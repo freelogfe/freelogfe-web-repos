@@ -355,8 +355,8 @@ function FResourceOptionEditorDrawer({
                         let errorText: string = '';
                         if (value === '') {
                           errorText = '输入配置值';
-                        } else if (value.length > 150) {
-                          errorText = '不超过150个字符';
+                        } else if (value.length > 500) {
+                          errorText = '不超过500个字符';
                         }
                         set_selectInputs(selectInputs.map((a, b) => {
                           if (b !== i) {
