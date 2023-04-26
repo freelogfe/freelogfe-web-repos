@@ -133,9 +133,9 @@ function FAddCustomOptionsDrawer({
             || eds.name === '' || eds.nameError !== ''
             || (eds.type === 'input'
               ? (eds.inputError !== '')
-              : eds.select.some((s) => {
+              : (eds.select.length === 0 || eds.select.some((s) => {
                 return s.value === '' || s.error !== '';
-              }))
+              })))
             || eds.descriptionError !== '';
         })}
         onClick={() => {
