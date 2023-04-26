@@ -230,12 +230,19 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
         // console.log(inputValue, option);
         return option.data.labels[option.data.labels.length - 1].length <= 40 && option.data.labels.join('/').startsWith(inputValue);
       }}
-      onChange={(value) => {
+      onChange={(value: string) => {
         if (!value) {
           return;
         }
         // console.log(value, selectedCache, 'selectedCache  valuesdlkfjsldkj');
+
         const startStr: string = [..._selectedCache.labels, ''].join('/');
+
+        // console.log(value.replace(startStr, '').includes('/'), '90iowje8932uiosdjflkjsdlfjlsdfjljl');
+        if (value.replace(startStr, '').includes('/')) {
+          return;
+        }
+
         if (!value.startsWith(startStr)) {
           return;
         }
