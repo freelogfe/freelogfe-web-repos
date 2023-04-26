@@ -178,7 +178,7 @@ function FResourceOptionEditorDrawer({
             const value: string = e.target.value;
             let errorText: string = '';
             if (value === '') {
-              errorText = '输入配置名称';
+              errorText = '请输入配置名称';
             } else if (value.length > 50) {
               errorText = '不超过50个字符';
             } else if (disabledNames.includes(value) && value !== defaultData?.name) {
@@ -201,7 +201,11 @@ function FResourceOptionEditorDrawer({
         <div className={styles.title}>
           {/*<i className={styles.dot} />*/}
           {/*<FComponentsLib.FTitleText type='h4'>key</FComponentsLib.FTitleText>*/}
-          <FComponentsLib.FContentText style={{ fontSize: 12 }} type={'highlight'} text={'key'} />
+          <FComponentsLib.FContentText
+            style={{ fontSize: 12 }}
+            type={'highlight'}
+            text={'key'}
+          />
         </div>
         <div style={{ height: 5 }} />
         <FInput
@@ -213,7 +217,7 @@ function FResourceOptionEditorDrawer({
             const value: string = e.target.value;
             let errorText: string = '';
             if (value === '') {
-              errorText = '输入key';
+              errorText = '请输入key';
             } else if (value.length > 20) {
               errorText = '不超过20个字符';
             } else if (disabledKeys.includes(value) && value !== defaultData?.key) {

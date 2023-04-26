@@ -269,11 +269,6 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
                   }
                   return dataSource;
                 }),
-                // basePEditorVisible: false,
-                // basePKeyInput: '',
-                // basePValueInput: '',
-                // basePDescriptionInput: '',
-                // basePDescriptionInputError: '',
               });
               await dispatch<SyncAllPropertiesAction>({
                 type: 'resourceVersionEditorPage/syncAllProperties',
@@ -285,35 +280,6 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
 
         {
           resourceVersionEditorPage.customOptions.length > 0 && (<FFormLayout.FBlock title={'自定义选项'}>
-            {/*<FCustomOptionsCards*/}
-            {/*  dataSource={resourceVersionEditorPage.customOptions.map((cos) => {*/}
-            {/*    return {*/}
-            {/*      theKey: cos.key,*/}
-            {/*      description: cos.description,*/}
-            {/*      type: cos.custom,*/}
-            {/*      value: cos.custom === 'select' ? cos.customOption : cos.defaultValue,*/}
-            {/*    };*/}
-            {/*  })}*/}
-            {/*  onEdit={(theKey) => {*/}
-            {/*    const customOption = resourceVersionEditorPage.customOptions.find((cos) => {*/}
-            {/*      return cos.key === theKey;*/}
-            {/*    });*/}
-            {/*    if (!customOption) {*/}
-            {/*      return;*/}
-            {/*    }*/}
-            {/*    onChange({*/}
-            {/*      customOptionEditorVisible: true,*/}
-            {/*      customOptionKey: customOption.key,*/}
-            {/*      customOptionDescription: customOption.description,*/}
-            {/*      customOptionDescriptionError: '',*/}
-            {/*      customOptionCustom: customOption.custom,*/}
-            {/*      customOptionDefaultValue: customOption.defaultValue,*/}
-            {/*      customOptionDefaultValueError: '',*/}
-            {/*      customOptionCustomOption: customOption.customOption,*/}
-            {/*      customOptionCustomOptionError: '',*/}
-            {/*    });*/}
-            {/*  }}*/}
-            {/*/>*/}
             <FResourceOptions
               dataSource={resourceVersionEditorPage.customOptions}
               onEdit={async (data) => {
@@ -335,7 +301,7 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
                     ...resourceVersionEditorPage.customOptions.map<string>((pp) => pp.key),
                   ],
                   disabledNames: [
-                    // ...resourceVersionEditorPage.rawProperties.map<string>((rp) => rp.name),
+                    ...resourceVersionEditorPage.rawProperties.map<string>((rp) => rp.name),
                     ...resourceVersionEditorPage.baseProperties.map<string>((bp) => bp.name),
                     ...resourceVersionEditorPage.customOptions.map<string>((pp) => pp.name),
                   ],

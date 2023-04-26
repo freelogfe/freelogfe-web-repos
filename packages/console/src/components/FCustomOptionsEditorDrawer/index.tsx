@@ -69,7 +69,8 @@ function FCustomOptionsEditorDrawer({
   }
 
   return (<FDrawer
-    title={'添加自定义选项'}
+    // title={'添加自定义选项'}
+    title={'添加配置'}
     onClose={() => {
       onCancel && onCancel();
     }}
