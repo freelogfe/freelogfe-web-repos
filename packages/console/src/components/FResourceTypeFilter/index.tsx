@@ -103,7 +103,7 @@ function FResourceTypeFilter({ value, omitTheme = false, onChange }: FResourceTy
       .map<FResourceTypeFilterStates['$recommend'][number]>((r) => {
         return {
           value: r.code,
-          labels: [r.name],
+          labels: r.names.split('/'),
         };
       }));
   });
@@ -153,7 +153,20 @@ function FResourceTypeFilter({ value, omitTheme = false, onChange }: FResourceTy
                 return i < 6;
               })
               .map((r) => {
-                return (<label key={r.value}>{r.labels.join('/')}</label>);
+                const showLabels: string[] = r.labels.filter((l) => {
+                  return l !== '全部';
+                });
+                return (<label
+                  onClick={() => {
+                    onDropdownChange({
+                      value: r.value,
+                      values: [],
+                      labels: r.labels,
+                      label: '',
+                      children: [],
+                    });
+                  }}
+                  key={r.value}>{showLabels.join('/') || '全部'}</label>);
               })
           }
         </div>
