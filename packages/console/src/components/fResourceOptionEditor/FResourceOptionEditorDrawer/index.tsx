@@ -137,12 +137,12 @@ function FResourceOptionEditorDrawer({
         })))}
         onClick={async () => {
           // console.log(selectInputs, 'selectInputsopisdjfl;ksdjflkjlk');
-          if (typeSelect === 'select' && selectInputs.map((s) => {
-            return s.value;
-          }).join(',').length > 500) {
-            fMessage('自定义选项总长度不超过500个字符', 'error');
-            return;
-          }
+          // if (typeSelect === 'select' && selectInputs.map((s) => {
+          //   return s.value;
+          // }).join(',').length > 500) {
+          //   fMessage('自定义选项总长度不超过500个字符', 'error');
+          //   return;
+          // }
 
           onOk && onOk({
             key: keyInput,
@@ -366,8 +366,8 @@ function FResourceOptionEditorDrawer({
                         let errorText: string = '';
                         if (value === '') {
                           errorText = '输入配置值';
-                        } else if (value.length > 500) {
-                          errorText = '不超过500个字符';
+                        } else if (value.length > 140) {
+                          errorText = '不超过140个字符';
                         }
                         set_selectInputs(selectInputs.map((a, b) => {
                           if (b !== i) {
