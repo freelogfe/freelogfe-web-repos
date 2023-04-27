@@ -8,11 +8,7 @@ import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import { ConnectState, StorageHomePageModelState, StorageObjectEditorModelState } from '@/models/connect';
 import {
-  // CreateBucketAction,
-  // OnBlur_NewBucketModal_Input_Action,
-  // OnChange_NewBucketModal_Input_Action,
   OnChangeActivatedBucketAction,
-  // OnChangeNewBucketAction,
   OnSucceed_CreateBucket_Action,
 } from '@/models/storageHomePage';
 import { withRouter } from 'umi';
@@ -20,12 +16,7 @@ import { RouteComponentProps } from 'react-router';
 import { ChangeAction, FetchInfoAction, storageObjectEditorInitData } from '@/models/storageObjectEditor';
 import Details from '@/pages/storage/Content/Details';
 import useUrlState from '@ahooksjs/use-url-state';
-// import FInput from '@/components/FInput';
-// import { ChangeAction as StorageHomePageChangeAction } from '@/models/storageHomePage';
 import { FUtil, FI18n } from '@freelog/tools-lib';
-// import FModal from '@/components/FModal';
-// import FComponentsLib from '@freelog/components-lib';
-// import fCreateBucketModal from '@/components/fCreateBucket';
 import fCreateBucket from '@/components/fCreateBucket';
 
 interface StorageProps extends RouteComponentProps<{}> {
