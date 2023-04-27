@@ -48,8 +48,9 @@ export interface StorageObjectEditorModelState {
 
   rawProperties: {
     key: string;
-    // name
+    name: string;
     value: string;
+    description: string;
   }[];
 
   baseProperties: {
@@ -58,26 +59,6 @@ export interface StorageObjectEditorModelState {
     value: string;
     description: string;
   }[];
-  // basePropertiesEditorVisible: boolean;
-  // basePropertiesEditorData: {
-  //   key: string;
-  //   keyError: string;
-  //   value: string;
-  //   valueError: string;
-  //   description: string;
-  //   descriptionError: string;
-  // }[];
-  // basePropertyEditorIndex: number;
-  // basePropertyEditorData: {
-  //   key: string;
-  //   keyError: string;
-  //   value: string;
-  //   valueError: string;
-  //   description: string;
-  //   descriptionError: string;
-  // } | null;
-
-  // customOptionsDataVisible: boolean;
   customOptionsData: {
     key: string;
     name: string;
@@ -86,31 +67,6 @@ export interface StorageObjectEditorModelState {
     input: string;
     select: string[];
   }[];
-  // customOptionsEditorVisible: boolean;
-  // customOptionsEditorDataSource: {
-  //   key: string;
-  //   keyError: string;
-  //   description: string;
-  //   descriptionError: string;
-  //   custom: 'input' | 'select';
-  //   defaultValue: string;
-  //   defaultValueError: string;
-  //   customOption: string;
-  //   customOptionError: string;
-  // }[];
-  // customOptionIndex: number;
-  // customOptionEditorData: {
-  //   key: string;
-  //   keyError: string;
-  //   description: string;
-  //   descriptionError: string;
-  //   custom: 'input' | 'select';
-  //   defaultValue: string;
-  //   defaultValueError: string;
-  //   customOption: string;
-  //   customOptionError: string;
-  // } | null;
-
   depRs: DepR[];
   depOs: DepO[];
 }
@@ -173,8 +129,6 @@ export interface StorageObjectEditorModelType {
     deleteObjectDepR: (action: DeleteObjectDepRAction, effects: EffectsCommandMap) => void;
     addObjectDepO: (action: AddObjectDepOAction, effects: EffectsCommandMap) => void;
     deleteObjectDepO: (action: DeleteObjectDepOAction, effects: EffectsCommandMap) => void;
-    // deleteObjectDep: (action: DeleteObjectDepAction, effects: EffectsCommandMap) => void;
-    // updateObjectInfo: (action: UpdateObjectInfoAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<StorageObjectEditorModelState, ChangeAction>;
@@ -185,35 +139,18 @@ export interface StorageObjectEditorModelType {
 }
 
 export const storageObjectEditorInitData: StorageObjectEditorModelState = {
-  // visible: false,
   objectId: '',
   bucketName: '',
   objectName: '',
   sha1: '',
-  // type: '',
-  // typeVerify: 2,
-  // typeError: '',
   size: 0,
 
-  // resourceTypeCodes: [],
-  // resourceTypeNames: [],
   resourceTypeValue: null,
 
   rawProperties: [],
 
   baseProperties: [],
-  // basePropertiesEditorVisible: false,
-  // basePropertiesEditorData: [],
-  // basePropertyEditorIndex: -1,
-  // basePropertyEditorData: null,
-  //
-  // customOptionsDataVisible: false,
   customOptionsData: [],
-  // customOptionsEditorVisible: false,
-  // customOptionsEditorDataSource: [],
-  // customOptionIndex: -1,
-  // customOptionEditorData: null,
-
   depRs: [],
   depOs: [],
 };

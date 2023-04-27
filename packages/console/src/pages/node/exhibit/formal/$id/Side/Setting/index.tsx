@@ -77,7 +77,7 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
                   {/*<td><FComponentsLib.FContentText text={pb.key} /></td>*/}
                   <td>
                     <FOverflowTooltip
-                      text={rp.key}
+                      text={rp.name}
                       style={{
                         fontWeight: 400,
                         lineHeight: '20px',

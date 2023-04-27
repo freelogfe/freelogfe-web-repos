@@ -4,31 +4,36 @@ import { Space } from 'antd';
 import SelectDeps from '@/pages/storage/Content/SelectDeps';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
-import { ConnectState, ResourceVersionCreatorPageModelState, StorageObjectEditorModelState } from '@/models/connect';
+import {
+  ConnectState,
+  // ResourceVersionCreatorPageModelState,
+  StorageObjectEditorModelState,
+} from '@/models/connect';
 import {
   ChangeAction,
   OnChangeTypeAction, OnClick_SaveBtn_Action,
 } from '@/models/storageObjectEditor';
 import DepsCards from './DepsCards';
-import FBaseProperties from '@/components/FBaseProperties';
-import FBasePropsEditorDrawer from '@/components/FBasePropsEditorDrawer';
+// import FBaseProperties from '@/components/FBaseProperties';
+// import FBasePropsEditorDrawer from '@/components/FBasePropsEditorDrawer';
 import FFormLayout from '@/components/FFormLayout';
 import FDrawer from '@/components/FDrawer';
-import FCustomOptionsEditorDrawer from '@/components/FCustomOptionsEditorDrawer';
+// import FCustomOptionsEditorDrawer from '@/components/FCustomOptionsEditorDrawer';
 import { history } from 'umi';
 import FTooltip from '@/components/FTooltip';
 import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
-import FCustomOptionsCards from '@/components/FCustomOptionsCards';
-import FBasePropEditorDrawer from '@/components/FBasePropEditorDrawer';
-import FCustomOptionEditorDrawer from '@/components/FCustomOptionEditorDrawer';
+// import FCustomOptionsCards from '@/components/FCustomOptionsCards';
+// import FBasePropEditorDrawer from '@/components/FBasePropEditorDrawer';
+// import FCustomOptionEditorDrawer from '@/components/FCustomOptionEditorDrawer';
 import FResourceTypeInput from '@/components/FResourceTypeInput';
 import FComponentsLib from '@freelog/components-lib';
 import FResourceProperties from '@/components/FResourceProperties';
 import fResourcePropertyEditor from '@/components/fResourcePropertyEditor';
-import { OnChange_BaseProperties_Action, OnChange_CustomOptions_Action } from '@/models/resourceVersionCreatorPage';
+// import { OnChange_BaseProperties_Action, OnChange_CustomOptions_Action } from '@/models/resourceVersionCreatorPage';
 import FResourceOptions from '@/components/FResourceOptions';
 import fResourceOptionEditor from '@/components/fResourceOptionEditor';
-import fAddFileBaseProps from '@/components/fAddFileBaseProps';
+
+// import fAddFileBaseProps from '@/components/fAddFileBaseProps';
 
 interface DetailsProps {
   dispatch: Dispatch;

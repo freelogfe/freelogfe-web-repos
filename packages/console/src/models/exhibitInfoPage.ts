@@ -72,7 +72,9 @@ export interface ExhibitInfoPageModelState {
   side_SettingUnfold: boolean;
   side_RawProperties: {
     key: string;
+    name: string;
     value: string;
+    description: string;
   }[];
   side_BaseProperties: {
     key: string;
@@ -442,6 +444,14 @@ const Model: ExhibitInfoPageModelType = {
           resourceSystemProperty: {
             [k: string]: string
           };
+          resourceSystemPropertyDescriptors: {
+            defaultValue: number | string;
+            key: string;
+            name: string;
+            remark: string;
+            valueDisplay: string;
+            valueUnit: string;
+          }[];
           presentableRewriteProperty: {
             key: string;
             remark: string;
@@ -449,7 +459,7 @@ const Model: ExhibitInfoPageModelType = {
           }[];
         };
       } = yield call(FServiceAPI.Exhibit.presentableDetails, params);
-      console.log(data_PresentableDetails, 'data_PresentableDetailsisdflksdjlk');
+      // console.log(data_PresentableDetails, 'data_PresentableDetailsisdflksdjlk');
 
       // console.log(data, 'data@#Rasfdjou890ujewfra');
 
@@ -613,10 +623,18 @@ const Model: ExhibitInfoPageModelType = {
 
           side_AllVersions: data_ResourceInfo.resourceVersions.map((d2: any) => d2.version),
           side_Version: data_PresentableDetails.version,
-          side_RawProperties: Object.entries(data_PresentableDetails.resourceSystemProperty).map((s: any) => ({
-            key: s[0],
-            value: fileAttrUnits[s[0]] ? fileAttrUnits[s[0]](s[1]) : s[1],
-          })),
+          // side_RawProperties: Object.entries(data_PresentableDetails.resourceSystemProperty).map((s: any) => ({
+          //   key: s[0],
+          //   value: fileAttrUnits[s[0]] ? fileAttrUnits[s[0]](s[1]) : s[1],
+          // })),
+          side_RawProperties: data_PresentableDetails.resourceSystemPropertyDescriptors.map((spd) => {
+            return {
+              key: spd.key,
+              name: spd.name,
+              value: spd.valueDisplay,
+              description: spd.remark,
+            };
+          }),
           side_BaseProperties: data_PresentableDetails.resourceCustomPropertyDescriptors
             .filter((rd: any) => rd.type === 'readonlyText')
             .map((rd: any) => ({
