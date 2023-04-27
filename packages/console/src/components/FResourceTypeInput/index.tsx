@@ -88,7 +88,7 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
   AHooks.useMount(async () => {
     const { data: data_resourceTypes }: {
       data: ServerData[];
-    } = await FServiceAPI.Resource.resourceTypes();
+    } = await FServiceAPI.Resource.resourceTypes({ category: 1 });
     const options: Option[] = handledData(data_resourceTypes, null);
     set$options(options);
   });
