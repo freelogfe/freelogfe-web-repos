@@ -56,7 +56,7 @@ function FResourceTypeFilter({ value, omitTheme = false, onChange }: FResourceTy
   AHooks.useMount(async () => {
     const { data: data_resourceTypes }: {
       data: ServerData[];
-    } = await FServiceAPI.Resource.resourceTypes();
+    } = await FServiceAPI.Resource.resourceTypes({ category: 1 });
     // console.log(data_resourceTypes, 'data_resourceTypessiodjdflkjsdlkjflksdjlk');
     let data: ServerData[] = data_resourceTypes;
     if (omitTheme) {
