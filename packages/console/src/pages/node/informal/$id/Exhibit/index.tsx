@@ -7,9 +7,9 @@ import FDropdownMenu from '@/components/FDropdownMenu';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import { ConnectState, InformalNodeManagerPageModelState } from '@/models/connect';
-import FMenu from '@/components/FMenu';
+// import FMenu from '@/components/FMenu';
 // import { DownOutlined } from '@ant-design/icons';
-import categoryData from '@/utils/category';
+// import categoryData from '@/utils/category';
 import {
   FetchExhibitListAction,
   OnCancel_AddExhibitDrawer_Action,

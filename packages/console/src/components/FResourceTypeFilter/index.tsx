@@ -32,6 +32,10 @@ interface ServerData {
 }
 
 interface FResourceTypeFilterStates {
+  _localRecently: {
+    value: string;
+    labels: string[];
+  }[];
   $recommend: {
     value: string;
     labels: string[];
@@ -41,6 +45,7 @@ interface FResourceTypeFilterStates {
 }
 
 const initStates: FResourceTypeFilterStates = {
+  _localRecently: [],
   $recommend: [],
   $options: [],
   _isOpen: false,
@@ -48,16 +53,18 @@ const initStates: FResourceTypeFilterStates = {
 
 function FResourceTypeFilter({ value, omitTheme = false, onChange }: FResourceTypeFilterProps) {
 
+  const [_localRecently, set_localRecently] = AHooks.useLocalStorageState<FResourceTypeFilterStates['_localRecently']>('FResourceTypeFilter-$localRecently', {
+    defaultValue: initStates['_localRecently'],
+  });
   const [$recommend, set$recommend] = React.useState<FResourceTypeFilterStates['$recommend']>(initStates['$recommend']);
   const [$options, set$options] = React.useState<Option[]>(initStates['$options']);
   const [_isOpen, set_isOpen] = React.useState<FResourceTypeFilterStates['_isOpen']>(initStates['_isOpen']);
-
 
   AHooks.useMount(async () => {
     const { data: data_resourceTypes }: {
       data: ServerData[];
     } = await FServiceAPI.Resource.resourceTypes({ category: 1 });
-    // console.log(data_resourceTypes, 'data_resourceTypessiodjdflkjsdlkjflksdjlk');
+    console.log(data_resourceTypes, 'data_resourceTypessiodjdflkjsdlkjflksdjlk');
     let data: ServerData[] = data_resourceTypes;
     if (omitTheme) {
       data = data.filter((d) => {
@@ -66,6 +73,7 @@ function FResourceTypeFilter({ value, omitTheme = false, onChange }: FResourceTy
     }
     // console.log(data, 'dataiosdjflksdjfljl  dddddd');
     const options: Option[] = handledData(data, null);
+    console.log(options, 'options sda98ifjoewjfolkedjflsdjfljdslfjsldjflkj');
     set$options(options);
   });
 
@@ -95,6 +103,20 @@ function FResourceTypeFilter({ value, omitTheme = false, onChange }: FResourceTy
   });
 
   function onDropdownChange(op: Option) {
+    // console.log(op, 'OOOPPPP sdujfoisdjflksdjlfkjdslkfjl');
+    set_localRecently([
+      {
+        value: op.value,
+        labels: op.labels,
+      },
+      ..._localRecently
+        .filter((i) => {
+          return i.value !== op.value;
+        })
+        .filter((i, j) => {
+          return j < 5;
+        }),
+    ]);
     onChange && onChange(op);
     set_isOpen(false);
   }
@@ -116,16 +138,14 @@ function FResourceTypeFilter({ value, omitTheme = false, onChange }: FResourceTy
         <div style={{ height: 20 }} />
         <div className={styles.recommendResourceTypes}>
           {
-            $recommend.map((r) => {
-              return (<label key={r.value}>{r.labels.join('/')}</label>);
-            })
+            [..._localRecently, ...$recommend]
+              .filter((_, i) => {
+                return i < 6;
+              })
+              .map((r) => {
+                return (<label key={r.value}>{r.labels.join('/')}</label>);
+              })
           }
-          {/*<label>阅读/文本</label>*/}
-          {/*<label>阅读/演示文稿</label>*/}
-          {/*<label>音频/有声书</label>*/}
-          {/*<label>音频/播客</label>*/}
-          {/*<label>视频/长视频</label>*/}
-          {/*<label>视频/短视频</label>*/}
         </div>
       </div>
 
@@ -183,21 +203,6 @@ function FResourceTypeFilter({ value, omitTheme = false, onChange }: FResourceTy
                                           <span>{o2.label}</span>
                                         </div>
 
-                                        {/*{*/}
-                                        {/*  o1Index + 1 === data.length && (<div*/}
-                                        {/*    className={styles.item + ' ' + styles.itemLatest}*/}
-                                        {/*    onClick={() => {*/}
-                                        {/*      // onDropdownClickCustom({*/}
-                                        {/*      //   value: o1.value,*/}
-                                        {/*      //   values: o1.values,*/}
-                                        {/*      //   label: o1.label,*/}
-                                        {/*      //   labels: o1.labels,*/}
-                                        {/*      // });*/}
-                                        {/*    }}*/}
-                                        {/*  >*/}
-                                        {/*    <span>添加新类型</span>*/}
-                                        {/*  </div>)*/}
-                                        {/*}*/}
                                       </React.Fragment>);
                                     })
                                   }
@@ -233,17 +238,6 @@ function FResourceTypeFilter({ value, omitTheme = false, onChange }: FResourceTy
       }
     </div>
   </Dropdown>);
-
-  // return (<Cascader
-  //   allowClear={false}
-  //   value={value}
-  //   options={options}
-  //   onChange={(value: Array<string | number>, selectedOptions) => {
-  //     // console.log(value, selectedOptions, 'value, selectedOptions sdi8ofjsdlkfjsldkfjlkj');
-  //     onChange && onChange(value);
-  //   }}
-  //   placeholder='Please select'
-  // />);
 }
 
 export default FResourceTypeFilter;
@@ -275,9 +269,9 @@ function handledData(data: ServerData[], parent: Option | null): Option[] {
 
   if (parent) {
     result.unshift({
-      value: '#all',
+      value: parent.value + '#all',
       label: '全部',
-      values: [...parent.values, '#all'],
+      values: [...parent.values, parent.value + '#all'],
       labels: [...parent.labels, '全部'],
       children: [],
     });
