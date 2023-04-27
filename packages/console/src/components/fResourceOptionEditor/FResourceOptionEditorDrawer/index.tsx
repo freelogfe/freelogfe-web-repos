@@ -6,6 +6,7 @@ import FComponentsLib from '@freelog/components-lib';
 import FInput from '@/components/FInput';
 import { FI18n, FUtil } from '@freelog/tools-lib';
 import fMessage from '@/components/fMessage';
+import { Data } from '@/components/FCustomOptionsEditorDrawer/FCustomOptions';
 
 interface FResourceOptionEditorDrawerProps {
   disabledKeys: string[];
@@ -369,7 +370,7 @@ function FResourceOptionEditorDrawer({
                         } else if (value.length > 140) {
                           errorText = '不超过140个字符';
                         }
-                        set_selectInputs(selectInputs.map((a, b) => {
+                        set_selectInputs(verifyDuplication(selectInputs.map((a, b) => {
                           if (b !== i) {
                             return a;
                           }
@@ -377,7 +378,7 @@ function FResourceOptionEditorDrawer({
                             value: value,
                             error: errorText,
                           };
-                        }));
+                        })));
                       }}
                       placeholder={'输入配置值'}
                     />
@@ -427,3 +428,24 @@ function FResourceOptionEditorDrawer({
 }
 
 export default FResourceOptionEditorDrawer;
+
+function verifyDuplication(selectInputs: FResourceOptionEditorDrawerStates['selectInputs']): FResourceOptionEditorDrawerStates['selectInputs'] {
+  const map: Map<string, number> = new Map<string, number>();
+  for (const item of selectInputs) {
+    if (item.value === '') {
+      continue;
+    }
+    map.set(item.value, (map.get(item.value) || 0) + 1);
+  }
+  const errorText: string = '不能重复';
+
+  return selectInputs.map<FResourceOptionEditorDrawerStates['selectInputs'][number]>((d) => {
+    if (d.error !== '' && d.error !== errorText) {
+      return d;
+    }
+    return {
+      ...d,
+      error: (map.get(d.value) || 0) > 1 ? errorText : '',
+    };
+  });
+}
