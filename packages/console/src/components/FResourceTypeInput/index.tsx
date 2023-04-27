@@ -98,6 +98,7 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
       data: {
         code: string;
         name: string;
+        names: string;
         resourceCount: number;
       }[];
     } = await FServiceAPI.Resource.listSimple4Recently({});
@@ -109,7 +110,7 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
       .map<FResourceTypeInputStates['$recommend'][number]>((r) => {
         return {
           value: r.code,
-          labels: [r.name],
+          labels: r.names.split('/'),
         };
       }));
   });
