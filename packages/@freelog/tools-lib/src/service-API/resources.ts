@@ -554,6 +554,7 @@ export function availableTags({...params}: AvailableTagsParamsType) {
 interface ResourceTypesParamsType {
   codeOrName?: string;
   category?: 1 | 2; // 种类 1：基础资源类型 2：自定义资源类型
+  isMine?: boolean;
 }
 
 export function resourceTypes({...params}: ResourceTypesParamsType = {}) {

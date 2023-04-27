@@ -63,8 +63,12 @@ function FResourceTypeFilter({ value, omitTheme = false, onChange }: FResourceTy
   AHooks.useMount(async () => {
     const { data: data_resourceTypes }: {
       data: ServerData[];
-    } = await FServiceAPI.Resource.resourceTypes({ category: 1 });
-    console.log(data_resourceTypes, 'data_resourceTypessiodjdflkjsdlkjflksdjlk');
+    } = await FServiceAPI.Resource.resourceTypes({
+      category: 1,
+      // @ts-ignore
+      isMine: false,
+    });
+    // console.log(data_resourceTypes, 'data_resourceTypessiodjdflkjsdlkjflksdjlk');
     let data: ServerData[] = data_resourceTypes;
     if (omitTheme) {
       data = data.filter((d) => {
@@ -73,7 +77,7 @@ function FResourceTypeFilter({ value, omitTheme = false, onChange }: FResourceTy
     }
     // console.log(data, 'dataiosdjflksdjfljl  dddddd');
     const options: Option[] = handledData(data, null);
-    console.log(options, 'options sda98ifjoewjfolkedjflsdjfljdslfjsldjflkj');
+    // console.log(options, 'options sda98ifjoewjfolkedjflsdjfljdslfjsldjflkj');
     set$options(options);
   });
 
@@ -82,11 +86,17 @@ function FResourceTypeFilter({ value, omitTheme = false, onChange }: FResourceTy
       data: {
         code: string;
         name: string;
+        names: string;
         resourceCount: number;
       }[];
     } = await FServiceAPI.Resource.listSimple4Recently({});
     // console.log(data_recently, 'dataoisdjlfkjsdlkfjsdlkjflkj');
     set$recommend(data_recently
+      .filter((r) => {
+        return _localRecently.every((lr) => {
+          return lr.value !== r.code;
+        });
+      })
       .filter((r, i) => {
         return i < 6;
       })
