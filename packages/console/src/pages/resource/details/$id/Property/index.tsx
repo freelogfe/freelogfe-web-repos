@@ -3,11 +3,11 @@ import styles from './index.less';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import { ConnectState, ResourceDetailPageModelState } from '@/models/connect';
-import FTooltip from '@/components/FTooltip';
-import { Space } from 'antd';
+// import FTooltip from '@/components/FTooltip';
+// import { Space } from 'antd';
 import FComponentsLib from '@freelog/components-lib';
 import FResourceProperties from '@/components/FResourceProperties';
-import FResourceOptions from '@/components/FResourceOptions';
+// import FResourceOptions from '@/components/FResourceOptions';
 
 interface PropertyProps {
   dispatch: Dispatch;
@@ -28,38 +28,6 @@ function Property({ dispatch, resourceDetailPage }: PropertyProps) {
         immutableData={resourceDetailPage.resourceVersion_Info.rawProperties}
         alterableData={resourceDetailPage.resourceVersion_Info.baseProperties}
       />
-
-      
-      {/*<div className={styles.list}>*/}
-      {/*  {*/}
-      {/*    resourceDetailPage.resourceVersion_Info.customOptions.map((p, index) => {*/}
-      {/*      return (<div key={p.key}>*/}
-      {/*        <Space size={10}>*/}
-      {/*          <FComponentsLib.FContentText*/}
-      {/*            text={p.key}*/}
-      {/*            type='negative'*/}
-      {/*          />*/}
-      {/*          {*/}
-      {/*            p.description && (<FTooltip*/}
-      {/*              title={p.description}*/}
-      {/*            >*/}
-      {/*              <FComponentsLib.FIcons.FInfo*/}
-      {/*                style={{ cursor: 'pointer', fontSize: 14 }}*/}
-      {/*              />*/}
-      {/*            </FTooltip>)*/}
-      {/*          }*/}
-      {/*        </Space>*/}
-      {/*        <div style={{ height: 10 }} />*/}
-      {/*        <FComponentsLib.FContentText*/}
-      {/*          style={{ maxWidth: 215 }}*/}
-      {/*          text={p.value}*/}
-      {/*          singleRow*/}
-      {/*        />*/}
-      {/*      </div>);*/}
-      {/*    })*/}
-      {/*  }*/}
-
-      {/*</div>*/}
     </div>
     <div style={{ height: 20 }} />
   </>);

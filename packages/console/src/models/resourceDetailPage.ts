@@ -72,19 +72,11 @@ export interface ResourceDetailPageModelState {
   resourceVersion_Info: {
     releaseTime: string;
     description: string;
-    // properties: {
-    //   key: string;
-    //   value: string;
-    //   description?: string;
-    // }[];
-    // options: {
-    //   key: string;
-    //   value: string;
-    //   description: string;
-    // }[];
     rawProperties: {
       key: string;
+      name: string;
       value: string;
+      description: string;
     }[];
     baseProperties: {
       key: string;
@@ -102,9 +94,7 @@ export interface ResourceDetailPageModelState {
     }[];
   };
 
-  // graph_FullScreen: boolean;
-  // graph_ViewportGraphShow: 'dependency' | 'authorization';
-  graphShow: boolean;
+  // graphShow: boolean;
 }
 
 export interface ChangeAction extends AnyAction {
@@ -228,7 +218,7 @@ const initStates: ResourceDetailPageModelState = {
 
   // graph_FullScreen: false,
   // graph_ViewportGraphShow: 'dependency',
-  graphShow: true,
+  // graphShow: true,
 };
 
 const Model: ResourceDetailPageModelType = {
@@ -781,6 +771,14 @@ const Model: ResourceDetailPageModelType = {
             remark: string;
           }[],
           systemProperty: { [key: string]: string; },
+          systemPropertyDescriptors: {
+            defaultValue: number | string;
+            key: string;
+            name: string;
+            remark: string;
+            valueDisplay: string;
+            valueUnit: string;
+          }[];
           createDate: string;
           description: string;
         }
@@ -795,11 +793,19 @@ const Model: ResourceDetailPageModelType = {
           resourceVersion_Info: {
             releaseTime: FUtil.Format.formatDateTime(data_versionInfo.createDate),
             description: data_versionInfo.description,
-            rawProperties: Object.entries(data_versionInfo.systemProperty as object)
-              .map((s) => ({
-                key: s[0],
-                value: fileAttrUnits[s[0]] ? fileAttrUnits[s[0]](s[1]) : s[1],
-              })),
+            // rawProperties: Object.entries(data_versionInfo.systemProperty as object)
+            //   .map((s) => ({
+            //     key: s[0],
+            //     value: fileAttrUnits[s[0]] ? fileAttrUnits[s[0]](s[1]) : s[1],
+            //   })),
+            rawProperties: data_versionInfo.systemPropertyDescriptors.map((spd) => {
+              return {
+                key: spd.key,
+                name: spd.name,
+                value: spd.valueDisplay,
+                description: spd.remark,
+              };
+            }),
             baseProperties: data_versionInfo.customPropertyDescriptors
               .filter((p) => {
                 return p.type === 'readonlyText';
