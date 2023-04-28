@@ -395,6 +395,14 @@ function Search({}: SearchProps) {
                 'h-100x   pt-40  flex-column-center ' + styles.rContainer
               }
             >
+              <div>
+                <FOperationCategoryFilter
+                  value={selectedOperationCategoryIDs}
+                  onChange={(value) => {
+                    setSelectedOperationCategoryIDs(value);
+                  }}
+                />
+              </div>
               {!resourcesListPure.length ? (
                 <div className="flex-column-center w-100x h-100x">
                   <div className="flex-2" />
@@ -408,14 +416,7 @@ function Search({}: SearchProps) {
                   <div className={styles.tip + ' mb-20 w-100x ml-18'}>
                     以下是{' ' + keywords + ' '}相关结果（{pageData.totalItem}）
                   </div>
-                  <div>
-                    <FOperationCategoryFilter
-                      value={selectedOperationCategoryIDs}
-                      onChange={(value) => {
-                        setSelectedOperationCategoryIDs(value);
-                      }}
-                    />
-                  </div>
+
                   <div
                     className={
                       'flex-row flex-wrap h-100x w-100x   ' +
