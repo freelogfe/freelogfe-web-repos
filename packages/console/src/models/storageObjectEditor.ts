@@ -353,7 +353,7 @@ const Model: StorageObjectEditorModelType = {
       // console.log(params, 'params098io3wkqlsaejfdlkjfl');
       const { ret, errCode, data, msg } = yield call(FServiceAPI.Storage.updateObject, params);
 
-      console.log(data, 'dataiosdjlfkjsdlkfjlk sdfij;sldkjflk iosdj');
+      // console.log(data, 'dataiosdjlfkjsdlkfjlk sdfij;sldkjflk iosdj');
 
       if (ret !== 0 || errCode !== 0) {
         fMessage(msg, 'error');
@@ -498,48 +498,6 @@ const Model: StorageObjectEditorModelType = {
         },
       });
     },
-    // * updateObjectInfo({}: UpdateObjectInfoAction, { call, select, put }: EffectsCommandMap) {
-    //   const { storageObjectEditor }: ConnectState = yield select(({ storageObjectEditor }: ConnectState) => ({
-    //     storageObjectEditor,
-    //   }));
-    //   const params: Parameters<typeof FServiceAPI.Storage.updateObject>[0] = {
-    //     objectIdOrName: encodeURIComponent(`${storageObjectEditor.bucketName}/${storageObjectEditor.objectName}`),
-    //     resourceType: storageObjectEditor.type,
-    //     dependencies: [
-    //       ...storageObjectEditor.depRs.map((r) => ({
-    //         name: r.name,
-    //         type: 'resource',
-    //         versionRange: r.version,
-    //       })),
-    //       ...storageObjectEditor.depOs.map((o) => ({
-    //         name: o.name,
-    //         type: 'object',
-    //       })),
-    //     ],
-    //     customPropertyDescriptors: [
-    //       ...storageObjectEditor.baseProperties.map<NonNullable<Parameters<typeof FServiceAPI.Storage.updateObject>[0]['customPropertyDescriptors']>[number]>((i) => {
-    //         return {
-    //           type: 'readonlyText',
-    //           key: i.key,
-    //           remark: i.description,
-    //           defaultValue: i.value,
-    //         };
-    //       }),
-    //       ...storageObjectEditor.customOptionsData.map<NonNullable<Parameters<typeof FServiceAPI.Storage.updateObject>[0]['customPropertyDescriptors']>[number]>((i) => {
-    //         const isInput: boolean = i.custom === 'input';
-    //         const options: string[] = i.customOption.split(',');
-    //         return {
-    //           type: isInput ? 'editableText' : 'select',
-    //           key: i.key,
-    //           remark: i.description,
-    //           defaultValue: isInput ? i.defaultValue : options[0],
-    //           candidateItems: isInput ? undefined : options,
-    //         };
-    //       }),
-    //     ],
-    //   };
-    //   yield call(FServiceAPI.Storage.updateObject, params);
-    // },
   },
   reducers: {
     change(state, { payload }) {
