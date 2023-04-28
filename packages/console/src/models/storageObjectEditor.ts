@@ -263,8 +263,8 @@ const Model: StorageObjectEditorModelType = {
           sha1: data_objectDetails.sha1,
           resourceTypeValue: {
             value: data_objectDetails.resourceTypeCode,
-            values: [data_objectDetails.resourceTypeCode],
-            label: data_objectDetails.resourceType[data_objectDetails.resourceType.length - 1],
+            // values: [data_objectDetails.resourceTypeCode],
+            // label: data_objectDetails.resourceType[data_objectDetails.resourceType.length - 1],
             labels: data_objectDetails.resourceType,
           },
           size: data_objectDetails.systemProperty.fileSize,
