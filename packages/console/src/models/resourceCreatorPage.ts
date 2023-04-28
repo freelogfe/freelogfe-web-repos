@@ -19,9 +19,9 @@ export interface ResourceCreatorPageModelState {
   //   // options: string[];
   // }[];
   resourceTypeCodes: {
-    value: string | number;
-    label: string;
-    values: Array<string | number>;
+    value: string;
+    // label: string;
+    // values: Array<string | number>;
     labels: string[];
     customInput?: string;
   } | null;

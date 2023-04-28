@@ -7,7 +7,7 @@ import FComponentsLib from '@freelog/components-lib';
 import FInput from '@/components/FInput';
 
 interface Option {
-  value: string | number;
+  value: string;
   label: string;
   values: Array<string | number>;
   labels: string[];
@@ -22,9 +22,7 @@ interface ServerData {
 
 interface FResourceTypeInputProps {
   value: {
-    value: string | number;
-    label: string;
-    values: Array<string | number>;
+    value: string;
     labels: string[];
     customInput?: string;
   } | null;
@@ -43,7 +41,7 @@ interface FResourceTypeInputStates {
   _mode: 'select' | 'input';
   _isOpen: boolean;
   _selectedCache: {
-    value: string | number;
+    value: string;
     label: string;
     values: Array<string | number>;
     labels: string[];
@@ -130,18 +128,19 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
 
   // console.log(autoCompleteInput, 'autoCompleteInput sd9ifoj;sldkfjsdlfjlkj');
 
-  function onDropdownChange(option: Option, options: Option[]) {
+  function onDropdownChange(v: {
+    value: string;
+    labels: string[];
+  }) {
     onChange && onChange({
-      value: option.value,
-      values: option.values,
-      label: option.label,
-      labels: option.labels,
+      value: v.value,
+      labels: v.labels,
     });
     set_isOpen(false);
   }
 
   async function onDropdownClickCustom({ value, values, label, labels }: {
-    value: string | number;
+    value: string;
     label: string;
     values: Array<string | number>;
     labels: string[];
@@ -251,16 +250,16 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
         if (value !== '#new') {
           onChange && onChange({
             value: data.value,
-            label: data.label,
-            values: data.values,
+            // label: data.label,
+            // values: data.values,
             labels: data.labels,
           });
         } else {
           const customInputLabels: string[] = _autoCompleteInput.split('/');
           onChange && onChange({
             value: _selectedCache.value,
-            label: _selectedCache.label,
-            values: _selectedCache.values,
+            // label: _selectedCache.label,
+            // values: _selectedCache.values,
             labels: _selectedCache.labels,
             customInput: customInputLabels[customInputLabels.length - 1],
           });
@@ -304,11 +303,8 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
                 onClick={() => {
                   onDropdownChange({
                     value: r.value,
-                    values: [r.value],
-                    label: r.labels[r.labels.length - 1],
                     labels: r.labels,
-                    children: [],
-                  }, []);
+                  });
                 }}
                 key={r.value}
               >{r.labels.join('/')}</label>);
@@ -332,7 +328,10 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
               key={o0.value}
               onClick={() => {
                 if (o0.children.length === 0) {
-                  onDropdownChange(o0, [o0]);
+                  onDropdownChange({
+                    value: o0.value,
+                    labels: o0.labels,
+                  });
                 }
               }}
             >
@@ -348,7 +347,10 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
                             className={styles.item}
                             onClick={() => {
                               if (o1.children.length === 0) {
-                                onDropdownChange(o1, [o0, o1]);
+                                onDropdownChange({
+                                  value: o1.value,
+                                  labels: o1.labels,
+                                });
                               }
                             }}
                           >
@@ -364,7 +366,10 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
                                           className={styles.item}
                                           onClick={() => {
                                             if (o2.children.length === 0) {
-                                              onDropdownChange(o2, [o0, o1, o2]);
+                                              onDropdownChange({
+                                                value: o2.value,
+                                                labels: o2.labels,
+                                              });
                                             }
                                           }}
                                         >
