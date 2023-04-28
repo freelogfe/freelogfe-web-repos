@@ -184,7 +184,6 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
 
   if (_mode === 'input' && _selectedCache) {
     return (<AutoComplete
-      // ref={refAutoComplete}
       autoFocus={true}
       allowClear={true}
       defaultOpen={true}
@@ -223,23 +222,17 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
         }),
       ]}
       style={{ width: 360 }}
-      // onSelect={onSelect}
-      // onSearch={onSearch}
       value={_autoCompleteInput}
       className={styles.AutoComplete}
       filterOption={(inputValue, option: any) => {
-        // console.log(inputValue, option);
         return option.data.labels[option.data.labels.length - 1].length <= 40 && option.data.labels.join('/').startsWith(inputValue);
       }}
       onChange={(value: string) => {
         if (!value) {
           return;
         }
-        // console.log(value, selectedCache, 'selectedCache  valuesdlkfjsldkj');
-
         const startStr: string = [..._selectedCache.labels, ''].join('/');
 
-        // console.log(value.replace(startStr, '').includes('/'), '90iowje8932uiosdjflkjsdlfjlsdfjljl');
         if (value.replace(startStr, '').includes('/')) {
           return;
         }
@@ -247,10 +240,6 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
         if (!value.startsWith(startStr)) {
           return;
         }
-        // console.log(value, startStr, 'asiodjf;lkwejl;kfjlsk;djflk;jsdlfkjsdlkfjsdlkfj');
-        // if (value.length > startStr.length + 40) {
-        //   return;
-        // }
         set_autoCompleteInput(value);
         set_autoCompleteInputIsNew(value !== startStr && _autoCompleteOptions.every((aco) => {
           return aco.labels.join('/') !== value;
@@ -311,15 +300,20 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
         <div className={styles.recommendResourceTypes}>
           {
             $recommend.map((r) => {
-              return (<label key={r.value}>{r.labels.join('/')}</label>);
+              return (<label
+                onClick={() => {
+                  onDropdownChange({
+                    value: r.value,
+                    values: [r.value],
+                    label: r.labels[r.labels.length - 1],
+                    labels: r.labels,
+                    children: [],
+                  }, []);
+                }}
+                key={r.value}
+              >{r.labels.join('/')}</label>);
             })
           }
-
-          {/*<label>阅读/演示文稿</label>*/}
-          {/*<label>音频/有声书</label>*/}
-          {/*<label>音频/播客</label>*/}
-          {/*<label>视频/长视频</label>*/}
-          {/*<label>视频/短视频</label>*/}
         </div>
       </div>
 
@@ -338,9 +332,6 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
               key={o0.value}
               onClick={() => {
                 if (o0.children.length === 0) {
-                  // console.log(o0, 'ds90ifjal;skdfj;lksdjflksdjklfjsdklj');
-                  // onChange && onChange(o0, [o0]);
-                  // set_isOpen(false);
                   onDropdownChange(o0, [o0]);
                 }
               }}
@@ -357,9 +348,6 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
                             className={styles.item}
                             onClick={() => {
                               if (o1.children.length === 0) {
-                                // console.log(o1, 'ds90ifjal;skdfj;lksdjflksdjklfjsdklj');
-                                // onChange && onChange(o1, [o0, o1]);
-                                // set_isOpen(false);
                                 onDropdownChange(o1, [o0, o1]);
                               }
                             }}
@@ -376,9 +364,6 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
                                           className={styles.item}
                                           onClick={() => {
                                             if (o2.children.length === 0) {
-                                              // console.log(2, 'ds90ifjal;skdfj;lksdjflksdjklfjsdklj');
-                                              // onChange && onChange(o2, [o0, o1, o2]);
-                                              // set_isOpen(false);
                                               onDropdownChange(o2, [o0, o1, o2]);
                                             }
                                           }}
@@ -390,14 +375,6 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
                                           o1Index + 1 === data.length && (<div
                                             className={styles.item + ' ' + styles.itemLatest}
                                             onClick={() => {
-                                              // set_mode('input');
-                                              // set_selectedCache({
-                                              //   value: o1.value,
-                                              //   values: o1.values,
-                                              //   label: o1.label,
-                                              //   labels: o1.labels,
-                                              // });
-                                              // set_autoCompleteInput([...o1.labels, ''].join('/'));
                                               onDropdownClickCustom({
                                                 value: o1.value,
                                                 values: o1.values,
