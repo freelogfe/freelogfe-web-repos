@@ -72,7 +72,7 @@ const initStates: FResourceTypeInputStates = {
 };
 
 function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
-
+  const ref = React.useRef<any>();
   // const refAutoComplete = React.useRef(null);
 
   const [$options, set$options] = React.useState<FResourceTypeInputStates['$options']>(initStates['$options']);
@@ -296,6 +296,9 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
     onOpenChange={(o) => {
       set_isOpen(o);
     }}
+    getPopupContainer={() => {
+      return ref.current;
+    }}
     trigger={['click']}
     overlayClassName={styles.overlayClassName}
     overlay={(<div className={styles.overlay}>
@@ -443,7 +446,11 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
       </div>
     </div>)}
   >
-    <div className={styles.square} style={{ borderColor: _isOpen ? '#2784FF' : '#D4D4D4' }}>
+    <div
+      className={styles.square}
+      style={{ borderColor: _isOpen ? '#2784FF' : '#D4D4D4' }}
+      ref={ref}
+    >
       {
         value === null
           ? (<span>{FI18n.i18nNext.t('createresource_selectresourcetype_input_hint')}</span>)
