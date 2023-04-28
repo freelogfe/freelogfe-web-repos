@@ -101,9 +101,9 @@ function Search({}: SearchProps) {
     manual: true,
     refreshDeps: [keywords, pageData.skip, userPageData.skip],
   });
-  // useEffect(() => {
-  //   if (keywords) run();
-  // }, [keywords]);
+  useEffect(() => {
+    if (keywords) run();
+  }, [keywords]);
   useEffect(() => {
     run();
   }, [selectedOperationCategoryIDs]);
