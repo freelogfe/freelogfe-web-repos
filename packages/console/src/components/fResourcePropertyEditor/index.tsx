@@ -29,7 +29,10 @@ function fResourcePropertyEditor({
                                    noneEditableFields = [],
                                  }: fResourcePropertyEditorProps): Promise<ReturnData> {
   return new Promise<ReturnData>((resolve) => {
-    const root = ReactDOM.createRoot(document.getElementById('drawer-root') as HTMLDivElement);
+    const drawerRoot: HTMLDivElement | null = self.document.getElementById('drawer-root') as HTMLDivElement;
+    const rootDiv: HTMLDivElement = self.document.createElement('div');
+    drawerRoot.appendChild(rootDiv);
+    const root = ReactDOM.createRoot(rootDiv);
     return root.render(<FResourcePropertyEditorDrawer
       defaultData={defaultData || null}
       disabledKeys={disabledKeys}
@@ -42,6 +45,7 @@ function fResourcePropertyEditor({
         resolve(null);
         setTimeout(() => {
           root.unmount();
+          rootDiv.remove();
         }, 300);
       }}
     />);
