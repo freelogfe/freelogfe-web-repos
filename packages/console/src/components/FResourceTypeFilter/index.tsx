@@ -94,7 +94,7 @@ function FResourceTypeFilter({ value, omitTheme = false, onChange }: FResourceTy
     set$recommend(data_recently
       .filter((r) => {
         return _localRecently.every((lr) => {
-          return lr.value !== r.code;
+          return lr.value.replace('#all', '') !== r.code;
         });
       })
       .filter((r, i) => {
