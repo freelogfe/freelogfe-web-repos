@@ -8,8 +8,6 @@ import { history } from 'umi';
 import { UpdateAObjectAction } from '@/models/storageHomePage';
 import { fileAttrUnits } from '@/utils/format';
 
-// import { codeToCodes } from '@/components/FResourceTypeInput';
-
 interface DepR {
   id: string;
   name: string;
@@ -36,8 +34,6 @@ export interface StorageObjectEditorModelState {
   objectName: string;
   sha1: string;
   size: number;
-  // resourceTypeCodes: Array<string | number>;
-  // resourceTypeNames: string[];
   resourceTypeValue: {
     value: string | number;
     label: string;
