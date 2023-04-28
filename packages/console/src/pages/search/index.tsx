@@ -65,7 +65,7 @@ function Search({}: SearchProps) {
       skip: pageData.skip,
       operationCategoryCode: selectedOperationCategoryIDs
         .filter((c) => c !== '#all')
-        .shift(),
+        .pop(),
     });
   };
   const getUsers = () => {
