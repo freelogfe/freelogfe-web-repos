@@ -184,6 +184,7 @@ function FResourcePropertyEditorDrawer({
               // errorText = '键不能重复';
               errorText = FI18n.i18nNext.t('alert_key_exist');
             } else if (!FUtil.Regexp.CUSTOM_KEY.test(value)) {
+              // console.log(FUtil.Regexp.CUSTOM_KEY, 'FUtil.Regexp.CUSTOM_KEY.test(value)')
               // errorText = `不符合${FUtil.Regexp.CUSTOM_KEY}`;
               errorText = FI18n.i18nNext.t('alert_key_convention_key');
             }

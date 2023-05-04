@@ -10,7 +10,8 @@ export const RESOURCE_TYPE: RegExp = new RegExp(/^[a-z0-9][a-z0-9_]{1,18}[a-z0-9
 
 // 自定义属性键
 // export const CUSTOM_KEY: RegExp = new RegExp(/^[a-zA-Z0-9_]{1,20}$/);
-export const CUSTOM_KEY: RegExp = new RegExp(/^[a-zA-Z_][a-zA-Z0-9_]{1,19}$/);
+// export const CUSTOM_KEY: RegExp = new RegExp(/^[a-zA-Z_][a-zA-Z0-9_]{1,19}$/);
+export const CUSTOM_KEY: RegExp = new RegExp(/^[a-zA-Z_]([a-zA-Z0-9_]{1,19})?$/);
 
 // 节点名称
 export const NODE_NAME: RegExp = new RegExp(/^[\u4E00-\u9FA5|a-zA-Z0-9]{2,24}$/);
