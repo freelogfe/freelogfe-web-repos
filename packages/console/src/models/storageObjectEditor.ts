@@ -270,8 +270,10 @@ const Model: StorageObjectEditorModelType = {
           size: data_objectDetails.systemProperty.fileSize,
           rawProperties: Object.entries(data_objectDetails.systemProperty).map((s) => ({
             key: s[0],
+            name: s[0],
             // value: s[0] === 'fileSize' ? FUtil.Format.humanizeSize(s[1]) : s[1],
             value: fileAttrUnits[s[0]] ? fileAttrUnits[s[0]](s[1]) : s[1],
+            description: '',
           })),
           baseProperties: (data_objectDetails.customPropertyDescriptors as any[])
             .filter((cpd: any) => cpd.type === 'readonlyText')

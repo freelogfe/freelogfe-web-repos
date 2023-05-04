@@ -213,7 +213,7 @@ function FAddDependenciesDrawer({
     }
   }
 
-  console.log(resourceList, 'resourceList98iosedjflksdjflkjsdl');
+  // console.log(resourceList, 'resourceList98iosedjflksdjflkjsdl');
 
   return (
     <FDrawer

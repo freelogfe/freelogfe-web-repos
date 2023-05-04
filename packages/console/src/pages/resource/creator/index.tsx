@@ -150,7 +150,7 @@ function ResourceCreator({
               <FResourceTypeInput
                 value={resourceCreatorPage.resourceTypeCodes}
                 onChange={(value) => {
-                  console.log(value, 'value9isodjflksdjflksdjflkjlkj');
+                  // console.log(value, 'value9isodjflksdjflksdjflkjlkj');
                   dispatch<OnChange_ResourceTypeCodes_Action>({
                     type: 'resourceCreatorPage/onChange_ResourceTypeCodes',
                     payload: {

@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import { AutoComplete, Cascader, Dropdown, Input, Menu } from 'antd';
 import * as AHooks from 'ahooks';
-import { FI18n, FServiceAPI } from '@freelog/tools-lib';
+import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 import FInput from '@/components/FInput';
 
@@ -232,13 +232,20 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
         }
         const startStr: string = [..._selectedCache.labels, ''].join('/');
 
-        if (value.replace(startStr, '').includes('/')) {
-          return;
-        }
+        // if (value.replace(startStr, '').includes('/')) {
+        //   return;
+        // }
 
         if (!value.startsWith(startStr)) {
           return;
         }
+
+        const custom: string = value.replace(startStr, '');
+
+        if (custom !== '' && !FUtil.Regexp.RESOURCE_TYPE.test(custom)) {
+          return;
+        }
+
         set_autoCompleteInput(value);
         set_autoCompleteInputIsNew(value !== startStr && _autoCompleteOptions.every((aco) => {
           return aco.labels.join('/') !== value;

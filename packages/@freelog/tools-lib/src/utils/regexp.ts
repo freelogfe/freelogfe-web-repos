@@ -6,7 +6,9 @@ export const RESOURCE_NAME: RegExp = new RegExp(/^(?!.*(\\|\/|:|\*|\?|"|<|>|\||\
 
 // 资源类型
 // export const RESOURCE_TYPE: RegExp = new RegExp(/^(?!_)[a-z0-9_]{3,20}(?<!_)$/);
-export const RESOURCE_TYPE: RegExp = new RegExp(/^[a-z0-9][a-z0-9_]{1,18}[a-z0-9]$/);
+// export const RESOURCE_TYPE: RegExp = new RegExp(/^[a-z0-9][a-z0-9_]{1,18}[a-z0-9]$/);
+// ^[\u4e00-\u9fefa-zA-Z0-9\\-&.,]{1,40}$
+export const RESOURCE_TYPE: RegExp = new RegExp('^[\u4e00-\u9fefa-zA-Z0-9\\-&.,]{1,40}$');
 
 // 自定义属性键
 // export const CUSTOM_KEY: RegExp = new RegExp(/^[a-zA-Z0-9_]{1,20}$/);
