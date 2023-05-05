@@ -159,26 +159,26 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
     // set_autoCompleteInputStarWith(startWidth);
     set_autoCompleteInput(startWidth);
 
-    const { data: data_list }: {
-      data: {
-        code: string;
-        name: string;
-        resourceCount: number;
-      }[];
-    } = await FServiceAPI.Resource.ListSimpleByParentCode({
-      parentCode: String(value),
-      // parentCode: 'RT005',
-    });
-
-    set_autoCompleteOptions(data_list.map((l) => {
-      return {
-        value: l.code,
-        label: l.name,
-        values: [l.code],
-        labels: [...labels, l.name],
-        count: l.resourceCount,
-      };
-    }));
+    // const { data: data_list }: {
+    //   data: {
+    //     code: string;
+    //     name: string;
+    //     resourceCount: number;
+    //   }[];
+    // } = await FServiceAPI.Resource.ListSimpleByParentCode({
+    //   parentCode: String(value),
+    //   // parentCode: 'RT005',
+    // });
+    //
+    // set_autoCompleteOptions(data_list.map((l) => {
+    //   return {
+    //     value: l.code,
+    //     label: l.name,
+    //     values: [l.code],
+    //     labels: [...labels, l.name],
+    //     count: l.resourceCount,
+    //   };
+    // }));
   }
 
   if (_mode === 'input' && _selectedCache) {
