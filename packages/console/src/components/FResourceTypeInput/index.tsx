@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import { AutoComplete, Cascader, Dropdown, Input, Menu } from 'antd';
+import { AutoComplete, Dropdown } from 'antd';
 import * as AHooks from 'ahooks';
 import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
