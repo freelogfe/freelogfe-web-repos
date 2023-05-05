@@ -113,20 +113,24 @@ function FResourceTypeFilter({ value, omitTheme = false, onChange }: FResourceTy
   });
 
   function onDropdownChange(op: Option) {
+    // console.log(op, 'i9wejlfksjdlkfjsdlkfjlkj');
+    if (op.value !== '#all') {
+      set_localRecently([
+        {
+          value: op.value,
+          labels: op.labels,
+        },
+        ..._localRecently
+          .filter((i) => {
+            return i.value !== op.value;
+          })
+          .filter((i, j) => {
+            return j < 5;
+          }),
+      ]);
+    }
     // console.log(op, 'OOOPPPP sdujfoisdjflksdjlfkjdslkfjl');
-    set_localRecently([
-      {
-        value: op.value,
-        labels: op.labels,
-      },
-      ..._localRecently
-        .filter((i) => {
-          return i.value !== op.value;
-        })
-        .filter((i, j) => {
-          return j < 5;
-        }),
-    ]);
+
     onChange && onChange(op);
     set_isOpen(false);
   }
