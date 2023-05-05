@@ -53,6 +53,13 @@ interface FResourceTypeInputStates {
     labels: string[];
     count: number;
   }[];
+  _autoCompleteOptionsOther: {
+    value: string;
+    label: string;
+    values: string[];
+    labels: string[];
+    count: number;
+  }[];
   _autoCompleteInput: string;
   _autoCompleteInputIsNew: boolean;
 }
@@ -64,6 +71,7 @@ const initStates: FResourceTypeInputStates = {
   _isOpen: false,
   _selectedCache: null,
   _autoCompleteOptions: [],
+  _autoCompleteOptionsOther: [],
   // autoCompleteInputStarWith: '',
   _autoCompleteInput: '',
   _autoCompleteInputIsNew: false,
@@ -79,6 +87,7 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
   const [_isOpen, set_isOpen] = React.useState<FResourceTypeInputStates['_isOpen']>(initStates['_isOpen']);
   const [_selectedCache, set_selectedCache] = React.useState<FResourceTypeInputStates['_selectedCache']>(initStates['_selectedCache']);
   const [_autoCompleteOptions, set_autoCompleteOptions] = React.useState<FResourceTypeInputStates['_autoCompleteOptions']>(initStates['_autoCompleteOptions']);
+  const [_autoCompleteOptionsOther, set_autoCompleteOptionsOther] = React.useState<FResourceTypeInputStates['_autoCompleteOptionsOther']>(initStates['_autoCompleteOptionsOther']);
   // const [autoCompleteInputStarWith, set_autoCompleteInputStarWith] = React.useState<FResourceTypeInputStates['autoCompleteInputStarWith']>(initStates['autoCompleteInputStarWith']);
   const [_autoCompleteInput, set_autoCompleteInput] = React.useState<FResourceTypeInputStates['_autoCompleteInput']>(initStates['_autoCompleteInput']);
   const [_autoCompleteInputIsNew, set_autoCompleteInputIsNew] = React.useState<FResourceTypeInputStates['_autoCompleteInputIsNew']>(initStates['_autoCompleteInputIsNew']);
@@ -119,11 +128,71 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
 
   AHooks.useDebounceEffect(
     () => {
-      console.log(_autoCompleteInput, 'a9s8idofjhoilsdjflkjsdlfjlkj');
+      // console.log(_autoCompleteInput, 'a9s8idofjhoilsdjflkjsdlfjlkj');
+      (async () => {
+
+        // console.log(_autoCompleteInput, '_autoCompleteInputisdjflksdjflksdjflkjl');
+        if (_autoCompleteInput === '' || _autoCompleteInput.endsWith('/')) {
+          set_autoCompleteOptions([]);
+          set_autoCompleteOptionsOther([]);
+          return;
+        }
+        const search: string[] = _autoCompleteInput.split('/');
+
+        const { data: data_list }: {
+          data: {
+            code: string;
+            name: string;
+            names: string;
+            resourceCount: number;
+          }[];
+        } = await FServiceAPI.Resource.ListSimpleByParentCode({
+          // parentCode: String(value),
+          parentCode: _selectedCache?.value || '',
+          category: 1,
+          name: search[search.length - 1],
+        });
+
+        set_autoCompleteOptions(data_list.map((l) => {
+          return {
+            value: l.code,
+            label: l.name,
+            values: [l.code],
+            labels: l.names.split('/'),
+            count: l.resourceCount,
+          };
+        }));
+
+
+        const { data: data_list1 }: {
+          data: {
+            code: string;
+            name: string;
+            names: string;
+            resourceCount: number;
+          }[];
+        } = await FServiceAPI.Resource.ListSimpleByParentCode({
+          parentCode: _selectedCache?.value || '',
+          category: 1,
+          name: search[search.length - 1],
+          // @ts-ignore
+          excludeParentCode: true,
+        });
+
+        set_autoCompleteOptionsOther(data_list1.map((l) => {
+          return {
+            value: l.code,
+            label: l.name,
+            values: [l.code],
+            labels: l.names.split('/'),
+            count: l.resourceCount,
+          };
+        }));
+      })();
     },
     [_autoCompleteInput],
     {
-      wait: 1000,
+      wait: 300,
     },
   );
 
@@ -168,27 +237,6 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
     const startWidth: string = [...labels, ''].join('/');
     // set_autoCompleteInputStarWith(startWidth);
     set_autoCompleteInput(startWidth);
-
-    // const { data: data_list }: {
-    //   data: {
-    //     code: string;
-    //     name: string;
-    //     resourceCount: number;
-    //   }[];
-    // } = await FServiceAPI.Resource.ListSimpleByParentCode({
-    //   parentCode: String(value),
-    //   // parentCode: 'RT005',
-    // });
-    //
-    // set_autoCompleteOptions(data_list.map((l) => {
-    //   return {
-    //     value: l.code,
-    //     label: l.name,
-    //     values: [l.code],
-    //     labels: [...labels, l.name],
-    //     count: l.resourceCount,
-    //   };
-    // }));
   }
 
   if (_mode === 'input' && _selectedCache) {
@@ -229,13 +277,29 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
             data: aco,
           };
         }),
+        ..._autoCompleteOptionsOther.map((aco) => {
+          return {
+            value: aco.value,
+            label: (<div className={styles.autoCompleteOption}>
+              <span>{aco.labels.join('/')}</span>
+              <FComponentsLib.FContentText
+                // text={`${aco.count}个资源`}
+                text={FI18n.i18nNext.t('createresource_selectresourcetype_input_resourceqty', {
+                  ResourceQty: aco.count,
+                })}
+                type={'additional2'}
+              />
+            </div>),
+            data: aco,
+          };
+        }),
       ]}
       style={{ width: 360 }}
       value={_autoCompleteInput}
       className={styles.AutoComplete}
-      filterOption={(inputValue, option: any) => {
-        return option.data.labels[option.data.labels.length - 1].length <= 40 && option.data.labels.join('/').startsWith(inputValue);
-      }}
+      // filterOption={(inputValue, option: any) => {
+      //   return option.data.labels[option.data.labels.length - 1].length <= 40 && option.data.labels.join('/').startsWith(inputValue);
+      // }}
       onChange={(value: string) => {
         // console.log(value, 'value 908wieojfklsdfjasldkfjlkj');
         if (!value) {
