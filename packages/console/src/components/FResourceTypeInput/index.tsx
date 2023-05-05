@@ -227,6 +227,7 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
         return option.data.labels[option.data.labels.length - 1].length <= 40 && option.data.labels.join('/').startsWith(inputValue);
       }}
       onChange={(value: string) => {
+        console.log(value, 'value 908wieojfklsdfjasldkfjlkj');
         if (!value) {
           return;
         }
@@ -239,15 +240,15 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
         if (!value.startsWith(startStr)) {
           return;
         }
-
+        //
         const custom: string = value.replace(startStr, '');
-
-        if (custom !== '' && !FUtil.Regexp.RESOURCE_TYPE.test(custom)) {
-          return;
-        }
-
+        //
+        // if (custom !== '' && !FUtil.Regexp.RESOURCE_TYPE.test(custom)) {
+        //   return;
+        // }
+        //
         set_autoCompleteInput(value);
-        set_autoCompleteInputIsNew(value !== startStr && _autoCompleteOptions.every((aco) => {
+        set_autoCompleteInputIsNew(value !== startStr && FUtil.Regexp.RESOURCE_TYPE.test(custom) && _autoCompleteOptions.every((aco) => {
           return aco.labels.join('/') !== value;
         }));
       }}
