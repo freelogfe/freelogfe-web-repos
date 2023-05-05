@@ -117,6 +117,16 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
 
   });
 
+  AHooks.useDebounceEffect(
+    () => {
+      console.log(_autoCompleteInput, 'a9s8idofjhoilsdjflkjsdlfjlkj');
+    },
+    [_autoCompleteInput],
+    {
+      wait: 1000,
+    },
+  );
+
   function init() {
     set_mode(initStates['_mode']);
     set_isOpen(initStates['_isOpen']);
@@ -227,27 +237,18 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
         return option.data.labels[option.data.labels.length - 1].length <= 40 && option.data.labels.join('/').startsWith(inputValue);
       }}
       onChange={(value: string) => {
-        console.log(value, 'value 908wieojfklsdfjasldkfjlkj');
+        // console.log(value, 'value 908wieojfklsdfjasldkfjlkj');
         if (!value) {
           return;
         }
         const startStr: string = [..._selectedCache.labels, ''].join('/');
-
-        // if (value.replace(startStr, '').includes('/')) {
-        //   return;
-        // }
-
         if (!value.startsWith(startStr)) {
           return;
         }
-        //
-        const custom: string = value.replace(startStr, '');
-        //
-        // if (custom !== '' && !FUtil.Regexp.RESOURCE_TYPE.test(custom)) {
-        //   return;
-        // }
-        //
         set_autoCompleteInput(value);
+
+
+        const custom: string = value.replace(startStr, '');
         set_autoCompleteInputIsNew(value !== startStr && FUtil.Regexp.RESOURCE_TYPE.test(custom) && _autoCompleteOptions.every((aco) => {
           return aco.labels.join('/') !== value;
         }));
