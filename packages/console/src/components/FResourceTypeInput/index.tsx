@@ -156,6 +156,8 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
           parentCode: _selectedCache?.value || '',
           category: 1,
           name: search[search.length - 1],
+          // @ts-ignore
+          isTerminate: true,
         });
 
         set_autoCompleteOptions(data_list.map((l) => {
@@ -180,8 +182,9 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
           parentCode: _selectedCache?.value || '',
           category: 1,
           name: search[search.length - 1],
-          // @ts-ignore
           excludeParentCode: true,
+          // @ts-ignore
+          isTerminate: true,
         });
 
         set_autoCompleteOptionsOther(data_list1.map((l) => {

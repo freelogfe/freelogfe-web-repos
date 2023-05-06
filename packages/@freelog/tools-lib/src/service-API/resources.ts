@@ -572,6 +572,7 @@ interface ListSimpleByParentCodeParamsType {
   name?: string;
   category?: 1 | 2; // 种类 1：基础资源类型 2：自定义资源类型
   excludeParentCode?: boolean;
+  isTerminate?: boolean;
 }
 
 export function ListSimpleByParentCode({...params}: ListSimpleByParentCodeParamsType) {
