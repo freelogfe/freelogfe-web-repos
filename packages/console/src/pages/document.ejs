@@ -1,14 +1,14 @@
 <!doctype html>
 <script>
-  if (window.location.host.includes('.freelog.com') && window.location.protocol === 'http:') {
-    window.location.replace(window.location.href.replace('http:', 'https:'));
+  if (self.location.host.includes('.freelog.com') && self.location.protocol === 'http:') {
+    self.location.replace(self.location.href.replace('http:', 'https:'));
   }
   (function() {
     const version = '0.10.0';
-    const localVersion = window.localStorage.getItem('Version');
+    const localVersion = self.localStorage.getItem('Version');
     if (version !== localVersion) {
-      window.localStorage.setItem('Version', version);
-      window.localStorage.removeItem('i18nextResources');
+      self.localStorage.setItem('Version', version);
+      self.localStorage.removeItem('i18nextResources');
     }
   })();
 
@@ -26,14 +26,14 @@
 <div id="read-file-root"></div>
 <script>
   (function() {
-    const el = document.createElement('script');
+    const el = self.document.createElement('script');
     // el.type = 'text/javascript';
     // el.charset = 'utf-8';
     el.async = true;
-    const ref = document.body.getElementsByTagName('script')[0];
+    const ref = self.document.body.getElementsByTagName('script')[0];
     // console.log(ref, 'ref');
     ref.parentNode.insertBefore(el, ref);
-    if (window.location.host.includes('.freelog.com')) {
+    if (self.location.host.includes('.freelog.com')) {
       el.src = 'https://s9.cnzz.com/z_stat.php?id=1281181586&web_id=1281181586';
     } else {
       el.src = 'https://s9.cnzz.com/z_stat.php?id=1281181588&web_id=1281181588';
