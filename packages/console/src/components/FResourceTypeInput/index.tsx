@@ -93,9 +93,14 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
   const [_autoCompleteInputIsNew, set_autoCompleteInputIsNew] = React.useState<FResourceTypeInputStates['_autoCompleteInputIsNew']>(initStates['_autoCompleteInputIsNew']);
 
   AHooks.useMount(async () => {
+
     const { data: data_resourceTypes }: {
       data: ServerData[];
-    } = await FServiceAPI.Resource.resourceTypes({ category: 1 });
+    } = await FServiceAPI.Resource.resourceTypes({
+      category: 1,
+      // @ts-ignore
+      status: 1,
+    });
     const options: Option[] = handledData(data_resourceTypes, null);
     set$options(options);
   });
