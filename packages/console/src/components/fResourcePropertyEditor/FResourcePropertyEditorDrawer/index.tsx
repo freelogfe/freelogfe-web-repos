@@ -186,7 +186,7 @@ function FResourcePropertyEditorDrawer({
             } else if (!FUtil.Regexp.CUSTOM_KEY.test(value)) {
               // console.log(FUtil.Regexp.CUSTOM_KEY, 'FUtil.Regexp.CUSTOM_KEY.test(value)')
               // errorText = `不符合${FUtil.Regexp.CUSTOM_KEY}`;
-              errorText = FI18n.i18nNext.t('alert_key_convention_key');
+              errorText = FI18n.i18nNext.t('alert_naming_convention_key');
             }
             set_keyInput(value);
             set_keyInputError(errorText);

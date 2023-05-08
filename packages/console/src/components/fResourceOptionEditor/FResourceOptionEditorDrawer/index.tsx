@@ -133,7 +133,7 @@ function FResourceOptionEditorDrawer({
         disabled={nameInput === '' || nameInputError !== ''
         || keyInput === '' || keyInputError !== ''
         || descriptionInputError !== ''
-        || (typeSelect === 'input' ? (inputInputError !== '') : (selectInputs.some((si) => {
+        || (typeSelect === 'input' ? (inputInputError !== '') : (selectInputs.length === 0 || selectInputs.some((si) => {
           return si.value === '' || si.error !== '';
         })))}
         onClick={async () => {
@@ -230,7 +230,8 @@ function FResourceOptionEditorDrawer({
               errorText = FI18n.i18nNext.t('alert_key_exist');
             } else if (!FUtil.Regexp.CUSTOM_KEY.test(value)) {
               // errorText = `不符合${FUtil.Regexp.CUSTOM_KEY}`;
-              errorText = FI18n.i18nNext.t('alert_key_convention_key');
+              // errorText = FI18n.i18nNext.t('alert_key_convention_key');
+              errorText = FI18n.i18nNext.t('alert_naming_convention_key');
             }
             set_keyInput(value);
             set_keyInputError(errorText);
