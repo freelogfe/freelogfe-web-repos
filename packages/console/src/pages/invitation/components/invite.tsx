@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './invite.less';
 import * as AHooks from 'ahooks';
 import FInput from '@/components/FInput';
-import { FServiceAPI } from '@freelog/tools-lib';
+import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import { history } from 'umi';
 import useUrlState from '@ahooksjs/use-url-state';
 import fMessage from '@/components/fMessage';
@@ -13,16 +13,12 @@ interface InviteProps {
 }
 
 function Invite({ jump }: InviteProps) {
-  const [code, setCode] = React.useState<string>('');
-  const [isCorrect, setIsCorrect] = React.useState<boolean>(true);
+  // console.log('iiiiiiii')
+  const [urlState] = useUrlState<{ returnUrl?: string; invitationCode?: string; }>();
+
+  const [code, setCode] = React.useState<string>(urlState.invitationCode || '');
+  const [errorMessege, setError] = React.useState<string>('');
   const [loading, setLoading] = React.useState<boolean>(false);
-  function submit() {
-    return FServiceAPI.TestQualification.betaCodesActivate({
-      // @ts-ignore
-      code: code,
-    });
-  }
-  const [urlState] = useUrlState<any>();
 
   const { data, error, run } = AHooks.useRequest(submit, {
     loadingDelay: 100,
@@ -32,59 +28,75 @@ function Invite({ jump }: InviteProps) {
     if (loading) {
       setTimeout(() => {
         setLoading(false);
-        if (data) {
-          if (data.errCode) {
-            setIsCorrect(false);
-          } else {
-            fMessage('验证成功！', 'success');
-            setTimeout(() => {
-              if (urlState.returnUrl) {
-                window.location.href = decodeURIComponent(urlState.returnUrl);
-              } else {
-                history.push('/dashboard');
-              }
-            }, 1500);
-          }
-        }
+        console.log(data, 'data09weiojflsikdjflksadjflksjdflkfjlk');
+
       }, 1000);
     }
   }, [data]);
 
-  AHooks.useUnmount(() => {});
+  AHooks.useUnmount(() => {
+  });
+
+  async function submit() {
+    const { data } = await FServiceAPI.TestQualification.betaCodesActivate({
+      // @ts-ignore
+      code: code,
+    });
+
+    if (data) {
+      if (data.errCode) {
+        setError('无效邀请码，请重新输入');
+      } else {
+        fMessage('验证成功！', 'success');
+        console.log(urlState);
+        if (urlState.returnUrl) {
+          console.log('returnUrl09weiojflksdfjlsdkjl');
+          window.location.replace(decodeURIComponent(urlState.returnUrl));
+        } else {
+          // history.push('/dashboard');
+          console.log(FUtil.LinkTo.dashboard(), 'asd98fiojweikfja;lskdjflsdjl');
+          window.location.replace(FUtil.LinkTo.dashboard());
+        }
+      }
+    }
+  }
+
   function flatCss(arr: Array<string>) {
     return arr.join(' ');
   }
+
   return (
     <div className={flatCss(['flex-column flex-1 w-100x align-center', styles.style])}>
-      <div className="flex-1 flex-column">
-        <div className="flex-3"></div>
-        <div className="shrink-0 flex-column align-center">
+      <div className='flex-1 flex-column'>
+        <div className='flex-3' />
+        <div className='shrink-0 flex-column align-center'>
           <div className={styles.title + ' mb-30'}>当前功能仅对内测用户开放</div>
           <div className={styles.title2}>填写邀请码/申请参加内测成功后，体验全部功能</div>
         </div>
-        <div className="flex-2"></div>
+        <div className='flex-2' />
       </div>
-      <div className="shrink-0 flex-column  w-360">
+      <div className='shrink-0 flex-column  w-360'>
         <FInput
-          placeholder="请输入内测邀请码"
+          value={code}
+          placeholder='请输入内测邀请码'
           wrapClassName={styles.input}
           onChange={(e) => {
-            setIsCorrect(true);
-            setCode(e.currentTarget.value);
+            setError('');
+            setCode(e.currentTarget.value.trim());
           }}
         />
-        <div className={styles.codeError}>{isCorrect ? '' : '无效邀请码，请重新输入'}</div>
+        <div className={styles.codeError}>{errorMessege}</div>
         <FComponentsLib.FRectBtn
           onClick={() => {
             run();
             setLoading(true);
           }}
-          disabled={!code || !isCorrect}
+          disabled={!code || !!errorMessege}
         >
           验证邀请码
         </FComponentsLib.FRectBtn>
       </div>
-      <div className="flex-1 flex-column align-center ">
+      <div className='flex-1 flex-column align-center '>
         <div className={'flex-row mt-130'}>
           <span className={styles.tip}>没有内测邀请码？</span>
           <span
@@ -92,7 +104,7 @@ function Invite({ jump }: InviteProps) {
             onClick={() => {
               history.push(
                 '/invitation?type=apply' +
-                  (urlState.returnUrl ? '&returnUrl=' + urlState.returnUrl : ''),
+                (urlState.returnUrl ? '&returnUrl=' + urlState.returnUrl : ''),
               );
               jump('Apply');
             }}

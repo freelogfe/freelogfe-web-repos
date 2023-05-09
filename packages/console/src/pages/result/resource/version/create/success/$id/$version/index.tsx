@@ -3,10 +3,16 @@ import styles from './index.less';
 import { withRouter, history } from 'umi';
 import FCenterLayout from '@/layouts/FCenterLayout';
 import * as AHooks from 'ahooks';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 import { RouteComponentProps } from 'react-router';
 import FComponentsLib from '@freelog/components-lib';
+import fMessage from '@/components/fMessage';
+import fPolicyBuilder from '@/components/fPolicyBuilder';
+import fPolicyOperator from '@/components/fPolicyOperator';
+// import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
+// import { FetchDataSourceAction, FetchDraftDataAction } from '@/models/resourceInfo';
 
 interface SuccessProps extends RouteComponentProps<{
   id: string;
@@ -17,17 +23,21 @@ interface SuccessProps extends RouteComponentProps<{
 
 function Success({ match, dispatch }: SuccessProps) {
 
-  const [count, setCount] = React.useState<number>(3);
+  const [countdown, set_countdown] = React.useState<number>(3);
+  const [nextStep, set_nextStep] = React.useState<'loading' | 'goto' | 'tipOnline'>('loading');
   // 0：初始 1：第一个版本且无策略 2：非第一个版本或有策略
-  const [gotoState, setGotoState] = React.useState<0 | 1 | 2>(0);
+  // const [gotoState, setGotoState] = React.useState<0 | 1 | 2>(0);
 
   AHooks.useInterval(() => {
-    const c = count - 1;
-    setCount(c);
+    const c = countdown - 1;
+    set_countdown(c);
     if (c === 0) {
-      gotoVersionInfo();
+      history.replace(FUtil.LinkTo.resourceVersion({
+        resourceID: match.params.id,
+        version: match.params.version,
+      }));
     }
-  }, gotoState === 2 ? 1000 : undefined);
+  }, nextStep === 'goto' && countdown > 0 ? 1000 : undefined);
 
   AHooks.useMount(async () => {
     const params: Parameters<typeof FServiceAPI.Resource.info>[0] = {
@@ -37,67 +47,138 @@ function Success({ match, dispatch }: SuccessProps) {
     const { data } = await FServiceAPI.Resource.info(params);
     // console.log(data, 'DDDDTTTTAAAAA');
 
-    if (data.resourceVersions.length === 1 && data.policies.length === 0) {
-      setGotoState(1);
-    } else {
-      setGotoState(2);
+    if (data.status === 1) {
+      set_nextStep('goto');
     }
+
+    if (data.status === 4) {
+      set_nextStep('tipOnline');
+    }
+
+    // if (data.resourceVersions.length === 1 && data.policies.length === 0) {
+    //   setGotoState(1);
+    // } else {
+    //   setGotoState(2);
+    // }
   });
 
-  function gotoVersionInfo() {
-    return history.replace(FUtil.LinkTo.resourceVersion({
-      resourceID: match.params.id,
-      version: match.params.version,
-    }));
-  }
-
-  function gotoAuth() {
-    return history.replace(FUtil.LinkTo.resourceAuth({
-      resourceID: match.params.id,
-    }));
-  }
+  // async function gotoVersionInfo() {
+  //
+  //   const { data: data_resourceInfo } = await FServiceAPI.Resource.info({
+  //     resourceIdOrName: match.params.id,
+  //     // isLoadPolicyInfo: 1,
+  //     // isLoadLatestVersionInfo: 1,
+  //     // isTranslate: 1,
+  //   });
+  //
+  //   // console.log(data_resourceInfo, 'data_resourceInfosoidfjsldkfjlkj');
+  //   if (data_resourceInfo.status === 0) {
+  //     const result = await fPromiseModalConfirm({
+  //       title: '资源待上架',
+  //       content: '将资源上架到资源市场开放授权，为你带来更多收益',
+  //       okText: '立即上架',
+  //       cancelText: '暂不上架',
+  //       icon: '',
+  //     });
+  //
+  //     // if (result) {
+  //     //   await resourceOnline(match.params.id);
+  //     //   await dispatch<FetchDataSourceAction>({
+  //     //     type: 'resourceInfo/fetchDataSource',
+  //     //     payload: match.params.id,
+  //     //   });
+  //     // }
+  //
+  //   }
+  // }
 
   return (<FCenterLayout>
     <div style={{ height: 100 }} />
     <div className={styles.modal}>
-      {
-        gotoState !== 0 && (<>
-          <i className={'freelog fl-icon-shenqingchenggong'} />
-          <div style={{ height: 20 }} />
-          <FComponentsLib.FTipText
-            type='second'
-            text={FI18n.i18nNext.t('version_created_successfully', { VersionNumber: match.params.version })}
-          />
-        </>)
-      }
+      <FComponentsLib.FIcons.FCheck />
+      <div style={{ height: 20 }} />
+      <FComponentsLib.FTipText
+        type='second'
+        text={FI18n.i18nNext.t('version_created_successfully', { VersionNumber: match.params.version })}
+      />
 
       <div style={{ height: 40 }} />
 
       {
-        gotoState === 1 && (<div className={styles.goto1}>
-          <FComponentsLib.FTipText type='third' text={'未添加策略的资源不会出现在资源市场中'} />
+        nextStep === 'tipOnline' && (<div className={styles.goto1}>
+          {/*{*/}
+          {/*  FI18n.i18nNext.t('versionreleased_desc')*/}
+          {/*    .split('\n')*/}
+          {/*    .map((text) => {*/}
+          {/*      if (!text) {*/}
+          {/*        return (<div style={{ height: 20 }} />);*/}
+          {/*      }*/}
+          {/*      return (<FComponentsLib.FTipText*/}
+          {/*        type='third'*/}
+          {/*        // text={'添加策略后可将资源上架，上架后才能在资源'}*/}
+          {/*        text={text}*/}
+          {/*      />);*/}
+          {/*    })*/}
+          {/*}*/}
+
+          <FComponentsLib.FTipText
+            type='third'
+            text={'将资源上架到资源市场开放授权，为你带来更多收益'}
+          />
+
           <div style={{ height: 30 }} />
           <FComponentsLib.FRectBtn
-            onClick={() => {
-              gotoAuth();
+            onClick={async () => {
+              const onlineSuccess = await resourceOnline(match.params.id);
+
+              if (onlineSuccess) {
+                fMessage('上线成功', 'success');
+                history.replace(FUtil.LinkTo.myResources());
+                FComponentsLib.fSetHotspotTooltipVisible('header.discoverNav', {
+                  value: true,
+                  effectiveImmediately: true,
+                  onlyNullish: true,
+                });
+                setTimeout(() => {
+                  FComponentsLib.fSetHotspotTooltipVisible('header.discoverNav', {
+                    value: false,
+                    effectiveImmediately: false,
+                    onlyNullish: false,
+                  });
+                });
+              }
             }}
             style={{ padding: '0 20px' }}
-          >立即添加授权策略</FComponentsLib.FRectBtn>
+          >{FI18n.i18nNext.t('versionreleased_btn_set_resource_available_for_auth')}</FComponentsLib.FRectBtn>
+          {/*FI18n.i18nNext.t('versionreleased_btn_set_resource_available_for_auth')*/}
           <div style={{ height: 15 }} />
           <FComponentsLib.FTextBtn
             onClick={() => {
-              gotoVersionInfo();
+              // gotoVersionInfo();
+              return history.replace(FUtil.LinkTo.resourceVersion({
+                resourceID: match.params.id,
+                version: match.params.version,
+              }));
             }}
-          >暂不添加</FComponentsLib.FTextBtn>
+          >{FI18n.i18nNext.t('versionreleased_btn_later')}</FComponentsLib.FTextBtn>
         </div>)
       }
       {
-        gotoState === 2 && (<div className={styles.goto2}>
-          <FComponentsLib.FTipText type='third' text={FI18n.i18nNext.t('jump_to_version_edit', { timer: count })} />
+        nextStep === 'goto' && (<div className={styles.goto2}>
+          <FComponentsLib.FTipText
+            type='third'
+            text={FI18n.i18nNext.t('jump_to_version_edit', { timer: countdown })}
+          />
           <div style={{ width: 10 }} />
           <FComponentsLib.FTextBtn
             // theme={'primary'}
-            onClick={gotoVersionInfo}
+            onClick={async () => {
+              // gotoVersionInfo();
+              history.replace(FUtil.LinkTo.resourceVersion({
+                resourceID: match.params.id,
+                version: match.params.version,
+              }));
+            }}
           >{FI18n.i18nNext.t('jump_now')}</FComponentsLib.FTextBtn>
         </div>)
       }
@@ -107,3 +188,95 @@ function Success({ match, dispatch }: SuccessProps) {
 
 
 export default withRouter(connect()(Success));
+
+async function resourceOnline(resourceID: string): Promise<boolean> {
+
+  const { data: data_resourceInfo } = await FServiceAPI.Resource.info({
+    resourceIdOrName: resourceID,
+    isLoadPolicyInfo: 1,
+    isLoadLatestVersionInfo: 1,
+    isTranslate: 1,
+  });
+
+  if (data_resourceInfo.status === 1) {
+    return true;
+  }
+
+  if (data_resourceInfo.policies.length === 0) {
+
+    const policy = await fPolicyBuilder({
+      alreadyUsedTexts: data_resourceInfo.policies
+        .map<string>((ip: any) => {
+          return ip.policyText;
+        }),
+      alreadyUsedTitles: data_resourceInfo.policies
+        .map((ip) => {
+          return ip.policyName;
+        }),
+      targetType: 'resource',
+    });
+
+    if (!policy) {
+      return false;
+    }
+
+    const params: Parameters<typeof FServiceAPI.Resource.update>[0] = {
+      resourceId: resourceID,
+      status: 1,
+      addPolicies: [
+        {
+          policyName: policy.title,
+          policyText: window.encodeURIComponent(policy.text),
+          status: 1,
+        },
+      ],
+    };
+    const { ret, errCode, msg } = await FServiceAPI.Resource.update(params);
+    if (ret !== 0 || errCode !== 0) {
+      fMessage(msg, 'error');
+      return false;
+    }
+    return true;
+
+  } else if (data_resourceInfo.policies.every((p) => p.status === 0)) {
+    const existingUsedPolicy = await fPolicyOperator({
+      titleText: FI18n.i18nNext.t('set_resource_available_for_auth_activate_auth_plan_title'),
+      confirmText: FI18n.i18nNext.t('set_resource_available_for_auth_activate_auth_plan_btn_done'),
+      tipText: FI18n.i18nNext.t('msg_set_resource_avaliable_for_auth02'),
+      policiesList: data_resourceInfo.policies,
+    });
+
+    if (!existingUsedPolicy) {
+      return false;
+    }
+
+    const params: Parameters<typeof FServiceAPI.Resource.update>[0] = {
+      resourceId: resourceID,
+      status: 1,
+      updatePolicies: existingUsedPolicy.map((p) => {
+        return {
+          policyId: p.policyID,
+          status: p.checked ? 1 : 0, // 0:下线策略 1:上线策略
+        };
+      }),
+    };
+    const { ret, errCode, msg } = await FServiceAPI.Resource.update(params);
+    if (ret !== 0 || errCode !== 0) {
+      fMessage(msg, 'error');
+      return false;
+    }
+    return true;
+  }
+
+  const params: Parameters<typeof FServiceAPI.Resource.update>[0] = {
+    resourceId: resourceID,
+    status: 1,
+  };
+  await FServiceAPI.Resource.update(params);
+
+  return true;
+}
+
+// function online_afterSuccessCreateVersion(){
+//
+// }

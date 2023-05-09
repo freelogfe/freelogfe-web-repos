@@ -80,7 +80,7 @@ function FBasePropsEditorDrawer({
     onClose={() => {
       onCancel && onCancel();
     }}
-    visible={visible}
+    open={visible}
     width={720}
     topRight={<Space size={30}>
       <FComponentsLib.FTextBtn
@@ -229,11 +229,6 @@ function FBasePropsEditorDrawer({
         text={'新增一项属性'}
       />
     </Space>
-
-    {/*<div style={{height: 120}}/>*/}
-    {/*<div className={styles.footer}>*/}
-    {/*  */}
-    {/*</div>*/}
   </FDrawer>);
 }
 

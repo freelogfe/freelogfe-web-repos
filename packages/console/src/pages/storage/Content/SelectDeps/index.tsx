@@ -1,8 +1,9 @@
 import * as React from 'react';
 import styles from './index.less';
 import { Tabs } from 'antd';
-import { connect, Dispatch } from 'dva';
-import { ConnectState, StorageObjectDepSelectorModelState, StorageObjectEditorModelState } from '@/models/connect';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
+import { ConnectState, StorageObjectEditorModelState } from '@/models/connect';
 import FResourceSelector from '@/containers/FResourceSelector';
 import FObjectSelector from '@/containers/FObjectSelector';
 import {
@@ -34,13 +35,13 @@ function SelectDeps({ storageObjectEditor, dispatch }: SelectDepsProps) {
       <Tabs.TabPane tab='资源' key='1'>
         <FResourceSelector
           showRemoveIDsOrNames={storageObjectEditor.depRs.map((r) => r.name)}
-          onSelect={(value) => {
+          onSelect={(value: { id: string }) => {
             dispatch<AddObjectDepRAction>({
               type: 'storageObjectEditor/addObjectDepR',
               payload: value.id,
             });
           }}
-          onDelete={(value) => {
+          onDelete={(value: { name: string }) => {
             // console.log(value, 'ddEDAFDSS');
             dispatch<DeleteObjectDepRAction>({
               type: 'storageObjectEditor/deleteObjectDepR',
@@ -53,14 +54,14 @@ function SelectDeps({ storageObjectEditor, dispatch }: SelectDepsProps) {
         <FObjectSelector
           disabledIDsOrNames={[storageObjectEditor.bucketName + '/' + storageObjectEditor.objectName]}
           showRemoveIDsOrNames={storageObjectEditor.depOs.map((o) => o.name)}
-          onSelect={(value) => {
+          onSelect={(value: { id: string }) => {
             // console.log(value, 'idid23ds');
             dispatch<AddObjectDepOAction>({
               type: 'storageObjectEditor/addObjectDepO',
               payload: value.id,
             });
           }}
-          onDelete={(value) => {
+          onDelete={(value: { name: string }) => {
             // console.log(value, 'ddEDAFD243r5SS');
             dispatch<DeleteObjectDepOAction>({
               type: 'storageObjectEditor/deleteObjectDepO',

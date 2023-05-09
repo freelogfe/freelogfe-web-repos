@@ -2,28 +2,38 @@ import * as React from 'react';
 import styles from './index.less';
 import { Space } from 'antd';
 import SelectDeps from '@/pages/storage/Content/SelectDeps';
-import { connect, Dispatch } from 'dva';
-import { ConnectState, ResourceVersionCreatorPageModelState, StorageObjectEditorModelState } from '@/models/connect';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
+import {
+  ConnectState,
+  // ResourceVersionCreatorPageModelState,
+  StorageObjectEditorModelState,
+} from '@/models/connect';
 import {
   ChangeAction,
   OnChangeTypeAction, OnClick_SaveBtn_Action,
-  // UpdateObjectInfoAction,
 } from '@/models/storageObjectEditor';
 import DepsCards from './DepsCards';
-import FBaseProperties from '@/components/FBaseProperties';
-import FBasePropsEditorDrawer from '@/components/FBasePropsEditorDrawer';
-import { FDown, FInfo, FUp, FDownload } from '@/components/FIcons';
+// import FBaseProperties from '@/components/FBaseProperties';
+// import FBasePropsEditorDrawer from '@/components/FBasePropsEditorDrawer';
 import FFormLayout from '@/components/FFormLayout';
 import FDrawer from '@/components/FDrawer';
-import FCustomOptionsEditorDrawer from '@/components/FCustomOptionsEditorDrawer';
+// import FCustomOptionsEditorDrawer from '@/components/FCustomOptionsEditorDrawer';
 import { history } from 'umi';
 import FTooltip from '@/components/FTooltip';
 import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
-import FCustomOptionsCards from '@/components/FCustomOptionsCards';
-import FBasePropEditorDrawer from '@/components/FBasePropEditorDrawer';
-import FCustomOptionEditorDrawer from '@/components/FCustomOptionEditorDrawer';
+// import FCustomOptionsCards from '@/components/FCustomOptionsCards';
+// import FBasePropEditorDrawer from '@/components/FBasePropEditorDrawer';
+// import FCustomOptionEditorDrawer from '@/components/FCustomOptionEditorDrawer';
 import FResourceTypeInput from '@/components/FResourceTypeInput';
 import FComponentsLib from '@freelog/components-lib';
+import FResourceProperties from '@/components/FResourceProperties';
+import fResourcePropertyEditor from '@/components/fResourcePropertyEditor';
+// import { OnChange_BaseProperties_Action, OnChange_CustomOptions_Action } from '@/models/resourceVersionCreatorPage';
+import FResourceOptions from '@/components/FResourceOptions';
+import fResourceOptionEditor from '@/components/fResourceOptionEditor';
+
+// import fAddFileBaseProps from '@/components/fAddFileBaseProps';
 
 interface DetailsProps {
   dispatch: Dispatch;
@@ -31,21 +41,8 @@ interface DetailsProps {
 }
 
 function Details({ storageObjectEditor, dispatch }: DetailsProps) {
+
   const [depInfoVisible, setDepInfoVisible] = React.useState<boolean>(false);
-
-  const hasError: boolean = storageObjectEditor.resource_Type.some((rt, rti) => {
-    return (rti !== 0 && rt.value === '') || rt.valueError !== '';
-  });
-
-  // function onChangeType(value: string) {
-  //   if (value === storageObjectEditor.type) {
-  //     return;
-  //   }
-  //   dispatch<OnChangeTypeAction>({
-  //     type: 'storageObjectEditor/onChangeType',
-  //     payload: value,
-  //   });
-  // }
 
   async function onChange(payload: ChangeAction['payload']) {
     await dispatch<ChangeAction>({
@@ -54,44 +51,66 @@ function Details({ storageObjectEditor, dispatch }: DetailsProps) {
     });
   }
 
+  async function onClick_addOptionBtn() {
+    const dataSource: {
+      key: string;
+      name: string;
+      type: 'input' | 'select';
+      input: string;
+      select: string[];
+      description: string;
+    } | null = await fResourceOptionEditor({
+      disabledKeys: [
+        ...storageObjectEditor.rawProperties.map<string>((rp) => rp.key),
+        ...storageObjectEditor.baseProperties.map<string>((bp) => bp.key),
+        ...storageObjectEditor.customOptionsData.map<string>((pp) => pp.key),
+      ],
+      disabledNames: [
+        // ...storageObjectEditor.rawProperties.map<string>((rp) => rp.name),
+        ...storageObjectEditor.baseProperties.map<string>((bp) => bp.name),
+        ...storageObjectEditor.customOptionsData.map<string>((pp) => pp.name),
+      ],
+    });
+
+    if (!dataSource) {
+      return;
+    }
+
+    await onChange({
+      customOptionsData: [
+        ...storageObjectEditor.customOptionsData,
+        dataSource,
+      ],
+    });
+  }
+
   return (<FDrawer
     title={'编辑对象信息'}
-    visible={!!storageObjectEditor.objectId}
+    open={!!storageObjectEditor.objectId}
     width={720}
     topRight={<Space size={30}>
       <FComponentsLib.FTextBtn
         onClick={() => {
-          onChange({
-            customOptionsDataVisible: false,
-          });
+          // onChange({
+          //   customOptionsDataVisible: false,
+          // });
           history.replace(FUtil.LinkTo.storageSpace({ bucketName: storageObjectEditor.bucketName }));
         }}
         type='default'
       >取消</FComponentsLib.FTextBtn>
       <FComponentsLib.FRectBtn
-        disabled={hasError}
+        // disabled={hasError}
         onClick={async () => {
           dispatch<OnClick_SaveBtn_Action>({
             type: 'storageObjectEditor/onClick_SaveBtn',
           });
-          // await dispatch<UpdateObjectInfoAction>({
-          //   type: 'storageObjectEditor/updateObjectInfo',
-          // });
-          // dispatch<UpdateAObjectAction>({
-          //   type: 'storageHomePage/updateAObject',
-          //   payload: {
-          //     id: storageObjectEditor.objectId,
-          //     type: storageObjectEditor.type,
-          //   },
-          // });
-          // router.replace(FUtil.LinkTo.storageSpace({ bucketName: storageObjectEditor.bucketName }));
         }}
       >保存</FComponentsLib.FRectBtn>
     </Space>}
     onClose={() => {
-      onChange({
-        customOptionsDataVisible: false,
-      });
+      // onChange({
+      //   customOptionsDataVisible: false,
+      // });
       history.replace(FUtil.LinkTo.storageSpace({
         bucketName: storageObjectEditor.bucketName,
       }));
@@ -125,163 +144,162 @@ function Details({ storageObjectEditor, dispatch }: DetailsProps) {
                         objectIdOrName: encodeURIComponent(`${storageObjectEditor.bucketName}/${storageObjectEditor.objectName}`),
                       });
                     }}
-                  ><FDownload style={{ fontSize: 14 }} /></FComponentsLib.FTextBtn>
+                  ><FComponentsLib.FIcons.FDownload style={{ fontSize: 14 }} /></FComponentsLib.FTextBtn>
                 </div>
               </FTooltip>
             </Space>
           </div>
           <div style={{ height: 5 }} />
-          <FBaseProperties
-            basics={storageObjectEditor.rawProperties}
-            additions={storageObjectEditor.baseProperties}
-            onChangeAdditions={(value) => {
-              onChange({ baseProperties: value });
-            }}
-            onClickEdit={(theKey: string) => {
-              const index: number = storageObjectEditor.baseProperties.findIndex((bp) => {
-                return bp.key === theKey;
-              });
-              onChange({
-                basePropertyEditorIndex: index,
-                basePropertyEditorData: {
-                  ...storageObjectEditor.baseProperties[index],
-                  keyError: '',
-                  valueError: '',
-                  descriptionError: '',
-                },
-              });
-            }}
-            rightTop={<Space size={20}>
-              <FComponentsLib.FTextBtn
-                style={{ fontSize: 12, fontWeight: 600 }}
-                type='primary'
-                onClick={() => {
-                  onChange({
-                    basePropertiesEditorVisible: true,
-                    basePropertiesEditorData: [{
-                      key: '',
-                      keyError: '',
-                      value: '',
-                      valueError: '',
-                      description: '',
-                      descriptionError: '',
-                    }],
-                  });
-                }}
-              >补充属性</FComponentsLib.FTextBtn>
-            </Space>}
-          />
 
-          <div style={{ height: 20 }} />
-
-          <Space>
-            <FComponentsLib.FTextBtn
-              onClick={() => {
-                onChange({
-                  customOptionsDataVisible: !storageObjectEditor.customOptionsDataVisible,
-                });
-              }}
-              type='default'
-              style={{ fontSize: 12, fontWeight: 600 }}
-            >
-              <span>自定义选项（高级）</span>
-              {storageObjectEditor.customOptionsDataVisible ? (<FUp />) : (<FDown />)}
-            </FComponentsLib.FTextBtn>
-            <FTooltip title={'自定义选项'}>
+          <div className={styles.attributes}>
+            <div style={{ height: 20 }} />
+            <div className={styles.attributesHeader}>
+              {/*<span>基础属性</span>*/}
+              <FComponentsLib.FContentText text={'基础属性'} type={'highlight'} style={{ fontSize: 12 }} />
               <div>
-                <FInfo />
+                <Space size={20}>
+                  <FComponentsLib.FTextBtn
+                    style={{ fontSize: 12, fontWeight: 600 }}
+                    type='primary'
+                    onClick={async () => {
+                      const dataSource: {
+                        key: string;
+                        name: string;
+                        value: string;
+                        description: string;
+                      } | null = await fResourcePropertyEditor({
+                        disabledKeys: [
+                          ...storageObjectEditor.rawProperties.map<string>((rp) => rp.key),
+                          ...storageObjectEditor.baseProperties.map<string>((bp) => bp.key),
+                          ...storageObjectEditor.customOptionsData.map<string>((pp) => pp.key),
+                        ],
+                        disabledNames: [
+                          ...storageObjectEditor.baseProperties.map<string>((bp) => bp.name),
+                          ...storageObjectEditor.customOptionsData.map<string>((pp) => pp.name),
+                        ],
+                      });
+                      // console.log(dataSource, 'dataSource9iojskldjflksdjflk');
+                      if (!dataSource) {
+                        return;
+                      }
+
+                      onChange({
+                        baseProperties: [
+                          ...storageObjectEditor.baseProperties,
+                          dataSource,
+                        ],
+                      });
+                    }}
+                  >补充属性</FComponentsLib.FTextBtn>
+                </Space>
               </div>
-            </FTooltip>
-          </Space>
+            </div>
+
+            <div style={{ height: 20 }} />
+
+            <FResourceProperties
+              immutableData={storageObjectEditor.rawProperties}
+              alterableData={storageObjectEditor.baseProperties}
+            />
+            <div style={{ height: 15 }} />
+          </div>
+
+          <div style={{ height: 5 }} />
 
           {
-            storageObjectEditor.customOptionsDataVisible && (<>
-
-              <div style={{ height: 20 }} />
-
-              <Space size={40}>
+            storageObjectEditor.customOptionsData.length === 0
+              ? (<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 20 }}>
                 <FComponentsLib.FTextBtn
+                  type={'default'}
+                  style={{ fontSize: 12 }}
                   onClick={() => {
-                    dispatch<ChangeAction>({
-                      type: 'storageObjectEditor/change',
-                      payload: {
-                        customOptionsEditorVisible: true,
-                        customOptionsEditorDataSource: [{
-                          key: '',
-                          keyError: '',
-                          description: '',
-                          descriptionError: '',
-                          custom: 'input',
-                          defaultValue: '',
-                          defaultValueError: '',
-                          customOption: '',
-                          customOptionError: '',
-                        }],
-                      },
+                    onClick_addOptionBtn();
+                  }}
+                >添加可选配置</FComponentsLib.FTextBtn>
+
+              </div>)
+              : (<div className={styles.options}>
+                <div style={{ height: 20 }} />
+                <div className={styles.optionsHeader}>
+                  <FComponentsLib.FContentText text={'可选配置'} type={'highlight'} style={{ fontSize: 12 }} />
+
+                  <FComponentsLib.FTextBtn
+                    style={{ fontSize: 12, fontWeight: 600 }}
+                    type='primary'
+                    onClick={async () => {
+                      onClick_addOptionBtn();
+                    }}
+                  >添加配置</FComponentsLib.FTextBtn>
+                </div>
+                <div style={{ height: 20 }} />
+
+                <FResourceOptions
+                  // dataSource={resourceVersionCreatorPage.customOptionsData}
+                  dataSource={storageObjectEditor.customOptionsData}
+                  onEdit={async (value) => {
+                    const index: number = storageObjectEditor.customOptionsData.findIndex((p) => {
+                      return p === value;
+                    });
+
+                    const dataSource: {
+                      key: string;
+                      name: string;
+                      type: 'input' | 'select';
+                      input: string;
+                      select: string[];
+                      description: string;
+                    } | null = await fResourceOptionEditor({
+                      disabledKeys: [
+                        ...storageObjectEditor.rawProperties.map<string>((rp) => rp.key),
+                        ...storageObjectEditor.baseProperties.map<string>((bp) => bp.key),
+                        ...storageObjectEditor.customOptionsData.map<string>((pp) => pp.key),
+                      ],
+                      disabledNames: [
+                        // ...storageObjectEditor.rawProperties.map<string>((rp) => rp.name),
+                        ...storageObjectEditor.baseProperties.map<string>((bp) => bp.name),
+                        ...storageObjectEditor.customOptionsData.map<string>((pp) => pp.name),
+                      ],
+                      defaultData: value,
+                    });
+
+                    if (!dataSource) {
+                      return;
+                    }
+
+                    await onChange({
+                      customOptionsData: storageObjectEditor.customOptionsData.map((a, b) => {
+                        if (b !== index) {
+                          return a;
+                        }
+                        return dataSource;
+                      }),
                     });
                   }}
-                  type='primary'
-                  style={{ fontSize: 12, fontWeight: 600 }}
-                >添加选项</FComponentsLib.FTextBtn>
+                  onDelete={async (value) => {
+                    await onChange({
+                      customOptionsData: storageObjectEditor.customOptionsData.filter((a) => {
+                        return a.key !== value.key && a.name !== value.name;
+                      }),
+                    });
+                  }}
+                />
 
-              </Space>
-
-              <div style={{ height: 20 }} />
-              {
-                storageObjectEditor.customOptionsData.length > 0 ? (<FCustomOptionsCards
-                    dataSource={storageObjectEditor.customOptionsData.map((cod) => {
-                      return {
-                        theKey: cod.key,
-                        description: cod.description,
-                        type: cod.custom,
-                        value: cod.custom === 'select' ? cod.customOption : cod.defaultValue,
-                      };
-                    })}
-                    onDelete={(theKey) => {
-                      dispatch<ChangeAction>({
-                        type: 'storageObjectEditor/change',
-                        payload: {
-                          customOptionsData: storageObjectEditor.customOptionsData.filter((cod) => {
-                            return cod.key !== theKey;
-                          }),
-                        },
-                      });
-                    }}
-                    onEdit={(theKey) => {
-                      const index: number = storageObjectEditor.customOptionsData.findIndex((cod) => {
-                        return cod.key === theKey;
-                      });
-                      const customOption = storageObjectEditor.customOptionsData[index];
-                      onChange({
-                        customOptionIndex: index,
-                        customOptionEditorData: customOption ? {
-                          key: customOption.key,
-                          keyError: '',
-                          description: customOption.description,
-                          descriptionError: '',
-                          custom: customOption.custom,
-                          defaultValue: customOption.defaultValue,
-                          defaultValueError: '',
-                          customOption: customOption.customOption,
-                          customOptionError: '',
-                        } : null,
-                      });
-                    }}
-                  />)
-                  : (<FComponentsLib.FContentText text={'暂无自定义选项…'} type='negative' />)
-              }
-            </>)
+              </div>)
           }
 
         </FFormLayout.FBlock>
         <FFormLayout.FBlock title={'资源类型'}>
           <FResourceTypeInput
-            dataSource={storageObjectEditor.resource_Type}
+            // useKey={'name'}
+            value={storageObjectEditor.resourceTypeValue}
             onChange={(value) => {
               dispatch<OnChangeTypeAction>({
                 type: 'storageObjectEditor/onChangeType',
                 payload: {
                   value: value,
+                  // names: selectedOptions.map((so) => {
+                  //   return so.label;
+                  // }),
                 },
               });
             }}
@@ -331,7 +349,7 @@ function Details({ storageObjectEditor, dispatch }: DetailsProps) {
       <FDrawer
         title='添加依赖'
         width={640}
-        visible={depInfoVisible}
+        open={depInfoVisible}
         onClose={() => setDepInfoVisible(false)}
         destroyOnClose
       >
@@ -339,181 +357,181 @@ function Details({ storageObjectEditor, dispatch }: DetailsProps) {
       </FDrawer>
     </div>
 
-    <FBasePropsEditorDrawer
-      visible={storageObjectEditor.basePropertiesEditorVisible}
-      dataSource={storageObjectEditor.basePropertiesEditorData}
-      disabledKeys={[
-        ...storageObjectEditor.rawProperties.map<string>((rp) => rp.key),
-        ...storageObjectEditor.baseProperties.map<string>((bp) => bp.key),
-        ...storageObjectEditor.customOptionsData.map<string>((pp) => pp.key),
-      ]}
-      onChange={(value) => {
-        onChange({
-          basePropertiesEditorData: value,
-        });
-      }}
-      onCancel={() => {
-        onChange({
-          basePropertiesEditorData: [],
-          basePropertiesEditorVisible: false,
-        });
-      }}
-      onConfirm={() => {
-        onChange({
-          basePropertiesEditorData: [],
-          basePropertiesEditorVisible: false,
-          baseProperties: [
-            ...storageObjectEditor.baseProperties,
-            ...storageObjectEditor.basePropertiesEditorData.map<ResourceVersionCreatorPageModelState['baseProperties'][number]>((bped) => {
-              return {
-                key: bped.key,
-                value: bped.value,
-                description: bped.description,
-              };
-            }),
-          ],
-        });
-      }}
-    />
+    {/*<FBasePropsEditorDrawer*/}
+    {/*  visible={storageObjectEditor.basePropertiesEditorVisible}*/}
+    {/*  dataSource={storageObjectEditor.basePropertiesEditorData}*/}
+    {/*  disabledKeys={[*/}
+    {/*    ...storageObjectEditor.rawProperties.map<string>((rp) => rp.key),*/}
+    {/*    ...storageObjectEditor.baseProperties.map<string>((bp) => bp.key),*/}
+    {/*    ...storageObjectEditor.customOptionsData.map<string>((pp) => pp.key),*/}
+    {/*  ]}*/}
+    {/*  onChange={(value) => {*/}
+    {/*    onChange({*/}
+    {/*      basePropertiesEditorData: value,*/}
+    {/*    });*/}
+    {/*  }}*/}
+    {/*  onCancel={() => {*/}
+    {/*    onChange({*/}
+    {/*      basePropertiesEditorData: [],*/}
+    {/*      basePropertiesEditorVisible: false,*/}
+    {/*    });*/}
+    {/*  }}*/}
+    {/*  onConfirm={() => {*/}
+    {/*    onChange({*/}
+    {/*      basePropertiesEditorData: [],*/}
+    {/*      basePropertiesEditorVisible: false,*/}
+    {/*      baseProperties: [*/}
+    {/*        ...storageObjectEditor.baseProperties,*/}
+    {/*        ...storageObjectEditor.basePropertiesEditorData.map<ResourceVersionCreatorPageModelState['baseProperties'][number]>((bped) => {*/}
+    {/*          return {*/}
+    {/*            key: bped.key,*/}
+    {/*            value: bped.value,*/}
+    {/*            description: bped.description,*/}
+    {/*          };*/}
+    {/*        }),*/}
+    {/*      ],*/}
+    {/*    });*/}
+    {/*  }}*/}
+    {/*/>*/}
 
-    <FBasePropEditorDrawer
-      usedKeys={[
-        ...storageObjectEditor.rawProperties.map<string>((rp) => rp.key),
-        ...storageObjectEditor.baseProperties.filter((bp, ind) => ind !== storageObjectEditor.basePropertyEditorIndex).map((bp) => {
-          return bp.key;
-        }),
-        ...storageObjectEditor.customOptionsData.map<string>((pp) => pp.key),
-      ]}
-      visible={storageObjectEditor.basePropertyEditorIndex > -1}
-      keyInput={storageObjectEditor.basePropertyEditorData?.key || ''}
-      keyInputError={storageObjectEditor.basePropertyEditorData?.keyError || ''}
-      valueInput={storageObjectEditor.basePropertyEditorData?.value || ''}
-      valueInputError={storageObjectEditor.basePropertyEditorData?.valueError || ''}
-      descriptionInput={storageObjectEditor.basePropertyEditorData?.description || ''}
-      descriptionInputError={storageObjectEditor.basePropertyEditorData?.descriptionError || ''}
-      onCancel={() => {
-        onChange({
-          basePropertyEditorIndex: -1,
-          basePropertyEditorData: null,
-        });
-      }}
-      onConfirm={() => {
-        onChange({
-          baseProperties: storageObjectEditor.baseProperties.map((bp, ind) => {
-            if (ind !== storageObjectEditor.basePropertyEditorIndex) {
-              return bp;
-            }
-            return {
-              key: storageObjectEditor.basePropertyEditorData?.key || '',
-              value: storageObjectEditor.basePropertyEditorData?.value || '',
-              description: storageObjectEditor.basePropertyEditorData?.description || '',
-            };
-          }),
-          basePropertyEditorIndex: -1,
-          basePropertyEditorData: null,
-        });
-      }}
-      onKeyInputChange={(value) => {
-        onChange({
-          basePropertyEditorData: storageObjectEditor.basePropertyEditorData ? {
-            ...storageObjectEditor.basePropertyEditorData,
-            key: value.value,
-            keyError: value.errorText,
-          } : null,
-        });
-      }}
-      onValueInputChange={(value) => {
-        onChange({
-          basePropertyEditorData: storageObjectEditor.basePropertyEditorData ? {
-            ...storageObjectEditor.basePropertyEditorData,
-            value: value.value,
-            valueError: value.errorText,
-          } : null,
-        });
-      }}
-      onDescriptionInputChange={(value) => {
-        onChange({
-          basePropertyEditorData: storageObjectEditor.basePropertyEditorData ? {
-            ...storageObjectEditor.basePropertyEditorData,
-            description: value.value,
-            descriptionError: value.errorText,
-          } : null,
-        });
-      }}
-    />
+    {/*<FBasePropEditorDrawer*/}
+    {/*  usedKeys={[*/}
+    {/*    ...storageObjectEditor.rawProperties.map<string>((rp) => rp.key),*/}
+    {/*    ...storageObjectEditor.baseProperties.filter((bp, ind) => ind !== storageObjectEditor.basePropertyEditorIndex).map((bp) => {*/}
+    {/*      return bp.key;*/}
+    {/*    }),*/}
+    {/*    ...storageObjectEditor.customOptionsData.map<string>((pp) => pp.key),*/}
+    {/*  ]}*/}
+    {/*  visible={storageObjectEditor.basePropertyEditorIndex > -1}*/}
+    {/*  keyInput={storageObjectEditor.basePropertyEditorData?.key || ''}*/}
+    {/*  keyInputError={storageObjectEditor.basePropertyEditorData?.keyError || ''}*/}
+    {/*  valueInput={storageObjectEditor.basePropertyEditorData?.value || ''}*/}
+    {/*  valueInputError={storageObjectEditor.basePropertyEditorData?.valueError || ''}*/}
+    {/*  descriptionInput={storageObjectEditor.basePropertyEditorData?.description || ''}*/}
+    {/*  descriptionInputError={storageObjectEditor.basePropertyEditorData?.descriptionError || ''}*/}
+    {/*  onCancel={() => {*/}
+    {/*    onChange({*/}
+    {/*      basePropertyEditorIndex: -1,*/}
+    {/*      basePropertyEditorData: null,*/}
+    {/*    });*/}
+    {/*  }}*/}
+    {/*  onConfirm={() => {*/}
+    {/*    onChange({*/}
+    {/*      baseProperties: storageObjectEditor.baseProperties.map((bp, ind) => {*/}
+    {/*        if (ind !== storageObjectEditor.basePropertyEditorIndex) {*/}
+    {/*          return bp;*/}
+    {/*        }*/}
+    {/*        return {*/}
+    {/*          key: storageObjectEditor.basePropertyEditorData?.key || '',*/}
+    {/*          value: storageObjectEditor.basePropertyEditorData?.value || '',*/}
+    {/*          description: storageObjectEditor.basePropertyEditorData?.description || '',*/}
+    {/*        };*/}
+    {/*      }),*/}
+    {/*      basePropertyEditorIndex: -1,*/}
+    {/*      basePropertyEditorData: null,*/}
+    {/*    });*/}
+    {/*  }}*/}
+    {/*  onKeyInputChange={(value) => {*/}
+    {/*    onChange({*/}
+    {/*      basePropertyEditorData: storageObjectEditor.basePropertyEditorData ? {*/}
+    {/*        ...storageObjectEditor.basePropertyEditorData,*/}
+    {/*        key: value.value,*/}
+    {/*        keyError: value.errorText,*/}
+    {/*      } : null,*/}
+    {/*    });*/}
+    {/*  }}*/}
+    {/*  onValueInputChange={(value) => {*/}
+    {/*    onChange({*/}
+    {/*      basePropertyEditorData: storageObjectEditor.basePropertyEditorData ? {*/}
+    {/*        ...storageObjectEditor.basePropertyEditorData,*/}
+    {/*        value: value.value,*/}
+    {/*        valueError: value.errorText,*/}
+    {/*      } : null,*/}
+    {/*    });*/}
+    {/*  }}*/}
+    {/*  onDescriptionInputChange={(value) => {*/}
+    {/*    onChange({*/}
+    {/*      basePropertyEditorData: storageObjectEditor.basePropertyEditorData ? {*/}
+    {/*        ...storageObjectEditor.basePropertyEditorData,*/}
+    {/*        description: value.value,*/}
+    {/*        descriptionError: value.errorText,*/}
+    {/*      } : null,*/}
+    {/*    });*/}
+    {/*  }}*/}
+    {/*/>*/}
 
-    <FCustomOptionsEditorDrawer
-      visible={storageObjectEditor.customOptionsEditorVisible}
-      onCancel={() => {
-        dispatch<ChangeAction>({
-          type: 'storageObjectEditor/change',
-          payload: {
-            customOptionsEditorVisible: false,
-            customOptionsEditorDataSource: [],
-          },
-        });
-      }}
-      disabledKeys={[
-        ...storageObjectEditor.rawProperties.map<string>((rp) => rp.key),
-        ...storageObjectEditor.baseProperties.map<string>((pp) => pp.key),
-        ...storageObjectEditor.customOptionsData.map<string>((cod) => cod.key),
-      ]}
-      onConfirm={(value) => {
-        dispatch<ChangeAction>({
-          type: 'storageObjectEditor/change',
-          payload: {
-            customOptionsData: [
-              ...storageObjectEditor.customOptionsData,
-              ...value,
-            ],
-            customOptionsEditorVisible: false,
-          },
-        });
-      }}
-    />
+    {/*<FCustomOptionsEditorDrawer*/}
+    {/*  visible={storageObjectEditor.customOptionsEditorVisible}*/}
+    {/*  onCancel={() => {*/}
+    {/*    dispatch<ChangeAction>({*/}
+    {/*      type: 'storageObjectEditor/change',*/}
+    {/*      payload: {*/}
+    {/*        customOptionsEditorVisible: false,*/}
+    {/*        customOptionsEditorDataSource: [],*/}
+    {/*      },*/}
+    {/*    });*/}
+    {/*  }}*/}
+    {/*  disabledKeys={[*/}
+    {/*    ...storageObjectEditor.rawProperties.map<string>((rp) => rp.key),*/}
+    {/*    ...storageObjectEditor.baseProperties.map<string>((pp) => pp.key),*/}
+    {/*    ...storageObjectEditor.customOptionsData.map<string>((cod) => cod.key),*/}
+    {/*  ]}*/}
+    {/*  onConfirm={(value) => {*/}
+    {/*    dispatch<ChangeAction>({*/}
+    {/*      type: 'storageObjectEditor/change',*/}
+    {/*      payload: {*/}
+    {/*        customOptionsData: [*/}
+    {/*          ...storageObjectEditor.customOptionsData,*/}
+    {/*          ...value,*/}
+    {/*        ],*/}
+    {/*        customOptionsEditorVisible: false,*/}
+    {/*      },*/}
+    {/*    });*/}
+    {/*  }}*/}
+    {/*/>*/}
 
-    <FCustomOptionEditorDrawer
-      visible={storageObjectEditor.customOptionIndex !== -1}
-      dataSource={{
-        key: storageObjectEditor.customOptionEditorData?.key || '',
-        value: (storageObjectEditor.customOptionEditorData?.custom === 'input' ? storageObjectEditor.customOptionEditorData?.defaultValue : storageObjectEditor.customOptionEditorData?.customOption) || '',
-        description: storageObjectEditor.customOptionEditorData?.description || '',
-        valueType: storageObjectEditor.customOptionEditorData?.custom || 'input',
-      }}
-      disabledKeys={[
-        ...storageObjectEditor.rawProperties.map<string>((rp) => rp.key),
-        ...storageObjectEditor.baseProperties.map<string>((pp) => pp.key),
-        ...storageObjectEditor.customOptionsData.filter((cod, ind) => {
-          return ind !== storageObjectEditor.customOptionIndex;
-        }).map((cod) => {
-          return cod.key;
-        }),
-      ]}
-      onCancel={() => {
-        onChange({
-          customOptionIndex: -1,
-          customOptionEditorData: null,
-        });
-      }}
-      onConfirm={(value) => {
-        onChange({
-          customOptionsData: storageObjectEditor.customOptionsData.map((cod, ind) => {
-            if (ind !== storageObjectEditor.customOptionIndex) {
-              return cod;
-            }
-            return {
-              key: value.key,
-              description: value.description,
-              custom: value.valueType,
-              defaultValue: value.value,
-              customOption: value.value,
-            };
-          }),
-          customOptionIndex: -1,
-          customOptionEditorData: null,
-        });
-      }}
-    />
+    {/*<FCustomOptionEditorDrawer*/}
+    {/*  visible={storageObjectEditor.customOptionIndex !== -1}*/}
+    {/*  dataSource={{*/}
+    {/*    key: storageObjectEditor.customOptionEditorData?.key || '',*/}
+    {/*    value: (storageObjectEditor.customOptionEditorData?.custom === 'input' ? storageObjectEditor.customOptionEditorData?.defaultValue : storageObjectEditor.customOptionEditorData?.customOption) || '',*/}
+    {/*    description: storageObjectEditor.customOptionEditorData?.description || '',*/}
+    {/*    valueType: storageObjectEditor.customOptionEditorData?.custom || 'input',*/}
+    {/*  }}*/}
+    {/*  disabledKeys={[*/}
+    {/*    ...storageObjectEditor.rawProperties.map<string>((rp) => rp.key),*/}
+    {/*    ...storageObjectEditor.baseProperties.map<string>((pp) => pp.key),*/}
+    {/*    ...storageObjectEditor.customOptionsData.filter((cod, ind) => {*/}
+    {/*      return ind !== storageObjectEditor.customOptionIndex;*/}
+    {/*    }).map((cod) => {*/}
+    {/*      return cod.key;*/}
+    {/*    }),*/}
+    {/*  ]}*/}
+    {/*  onCancel={() => {*/}
+    {/*    onChange({*/}
+    {/*      customOptionIndex: -1,*/}
+    {/*      customOptionEditorData: null,*/}
+    {/*    });*/}
+    {/*  }}*/}
+    {/*  onConfirm={(value) => {*/}
+    {/*    onChange({*/}
+    {/*      customOptionsData: storageObjectEditor.customOptionsData.map((cod, ind) => {*/}
+    {/*        if (ind !== storageObjectEditor.customOptionIndex) {*/}
+    {/*          return cod;*/}
+    {/*        }*/}
+    {/*        return {*/}
+    {/*          key: value.key,*/}
+    {/*          description: value.description,*/}
+    {/*          custom: value.valueType,*/}
+    {/*          defaultValue: value.value,*/}
+    {/*          customOption: value.value,*/}
+    {/*        };*/}
+    {/*      }),*/}
+    {/*      customOptionIndex: -1,*/}
+    {/*      customOptionEditorData: null,*/}
+    {/*    });*/}
+    {/*  }}*/}
+    {/*/>*/}
   </FDrawer>);
 }
 

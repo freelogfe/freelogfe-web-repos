@@ -32,6 +32,7 @@ export interface NodeManager_Contract_Page_ModelState {
   authorize_List: {
     cover: string;
     subjectType: 'resource' | 'exhibit';
+    subjectID: string;
     subjectName: string;
     contractName: string;
     licensorId: string;
@@ -62,6 +63,7 @@ export interface NodeManager_Contract_Page_ModelState {
   authorized_List: {
     cover: string;
     subjectType: 'resource' | 'exhibit';
+    subjectID: string;
     subjectName: string;
     contractName: string;
     licensorId: string;
@@ -522,20 +524,21 @@ const Model: NodeManager_Contract_Page_ModelType = {
         keywords: nodeManager_Contract_Page.authorize_Keywords || undefined,
       };
 
-      const data = yield call(contractList, params);
+      const data: { dataList: any[]; totalItem: number; } = yield call(contractList, params);
 
       // console.log(data, '@2222222222')
 
       const resultList: NodeManager_Contract_Page_ModelState['authorize_List'] = [
         ...beforeData,
-        ...(data.dataList as any[]).map<NodeManager_Contract_Page_ModelState['authorize_List'][number]>((al: any) => {
+        ...data.dataList.map<NodeManager_Contract_Page_ModelState['authorize_List'][number]>((al: any) => {
 
           return {
             cover: al.subjectInfo?.coverImages[0] || '',
             subjectType: al.subjectType === 1 ? 'resource' : 'exhibit',
+            subjectID: al.subjectId,
             subjectName: al.subjectName,
             contractName: al.contractName,
-            licensorId: al.licenseeId,
+            licensorId: al.licensorId,
             licensorType: al.subjectType === 1 ? 'resource' : 'node',
             licensorName: al.licensorName,
             licenseeId: al.licenseeId,
@@ -672,7 +675,7 @@ const Model: NodeManager_Contract_Page_ModelType = {
         keywords: nodeManager_Contract_Page.authorized_Keywords || undefined,
       };
 
-      const data = yield call(contractList, params);
+      const data: { dataList: any[]; totalItem: number; } = yield call(contractList, params);
 
       // console.log(data, 'DDDDF093ujlksjdlfsdkflsdfls');
       // const data1 = { dataList: [] };
@@ -682,9 +685,10 @@ const Model: NodeManager_Contract_Page_ModelType = {
           return {
             cover: al.subjectInfo?.coverImages[0] || '',
             subjectType: al.subjectType === 1 ? 'resource' : 'exhibit',
+            subjectID: al.subjectId,
             subjectName: al.subjectName,
             contractName: al.contractName,
-            licensorId: al.licenseeId,
+            licensorId: al.licensorId,
             licensorType: al.subjectType === 1 ? 'resource' : 'node',
             licensorName: al.licensorName,
             licenseeId: al.licenseeId,

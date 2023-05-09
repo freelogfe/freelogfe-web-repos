@@ -1,7 +1,8 @@
 import * as React from 'react';
 import styles from './index.less';
 import { Drawer, Space } from 'antd';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState, ResourceDetailPageModelState } from '@/models/connect';
 import FPolicyDisplay from '@/components/FPolicyDisplay';
 import FComponentsLib from '@freelog/components-lib';
@@ -163,7 +164,7 @@ function ResourcesAndPolicies({ dispatch, resourceDetailPage }: ResourcesAndPoli
     }
 
     <Drawer
-      visible={!!visibleR}
+      open={!!visibleR}
       // title={<span style={{fontWeight: 400}}>stefan/Smell like teen spirit</span>}
       title={null}
       width={720}

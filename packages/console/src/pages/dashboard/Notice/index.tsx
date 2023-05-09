@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
 import { Space } from 'antd';
-import FLoudspeaker from '@/components/FIcons/FLoudspeaker';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import * as AHooks from 'ahooks';
 import FComponentsLib from '@freelog/components-lib';
@@ -42,9 +41,11 @@ function Notice({}: NoticeProps) {
         href: d.linkActivityId
           ? (FUtil.Format.completeUrlByDomain('www') + FUtil.LinkTo.activity({ activityID: d.linkActivityId }))
           : d.link,
-        date: '0000-00-00'
+        date: '0000-00-00',
       };
     }));
+
+    await FServiceAPI.Activity.eventTrackingAdsVisit({ _id: data.dataList[0]._id });
   });
 
   AHooks.useUnmount(() => {
@@ -60,14 +61,15 @@ function Notice({}: NoticeProps) {
       notices.map((n) => {
         return (<div key={n.id} className={styles.noticeContent}>
           <Space size={10}>
-            <FLoudspeaker style={{ color: '#2784FF' }} />
+            <FComponentsLib.FIcons.FLoudspeaker style={{ color: '#2784FF' }} />
             <span>{n.title}</span>
           </Space>
           <Space size={15}>
             {/*<span>{n.date}</span>*/}
             <FComponentsLib.FTextBtn
               type='primary'
-              onClick={() => {
+              onClick={async () => {
+                await FServiceAPI.Activity.eventTrackingAdsClick({ _id: n.id });
                 window.open(n.href);
               }}
             >查看详情</FComponentsLib.FTextBtn>

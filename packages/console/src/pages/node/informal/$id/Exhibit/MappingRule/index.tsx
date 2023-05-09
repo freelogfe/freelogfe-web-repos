@@ -1,17 +1,17 @@
 import * as React from 'react';
 import styles from './index.less';
 import { Space } from 'antd';
-import {
-  // FEdit, FLine,
-  FMappingRuleAdd,
-  FMappingRuleAttr,
-  FMappingRuleCover,
-  FMappingRuleLabel,
-  FMappingRuleOffline,
-  FMappingRuleOnline,
-  FMappingRuleReplace,
-  FMappingRuleTitle,
-} from '@/components/FIcons';
+// import {
+//   // FEdit, FLine,
+//   FMappingRuleAdd,
+//   FMappingRuleAttr,
+//   FMappingRuleCover,
+//   FMappingRuleLabel,
+//   FMappingRuleOffline,
+//   FMappingRuleOnline,
+//   FMappingRuleReplace,
+//   FMappingRuleTitle,
+// } from '@/components/FIcons';
 import FPopover from '@/components/FPopover';
 import TypesCaption from '../../components/TypesCaption';
 import {
@@ -27,7 +27,6 @@ import {
   TitleRule,
   // VersionRule,
 } from '../../components/MappingRules';
-import FMappingRuleActive from '@/components/FIcons/FMappingRuleActive';
 import { TooltipPlacement } from 'antd/lib/tooltip';
 import { OperationAndActionRecords } from '@/type/InformalNodeTypes';
 import FTooltip from '@/components/FTooltip';
@@ -150,35 +149,35 @@ function MappingRule({
       {
         operationAndActionRecords.map((oaar, oaarIndex) => {
           if (oaar.type === 'add') {
-            return (<FMappingRuleAdd key={oaarIndex} />);
+            return (<FComponentsLib.FIcons.FMappingRuleAdd key={oaarIndex} />);
           }
           if (oaar.type === 'alter') {
             return (<FComponentsLib.FIcons.FEdit key={oaarIndex} />);
           }
           if (oaar.type === 'activate_theme') {
-            return (<FMappingRuleActive key={oaarIndex} />);
+            return (<FComponentsLib.FIcons.FMappingRuleActive key={oaarIndex} />);
           }
           if (oaar.type === 'set_cover') {
-            return (<FMappingRuleCover key={oaarIndex} />);
+            return (<FComponentsLib.FIcons.FMappingRuleCover key={oaarIndex} />);
           }
           if (oaar.type === 'set_title') {
-            return (<FMappingRuleTitle key={oaarIndex} />);
+            return (<FComponentsLib.FIcons.FMappingRuleTitle key={oaarIndex} />);
           }
           if (oaar.type === 'set_labels') {
-            return (<FMappingRuleLabel key={oaarIndex} />);
+            return (<FComponentsLib.FIcons.FMappingRuleLabel key={oaarIndex} />);
           }
           if (oaar.type === 'online') {
             return oaar.data.onlineStatus
-              ? (<FMappingRuleOnline key={oaarIndex} />)
-              : (<FMappingRuleOffline key={oaarIndex} />);
+              ? (<FComponentsLib.FIcons.FMappingRuleOnline key={oaarIndex} />)
+              : (<FComponentsLib.FIcons.FMappingRuleOffline key={oaarIndex} />);
           }
 
           if (oaar.type === 'add_attr' || oaar.type === 'delete_attr') {
-            return (<FMappingRuleAttr key={oaarIndex} />);
+            return (<FComponentsLib.FIcons.FMappingRuleAttr key={oaarIndex} />);
           }
 
           if (oaar.type === 'replace') {
-            return (<FMappingRuleReplace key={oaarIndex} />);
+            return (<FComponentsLib.FIcons.FMappingRuleReplace key={oaarIndex} />);
           }
           return null;
         })

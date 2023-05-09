@@ -8,7 +8,6 @@ import { ColumnsType } from 'antd/lib/table/interface';
 import MappingRule from '@/pages/node/informal/$id/Exhibit/MappingRule';
 import { Checkbox, Popconfirm, Space } from 'antd';
 import FSwitch from '@/components/FSwitch';
-import { FDelete, FFileSearch } from '@/components/FIcons';
 import FIdentityTypeBadge from '@/components/FIdentityTypeBadge';
 import {
   OnChange_Exhibits_StatusSwitch_Action,
@@ -36,28 +35,28 @@ function ExhibitTable({ dispatch, informalNodeManagerPage }: ExhibitTableProps) 
 
   const columns: ColumnsType<InformalNodeManagerPageModelState['exhibit_List'][number]> = [
     {
-      title: <FComponentsLib.FTitleText type="table" text={'来源｜封面'} />,
+      title: <FComponentsLib.FTitleText type='table' text={'来源｜封面'} />,
       dataIndex: 'cover',
       key: 'cover',
       width: 120,
       render(text, record) {
         return (<div className={styles.cover}>
-          <FCoverImage
-            src={record.stateInfo.coverInfo.coverImages[0] || ''}
-            width={120}
-            style={{ borderRadius: 4 }}
-          />
-          <div className={styles.Identity}>
-            <FIdentityTypeBadge
-              status={record.associatedPresentableId === '' ? record.originInfo.type : 'exhibit'}
+            <FCoverImage
+              src={record.stateInfo.coverInfo.coverImages[0] || ''}
+              width={120}
+              style={{ borderRadius: 4 }}
             />
+            <div className={styles.Identity}>
+              <FIdentityTypeBadge
+                status={record.associatedPresentableId === '' ? record.originInfo.type : 'exhibit'}
+              />
             </div>
           </div>
         );
       },
     },
     {
-      title: <FComponentsLib.FTitleText type="table" text={'测试展品名称｜类型｜测试展品标题｜映射规则'} />,
+      title: <FComponentsLib.FTitleText type='table' text={'测试展品名称｜类型｜测试展品标题｜映射规则'} />,
       dataIndex: 'name',
       key: 'name',
       render(text, record) {
@@ -79,13 +78,13 @@ function ExhibitTable({ dispatch, informalNodeManagerPage }: ExhibitTableProps) 
             </div>
           </div>
           <div style={{ maxWidth: 500, overflow: 'hidden' }}>
-            <MappingRule operationAndActionRecords={record.operationAndActionRecords}/>
+            <MappingRule operationAndActionRecords={record.operationAndActionRecords} />
           </div>
         </div>);
       },
     },
     {
-      title: <FComponentsLib.FTitleText type="table" text={''} />,
+      title: <FComponentsLib.FTitleText type='table' text={''} />,
       dataIndex: 'action',
       key: 'action',
       width: 110,
@@ -122,14 +121,14 @@ function ExhibitTable({ dispatch, informalNodeManagerPage }: ExhibitTableProps) 
                 record.associatedPresentableId !== ''
                   ? undefined
                   : () => {
-                      dispatch<OnClick_Exhibits_DeleteBtn_Action>({
-                        type: 'informalNodeManagerPage/onClick_Exhibits_DeleteBtn',
-                        payload: {
-                          testResourceId: record.testResourceId,
-                          testResourceName: record.testResourceName,
-                        },
-                      });
-                    }
+                    dispatch<OnClick_Exhibits_DeleteBtn_Action>({
+                      type: 'informalNodeManagerPage/onClick_Exhibits_DeleteBtn',
+                      payload: {
+                        testResourceId: record.testResourceId,
+                        testResourceName: record.testResourceName,
+                      },
+                    });
+                  }
               }
             />
           </div>
@@ -137,7 +136,7 @@ function ExhibitTable({ dispatch, informalNodeManagerPage }: ExhibitTableProps) 
       },
     },
     {
-      title: <FComponentsLib.FTitleText type="table" text={'展示版本'} />,
+      title: <FComponentsLib.FTitleText type='table' text={'展示版本'} />,
       dataIndex: 'version',
       key: 'version',
       width: 123,
@@ -155,7 +154,7 @@ function ExhibitTable({ dispatch, informalNodeManagerPage }: ExhibitTableProps) 
       },
     },
     {
-      title: <FComponentsLib.FTitleText type="table" text={FI18n.i18nNext.t('switch_set_exhibit_avaliable')} />,
+      title: <FComponentsLib.FTitleText type='table' text={FI18n.i18nNext.t('switch_set_exhibit_avaliable')} />,
       dataIndex: 'online',
       key: 'online',
       width: 65,
@@ -201,7 +200,7 @@ function ExhibitTable({ dispatch, informalNodeManagerPage }: ExhibitTableProps) 
 
     if (value) {
       // 上架
-        upOrDownExhibit(value);
+      upOrDownExhibit(value);
     } else {
       // 下架
       const resourceNoTip = localStorage.getItem('exhibitNoTip') || false;
@@ -242,7 +241,7 @@ function ExhibitTable({ dispatch, informalNodeManagerPage }: ExhibitTableProps) 
         setResultPopupType(null);
       }, 1000);
     }, 1000);
-  }
+  };
 
   return (
     <>
@@ -260,9 +259,9 @@ function ExhibitTable({ dispatch, informalNodeManagerPage }: ExhibitTableProps) 
 
       <FDialog
         show={inactiveDialogShow}
-        title="提醒"
-        desc="下架后其它用户将无法签约该资源，确认要下架吗？"
-        sureText="下架资源"
+        title={FI18n.i18nNext.t('remove_exhibit_from_auth_confirmation_title')}
+        desc={FI18n.i18nNext.t('confirm_msg_remove_exhibits_from_auth')}
+        sureText={FI18n.i18nNext.t('btn_remove_exhibits_from_auth')}
         cancel={() => {
           setInactiveDialogShow(false);
         }}
@@ -274,10 +273,10 @@ function ExhibitTable({ dispatch, informalNodeManagerPage }: ExhibitTableProps) 
             checked={noLonger}
             onChange={(e) => setNoLonger(e.target.checked)}
           >
-            不再提醒
+            {FI18n.i18nNext.t('checkbox_dontaskmeagain')}
           </Checkbox>
         }
-      ></FDialog>
+      />
 
       {resultPopupType !== null && (
         <div className={styles['result-modal']}>
@@ -286,7 +285,11 @@ function ExhibitTable({ dispatch, informalNodeManagerPage }: ExhibitTableProps) 
               <div className={styles['loader']}>
                 <LoadingOutlined className={styles['loader-icon']} />
                 <div className={styles['loader-text']}>
-                  正在{resultPopupType ? '上架' : '下架'}
+                  {
+                    resultPopupType
+                      ? FI18n.i18nNext.t('set_resource_available_for_auth_msg_processing')
+                      : FI18n.i18nNext.t('remove_resource_from_auth_msg_processing')
+                  }
                 </div>
               </div>
             ) : (
@@ -295,9 +298,13 @@ function ExhibitTable({ dispatch, informalNodeManagerPage }: ExhibitTableProps) 
                   className={`freelog fl-icon-shangpao ${styles['result-icon']} ${
                     styles[resultPopupType ? 'up' : 'down']
                   }`}
-                ></i>
+                />
                 <div className={styles['result-text']}>
-                  已{resultPopupType ? '上架' : '下架'}
+                  {
+                    resultPopupType
+                      ? FI18n.i18nNext.t('set_resource_available_for_auth_msg_done')
+                      : FI18n.i18nNext.t('remove_resource_from_auth_msg_done')
+                  }
                 </div>
               </div>
             )}
@@ -324,26 +331,26 @@ function Actions({ onEdit, onSearch, onDelete }: ActionsProps) {
   const refDom = React.useRef(null);
 
   return (<div ref={refDom}>
-      <Space size={25}>
-        {onEdit && (
-          <FTooltip title={FI18n.i18nNext.t('tip_edit_exhibit')}>
+    <Space size={25}>
+      {onEdit && (
+        <FTooltip title={FI18n.i18nNext.t('tip_edit_exhibit')}>
             <span>
-              <FComponentsLib.FTextBtn type="primary" onClick={() => onEdit()}>
+              <FComponentsLib.FTextBtn type='primary' onClick={() => onEdit()}>
                 <FComponentsLib.FIcons.FEdit />
               </FComponentsLib.FTextBtn>
             </span>
-          </FTooltip>
-        )}
+        </FTooltip>
+      )}
 
-        {onSearch && (
-          <FTooltip title={FI18n.i18nNext.t('tip_check_relevant_resource')}>
+      {onSearch && (
+        <FTooltip title={FI18n.i18nNext.t('tip_check_relevant_resource')}>
             <span>
-              <FComponentsLib.FTextBtn type="primary" onClick={() => onSearch()}>
-                <FFileSearch />
+              <FComponentsLib.FTextBtn type='primary' onClick={() => onSearch()}>
+                <FComponentsLib.FIcons.FFileSearch />
               </FComponentsLib.FTextBtn>
             </span>
-          </FTooltip>
-        )}
+        </FTooltip>
+      )}
 
       {
         onDelete && (<FComponentsLib.FTextBtn
@@ -355,7 +362,7 @@ function Actions({ onEdit, onSearch, onDelete }: ActionsProps) {
               },
             });
           }}
-          className={styles.Delete}><FDelete /></FComponentsLib.FTextBtn>)
+          className={styles.Delete}><FComponentsLib.FIcons.FDelete /></FComponentsLib.FTextBtn>)
       }
 
     </Space>

@@ -6,6 +6,7 @@ import { history } from 'umi';
 import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 import fMessage from '@/components/fMessage';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
+import { fileAttrUnits } from '@/utils/format';
 
 export interface ResourceDetailPageModelState {
   page_State: 'loading' | 'details' | 'signPage';
@@ -29,7 +30,7 @@ export interface ResourceDetailPageModelState {
     resourceId: string;
     resourceName: string;
     resourceType: string[];
-    status: 0 | 1;
+    status: 0 | 1 | 2 | 4;
     authProblem: boolean;
     policies: PolicyFullInfo_Type[],
     userId: number;
@@ -39,9 +40,9 @@ export interface ResourceDetailPageModelState {
     id: string;
     name: string;
     type: string[];
-    status: 0 | 1;
-    authProblem: boolean;
-    error: '' | 'offline' | 'freeze';
+    // status: 0 | 1;
+    // authProblem: boolean;
+    error: '' | 'offline' | 'freeze' | 'unreleased';
     warning: '' | 'authException' | 'ownerFreeze';
     contracts: {
       checked: boolean;
@@ -71,20 +72,29 @@ export interface ResourceDetailPageModelState {
   resourceVersion_Info: {
     releaseTime: string;
     description: string;
-    properties: {
+    rawProperties: {
       key: string;
-      value: string;
-      description?: string;
-    }[];
-    options: {
-      key: string;
+      name: string;
       value: string;
       description: string;
     }[];
+    baseProperties: {
+      key: string;
+      name: string;
+      value: string;
+      description: string;
+    }[];
+    customOptions: {
+      key: string;
+      name: string;
+      description: string;
+      type: 'input' | 'select';
+      input: string;
+      select: string[];
+    }[];
   };
 
-  graph_FullScreen: boolean;
-  graph_ViewportGraphShow: 'dependency' | 'authorization';
+  // graphShow: boolean;
 }
 
 export interface ChangeAction extends AnyAction {
@@ -201,12 +211,14 @@ const initStates: ResourceDetailPageModelState = {
   resourceVersion_Info: {
     releaseTime: '',
     description: '',
-    properties: [],
-    options: [],
+    rawProperties: [],
+    baseProperties: [],
+    customOptions: [],
   },
 
-  graph_FullScreen: false,
-  graph_ViewportGraphShow: 'dependency',
+  // graph_FullScreen: false,
+  // graph_ViewportGraphShow: 'dependency',
+  // graphShow: true,
 };
 
 const Model: ResourceDetailPageModelType = {
@@ -345,7 +357,8 @@ const Model: ResourceDetailPageModelType = {
                       };
                     });
                   return {
-                    checked: false,
+                    // checked: false,
+                    checked: true,
                     id: c.contractId,
                     name: c.contractName,
                     text: c.policyInfo.policyText,
@@ -356,6 +369,7 @@ const Model: ResourceDetailPageModelType = {
                   };
                 });
 
+              // console.log(contracts, 'contractsoisedjeflksdjlfkjsdlfkjl');
               const allContractUsedPolicyIDs: string[] = contracts
                 .filter((cp) => cp.status !== 'terminal')
                 .map<string>((cp) => cp.policyID);
@@ -375,13 +389,15 @@ const Model: ResourceDetailPageModelType = {
                 id: value.resourceId,
                 name: value.resourceName,
                 type: value.resourceType,
-                status: value.status,
-                authProblem: value.authProblem,
+                // status: value.status,
+                // authProblem: value.authProblem,
                 error: value.status === 0
-                  ? 'offline'
-                  : (value.status & 2) === 2
+                  ? 'unreleased'
+                  : value.status === 2
                     ? 'freeze'
-                    : '',
+                    : value.status === 4
+                      ? 'offline'
+                      : '',
                 warning: ownerUserInfo.status === 1
                   ? 'ownerFreeze'
                   : value.authProblem
@@ -510,10 +526,12 @@ const Model: ResourceDetailPageModelType = {
         })),
       };
       const { data, ret, errCode, msg } = yield call(FServiceAPI.Exhibit.createPresentable, params);
-      if (ret + (errCode || 0) > 0) {
+      if (ret !== 0 || errCode !== 0) {
+        self._czc?.push(['_trackEvent', '确认签约页', '确认签约', '', 0]);
         fMessage(msg, 'error');
         return;
       }
+      self._czc?.push(['_trackEvent', '确认签约页', '确认签约', '', 1]);
       history.push(FUtil.LinkTo.exhibitManagement({ exhibitID: data.presentableId }));
     },
     * onChangeAndVerifySignExhibitName({ payload }: OnChangeAndVerifySignExhibitNameAction, {
@@ -581,8 +599,9 @@ const Model: ResourceDetailPageModelType = {
       let rawSignResources: ResourceDetailPageModelState['sign_AllRawResources'] = [data_ResourceDetail];
 
       // console.log(data.baseUpcastResources, 'data.baseUpcastResources908898888888');
+
       // 获取上抛资源信息
-      if ((data_ResourceDetail.baseUpcastResources || []).length > 0) {
+      if (data_ResourceDetail.status === 1 && (data_ResourceDetail.baseUpcastResources || []).length > 0) {
         // console.log(data.baseUpcastResources.map((r: any) => r.resourceId), '0928384u290u49023');
 
         const params: Parameters<typeof handleResourceBatchInfo>[0] = {
@@ -639,11 +658,13 @@ const Model: ResourceDetailPageModelType = {
                 type: rs.resourceType,
                 status: rs.status,
                 authProblem: rs.authProblem,
-                error: rs.status === 0 ?
-                  'offline'
-                  : (rs.status & 2) === 2
+                error: rs.status === 0
+                  ? 'unreleased'
+                  : rs.status === 2
                     ? 'freeze'
-                    : '',
+                    : rs.status === 4
+                      ? 'offline'
+                      : '',
                 warning: ownerUserInfo.status === 1
                   ? 'ownerFreeze'
                   : rs.authProblem
@@ -739,7 +760,29 @@ const Model: ResourceDetailPageModelType = {
         resourceId: resourceDetailPage.resource_ID,
       };
       // console.log('resourceVersionInfo1239weiojfasdlkfjslk');
-      const { data } = yield call(FServiceAPI.Resource.resourceVersionInfo1, params);
+      const { data: data_versionInfo }: {
+        data: {
+          customPropertyDescriptors: {
+            key: string;
+            name: string;
+            defaultValue: string;
+            type: 'editableText' | 'readonlyText' | 'radio' | 'checkbox' | 'select';
+            candidateItems: string[];
+            remark: string;
+          }[],
+          systemProperty: { [key: string]: string; },
+          systemPropertyDescriptors: {
+            defaultValue: number | string;
+            key: string;
+            name: string;
+            remark: string;
+            valueDisplay: string;
+            valueUnit: string;
+          }[];
+          createDate: string;
+          description: string;
+        }
+      } = yield call(FServiceAPI.Resource.resourceVersionInfo1, params);
       // console.log(data, 'redataceVersionInfo1239weiojfasdlkfjslkdata');
       // console.log(params, 'params0932jklsdjflsdk');
       // console.log(data, 'data0932jklsdjflsdk');
@@ -748,31 +791,63 @@ const Model: ResourceDetailPageModelType = {
         type: 'change',
         payload: {
           resourceVersion_Info: {
-            releaseTime: FUtil.Format.formatDateTime(data.createDate),
-            description: data.description,
-            properties: [
-              ...Object.entries(data.systemProperty as object)
-                .map((s) => ({
-                  key: s[0],
-                  value: s[0] === 'fileSize' ? FUtil.Format.humanizeSize(s[1]) : s[1],
-                })),
-              ...data.customPropertyDescriptors.filter((p: any) => p.type === 'readonlyText')
-                .map((p: any) => {
-                  // console.log(p, 'PPPPP()*UOI');
-                  return {
-                    key: p.key,
-                    value: p.defaultValue,
-                    description: p.remark,
-                  };
-                }),
-            ],
-            options: data.customPropertyDescriptors.filter((p: any) => p.type !== 'readonlyText')
+            releaseTime: FUtil.Format.formatDateTime(data_versionInfo.createDate),
+            description: data_versionInfo.description,
+            // rawProperties: Object.entries(data_versionInfo.systemProperty as object)
+            //   .map((s) => ({
+            //     key: s[0],
+            //     value: fileAttrUnits[s[0]] ? fileAttrUnits[s[0]](s[1]) : s[1],
+            //   })),
+            rawProperties: data_versionInfo.systemPropertyDescriptors.map((spd) => {
+              return {
+                key: spd.key,
+                name: spd.name,
+                value: spd.valueDisplay,
+                description: spd.remark,
+              };
+            }),
+            baseProperties: data_versionInfo.customPropertyDescriptors
+              .filter((p) => {
+                return p.type === 'readonlyText';
+              })
               .map((p: any) => {
-                // console.log(p, '@@@@@@#$#@$@#$@#');
+                // console.log(p, 'PPPPP()*UOI');
                 return {
                   key: p.key,
+                  name: p.name,
                   value: p.defaultValue,
                   description: p.remark,
+                };
+              }),
+            // properties: [
+            //   ...Object.entries(data.systemProperty as object)
+            //     .map((s) => ({
+            //       key: s[0],
+            //       value: fileAttrUnits[s[0]] ? fileAttrUnits[s[0]](s[1]) : s[1],
+            //     })),
+            //   ...data.customPropertyDescriptors.filter((p: any) => p.type === 'readonlyText')
+            //     .map((p: any) => {
+            //       // console.log(p, 'PPPPP()*UOI');
+            //       return {
+            //         key: p.key,
+            //         value: p.defaultValue,
+            //         description: p.remark,
+            //       };
+            //     }),
+            // ],
+            customOptions: data_versionInfo.customPropertyDescriptors
+              .filter((i) => {
+                return i.type !== 'readonlyText';
+              })
+              .map((i) => {
+                // console.log(p, '@@@@@@#$#@$@#$@#');
+                return {
+                  key: i.key,
+                  name: i.name,
+                  description: i.remark,
+                  type: i.type === 'editableText' ? 'input' : 'select',
+                  input: i.defaultValue,
+                  select: i.candidateItems,
                 };
               }),
           },

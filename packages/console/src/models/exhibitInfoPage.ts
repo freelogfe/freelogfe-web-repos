@@ -7,8 +7,9 @@ import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 import { history } from 'umi';
 import { FCustomOptionsEditorDrawerStates } from '@/components/FCustomOptionsEditorDrawer';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
-
-// import FUtil1 from '@/utils';
+import { fileAttrUnits } from '@/utils/format';
+import FComponentsLib from '@freelog/components-lib';
+import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
 
 export interface ExhibitInfoPageModelState {
   pageLoading: boolean;
@@ -24,7 +25,7 @@ export interface ExhibitInfoPageModelState {
   exhibit_BelongNode_ActiveThemeId: string;
 
   policy_List: PolicyFullInfo_Type[];
-  policy_BuildDrawer_Visible: boolean;
+  // policy_BuildDrawer_Visible: boolean;
 
   contract_ExhibitAllContractIDs: {
     exhibitID: string;
@@ -33,11 +34,12 @@ export interface ExhibitInfoPageModelState {
   }[];
   contract_SelectedAssociatedID: string;
   contract_Associated: {
-    // selected: boolean;
     id: string;
     name: string;
     type: string[];
-
+    state: 'online' | 'offline';
+    error: '' | 'offline' | 'unreleased' | 'freeze';
+    warning: '';
     exhibits: {
       id: string;
       name: string;
@@ -56,22 +58,33 @@ export interface ExhibitInfoPageModelState {
     policies: PolicyFullInfo_Type[];
   }[];
 
-  graph_FullScreen: boolean;
-  graph_Viewport_Show: 'relationship' | 'authorization' | 'dependency';
+  // graph_FullScreen: boolean;
+  // graph_Viewport_Show: 'relationship' | 'authorization' | 'dependency';
+  graphShow: boolean;
 
   side_ExhibitCover: string;
   side_ExhibitTitle: string;
   side_ExhibitInputTitle: string | null;
+  side_ExhibitInputTitle_Error: string;
   side_ExhibitTags: string[];
   side_AllVersions: string[];
   side_Version: string;
   side_SettingUnfold: boolean;
-  side_BaseAttrs: {
+  side_RawProperties: {
     key: string;
+    name: string;
     value: string;
+    description: string;
+  }[];
+  side_BaseProperties: {
+    key: string;
+    name: string;
+    value: string;
+    description: string;
   }[];
   side_InheritOptions: {
     key: string;
+    name: string;
     value: string;
     description: string;
     type: 'input' | 'select';
@@ -82,18 +95,19 @@ export interface ExhibitInfoPageModelState {
   }[];
   side_CustomOptions: {
     key: string;
+    name: string;
     value: string;
     description: string;
     valueInput: string;
     valueInputError: string;
   }[];
-  side_CustomOptionsDrawer_Visible: boolean;
-  side_CustomOptionDrawer_Visible: boolean;
-  side_CustomOptionDrawer_DataSource: {
-    key: string;
-    value: string;
-    description: string;
-  } | null;
+  // side_CustomOptionsDrawer_Visible: boolean;
+  // side_CustomOptionDrawer_Visible: boolean;
+  // side_CustomOptionDrawer_DataSource: {
+  //   key: string;
+  //   value: string;
+  //   description: string;
+  // } | null;
   side_ResourceID: string;
   side_ResourceName: string;
   side_ResourceType: string[];
@@ -176,6 +190,12 @@ export interface UpdateContractUsedAction {
   };
 }
 
+export interface OnChange_Side_InputTitle_Action extends AnyAction {
+  type: 'exhibitInfoPage/onChange_Side_InputTitle';
+  payload: {
+    value: string | null;
+  };
+}
 
 export interface OnClick_Side_InheritOptions_ResetBtn_Action extends AnyAction {
   type: 'exhibitInfoPage/onClick_Side_InheritOptions_ResetBtn';
@@ -199,12 +219,12 @@ export interface OnBlur_Side_InheritOptions_ValueInput_Action extends AnyAction 
   };
 }
 
-export interface OnClick_Side_CustomOptions_EditBtn_Action extends AnyAction {
-  type: 'exhibitInfoPage/onClick_Side_CustomOptions_EditBtn';
-  payload: {
-    index: number;
-  };
-}
+// export interface OnClick_Side_CustomOptions_EditBtn_Action extends AnyAction {
+//   type: 'exhibitInfoPage/onClick_Side_CustomOptions_EditBtn';
+//   payload: {
+//     index: number;
+//   };
+// }
 
 export interface OnClick_Side_CustomOptions_DeleteBtn_Action extends AnyAction {
   type: 'exhibitInfoPage/onClick_Side_CustomOptions_DeleteBtn';
@@ -228,26 +248,34 @@ export interface OnBlur_Side_CustomOptions_ValueInput_Action extends AnyAction {
   };
 }
 
-export interface OnClick_Side_AddCustomOptionsBtn_Action extends AnyAction {
-  type: 'exhibitInfoPage/onClick_Side_AddCustomOptionsBtn';
-}
+// export interface OnClick_Side_AddCustomOptionsBtn_Action extends AnyAction {
+//   type: 'exhibitInfoPage/onClick_Side_AddCustomOptionsBtn';
+// }
 
 export interface OnConfirm_AddCustomOptionsDrawer_Action extends AnyAction {
   type: 'exhibitInfoPage/onConfirm_AddCustomOptionsDrawer';
   payload: {
-    value: FCustomOptionsEditorDrawerStates['dataSource'];
+    value: {
+      key: string;
+      name: string;
+      // type: 'input' | 'select';
+      input: string;
+      // select: string[];
+      description: string;
+    };
   };
 }
 
-export interface OnCancel_AddCustomOptionsDrawer_Action extends AnyAction {
-  type: 'exhibitInfoPage/onCancel_AddCustomOptionsDrawer';
-}
+// export interface OnCancel_AddCustomOptionsDrawer_Action extends AnyAction {
+//   type: 'exhibitInfoPage/onCancel_AddCustomOptionsDrawer';
+// }
 
 export interface OnConfirm_CustomOptionDrawer_Action extends AnyAction {
   type: 'exhibitInfoPage/onConfirm_CustomOptionDrawer';
   payload: {
     value: {
       key: string;
+      name: string;
       value: string;
       description: string;
       valueType: 'input' | 'select';
@@ -255,9 +283,9 @@ export interface OnConfirm_CustomOptionDrawer_Action extends AnyAction {
   };
 }
 
-export interface OnCancel_CustomOptionDrawer_Action extends AnyAction {
-  type: 'exhibitInfoPage/onCancel_CustomOptionDrawer';
-}
+// export interface OnCancel_CustomOptionDrawer_Action extends AnyAction {
+//   type: 'exhibitInfoPage/onCancel_CustomOptionDrawer';
+// }
 
 export interface ExhibitInfoPageModelType {
   namespace: 'exhibitInfoPage';
@@ -275,18 +303,19 @@ export interface ExhibitInfoPageModelType {
     changeVersion: (action: ChangeVersionAction, effects: EffectsCommandMap) => void;
     updateContractUsed: (action: UpdateContractUsedAction, effects: EffectsCommandMap) => void;
 
+    onChange_Side_InputTitle: (action: OnChange_Side_InputTitle_Action, effects: EffectsCommandMap) => void;
     onClick_Side_InheritOptions_ResetBtn: (action: OnClick_Side_InheritOptions_ResetBtn_Action, effects: EffectsCommandMap) => void;
     onChange_Side_InheritOptions_ValueInput: (action: OnChange_Side_InheritOptions_ValueInput_Action, effects: EffectsCommandMap) => void;
     onBlur_Side_InheritOptions_ValueInput: (action: OnBlur_Side_InheritOptions_ValueInput_Action, effects: EffectsCommandMap) => void;
-    onClick_Side_CustomOptions_EditBtn: (action: OnClick_Side_CustomOptions_EditBtn_Action, effects: EffectsCommandMap) => void;
+    // onClick_Side_CustomOptions_EditBtn: (action: OnClick_Side_CustomOptions_EditBtn_Action, effects: EffectsCommandMap) => void;
     onClick_Side_CustomOptions_DeleteBtn: (action: OnClick_Side_CustomOptions_DeleteBtn_Action, effects: EffectsCommandMap) => void;
     onChange_Side_CustomOptions_ValueInput: (action: OnChange_Side_CustomOptions_ValueInput_Action, effects: EffectsCommandMap) => void;
     onBlur_Side_CustomOptions_ValueInput: (action: OnBlur_Side_CustomOptions_ValueInput_Action, effects: EffectsCommandMap) => void;
-    onClick_Side_AddCustomOptionsBtn: (action: OnClick_Side_AddCustomOptionsBtn_Action, effects: EffectsCommandMap) => void;
+    // onClick_Side_AddCustomOptionsBtn: (action: OnClick_Side_AddCustomOptionsBtn_Action, effects: EffectsCommandMap) => void;
     onConfirm_AddCustomOptionsDrawer: (action: OnConfirm_AddCustomOptionsDrawer_Action, effects: EffectsCommandMap) => void;
-    onCancel_AddCustomOptionsDrawer: (action: OnCancel_AddCustomOptionsDrawer_Action, effects: EffectsCommandMap) => void;
+    // onCancel_AddCustomOptionsDrawer: (action: OnCancel_AddCustomOptionsDrawer_Action, effects: EffectsCommandMap) => void;
     onConfirm_CustomOptionDrawer: (action: OnConfirm_CustomOptionDrawer_Action, effects: EffectsCommandMap) => void;
-    onCancel_CustomOptionDrawer: (action: OnCancel_CustomOptionDrawer_Action, effects: EffectsCommandMap) => void;
+    // onCancel_CustomOptionDrawer: (action: OnCancel_CustomOptionDrawer_Action, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<ExhibitInfoPageModelState, ChangeAction>;
@@ -310,29 +339,32 @@ const initStates: ExhibitInfoPageModelState = {
   exhibit_BelongNode_ActiveThemeId: '',
 
   policy_List: [],
-  policy_BuildDrawer_Visible: false,
+  // policy_BuildDrawer_Visible: false,
 
   contract_ExhibitAllContractIDs: [],
   contract_SelectedAssociatedID: '',
   contract_Associated: [],
 
-  graph_FullScreen: false,
-  graph_Viewport_Show: 'relationship',
+  // graph_FullScreen: false,
+  // graph_Viewport_Show: 'relationship',
+  graphShow: true,
 
   side_ExhibitCover: '',
   side_ExhibitTitle: '',
   side_ExhibitInputTitle: null,
+  side_ExhibitInputTitle_Error: '',
   side_ExhibitTags: [],
   side_AllVersions: [],
   side_Version: '',
   side_SettingUnfold: false,
-  side_BaseAttrs: [],
+  side_RawProperties: [],
+  side_BaseProperties: [],
   side_InheritOptions: [],
   side_CustomOptions: [],
 
-  side_CustomOptionsDrawer_Visible: false,
-  side_CustomOptionDrawer_Visible: false,
-  side_CustomOptionDrawer_DataSource: null,
+  // side_CustomOptionsDrawer_Visible: false,
+  // side_CustomOptionDrawer_Visible: false,
+  // side_CustomOptionDrawer_DataSource: null,
   side_ResourceID: '',
   side_ResourceName: '',
   side_ResourceType: [],
@@ -387,7 +419,47 @@ const Model: ExhibitInfoPageModelType = {
           exhibit_ID: '',
         },
       });
-      const { data: data_PresentableDetails } = yield call(FServiceAPI.Exhibit.presentableDetails, params);
+      const { data: data_PresentableDetails }: {
+        data: {
+          nodeId: number;
+          userId: number;
+          presentableId: string;
+          presentableName: string;
+          resourceInfo: any;
+          resourceCustomPropertyDescriptors: {
+            candidateItems: string[]
+            defaultValue: string;
+            key: string;
+            name: string;
+            remark: string;
+            type: 'readonlyText' | 'select' | 'editableText';
+          }[];
+          coverImages: string[];
+          onlineStatus: number;
+          policies: any[];
+          presentableTitle: string;
+          resolveResources: any[];
+          tags: string[];
+          version: string;
+          resourceSystemProperty: {
+            [k: string]: string
+          };
+          resourceSystemPropertyDescriptors: {
+            defaultValue: number | string;
+            key: string;
+            name: string;
+            remark: string;
+            valueDisplay: string;
+            valueUnit: string;
+          }[];
+          presentableRewriteProperty: {
+            key: string;
+            remark: string;
+            value: string;
+          }[];
+        };
+      } = yield call(FServiceAPI.Exhibit.presentableDetails, params);
+      // console.log(data_PresentableDetails, 'data_PresentableDetailsisdflksdjlk');
 
       // console.log(data, 'data@#Rasfdjou890ujewfra');
 
@@ -421,7 +493,7 @@ const Model: ExhibitInfoPageModelType = {
 
       // 要禁用的键
       const disabledRewriteKeys = [
-        ...data_PresentableDetails.resourceCustomPropertyDescriptors.map((i: any) => i.key),
+        ...data_PresentableDetails.resourceCustomPropertyDescriptors.map((i) => i.key),
       ];
 
       // console.log(data, 'data2341234');
@@ -463,7 +535,7 @@ const Model: ExhibitInfoPageModelType = {
       }).flat();
       // console.log(result, 'result111122222333333');
 
-      const policies: PolicyFullInfo_Type[] = data_PresentableDetails.policies;
+      const policies: PolicyFullInfo_Type[] = [...data_PresentableDetails.policies];
       policies.reverse();
 
       policies.sort((a, b) => {
@@ -494,7 +566,7 @@ const Model: ExhibitInfoPageModelType = {
             return rr.resourceId === exhibitInfoPage.contract_SelectedAssociatedID;
           }) ? exhibitInfoPage.contract_SelectedAssociatedID : result_ContractAssociated[0].resourceId,
           contract_Associated: result_ContractAssociated
-            .map((r, index) => {
+            .map<ExhibitInfoPageModelState['contract_Associated'][number]>((r, index) => {
               const exhibits = data_AllPresentables.filter((d5: any) => {
                 return d5.resolveResources.some((rr: any) => {
                   return d5.presentableId !== data_PresentableDetails.presentableId && rr.resourceId === r.resourceId;
@@ -514,6 +586,15 @@ const Model: ExhibitInfoPageModelType = {
                 name: r.resourceName,
                 type: r.resourceType,
                 exhibits: exhibits,
+                state: r.status === 1 ? 'online' : 'offline',
+                error: r.status === 0
+                  ? 'unreleased'
+                  : r.status === 2
+                    ? 'freeze'
+                    : r.status === 4
+                      ? 'offline'
+                      : '',
+                warning: '',
                 contracts: r.contracts
                   .filter((p) => {
                     return p.status !== 'terminal';
@@ -542,28 +623,38 @@ const Model: ExhibitInfoPageModelType = {
 
           side_AllVersions: data_ResourceInfo.resourceVersions.map((d2: any) => d2.version),
           side_Version: data_PresentableDetails.version,
-
-          side_BaseAttrs: [
-            ...Object.entries(data_PresentableDetails.resourceSystemProperty).map((s: any) => ({
-              key: s[0],
-              value: s[0] === 'fileSize' ? FUtil.Format.humanizeSize(s[1]) : s[1],
+          // side_RawProperties: Object.entries(data_PresentableDetails.resourceSystemProperty).map((s: any) => ({
+          //   key: s[0],
+          //   value: fileAttrUnits[s[0]] ? fileAttrUnits[s[0]](s[1]) : s[1],
+          // })),
+          side_RawProperties: data_PresentableDetails.resourceSystemPropertyDescriptors.map((spd) => {
+            return {
+              key: spd.key,
+              name: spd.name,
+              value: spd.valueDisplay,
+              description: spd.remark,
+            };
+          }),
+          side_BaseProperties: data_PresentableDetails.resourceCustomPropertyDescriptors
+            .filter((rd: any) => rd.type === 'readonlyText')
+            .map((rd: any) => ({
+              key: rd.key,
+              name: rd.name,
+              value: rd.defaultValue,
+              description: rd.remark,
             })),
-            ...data_PresentableDetails.resourceCustomPropertyDescriptors
-              .filter((rd: any) => rd.type === 'readonlyText')
-              .map((rd: any) => ({
-                key: rd.key,
-                value: rd.defaultValue,
-              })),
-          ],
-          side_InheritOptions: (data_PresentableDetails.resourceCustomPropertyDescriptors as any[])
-            .filter((rd: any) => rd.type !== 'readonlyText')
-            .map<ExhibitInfoPageModelState['side_InheritOptions'][number]>((rd: any) => {
-              const prp = data_PresentableDetails.presentableRewriteProperty.find((pr: any) => pr.key === rd.key);
+          side_InheritOptions: data_PresentableDetails.resourceCustomPropertyDescriptors
+            .filter((rd) => {
+              return rd.type === 'editableText' || rd.type === 'select';
+            })
+            .map<ExhibitInfoPageModelState['side_InheritOptions'][number]>((rd) => {
+              const prp = data_PresentableDetails.presentableRewriteProperty.find((pr) => pr.key === rd.key);
               const value = prp ? prp.value : rd.defaultValue;
               // console.log(prp, 'rd1234234#####');
               // console.log(rd, 'rd1234234******');
               return {
                 key: rd?.key || '',
+                name: rd?.name || '',
                 value: value,
                 type: rd.type === 'select' ? 'select' : 'input',
                 options: rd.type === 'select' ? rd.candidateItems : [],
@@ -575,9 +666,10 @@ const Model: ExhibitInfoPageModelType = {
             }),
           side_CustomOptions: (data_PresentableDetails.presentableRewriteProperty as any[])
             .filter((pr: any) => !disabledRewriteKeys.includes(pr.key))
-            .map<ExhibitInfoPageModelState['side_CustomOptions'][number]>((pr: any) => {
+            .map<ExhibitInfoPageModelState['side_CustomOptions'][number]>((pr) => {
               return {
                 key: pr.key,
+                name: pr.name,
                 value: pr.value,
                 description: pr.remark,
                 valueInput: pr.value,
@@ -596,6 +688,7 @@ const Model: ExhibitInfoPageModelType = {
       const { exhibitInfoPage }: ConnectState = yield select(({ exhibitInfoPage }: ConnectState) => ({
         exhibitInfoPage,
       }));
+
       const params: Parameters<typeof FServiceAPI.Exhibit.updatePresentable>[0] = {
         presentableId: exhibitInfoPage.exhibit_ID,
         addPolicies: [{
@@ -603,10 +696,84 @@ const Model: ExhibitInfoPageModelType = {
           policyText: payload.text,
           status: 1,
         }],
+
       };
-      yield call(FServiceAPI.Exhibit.updatePresentable, params);
-      yield put<FetchInfoAction>({
-        type: 'fetchInfo',
+      const res: {
+        ret: number;
+        errCode: number;
+        msg: string;
+      } = yield call(FServiceAPI.Exhibit.updatePresentable, params);
+
+      if (res.ret !== 0 || res.errCode !== 0) {
+        fMessage(res.msg, 'error');
+        return;
+      }
+
+      FComponentsLib.fSetHotspotTooltipVisible('exhibitDetailPage.onlineSwitch', {
+        value: true,
+        effectiveImmediately: true,
+        onlyNullish: true,
+      });
+
+      setTimeout(() => {
+        FComponentsLib.fSetHotspotTooltipVisible('exhibitDetailPage.onlineSwitch', {
+          value: false,
+          effectiveImmediately: false,
+          onlyNullish: false,
+        });
+      });
+
+      if (!exhibitInfoPage.exhibit_Online && !exhibitInfoPage.side_ResourceType.includes('主题')) {
+        const online: boolean = yield call(fPromiseModalConfirm, {
+          title: '展品待上架',
+          description: '将展品上架开放授权，为你带来更多收益',
+          okText: '立即上架',
+          cancelText: '暂不上架',
+        });
+
+        if (online) {
+          const params2: Parameters<typeof FServiceAPI.Exhibit.presentablesOnlineStatus>[0] = {
+            presentableId: exhibitInfoPage.exhibit_ID,
+            onlineStatus: 1,
+          };
+          yield call(FServiceAPI.Exhibit.presentablesOnlineStatus, params2);
+          FComponentsLib.fSetHotspotTooltipVisible('exhibitDetailPage.onlineSwitch', {
+            value: false,
+            effectiveImmediately: true,
+            onlyNullish: false,
+          });
+        }
+
+      }
+
+      // const params2: Parameters<typeof FServiceAPI.Exhibit.presentablesOnlineStatus>[0] = {
+      //   presentableId: exhibitInfoPage.exhibit_ID,
+      //   onlineStatus: 0,
+      // };
+      // await FServiceAPI.Exhibit.presentablesOnlineStatus(params2);
+
+      const params1: Parameters<typeof FServiceAPI.Exhibit.presentableDetails>[0] = {
+        presentableId: exhibitInfoPage.exhibit_ID,
+        isLoadCustomPropertyDescriptors: 1,
+        isLoadPolicyInfo: 1,
+        isTranslate: 1,
+      };
+
+      const { data: data_PresentableDetails } = yield call(FServiceAPI.Exhibit.presentableDetails, params1);
+
+      const policies: PolicyFullInfo_Type[] = [...data_PresentableDetails.policies];
+      policies.reverse();
+
+      policies.sort((a, b) => {
+        return (a.status === 1 && b.status === 0) ? -1 : 0;
+      });
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          policy_List: policies,
+          exhibit_Online: data_PresentableDetails.onlineStatus === 1,
+        },
       });
     },
     * updateAPolicy({ payload }: UpdateAPolicyAction, { call, select, put }: EffectsCommandMap) {
@@ -621,8 +788,31 @@ const Model: ExhibitInfoPageModelType = {
         }],
       };
       yield call(FServiceAPI.Exhibit.updatePresentable, params);
-      yield put<FetchInfoAction>({
-        type: 'fetchInfo',
+      // yield put<FetchInfoAction>({
+      //   type: 'fetchInfo',
+      // });
+
+      const params1: Parameters<typeof FServiceAPI.Exhibit.presentableDetails>[0] = {
+        presentableId: exhibitInfoPage.exhibit_ID,
+        isLoadCustomPropertyDescriptors: 1,
+        isLoadPolicyInfo: 1,
+        isTranslate: 1,
+      };
+
+      const { data: data_PresentableDetails } = yield call(FServiceAPI.Exhibit.presentableDetails, params1);
+
+      const policies: PolicyFullInfo_Type[] = [...data_PresentableDetails.policies];
+      policies.reverse();
+
+      policies.sort((a, b) => {
+        return (a.status === 1 && b.status === 0) ? -1 : 0;
+      });
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          policy_List: policies,
+        },
       });
     },
     * updateBaseInfo({ payload }: UpdateBaseInfoAction, { select, call, put }: EffectsCommandMap) {
@@ -788,6 +978,15 @@ const Model: ExhibitInfoPageModelType = {
       });
     },
 
+    * onChange_Side_InputTitle({ payload }: OnChange_Side_InputTitle_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          side_ExhibitInputTitle: payload.value,
+          side_ExhibitInputTitle_Error: (payload.value || '').length > 100 ? '不能超过100个字符' : '',
+        },
+      });
+    },
     * onClick_Side_InheritOptions_ResetBtn({ payload }: OnClick_Side_InheritOptions_ResetBtn_Action, {
       select,
       call,
@@ -911,28 +1110,28 @@ const Model: ExhibitInfoPageModelType = {
       }
       fMessage('自定义选项已更新');
     },
-    * onClick_Side_CustomOptions_EditBtn({ payload }: OnClick_Side_CustomOptions_EditBtn_Action, {
-      select,
-      put,
-    }: EffectsCommandMap) {
-      const { exhibitInfoPage }: ConnectState = yield select(({ exhibitInfoPage }: ConnectState) => ({
-        exhibitInfoPage,
-      }));
-
-      const currentData = exhibitInfoPage.side_CustomOptions[payload.index];
-
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          side_CustomOptionDrawer_Visible: true,
-          side_CustomOptionDrawer_DataSource: {
-            key: currentData.key,
-            value: currentData.valueInput,
-            description: currentData.description,
-          },
-        },
-      });
-    },
+    // * onClick_Side_CustomOptions_EditBtn({ payload }: OnClick_Side_CustomOptions_EditBtn_Action, {
+    //   select,
+    //   put,
+    // }: EffectsCommandMap) {
+    //   const { exhibitInfoPage }: ConnectState = yield select(({ exhibitInfoPage }: ConnectState) => ({
+    //     exhibitInfoPage,
+    //   }));
+    //
+    //   const currentData = exhibitInfoPage.side_CustomOptions[payload.index];
+    //
+    //   yield put<ChangeAction>({
+    //     type: 'change',
+    //     payload: {
+    //       side_CustomOptionDrawer_Visible: true,
+    //       side_CustomOptionDrawer_DataSource: {
+    //         key: currentData.key,
+    //         value: currentData.valueInput,
+    //         description: currentData.description,
+    //       },
+    //     },
+    //   });
+    // },
     * onClick_Side_CustomOptions_DeleteBtn({ payload }: OnClick_Side_CustomOptions_DeleteBtn_Action, {
       select,
       call,
@@ -1044,14 +1243,14 @@ const Model: ExhibitInfoPageModelType = {
       fMessage('自定义选项已更新');
 
     },
-    * onClick_Side_AddCustomOptionsBtn({}: OnClick_Side_AddCustomOptionsBtn_Action, { put }: EffectsCommandMap) {
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          side_CustomOptionsDrawer_Visible: true,
-        },
-      });
-    },
+    // * onClick_Side_AddCustomOptionsBtn({}: OnClick_Side_AddCustomOptionsBtn_Action, { put }: EffectsCommandMap) {
+    //   yield put<ChangeAction>({
+    //     type: 'change',
+    //     payload: {
+    //       side_CustomOptionsDrawer_Visible: true,
+    //     },
+    //   });
+    // },
     * onConfirm_AddCustomOptionsDrawer({ payload }: OnConfirm_AddCustomOptionsDrawer_Action, {
       select,
       call,
@@ -1063,23 +1262,25 @@ const Model: ExhibitInfoPageModelType = {
 
       const side_CustomOptions: ExhibitInfoPageModelState['side_CustomOptions'] = [
         ...exhibitInfoPage.side_CustomOptions,
-        ...payload.value.map<ExhibitInfoPageModelState['side_CustomOptions'][number]>((v) => {
-          return {
-            key: v.key,
-            value: v.defaultValue,
-            description: v.description,
-            option: [],
-            valueInput: v.defaultValue,
-            valueInputError: '',
-          };
-        }),
+        {
+          key: payload.value.key,
+          name: payload.value.name,
+          value: payload.value.input,
+          description: payload.value.description,
+          // option: [],
+          valueInput: payload.value.input,
+          valueInputError: '',
+        },
+        // ...payload.value.map<ExhibitInfoPageModelState['side_CustomOptions'][number]>((v) => {
+        //   return
+        // }),
       ];
 
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           side_CustomOptions: side_CustomOptions,
-          side_CustomOptionsDrawer_Visible: false,
+          // side_CustomOptionsDrawer_Visible: false,
         },
       });
 
@@ -1103,14 +1304,14 @@ const Model: ExhibitInfoPageModelType = {
       }
       fMessage('自定义选项已添加');
     },
-    * onCancel_AddCustomOptionsDrawer({}: OnCancel_AddCustomOptionsDrawer_Action, { put }: EffectsCommandMap) {
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          side_CustomOptionsDrawer_Visible: false,
-        },
-      });
-    },
+    // * onCancel_AddCustomOptionsDrawer({}: OnCancel_AddCustomOptionsDrawer_Action, { put }: EffectsCommandMap) {
+    //   yield put<ChangeAction>({
+    //     type: 'change',
+    //     payload: {
+    //       side_CustomOptionsDrawer_Visible: false,
+    //     },
+    //   });
+    // },
     * onConfirm_CustomOptionDrawer({ payload }: OnConfirm_CustomOptionDrawer_Action, {
       select,
       call,
@@ -1125,6 +1326,7 @@ const Model: ExhibitInfoPageModelType = {
         }
         return {
           key: co.key,
+          name: co.name,
           value: payload.value.value,
           description: payload.value.description,
           valueInput: payload.value.value,
@@ -1136,8 +1338,8 @@ const Model: ExhibitInfoPageModelType = {
         type: 'change',
         payload: {
           side_CustomOptions: side_CustomOptions,
-          side_CustomOptionDrawer_Visible: false,
-          side_CustomOptionDrawer_DataSource: null,
+          // side_CustomOptionDrawer_Visible: false,
+          // side_CustomOptionDrawer_DataSource: null,
         },
       });
 
@@ -1157,15 +1359,15 @@ const Model: ExhibitInfoPageModelType = {
       }
       fMessage('自定义选项已更新');
     },
-    * onCancel_CustomOptionDrawer({}: OnCancel_CustomOptionDrawer_Action, { put }: EffectsCommandMap) {
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          side_CustomOptionDrawer_Visible: false,
-          side_CustomOptionDrawer_DataSource: null,
-        },
-      });
-    },
+    // * onCancel_CustomOptionDrawer({}: OnCancel_CustomOptionDrawer_Action, { put }: EffectsCommandMap) {
+    //   yield put<ChangeAction>({
+    //     type: 'change',
+    //     payload: {
+    //       side_CustomOptionDrawer_Visible: false,
+    //       side_CustomOptionDrawer_DataSource: null,
+    //     },
+    //   });
+    // },
   },
   reducers: {
     change(state, { payload }) {
@@ -1200,7 +1402,7 @@ export type HandleRelationResult = {
   resourceId: string;
   resourceName: string;
   resourceType: string[];
-  status: 0 | 1;
+  status: 0 | 1 | 2 | 4;
   contracts: {
     contractId: string;
     contractName: string;
@@ -1409,6 +1611,7 @@ async function updateRewrite({
         .map((io) => {
           return {
             key: io.key,
+            name: io.name,
             value: io.value,
             remark: io.description,
           };
@@ -1417,6 +1620,7 @@ async function updateRewrite({
         .map((io) => {
           return {
             key: io.key,
+            name: io.name,
             value: io.value,
             remark: io.description,
           };

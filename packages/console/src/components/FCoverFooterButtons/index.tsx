@@ -1,12 +1,9 @@
 import * as React from 'react';
 import styles from './index.less';
-import FMappingRuleActive from '@/components/FIcons/FMappingRuleActive';
-import { FDelete } from '@/components/FIcons';
-import FFileSearch from '../FIcons/FFileSearch';
 import FDivider from '@/components/FDivider';
-import FCancelCollect from '@/components/FIcons/FCancelCollect';
-import FUpdate from '@/components/FIcons/FUpdate';
+// import FUpdate from '@/components/FIcons/FUpdate';
 import FComponentsLib from '@freelog/components-lib';
+import { FI18n } from '@freelog/tools-lib';
 
 interface FCoverFooterButtonsProps {
   buttons: {
@@ -17,8 +14,8 @@ interface FCoverFooterButtonsProps {
 
 const btnMap: any = {
   active: {
-    text: '激活',
-    icon: (<FMappingRuleActive />),
+    text: FI18n.i18nNext.t('btn_activate_theme'),
+    icon: (<FComponentsLib.FIcons.FMappingRuleActive />),
   },
   edit: {
     text: '编辑',
@@ -26,23 +23,23 @@ const btnMap: any = {
   },
   resourceDetails: {
     text: '资源详情',
-    icon: (<FFileSearch />),
+    icon: (<FComponentsLib.FIcons.FFileSearch />),
   },
   objectDetails: {
     text: '对象详情',
-    icon: (<FFileSearch />),
+    icon: (<FComponentsLib.FIcons.FFileSearch />),
   },
   delete: {
     text: '删除',
-    icon: (<FDelete />),
+    icon: (<FComponentsLib.FIcons.FDelete />),
   },
   update: {
     text: '更新',
-    icon: (<FUpdate />),
+    icon: (<FComponentsLib.FIcons.FUpdate />),
   },
   cancelCollect: {
     text: '取消收藏',
-    icon: (<FCancelCollect />),
+    icon: (<FComponentsLib.FIcons.FCancelCollect />),
   },
 };
 

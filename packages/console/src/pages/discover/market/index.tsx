@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState, DiscoverPageModelState } from '@/models/connect';
 import categoryData from '@/utils/category';
 import styles from './index.less';
@@ -8,7 +9,7 @@ import {
   OnChangeResourceTypeAction,
   OnClickLoadMoreBtnAction,
   OnChangeTagsAction,
-  OnUnmountMarketPageAction,
+  OnUnmountMarketPageAction, OnMountMarketPageAction, OnChange_SelectedOperationCategoryIDs_Action,
 } from '@/models/discoverPage';
 import FResourceCard from '@/components/FResourceCard';
 import { Button } from 'antd';
@@ -16,6 +17,7 @@ import FNoDataTip from '@/components/FNoDataTip';
 import { FUtil } from '@freelog/tools-lib';
 import FLoadingTip from '@/components/FLoadingTip';
 import * as AHooks from 'ahooks';
+import FOperationCategoryFilter from '@/components/FOperationCategoryFilter';
 
 interface MarketProps {
   dispatch: Dispatch;
@@ -23,75 +25,81 @@ interface MarketProps {
 }
 
 function Market({ dispatch, discoverPage }: MarketProps) {
-  const [urlState] = useUrlState<any>();
+  // const [urlState] = useUrlState<any>();
   // -3 小说大赛   -2  漫画大赛    -1 全部
-  const [category, setCategory] = React.useState<any>({
-    first: -4,
-    second: '',
-  });
+  // const [category, setCategory] = React.useState<any>({
+  //   first: -4,
+  //   second: '',
+  // });
 
-  React.useEffect(() => {
-    if (category.first === -4) {
-      return;
-    }
-    if ([-3, -2].includes(category.first)) {
-      dispatch<OnChangeTagsAction>({
-        type: 'discoverPage/onChangeTags',
-        payload: {
-          value: category.first === -3 ? '内测集结！小说家召集令' : '内测集结！漫画家召集令',
-        },
-      });
-      return;
-    }
-    let str = '';
-    if (category.first !== -1) {
-      str = categoryData.first[category.first];
-      // @ts-ignore
-      if (categoryData.second[category.first] && category.second) {
-        str = category.second;
-      }
-    }
-    dispatch<OnChangeResourceTypeAction>({
-      type: 'discoverPage/onChangeResourceType',
-      payload: {
-        value: str,
-      },
-    });
-  }, [category]);
+  // React.useEffect(() => {
+  //   if (category.first === -4) {
+  //     return;
+  //   }
+  //   if ([-3, -2].includes(category.first)) {
+  //     dispatch<OnChangeTagsAction>({
+  //       type: 'discoverPage/onChangeTags',
+  //       payload: {
+  //         value: category.first === -3 ? '内测集结！小说家召集令' : '内测集结！漫画家召集令',
+  //       },
+  //     });
+  //     return;
+  //   }
+  //   let str = '';
+  //   if (category.first !== -1) {
+  //     str = categoryData.first[category.first];
+  //     // @ts-ignore
+  //     if (categoryData.second[category.first] && category.second) {
+  //       str = category.second;
+  //     }
+  //   }
+  //   dispatch<OnChangeResourceTypeAction>({
+  //     type: 'discoverPage/onChangeResourceType',
+  //     payload: {
+  //       value: str,
+  //     },
+  //   });
+  // }, [category]);
+
+  // AHooks.useMount(() => {
+  //   if (urlState.query) {
+  //     const data: any = urlState.query.split('%');
+  //     let first = -1,
+  //       second = '';
+  //     categoryData.first.some((item: string, index: number) => {
+  //       if (item === data[0]) {
+  //         first = index;
+  //         return true;
+  //       }
+  //     });
+  //     // @ts-ignore
+  //     first > 1 &&
+  //     // @ts-ignore
+  //     categoryData.second[first].some((item: string, index: number) => {
+  //       if (item === data[1]) {
+  //         second = item;
+  //         return true;
+  //       }
+  //     });
+  //     setCategory({
+  //       first,
+  //       second,
+  //     });
+  //   } else {
+  //     setCategory({
+  //       first: -1,
+  //       second: '',
+  //     });
+  //   }
+  //   // dispatch<OnMountMarketPageAction>({
+  //   //   type: 'discoverPage/onMountMarketPage',
+  //   // });
+  // });
 
   AHooks.useMount(() => {
-    if (urlState.query) {
-      const data: any = urlState.query.split('%');
-      let first = -1,
-        second = '';
-      categoryData.first.some((item: string, index: number) => {
-        if (item === data[0]) {
-          first = index;
-          return true;
-        }
-      });
-      // @ts-ignore
-      first > 1 &&
-      // @ts-ignore
-      categoryData.second[first].some((item: string, index: number) => {
-        if (item === data[1]) {
-          second = item;
-          return true;
-        }
-      });
-      setCategory({
-        first,
-        second,
-      });
-    } else {
-      setCategory({
-        first: -1,
-        second: '',
-      });
-    }
-    // dispatch<OnMountMarketPageAction>({
-    //   type: 'discoverPage/onMountMarketPage',
-    // });
+    dispatch<OnMountMarketPageAction>({
+      type: 'discoverPage/onMountMarketPage',
+    });
   });
 
   AHooks.useUnmount(() => {
@@ -102,133 +110,148 @@ function Market({ dispatch, discoverPage }: MarketProps) {
 
   return (
     <>
-      <div className={'flex-column ' + styles.filter}>
-        <div className='flex-row-center mt-30'>
-          <a
-            onClick={() => {
-              setCategory({
-                second: '',
-                first: -1,
-              });
-            }}
-            className={(category.first === -1 ? styles.allSelected : '') + ' ' + styles.first}
-          >
-            <span className={styles.left} />
-            <span className={styles.text}>全部</span>
-            <span className={styles.right} />
-          </a>
-          {categoryData.first.map((item: string, index: number) => {
-            return (
-              <a
-                onClick={() => {
-                  setCategory({
-                    second: category.first === index ? category.second : '',
-                    first: index,
-                  });
-                }}
-                key={item}
-                className={
-                  (category.first === index
-                    ? [0, 1].includes(index)
-                      ? styles.allSelected
-                      : styles.firstSelected
-                    : '') +
-                  ' ' +
-                  styles.first
-                  // + (index === categoryData.first.length - 1 ? '' : ' mr-30')
-                }
-              >
-                <span className={styles.left} />
-                <span className={styles.text}>{item}</span>
-                <span className={styles.right} />
-              </a>
-            );
-          })}
-          <a
-            onClick={() => {
-              setCategory({
-                second: '',
-                first: -2,
-              });
-            }}
-            className={(category.first === -2 ? styles.allSelected : '') + ' ' + styles.first}
-          >
-            <span className={styles.left} />
-            <span className={styles.text}>#内测集结！漫画家召集令</span>
-            <span className={styles.right} />
-          </a>
-          <a
-            onClick={() => {
-              setCategory({
-                second: '',
-                first: -3,
-              });
-            }}
-            className={(category.first === -3 ? styles.allSelected : '') + ' ' + styles.first}
-          >
-            <span className={styles.left} />
-            <span className={styles.text}>#内测集结！小说家召集令</span>
-            <span className={styles.right} />
-          </a>
-        </div>
-        {category.first > 1 ? (
-          <div className={'flex-row-center py-15 ' + styles.secondContainer}>
-            {category.first > 1 &&
-            // @ts-ignore
-            categoryData.second[category.first].map((item: string, index: number) => {
-              return (
-                <a
-                  onClick={() => {
-                    console.log(item);
-                    setCategory({
-                      ...category,
-                      second: item === category.second ? '' : item,
-                    });
-                  }}
-                  key={item}
-                  className={
-                    (category.second === item ? styles.secondSelected : '') +
-                    ' ' +
-                    styles.second +
-                    // @ts-ignore
-                    (index === categoryData.second[category.first].length - 1 ? '' : ' mr-20')
-                  }
-                >
-                  {item}
-                </a>
-              );
-            })}
-          </div>
-        ) : null}
-        {/*<FInput*/}
-        {/*  value={discoverPage.inputText}*/}
-        {/*  debounce={300}*/}
-        {/*  onDebounceChange={(value) => {*/}
-        {/*    dispatch<OnChangeKeywordsAction>({*/}
-        {/*      type: 'discoverPage/onChangeKeywords',*/}
-        {/*      payload: {*/}
-        {/*        value: value,*/}
-        {/*      },*/}
-        {/*    });*/}
-        {/*  }}*/}
-        {/*  wrapClassName="self-end my-31"*/}
-        {/*  theme="dark"*/}
-        {/*  size="small"*/}
-        {/*  className={styles.filterInput}*/}
-        {/*/>*/}
+      <div>
+        <FOperationCategoryFilter
+          value={discoverPage.selectedOperationCategoryIDs}
+          onChange={(value) => {
+            console.log(value);
+            dispatch<OnChange_SelectedOperationCategoryIDs_Action>({
+              type: 'discoverPage/onChange_SelectedOperationCategoryIDs',
+              payload: {
+                value: value,
+              },
+            });
+          }}
+        />
       </div>
-      {/* <Labels
-        options={discoverPage.resourceTypeOptions}
-        value={discoverPage.resourceType}
-        onChange={(value) => {
-          dispatch<OnChangeResourceTypeAction>({
-            type: 'discoverPage/onChangeResourceType',
-            payload: {
-              value: value,
-            },
-          });
-        }}
-      /> */}
+      {/*<div className={'flex-column ' + styles.filter}>*/}
+      {/*  <div className='flex-row-center mt-30'>*/}
+      {/*    <a*/}
+      {/*      onClick={() => {*/}
+      {/*        setCategory({*/}
+      {/*          second: '',*/}
+      {/*          first: -1,*/}
+      {/*        });*/}
+      {/*      }}*/}
+      {/*      className={(category.first === -1 ? styles.allSelected : '') + ' ' + styles.first}*/}
+      {/*    >*/}
+      {/*      <span className={styles.left} />*/}
+      {/*      <span className={styles.text}>全部</span>*/}
+      {/*      <span className={styles.right} />*/}
+      {/*    </a>*/}
+
+      {/*    {*/}
+      {/*      discoverPage.operationCategories*/}
+      {/*        .filter((operationCategory) => {*/}
+      {/*          return operationCategory.depth === 0;*/}
+      {/*        })*/}
+      {/*        .map((operationCategory) => {*/}
+      {/*        if (operationCategory.depth === 0) {*/}
+      {/*          return (<a*/}
+      {/*            key={operationCategory.id}*/}
+      {/*            className={*/}
+      {/*              (category.first === index*/}
+      {/*                ? [0, 1].includes(index)*/}
+      {/*                  ? styles.allSelected*/}
+      {/*                  : styles.firstSelected*/}
+      {/*                : '') +*/}
+      {/*              ' ' +*/}
+      {/*              styles.first*/}
+      {/*              // + (index === categoryData.first.length - 1 ? '' : ' mr-30')*/}
+      {/*            }*/}
+      {/*          >*/}
+      {/*            <span className={styles.left} />*/}
+      {/*            <span className={styles.text}>{item}</span>*/}
+      {/*            <span className={styles.right} />*/}
+      {/*          </a>)*/}
+      {/*        }*/}
+      {/*      })*/}
+      {/*    }*/}
+
+      {/*    {categoryData.first.map((item: string, index: number) => {*/}
+      {/*      return (*/}
+      {/*        <a*/}
+      {/*          onClick={() => {*/}
+      {/*            setCategory({*/}
+      {/*              second: category.first === index ? category.second : '',*/}
+      {/*              first: index,*/}
+      {/*            });*/}
+      {/*          }}*/}
+      {/*          key={item}*/}
+      {/*          className={*/}
+      {/*            (category.first === index*/}
+      {/*              ? [0, 1].includes(index)*/}
+      {/*                ? styles.allSelected*/}
+      {/*                : styles.firstSelected*/}
+      {/*              : '') +*/}
+      {/*            ' ' +*/}
+      {/*            styles.first*/}
+      {/*            // + (index === categoryData.first.length - 1 ? '' : ' mr-30')*/}
+      {/*          }*/}
+      {/*        >*/}
+      {/*          <span className={styles.left} />*/}
+      {/*          <span className={styles.text}>{item}</span>*/}
+      {/*          <span className={styles.right} />*/}
+      {/*        </a>*/}
+      {/*      );*/}
+      {/*    })}*/}
+      {/*    <a*/}
+      {/*      onClick={() => {*/}
+      {/*        setCategory({*/}
+      {/*          second: '',*/}
+      {/*          first: -2,*/}
+      {/*        });*/}
+      {/*      }}*/}
+      {/*      className={(category.first === -2 ? styles.allSelected : '') + ' ' + styles.first}*/}
+      {/*    >*/}
+      {/*      <span className={styles.left} />*/}
+      {/*      <span className={styles.text}>#内测集结！漫画家召集令</span>*/}
+      {/*      <span className={styles.right} />*/}
+      {/*    </a>*/}
+      {/*    <a*/}
+      {/*      onClick={() => {*/}
+      {/*        setCategory({*/}
+      {/*          second: '',*/}
+      {/*          first: -3,*/}
+      {/*        });*/}
+      {/*      }}*/}
+      {/*      className={(category.first === -3 ? styles.allSelected : '') + ' ' + styles.first}*/}
+      {/*    >*/}
+      {/*      <span className={styles.left} />*/}
+      {/*      <span className={styles.text}>#内测集结！小说家召集令</span>*/}
+      {/*      <span className={styles.right} />*/}
+      {/*    </a>*/}
+      {/*  </div>*/}
+      {/*  {category.first > 1 ? (*/}
+      {/*    <div className={'flex-row-center py-15 ' + styles.secondContainer}>*/}
+      {/*      {category.first > 1 &&*/}
+      {/*      // @ts-ignore*/}
+      {/*      categoryData.second[category.first].map((item: string, index: number) => {*/}
+      {/*        return (*/}
+      {/*          <a*/}
+      {/*            onClick={() => {*/}
+      {/*              console.log(item);*/}
+      {/*              setCategory({*/}
+      {/*                ...category,*/}
+      {/*                second: item === category.second ? '' : item,*/}
+      {/*              });*/}
+      {/*            }}*/}
+      {/*            key={item}*/}
+      {/*            className={*/}
+      {/*              (category.second === item ? styles.secondSelected : '') +*/}
+      {/*              ' ' +*/}
+      {/*              styles.second +*/}
+      {/*              // @ts-ignore*/}
+      {/*              (index === categoryData.second[category.first].length - 1 ? '' : ' mr-20')*/}
+      {/*            }*/}
+      {/*          >*/}
+      {/*            {item}*/}
+      {/*          </a>*/}
+      {/*        );*/}
+      {/*      })}*/}
+      {/*    </div>*/}
+      {/*  ) : null}*/}
+      {/*</div>*/}
 
       {discoverPage.totalItem === -1 && <FLoadingTip height={'calc(100vh - 140px - 50px)'} />}
 

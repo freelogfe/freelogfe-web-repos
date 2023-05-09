@@ -41,11 +41,25 @@
     color: #2784ff;
     line-height: 20px;
     height: 20px;
+    i {
+      display: none;
+    }
     &:active {
-      border-bottom: 1px solid #2784ff;
+      i {
+        display: inline-block !important;
+      }
+      opacity: 0.8;
+      span {
+        border-bottom: 1px solid #2784ff;
+      }
     }
     &:hover {
-      border-bottom: 1px solid #2784ff;
+      i {
+        display: inline-block !important;
+      }
+      span {
+        border-bottom: 1px solid #2784ff;
+      }
     }
   }
   .red-pack {
@@ -181,27 +195,10 @@
       font-weight: 400;
       color: #222222;
       line-height: 20px;
-      opacity: 40%;
+      opacity: 0.4;
       word-break: normal;
       word-wrap: break-word;
     }
   }
-  .footer {
-    background: #ffffff;
-    .title {
-      font-size: 20px;
-      font-weight: 600;
-      color: #222222;
-      line-height: 26px;
-      margin-bottom: 30px;
-    }
-    .title2 {
-      font-size: 14px;
-      font-family: PingFangSC-Regular, PingFang SC;
-      font-weight: 400;
-      color: #222222;
-      line-height: 20px;
-      margin-bottom: 82px;
-    }
-  }
+
 }

@@ -34,6 +34,9 @@ interface FGraph_Tree_Relationship_Resource_Props {
   version: string;
   width: number;
   height: number;
+  fit?: boolean;
+
+  onMount?({ hasData }: { hasData: boolean }): void;
 }
 
 interface RootResourceNode {
@@ -75,6 +78,8 @@ function FGraph_Tree_Relationship_Resource({
                                              version,
                                              width,
                                              height,
+                                             fit = false,
+                                             onMount,
                                            }: FGraph_Tree_Relationship_Resource_Props) {
 
   const [dataSource, set_DataSource] = React.useState<FGraph_Relationship_States['dataSource']>(initStates['dataSource']);
@@ -123,7 +128,7 @@ function FGraph_Tree_Relationship_Resource({
       }),
     };
     // console.log(dataSource, 'dataSource890io23uhrjkflsdhfkj');
-
+    onMount && onMount({ hasData: dataSource.children.length > 0 });
     set_DataSource(dataSource);
   }
 
@@ -133,8 +138,8 @@ function FGraph_Tree_Relationship_Resource({
       width={width}
       height={height}
       data={dataSource as any}
-      // fitCenter={false}
-      // autoFit={true}
+      fitCenter={!fit}
+      autoFit={fit}
       nodeCfg={
         {
           type: F_RELATIONSHIP_NODE_TYPE,

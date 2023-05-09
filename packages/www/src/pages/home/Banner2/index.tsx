@@ -84,16 +84,24 @@ function Banner2({}: Banner2Props) {
 
           }}
         >
-          <FComponentsLib.FTitleText text={FI18n.i18nNext.t('home_scene_01')} type='h1' />
+          <FComponentsLib.FTitleText
+            style={{ textAlign: 'center' }}
+            text={FI18n.i18nNext.t('home_scene_01')}
+            type='h1'
+          />
           <div style={{ height: 15 }} />
-          <FComponentsLib.FTitleText text={FI18n.i18nNext.t('home_scene_01_descr')} type='h4' />
+          <FComponentsLib.FTitleText
+            style={{ textAlign: 'center' }}
+            text={FI18n.i18nNext.t('home_scene_01_descr')}
+            type='h4'
+          />
           <div style={{ height: 15 }} />
           <div className={styles.banner2Content2Left_CardFooter}>
             <FComponentsLib.FRectBtn
               size='small'
               style={{ padding: '0 15px' }}
               onClick={() => {
-                // window.open('https://fl-reading.freelog.com');
+                self._czc?.push(['_trackEvent', '首页', '小说阅读', '', 1]);
                 window.open(FI18n.i18nNext.t('home_scene_01_link'));
               }}
             >{FI18n.i18nNext.t('btn_viewlivenode_reading')}</FComponentsLib.FRectBtn>
@@ -102,7 +110,7 @@ function Banner2({}: Banner2Props) {
               size='small'
               style={{ padding: '0 15px' }}
               onClick={() => {
-                // window.open('https://fl-comics.freelog.com');
+                self._czc?.push(['_trackEvent', '首页', '漫画阅读', '', 1]);
                 window.open(FI18n.i18nNext.t('home_scene_01_link_02'));
               }}
             >{FI18n.i18nNext.t('btn_viewlivenode_comics')}</FComponentsLib.FRectBtn>
@@ -119,9 +127,17 @@ function Banner2({}: Banner2Props) {
 
           }}
         >
-          <FComponentsLib.FTitleText text={FI18n.i18nNext.t('home_scene_02')} type='h1' />
+          <FComponentsLib.FTitleText
+            text={FI18n.i18nNext.t('home_scene_02')}
+            type='h1'
+            style={{ textAlign: 'center' }}
+          />
           <div style={{ height: 15 }} />
-          <FComponentsLib.FTitleText text={FI18n.i18nNext.t('home_scene_02_descr')} type='h4' />
+          <FComponentsLib.FTitleText
+            text={FI18n.i18nNext.t('home_scene_02_descr')}
+            type='h4'
+            style={{ textAlign: 'center' }}
+          />
           <div style={{ height: 15 }} />
           <div className={styles.banner2Content2Left_CardFooter}>
             {/*<FComponentsLib.FRectBtn size='small' style={{ padding: '0 15px' }}>场景体验</FComponentsLib.FRectBtn>*/}
@@ -129,7 +145,7 @@ function Banner2({}: Banner2Props) {
               size='small'
               style={{ padding: '0 15px' }}
               onClick={() => {
-                // window.open('https://fl-stock.freelog.com');
+                self._czc?.push(['_trackEvent', '首页', '现在体验', '', 1]);
                 window.open(FI18n.i18nNext.t('home_scene_02_link'));
               }}
             >{FI18n.i18nNext.t('btn_viewlivenode_02')}</FComponentsLib.FRectBtn>
@@ -146,16 +162,24 @@ function Banner2({}: Banner2Props) {
 
           }}
         >
-          <FComponentsLib.FTitleText text={FI18n.i18nNext.t('home_scene_03')} type='h1' />
+          <FComponentsLib.FTitleText
+            text={FI18n.i18nNext.t('home_scene_03')}
+            type='h1'
+            style={{ textAlign: 'center' }}
+          />
           <div style={{ height: 15 }} />
-          <FComponentsLib.FTitleText text={FI18n.i18nNext.t('home_scene_03_descr')} type='h4' />
+          <FComponentsLib.FTitleText
+            text={FI18n.i18nNext.t('home_scene_03_descr')}
+            type='h4'
+            style={{ textAlign: 'center' }}
+          />
           <div style={{ height: 15 }} />
           <div className={styles.banner2Content2Left_CardFooter}>
             <FComponentsLib.FRectBtn
               size='small'
               style={{ padding: '0 15px' }}
               onClick={() => {
-                // window.open('https://fl-games.freelog.com');
+                self._czc?.push(['_trackEvent', '首页', '现在体验', '', 1]);
                 window.open(FI18n.i18nNext.t('home_scene_03_link'));
               }}
             >{FI18n.i18nNext.t('btn_viewlivenode_03')}</FComponentsLib.FRectBtn>
@@ -172,15 +196,24 @@ function Banner2({}: Banner2Props) {
 
           }}
         >
-          <FComponentsLib.FTitleText text={FI18n.i18nNext.t('home_scene_04')} type='h1' />
+          <FComponentsLib.FTitleText
+            text={FI18n.i18nNext.t('home_scene_04')}
+            type='h1'
+            style={{ textAlign: 'center' }}
+          />
           <div style={{ height: 15 }} />
-          <FComponentsLib.FTitleText text={FI18n.i18nNext.t('home_scene_04_descr')} type='h4' />
+          <FComponentsLib.FTitleText
+            text={FI18n.i18nNext.t('home_scene_04_descr')}
+            type='h4'
+            style={{ textAlign: 'center' }}
+          />
           <div style={{ height: 15 }} />
           <div className={styles.banner2Content2Left_CardFooter}>
             <FComponentsLib.FRectBtn
               size='small'
               style={{ padding: '0 15px' }}
               onClick={() => {
+                self._czc?.push(['_trackEvent', '首页', '马上注册', '', 1]);
                 window.open(FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.logon());
               }}
             >{FI18n.i18nNext.t('btn_signupnow')}</FComponentsLib.FRectBtn>
@@ -199,15 +232,13 @@ function Banner2({}: Banner2Props) {
             return (<React.Fragment key={i}>
               <img
                 className={[styles.imgTop, 'animate__animated', i === activatedIndex ? 'animate__flipInX' : ''].join(' ')}
-                // className={[styles.imgTop, 'animate__animated', i === activatedIndex ? 'animate__zoomInDown' : ''].join(' ')}
-                src={configInfo[activatedIndex].img1}
+                src={configInfo[activatedIndex].img2}
                 style={{ opacity: i === activatedIndex ? 1 : 0 }}
                 alt={''}
               />
               <img
                 className={[styles.imgBottom, 'animate__animated', i === activatedIndex ? 'animate__flipInX' : ''].join(' ')}
-                // className={[styles.imgBottom, 'animate__animated', i === activatedIndex ? 'animate__zoomInUp' : ''].join(' ')}
-                src={configInfo[activatedIndex].img2}
+                src={configInfo[activatedIndex].img1}
                 alt={''}
                 style={{ opacity: i === activatedIndex ? 1 : 0 }}
               />

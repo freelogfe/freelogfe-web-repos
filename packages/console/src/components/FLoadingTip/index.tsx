@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import {FLoading} from "../FIcons";
+import FComponentsLib from '@freelog/components-lib';
 
 interface FLoadingTipProps {
   height: number | string;
@@ -17,7 +17,7 @@ function FLoadingTip({height}: FLoadingTipProps) {
   >
     <div/>
     <div>
-      <FLoading className={styles.icon}/>
+      <FComponentsLib.FIcons.FLoading className={styles.icon}/>
     </div>
     <div/>
   </div>);

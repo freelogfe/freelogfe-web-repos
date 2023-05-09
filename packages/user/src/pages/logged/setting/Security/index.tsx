@@ -69,9 +69,11 @@ import bindSuccess from '@/assets/bind-success.png';
 import unbindSuccess from '@/assets/unbind-success.png';
 import bindWarning from '@/assets/bind-warning.png';
 import bindError from '@/assets/bind-error.png';
-import { FServiceAPI, FUtil } from '@freelog/tools-lib';
+import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 import { getUrlOfBindingWechat } from '@/utils';
+import FPasswordInput from '@/components/FPasswordInput';
+import FPhoneInput from '@/components/FPhoneInput';
 
 interface SecurityProps {
   dispatch: Dispatch;
@@ -431,7 +433,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
                     type='highlight'
                   />
                   <div style={{ width: 30 }} />
-                  <FComponentsLib.FTextBtn
+                  {location.host.includes('testfreelog.com') ? <FComponentsLib.FTextBtn
                     type='danger'
                     onClick={() => {
                       if (!settingPage.email && !settingPage.phone) {
@@ -457,7 +459,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
                     }}
                   >
                     解绑
-                  </FComponentsLib.FTextBtn>
+                  </FComponentsLib.FTextBtn> : null}
                 </div>
               )}
             </div>
@@ -825,26 +827,34 @@ function Security({ dispatch, settingPage }: SecurityProps) {
           <div style={{ height: 15 }} />
           <FComponentsLib.FTipText text={'手机号'} type='third' />
           <div style={{ height: 5 }} />
-          <FInput
-            value={settingPage.bindPhone_PhoneInput}
-            onChange={(e) => {
+          <FPhoneInput
+            inputValue={settingPage.bindPhone_PhoneInput}
+            onChangeInput={(value) => {
               dispatch<OnChange_BindPhone_PhoneInput_Action>({
                 type: 'settingPage/onChange_BindPhone_PhoneInput',
                 payload: {
-                  value: e.target.value,
+                  value: value,
                 },
               });
             }}
-            onBlur={() => {
+            onBlurInput={() => {
               dispatch<OnBlur_BindPhone_PhoneInput_Action>({
                 type: 'settingPage/onBlur_BindPhone_PhoneInput',
               });
             }}
-            errorText={settingPage.bindPhone_PhoneInputError}
+            // errorText={settingPage.bindPhone_PhoneInputError}
             placeholder='请输入手机号'
-            className={styles.modalBlockInput}
-            wrapClassName={styles.modalBlockInput}
+            // className={styles.modalBlockInput}
+            // wrapClassName={styles.modalBlockInput}
           />
+          {
+            settingPage.bindPhone_PhoneInputError && (<>
+              <div style={{ height: 5 }} />
+              <div style={{ color: 'red' }}>{settingPage.bindPhone_PhoneInputError}</div>
+            </>)
+          }
+
+
           <div style={{ height: 25 }} />
           <FComponentsLib.FTipText text={'验证码'} type='third' />
           <div style={{ height: 5 }} />
@@ -1004,27 +1014,33 @@ function Security({ dispatch, settingPage }: SecurityProps) {
           <FComponentsLib.FTipText text={'新手机号'} type='third' />
 
           <div style={{ height: 5 }} />
-          <FInput
-            value={settingPage.changePhone_New_PhoneInput}
-            onChange={(e) => {
+          <FPhoneInput
+            inputValue={settingPage.changePhone_New_PhoneInput}
+            onChangeInput={(value) => {
               dispatch<OnChange_ChangePhone_New_PhoneInput_Action>({
                 type: 'settingPage/onChange_ChangePhone_New_PhoneInput',
                 payload: {
-                  value: e.target.value,
+                  value: value,
                 },
               });
             }}
-            onBlur={() => {
+            onBlurInput={() => {
               // console.log('BBBBBBLLLLLUUUURRRR');
               dispatch<OnBlur_ChangePhone_New_PhoneInput_Action>({
                 type: 'settingPage/onBlur_ChangePhone_New_PhoneInput',
               });
             }}
-            errorText={settingPage.changePhone_New_PhoneInputError}
+            // errorText={settingPage.changePhone_New_PhoneInputError}
             placeholder='请输入手机号'
-            className={styles.modalBlockInput}
-            wrapClassName={styles.modalBlockInput}
+            // className={styles.modalBlockInput}
+            // wrapClassName={styles.modalBlockInput}
           />
+          {
+            settingPage.changePhone_New_PhoneInputError && (<>
+              <div style={{ height: 5 }} />
+              <div style={{ color: 'red' }}>{settingPage.changePhone_New_PhoneInputError}</div>
+            </>)
+          }
           <div style={{ height: 25 }} />
           <FComponentsLib.FTipText text={'验证码'} type='third' />
           <div style={{ height: 5 }} />
@@ -1105,8 +1121,8 @@ function Security({ dispatch, settingPage }: SecurityProps) {
           <FComponentsLib.FTipText text={'原密码'} type='third' />
 
           <div style={{ height: 5 }} />
-          <FInput
-            type='password'
+          <FPasswordInput
+            // type='password'
             value={settingPage.changePassword_Old_PasswordInput}
             onChange={(e) => {
               dispatch<OnChange_ChangePassword_Old_PasswordInput_Action>({
@@ -1118,17 +1134,17 @@ function Security({ dispatch, settingPage }: SecurityProps) {
             }}
             placeholder='请输入原密码'
             className={styles.modalBlockInput}
-            wrapClassName={styles.modalBlockInput}
+            // wrapClassName={styles.modalBlockInput}
           />
           <div style={{ height: 25 }} />
 
           <FComponentsLib.FTipText text={'新密码'} type='third' />
 
           <div style={{ height: 5 }} />
-          <FInput
-            type='password'
+          <FPasswordInput
+            // type='password'
             value={settingPage.changePassword_New1_PasswordInput}
-            errorText={settingPage.changePassword_New1_PasswordInput_Error}
+            // errorText={}
             onChange={(e) => {
               dispatch<OnChange_ChangePassword_New1_PasswordInput_Action>({
                 type: 'settingPage/onChange_ChangePassword_New1_PasswordInput',
@@ -1144,18 +1160,25 @@ function Security({ dispatch, settingPage }: SecurityProps) {
             }}
             placeholder='请输入新密码'
             className={styles.modalBlockInput}
-            wrapClassName={styles.modalBlockInput}
+            // wrapClassName={styles.modalBlockInput}
           />
+
+          {
+            settingPage.changePassword_New1_PasswordInput_Error && (<>
+              <div style={{ height: 5 }} />
+              <div style={{ color: 'red' }}>{settingPage.changePassword_New1_PasswordInput_Error}</div>
+            </>)
+          }
 
           <div style={{ height: 25 }} />
 
-          <FComponentsLib.FTipText text={'重新输入新密码'} type='third' />
+          <FComponentsLib.FTipText text={FI18n.i18nNext.t('account_reenter_password')} type='third' />
 
           <div style={{ height: 5 }} />
-          <FInput
-            type='password'
+          <FPasswordInput
+            // type='password'
             value={settingPage.changePassword_New2_PasswordInput}
-            errorText={settingPage.changePassword_New2_PasswordInput_Error}
+            // errorText={settingPage.changePassword_New2_PasswordInput_Error}
             onChange={(e) => {
               dispatch<OnChange_ChangePassword_New2_PasswordInput_Action>({
                 type: 'settingPage/onChange_ChangePassword_New2_PasswordInput',
@@ -1169,10 +1192,17 @@ function Security({ dispatch, settingPage }: SecurityProps) {
                 type: 'settingPage/onBlur_ChangePassword_New2_PasswordInput',
               });
             }}
-            placeholder='请输入新密码'
+            placeholder={FI18n.i18nNext.t('account_reenter_password_hint')}
             className={styles.modalBlockInput}
-            wrapClassName={styles.modalBlockInput}
+            // wrapClassName={styles.modalBlockInput}
           />
+
+          {
+            settingPage.changePassword_New2_PasswordInput_Error && (<>
+              <div style={{ height: 5 }} />
+              <div style={{ color: 'red' }}>{settingPage.changePassword_New2_PasswordInput_Error}</div>
+            </>)
+          }
 
           <div style={{ height: 80 }} />
           <div className={styles.modalFooter}>

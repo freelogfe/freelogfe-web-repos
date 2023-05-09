@@ -1,0 +1,205 @@
+// 授权状态遮罩
+.document-auth {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  .tip {
+    color: #e9a923;
+    display: flex;
+    align-items: center;
+
+    .freelog {
+      font-size: 20px;
+    }
+
+    .auth-text {
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 20px;
+      margin-left: 10px;
+    }
+
+    &.upcast {
+      color: #ee4040;
+    }
+  }
+
+  .auth-btn {
+    padding: 15px 50px;
+    background: #2784ff;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #ffffff;
+    line-height: 20px;
+    margin-top: 20px;
+    cursor: pointer;
+
+    &:hover {
+      background: #529dff;
+    }
+
+    &:active {
+      background: #2376e5;
+    }
+  }
+}
+
+// 未授权文档资源 dom
+.unauthorized-document {
+  position: relative;
+  width: 100%;
+  caret-color: transparent;
+  cursor: default;
+
+  &:hover .resource-toolbar {
+    transform: none;
+    opacity: 1;
+  }
+
+  .main-area {
+    position: relative;
+    background-color: rgba(0, 0, 0, 0.02);
+    border-radius: 6px;
+    padding: 15px;
+    box-sizing: border-box;
+
+    .row {
+      width: 100%;
+      display: flex;
+
+      & + .row {
+        margin-top: 12px;
+      }
+
+      div {
+        background-color: rgba(0, 0, 0, 0.02);
+        border-radius: 4px;
+        height: 20px;
+
+        & + div {
+          margin-left: 10px;
+        }
+      }
+
+      .mini {
+        width: 80px;
+      }
+
+      .small {
+        width: 120px;
+      }
+
+      .large {
+        flex: 1;
+      }
+
+      .middle {
+        width: 330px;
+      }
+    }
+  }
+}
+
+// 已授权文档资源 dom
+.authorized-document {
+  position: relative;
+  width: 100%;
+  caret-color: transparent;
+  cursor: default;
+
+  &:hover {
+    .resource-toolbar {
+      transform: none;
+      opacity: 1;
+    }
+
+    .document-area {
+      background-color: rgba(0, 0, 0, 0.02);
+    }
+  }
+
+  .document-area {
+    width: 800px;
+    overflow-x: hidden;
+    transition: all 0.2s linear;
+
+    img,
+    video,
+    audio {
+      max-width: 100%;
+      margin-left: 50%;
+      transform: translateX(-50%);
+    }
+  }
+}
+
+// 无效依赖
+.invalid-document {
+  position: relative;
+  width: 100%;
+  caret-color: transparent;
+  cursor: default;
+
+  .main-area {
+    position: relative;
+    background-color: rgba(0, 0, 0, 0.02);
+    border-radius: 6px;
+    padding: 15px;
+    box-sizing: border-box;
+
+    .row {
+      width: 100%;
+      display: flex;
+
+      & + .row {
+        margin-top: 12px;
+      }
+
+      div {
+        background-color: rgba(0, 0, 0, 0.02);
+        border-radius: 4px;
+        height: 20px;
+
+        & + div {
+          margin-left: 10px;
+        }
+      }
+
+      .mini {
+        width: 80px;
+      }
+
+      .small {
+        width: 120px;
+      }
+
+      .large {
+        flex: 1;
+      }
+
+      .middle {
+        width: 330px;
+      }
+    }
+  }
+
+  .invalid-tip {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #e9a923;
+  }
+}

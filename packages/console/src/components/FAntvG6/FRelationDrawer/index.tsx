@@ -13,8 +13,9 @@ import fMessage from '@/components/fMessage';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
 import FContract_AvailablePolicy_Card from '@/components/FContract_AvailablePolicy_Card';
 import FContractAppliedExhibits, { serverData_2_ContractAppliedExhibits } from '@/components/FContractAppliedExhibits';
-import FTerminatedContractListDrawer from '@/components/FTerminatedContractListDrawer';
+// import FTerminatedContractListDrawer from '@/components/FTerminatedContractListDrawer';
 import FComponentsLib from '@freelog/components-lib';
+import fViewTerminatedContracts from '@/components/fViewTerminatedContracts';
 
 interface FRelationDrawerProps {
   bothSidesInfo: {
@@ -69,14 +70,14 @@ interface FRelationDrawerStates {
     policyIDs: string[];
   }[];
 
-  terminatedContractIDs: string[];
+  // terminatedContractIDs: string[];
 }
 
 const initData: FRelationDrawerStates = {
   dataSource: null,
   versions: [],
   exhibits: [],
-  terminatedContractIDs: [],
+  // terminatedContractIDs: [],
 };
 
 function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRelationDrawerProps) {
@@ -85,7 +86,7 @@ function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRe
   const [dataSource, set_DataSource] = React.useState<FRelationDrawerStates['dataSource']>(initData['dataSource']);
   const [versions, set_Versions] = React.useState<FRelationDrawerStates['versions']>(initData['versions']);
   const [exhibits, set_Exhibits] = React.useState<FRelationDrawerStates['exhibits']>(initData['exhibits']);
-  const [terminatedContractIDs, set_terminatedContractIDs] = React.useState<FRelationDrawerStates['terminatedContractIDs']>(initData['terminatedContractIDs']);
+  // const [terminatedContractIDs, set_terminatedContractIDs] = React.useState<FRelationDrawerStates['terminatedContractIDs']>(initData['terminatedContractIDs']);
 
   React.useEffect(() => {
 
@@ -436,10 +437,12 @@ function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRe
   }
 
   return (<FDrawer
-    visible={!!bothSidesInfo}
+    // visible={!!bothSidesInfo}
+    open={!!bothSidesInfo}
     title={'授权关系'}
     // onClose={() => onClose && onClose()}
-    afterVisibleChange={onChange_DrawerVisible}
+    // afterVisibleChange={onChange_DrawerVisible}
+    afterOpenChange={onChange_DrawerVisible}
     onClose={() => {
       onClose && onClose();
     }}
@@ -573,11 +576,16 @@ function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRe
             {
               dataSource.invalidContracts.length > 0 && (<div style={{ display: 'flex', alignItems: 'center' }}>
                 {/*<FContentText text={'查看已终止的合约请移至'} type='negative' />*/}
-                <FComponentsLib.FTextBtn onClick={() => {
+                <FComponentsLib.FTextBtn onClick={async () => {
                   // window.open(`${FUtil.Format.completeUrlByDomain('user')}${FUtil.LinkTo.contract()}`);
-                  set_terminatedContractIDs(dataSource.invalidContracts.map((ic) => {
-                    return ic.contractId;
-                  }));
+                  // set_terminatedContractIDs(dataSource.invalidContracts.map((ic) => {
+                  //   return ic.contractId;
+                  // }));
+                  await fViewTerminatedContracts({
+                    terminatedContractIDs: dataSource.invalidContracts.map((ic) => {
+                      return ic.contractId;
+                    }),
+                  });
                 }}>查看已终止合约</FComponentsLib.FTextBtn>
               </div>)
             }
@@ -626,12 +634,12 @@ function FRelationDrawer({ bothSidesInfo, onClose, onChange_Authorization }: FRe
       </FFormLayout>)
     }
 
-    <FTerminatedContractListDrawer
-      terminatedContractIDs={terminatedContractIDs}
-      onClose={() => {
-        set_terminatedContractIDs([]);
-      }}
-    />
+    {/*<FTerminatedContractListDrawer*/}
+    {/*  terminatedContractIDs={terminatedContractIDs}*/}
+    {/*  onClose={() => {*/}
+    {/*    set_terminatedContractIDs([]);*/}
+    {/*  }}*/}
+    {/*/>*/}
   </FDrawer>);
 }
 

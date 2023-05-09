@@ -7,7 +7,8 @@ import {
   ResourceAuthPageModelState,
   UpdateAuthorizedAction,
 } from '@/models/resourceAuthPage';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import FDivider from '@/components/FDivider';
 import { ConnectState } from '@/models/connect';
 import FContractDisplay from '@/components/FContractDisplay';

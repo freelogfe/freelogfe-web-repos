@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
 import { Space } from 'antd';
-import { FImport, FExport, FCode, FExit, FDelete } from '@/components/FIcons';
 import TypesCaption from '../components/TypesCaption';
 import {
   AttrRule,
@@ -18,7 +17,6 @@ import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import { ConnectState, InformalNodeManagerPageModelState } from '@/models/connect';
 import {
-  OnCancelRulePageLeaveAction,
   OnChange_Rule_ListCheckbox_Action,
   OnChange_Rule_CheckAllCheckbox_Action,
   OnClick_Rule_DeleteBtn_Action,
@@ -26,10 +24,8 @@ import {
   OnClick_Rule_ExportBtn_Action,
   OnClick_Rule_ExitCoding_CancelBtn_Action,
   OnClick_Rule_ExitCoding_ConfirmBtn_Action,
-  OnConfirmRulePageLeaveAction,
   OnLoad_Rule_ImportFileInput_Action,
   OnMountRulePageAction,
-  OnPromptRulePageLeaveAction,
   OnUnmountRulePageAction,
   OnClick_Rule_ExitCodingBtn_Action,
   OnClick_Rule_Export_CancelBtn_Action,
@@ -38,20 +34,18 @@ import {
   OnClick_Rule_Delete_ConfirmBtn_Action,
   OnChange_Rule_Codemirror_Action,
   OnClick_Rule_SaveBtn_Action,
-  // IRules,
 } from '@/models/informalNodeManagerPage';
-import FUpload from '@/components/FUpload';
-import { Prompt } from 'umi';
-import * as H from 'history';
 import * as AHooks from 'ahooks';
 import fConfirmModal from '@/components/fConfirmModal';
-import { FUtil, FI18n } from '@freelog/tools-lib';
+import { FI18n } from '@freelog/tools-lib';
 import FTooltip from '@/components/FTooltip';
 import FCheckbox from '@/components/FCheckbox';
 import FNoDataTip from '@/components/FNoDataTip';
 import FMonacoEditor from '@/components/FMonacoEditor';
 import { Helmet } from 'react-helmet';
 import FComponentsLib from '@freelog/components-lib';
+import FPrompt from '@/components/FPrompt';
+import fReadLocalFiles from '@/components/fReadLocalFiles';
 
 interface MappingRuleProps {
   dispatch: Dispatch;
@@ -82,51 +76,11 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
 
   }, [informalNodeManagerPage.rule_CodeIsDirty]);
 
-  // async function onChange(payload: Partial<InformalNodeManagerPageModelState>) {
-  //   await dispatch<ChangeAction>({
-  //     type: 'informalNodeManagerPage/change',
-  //     payload,
-  //   });
-  // }
-
   return (<>
     <Helmet>
       <title>{`映射规则管理 · ${informalNodeManagerPage.node_Name} - Freelog`}</title>
     </Helmet>
-
-    <Prompt
-      when={informalNodeManagerPage.rule_CodeIsDirty && informalNodeManagerPage.rule_PromptLeavePath === ''}
-      message={(location: H.Location) => {
-        // console.log(location, 'location12341234123411111111@@@@@@');
-        const locationHref: string = location.pathname + location.search;
-        if (locationHref === FUtil.LinkTo.informNodeManagement({
-          nodeID: informalNodeManagerPage.node_ID,
-          showPage: 'mappingRule',
-        })) {
-          return true;
-        }
-        dispatch<OnPromptRulePageLeaveAction>({
-          type: 'informalNodeManagerPage/onPromptRulePageLeave',
-          payload: {
-            href: locationHref,
-          },
-        });
-        fConfirmModal({
-          message: '编辑后的映射规则尚未保存，现在离开会导致信息丢失',
-          onOk() {
-            dispatch<OnConfirmRulePageLeaveAction>({
-              type: 'informalNodeManagerPage/onConfirmRulePageLeave',
-            });
-          },
-          onCancel() {
-            dispatch<OnCancelRulePageLeaveAction>({
-              type: 'informalNodeManagerPage/onCancelRulePageLeave',
-            });
-          },
-        });
-        return false;
-      }}
-    />
+    <FPrompt watch={informalNodeManagerPage.rule_CodeIsDirty} messageText={'编辑后的映射规则尚未保存，现在离开会导致信息丢失'} />
     <div className={styles.header}>
       <div className={styles.headerLeft}>
         <FComponentsLib.FTitleText text={'映射规则管理'} />
@@ -135,12 +89,18 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
         <div style={{ width: 50 }} />
         {
           informalNodeManagerPage.rule_PageStatus === 'normal' && (<Space size={30}>
-            <FUpload
-              accept={'text/plain'}
-              beforeUpload={(file) => {
-                // console.log(file, 'file@Q#asdf-juLK(*)YHOjkf');
+            <FComponentsLib.FTextBtn
+              onClick={async () => {
+                const files = await fReadLocalFiles({
+                  multiple: true,
+                  accept: 'text/plain',
+                });
+
+                if (!files) {
+                  return;
+                }
                 const reader = new FileReader();
-                reader.readAsText(file);
+                reader.readAsText(files[0]);
                 reader.onload = function(evt: any) {
                   // console.log(evt, 'evt2222090900980989080980988');
                   dispatch<OnLoad_Rule_ImportFileInput_Action>({
@@ -150,17 +110,13 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
                     },
                   });
                 };
-                return false;
               }}
-              showUploadList={false}
-            >
-              <FComponentsLib.FTextBtn type='primary'>
-                <Space size={5}>
-                  <FImport />
-                  <span>导入</span>
-                </Space>
-              </FComponentsLib.FTextBtn>
-            </FUpload>
+              type='primary'>
+              <Space size={5}>
+                <FComponentsLib.FIcons.FImport />
+                <span>导入</span>
+              </Space>
+            </FComponentsLib.FTextBtn>
             {
               informalNodeManagerPage.rule_RuleList.length > 0 && (<>
                 <FComponentsLib.FTextBtn
@@ -172,7 +128,7 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
                   }}
                 >
                   <Space size={5}>
-                    <FExport />
+                    <FComponentsLib.FIcons.FExport />
                     <span>导出</span>
                   </Space>
                 </FComponentsLib.FTextBtn>
@@ -185,7 +141,7 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
                   }}
                 >
                   <Space size={5}>
-                    <FDelete />
+                    <FComponentsLib.FIcons.FDelete />
                     <span>删除</span>
                   </Space>
                 </FComponentsLib.FTextBtn>
@@ -205,7 +161,7 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
             });
           }}>
           <Space size={5}>
-            <FCode />
+            <FComponentsLib.FIcons.FCode />
             <span>进入代码模式</span>
           </Space>
         </FComponentsLib.FTextBtn>)
@@ -236,7 +192,7 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
             });
           }}>
           <Space size={5}>
-            <FExit />
+            <FComponentsLib.FIcons.FExit />
             <span>退出代码模式</span>
           </Space>
         </FComponentsLib.FTextBtn>)
@@ -434,138 +390,161 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
             }
 
             {
-              informalNodeManagerPage.rule_RuleList.length === 0
-                ? (<FNoDataTip height={'calc(100vh - 70px - 24px - 200px)'} tipText={'没有测试规则'} />)
-                : informalNodeManagerPage.rule_RuleList.map((rule, index: number, ruleObjListArray) => {
-                  return (<div
-                    key={index}
-                    className={styles.ruleCard}
-                  >
-                    <div className={styles.ruleCardHeader}>
-                      <Space size={20}>
-                        {
-                          informalNodeManagerPage.rule_PageStatus !== 'normal' && (<FCheckbox
-                            checked={rule.checked}
-                            onChange={(e) => {
-                              dispatch<OnChange_Rule_ListCheckbox_Action>({
-                                type: 'informalNodeManagerPage/onChange_Rule_ListCheckbox',
-                                payload: {
-                                  ruleID: rule.id,
-                                  checked: e.target.checked,
-                                },
-                              });
-                            }}
-                          />)
-                        }
-
-                        {rule.ruleInfo.operation === 'add' && <AddRule
-                          exhibit={rule.ruleInfo.exhibitName}
-                          source={rule.ruleInfo.candidate}
-                        />}
-                        {rule.ruleInfo.operation === 'alter' && <AlterRule
-                          alter={rule.ruleInfo.exhibitName}
-                        />}
-                        {rule.ruleInfo.operation === 'activate_theme' && <ActiveRule
-                          active={rule.ruleInfo.exhibitName}
-                        />}
-                      </Space>
-
-                      {
-                        rule.ruleInfo.errorMsg && (<FTooltip
-                          title={rule.ruleInfo.errorMsg}
-                          placement='left'
-                        >
-                          <div><FComponentsLib.FIcons.FFail style={{ color: '#EE4040' }} /></div>
-                        </FTooltip>)
-                      }
-                      {
-                        !rule.ruleInfo.errorMsg && rule.ruleInfo.warningMsg && (<FTooltip
-                          title={rule.ruleInfo.warningMsg}
-                          placement='left'
-                        >
-                          <div><FComponentsLib.FIcons.FWarning /></div>
-                        </FTooltip>)
-                      }
-
-                    </div>
-                    {
-                      (rule.ruleInfo.operation === 'add' || rule.ruleInfo.operation === 'alter')
-                      && rule.ruleInfo.actions.length > 0 && (<div className={styles.ruleCardBody}>
-                        <Space
-                          className={styles.ruleCardBodyList}
-                          size={15}
-                          direction='vertical'
-                        >
+              informalNodeManagerPage.rule_RuleList
+                .filter((r) => {
+                  return r.ruleInfo.operation !== 'comment';
+                }).length === 0
+                ? (<>
+                  <FNoDataTip
+                    height={'calc(100vh - 70px - 24px - 200px)'}
+                    // tipText={'没有测试规则'}
+                    tipText={FI18n.i18nNext.t('testnode_reflectrules_msg_empty')}
+                  />
+                  {/*<div>*/}
+                  {/*  <FComponentsLib.FRectBtn>1234</FComponentsLib.FRectBtn>*/}
+                  {/*  <FComponentsLib.FRectBtn>1234</FComponentsLib.FRectBtn>*/}
+                  {/*</div>*/}
+                </>)
+                : informalNodeManagerPage.rule_RuleList
+                  .filter((r) => {
+                    return r.ruleInfo.operation !== 'comment';
+                  })
+                  .map((rule, index: number, ruleObjListArray) => {
+                    return (<div
+                      key={index}
+                      className={styles.ruleCard}
+                    >
+                      <div className={styles.ruleCardHeader}>
+                        <Space size={20}>
                           {
-                            rule.ruleInfo.actions.map((ruleAction, ind) => {
-                              // console.log(ruleAction, 'ruleAction@#$@#$@809i');
-                              return (<div className={styles.ruleCardBodyListItem} key={ind}>
-                                {
-                                  ruleAction.operation === 'set_cover' && (<CoverRule cover={ruleAction.content} />)
-                                }
-                                {
-                                  ruleAction.operation === 'set_title' && (<TitleRule title={ruleAction.content} />)
-                                }
-                                {
-                                  ruleAction.operation === 'set_labels' && (<LabelRule labels={ruleAction.content} />)
-                                }
-                                {
-                                  ruleAction.operation === 'online' && (<>
-                                    {ruleAction.content
-                                      ? (<OnlineRule online />)
-                                      : (<OfflineRule offline />)}
-                                  </>)
-                                }
-                                {
-                                  ruleAction.operation === 'replace' && (<ReplaceRule
-                                    replaced={ruleAction.content.replaced}
-                                    replacer={ruleAction.content.replacer}
-                                    scopes={ruleAction.content.scopes}
-                                  />)
-                                }
-                                {
-                                  ruleAction.operation === 'add_attr' && (<AttrRule
-                                    type={'add'}
-                                    theKey={ruleAction.content.key}
-                                    value={ruleAction.content.value}
-                                    description={ruleAction.content.description}
-                                  />)
-                                }
-                                {
-                                  ruleAction.operation === 'delete_attr' && (<AttrRule
-                                    type={'delete'}
-                                    theKey={ruleAction.content.key}
-                                  />)
-                                }
-
-                                {
-                                  ruleAction.errorMsg && (<FTooltip
-                                    title={ruleAction.errorMsg}
-                                    placement='left'
-                                  >
-                                    <div><FComponentsLib.FIcons.FFail style={{ color: '#EE4040' }} /></div>
-                                  </FTooltip>)
-                                }
-
-                                {
-                                  !ruleAction.errorMsg && ruleAction.warningMsg && (<FTooltip
-                                    title={ruleAction.warningMsg}
-                                    placement='left'
-                                  >
-                                    <div><FComponentsLib.FIcons.FWarning /></div>
-                                  </FTooltip>)
-                                }
-
-                              </div>);
-
-                            })
+                            informalNodeManagerPage.rule_PageStatus !== 'normal' && (<FCheckbox
+                              checked={rule.checked}
+                              onChange={(e) => {
+                                dispatch<OnChange_Rule_ListCheckbox_Action>({
+                                  type: 'informalNodeManagerPage/onChange_Rule_ListCheckbox',
+                                  payload: {
+                                    ruleID: rule.id,
+                                    checked: e.target.checked,
+                                  },
+                                });
+                              }}
+                            />)
                           }
 
+                          {rule.ruleInfo.operation === 'add' && <AddRule
+                            exhibit={rule.ruleInfo.exhibitName}
+                            source={rule.ruleInfo.candidate}
+                          />}
+                          {rule.ruleInfo.operation === 'alter' && <AlterRule
+                            alter={rule.ruleInfo.exhibitName}
+                          />}
+                          {rule.ruleInfo.operation === 'activate_theme' && <ActiveRule
+                            active={rule.ruleInfo.exhibitName}
+                          />}
                         </Space>
-                      </div>)
-                    }
-                  </div>);
-                })
+
+                        {
+                          (rule as any).ruleInfo?.errorMsg && (<FTooltip
+                            title={(rule as any).ruleInfo?.errorMsg}
+                            placement='left'
+                          >
+                            <div><FComponentsLib.FIcons.FFail style={{ color: '#EE4040' }} /></div>
+                          </FTooltip>)
+                        }
+                        {
+                          !(rule as any).ruleInfo?.errorMsg && (rule as any).ruleInfo?.warningMsg && (<FTooltip
+                            title={(rule as any).ruleInfo?.warningMsg}
+                            placement='left'
+                          >
+                            <div><FComponentsLib.FIcons.FWarning /></div>
+                          </FTooltip>)
+                        }
+
+                      </div>
+                      {
+                        (rule.ruleInfo.operation === 'add' || rule.ruleInfo.operation === 'alter')
+                        && rule.ruleInfo.actions.filter((r) => {
+                          return r.operation !== 'comment';
+                        }).length > 0 && (<div className={styles.ruleCardBody}>
+                          <Space
+                            className={styles.ruleCardBodyList}
+                            size={15}
+                            direction='vertical'
+                          >
+                            {
+                              rule.ruleInfo.actions
+                                .filter((r) => {
+                                  return r.operation !== 'comment';
+                                })
+                                .map((ruleAction, ind) => {
+                                  // console.log(ruleAction, 'ruleAction@#$@#$@809i');
+                                  return (<div className={styles.ruleCardBodyListItem} key={ind}>
+                                    {
+                                      ruleAction.operation === 'set_cover' && (<CoverRule cover={ruleAction.content} />)
+                                    }
+                                    {
+                                      ruleAction.operation === 'set_title' && (<TitleRule title={ruleAction.content} />)
+                                    }
+                                    {
+                                      ruleAction.operation === 'set_labels' && (<LabelRule labels={ruleAction.content} />)
+                                    }
+                                    {
+                                      ruleAction.operation === 'online' && (<>
+                                        {ruleAction.content
+                                          ? (<OnlineRule online />)
+                                          : (<OfflineRule offline />)}
+                                      </>)
+                                    }
+                                    {
+                                      ruleAction.operation === 'replace' && (<ReplaceRule
+                                        replaced={ruleAction.content.replaced}
+                                        replacer={ruleAction.content.replacer}
+                                        scopes={ruleAction.content.scopes}
+                                      />)
+                                    }
+                                    {
+                                      ruleAction.operation === 'add_attr' && (<AttrRule
+                                        type={'add'}
+                                        theKey={ruleAction.content.key}
+                                        value={ruleAction.content.value}
+                                        description={ruleAction.content.description}
+                                      />)
+                                    }
+                                    {
+                                      ruleAction.operation === 'delete_attr' && (<AttrRule
+                                        type={'delete'}
+                                        theKey={ruleAction.content.key}
+                                      />)
+                                    }
+
+                                    {
+                                      ruleAction.errorMsg && (<FTooltip
+                                        title={ruleAction.errorMsg}
+                                        placement='left'
+                                      >
+                                        <div><FComponentsLib.FIcons.FFail style={{ color: '#EE4040' }} /></div>
+                                      </FTooltip>)
+                                    }
+
+                                    {
+                                      !ruleAction.errorMsg && ruleAction.warningMsg && (<FTooltip
+                                        title={ruleAction.warningMsg}
+                                        placement='left'
+                                      >
+                                        <div><FComponentsLib.FIcons.FWarning /></div>
+                                      </FTooltip>)
+                                    }
+
+                                  </div>);
+
+                                })
+                            }
+
+                          </Space>
+                        </div>)
+                      }
+                    </div>);
+                  })
             }
           </Space>
         </div>)

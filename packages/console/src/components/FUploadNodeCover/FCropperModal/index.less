@@ -1,0 +1,46 @@
+@import '../../../config.less';
+
+.content {
+  display: flex;
+  justify-content: space-between;
+
+  .contentLeft {
+    width: 560px;
+
+    :global(.cropper-view-box),
+    :global(.cropper-face) {
+      border-radius: 50%;
+    }
+  }
+
+  .contentRight {
+    width: 300px;
+
+    .previewCard {
+      width: 300px;
+      background: #FFFFFF;
+      //box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.05);
+      //border-radius: 10px;
+      //padding: 10px;
+      display: flex;
+      //align-items: center;
+      justify-content: center;
+
+      .imgPreview {
+        overflow: hidden;
+        display: block;
+        width: 130px;
+        height: 130px;
+        border-radius: 50%;
+      }
+    }
+  }
+}
+
+//.imgBox {
+//  display: inline-block;
+//  padding: 10px;
+//  box-sizing: border-box;
+//}
+
+

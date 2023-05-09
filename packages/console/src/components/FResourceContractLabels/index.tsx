@@ -1,7 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-// import { FWarning } from '@/components/FIcons';
-// import F_Contract_And_Policy_Labels from '@/components/F_Contract_And_Policy_Labels';
 import FComponentsLib from '@freelog/components-lib';
 
 interface FResourceContractLabelsProps {
@@ -27,18 +25,7 @@ function FResourceContractLabels({ contracts }: FResourceContractLabelsProps) {
         dot: c.auth ? 'green' : 'yellow',
       };
     })}
-    // singleRow={true}
   />);
-
-  // return (<div className={styles.labels}>
-  //   {
-  //     contracts.map((c, i) => (<div key={i}>
-  //       <span>{c.name}</span>
-  //       <div style={{ width: 5 }} />
-  //       <label style={{ backgroundColor: c.auth ? '#42C28C' : '#E9A923' }} />
-  //     </div>))
-  //   }
-  // </div>);
 }
 
 export default FResourceContractLabels;

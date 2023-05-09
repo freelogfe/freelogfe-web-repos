@@ -1,0 +1,29 @@
+@import '../../config.less';
+
+.row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 5px;
+
+  .title {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    display: block;
+    flex-shrink: 1;
+    color: #222;
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 600;
+  }
+
+  .right {
+    flex-shrink: 0;
+    width: fit-content;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+}

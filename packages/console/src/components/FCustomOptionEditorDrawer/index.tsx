@@ -87,9 +87,9 @@ function FCustomOptionEditorDrawer({
       onClose={() => {
         onCancel && onCancel();
       }}
-      visible={visible}
+      open={visible}
       width={720}
-      afterVisibleChange={(visible) => {
+      afterOpenChange={(visible) => {
         if (visible) {
           onVisible_Drawer();
         } else {
@@ -139,8 +139,8 @@ function FCustomOptionEditorDrawer({
                 let errorText: string = '';
                 if (value === '') {
                   errorText = '请输入';
-                } else if (value.length > 15) {
-                  errorText = '不超过15个字符';
+                } else if (value.length > 20) {
+                  errorText = '不超过20个字符';
                 } else if (!FUtil.Regexp.CUSTOM_KEY.test(value)) {
                   errorText = `不符合${FUtil.Regexp.CUSTOM_KEY}`;
                 } else if (disabledKeys.includes(value)) {

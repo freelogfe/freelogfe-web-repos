@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
-import {FDown} from "@/components/FIcons";
-import FUp from "@/components/FIcons/FUp";
+// import {FDown} from "@/components/FIcons";
+// import FUp from "@/components/FIcons/FUp";
 import FComponentsLib from '@freelog/components-lib';
 
 interface FExpandableProps {
@@ -29,7 +29,7 @@ function FExpandable({children}: FExpandableProps) {
             onClick={() => {
               setExpandable(false);
             }}
-          ><span>收起全部 <FUp/></span></FComponentsLib.FTextBtn>)
+          ><span>收起全部 <FComponentsLib.FIcons.FUp/></span></FComponentsLib.FTextBtn>)
         }
       </div>)
     }
@@ -58,7 +58,7 @@ function FExpandable({children}: FExpandableProps) {
           onClick={() => {
             setExpandable(true);
           }}
-        ><span>展开查看全部 <FDown/></span></FComponentsLib.FTextBtn>)
+        ><span>展开查看全部 <FComponentsLib.FIcons.FDown/></span></FComponentsLib.FTextBtn>)
       }
     </div>)}
   </div>);

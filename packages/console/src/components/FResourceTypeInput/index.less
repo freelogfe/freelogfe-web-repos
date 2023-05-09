@@ -1,5 +1,117 @@
 @import '../../config.less';
 
-.FSelect {
-  width: 200px;
+.square {
+  width: 360px;
+  height: 38px;
+  background: #FFF;
+  border-radius: 4px;
+  border: 1px solid #D4D4D4;
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  position: relative;
+
+  & > span {
+    color: #BEBEBE;
+    font-size: 14px;
+  }
+}
+
+.overlayClassName {
+  background-color: #FFF;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.overlay {
+  width: 360px;
+  background-color: white;
+
+  .recommend {
+    padding: 20px;
+
+    .recommendResourceTypes {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+
+      & > label {
+        padding: 3px 6px;
+        color: #666;
+        line-height: 18px;
+        font-size: 12px;
+        background-color: #EBECF0;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+.FCascader {
+  width: 100%;
+
+  .itemChildren {
+    position: absolute;
+    left: 100%;
+    top: 0;
+    width: 100%;
+    background: #FFF;
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+    display: none;
+  }
+
+  .item {
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 14px;
+    font-weight: 400;
+    color: #222;
+    cursor: pointer;
+    position: relative;
+
+    &.itemLatest {
+      color: @f-primary-color;
+    }
+
+    .itemRightIcon {
+      font-size: 12px;
+      //transform: rotate(90deg);
+    }
+
+    &:hover {
+      background-color: @f-primary-color;
+      color: white;
+
+      & > .itemChildren {
+        display: block;
+      }
+    }
+  }
+}
+
+.AutoComplete {
+  height: 38px;
+
+  //:global(.ant-select-selection-placeholder) {
+  //  line-height: 36px;
+  //}
+}
+
+.autoCompleteOption {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  & > span {
+    color: #333;
+    font-size: 14px;
+    line-height: 20px;
+  }
 }

@@ -2,7 +2,8 @@ import * as React from 'react';
 import styles from './index.less';
 import FInput from '@/components/FInput';
 import { Space } from 'antd';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState, ResourceDetailPageModelState, NodesModelState } from '@/models/connect';
 import ResourcesAndPolicies from './ResourcesAndPolicies';
 import { history } from 'umi';
@@ -13,10 +14,10 @@ import {
 } from '@/models/resourceDetailPage';
 import FContentLayout from '@/layouts/FContentLayout';
 import FFormLayout from '@/components/FFormLayout';
-import { FLeft, FNodes } from '@/components/FIcons';
 import FCoverImage from '@/components/FCoverImage';
 import * as AHooks from 'ahooks';
 import FComponentsLib from '@freelog/components-lib';
+import { FI18n } from '@freelog/tools-lib';
 
 interface SignProps {
   dispatch: Dispatch;
@@ -27,7 +28,7 @@ interface SignProps {
 function Sign({ dispatch, resourceDetailPage, nodes }: SignProps) {
 
   AHooks.useUnmount(() => {
-      window.history.forward();
+    window.history.forward();
   });
 
   const selectedNode = nodes.list.find((n) => n.nodeId === resourceDetailPage.sign_SelectedNodeID);
@@ -61,7 +62,7 @@ function Sign({ dispatch, resourceDetailPage, nodes }: SignProps) {
         }}
         type='default'
       >
-        <FLeft />
+        <FComponentsLib.FIcons.FLeft />
         <>返回上一步</>
       </FComponentsLib.FTextBtn>
       <div style={{ width: 30 }} />
@@ -79,7 +80,7 @@ function Sign({ dispatch, resourceDetailPage, nodes }: SignProps) {
       <FFormLayout>
         <FFormLayout.FBlock title={'确认签约节点'}>
           <Space size={5}>
-            <FNodes className={styles.yellow} />
+            <FComponentsLib.FIcons.FNodes className={styles.yellow} />
             <FComponentsLib.FContentText
               type='highlight'
               text={selectedNode?.nodeName}
@@ -92,7 +93,8 @@ function Sign({ dispatch, resourceDetailPage, nodes }: SignProps) {
           subtitle={<FComponentsLib.FContentText
             type='additional2'
             className={styles.yellow}
-            text={'(展品名称在当前节点内部唯一，后期不可修改，仅供编码用)'}
+            // text={'(展品名称在当前节点内部唯一，后期不可修改，仅供编码用)'}
+            text={FI18n.i18nNext.t('addresourcetonode_exhibitname_info')}
           />}
         >
           <FInput
@@ -109,7 +111,8 @@ function Sign({ dispatch, resourceDetailPage, nodes }: SignProps) {
           {
             resourceDetailPage.sign_SignExhibitNameErrorTip && (<>
               <div style={{ height: 5 }} />
-              <div className={styles.sign_SignExhibitNameErrorTip}>{resourceDetailPage.sign_SignExhibitNameErrorTip}</div>
+              <div
+                className={styles.sign_SignExhibitNameErrorTip}>{resourceDetailPage.sign_SignExhibitNameErrorTip}</div>
             </>)
           }
 

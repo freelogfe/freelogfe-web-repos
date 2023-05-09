@@ -1,8 +1,5 @@
 import React from 'react';
-// import ReactDOM from 'react-dom';
-import { DecompositionTreeGraph } from '@ant-design/graphs';
-import { CommonConfig } from '@ant-design/graphs/es/interface';
-import { DecompositionTreeGraphConfig } from '@ant-design/graphs/es/components/decompositionTreeGraph';
+import { DecompositionTreeGraph, DecompositionTreeGraphConfig } from '@ant-design/graphs';
 
 const DemoDecompositionTreeGraph = () => {
   const data: DecompositionTreeGraphConfig['data'] = {

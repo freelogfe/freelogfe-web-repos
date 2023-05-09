@@ -1,15 +1,15 @@
 import * as React from 'react';
 import styles from './index.less';
 import { Space } from 'antd';
-import img_Cartoon1 from '@/assets/activity/cartoon1@2x.png';
-import img_Cartoon2 from '@/assets/activity/cartoon2@2x.png';
-import img_Cartoon3 from '@/assets/activity/cartoon3@2x.png';
-import img_Cartoon4 from '@/assets/activity/cartoon4@2x.png';
-import img_Novel1 from '@/assets/activity/novel1@2x.png';
-import img_Novel2 from '@/assets/activity/novel2@2x.png';
-import img_Novel3 from '@/assets/activity/novel3@2x.png';
-import img_Novel4 from '@/assets/activity/novel4@2x.png';
-import { FUtil } from '@freelog/tools-lib';
+import img_Cartoon1 from '@/assets/activity/cartoon1.png';
+import img_Cartoon2 from '@/assets/activity/cartoon2.png';
+import img_Cartoon3 from '@/assets/activity/cartoon3.png';
+import img_Cartoon4 from '@/assets/activity/cartoon4.png';
+import img_Novel1 from '@/assets/activity/novel1.jpg';
+import img_Novel2 from '@/assets/activity/novel2.jpg';
+import img_Novel3 from '@/assets/activity/novel3.jpg';
+import img_Novel4 from '@/assets/activity/novel4.jpg';
+import { FI18n, FUtil } from '@freelog/tools-lib';
 import * as AHooks from 'ahooks';
 import FComponentsLib from '@freelog/components-lib';
 import { connect } from 'dva';
@@ -99,31 +99,31 @@ const initStates: ActivityStates = {
     {
       id: 'cartoon1',
       img: img_Cartoon1,
-      description: 'ワンパンマン_ONE PUNCH-MAN',
+      description: '宅家一天',
     },
     {
       id: 'cartoon2',
       img: img_Cartoon2,
-      description: '刺客伍六七',
+      description: '病毒退散',
     },
     {
       id: 'cartoon3',
       img: img_Cartoon3,
-      description: '国王排名 王様ランキング',
+      description: '活着真好',
     },
     {
       id: 'cartoon4',
       img: img_Cartoon4,
-      description: '鬼滅の刃（鬼灭之刃）',
+      description: '新的世界',
     },
   ],
   display_Cartoon_Css: [...css1],
   display_Cartoon_Index: 0,
   display_Novel: [
-    { id: 'novel1', img: img_Novel1, description: '五极异域' },
-    { id: 'novel2', img: img_Novel2, description: '你躲在时间门外' },
-    { id: 'novel3', img: img_Novel3, description: '渡心劫' },
-    { id: 'novel4', img: img_Novel4, description: '盗墓笔记' },
+    { id: 'novel1', img: img_Novel1, description: '红楼梦' },
+    { id: 'novel2', img: img_Novel2, description: '三国演义' },
+    { id: 'novel3', img: img_Novel3, description: '水浒传' },
+    { id: 'novel4', img: img_Novel4, description: '西游记' },
   ],
   display_Novel_Css: [...css2],
   display_Novel_Index: 0,
@@ -180,9 +180,15 @@ function Participations({ activityDetailsPage, onClickRuleBtn }: ParticipationsP
         <div style={{ height: 10 }} />
         <div className={styles.participation_Text2}>校园、热血、搞笑、恋爱等类型主题不限，发布现有作品即可参赛~</div>
         <div style={{ height: 50 }} />
-        <div className={styles.participation_Text3}>1.创建发布漫画资源，并添加 #内测集结！漫画家召集令# 活动标签；</div>
+        <div className={styles.participation_Text3}>1.创建发布漫画资源，并添加 <FComponentsLib.FCopyToClipboard
+          text={'内测集结！漫画家召集令'}
+          title={'点击复制标签'}
+        ><span
+          style={{ cursor: 'pointer', color: '#E9A923' }}>#内测集结！漫画家召集令#</span></FComponentsLib.FCopyToClipboard> 活动标签；
+        </div>
         <div style={{ height: 20 }} />
-        <div className={styles.participation_Text3}>2.将参赛资源签约为展品，展品按照被签约次数参与排名。</div>
+        {/*<div className={styles.participation_Text3}>2.将参赛资源签约为展品，展品按照被签约次数参与排名。</div>*/}
+        <div className={styles.participation_Text3}>2.参赛资源由Freelog平台评审排名。</div>
         <div style={{ height: 50 }} />
         <Space size={30}>
           <FComponentsLib.FRectBtn
@@ -190,7 +196,8 @@ function Participations({ activityDetailsPage, onClickRuleBtn }: ParticipationsP
             style={{ height: 50, padding: '0 50px' }}
             disabled={activityDetailsPage.timeValidity !== 'Validity'}
             onClick={() => {
-              window.open(FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.resourceCreator());
+              self._czc?.push(['_trackEvent', '资源创作大赛页', '立即参赛', '', 1]);
+              self.open(FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.resourceCreator());
             }}
           >{activityDetailsPage.timeValidity === 'NotStart'
             ? '即将开始'
@@ -200,6 +207,7 @@ function Participations({ activityDetailsPage, onClickRuleBtn }: ParticipationsP
           <FComponentsLib.FTextBtn
             type='primary'
             onClick={() => {
+              self._czc?.push(['_trackEvent', '资源创作大赛页', '如何参赛', '', 1]);
               onClickRuleBtn && onClickRuleBtn();
             }}
           >如何参赛？</FComponentsLib.FTextBtn>
@@ -210,7 +218,7 @@ function Participations({ activityDetailsPage, onClickRuleBtn }: ParticipationsP
           set_Delay(undefined);
         }}
         onMouseLeave={() => {
-          set_Delay(5000);
+          set_Delay(2000);
         }}
         className={styles.participation_Display}
       >
@@ -221,9 +229,11 @@ function Participations({ activityDetailsPage, onClickRuleBtn }: ParticipationsP
                 className={styles.participation_Display_Cover}
                 style={{ ...display_Cartoon_Css[i] }}
                 key={d.id}
-                onClick={() => {
-                  onClick_Display_Cartoon(i);
-                }}
+                // onClick={() => {
+                //   // onClick_Display_Cartoon(i);
+                // }}
+                href={FI18n.i18nNext.t('flnode_comics_addr')}
+                target={'_blank'}
               >
                 <img src={d.img} alt={''} />
                 <div style={{ height: 10 }} />
@@ -243,7 +253,7 @@ function Participations({ activityDetailsPage, onClickRuleBtn }: ParticipationsP
           set_Delay(undefined);
         }}
         onMouseLeave={() => {
-          set_Delay(5000);
+          set_Delay(2000);
         }}
         className={styles.participation_Display}
       >
@@ -254,9 +264,11 @@ function Participations({ activityDetailsPage, onClickRuleBtn }: ParticipationsP
                 className={styles.participation_Display_Cover}
                 style={{ ...display_Novel_Css[i] }}
                 key={d.id}
-                onClick={() => {
-                  onClick_Display_Novel(i);
-                }}
+                // onClick={() => {
+                //   // onClick_Display_Novel(i);
+                // }}
+                href={FI18n.i18nNext.t('flnode_reading_addr')}
+                target={'_blank'}
               >
                 <img src={d.img} alt={''} />
                 <div style={{ height: 10 }} />
@@ -273,9 +285,15 @@ function Participations({ activityDetailsPage, onClickRuleBtn }: ParticipationsP
         <div style={{ height: 10 }} />
         <div className={styles.participation_Text2}>同人、言情、玄幻、耽美等类型主题不限，发布现有作品即可参赛~</div>
         <div style={{ height: 50 }} />
-        <div className={styles.participation_Text3}>1.创建发布小说资源，并添加 #内测集结！小说家召集令# 活动标签；</div>
+        <div className={styles.participation_Text3}>1.创建发布小说资源，并添加 <FComponentsLib.FCopyToClipboard
+          text={'内测集结！小说家召集令'}
+          title={'点击复制标签'}
+        ><span
+          style={{ cursor: 'pointer', color: '#E9A923' }}>#内测集结！小说家召集令#</span></FComponentsLib.FCopyToClipboard> 活动标签；
+        </div>
         <div style={{ height: 20 }} />
-        <div className={styles.participation_Text3}>2.将参赛资源签约为展品，展品按照被签约次数参与排名。</div>
+        {/*<div className={styles.participation_Text3}>2.将参赛资源签约为展品，展品按照被签约次数参与排名。</div>*/}
+        <div className={styles.participation_Text3}>2.参赛资源由Freelog平台评审排名。</div>
         <div style={{ height: 50 }} />
         <Space size={30}>
           <FComponentsLib.FRectBtn
@@ -283,6 +301,7 @@ function Participations({ activityDetailsPage, onClickRuleBtn }: ParticipationsP
             style={{ height: 50, padding: '0 50px' }}
             disabled={activityDetailsPage.timeValidity !== 'Validity'}
             onClick={() => {
+              self._czc?.push(['_trackEvent', '资源创作大赛页', '立即参赛', '', 1]);
               window.open(FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.resourceCreator());
             }}
           >{activityDetailsPage.timeValidity === 'NotStart'
@@ -293,6 +312,7 @@ function Participations({ activityDetailsPage, onClickRuleBtn }: ParticipationsP
           <FComponentsLib.FTextBtn
             type='primary'
             onClick={() => {
+              self._czc?.push(['_trackEvent', '资源创作大赛页', '如何参赛', '', 1]);
               onClickRuleBtn && onClickRuleBtn();
             }}
           >如何参赛？</FComponentsLib.FTextBtn>

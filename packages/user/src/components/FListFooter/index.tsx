@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FLoading } from '../FIcons';
+// import { FLoading } from '../FIcons';
 import FComponentsLib from '@freelog/components-lib';
 
 interface FListFooterProps {
@@ -23,7 +23,7 @@ function FListFooter({ state, onClickLoadMore }: FListFooterProps) {
     }
 
     {
-      state === 'loading' && (<FLoading style={{ fontSize: 24 }} />)
+      // state === 'loading' && (<FLoading style={{ fontSize: 24 }} />)
     }
 
     {

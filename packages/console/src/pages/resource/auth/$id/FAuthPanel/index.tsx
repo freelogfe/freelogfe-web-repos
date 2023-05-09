@@ -6,8 +6,9 @@ import Policies from './Policies';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import { ConnectState, ResourceAuthPageModelState } from '@/models/connect';
-import FTerminatedContractListDrawer from '@/components/FTerminatedContractListDrawer';
 import FComponentsLib from '@freelog/components-lib';
+import fViewTerminatedContracts from '@/components/fViewTerminatedContracts';
+import { FI18n } from '@freelog/tools-lib';
 
 export interface FAuthPanelProps {
   dispatch: Dispatch;
@@ -15,8 +16,6 @@ export interface FAuthPanelProps {
 }
 
 function FAuthPanel({ resourceAuthPage }: FAuthPanelProps) {
-
-  const [terminatedContractIDs, set_TerminatedContractIDs] = React.useState<string[]>([]);
 
   const activeResource = resourceAuthPage.contractsAuthorized.find((i) => i.activated);
 
@@ -26,37 +25,78 @@ function FAuthPanel({ resourceAuthPage }: FAuthPanelProps) {
         <Resources />
       </div>
     </div>
-    <div className={styles.DepPanelContent}>
-      <div className={styles.contentBox}>
-        <Contracts />
 
+
+    {
+      activeResource && ((activeResource.error === '' || (activeResource.error === 'offline' && activeResource.contracts.length > 0)) ? (
+        <div className={styles.DepPanelContent}>
+          <div className={styles.contentBox}>
+            <Contracts />
+
+            {
+              activeResource && activeResource.terminatedContractIDs.length > 0 && (<>
+                <div style={{ height: 15 }} />
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    {/*<FContentText text={'查看已终止的合约请移至'} type='negative' />*/}
+                    <FComponentsLib.FTextBtn onClick={async () => {
+                      // window.open(`${FUtil.Format.completeUrlByDomain('user')}${FUtil.LinkTo.contract()}`);
+                      // set_TerminatedContractIDs(activeResource.terminatedContractIDs);
+                      await fViewTerminatedContracts({
+                        terminatedContractIDs: activeResource.terminatedContractIDs,
+                      });
+                    }}>查看已终止合约</FComponentsLib.FTextBtn>
+                  </div>
+                </div>
+              </>)
+
+            }
+
+            {
+              activeResource.error === '' && (<>
+                <div style={{ height: 25 }} />
+
+                <Policies />
+              </>)
+            }
+
+          </div>
+        </div>) : (<div className={styles.errorContent}>
         {
-          activeResource && activeResource.terminatedContractIDs.length > 0 && (<>
-            <div style={{ height: 15 }} />
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center' }}>
-                {/*<FContentText text={'查看已终止的合约请移至'} type='negative' />*/}
-                <FComponentsLib.FTextBtn onClick={() => {
-                  // window.open(`${FUtil.Format.completeUrlByDomain('user')}${FUtil.LinkTo.contract()}`);
-                  set_TerminatedContractIDs(activeResource.terminatedContractIDs);
-                }}>查看已终止合约</FComponentsLib.FTextBtn>
-              </div>
-            </div>
+          activeResource.error === 'unreleased' && (<>
+            <FComponentsLib.FIcons.FForbid style={{ color: '#EE4040', fontSize: 20 }} />
+            <FComponentsLib.FTipText
+              // text={'该资源未发行，无法授权。'}
+              text={'该资源未发行，无法授权。'}
+              type='second'
+            />
           </>)
         }
 
-        <div style={{ height: 25 }} />
+        {
+          activeResource.error === 'offline' && activeResource.contracts.length === 0 && (<>
+            <FComponentsLib.FIcons.FForbid style={{ color: '#EE4040', fontSize: 20 }} />
+            <FComponentsLib.FTipText
+              // text={'该资源未上线，无法授权。'}
+              text={FI18n.i18nNext.t('alarm_resource_not_available')}
+              type='second'
+            />
+          </>)
+        }
 
-        <Policies />
-      </div>
-    </div>
+        {
+          activeResource.error === 'freeze' && (<>
+            <FComponentsLib.FIcons.FForbid style={{ color: '#EE4040', fontSize: 20 }} />
+            <FComponentsLib.FTipText
+              text={'该资源已封禁，无法授权。'}
+              type='second'
+            />
+          </>)
+        }
 
-    <FTerminatedContractListDrawer
-      terminatedContractIDs={terminatedContractIDs}
-      onClose={() => {
-        set_TerminatedContractIDs([]);
-      }}
-    />
+      </div>))
+    }
+
   </div>);
 }
 

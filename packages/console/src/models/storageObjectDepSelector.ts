@@ -128,7 +128,7 @@ const Model: StorageObjectDepSelectorModelType = {
         ];
       } else {
         const params: Parameters<typeof FServiceAPI.Resource.list>[0] = {
-          startResourceId: resourceList[0]?.resourceId,
+          // startResourceId: resourceList[0]?.resourceId,
           skip: resourceList.length,
           // limit: storageObjectDepSelector.rPageSize,
           limit: FUtil.Predefined.pageSize,

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import { Space } from 'antd';
+// import { Space } from 'antd';
 import FPopover from '@/components/FPopover';
 import FComponentsLib from '@freelog/components-lib';
 import * as AHooks from 'ahooks';
@@ -18,27 +18,28 @@ const tasks = {
     name: '创建1个资源',
     popoverContent: (<div className={styles.tooltipDisplay}>
       <FComponentsLib.FContentText
-        text={
-          '成功创建1个合规资源，图片、小说、漫画、游戏、视频、音乐、插件等资源类型不限，可直接上传往期作品。'
-        }
+        text={'成功创建1个合规资源，图片、小说、漫画、游戏、视频、音乐、插件等资源类型不限，可直接上传往期作品。'}
         type='highlight'
       />
       <div style={{ height: 15 }} />
-      <Space size={5}>
-        <FComponentsLib.FContentText text={'可查阅'} />
+      <div>
+        {/*可查阅  创建资源视频教程  或  图文教程  创建资源。*/}
+        <FComponentsLib.FContentText text={'可查阅'} style={{ display: 'contents' }} />
+        &nbsp;
         <a
-          href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
+          href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f&title=1.+%E5%A6%82%E4%BD%95%E5%8F%91%E8%A1%8C%E8%B5%84%E6%BA%90'}
           target={'_blank'}
-          type='primary'
-        >资源作者使用教程</a>
-        <FComponentsLib.FContentText text={'（视频）或'} />
+        >创建资源视频教程</a>
+        &nbsp;
+        <FComponentsLib.FContentText text={'或'} style={{ display: 'contents' }} />
+        &nbsp;
         <a
-          href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
+          href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f&title=1.%E3%80%90%E5%8F%91%E8%A1%8C%E8%B5%84%E6%BA%90%E3%80%91%E6%93%8D%E4%BD%9C%E6%8C%87%E5%8D%97'}
           target={'_blank'}
-          type='primary'
-        >资源创建教程</a>
-        <FComponentsLib.FContentText text={'（图文）创建资源。'} />
-      </Space>
+        >图文教程</a>
+        &nbsp;
+        <FComponentsLib.FContentText text={'创建资源。'} style={{ display: 'contents' }} />
+      </div>
     </div>),
     onClick() {
       self.open(FUtil.LinkTo.resourceCreator());
@@ -49,26 +50,29 @@ const tasks = {
     popoverContent: (<div className={styles.tooltipDisplay}>
       <FComponentsLib.FContentText
         text={
-          '通过更新资源版本可以优化和调整资源内容，以便在相同的资源中保留多个资源文件。'
+          '通过更新资源版本可以优化和调整资源内容，同时又可以保留更新历史和文件。'
         }
         type='highlight'
       />
       <div style={{ height: 15 }} />
-      <Space size={5} style={{ flexWrap: 'wrap' }}>
-        <FComponentsLib.FContentText text={'可查阅'} />
+      <div>
+        {/*可查阅   资源版本发布教程  发布资源版本。*/}
+        <FComponentsLib.FContentText text={'可查阅'} style={{ display: 'contents' }} />
+        &nbsp;
         <a
           href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
           target={'_blank'}
-          type='primary'
         >资源版本发布教程</a>
-        <FComponentsLib.FContentText text={'（图文）或'} />
-        <a
-          href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
-          target={'_blank'}
-          type='primary'
-        >资源作者使用教程</a>
-        <FComponentsLib.FContentText text={'（视频）发布资源版本。'} />
-      </Space>
+        {/*&nbsp;*/}
+        {/*<FComponentsLib.FContentText text={'（图文）或'} style={{ display: 'contents' }} />*/}
+        {/*&nbsp;*/}
+        {/*<a*/}
+        {/*  href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}*/}
+        {/*  target={'_blank'}*/}
+        {/*>资源作者使用教程</a>*/}
+        {/*&nbsp;*/}
+        <FComponentsLib.FContentText text={'发布资源版本。'} style={{ display: 'contents' }} />
+      </div>
     </div>),
     onClick() {
       self.open(FUtil.LinkTo.myResources());
@@ -84,42 +88,47 @@ const tasks = {
         type='highlight'
       />
       <div style={{ height: 15 }} />
-      <Space size={5} style={{ flexWrap: 'wrap' }}>
-        <FComponentsLib.FContentText text={'可查阅'} />
+      <div>
+        {/*可查阅  资源授权策略添加教程  为资源添加授权策略。*/}
+        <FComponentsLib.FContentText text={'可查阅'} style={{ display: 'contents' }} />
+        &nbsp;
         <a
           href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
           target={'_blank'}
           type='primary'
         >资源授权策略添加教程</a>
-        <FComponentsLib.FContentText text={'（图文）或'} />
-        <a
-          href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
-          target={'_blank'}
-          type='primary'
-        >资源作者使用教程</a>
-        <FComponentsLib.FContentText text={'(视频) 为资源添加授权策略。'} />
-      </Space>
+        &nbsp;
+        {/*<FComponentsLib.FContentText text={'（图文）或'} style={{ display: 'contents' }} />*/}
+        {/*&nbsp;*/}
+        {/*<a*/}
+        {/*  href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}*/}
+        {/*  target={'_blank'}*/}
+        {/*  type='primary'*/}
+        {/*>资源作者使用教程</a>*/}
+        {/*&nbsp;*/}
+        <FComponentsLib.FContentText text={'为资源添加授权策略。'} style={{ display: 'contents' }} />
+      </div>
     </div>),
     onClick() {
       self.open(FUtil.LinkTo.myResources());
     },
   },
-  TS000024: {
-    name: '分享资源',
-    popoverContent: (<div className={styles.tooltipDisplay}>
-      <FComponentsLib.FContentText text={'好的资源值得和好友一块分享，快去资源详情页点击分享按钮，将你喜欢的资源推荐给好友。'} type='highlight' />
-    </div>),
-    async onClick() {
-      const { data } = await FServiceAPI.Resource.list({
-        limit: 1,
-        isSelf: 1,
-      });
-      self.open(FUtil.LinkTo.resourceDetails({
-        resourceID: data.dataList[0].resourceId,
-      }));
-      console.log(data, 'DDDDDD89iok3ljw2sdjfsd');
-    },
-  },
+  // TS000024: {
+  //   name: '分享资源',
+  //   popoverContent: (<div className={styles.tooltipDisplay}>
+  //     <FComponentsLib.FContentText text={'好的资源值得和好友一块分享，快去资源详情页点击分享按钮，将你喜欢的资源推荐给好友。'} type='highlight' />
+  //   </div>),
+  //   async onClick() {
+  //     const { data } = await FServiceAPI.Resource.list({
+  //       limit: 1,
+  //       isSelf: 1,
+  //     });
+  //     self.open(FUtil.LinkTo.resourceDetails({
+  //       resourceID: data.dataList[0].resourceId,
+  //     }));
+  //     console.log(data, 'DDDDDD89iok3ljw2sdjfsd');
+  //   },
+  // },
 } as const;
 
 function BoardCard2({ unfold, onMouseEnter }: BoardCard2Props) {
@@ -127,7 +136,9 @@ function BoardCard2({ unfold, onMouseEnter }: BoardCard2Props) {
 
   AHooks.useMount(async () => {
     const { data } = await FServiceAPI.Activity.getResourceTaskInfo();
-    set_dataSource(data);
+    set_dataSource(data.filter((d: any) => {
+      return d.taskConfigCode in tasks;
+    }));
   });
 
   const needSteps: number = dataSource.filter((item: any) => item.status === 1).length;
@@ -149,10 +160,10 @@ function BoardCard2({ unfold, onMouseEnter }: BoardCard2Props) {
         {
           needSteps === 0
             ? (<div className={styles.title3} style={{ opacity: .5 }}>
-              7元奖励已领取
+              6元奖励已领取
             </div>)
             : (<div className={styles.title3}>
-              还差{needSteps}步领取 <span>7元</span> 奖励
+              还差{needSteps}步领取 <span>6元</span> 奖励
             </div>)
         }
 

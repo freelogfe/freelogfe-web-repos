@@ -1,10 +1,16 @@
 import * as React from 'react';
 import styles from './index.less';
-import { ChangeAction, ExhibitInfoPageModelState, UpdateBaseInfoAction } from '@/models/exhibitInfoPage';
+import {
+  // ChangeAction,
+  ExhibitInfoPageModelState,
+  OnChange_Side_InputTitle_Action,
+  UpdateBaseInfoAction,
+} from '@/models/exhibitInfoPage';
 import { Space } from 'antd';
 import FInput from '@/components/FInput';
-import FLabelEditor from '@/pages/resource/components/FLabelEditor';
-import { connect, Dispatch } from 'dva';
+import FLabelEditor from '@/components/FLabelEditor';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState } from '@/models/connect';
 import fMessage from '@/components/fMessage';
 import FTooltip from '@/components/FTooltip';
@@ -20,15 +26,21 @@ interface InfoProps {
 
 function Info({ dispatch, exhibitInfoPage }: InfoProps) {
   function onChangePInputTitle(value: string | null) {
-    dispatch<ChangeAction>({
-      type: 'exhibitInfoPage/change',
+    // dispatch<ChangeAction>({
+    //   type: 'exhibitInfoPage/change',
+    //   payload: {
+    //     side_ExhibitInputTitle: value,
+    //   },
+    // });
+    dispatch<OnChange_Side_InputTitle_Action>({
+      type: 'exhibitInfoPage/onChange_Side_InputTitle',
       payload: {
-        side_ExhibitInputTitle: value,
+        value: value,
       },
     });
   }
 
-  if (exhibitInfoPage.side_ResourceType === 'theme') {
+  if (exhibitInfoPage.side_ResourceType.includes('主题')) {
     return null;
   }
 
@@ -55,10 +67,6 @@ function Info({ dispatch, exhibitInfoPage }: InfoProps) {
         });
       }}>
       <div className={styles.cover}>
-        {/*<img*/}
-        {/*  alt=''*/}
-        {/*  src={exhibitInfoPage.side_ExhibitCover || imgSrc}*/}
-        {/*/>*/}
         <FCoverImage src={exhibitInfoPage.side_ExhibitCover || ''} width={220} style={{ borderRadius: 10 }} />
         <div className={styles.coverEdit}>
 
@@ -76,7 +84,10 @@ function Info({ dispatch, exhibitInfoPage }: InfoProps) {
     {
       exhibitInfoPage.side_ExhibitInputTitle === null
         ? (<Space size={10}>
-          <FComponentsLib.FContentText text={exhibitInfoPage.side_ExhibitTitle} />
+          <FComponentsLib.FContentText
+            text={exhibitInfoPage.side_ExhibitTitle}
+            style={{ overflowWrap: 'anywhere' }}
+          />
           <FTooltip title={'编辑'}>
             <div>
               <FComponentsLib.FTextBtn onClick={() => {
@@ -92,6 +103,13 @@ function Info({ dispatch, exhibitInfoPage }: InfoProps) {
             value={exhibitInfoPage.side_ExhibitInputTitle || ''}
             onChange={(e) => onChangePInputTitle(e.target.value)}
           />
+          {
+            exhibitInfoPage.side_ExhibitInputTitle_Error !== '' && (<>
+              <div style={{ height: 5 }} />
+              <div style={{ color: '#EE4040' }}>{exhibitInfoPage.side_ExhibitInputTitle_Error}</div>
+            </>)
+          }
+
           <div style={{ height: 10 }} />
           <div className={styles.btn}>
             <FComponentsLib.FTextBtn
@@ -101,6 +119,7 @@ function Info({ dispatch, exhibitInfoPage }: InfoProps) {
             >{FI18n.i18nNext.t('btn_cancel')}</FComponentsLib.FTextBtn>
             <div style={{ width: 15 }} />
             <FComponentsLib.FRectBtn
+              disabled={exhibitInfoPage.side_ExhibitInputTitle_Error !== ''}
               size='small'
               onClick={() => {
                 dispatch<UpdateBaseInfoAction>({

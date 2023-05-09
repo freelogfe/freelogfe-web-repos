@@ -1,8 +1,17 @@
 <!doctype html>
 <script>
-  if (window.location.host.includes('.freelog.com') && window.location.protocol === 'http:') {
-    window.location.replace(window.location.href.replace('http:', 'https:'));
+  if (self.location.host.includes('.freelog.com') && self.location.protocol === 'http:') {
+    self.location.replace(self.location.href.replace('http:', 'https:'));
   }
+
+  (function() {
+    const version = '0.10.0';
+    const localVersion = self.localStorage.getItem('Version');
+    if (version !== localVersion) {
+      self.localStorage.setItem('Version', version);
+      self.localStorage.removeItem('i18nextResources');
+    }
+  })();
 </script>
 <html>
 <head>
@@ -11,5 +20,26 @@
 </head>
 <body>
 <div id="root"></div>
+<!--<script type="text/javascript" src="https://s9.cnzz.com/z_stat.php?id=1281181588&web_id=1281181588"></script>-->
+<script>
+  (function() {
+    const el = self.document.createElement('script');
+    // el.type = 'text/javascript';
+    // el.charset = 'utf-8';
+    el.async = true;
+    const ref = self.document.body.getElementsByTagName('script')[0];
+    // console.log(ref, 'ref');
+    ref.parentNode.insertBefore(el, ref);
+    if (self.location.host.includes('.freelog.com')) {
+      el.src = 'https://s9.cnzz.com/z_stat.php?id=1281181586&web_id=1281181586';
+    } else {
+      el.src = 'https://s9.cnzz.com/z_stat.php?id=1281181588&web_id=1281181588';
+    }
+  })();
+
+  setTimeout(() => {
+    self.document.querySelector(`[title = '站长统计']`)?.style.display = 'none'
+  }, 300);
+</script>
 </body>
 </html>

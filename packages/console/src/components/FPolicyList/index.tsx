@@ -1,9 +1,8 @@
 import * as React from 'react';
 import styles from './index.less';
 import FSwitch from '../FSwitch';
-import { Space } from 'antd';
+import { Space, Spin } from 'antd';
 import FModal from '../FModal';
-import FFullScreen from '../FIcons/FFullScreen';
 import FPolicyDisplay from '../FPolicyDisplay';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
 import { FI18n } from '@freelog/tools-lib';
@@ -22,13 +21,14 @@ function FPolicyList({ dataSource, atLeastOneUsing = false, onCheckChange }: FPo
   // console.log(dataSource, 'dataSource#@@@@@#@##########');
   const disabledOnlyUsing: boolean = atLeastOneUsing
     ? dataSource.filter((ds) => {
-        return ds.status === 1;
-      }).length <= 1
+    return ds.status === 1;
+  }).length <= 1
     : false;
 
   return (
     <div className={styles.styles}>
       {dataSource.map((ds) => {
+        // console.log(ds, 'dsfijdflksdjflkjsdlkfjsldkfjsldkjlk');
         return (
           <PolicyCard
             key={ds.policyId}
@@ -53,22 +53,29 @@ interface PolicyCardProps {
   fullInfo: PolicyFullInfo_Type;
   onlineDisable?: boolean;
   activeBtnShow?: boolean;
+
   onOnlineChange?(bool: boolean): void;
 }
 
 export function PolicyCard({
-  fullInfo,
-  onlineDisable = false,
-  activeBtnShow = true,
-  onOnlineChange,
-}: PolicyCardProps) {
-  const [fullScreenVisible, setFullScreenVisible] = React.useState<boolean>();
+                             fullInfo,
+                             onlineDisable = false,
+                             activeBtnShow = true,
+                             onOnlineChange,
+                           }: PolicyCardProps) {
+  const [fullScreenVisible, setFullScreenVisible] = React.useState<boolean>(false);
+  const [loading, set_loading] = React.useState<boolean>(false);
 
+  React.useEffect(() => {
+    // console.log('#####89sdflsdkfjlsdjl****');
+    set_loading(false);
+  }, [fullInfo]);
+  // console.log(fullInfo.policyName, 'fullInfo.policyNameosdjlkfjlksdjlkj');
   return (
     <div className={styles.policy}>
       <div className={styles.header}>
         <FComponentsLib.FContentText
-          type="highlight"
+          type='highlight'
           text={fullInfo.policyName}
           style={{ maxWidth: 150 }}
           singleRow
@@ -81,17 +88,20 @@ export function PolicyCard({
             </label>
 
             <FTooltip
-              title={'已上架的标的物必须启用至少一个授权策略'}
+              title={FI18n.i18nNext.t('msg_activateauthplan_disable')}
               zIndex={onlineDisable ? 1 : -1}
             >
               <div>
-                <FSwitch
-                  disabled={onlineDisable}
-                  checked={fullInfo.status === 1}
-                  onChange={(value) => {
-                    onOnlineChange && onOnlineChange(value);
-                  }}
-                />
+                <Spin spinning={loading}>
+                  <FSwitch
+                    disabled={onlineDisable}
+                    checked={fullInfo.status === 1}
+                    onChange={(value) => {
+                      onOnlineChange && onOnlineChange(value);
+                      set_loading(true);
+                    }}
+                  />
+                </Spin>
               </div>
             </FTooltip>
           </Space>
@@ -108,11 +118,11 @@ export function PolicyCard({
           setFullScreenVisible(true);
         }}
       >
-        <FFullScreen style={{ fontSize: 12 }} />
+        <FComponentsLib.FIcons.FFullScreen style={{ fontSize: 12 }} />
       </a>
       <FModal
         title={null}
-        visible={fullScreenVisible}
+        open={fullScreenVisible}
         onCancel={() => {
           setFullScreenVisible(false);
         }}
@@ -121,7 +131,7 @@ export function PolicyCard({
         centered
       >
         <div className={styles.ModalTile}>
-          <FComponentsLib.FTitleText text={fullInfo.policyName} type="h2" />
+          <FComponentsLib.FTitleText text={fullInfo.policyName} type='h2' />
           <div style={{ width: 20 }} />
           <label style={{ color: fullInfo.status === 1 ? '#42C28C' : '#B4B6BA' }}>
             {FI18n.i18nNext.t('btn_activate_auth_plan')}

@@ -17,7 +17,7 @@ import {
 import { history } from 'umi';
 import { RouteComponentProps } from 'react-router';
 import MappingRule from '@/pages/node/informal/$id/Exhibit/MappingRule';
-import { FUtil } from '@freelog/tools-lib';
+import { FI18n, FUtil } from '@freelog/tools-lib';
 import * as AHooks from 'ahooks';
 import FIdentityTypeBadge from '@/components/FIdentityTypeBadge';
 import FLoadingTip from '@/components/FLoadingTip';
@@ -230,9 +230,9 @@ function Presentable({ dispatch, match, informExhibitInfoPage, nodes }: InformEx
 
       <FDialog
         show={inactiveDialogShow}
-        title='提醒'
-        desc='下架后其它用户将无法签约该资源，确认要下架吗？'
-        sureText='下架资源'
+        title={FI18n.i18nNext.t('remove_exhibit_from_auth_confirmation_title')}
+        desc={FI18n.i18nNext.t('confirm_msg_remove_exhibits_from_auth')}
+        sureText={FI18n.i18nNext.t('btn_remove_exhibits_from_auth')}
         cancel={() => {
           setInactiveDialogShow(false);
         }}
@@ -244,10 +244,10 @@ function Presentable({ dispatch, match, informExhibitInfoPage, nodes }: InformEx
             checked={noLonger}
             onChange={(e) => setNoLonger(e.target.checked)}
           >
-            不再提醒
+            {FI18n.i18nNext.t('checkbox_dontaskmeagain')}
           </Checkbox>
         }
-      ></FDialog>
+      />
 
       {resultPopupType !== null && (
         <div className={styles['result-modal']}>
@@ -255,7 +255,13 @@ function Presentable({ dispatch, match, informExhibitInfoPage, nodes }: InformEx
             {loading ? (
               <div className={styles['loader']}>
                 <LoadingOutlined className={styles['loader-icon']} />
-                <div className={styles['loader-text']}>正在{resultPopupType ? '上架' : '下架'}</div>
+                <div className={styles['loader-text']}>
+                  {
+                    resultPopupType
+                      ? FI18n.i18nNext.t('set_resource_available_for_auth_msg_processing')
+                      : FI18n.i18nNext.t('remove_resource_from_auth_msg_processing')
+                  }
+                </div>
               </div>
             ) : (
               <div className={styles['result']}>
@@ -263,8 +269,14 @@ function Presentable({ dispatch, match, informExhibitInfoPage, nodes }: InformEx
                   className={`freelog fl-icon-shangpao ${styles['result-icon']} ${
                     styles[resultPopupType ? 'up' : 'down']
                   }`}
-                ></i>
-                <div className={styles['result-text']}>已{resultPopupType ? '上架' : '下架'}</div>
+                />
+                <div className={styles['result-text']}>
+                  {
+                    resultPopupType
+                      ? FI18n.i18nNext.t('set_resource_available_for_auth_msg_done')
+                      : FI18n.i18nNext.t('remove_resource_from_auth_msg_done')
+                  }
+                </div>
               </div>
             )}
           </div>

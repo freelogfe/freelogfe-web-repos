@@ -4,7 +4,7 @@ import { Col, Row, Space } from 'antd';
 import FInput from '../../../FInput';
 import FSelect from '../../../FSelect';
 import { Data } from '../index';
-import { FUtil ,FI18n} from '@freelog/tools-lib';
+import { FUtil, FI18n } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 
 interface PropertyProps {
@@ -40,8 +40,8 @@ function Property({ data, hideTypeSelect = false, onChange }: PropertyProps) {
             let errorText: string = '';
             if (value === '') {
               errorText = '请输入';
-            } else if (value.length > 15) {
-              errorText = '不超过15个字符';
+            } else if (value.length > 20) {
+              errorText = '不超过20个字符';
             } else if (!FUtil.Regexp.CUSTOM_KEY.test(value)) {
               errorText = `不符合${FUtil.Regexp.CUSTOM_KEY}`;
             }
@@ -126,13 +126,16 @@ function Property({ data, hideTypeSelect = false, onChange }: PropertyProps) {
             <Space size={5}>
               {/*<i className={styles.dot} />*/}
               {/*<FTitleText type='h4' text={'自定义选项(填写一个默认值)'} />*/}
-              <FComponentsLib.FTitleText type='h4' text={'自定义选项'} />
+              <FComponentsLib.FTitleText
+                type='h4'
+                text={!hideTypeSelect ? FI18n.i18nNext.t('options_textfield_default_title') : FI18n.i18nNext.t('options_textfield_value_title')}
+              />
             </Space>
             <div style={{ height: 5 }} />
             <FInput
               className={styles.input}
               wrapClassName={styles.input}
-              placeholder={'输入自定义选项'}
+              placeholder={!hideTypeSelect ? FI18n.i18nNext.t('options_textfield_default_hint') : FI18n.i18nNext.t('options_textfield_value_hint')}
               value={data.defaultValue}
               onChange={(e) => {
                 const value: string = e.target.value;

@@ -2,7 +2,8 @@ import * as React from 'react';
 import styles from './index.less';
 import { Space } from 'antd';
 import FBraftEditor from '@/components/FBraftEditor';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState, ResourceInfoModelState, ResourceVersionEditorPageModelState } from '@/models/connect';
 import {
   UpdateDataSourceAction,
@@ -11,7 +12,6 @@ import {
   SyncAllPropertiesAction,
 } from '@/models/resourceVersionEditorPage';
 import BraftEditor, { EditorState } from 'braft-editor';
-import RouterTypes from 'umi/routerTypes';
 import { withRouter } from 'umi';
 import FInput from '@/components/FInput';
 import FTooltip from '@/components/FTooltip';
@@ -19,37 +19,27 @@ import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
 import Sider from '@/pages/resource/containers/Sider';
 import FFormLayout from '@/components/FFormLayout';
 import FDrawer from '@/components/FDrawer';
-import FDownload from '@/components/FIcons/FDownload';
-import {
-  // FAntvG6AuthorizationGraph,
-  // FAntvG6DependencyGraph,
-  // FAntvG6RelationshipGraph,
-  FViewportTabs,
-} from '@/components/FAntvG6';
 import { FServiceAPI, FI18n } from '@freelog/tools-lib';
 import FDivider from '@/components/FDivider';
-import FCustomOptionsCards from '@/components/FCustomOptionsCards';
 import { RouteComponentProps } from 'react-router';
-import FBasePropertiesCards from '@/components/FBasePropertiesCards';
-import FCustomOptionEditorDrawer from '@/components/FCustomOptionEditorDrawer';
 import { Helmet } from 'react-helmet';
-import FGraph_Tree_Relationship_Resource from '@/components/FAntvG6/FGraph_Tree_Relationship_Resource';
-import FGraph_Tree_Authorization_Resource from '@/components/FAntvG6/FGraph_Tree_Authorization_Resource';
-import FGraph_Tree_Dependency_Resource from '@/components/FAntvG6/FGraph_Tree_Dependency_Resource';
 import FComponentsLib from '@freelog/components-lib';
+import FViewportCards_Resource from '@/components/FAntvG6/FViewportCards_Resource';
+import FResourceProperties from '@/components/FResourceProperties';
+import FResourceOptions from '@/components/FResourceOptions';
+import fResourcePropertyEditor from '@/components/fResourcePropertyEditor';
+import fResourceOptionEditor from '@/components/fResourceOptionEditor';
 
 interface VersionEditorProps extends RouteComponentProps<{
   id: string;
   version: string;
 }> {
   dispatch: Dispatch;
-  // $version: ResourceVersionEditorPageModelState;
   resourceVersionEditorPage: ResourceVersionEditorPageModelState;
   resourceInfo: ResourceInfoModelState,
 }
 
-function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, match }: VersionEditorProps & RouterTypes) {
-  // console.log(route, 'route!@#$@!#$@!#42134');
+function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, match }: VersionEditorProps) {
 
   const [isEditing, setIsEditing] = React.useState<boolean>(false);
   const [editor, setEditor] = React.useState<EditorState>(BraftEditor.createEditorState(resourceVersionEditorPage.description));
@@ -88,21 +78,6 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
         descriptionFullScreen: false,
       });
     }
-  }
-
-  function onUpdateProperties(data: any[]) {
-    dispatch<UpdateDataSourceAction>({
-      type: 'resourceVersionEditorPage/updateDataSource',
-      payload: {
-        customPropertyDescriptors: data.map((i) => ({
-          key: i.key as string,
-          defaultValue: i.value as string,
-          type: !i.allowCustom ? 'readonlyText' : i.custom === 'input' ? 'editableText' : 'select',
-          candidateItems: i.customOption ? i.customOption.split(',') : [],
-          remark: i.description,
-        })),
-      },
-    });
   }
 
   function onCloseCustomOptionDrawer() {
@@ -221,7 +196,7 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
               ? (<FBraftEditor
                 value={editor}
                 // defaultValue={editorText}
-                onChange={(value) => setEditor(value)}
+                onChange={(value: EditorState) => setEditor(value)}
                 style={{ height: 500 }}
               />)
               : (resourceVersionEditorPage.description && (
@@ -233,119 +208,70 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
                 </div>))
           }
         </FFormLayout.FBlock>
-        <FFormLayout.FBlock
-          title={'相关视图'}
-          extra={<FComponentsLib.FTextBtn
-            type='default'
-            onClick={() => {
-              onChange({
-                graphFullScreen: true,
-              });
-            }}
-          >全屏查看</FComponentsLib.FTextBtn>}
-        >
-          <FViewportTabs
-            options={[
-              { label: '关系树', value: 'relationship' },
-              { label: '授权链', value: 'authorization' },
-              { label: '依赖树', value: 'dependency' },
-            ]}
-            value={resourceVersionEditorPage.viewportGraphShow}
-            onChange={(value) => {
-              onChange({
-                viewportGraphShow: value as 'relationship',
-              });
-            }}
+
+        {
+          resourceVersionEditorPage.graphShow && (<FFormLayout.FBlock
+            title={'相关视图'}
           >
 
-            {
-              resourceVersionEditorPage.graphFullScreen
-                ? (<div style={{ height: 500 }} />)
-                : (<>
-                  {/*{*/}
-                  {/*  resourceVersionEditorPage.viewportGraphShow === 'relationship' && (<FAntvG6RelationshipGraph*/}
-                  {/*    nodes={resourceVersionEditorPage.relationGraphNodes}*/}
-                  {/*    edges={resourceVersionEditorPage.relationGraphEdges}*/}
-                  {/*    width={860}*/}
-                  {/*  />)*/}
-                  {/*}*/}
-                  {
-                    resourceVersionEditorPage.viewportGraphShow === 'relationship' && (<FGraph_Tree_Relationship_Resource
-                      resourceID={resourceVersionEditorPage.resourceID}
-                      version={resourceVersionEditorPage.version}
-                      width={860}
-                      height={500}
-                    />)
-                  }
+            <FViewportCards_Resource
+              resourceID={resourceVersionEditorPage.resourceID}
+              version={resourceVersionEditorPage.version}
+              graphShow={['relationship', 'authorization', 'dependency']}
+              onMount={({ hasData }) => {
+                dispatch<ChangeAction>({
+                  type: 'resourceVersionEditorPage/change',
+                  payload: {
+                    graphShow: hasData,
+                  },
+                });
+              }}
+            />
 
-                  {/*{*/}
-                  {/*  resourceVersionEditorPage.viewportGraphShow === 'authorization' && (<FAntvG6AuthorizationGraph*/}
-                  {/*    nodes={resourceVersionEditorPage.authorizationGraphNodes}*/}
-                  {/*    edges={resourceVersionEditorPage.authorizationGraphEdges}*/}
-                  {/*    width={860}*/}
-                  {/*  />)*/}
-                  {/*}*/}
+          </FFormLayout.FBlock>)
+        }
 
-                  {
-                    resourceVersionEditorPage.viewportGraphShow === 'authorization' && (<FGraph_Tree_Authorization_Resource
-                      resourceID={resourceVersionEditorPage.resourceID}
-                      version={resourceVersionEditorPage.version}
-                      width={860}
-                      height={500}
-                    />)
-                  }
-
-                  {/*{*/}
-                  {/*  resourceVersionEditorPage.viewportGraphShow === 'dependency' && (<FAntvG6DependencyGraph*/}
-                  {/*    nodes={resourceVersionEditorPage.dependencyGraphNodes}*/}
-                  {/*    edges={resourceVersionEditorPage.dependencyGraphEdges}*/}
-                  {/*    width={860}*/}
-                  {/*  />)*/}
-                  {/*}*/}
-
-                  {
-                    resourceVersionEditorPage.viewportGraphShow === 'dependency' && (<FGraph_Tree_Dependency_Resource
-                      resourceID={resourceVersionEditorPage.resourceID}
-                      version={resourceVersionEditorPage.version}
-                      width={860}
-                      height={500}
-                    />)
-                  }
-                </>)
-            }
-
-          </FViewportTabs>
-
-        </FFormLayout.FBlock>
 
         <FFormLayout.FBlock title={'基础属性'}>
-          <FBasePropertiesCards
-            rawProperties={resourceVersionEditorPage.rawProperties.map((rp) => {
-              return {
-                theKey: rp.key,
-                value: rp.value,
-              };
-            })}
-            baseProperties={resourceVersionEditorPage.baseProperties.map((bp) => {
-              return {
-                theKey: bp.key,
-                description: bp.description,
-                value: bp.value,
-              };
-            })}
-            onEdit={(theKey) => {
-              const baseP = resourceVersionEditorPage.baseProperties.find((bp) => {
-                return bp.key === theKey;
+          <FResourceProperties
+            immutableData={resourceVersionEditorPage.rawProperties}
+            alterableData={resourceVersionEditorPage.baseProperties}
+            onEdit_alterableData={async (data) => {
+              const index: number = resourceVersionEditorPage.baseProperties.findIndex((p) => {
+                return p === data;
               });
-              if (!baseP) {
+              const dataSource: {
+                key: string;
+                name: string;
+                value: string;
+                description: string;
+              } | null = await fResourcePropertyEditor({
+                disabledKeys: [
+                  ...resourceVersionEditorPage.rawProperties.map<string>((rp) => rp.key),
+                  ...resourceVersionEditorPage.baseProperties.map<string>((bp) => bp.key),
+                  ...resourceVersionEditorPage.customOptions.map<string>((pp) => pp.key),
+                ],
+                disabledNames: [
+                  ...resourceVersionEditorPage.baseProperties.map<string>((bp) => bp.name),
+                  ...resourceVersionEditorPage.customOptions.map<string>((pp) => pp.name),
+                ],
+                defaultData: data,
+                noneEditableFields: ['key', 'name'],
+              });
+              if (!dataSource) {
                 return;
               }
-              onChange({
-                basePEditorVisible: true,
-                basePKeyInput: baseP.key,
-                basePValueInput: baseP.value,
-                basePDescriptionInput: baseP.description,
-                basePDescriptionInputError: '',
+
+              await onChange({
+                baseProperties: resourceVersionEditorPage.baseProperties.map((bp, i) => {
+                  if (index !== i) {
+                    return bp;
+                  }
+                  return dataSource;
+                }),
+              });
+              await dispatch<SyncAllPropertiesAction>({
+                type: 'resourceVersionEditorPage/syncAllProperties',
               });
             }}
           />
@@ -353,34 +279,61 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
         </FFormLayout.FBlock>
 
         {
-          resourceVersionEditorPage.customOptions?.length > 0 && (<FFormLayout.FBlock title={'自定义选项'}>
-            <FCustomOptionsCards
-              dataSource={resourceVersionEditorPage.customOptions.map((cos) => {
-                return {
-                  theKey: cos.key,
-                  description: cos.description,
-                  type: cos.custom,
-                  value: cos.custom === 'select' ? cos.customOption : cos.defaultValue,
-                };
-              })}
-              onEdit={(theKey) => {
-                const customOption = resourceVersionEditorPage.customOptions.find((cos) => {
-                  return cos.key === theKey;
+          resourceVersionEditorPage.customOptions.length > 0 && (<FFormLayout.FBlock title={'自定义选项'}>
+            <FResourceOptions
+              dataSource={resourceVersionEditorPage.customOptions}
+              onEdit={async (data) => {
+                const index: number = resourceVersionEditorPage.customOptions.findIndex((p) => {
+                  return p === data;
                 });
-                if (!customOption) {
+
+                const dataSource: {
+                  key: string;
+                  name: string;
+                  type: 'input' | 'select';
+                  input: string;
+                  select: string[];
+                  description: string;
+                } | null = await fResourceOptionEditor({
+                  disabledKeys: [
+                    ...resourceVersionEditorPage.rawProperties.map<string>((rp) => rp.key),
+                    ...resourceVersionEditorPage.baseProperties.map<string>((bp) => bp.key),
+                    ...resourceVersionEditorPage.customOptions.map<string>((pp) => pp.key),
+                  ],
+                  disabledNames: [
+                    ...resourceVersionEditorPage.rawProperties.map<string>((rp) => rp.name),
+                    ...resourceVersionEditorPage.baseProperties.map<string>((bp) => bp.name),
+                    ...resourceVersionEditorPage.customOptions.map<string>((pp) => pp.name),
+                  ],
+                  defaultData: data,
+                  noneEditableFields: ['key', 'name', 'type'],
+                });
+
+                if (!dataSource) {
                   return;
                 }
-                onChange({
-                  customOptionEditorVisible: true,
-                  customOptionKey: customOption.key,
-                  customOptionDescription: customOption.description,
-                  customOptionDescriptionError: '',
-                  customOptionCustom: customOption.custom,
-                  customOptionDefaultValue: customOption.defaultValue,
-                  customOptionDefaultValueError: '',
-                  customOptionCustomOption: customOption.customOption,
-                  customOptionCustomOptionError: '',
+                await onChange({
+                  customOptions: resourceVersionEditorPage.customOptions
+                    .map<ResourceVersionEditorPageModelState['customOptions'][number]>((bp,i) => {
+                      if (index !== i) {
+                        return bp;
+                      }
+                      return dataSource;
+                    }),
+                  // customOptionEditorVisible: false,
+                  // customOptionKey: '',
+                  // customOptionDescription: '',
+                  // customOptionDescriptionError: '',
+                  // customOptionCustom: 'input',
+                  // customOptionDefaultValue: '',
+                  // customOptionDefaultValueError: '',
+                  // customOptionCustomOption: '',
+                  // customOptionCustomOptionError: '',
                 });
+                await dispatch<SyncAllPropertiesAction>({
+                  type: 'resourceVersionEditorPage/syncAllProperties',
+                });
+
               }}
             />
           </FFormLayout.FBlock>)
@@ -389,251 +342,225 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
       </FFormLayout>
     </FLeftSiderLayout>
 
-    <FDrawer
-      title={'编辑基础属性'}
-      onClose={() => {
-        onCloseBaseAttrDrawer();
-      }}
-      visible={resourceVersionEditorPage.basePEditorVisible}
-      width={720}
-      topRight={<Space size={30}>
-        <FComponentsLib.FTextBtn
-          type='default'
-          onClick={() => {
-            onCloseBaseAttrDrawer();
-          }}
-        >取消</FComponentsLib.FTextBtn>
+    {/*<FDrawer*/}
+    {/*  title={'编辑基础属性'}*/}
+    {/*  onClose={() => {*/}
+    {/*    onCloseBaseAttrDrawer();*/}
+    {/*  }}*/}
+    {/*  open={resourceVersionEditorPage.basePEditorVisible}*/}
+    {/*  width={720}*/}
+    {/*  topRight={<Space size={30}>*/}
+    {/*    <FComponentsLib.FTextBtn*/}
+    {/*      type='default'*/}
+    {/*      onClick={() => {*/}
+    {/*        onCloseBaseAttrDrawer();*/}
+    {/*      }}*/}
+    {/*    >取消</FComponentsLib.FTextBtn>*/}
 
-        <FComponentsLib.FRectBtn
-          type='primary'
-          disabled={!!resourceVersionEditorPage.basePDescriptionInputError || !!resourceVersionEditorPage.basePValueInputError}
-          onClick={async () => {
-            await onChange({
-              baseProperties: resourceVersionEditorPage.baseProperties.map((bp) => {
-                if (bp.key !== resourceVersionEditorPage.basePKeyInput) {
-                  return bp;
-                }
-                return {
-                  ...bp,
-                  value: resourceVersionEditorPage.basePValueInput,
-                  description: resourceVersionEditorPage.basePDescriptionInput,
-                };
-              }),
-              basePEditorVisible: false,
-              basePKeyInput: '',
-              basePValueInput: '',
-              basePDescriptionInput: '',
-              basePDescriptionInputError: '',
-            });
-            await dispatch<SyncAllPropertiesAction>({
-              type: 'resourceVersionEditorPage/syncAllProperties',
-            });
-          }}
-        >保存</FComponentsLib.FRectBtn>
-      </Space>}
-    >
-      <Space
-        size={20}
-        direction='vertical'
-        style={{ width: '100%' }}
-      >
-        <div className={styles.input}>
-          <div className={styles.title}>
-            <i className={styles.dot} />
-            <FComponentsLib.FTitleText type='h4'>key</FComponentsLib.FTitleText>
-          </div>
-          <div style={{ height: 5 }} />
-          <FInput
-            disabled={true}
-            value={resourceVersionEditorPage.basePKeyInput}
-            className={styles.input}
-          />
-        </div>
+    {/*    <FComponentsLib.FRectBtn*/}
+    {/*      type='primary'*/}
+    {/*      disabled={!!resourceVersionEditorPage.basePDescriptionInputError || !!resourceVersionEditorPage.basePValueInputError}*/}
+    {/*      onClick={async () => {*/}
+    {/*        await onChange({*/}
+    {/*          baseProperties: resourceVersionEditorPage.baseProperties.map((bp) => {*/}
+    {/*            if (bp.key !== resourceVersionEditorPage.basePKeyInput) {*/}
+    {/*              return bp;*/}
+    {/*            }*/}
+    {/*            return {*/}
+    {/*              ...bp,*/}
+    {/*              value: resourceVersionEditorPage.basePValueInput,*/}
+    {/*              description: resourceVersionEditorPage.basePDescriptionInput,*/}
+    {/*            };*/}
+    {/*          }),*/}
+    {/*          basePEditorVisible: false,*/}
+    {/*          basePKeyInput: '',*/}
+    {/*          basePValueInput: '',*/}
+    {/*          basePDescriptionInput: '',*/}
+    {/*          basePDescriptionInputError: '',*/}
+    {/*        });*/}
+    {/*        await dispatch<SyncAllPropertiesAction>({*/}
+    {/*          type: 'resourceVersionEditorPage/syncAllProperties',*/}
+    {/*        });*/}
+    {/*      }}*/}
+    {/*    >保存</FComponentsLib.FRectBtn>*/}
+    {/*  </Space>}*/}
+    {/*>*/}
+    {/*  <Space*/}
+    {/*    size={20}*/}
+    {/*    direction='vertical'*/}
+    {/*    style={{ width: '100%' }}*/}
+    {/*  >*/}
+    {/*    <div className={styles.input}>*/}
+    {/*      <div className={styles.title}>*/}
+    {/*        <i className={styles.dot} />*/}
+    {/*        <FComponentsLib.FTitleText type='h4'>key</FComponentsLib.FTitleText>*/}
+    {/*      </div>*/}
+    {/*      <div style={{ height: 5 }} />*/}
+    {/*      <FInput*/}
+    {/*        disabled={true}*/}
+    {/*        value={resourceVersionEditorPage.basePKeyInput}*/}
+    {/*        className={styles.input}*/}
+    {/*      />*/}
+    {/*    </div>*/}
 
-        <div className={styles.input}>
-          <div className={styles.title}>
-            <i className={styles.dot} />
-            <FComponentsLib.FTitleText type='h4'>value</FComponentsLib.FTitleText>
-          </div>
-          <div style={{ height: 5 }} />
-          <FInput
-            value={resourceVersionEditorPage.basePValueInput}
-            // errorText={}
-            className={styles.input}
-            onChange={(e) => {
-              const value: string = e.target.value;
-              let valueError: string = '';
-              if (value === '') {
-                valueError = '请输入';
-              } else if (value.length > 30) {
-                valueError = '不超过30个字符';
-              }
-              onChange({
-                basePValueInput: value,
-                basePValueInputError: valueError,
-              });
-            }}
-            placeholder={'输入value'}
-          />
-          {resourceVersionEditorPage.basePValueInputError && (<>
-            <div style={{ height: 5 }} />
-            <div className={styles.errorTip}>{resourceVersionEditorPage.basePValueInputError}</div>
-          </>)}
-        </div>
+    {/*    <div className={styles.input}>*/}
+    {/*      <div className={styles.title}>*/}
+    {/*        <i className={styles.dot} />*/}
+    {/*        <FComponentsLib.FTitleText type='h4'>value</FComponentsLib.FTitleText>*/}
+    {/*      </div>*/}
+    {/*      <div style={{ height: 5 }} />*/}
+    {/*      <FInput*/}
+    {/*        value={resourceVersionEditorPage.basePValueInput}*/}
+    {/*        // errorText={}*/}
+    {/*        className={styles.input}*/}
+    {/*        onChange={(e) => {*/}
+    {/*          const value: string = e.target.value;*/}
+    {/*          let valueError: string = '';*/}
+    {/*          if (value === '') {*/}
+    {/*            valueError = '请输入';*/}
+    {/*          } else if (value.length > 30) {*/}
+    {/*            valueError = '不超过30个字符';*/}
+    {/*          }*/}
+    {/*          onChange({*/}
+    {/*            basePValueInput: value,*/}
+    {/*            basePValueInputError: valueError,*/}
+    {/*          });*/}
+    {/*        }}*/}
+    {/*        placeholder={'输入value'}*/}
+    {/*      />*/}
+    {/*      {resourceVersionEditorPage.basePValueInputError && (<>*/}
+    {/*        <div style={{ height: 5 }} />*/}
+    {/*        <div className={styles.errorTip}>{resourceVersionEditorPage.basePValueInputError}</div>*/}
+    {/*      </>)}*/}
+    {/*    </div>*/}
 
-        <div className={styles.input}>
-          <div className={styles.title}>
-            <FComponentsLib.FTitleText type='h4'>属性说明</FComponentsLib.FTitleText>
-          </div>
-          <div style={{ height: 5 }} />
-          <FInput
-            value={resourceVersionEditorPage.basePDescriptionInput}
-            errorText={resourceVersionEditorPage.basePDescriptionInputError}
-            className={styles.input}
-            onChange={(e) => {
-              const value: string = e.target.value;
-              let descriptionError: string = '';
-              if (value.length > 50) {
-                descriptionError = '不超过50个字符';
-              }
-              onChange({
-                basePDescriptionInput: value,
-                basePDescriptionInputError: descriptionError,
-              });
-            }}
-            placeholder={'输入属性说明'}
-          />
-        </div>
+    {/*    <div className={styles.input}>*/}
+    {/*      <div className={styles.title}>*/}
+    {/*        <FComponentsLib.FTitleText type='h4'>属性说明</FComponentsLib.FTitleText>*/}
+    {/*      </div>*/}
+    {/*      <div style={{ height: 5 }} />*/}
+    {/*      <FInput*/}
+    {/*        value={resourceVersionEditorPage.basePDescriptionInput}*/}
+    {/*        errorText={resourceVersionEditorPage.basePDescriptionInputError}*/}
+    {/*        className={styles.input}*/}
+    {/*        onChange={(e) => {*/}
+    {/*          const value: string = e.target.value;*/}
+    {/*          let descriptionError: string = '';*/}
+    {/*          if (value.length > 50) {*/}
+    {/*            descriptionError = '不超过50个字符';*/}
+    {/*          }*/}
+    {/*          onChange({*/}
+    {/*            basePDescriptionInput: value,*/}
+    {/*            basePDescriptionInputError: descriptionError,*/}
+    {/*          });*/}
+    {/*        }}*/}
+    {/*        placeholder={'输入属性说明'}*/}
+    {/*      />*/}
+    {/*    </div>*/}
 
-      </Space>
-    </FDrawer>
+    {/*  </Space>*/}
+    {/*</FDrawer>*/}
 
-    <FCustomOptionEditorDrawer
-      disabledKeyInput
-      disabledValueTypeSelect
-      visible={resourceVersionEditorPage.customOptionEditorVisible}
-      dataSource={{
-        key: resourceVersionEditorPage.customOptionKey,
-        value: (resourceVersionEditorPage.customOptionCustom === 'input' ? resourceVersionEditorPage.customOptionDefaultValue : resourceVersionEditorPage.customOptionCustomOption) || '',
-        description: resourceVersionEditorPage.customOptionDescription,
-        valueType: resourceVersionEditorPage.customOptionCustom || 'input',
-      }}
-      onCancel={() => {
-        onCloseCustomOptionDrawer();
-      }}
-      onConfirm={async (value) => {
-        await onChange({
-          customOptions: resourceVersionEditorPage.customOptions
-            .map<ResourceVersionEditorPageModelState['customOptions'][number]>((bp) => {
-              if (bp.key !== resourceVersionEditorPage.customOptionKey) {
-                return bp;
-              }
-              return {
-                ...bp,
-                description: value.description,
-                defaultValue: value.value,
-                customOption: value.value,
-              };
-            }),
-          customOptionEditorVisible: false,
-          customOptionKey: '',
-          customOptionDescription: '',
-          customOptionDescriptionError: '',
-          customOptionCustom: 'input',
-          customOptionDefaultValue: '',
-          customOptionDefaultValueError: '',
-          customOptionCustomOption: '',
-          customOptionCustomOptionError: '',
-        });
-        await dispatch<SyncAllPropertiesAction>({
-          type: 'resourceVersionEditorPage/syncAllProperties',
-        });
-      }}
-    />
+    {/*<FCustomOptionEditorDrawer*/}
+    {/*  disabledKeyInput*/}
+    {/*  disabledValueTypeSelect*/}
+    {/*  visible={resourceVersionEditorPage.customOptionEditorVisible}*/}
+    {/*  dataSource={{*/}
+    {/*    key: resourceVersionEditorPage.customOptionKey,*/}
+    {/*    value: (resourceVersionEditorPage.customOptionCustom === 'input' ? resourceVersionEditorPage.customOptionDefaultValue : resourceVersionEditorPage.customOptionCustomOption) || '',*/}
+    {/*    description: resourceVersionEditorPage.customOptionDescription,*/}
+    {/*    valueType: resourceVersionEditorPage.customOptionCustom || 'input',*/}
+    {/*  }}*/}
+    {/*  onCancel={() => {*/}
+    {/*    onCloseCustomOptionDrawer();*/}
+    {/*  }}*/}
+    {/*  onConfirm={async (value) => {*/}
+    {/*    await onChange({*/}
+    {/*      customOptions: resourceVersionEditorPage.customOptions*/}
+    {/*        .map<ResourceVersionEditorPageModelState['customOptions'][number]>((bp) => {*/}
+    {/*          if (bp.key !== resourceVersionEditorPage.customOptionKey) {*/}
+    {/*            return bp;*/}
+    {/*          }*/}
+    {/*          return {*/}
+    {/*            ...bp,*/}
+    {/*            description: value.description,*/}
+    {/*            defaultValue: value.value,*/}
+    {/*            customOption: value.value,*/}
+    {/*          };*/}
+    {/*        }),*/}
+    {/*      customOptionEditorVisible: false,*/}
+    {/*      customOptionKey: '',*/}
+    {/*      customOptionDescription: '',*/}
+    {/*      customOptionDescriptionError: '',*/}
+    {/*      customOptionCustom: 'input',*/}
+    {/*      customOptionDefaultValue: '',*/}
+    {/*      customOptionDefaultValueError: '',*/}
+    {/*      customOptionCustomOption: '',*/}
+    {/*      customOptionCustomOptionError: '',*/}
+    {/*    });*/}
+    {/*    await dispatch<SyncAllPropertiesAction>({*/}
+    {/*      type: 'resourceVersionEditorPage/syncAllProperties',*/}
+    {/*    });*/}
+    {/*  }}*/}
+    {/*/>*/}
 
-    <FDrawer
-      visible={resourceVersionEditorPage.graphFullScreen}
-      title={'相关视图'}
-      destroyOnClose
-      width={'100%'}
-      onClose={() => {
-        onChange({
-          graphFullScreen: false,
-        });
-      }}
-    >
+    {/*<FDrawer*/}
+    {/*  open={resourceVersionEditorPage.graphFullScreen}*/}
+    {/*  title={'相关视图'}*/}
+    {/*  destroyOnClose*/}
+    {/*  width={'100%'}*/}
+    {/*  onClose={() => {*/}
+    {/*    onChange({*/}
+    {/*      graphFullScreen: false,*/}
+    {/*    });*/}
+    {/*  }}*/}
+    {/*>*/}
 
-      <FViewportTabs
-        options={[
-          { label: '关系树', value: 'relationship' },
-          { label: '授权链', value: 'authorization' },
-          { label: '依赖树', value: 'dependency' },
-        ]}
-        value={resourceVersionEditorPage.viewportGraphShow}
-        onChange={(value) => {
-          onChange({
-            viewportGraphShow: value as 'relationship',
-          });
-        }}
-      >
+    {/*  <FViewportTabs*/}
+    {/*    options={[*/}
+    {/*      { label: '关系树', value: 'relationship' },*/}
+    {/*      { label: '授权链', value: 'authorization' },*/}
+    {/*      { label: '依赖树', value: 'dependency' },*/}
+    {/*    ]}*/}
+    {/*    value={resourceVersionEditorPage.viewportGraphShow}*/}
+    {/*    onChange={(value) => {*/}
+    {/*      onChange({*/}
+    {/*        viewportGraphShow: value as 'relationship',*/}
+    {/*      });*/}
+    {/*    }}*/}
+    {/*  >*/}
 
-        {/*{*/}
-        {/*  resourceVersionEditorPage.viewportGraphShow === 'relationship' && (<FAntvG6RelationshipGraph*/}
-        {/*    nodes={resourceVersionEditorPage.relationGraphNodes}*/}
-        {/*    edges={resourceVersionEditorPage.relationGraphEdges}*/}
-        {/*    width={window.innerWidth - 60}*/}
-        {/*    height={window.innerHeight - 60 - 70 - 50}*/}
-        {/*  />)*/}
-        {/*}*/}
+    {/*    {*/}
+    {/*      resourceVersionEditorPage.viewportGraphShow === 'relationship' && (<FGraph_Tree_Relationship_Resource*/}
+    {/*        resourceID={resourceVersionEditorPage.resourceID}*/}
+    {/*        version={resourceVersionEditorPage.version}*/}
+    {/*        width={window.innerWidth - 60}*/}
+    {/*        height={window.innerHeight - 60 - 70 - 50}*/}
+    {/*      />)*/}
+    {/*    }*/}
 
-        {
-          resourceVersionEditorPage.viewportGraphShow === 'relationship' && (<FGraph_Tree_Relationship_Resource
-            resourceID={resourceVersionEditorPage.resourceID}
-            version={resourceVersionEditorPage.version}
-            width={window.innerWidth - 60}
-            height={window.innerHeight - 60 - 70 - 50}
-          />)
-        }
+    {/*    {*/}
+    {/*      resourceVersionEditorPage.viewportGraphShow === 'authorization' && (<FGraph_Tree_Authorization_Resource*/}
+    {/*        resourceID={resourceVersionEditorPage.resourceID}*/}
+    {/*        version={resourceVersionEditorPage.version}*/}
+    {/*        width={window.innerWidth - 60}*/}
+    {/*        height={window.innerHeight - 60 - 70 - 50}*/}
+    {/*      />)*/}
+    {/*    }*/}
 
-        {/*{*/}
-        {/*  resourceVersionEditorPage.viewportGraphShow === 'authorization' && (<FAntvG6AuthorizationGraph*/}
-        {/*    nodes={resourceVersionEditorPage.authorizationGraphNodes}*/}
-        {/*    edges={resourceVersionEditorPage.authorizationGraphEdges}*/}
-        {/*    width={window.innerWidth - 60}*/}
-        {/*    height={window.innerHeight - 60 - 70 - 50}*/}
-        {/*  />)*/}
-        {/*}*/}
-        {
-          resourceVersionEditorPage.viewportGraphShow === 'authorization' && (<FGraph_Tree_Authorization_Resource
-            resourceID={resourceVersionEditorPage.resourceID}
-            version={resourceVersionEditorPage.version}
-            width={window.innerWidth - 60}
-            height={window.innerHeight - 60 - 70 - 50}
-          />)
-        }
-
-        {/*{*/}
-        {/*  resourceVersionEditorPage.viewportGraphShow === 'dependency' && (<FAntvG6DependencyGraph*/}
-        {/*    nodes={resourceVersionEditorPage.dependencyGraphNodes}*/}
-        {/*    edges={resourceVersionEditorPage.dependencyGraphEdges}*/}
-        {/*    width={window.innerWidth - 60}*/}
-        {/*    height={window.innerHeight - 60 - 70 - 50}*/}
-        {/*  />)*/}
-        {/*}*/}
-
-        {
-          resourceVersionEditorPage.viewportGraphShow === 'dependency' && (<FGraph_Tree_Dependency_Resource
-            resourceID={resourceVersionEditorPage.resourceID}
-            version={resourceVersionEditorPage.version}
-            width={window.innerWidth - 60}
-            height={window.innerHeight - 60 - 70 - 50}
-          />)
-        }
-      </FViewportTabs>
-    </FDrawer>
+    {/*    {*/}
+    {/*      resourceVersionEditorPage.viewportGraphShow === 'dependency' && (<FGraph_Tree_Dependency_Resource*/}
+    {/*        resourceID={resourceVersionEditorPage.resourceID}*/}
+    {/*        version={resourceVersionEditorPage.version}*/}
+    {/*        width={window.innerWidth - 60}*/}
+    {/*        height={window.innerHeight - 60 - 70 - 50}*/}
+    {/*      />)*/}
+    {/*    }*/}
+    {/*  </FViewportTabs>*/}
+    {/*</FDrawer>*/}
 
     <FDrawer
-      visible={resourceVersionEditorPage.descriptionFullScreen}
+      open={resourceVersionEditorPage.descriptionFullScreen}
       title={'版本描述'}
       destroyOnClose
       mask={false}
@@ -690,7 +617,7 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
                 width: 950,
               }}
               // defaultValue={editorText}
-              onChange={(value) => setEditor(value)}
+              onChange={(value: EditorState) => setEditor(value)}
             />)
             : (resourceVersionEditorPage.description && (
               <div
@@ -741,7 +668,7 @@ function Header({ version, resourceID, signingDate, onClickDownload }: HeaderPro
               type='primary'
               onClick={() => onClickDownload && onClickDownload()}
             >
-              <FDownload
+              <FComponentsLib.FIcons.FDownload
                 style={{ fontSize: 16, fontWeight: 600 }}
               />
             </FComponentsLib.FTextBtn>

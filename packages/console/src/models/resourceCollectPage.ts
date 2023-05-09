@@ -5,8 +5,13 @@ import { ConnectState, ResourceListPageModelState } from '@/models/connect';
 import { FServiceAPI } from '@freelog/tools-lib';
 
 export interface ResourceCollectPageModelState {
-  resourceType: string;
-  resourceStatus: '0' | '1' | '2';
+  resourceTypeCodes: {
+    value: string;
+    label: string;
+    values: string[];
+    labels: string[];
+  };
+  resourceStatus: 0 | 1 | 2 | 4 | '#';
   inputText: string;
   // pageCurrent: number;
   pageSize: number;
@@ -49,14 +54,14 @@ export interface FetchDataSourceAction extends AnyAction {
 export interface OnChangeResourceTypeAction extends AnyAction {
   type: 'resourceCollectPage/onChangeResourceType';
   payload: {
-    value: string;
+    value: ResourceCollectPageModelState['resourceTypeCodes'];
   };
 }
 
 export interface OnChangeStatusAction extends AnyAction {
   type: 'resourceCollectPage/onChangeStatus';
   payload: {
-    value: string;
+    value: 0 | 1 | 2 | 4 | '#';
   };
 }
 
@@ -70,11 +75,6 @@ export interface OnChangeKeywordsAction extends AnyAction {
 export interface OnClickLoadingMordAction extends AnyAction {
   type: 'resourceCollectPage/onClickLoadingMord';
 }
-
-// export interface ChangeStatesAction extends AnyAction {
-//   type: 'resourceCollectPage/changeStates',
-//   payload: Partial<Pick<ResourceCollectPageModelState, 'resourceType' | 'resourceStatus' | 'inputText'>>;
-// }
 
 export interface OnBoomJuiceAction extends AnyAction {
   type: 'resourceCollectPage/onBoomJuice';
@@ -103,8 +103,13 @@ export interface ResourceCollectModelType {
 }
 
 const initStates: ResourceCollectPageModelState = {
-  resourceType: '-1',
-  resourceStatus: '2',
+  resourceTypeCodes: {
+    value: '#all',
+    label: '全部',
+    values: ['#all'],
+    labels: ['全部'],
+  },
+  resourceStatus: '#',
   inputText: '',
   dataSource: [],
   pageSize: 20,
@@ -159,12 +164,16 @@ const Model: ResourceCollectModelType = {
         dataSource = resourceCollectPage.dataSource;
       }
 
+      const resourceTypes: Array<string | number> = resourceCollectPage.resourceTypeCodes.labels.filter((rt) => {
+        return rt !== '全部';
+      });
+
       const params: Parameters<typeof FServiceAPI.Collection.collectionResources>[0] = {
         skip: dataSource.length,
         limit: resourceCollectPage.pageSize,
         keywords: resourceCollectPage.inputText,
-        resourceType: resourceCollectPage.resourceType === '-1' ? undefined : resourceCollectPage.resourceType,
-        resourceStatus: Number(resourceCollectPage.resourceStatus) as 0 | 1 | 2,
+        resourceType: resourceTypes.length === 0 ? undefined : String(resourceTypes[resourceTypes.length - 1]),
+        resourceStatus: resourceCollectPage.resourceStatus === '#' ? undefined : resourceCollectPage.resourceStatus as 0,
       };
 
       const { data } = yield call(FServiceAPI.Collection.collectionResources, params);
@@ -214,7 +223,7 @@ const Model: ResourceCollectModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          resourceType: payload.value,
+          resourceTypeCodes: payload.value,
         },
       });
 
@@ -229,7 +238,7 @@ const Model: ResourceCollectModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          resourceStatus: payload.value as '1',
+          resourceStatus: payload.value,
         },
       });
 

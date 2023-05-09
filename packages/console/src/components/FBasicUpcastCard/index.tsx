@@ -1,9 +1,8 @@
 import * as React from 'react';
 import styles from './index.less';
-import { FInfo } from '../FIcons';
 import FTooltip from '../FTooltip';
-// import FUtil1 from '@/utils';
 import { FI18n } from '@freelog/tools-lib';
+import FComponentsLib from '@freelog/components-lib';
 
 interface FBasicUpcastCardProps {
   dataSource: {
@@ -15,6 +14,11 @@ interface FBasicUpcastCardProps {
 }
 
 function FBasicUpcastCard({ dataSource, onClick }: FBasicUpcastCardProps) {
+
+  if (dataSource.length === 0) {
+    return null;
+  }
+
   return (<div className={styles.styles}>
     <div style={{ height: 10 }} />
     <div className={styles.redBorder}>
@@ -38,7 +42,7 @@ function FBasicUpcastCard({ dataSource, onClick }: FBasicUpcastCardProps) {
         return (<div key={i}>{u}</div>);
       })}>
         <div style={{ cursor: 'pointer' }}>
-          <FInfo style={{ fontSize: 14 }} />
+          <FComponentsLib.FIcons.FInfo style={{ fontSize: 14 }} />
         </div>
       </FTooltip>
     </div>

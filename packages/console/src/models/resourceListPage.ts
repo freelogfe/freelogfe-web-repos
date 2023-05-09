@@ -5,8 +5,13 @@ import { ConnectState } from '@/models/connect';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 
 export interface ResourceListPageModelState {
-  resourceType: string;
-  resourceStatus: string;
+  resourceTypeCodes: {
+    value: string;
+    label: string;
+    values: string[];
+    labels: string[];
+  };
+  resourceStatus: 0 | 1 | 2 | 4 | '#';
   inputText: string;
   // pageSize: number;
   totalNum: number;
@@ -50,14 +55,14 @@ export interface FetchDataSourceAction extends AnyAction {
 export interface OnChangeResourceTypeAction extends AnyAction {
   type: 'resourceListPage/onChangeResourceType';
   payload: {
-    value: string;
+    value: ResourceListPageModelState['resourceTypeCodes'];
   };
 }
 
 export interface OnChangeStatusAction extends AnyAction {
   type: 'resourceListPage/onChangeStatus';
   payload: {
-    value: string;
+    value: 0 | 1 | 2 | 4 | '#';
   };
 }
 
@@ -99,8 +104,13 @@ export interface ResourceListPageModelType {
 }
 
 const initStates: ResourceListPageModelState = {
-  resourceType: '-1',
-  resourceStatus: '2',
+  resourceTypeCodes: {
+    value: '#all',
+    label: '全部',
+    values: ['#all'],
+    labels: ['全部'],
+  },
+  resourceStatus: '#',
   inputText: '',
   dataSource: [],
   // pageSize: 20,
@@ -142,12 +152,17 @@ const Model: ResourceListPageModelType = {
 
       // console.log(dataSource, 'dataSourcedataSource92834uoi');
 
+      const resourceTypes: Array<string | number> = resourceListPage.resourceTypeCodes.labels.filter((rt) => {
+        return rt !== '全部';
+      });
+
       const params: Parameters<typeof FServiceAPI.Resource.list>[0] = {
         skip: dataSource.length,
         limit: FUtil.Predefined.pageSize,
         keywords: resourceListPage.inputText,
-        resourceType: resourceListPage.resourceType === '-1' ? undefined : resourceListPage.resourceType,
-        status: Number(resourceListPage.resourceStatus) as 0 | 1 | 2,
+        resourceType: resourceTypes.length === 0 ? undefined : String(resourceTypes[resourceTypes.length - 1]),
+        // status: Number(resourceListPage.resourceStatus) as 0 | 1 | 2,
+        status: resourceListPage.resourceStatus === '#' ? undefined : (resourceListPage.resourceStatus as 0),
         isSelf: 1,
       };
       const { data } = yield call(FServiceAPI.Resource.list, params);
@@ -202,7 +217,7 @@ const Model: ResourceListPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          resourceType: payload.value,
+          resourceTypeCodes: payload.value,
         },
       });
 

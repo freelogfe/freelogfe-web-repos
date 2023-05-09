@@ -1,0 +1,67 @@
+@import '../config.less';
+
+//.respiration {
+//  width: 32px !important;
+//  height: 32px !important;
+//}
+
+.outerRing {
+  width: 32px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.01);
+  border: 1px solid #B06AB3;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .innerCircle {
+    width: 10px;
+    height: 10px;
+    background: linear-gradient(135deg, #4568DC 0%, #B06AB3 100%);
+    border-radius: 50%;
+    animation: 1s linear 0s infinite alternate breathing;
+  }
+}
+
+
+
+@keyframes breathing {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.8);
+  }
+}
+
+//.outerRing {
+//  width: 32px;
+//  height: 32px;
+//  background: rgba(255, 255, 255, 0.01);
+//  border: 1px solid #B06AB3;
+//  border-radius: 50%;
+//  display: flex;
+//  align-items: center;
+//  justify-content: center;
+//
+//}
+//
+//.innerCircle {
+//  width: 10px;
+//  height: 10px;
+//  background: linear-gradient(135deg, #4568DC 0%, #B06AB3 100%);
+//  border-radius: 50%;
+//  animation: 1s linear 1s infinite alternate breathing;
+//
+//}
+//
+//@keyframes breathing {
+//  from {
+//    transform: scale(1);
+//  }
+//  to {
+//    transform: scale(1.8);
+//  }
+//}
+

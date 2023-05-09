@@ -213,7 +213,7 @@ function FAddInformExhibitDrawer({
 
   return (<FDrawer
     title={isTheme ? FI18n.i18nNext.t('import_test_theme') : '添加测试展品'}
-    visible={visible}
+    open={visible}
     topRight={<Space size={30}>
       <FComponentsLib.FTextBtn
         type='default'
@@ -228,7 +228,7 @@ function FAddInformExhibitDrawer({
         type='primary'
       >添加</FComponentsLib.FRectBtn>
     </Space>}
-    afterVisibleChange={onChange_DrawerVisible}
+    afterOpenChange={onChange_DrawerVisible}
   >
     <div ref={containerRef} className={styles.container}>
       <div className={styles.tabs}>
@@ -328,7 +328,7 @@ function FAddInformExhibitDrawer({
                           title={l.disabledReason}
                           getPopupContainer={() => containerRef.current}
                           trigger='hover'
-                          visible={l.disabled ? undefined : false}
+                          open={l.disabled ? undefined : false}
                         >
                           <div>
                             <FCheckbox

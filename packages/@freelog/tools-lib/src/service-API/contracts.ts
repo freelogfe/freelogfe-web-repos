@@ -1,5 +1,41 @@
 import FUtil from '../utils';
 
+// 创建合同
+interface CreateContractParamsType {
+  subjectId: string;
+  subjectType: 1 | 2 | 3; // 标的物类型 1:资源 2:展品 3:用户组
+  policyId: string;
+  licenseeId: string | number;
+  licenseeIdentityType: 1 | 2 | 3; // 乙方身份类型 1:资源方 2:节点方 3:C端用户
+}
+
+export function createContract({...params}: CreateContractParamsType) {
+  return FUtil.Request({
+    method: 'POST',
+    url: `/v2/contracts`,
+    data: params,
+  });
+}
+
+// 批量创建合同
+interface BatchCreateContractsParamsType {
+  subjects: {
+    subjectId: string;
+    policyId: string;
+  }[];
+  subjectType: 1 | 2 | 3; // 标的物类型 1:资源 2:展品 3:用户组
+  licenseeId: string | number;
+  licenseeIdentityType: 1 | 2 | 3; // 乙方身份类型 1:资源方 2:节点方 3:C端用户
+}
+
+export function batchCreateContracts({...params}: BatchCreateContractsParamsType) {
+  return FUtil.Request({
+    method: 'POST',
+    url: `/v2/contracts/batchSign`,
+    data: params,
+  });
+}
+
 // 查看合同详情
 interface ContractDetailsParamsType {
   contractId: string;

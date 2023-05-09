@@ -5,6 +5,8 @@ import moment from 'moment';
 import { ConnectState } from '@/models/connect';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import { history } from 'umi';
+import { fileAttrUnits } from '@/utils/format';
+import fMessage from '@/components/fMessage';
 
 export interface ResourceVersionEditorPageModelState {
   resourceID: string;
@@ -14,59 +16,23 @@ export interface ResourceVersionEditorPageModelState {
   descriptionFullScreen: boolean;
   description: string;
 
-  graphFullScreen: boolean;
-  viewportGraphShow: 'relationship' | 'authorization' | 'dependency';
-  // dependencyGraphNodes: {
-  //   id: string;
-  //   resourceId: string;
-  //   resourceName: string;
-  //   resourceType: string;
-  //   version: string;
-  // }[];
-  // dependencyGraphEdges: {
-  //   source: string;
-  //   target: string;
-  // }[];
-  // authorizationGraphNodes: Array<{
-  //   id: string;
-  //   resourceId: string;
-  //   resourceName: string;
-  //   resourceType: string;
-  //   version: string;
-  // } | {
-  //   id: string;
-  //   contracts: {
-  //     contractId: string;
-  //     contractName: string;
-  //     isAuth: boolean;
-  //     updateDate: string;
-  //   }[];
-  // }>;
-  // authorizationGraphEdges: {
-  //   source: string;
-  //   target: string;
-  // }[];
-  // relationGraphNodes: {
-  //   id: string;
-  //   resourceId: string;
-  //   resourceName: string;
-  //   resourceType: string;
-  //   version: string;
-  //   pending: boolean;
-  //   exception: boolean;
-  // }[];
-  // relationGraphEdges: {
-  //   source: string;
-  //   target: string;
-  // }[];
+  // graphFullScreen: boolean;
+  // viewportGraphShow: 'relationship' | 'authorization' | 'dependency';
+  // relationshipGraphShow: boolean;
+  // authorizationGraphShow: boolean;
+  // dependencyGraphShow: boolean;
+  graphShow: boolean;
 
   rawProperties: {
     key: string;
+    name: string;
     value: string;
+    description: string;
   }[];
 
   baseProperties: {
     key: string;
+    name: string;
     value: string;
     description: string;
   }[];
@@ -80,10 +46,11 @@ export interface ResourceVersionEditorPageModelState {
 
   customOptions: {
     key: string;
+    name: string;
     description: string;
-    custom: 'input' | 'select';
-    defaultValue: string;
-    customOption: string;
+    type: 'input' | 'select';
+    input: string;
+    select: string[];
   }[];
   customOptionEditorVisible: boolean;
   customOptionKey: string;
@@ -142,14 +109,12 @@ const Model: ResourceVersionEditorModelType = {
     descriptionFullScreen: false,
     description: '',
 
-    graphFullScreen: false,
-    viewportGraphShow: 'relationship',
-    // dependencyGraphNodes: [],
-    // dependencyGraphEdges: [],
-    // authorizationGraphNodes: [],
-    // authorizationGraphEdges: [],
-    // relationGraphNodes: [],
-    // relationGraphEdges: [],
+    // graphFullScreen: false,
+    // viewportGraphShow: 'relationship',
+    // relationshipGraphShow: true,
+    // authorizationGraphShow: true,
+    // dependencyGraphShow: true,
+    graphShow: true,
 
     rawProperties: [],
     baseProperties: [],
@@ -183,93 +148,76 @@ const Model: ResourceVersionEditorModelType = {
         resourceId: resourceVersionEditorPage.resourceID,
         version: resourceVersionEditorPage.version,
       };
-      const { data } = yield call(FServiceAPI.Resource.resourceVersionInfo1, params);
-      // console.log(data, 'data902q3jrlkasdfasdf');
-      if (!data) {
+      const { data: data_versionInfo }: {
+        data: {
+          customPropertyDescriptors: {
+            key: string;
+            name: string;
+            defaultValue: string;
+            type: 'editableText' | 'readonlyText' | 'radio' | 'checkbox' | 'select';
+            candidateItems: string[];
+            remark: string;
+          }[],
+          createDate: string;
+          description: string;
+          // systemProperty: {
+          //   [k: string]: string;
+          // }
+          systemPropertyDescriptors: {
+            defaultValue: number | string;
+            key: string;
+            name: string;
+            remark: string;
+            valueDisplay: string;
+            valueUnit: string;
+          }[];
+        }
+      } = yield call(FServiceAPI.Resource.resourceVersionInfo1, params);
+      // console.log(data_versionInfo, 'data902q3jrlkasdfasdf');
+      if (!data_versionInfo) {
         history.replace(FUtil.LinkTo.exception403({}));
         return;
       }
 
-      // 依赖树
-      // const params2: Parameters<typeof FServiceAPI.Resource.dependencyTree>[0] = {
-      //   resourceId: resourceVersionEditorPage.resourceID,
-      //   version: resourceVersionEditorPage.version,
-      //   // $version: '0.0.1',
-      //   isContainRootNode: true,
-      // };
-      //
-      // const {data: data2} = yield call(FServiceAPI.Resource.dependencyTree, params2);
-      // const {nodes: dependencyGraphNodes, edges: dependencyGraphEdges} = handleDependencyGraphData(data2[0]);
-
-      // 授权树
-      // const params3: Parameters<typeof FServiceAPI.Resource.authTree>[0] = {
-      //   resourceId: resourceVersionEditorPage.resourceID,
-      //   version: resourceVersionEditorPage.version,
-      // };
-      //
-      // const {data: data3} = yield call(FServiceAPI.Resource.authTree, params3);
-      // // console.log(data3, 'data39023jrafklsdjlaksdfjlkasdf');
-      // const {nodes: authorizationGraphNodes, edges: authorizationGraphEdges} = yield call(handleAuthorizationGraphData, data3, {
-      //   id: data.version,
-      //   resourceId: data.resourceId,
-      //   resourceName: data.resourceName,
-      //   resourceType: data.resourceType,
-      //   version: data.version,
-      //   versionId: data.versionId,
-      // });
-
-      // 关系树
-      // const params4: Parameters<typeof FServiceAPI.Resource.relationTreeAuth>[0] = {
-      //   resourceId: resourceVersionEditorPage.resourceID,
-      //   version: resourceVersionEditorPage.version,
-      // };
-      //
-      // const {data: data4} = yield call(FServiceAPI.Resource.relationTreeAuth, params4);
-      // // console.log(data4, 'data4@!#awef98adjs;klfjalskdfjlkjalsdkfja');
-      // const {nodes: relationGraphNodes, edges: relationGraphEdges} = handleRelationGraphData(data4[0]);
-      // console.log(relationGraphNodes, relationGraphEdges, 'relationGraphEdges@Q@#$!@#$!@$@#$@!#$');
-
-      const base = data.customPropertyDescriptors.filter((i: any) => i.type === 'readonlyText');
-      const opt = data.customPropertyDescriptors.filter((i: any) => i.type === 'editableText' || i.type === 'select');
+      const base = data_versionInfo.customPropertyDescriptors.filter((i) => i.type === 'readonlyText');
+      const opt = data_versionInfo.customPropertyDescriptors.filter((i) => i.type === 'editableText' || i.type === 'select');
       // console.log('@#$@#$@#$@#$$#@$@#$1111111111');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          signingDate: moment(data.createDate).format('YYYY-MM-DD'),
-          description: data.description,
-          rawProperties: Object.entries(data.systemProperty).map((sp) => {
-            // console.log(sp, 'SSSSSSppppPPPPP90j');
+          signingDate: moment(data_versionInfo.createDate).format('YYYY-MM-DD'),
+          description: data_versionInfo.description,
+          // rawProperties: Object.entries(data_versionInfo.systemProperty).map((sp) => {
+          //   // console.log(sp, 'SSSSSSppppPPPPP90j');
+          //   return {
+          //     key: sp[0],
+          //     value: fileAttrUnits[sp[0]] ? fileAttrUnits[sp[0]](sp[1]) : sp[1] as string,
+          //   };
+          // }),
+          rawProperties: data_versionInfo.systemPropertyDescriptors.map<ResourceVersionEditorPageModelState['rawProperties'][number]>((spd) => {
             return {
-              key: sp[0],
-              value: sp[0] === 'fileSize' ? FUtil.Format.humanizeSize(Number(sp[1])) : sp[1] as string,
+              key: spd.key,
+              name: spd.name,
+              value: spd.valueDisplay,
+              description: spd.remark,
             };
           }),
-          baseProperties: base.map((b: any) => {
+          baseProperties: base.map((b) => {
             return {
               key: b.key,
+              name: b.name,
               value: b.defaultValue,
               description: b.remark,
             };
           }),
-          customOptions: opt.map((i: any) => ({
+          customOptions: opt.map((i) => ({
             key: i.key,
-            value: i.defaultValue,
-
+            name: i.name,
             description: i.remark,
-            descriptionInput: i.remark,
-            descriptionIsEditing: false,
-            descriptionError: '',
-
-            custom: i.type === 'select' ? 'select' : 'input',
-            defaultValue: i.defaultValue,
-            customOption: i.candidateItems.join(','),
+            type: i.type === 'editableText' ? 'input' : 'select',
+            input: i.defaultValue,
+            select: i.candidateItems,
           })),
-          // dependencyGraphNodes: dependencyGraphNodes,
-          // dependencyGraphEdges: dependencyGraphEdges,
-          // authorizationGraphNodes: authorizationGraphNodes,
-          // authorizationGraphEdges: authorizationGraphEdges,
-          // relationGraphNodes: relationGraphNodes,
-          // relationGraphEdges: relationGraphEdges,
         },
       });
     },
@@ -297,19 +245,21 @@ const Model: ResourceVersionEditorModelType = {
         ...resourceVersionEditorPage.baseProperties.map((bp) => {
           return {
             key: bp.key,
+            name: bp.name,
             defaultValue: bp.value,
             type: 'readonlyText' as 'readonlyText',
             remark: bp.description,
           };
         }),
         ...resourceVersionEditorPage.customOptions.map((pp) => {
-          const isInput: boolean = pp.custom === 'input';
-          const options: string[] = pp.customOption.split(',');
+          const isInput: boolean = pp.type === 'input';
+          const options: string[] = pp.select;
           return {
             type: isInput ? 'editableText' : 'select' as 'editableText' | 'select',
             key: pp.key,
+            name: pp.name,
             remark: pp.description,
-            defaultValue: isInput ? pp.defaultValue : options[0],
+            defaultValue: isInput ? pp.input : options[0],
             candidateItems: isInput ? undefined : options,
           };
         }),
@@ -319,7 +269,10 @@ const Model: ResourceVersionEditorModelType = {
         resourceId: resourceVersionEditorPage.resourceID,
         customPropertyDescriptors: customPropertyDescriptors,
       };
-      yield call(FServiceAPI.Resource.updateResourceVersionInfo, params);
+      const { ret, errCode, data, msg } = yield call(FServiceAPI.Resource.updateResourceVersionInfo, params);
+      if (ret !== 0 || errCode !== 0) {
+        fMessage(msg, 'error');
+      }
     },
   },
 

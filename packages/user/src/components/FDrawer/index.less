@@ -1,5 +1,9 @@
 @import '../../config.less';
 
+.style {
+  z-index: @f-zIndex-drawer;
+}
+
 .header {
   display: flex;
   align-items: center;
@@ -12,7 +16,7 @@
   top: 0;
   right: 0;
   background-color: white;
-  z-index: 1000;
+  z-index: @f-zIndex-drawer;
 }
 
 .content {

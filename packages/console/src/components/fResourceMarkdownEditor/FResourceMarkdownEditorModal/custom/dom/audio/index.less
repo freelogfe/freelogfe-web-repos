@@ -1,0 +1,77 @@
+// 授权状态
+.audio-auth {
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+  color: #e9a923;
+
+  .freelog {
+    font-size: 14px;
+  }
+
+  .auth-text {
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 18px;
+    margin-left: 5px;
+  }
+
+  &.upcast {
+    color: #ee4040;
+  }
+
+  .auth-btn {
+    padding: 6px 15px;
+    background: #2784ff;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #ffffff;
+    line-height: 20px;
+    margin-left: 20px;
+    cursor: pointer;
+
+    &:hover {
+      background: #529dff;
+    }
+
+    &:active {
+      background: #2376e5;
+    }
+  }
+}
+
+// 音频资源 dom
+.audio-wrapper,
+.invalid-audio {
+  position: relative;
+  width: 100%;
+  caret-color: transparent;
+  cursor: default;
+
+  &:hover {
+    .resource-toolbar {
+      transform: none;
+      opacity: 1;
+    }
+    .audio-area {
+      background-color: rgba(0, 0, 0, 0.02);
+    }
+  }
+
+  .audio-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: all 0.2s linear;
+
+    .invalid-tip {
+      display: flex;
+      align-items: center;
+      margin: 10px 0;
+      color: #e9a923;
+      font-size: 12px;
+      font-weight: 600;
+    }
+  }
+}

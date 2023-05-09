@@ -268,3 +268,19 @@ export function thirdPartyIsBind(params: ThirdPartyIsBindParamsType) {
     params: params,
   });
 }
+
+// 签到
+export function signForCoins() {
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/activities/facade/sign`,
+  });
+}
+
+// 查询签到信息
+export function getSignInfo() {
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/activities/facade/signInfo`,
+  });
+}

@@ -2,20 +2,16 @@ import * as React from 'react';
 import styles from './index.less';
 import { Space } from 'antd';
 import FTable from '@/components/FTable';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState, StorageHomePageModelState } from '@/models/connect';
 import {
   DeleteObjectAction,
-  UploadFilesAction,
-  FetchObjectsAction,
+  // UploadFilesAction,
+  FetchObjectsAction, FetchSpaceStatisticAction, FetchBucketsAction,
 } from '@/models/storageHomePage';
-import { FDelete } from '@/components/FIcons';
 import FNoDataTip from '@/components/FNoDataTip';
-import FUploadTasksPanel from '@/pages/storage/containers/FUploadTasksPanel';
-import FUpload from '@/components/FUpload';
-import { RcFile } from 'antd/lib/upload/interface';
 import FLoadingTip from '@/components/FLoadingTip';
-import FDownload from '@/components/FIcons/FDownload';
 import { ColumnsType } from 'antd/lib/table/interface';
 import FTooltip from '@/components/FTooltip';
 import FLink from '@/components/FLink';
@@ -24,6 +20,8 @@ import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 import NoBucket from '@/pages/storage/NoBucket';
 import FListFooter from '@/components/FListFooter';
 import FComponentsLib from '@freelog/components-lib';
+import fReadLocalFiles from '@/components/fReadLocalFiles';
+import FStorageUploadTasksPanel, { getStorageUploadTasksPanel } from '@/components/FStorageUploadTasksPanel';
 
 interface ContentProps {
   dispatch: Dispatch;
@@ -66,7 +64,9 @@ function Content({ storageHomePage, dispatch }: ContentProps) {
             onClickDownload={() => FServiceAPI.Storage.downloadObject({ objectIdOrName: record.id })}
             onClickDelete={() => {
               fConfirmModal({
-                message: '存储空间对象一旦删除则无法恢复，确认删除吗？',
+                message: FI18n.i18nNext.t('msg_delete_object_confirm'),
+                cancelText: FI18n.i18nNext.t('btn_cancel'),
+                okText: FI18n.i18nNext.t('btn_delete_object'),
                 onOk() {
                   onClickDelete(record);
                 },
@@ -130,29 +130,38 @@ function Content({ storageHomePage, dispatch }: ContentProps) {
     }
 
     {
-      storageHomePage.total === 0 && (<>
+      storageHomePage.total === 0 && storageHomePage.filterInput !== '' && (<>
         <FNoDataTip
           height={'calc(100vh - 170px)'}
-          // tipText={'当前Bucket还没有上传任何对象'}
+          tipText={'无搜索结果'}
+        />
+      </>)
+    }
+
+    {
+      storageHomePage.total === 0 && storageHomePage.filterInput === '' && (<>
+        <FNoDataTip
+          height={'calc(100vh - 170px)'}
           tipText={FI18n.i18nNext.t('objects_list_empty')}
-          btn={<FUpload
-            showUploadList={false}
-            multiple={true}
-            beforeUpload={(file: RcFile, fileList: RcFile[]) => {
-              if (file === fileList[fileList.length - 1]) {
-                dispatch<UploadFilesAction>({
-                  type: 'storageHomePage/uploadFiles',
-                  payload: fileList,
-                });
+          btn={<FComponentsLib.FRectBtn
+            onClick={async () => {
+              const files = await fReadLocalFiles({
+                multiple: true,
+              });
+              if (!files) {
+                return;
               }
-              return false;
-            }}>
-            <FComponentsLib.FRectBtn
-              size='large'
-              type='primary'
-              style={{ paddingLeft: 50, paddingRight: 50 }}
-            >{FI18n.i18nNext.t('upload_object')}</FComponentsLib.FRectBtn>
-          </FUpload>}
+
+              // dispatch<UploadFilesAction>({
+              //   type: 'storageHomePage/uploadFiles',
+              //   payload: files,
+              // });
+              (await getStorageUploadTasksPanel()).addTask(files);
+            }}
+            size='large'
+            type='primary'
+            style={{ paddingLeft: 50, paddingRight: 50 }}
+          >{FI18n.i18nNext.t('upload_object')}</FComponentsLib.FRectBtn>}
         />
       </>)
     }
@@ -180,7 +189,23 @@ function Content({ storageHomePage, dispatch }: ContentProps) {
       </>)
     }
 
-    <FUploadTasksPanel />
+    {/*<FUploadTasksPanel />*/}
+    <FStorageUploadTasksPanel
+      bucketName={storageHomePage.activatedBucket}
+      availableStorageSize={storageHomePage.totalStorage - storageHomePage.usedStorage}
+      onSuccess={() => {
+        dispatch<FetchObjectsAction>({
+          type: 'storageHomePage/fetchObjects',
+          payload: 'insert',
+        });
+        dispatch<FetchSpaceStatisticAction>({
+          type: 'storageHomePage/fetchSpaceStatistic',
+        });
+        dispatch<FetchBucketsAction>({
+          type: 'storageHomePage/fetchBuckets',
+        });
+      }}
+    />
   </div>);
 }
 
@@ -228,7 +253,7 @@ function ToolsBar({
           <FComponentsLib.FTextBtn
             onClick={() => onClickDownload && onClickDownload()}
             type='primary'
-          ><FDownload /></FComponentsLib.FTextBtn>
+          ><FComponentsLib.FIcons.FDownload /></FComponentsLib.FTextBtn>
         </span>
       </FTooltip>)
     }
@@ -237,9 +262,10 @@ function ToolsBar({
         <FTooltip title={FI18n.i18nNext.t('tip_delete')}>
           <span>
             <FComponentsLib.FTextBtn
+              type={'danger'}
               onClick={() => onClickDelete && onClickDelete()}
               className={styles.Delete}
-            ><FDelete /></FComponentsLib.FTextBtn>
+            ><FComponentsLib.FIcons.FDelete /></FComponentsLib.FTextBtn>
           </span>
         </FTooltip>
       )

@@ -3,31 +3,33 @@ import * as React from 'react';
 import styles from './index.less';
 import FInput from '@/components/FInput';
 import FResourceList from '@/components/FResourceList';
-import {connect, Dispatch} from 'dva';
-import {ConnectState, StorageObjectDepSelectorModelState} from '@/models/connect';
-import {DownOutlined} from '@ant-design/icons';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
+import { ConnectState, StorageObjectDepSelectorModelState } from '@/models/connect';
+import { DownOutlined } from '@ant-design/icons';
 import {
   FetchResourcesAction,
-  OnChangeRConditionsAction
+  OnChangeRConditionsAction,
 } from '@/models/storageObjectDepSelector';
-import FDropdownMenu from "@/components/FDropdownMenu";
+import FDropdownMenu from '@/components/FDropdownMenu';
+import FComponentsLib from '@freelog/components-lib';
 
 interface FResourceSelectorProps {
   disabledIDsOrNames?: string[];
   showRemoveIDsOrNames?: string[];
 
-  onSelect?({id, name}: { id: string; name: string; }): void;
+  onSelect?({ id, name }: { id: string; name: string; }): void;
 
-  onDelete?({id, name}: { id: string; name: string; }): void;
+  onDelete?({ id, name }: { id: string; name: string; }): void;
 
   dispatch: Dispatch;
   storageObjectDepSelector: StorageObjectDepSelectorModelState;
 }
 
 const selectOptions: { text?: string, value: string }[] = [
-  {text: '资源市场', value: '1'},
-  {text: '我的资源', value: '2'},
-  {text: '我的收藏', value: '3'},
+  { text: '资源市场', value: '1' },
+  { text: '我的资源', value: '2' },
+  { text: '我的收藏', value: '3' },
 ];
 
 function FResourceSelector({
@@ -56,11 +58,11 @@ function FResourceSelector({
           });
         }}
       >
-        <a>{(selectOptions.find((op) => op.value === storageObjectDepSelector.rSelect) as any).text} <DownOutlined
-          style={{marginLeft: 8}}/></a>
+        <a>{(selectOptions.find((op) => op.value === storageObjectDepSelector.rSelect) as any).text}
+          <FComponentsLib.FIcons.FDown style={{ marginLeft: 8, fontSize: 12 }} /></a>
       </FDropdownMenu>
       <FInput
-        theme="dark"
+        theme='dark'
         debounce={300}
         value={storageObjectDepSelector.rInput}
         onDebounceChange={(value) => {
@@ -88,10 +90,10 @@ function FResourceSelector({
       loading={storageObjectDepSelector.rTotal === -1}
       stillMore={storageObjectDepSelector.resourceList.length < storageObjectDepSelector.rTotal}
       onSelect={(value) => {
-        onSelect && onSelect({id: value.id, name: value.title});
+        onSelect && onSelect({ id: value.id, name: value.title });
       }}
       onDelete={(value) => {
-        onDelete && onDelete({id: value.id, name: value.title});
+        onDelete && onDelete({ id: value.id, name: value.title });
       }}
       onLoadMord={() => {
         dispatch<FetchResourcesAction>({
@@ -103,6 +105,6 @@ function FResourceSelector({
   </>);
 }
 
-export default connect(({storageObjectDepSelector}: ConnectState) => ({
+export default connect(({ storageObjectDepSelector }: ConnectState) => ({
   storageObjectDepSelector: storageObjectDepSelector,
 }))(FResourceSelector);

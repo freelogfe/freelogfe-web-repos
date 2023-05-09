@@ -2,7 +2,8 @@ import * as React from 'react';
 import styles from './index.less';
 import FInput from '@/components/FInput';
 import { Popover, Radio, Space } from 'antd';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import FComponentsLib from '@freelog/components-lib';
 import {
   ConnectState,
@@ -10,7 +11,7 @@ import {
 } from '@/models/connect';
 import { FUtil } from '@freelog/tools-lib';
 import * as AHooks from 'ahooks';
-import { FCheck } from '@/components/FIcons';
+// import { FCheck } from '@/components/FIcons';
 import {
   OnBlur_PaymentPassword_Password1Input_Action,
   OnBlur_PaymentPassword_Password2Input_Action,
@@ -30,6 +31,7 @@ import {
   OnUnmountPageAction,
 } from '@/models/retrievePayPasswordPage';
 import { FetchInfoAction } from '@/models/user';
+import FPasswordInput from '@/components/FPasswordInput';
 
 interface RetrievePayPasswordProps {
   dispatch: Dispatch;
@@ -92,9 +94,9 @@ function RetrievePayPassword({
           }
         >
           <div className='flex-column align-center flex-1'>
-            <div className='flex-1'></div>
-            <div className='flex-1'></div>
-            <div className='flex-1'></div>
+            <div className='flex-1' />
+            <div className='flex-1' />
+            <div className='flex-1' />
             <div className='shrink-0 flex-column-center'>
               <FComponentsLib.FTitleText className='mb-30' text={'验证登陆密码'} type='h1' />
               <FComponentsLib.FTipText
@@ -102,8 +104,8 @@ function RetrievePayPassword({
                 type='second'
               />
             </div>
-            <div className='flex-1'></div>
-            <div className='flex-1'></div>
+            <div className='flex-1' />
+            <div className='flex-1' />
           </div>
           <div className=' flex-column-center shrink-0'>
             <div className={styles.ActivateAccountContent}>
@@ -124,12 +126,12 @@ function RetrievePayPassword({
                     </FComponentsLib.FTextBtn>
                   </div>
                   <div style={{ height: 5 }} />
-                  <FInput
+                  <FPasswordInput
                     placeholder='输入登录密码'
-                    type='password'
+                    // type='password'
                     className={styles.blockInput}
-                    wrapClassName={styles.blockInput}
-                    size='middle'
+                    // wrapClassName={styles.blockInput}
+                    // size='middle'
                     value={retrievePayPasswordPage.userPassword_PasswordInput}
                     // errorText={retrievePayPasswordPage.userPasswordInputE}
                     onChange={(e) => {
@@ -160,7 +162,7 @@ function RetrievePayPassword({
               </FComponentsLib.FRectBtn>
             </div>
           </div>
-          <div className='flex-1'></div>
+          <div className='flex-1' />
         </div>
       )}
 
@@ -171,7 +173,7 @@ function RetrievePayPassword({
           }
         >
           <div className='flex-column align-center flex-1'>
-            <div className='flex-3'></div>
+            <div className='flex-3' />
             <div className='shrink-0 flex-column-center'>
               <FComponentsLib.FTitleText text={'双重验证'} type='h1' className='mb-30' />
               <FComponentsLib.FTipText
@@ -181,7 +183,7 @@ function RetrievePayPassword({
                 type='second'
               />
             </div>
-            <div className='flex-2'></div>
+            <div className='flex-2' />
           </div>
           <div className=' flex-column-center shrink-0'>
             <div className={styles.ActivateAccountContent}>
@@ -286,7 +288,7 @@ function RetrievePayPassword({
               </FComponentsLib.FRectBtn>
             </div>
           </div>
-          <div className='flex-1'></div>
+          <div className='flex-1' />
         </div>
       )}
 
@@ -297,9 +299,9 @@ function RetrievePayPassword({
           }
         >
           <div className='flex-column align-center flex-1'>
-            <div className='flex-1'></div>
-            <div className='flex-1'></div>
-            <div className='flex-1'></div>
+            <div className='flex-1' />
+            <div className='flex-1' />
+            <div className='flex-1' />
             <div className='shrink-0 flex-column-center'>
               <FComponentsLib.FTitleText className='mb-30' text={'重置支付密码'} type='h1' />
               <FComponentsLib.FTipText
@@ -307,8 +309,8 @@ function RetrievePayPassword({
                 type='second'
               />
             </div>
-            <div className='flex-1'></div>
-            <div className='flex-1'></div>
+            <div className='flex-1' />
+            <div className='flex-1' />
           </div>
           <div className=' flex-column-center shrink-0'>
             <div className={styles.ActivateAccountContent}>
@@ -387,14 +389,14 @@ function RetrievePayPassword({
               </FComponentsLib.FRectBtn>
             </div>
           </div>
-          <div className='flex-1'></div>
+          <div className='flex-1' />
         </div>
       )}
 
       {retrievePayPasswordPage.showView === 'success' && (
         <div className={styles.resetPasswordSuccess}>
           <div className={styles.box}>
-            <FCheck style={{ fontSize: 96 }} />
+            <FComponentsLib.FIcons.FCheck style={{ fontSize: 96 }} />
             <div style={{ height: 30 }} />
             <FComponentsLib.FTitleText text={'支付密码重置成功'} />
             <div style={{ height: 40 }} />

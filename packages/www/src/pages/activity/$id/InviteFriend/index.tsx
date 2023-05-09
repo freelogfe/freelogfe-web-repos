@@ -12,7 +12,7 @@ import fMessage from '@/components/fMessage';
 import { withRouter } from 'umi';
 import { RouteComponentProps } from 'react-router';
 import * as AHooks from 'ahooks';
-
+import FFooter from '@/components/Footer';
 import FComponentsLib from '@freelog/components-lib';
 import { connect } from 'dva';
 import { ActivityDetailsPageModelState, ConnectState } from '@/models/connect';
@@ -28,7 +28,7 @@ interface InviteFriendProps extends RouteComponentProps<{ id: string }> {
   activityDetailsPage: ActivityDetailsPageModelState;
 }
 
-function InviteFriend({ activityDetailsPage, match }: InviteFriendProps) {
+function InviteFriend({ activityDetailsPage }: InviteFriendProps) {
   const [showInvite, setShowInvite] = React.useState<boolean>(false);
   const [userData, setUserData] = React.useState<any>({});
   const [records, setRecords] = React.useState<{
@@ -41,13 +41,16 @@ function InviteFriend({ activityDetailsPage, match }: InviteFriendProps) {
   }[]>([]);
 
   AHooks.useMount(() => {
+    self._czc?.push(['_trackPageview', self.location.pathname]);
     getData();
   });
 
   async function getData() {
     const userID: number = FUtil.Tool.getUserIDByCookies();
     if (userID !== -1) {
-      const { data: data_invitees }: {
+      const {
+        data: data_invitees,
+      }: {
         data: {
           userId: number;
           username: string;
@@ -59,53 +62,77 @@ function InviteFriend({ activityDetailsPage, match }: InviteFriendProps) {
       // console.log(data, 'task093iolksdfjlsdkfjlsdfjk');
       // setRecords(task.data.dataList);
 
-      const { data: data_friendInfos } = await FServiceAPI.Activity.listInviteFriendInfos(data_invitees.map((di) => {
-        return {
-          userId: di.userId,
-          username: di.username,
-          createDate: di.invitedDate,
-        };
-      }));
+      const { data: data_friendInfos } =
+        await FServiceAPI.Activity.listInviteFriendInfos(
+          data_invitees.map((di) => {
+            return {
+              userId: di.userId,
+              username: di.username,
+              createDate: di.invitedDate,
+            };
+          }),
+        );
 
-      console.log(data_friendInfos, '111data_friendInfosi9oewdsfklsdjflsdkjflsdkjflkj');
+      // console.log(
+      //   data_friendInfos,
+      //   '111data_friendInfosi9oewdsfklsdjflsdkjflsdkjflkj',
+      // );
 
-      setRecords(data_invitees.map((d) => {
-        const status: 0 | 1 | 3 = data_friendInfos.find((df: any) => {
-          return df.friendId === d.userId;
-        })?.status || 0;
+      setRecords(
+        data_invitees.map((d) => {
+          const status: 0 | 1 | 3 =
+            data_friendInfos.find((df: any) => {
+              return df.friendId === d.userId;
+            })?.status || 0;
 
-        let state: 'expire' | 'onRoad' | 'received';
+          let state: 'expire' | 'onRoad' | 'received';
 
-        switch (status) {
-          case 0:
-            state = 'expire';
-            break;
-          case 1:
-            state = 'onRoad';
-            break;
-          case 3:
-            state = 'received';
-            break;
-        }
-        return {
-          ...d,
-          createDate: FUtil.Format.formatDateTime(d.invitedDate),
-          state,
-        };
-      }));
+          switch (status) {
+            case 0:
+              state = 'expire';
+              break;
+            case 1:
+              state = 'onRoad';
+              break;
+            case 3:
+              state = 'received';
+              break;
+          }
+          return {
+            ...d,
+            createDate: FUtil.Format.formatDateTime(d.invitedDate),
+            state,
+          };
+        }),
+      );
     }
 
     const res = await FServiceAPI.TestQualification.codeDetails2({});
+    let userInfo = { data: {} };
+    userInfo =
+      userID > -1 ? await FServiceAPI.User.currentUserInfo() : userInfo;
+    // console.log(userInfo);
+    // setUserData({
+    //   userInfo: userInfo.data,
+    //   ...res.data,
+    //   textCopy: `邀你一起参与Freelog内测啦！Freelog是国内首家基于智能合约的资源自动化交易平台，参与内测活动至少可领【58元】现金奖励，发布图片、小说、漫画等资源还可赢取【3000元】现金奖励！活动仅限800人，快快戳链接注册参与吧！
+    // \n邀请码${
+    //     ' ' + res.data.code + ' '
+    //   }\n\n 前往Freelog注册：https://www.freelog.com/`,
+    // });
     setUserData({
+      userInfo: userInfo.data,
       ...res.data,
-      textCopy: `邀你一起参与Freelog内测啦！Freelog是国内首家基于智能合约的资源自动化交易平台，参与内测活动至少可领【58元】现金奖励，发布图片、小说、漫画等资源还可赢取【3000元】现金奖励！活动仅限800人，快快戳链接注册参与吧！
-    \n邀请码${
-        ' ' + res.data.code + ' '
-      }\n\n 前往Freelog注册：https://www.freelog.com/`,
+      textCopy: `邀你一起参与Freelog内测啦！Freelog，国内首家基于智能合约的资源自动化交易平台，参与内测至少可领【61元】现金奖励，发布小说、漫画等资源还可赢取【2000元】现金奖励！活动仅限800人，快快戳链接注册参与吧！
+
+
+前往Freelog注册：${FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.logon({ invitationCode: res.data.code })}
+
+
+邀请码：${res.data.code}
+`,
     });
-
   }
-
 
   function scrollToAnchor(anchorName: any) {
     let state: any = {
@@ -156,16 +183,25 @@ function InviteFriend({ activityDetailsPage, match }: InviteFriendProps) {
                 <span className='title'>更多现金奖励领取方式尽在</span>
                 <a
                   className='way px-10'
-                  href={FI18n.i18nNext.t('beta_event_referralprogram_guideline_link')}
+                  href={FI18n.i18nNext.t(
+                    'beta_event_referralprogram_guideline_link',
+                  )}
                   target={'_blank'}
-                >Freelog内测玩法指南</a>
-                <span className='tip'>(至少可领58元现金奖励哦!)</span>
+                >
+                  Freelog内测玩法指南
+                </a>
+                <span className='tip'>(至少可领61元现金奖励哦!)</span>
               </div>
             </div>
           </div>
         </div>
         <div className='flex-column praise w-100x align-center'>
-          <div className='category'>活动奖励</div>
+          <div className='category'>
+            <div className='invite-circle active-reward'>
+              <div className='circle-inside'></div>
+            </div>
+            <span>活动奖励</span>
+          </div>
           <div className='container flex-column align-center'>
             <span className='title mt-50'>奖励一</span>
             <div className='flex-row title2 align-end'>
@@ -190,29 +226,61 @@ function InviteFriend({ activityDetailsPage, match }: InviteFriendProps) {
           </div>
         </div>
         <div className='flex-column steps w-100x align-center'>
-          <div className='category'>参与步骤</div>
-          <div className='container flex-column align-center pt-50'>
-            <div className='flex-row  w-100x pl-43 pr-35'>
-              <span className='des w-180 mr-87'>
-                向好友分享
+          <div className='category'>
+            <div className='invite-circle active-step'>
+              <div className='circle-inside'></div>
+            </div>
+            <span>参与步骤</span>
+          </div>
+          <div
+            className={
+              'container flex-column align-center pt-50 ' +
+              (records.length != 0 ? 'h-796' : 'h-460')
+            }
+          >
+            {/*<div className='flex-row  w-100x pl-43 pr-35'>*/}
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                width: '100%',
+              }}
+              className={'des'}
+            >
+              <div style={{
+                flexBasis: '25%',
+                textAlign: 'center',
+              }} className={'des'}>
+                {/*向好友分享*/}
+                分享邀请码
                 <br />
-                链接及邀请码
-              </span>
-              <span className='des w-180 mr-87'>
-                好友使用
-                <br />
-                邀请码注册
-              </span>
-              <span className='des w-180 mr-87'>
+                给好友
+              </div>
+              <div style={{
+                flexBasis: '25%',
+                textAlign: 'center',
+              }}>
                 好友完成
                 <br />
-                指定任务
-              </span>
-              <span className='des w-180'>
-                领取
+                Freelog网站注册
+              </div>
+              <div style={{
+                flexBasis: '25%',
+                textAlign: 'center',
+              }} className={'des'}>
+                好友用邀请码
                 <br />
-                现金奖励
-              </span>
+                激活内测资格
+              </div>
+              <div style={{
+                flexBasis: '25%',
+                textAlign: 'center',
+              }} className={'des'}>
+                奖励
+                <br />
+                到账
+              </div>
             </div>
             <div className='flex-row w-100x mt-40 pl-43 pr-71  align-center'>
               <div className=' flex-column-center pl-65 pr-20'>
@@ -241,93 +309,202 @@ function InviteFriend({ activityDetailsPage, match }: InviteFriendProps) {
             </div>
             <FComponentsLib.FRectBtn
               className='invite-button mt-88'
-              disabled={userData.usedCount >= userData.limitCount || activityDetailsPage.timeValidity !== 'Validity'}
+              disabled={
+                userData.usedCount >= userData.limitCount ||
+                activityDetailsPage.timeValidity !== 'Validity'
+              }
               onClick={(e) => {
+                if (!userData.limitCount) return;
+                if (userData.userInfo.userType != 1) {
+                  fMessage(<span>此活动仅对内测用户开放!</span>, 'warning');
+                  return;
+                }
+                self._czc?.push([
+                  '_trackEvent',
+                  '邀请好友页',
+                  '立即邀请',
+                  '',
+                  1,
+                ]);
                 setShowInvite(true);
                 e.stopPropagation();
               }}
             >
               {/*{taskInfo.status === 4 ? '立即邀请' : status[taskInfo.status]}*/}
-              {
-                activityDetailsPage.timeValidity === 'NotStart'
-                  ? '即将开始'
-                  : activityDetailsPage.timeValidity === 'Finished'
-                    ? '已经结束'
-                    : '立即邀请'
-              }
+              {activityDetailsPage.timeValidity === 'NotStart'
+                ? '即将开始'
+                : activityDetailsPage.timeValidity === 'Finished'
+                  ? '已经结束'
+                  : userData.limitCount
+                    ? '立即邀请'
+                    : '登录后立即邀请'}
             </FComponentsLib.FRectBtn>
             <div className='flex-row w-260 space-between mt-10'>
-              <span className='invite-left'>
-                还可邀请 {userData.limitCount - userData.usedCount} 位好友
-              </span>
-              <a className='get-more link'>获取更多名额</a>
+              {userData.limitCount && (
+                <span className='invite-left'>
+                  还可邀请 {userData.limitCount - userData.usedCount} 位好友
+                </span>
+              )}
+              {userData.usedCount < 5 && (
+                <a
+                  className='get-more link'
+                  onClick={() => {
+                    self._czc?.push([
+                      '_trackEvent',
+                      '邀请好友页',
+                      '获取更多邀请名额',
+                      '',
+                      1,
+                    ]);
+                    scrollToAnchor('inner-test');
+                  }}
+                >
+                  获取更多名额
+                </a>
+              )}
             </div>
-            <div className='record mt-60 w-100x'>
-              <div className='flex-row title-row align-end'>
-                <div className='flex-row align-end c1'>
-                  <span className='title'>我的邀请记录</span>
-                  <span className='tip'>
-                    好友在注册后的7天内完成指定任务，即可领取奖励
-                  </span>
+            {records.length != 0 && (
+              <div className='record mt-60 w-100x'>
+                <div className='flex-row title-row align-end'>
+                  <div className='flex-row align-end c1'>
+                    <span className='title'>我的邀请记录</span>
+                    <span className='tip'>
+                      好友在注册后的7天内完成指定任务，即可领取奖励
+                    </span>
+                  </div>
+                  <span className='tip c2'>最近更新</span>
+                  <span className='tip c3'>奖励进度</span>
                 </div>
-                <span className='tip c2'>最近更新</span>
-                <span className='tip c3'>奖励进度</span>
-              </div>
-              {
-                records.map((r) => {
-                  return (<div className='flex-row row' key={r.userId}>
-                    <span className='item c1'>{r.username}（{r.mobile || r.email || '****'}）</span>
-                    <span className='item c2'>{r.createDate}</span>
-                    <span className='item c3'>{states[r.state] || '未知'}</span>
-                  </div>);
-                })
-              }
 
-            </div>
+                {records.length === 0 && (
+                  <div
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      height: 100,
+                    }}
+                  >
+                    <FComponentsLib.FContentText
+                      text={'暂无'}
+                      type={'additional2'}
+                    />
+                  </div>
+                )}
+                {records.map((r) => {
+                  return (
+                    <div className='flex-row row' key={r.userId}>
+                      <span className='item c1'>
+                        {r.username}（{r.mobile || r.email || '****'}）
+                      </span>
+                      <span className='item c2'>{r.createDate}</span>
+                      <span className='item c3'>
+                        {states[r.state] || '未知'}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
         </div>
         <div className='flex-column tutorial w-100x align-center'>
-          <div className='category'>邀请攻略</div>
-          <div className='flex-row container space-between'>
-            <div className='h-590 over-h '>
-              <img src={friend} alt='' className='h-100x' />
+          <div className='category'>
+            <div className='invite-circle active-policy'>
+              <div className='circle-inside' />
             </div>
-            <div className='h-590 over-h '>
-              <img src={code} alt='' className='h-100x' />
+            <span>邀请攻略</span>
+          </div>
+          {/*<div className='flex-row container'>*/}
+          <div style={{ display: 'flex', justifyContent: 'space-between', width: 1060 }}>
+            {/*<div className='h-590 over-h '>*/}
+            <div style={{ width: 515 }}>
+              <img src={friend} alt='' style={{ width: '100%' }} />
             </div>
-            <div className='h-590 over-h '>
-              <img src={task} alt='' className='h-100x' />
+            {/*<div className='h-590 over-h '>*/}
+            <div style={{ width: 515 }}>
+              <img src={code} alt='' style={{ width: '100%' }} />
             </div>
+            {/*<div className='h-590 over-h '>*/}
+            {/*  <img src={task} alt='' className='h-100x' />*/}
+            {/*</div>*/}
           </div>
         </div>
         <div className='flex-column rule w-100x align-center' id='inner-test'>
-          <div className='category'>活动规则</div>
+          <div className='category'>
+            <div className='invite-circle active-rule'>
+              <div className='circle-inside' />
+            </div>
+            <span>活动规则</span>
+          </div>
           <div className='flex-column container space-between'>
             <span className=''>
-              1.&nbsp; &nbsp;内测活动时间：2021/**/** - 2021/**/**；
+              1.&nbsp; &nbsp;内测活动时间：
+              {activityDetailsPage.startTime?.format('YYYY/MM/DD') ||
+                'YYYY/MM/DD'}{' '}
+              -{' '}
+              {activityDetailsPage.endTime?.format('YYYY/MM/DD') ||
+                'YYYY/MM/DD'}
+              ；
             </span>
+            {/*<span className=''>*/}
+            {/*  2.&nbsp;*/}
+            {/*  &nbsp;内测活动仅限800名用户参与，在Freelog内测用户满800人后，邀请好友活动暂停，未成功使用的邀请码将暂时失效，已邀请且已注册的好友完成指定任务后仍可获得现金奖励；*/}
+            {/*</span> */}
             <span className=''>
               2.&nbsp;
-              &nbsp;内测活动仅限800名用户参与，在Freelog内测用户满800人后，邀请好友活动暂停，未成功使用的邀请码将暂时失效，已邀请且已注册的好友完成指定任务后仍可获得现金奖励；
+              &nbsp;内测活动仅限800名用户参与，在Freelog内测用户满800人后，邀请好友活动将会暂停；
             </span>
+            {/*<span className=''>*/}
+            {/*  3.&nbsp;*/}
+            {/*  &nbsp;每位用户在内测活动期间可获得1个邀请码，邀请码的有效使用次数为3次。*/}
+            {/*  完成*/}
+            {/*  <a*/}
+            {/*    href={FI18n.i18nNext.t('beta_event_guideline_newbie_link')}*/}
+            {/*    target={'_blank'}*/}
+            {/*  >*/}
+            {/*    新手任务*/}
+            {/*  </a>*/}
+            {/*  中的【完善个人信息】【*/}
+            {/*  Freelog社区签到】两个小任务，可额外各获得一个邀请名额。好友填写邀请码注册成功后，即消耗1次使用次数；*/}
+            {/*</span>*/}
             <span className=''>
               3.&nbsp;
-              &nbsp;每位用户在内测活动期间可获得1个邀请码，邀请码的有效使用次数为5次，其中2次需完成特定<a
-              href={FI18n.i18nNext.t('beta_event_guideline_newbie_link')}
-              target={'_blank'}
-            >新手任务</a>解锁。好友填写邀请码注册成功后，即消耗1次使用次数；
-            </span>
-            <span className=''>
-              4.&nbsp;
               &nbsp;将邀请链接及个人邀请码分享给好友，好友通过您分享的链接和邀请码注册Freelog平台账号，并在7天内完成新手任务中的「资源系列任务」或「节点系列任务」，您可领取3—20元现金奖励（累计奖励），同时好友可获得3元现金奖励；
             </span>
             <span className=''>
-              5.&nbsp;
-              &nbsp;随机抽取4位成功邀请好友的用户赠送价值400元的京东购物卡（电子卡），中奖用户名单将于2020年***公布；
+              4.&nbsp;
+              &nbsp;随机抽取4位成功邀请好友的用户赠送价值400元的京东购物卡（电子卡），中奖用户名单将于
+              {activityDetailsPage.announceTime?.format('YYYY年MM月DD日') ||
+                'YYYY年MM月DD日'}
+              公布；
             </span>
             <span className=''>
-              6.&nbsp; &nbsp;现金奖励发放方式及提现要求说明；
+              5.&nbsp;
+              &nbsp;现金奖励发放方式及提现要求说明；
             </span>
+            <span className=''>
+              6.&nbsp;
+              &nbsp;每位用户在内测活动期间可获得1个邀请码，邀请码的有效使用次数为5次，其中2次需完成特定新手任务解锁。好友填写邀请码注册成功后，即消耗1次使用次数；
+            </span>
+            {/*<div style={{ display: 'flex', flexWrap: 'wrap', gap: 5 }}>*/}
+            {/*  <span className=''>*/}
+            {/*    6.&nbsp; &nbsp;邀请好友参与Freelog内测活动*/}
+            {/*    ，好友在7天内完成相应指定任务，即可领取3-20元现金奖励。可通过*/}
+            {/*  </span>*/}
+            {/*  <FComponentsLib.FTextBtn*/}
+            {/*    type={'primary'}*/}
+            {/*    onClick={() => {*/}
+            {/*      self.open(*/}
+            {/*        FUtil.Format.completeUrlByDomain('user') +*/}
+            {/*        FUtil.LinkTo.reward(),*/}
+            {/*      );*/}
+            {/*    }}*/}
+            {/*  >*/}
+            {/*    【个人中心】—【活动奖励】*/}
+            {/*  </FComponentsLib.FTextBtn>*/}
+            {/*  <span>，将内测期间领取的现金奖励申请提现至微信钱宝。</span>*/}
+            {/*</div>*/}
             <span className=''>
               7.&nbsp;
               &nbsp;对于存在非正常邀请行为的用户，平台将取消其活动参与资格，并扣除相应奖励不予结算；
@@ -337,27 +514,36 @@ function InviteFriend({ activityDetailsPage, match }: InviteFriendProps) {
             </span>
           </div>
         </div>
+        <FFooter />
       </div>
-      <div
-        className={
-          'invite-text flex-column align-center pt-30 pb-25 ' +
-          (showInvite ? '' : 'd-none')
-        }
-      >
-        <textarea
-          readOnly
-          className='input mb-20'
-          value={userData.textCopy || ''}
-        />
-        <FComponentsLib.FRectBtn
-          onClick={() => {
-            copy(userData.textCopy);
-            fMessage(<span>复制成功！</span>, 'success');
-          }}
+      {
+        showInvite && (<div
+          className={'invite-text-container'}
+          onClick={() => setShowInvite(false)}
         >
-          复制内容
-        </FComponentsLib.FRectBtn>
-      </div>
+          <div
+            className={'invite-text flex-column align-center pt-30 pb-25 '}
+            onClick={(e) => e.stopPropagation()}
+          >
+          <textarea
+            readOnly
+            className='input mb-20'
+            value={userData.textCopy || ''}
+          />
+            <FComponentsLib.FRectBtn
+              onClick={() => {
+                copy(userData.textCopy, {
+                  format: 'text/plain',
+                });
+                fMessage(<span>复制成功！</span>, 'success');
+              }}
+            >
+              复制内容
+            </FComponentsLib.FRectBtn>
+          </div>
+        </div>)
+      }
+
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import { Space } from 'antd';
-import { FDelete, FRedo, FSwap } from '@/components/FIcons';
+// import { FRedo, FSwap } from '@/components/FIcons';
 import {
   OnBlur_Side_Exhibit_EditDeleteAttrInput_Action,
   OnBlur_Side_Exhibit_OnlyEditAttrInput_Action,
@@ -18,7 +18,8 @@ import {
   OnHandleAttrModalAction,
 } from '@/models/informExhibitInfoPage';
 import FInput from '@/components/FInput';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState, InformExhibitInfoPageModelState } from '@/models/connect';
 import FDropdownMenu from '@/components/FDropdownMenu';
 import FCustomOptionsEditorDrawer from '@/components/FCustomOptionsEditorDrawer';
@@ -26,6 +27,7 @@ import FCustomOptionEditorDrawer from '@/components/FCustomOptionEditorDrawer';
 import FSelect from '@/components/FSelect';
 import fConfirmModal from '@/components/fConfirmModal';
 import FComponentsLib from '@freelog/components-lib';
+import FOverflowTooltip from '@/components/FOverflowTooltip';
 
 interface SettingProps {
   dispatch: Dispatch;
@@ -60,15 +62,11 @@ function Setting({ dispatch, informExhibitInfoPage }: SettingProps) {
           }}
         >
           <Space style={{ cursor: 'pointer' }} size={15}><FComponentsLib.FContentText
-            text={informExhibitInfoPage.side_Exhibit_Version} /><FSwap /></Space>
+            text={informExhibitInfoPage.side_Exhibit_Version} /><FComponentsLib.FIcons.FSwap /></Space>
         </FDropdownMenu>
         <div style={{ height: 30 }} />
       </>)
     }
-
-    {/*{*/}
-    {/*  informExhibitInfoPage.settingUnfold && (<>*/}
-
 
     <FComponentsLib.FTitleText text={'基础属性'} type='h4' />
     <div style={{ height: 15 }} />
@@ -77,8 +75,28 @@ function Setting({ dispatch, informExhibitInfoPage }: SettingProps) {
         <tbody>
         {
           informExhibitInfoPage.side_Exhibit_OnlyReadAttrs.map((pb) => (<tr key={pb.theKey}>
-            <td><FComponentsLib.FContentText style={{ width: 80 }} singleRow text={pb.theKey} /></td>
-            <td><FComponentsLib.FContentText style={{ width: 100 }} singleRow text={pb.value} /></td>
+            {/*<td><FComponentsLib.FContentText style={{ width: 80 }} singleRow text={pb.theKey} /></td>*/}
+            <td><FOverflowTooltip
+              text={pb.theKey}
+              style={{
+                fontWeight: 400,
+                lineHeight: '20px',
+                color: '#222',
+                fontSize: 14,
+                maxWidth: 90,
+              }}
+            /></td>
+            {/*<td><FComponentsLib.FContentText style={{ width: 100 }} singleRow text={pb.value} /></td>*/}
+            <td><FOverflowTooltip
+              text={pb.value}
+              style={{
+                fontWeight: 400,
+                lineHeight: '20px',
+                color: '#222',
+                fontSize: 14,
+                maxWidth: 90,
+              }}
+            /></td>
           </tr>))
         }
         </tbody>
@@ -111,7 +129,7 @@ function Setting({ dispatch, informExhibitInfoPage }: SettingProps) {
                   });
 
                 }}
-              ><FRedo /></FComponentsLib.FTextBtn>
+              ><FComponentsLib.FIcons.FRedo /></FComponentsLib.FTextBtn>
 
             </Space>
 
@@ -192,7 +210,7 @@ function Setting({ dispatch, informExhibitInfoPage }: SettingProps) {
                   });
                 }}
               ><FComponentsLib.FIcons.FEdit /></FComponentsLib.FTextBtn>
-              <FDelete
+              <FComponentsLib.FIcons.FDelete
                 style={{ color: '#EE4040', cursor: 'pointer' }}
                 onClick={() => {
                   fConfirmModal({

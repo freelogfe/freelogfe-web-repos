@@ -17,23 +17,26 @@ const tasks = {
   TS000031: {
     name: '创建1个节点',
     popoverContent: (<div className={styles.tooltipDisplay}>
-      <FComponentsLib.FContentText text={'成功创建1个节点即可。'} type='highlight' />
-      <div style={{ height: 15 }} />
-      <Space size={5}>
-        <FComponentsLib.FContentText text={'可查阅'} />
+      {/*<FComponentsLib.FContentText text={'节点是资源的展示推广空间，你可以将Freelog资源市场中想要推广的资源添加至节点，再将此节点分享至微博、豆瓣、微信等平台，即通过资源推广获取收益，实现流量变现。'} type='highlight' />*/}
+      {/*<div style={{ height: 15 }} />*/}
+      <div>
+        {/*可查阅  节点创建视频教程  或  图文教程  创建节点。*/}
+        <FComponentsLib.FContentText text={'可查阅'} style={{ display: 'contents' }} />
+        &nbsp;
         <a
-          href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
+          href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f&title=2.+%E5%A6%82%E4%BD%95%E8%BF%90%E8%90%A5%E8%8A%82%E7%82%B9'}
           target={'_blank'}
-          type='primary'
-        >节点商使用教程</a>
-        <FComponentsLib.FContentText text={'（视频）或'} />
+        >节点创建视频教程</a>
+        &nbsp;
+        <FComponentsLib.FContentText text={'或'} style={{ display: 'contents' }} />
+        &nbsp;
         <a
-          href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
+          href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f&title=2.%E3%80%90%E8%BF%90%E8%90%A5%E8%8A%82%E7%82%B9%E3%80%91%E6%93%8D%E4%BD%9C%E6%8C%87%E5%8D%97'}
           target={'_blank'}
-          type='primary'
-        >节点创建教程</a>
-        <FComponentsLib.FContentText text={'（图文）创建节点。'} />
-      </Space>
+        >图文教程</a>
+        &nbsp;
+        <FComponentsLib.FContentText text={'创建节点。'} style={{ display: 'contents' }} />
+      </div>
     </div>),
     onClick() {
       self.open(FUtil.LinkTo.nodeCreator());
@@ -44,21 +47,24 @@ const tasks = {
     popoverContent: (<div className={styles.tooltipDisplay}>
       <FComponentsLib.FContentText text={'资源被签约到节点即变为展品。'} type='highlight' />
       <div style={{ height: 15 }} />
-      <Space size={5} style={{ flexWrap: 'wrap' }}>
-        <FComponentsLib.FContentText text={'可查阅'} />
+      <div>
+        {/*可查阅  展品添加上线教程  在资源市场添加并上线展品。*/}
+        <FComponentsLib.FContentText text={'可查阅'} style={{ display: 'contents' }} />
+        &nbsp;
         <a
           href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
           target={'_blank'}
-          type='primary'
         >展品添加上线教程</a>
-        <FComponentsLib.FContentText text={'（图文）或'} />
-        <a
-          href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
-          target={'_blank'}
-          type='primary'
-        >节点商使用教程</a>
-        <FComponentsLib.FContentText text={'（视频）在资源市场添加并上线展品。'} />
-      </Space>
+        &nbsp;
+        {/*<FComponentsLib.FContentText text={'（图文）或'} style={{ display: 'contents' }} />*/}
+        {/*&nbsp;*/}
+        {/*<a*/}
+        {/*  href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}*/}
+        {/*  target={'_blank'}*/}
+        {/*>节点商使用教程</a>*/}
+        {/*&nbsp;*/}
+        <FComponentsLib.FContentText text={'在资源市场添加并上线展品。'} style={{ display: 'contents' }} />
+      </div>
       <div style={{ height: 15 }} />
       <div style={{ color: '#EE4040' }}>
         *只有处于上线状态的展品才能被用户签约消费。
@@ -73,21 +79,24 @@ const tasks = {
     popoverContent: (<div className={styles.tooltipDisplay}>
       <FComponentsLib.FContentText text={'主题决定节点的展示外观。'} type='highlight' />
       <div style={{ height: 15 }} />
-      <Space size={5}>
-        <FComponentsLib.FContentText text={'可查阅'} />
+      <div>
+        {/*可查阅  主题激活教程  激活主题。*/}
+        <FComponentsLib.FContentText text={'可查阅'} style={{ display: 'contents' }} />
+        &nbsp;
         <a
           href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
           target={'_blank'}
-          type='primary'
         >主题激活教程</a>
-        <FComponentsLib.FContentText text={'（图文）或'} />
-        <a
-          href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
-          target={'_blank'}
-          type='primary'
-        >节点商使用教程</a>
-        <FComponentsLib.FContentText text={'（视频）激活主题。'} />
-      </Space>
+        &nbsp;
+        {/*<FComponentsLib.FContentText text={'（图文）或'} style={{ display: 'contents' }} />*/}
+        {/*&nbsp;*/}
+        {/*<a*/}
+        {/*  href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}*/}
+        {/*  target={'_blank'}*/}
+        {/*>节点商使用教程</a>*/}
+        {/*&nbsp;*/}
+        <FComponentsLib.FContentText text={'激活主题。'} style={{ display: 'contents' }} />
+      </div>
     </div>),
     onClick() {
       self.open(FUtil.LinkTo.market({ query: '主题' }));
@@ -124,7 +133,21 @@ function BoardCard3({ unfold, onMouseEnter }: BoardCard3Props) {
 
   AHooks.useMount(async () => {
     const { data } = await FServiceAPI.Activity.getNodeTaskInfo();
-    set_dataSource(data);
+    const data1 = [
+      ...data,
+    ];
+    data1.sort((a, b) => {
+      // console.log(a, b, '88888***888d');
+      if (a.taskConfigCode === 'TS000033' && b.taskConfigCode === 'TS000032') {
+        return -1;
+      }
+      if (a.taskConfigCode === 'TS000032' && b.taskConfigCode === 'TS000033') {
+        return 1;
+      }
+      return 0;
+    });
+    // console.log(data1, 'data1iosdjflksdjlk');
+    set_dataSource(data1);
   });
 
   const needSteps: number = dataSource.filter((item: any) => item.status === 1).length;
@@ -141,15 +164,15 @@ function BoardCard3({ unfold, onMouseEnter }: BoardCard3Props) {
         <div />
         <div className={styles.title1}>节点任务</div>
         <div className={styles.title2} style={{ height: unfold ? 60 : 150 }}>
-          完成“节点任务”即可成为Freelog节点商，节点商是平台资源的整合方，通过在节点上展示资源和制定授权策略获取资运营收益
+          节点是资源的展示推广空间，你可以将Freelog资源市场中想要推广的资源添加至节点，再将此节点分享至微博、豆瓣、微信等平台，即通过资源推广获取收益，实现流量变现。
         </div>
         {
           needSteps === 0
             ? (<div className={styles.title3} style={{ opacity: .5 }}>
-              7元奖励已领取
+              8元奖励已领取
             </div>)
             : (<div className={styles.title3}>
-              还差{needSteps}步领取 <span>7元</span> 奖励
+              还差{needSteps}步领取 <span>8元</span> 奖励
             </div>)
         }
         <div />

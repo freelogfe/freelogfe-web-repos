@@ -1,5 +1,6 @@
 export default [
   { exact: true, path: '/ui-example', component: '../pages/ui-example' },
+  { exact: true, path: '/nodePausePreview', component: '../pages/nodePausePreview' },
   {
     path: '/',
     component: '../layouts/FLayout',
@@ -129,6 +130,12 @@ export default [
                         path: 'success/:id/:version',
                         component: '../pages/result/resource/version/create/success/$id/$version',
                         title: '版本创建成功 - Freelog',
+                      },
+                      {
+                        exact: true,
+                        path: 'release/:id/:version',
+                        component: '../pages/result/resource/version/create/release/$id/$version',
+                        title: '版本正在创建 - Freelog',
                       },
                     ],
                   },

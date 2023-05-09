@@ -3,7 +3,8 @@ import styles from './index.less';
 import { withRouter } from 'umi';
 import Sider from './Sider';
 import Exhibit from './Exhibit';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import {
   OnChangePageAction,
   OnMountPageAction,

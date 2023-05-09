@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import FForbid from '@/components/FIcons/FForbid';
 import { RouteComponentProps } from 'react-router';
 import { history, withRouter } from 'umi';
 import { connect } from 'dva';
@@ -51,7 +50,7 @@ function Freeze({ match }: FreezeProps) {
   }
 
   return (<div className={styles.container}>
-    <FForbid className={styles.FForbid} />
+    <FComponentsLib.FIcons.FForbid className={styles.FForbid} />
     <div style={{ height: 30 }} />
     <FComponentsLib.FTitleText text={'此资源因违规已被封禁'} type='h1' />
     {/*<FComponentsLib.FTitleText text={FI18n.i18nNext.t('alert_resourceblocked01')} type='h1' />*/}

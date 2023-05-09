@@ -14,6 +14,27 @@ import fMessage from '@/components/fMessage';
 
 const { decompile, compile } = require('@freelog/nmr_translator');
 
+// const resource_TypeData = [
+//   { value: '插件', parentValue: '#' },
+//   { value: '阅读', parentValue: '#' },
+//   { value: '音频', parentValue: '#' },
+//   { value: '图片', parentValue: '#' },
+//   { value: '视频', parentValue: '#' },
+//   { value: '游戏', parentValue: '#' },
+//   { value: '文章', parentValue: '阅读' },
+//   { value: '演示文稿', parentValue: '阅读' },
+//   { value: '音效', parentValue: '音频' },
+//   { value: '音乐', parentValue: '音频' },
+//   { value: '播客节目', parentValue: '音频' },
+//   { value: '照片', parentValue: '图片' },
+//   { value: '插画', parentValue: '图片' },
+//   { value: '动态影像', parentValue: '视频' },
+//   { value: '实拍片段', parentValue: '视频' },
+//   { value: '短视频', parentValue: '视频' },
+//   { value: '长视频', parentValue: '视频' },
+//   { value: '红白机', parentValue: '游戏' },
+// ] as const;
+
 interface ICandidate {
   name: string;
   versionRange?: string;
@@ -286,8 +307,12 @@ export interface InformalNodeManagerPageModelState {
 
   replaceModal_Errors: string[];
 
-  exhibit_TypeOptions: { value: string; text: string; }[];
-  exhibit_SelectedType: '-1' | string;
+  exhibit_ResourceTypeCodes: {
+    value: string;
+    label: string;
+    values: string[];
+    labels: string[];
+  };
   exhibit_StatusOptions: { value: string; text: string; }[];
   exhibit_SelectedStatus: '0' | '1' | '2';
   exhibit_FilterKeywords: string;
@@ -309,7 +334,7 @@ export interface InformalNodeManagerPageModelState {
     id: string;
     checked: boolean;
     matchErrors: string[];
-    ruleInfo: IRules['add'] | IRules['alter'] | IRules['activate_theme'];
+    ruleInfo: IRules['add'] | IRules['alter'] | IRules['activate_theme'] | IRules['comment'];
     efficientInfos: {
       count: number;
       type: 'add' | 'alter' | 'set_labels' | 'online' | 'set_title' | 'set_cover' | 'add_attr' | 'delete_attr' | 'replace' | 'activate_theme';
@@ -317,7 +342,7 @@ export interface InformalNodeManagerPageModelState {
   }[];
   rule_CodeInput: string;
   rule_CodeIsDirty: boolean;
-  rule_PromptLeavePath: string;
+  // rule_PromptLeavePath: string;
 
   rule_CodeState: 'editing' | 'checking' | 'compileError' | 'executionError' | 'noError';
   rule_CodeCompileErrors: {
@@ -391,20 +416,20 @@ export interface OnUnmountRulePageAction extends AnyAction {
   type: 'informalNodeManagerPage/onUnmountRulePage';
 }
 
-export interface OnPromptRulePageLeaveAction extends AnyAction {
-  type: 'informalNodeManagerPage/onPromptRulePageLeave';
-  payload: {
-    href: string;
-  };
-}
-
-export interface OnConfirmRulePageLeaveAction extends AnyAction {
-  type: 'informalNodeManagerPage/onConfirmRulePageLeave';
-}
-
-export interface OnCancelRulePageLeaveAction extends AnyAction {
-  type: 'informalNodeManagerPage/onCancelRulePageLeave';
-}
+// export interface OnPromptRulePageLeaveAction extends AnyAction {
+//   type: 'informalNodeManagerPage/onPromptRulePageLeave';
+//   payload: {
+//     href: string;
+//   };
+// }
+//
+// export interface OnConfirmRulePageLeaveAction extends AnyAction {
+//   type: 'informalNodeManagerPage/onConfirmRulePageLeave';
+// }
+//
+// export interface OnCancelRulePageLeaveAction extends AnyAction {
+//   type: 'informalNodeManagerPage/onCancelRulePageLeave';
+// }
 
 export interface FetchNodeInfoAction extends AnyAction {
   type: 'fetchNodeInfo';
@@ -429,7 +454,7 @@ export interface OnClickExhibitsReplaceBtnAction extends AnyAction {
 export interface OnChangeExhibitTypeAction extends AnyAction {
   type: 'informalNodeManagerPage/onChangeExhibitType';
   payload: {
-    value: string;
+    value: InformalNodeManagerPageModelState['exhibit_ResourceTypeCodes'];
   };
 }
 
@@ -744,9 +769,6 @@ interface InformalNodeManagerPageModelType {
     onUnmountThemePage: (action: OnUnmountThemePageAction, effects: EffectsCommandMap) => void;
     onMountRulePage: (action: OnMountRulePageAction, effects: EffectsCommandMap) => void;
     onUnmountRulePage: (action: OnUnmountRulePageAction, effects: EffectsCommandMap) => void;
-    onPromptRulePageLeave: (action: OnPromptRulePageLeaveAction, effects: EffectsCommandMap) => void;
-    onConfirmRulePageLeave: (action: OnConfirmRulePageLeaveAction, effects: EffectsCommandMap) => void;
-    onCancelRulePageLeave: (action: OnCancelRulePageLeaveAction, effects: EffectsCommandMap) => void;
 
     fetchNodeInfo: (action: FetchNodeInfoAction, effects: EffectsCommandMap) => void;
 
@@ -820,8 +842,7 @@ interface InformalNodeManagerPageModelType {
 }
 
 const exhibitInitStates: Pick<InformalNodeManagerPageModelState,
-  'exhibit_TypeOptions' |
-  'exhibit_SelectedType' |
+  'exhibit_ResourceTypeCodes' |
   'exhibit_StatusOptions' |
   'exhibit_SelectedStatus' |
   'exhibit_FilterKeywords' |
@@ -830,13 +851,12 @@ const exhibitInitStates: Pick<InformalNodeManagerPageModelState,
   'exhibit_List' |
   'exhibit_ListTotal' |
   'exhibit_PageError'> = {
-  exhibit_TypeOptions: [
-    { text: '全部', value: '-1' },
-    ...FUtil.Predefined.resourceTypes
-      .filter((i) => i !== 'theme')
-      .map((i) => ({ value: i, text: i })),
-  ],
-  exhibit_SelectedType: '-1',
+  exhibit_ResourceTypeCodes: {
+    value: '#all',
+    label: '全部',
+    values: ['#all'],
+    labels: ['全部'],
+  },
   exhibit_StatusOptions: [
     { text: '全部', value: '2' },
     { text: FI18n.i18nNext.t('filter_exhibit_status_availableforauth'), value: '1' },
@@ -871,7 +891,7 @@ const ruleInitSates: Pick<InformalNodeManagerPageModelState,
   'rule_RuleList' |
   'rule_CodeInput' |
   'rule_CodeIsDirty' |
-  'rule_PromptLeavePath' |
+  // 'rule_PromptLeavePath' |
   'rule_CodeState' |
   'rule_CodeCompileErrors' |
   'rule_CodeExecutionErrors' |
@@ -880,7 +900,7 @@ const ruleInitSates: Pick<InformalNodeManagerPageModelState,
   rule_RuleList: [],
   rule_CodeInput: '',
   rule_CodeIsDirty: false,
-  rule_PromptLeavePath: '',
+  // rule_PromptLeavePath: '',
   rule_CodeState: 'editing',
   rule_CodeCompileErrors: [],
   rule_CodeExecutionErrors: [],
@@ -1034,30 +1054,6 @@ const Model: InformalNodeManagerPageModelType = {
         },
       });
     },
-    * onPromptRulePageLeave({ payload }: OnPromptRulePageLeaveAction, { put }: EffectsCommandMap) {
-
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          rule_PromptLeavePath: payload.href,
-        },
-      });
-
-    },
-    * onConfirmRulePageLeave({}: OnConfirmRulePageLeaveAction, { select }: EffectsCommandMap) {
-      const { informalNodeManagerPage }: ConnectState = yield select(({ informalNodeManagerPage }: ConnectState) => ({
-        informalNodeManagerPage,
-      }));
-      history.push(informalNodeManagerPage.rule_PromptLeavePath);
-    },
-    * onCancelRulePageLeave({}: OnCancelRulePageLeaveAction, { put }: EffectsCommandMap) {
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          rule_PromptLeavePath: '',
-        },
-      });
-    },
     * fetchNodeInfo({}: FetchNodeInfoAction, { select, put, call }: EffectsCommandMap) {
       const { informalNodeManagerPage }: ConnectState = yield select(({ informalNodeManagerPage }: ConnectState) => ({
         informalNodeManagerPage,
@@ -1125,6 +1121,11 @@ const Model: InformalNodeManagerPageModelType = {
         ];
       }
       // console.log(informalNodeManagerPage.exhibit_SelectedType, 'informalNodeManagerPage.exhibit_SelectedTypeiosejlkfsdjlk');
+
+      const resourceTypes: Array<string | number> = informalNodeManagerPage.exhibit_ResourceTypeCodes.labels.filter((rt) => {
+        return rt !== '全部';
+      });
+
       const params: Parameters<typeof FServiceAPI.InformalNode.testResources>[0] = {
         skip: list.length,
         // limit: FUtil.Predefined.pageSize,
@@ -1132,7 +1133,13 @@ const Model: InformalNodeManagerPageModelType = {
         nodeId: informalNodeManagerPage.node_ID,
         onlineStatus: Number(informalNodeManagerPage.exhibit_SelectedStatus) as 2,
         omitResourceType: '主题',
-        resourceType: (informalNodeManagerPage.exhibit_SelectedType === '-1' || informalNodeManagerPage.exhibit_SelectedType === '') ? undefined : informalNodeManagerPage.exhibit_SelectedType,
+        resourceType: resourceTypes.length === 0 ? undefined : String(resourceTypes[resourceTypes.length - 1]),
+        // resourceType: (informalNodeManagerPage.exhibit_SelectedType2 !== '-1' || informalNodeManagerPage.exhibit_SelectedType === '') ? undefined : informalNodeManagerPage.exhibit_SelectedType,
+        // resourceType: informalNodeManagerPage.exhibit_SelectedType2 !== '-1'
+        //   ? informalNodeManagerPage.exhibit_SelectedType2
+        //   : informalNodeManagerPage.exhibit_SelectedType1 !== '-1'
+        //     ? informalNodeManagerPage.exhibit_SelectedType1
+        //     : undefined,
         keywords: informalNodeManagerPage.exhibit_FilterKeywords || undefined,
       };
 
@@ -1153,7 +1160,7 @@ const Model: InformalNodeManagerPageModelType = {
       const { state, more } = listStateAndListMore({
         list_Length: exhibitList.length,
         total_Length: data_informalExhibits.totalItem,
-        has_FilterCriteria: informalNodeManagerPage.exhibit_SelectedType !== '-1'
+        has_FilterCriteria: informalNodeManagerPage.exhibit_ResourceTypeCodes.values[0] !== '#all'
           || informalNodeManagerPage.exhibit_SelectedStatus !== '2'
           || informalNodeManagerPage.exhibit_FilterKeywords !== '',
       });
@@ -1183,13 +1190,43 @@ const Model: InformalNodeManagerPageModelType = {
     },
     * onChangeExhibitType({ payload }: OnChangeExhibitTypeAction, { put }: EffectsCommandMap) {
 
-      // console.log('onChangeExhibitType 11111');
+      // if (payload.level === 1) {
+      //   yield put<ChangeAction>({
+      //     type: 'change',
+      //     payload: {
+      //       exhibit_SelectedType1: payload.value,
+      //       exhibit_SelectedType2: '-1',
+      //       exhibit_TypeOptions2: [
+      //         { text: '全部', value: '-1' },
+      //         ...resource_TypeData
+      //           .filter((rt) => {
+      //             return rt.parentValue === payload.value;
+      //           })
+      //           .map((i) => {
+      //             return {
+      //               value: i.value,
+      //               text: i.value,
+      //             };
+      //           }),
+      //       ],
+      //     },
+      //   });
+      // } else if (payload.level === 2) {
+      //   yield put<ChangeAction>({
+      //     type: 'change',
+      //     payload: {
+      //       exhibit_SelectedType2: payload.value,
+      //     },
+      //   });
+      // }
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          exhibit_SelectedType: payload.value,
+          exhibit_ResourceTypeCodes: payload.value,
         },
       });
+
       yield put<FetchExhibitListAction>({
         type: 'fetchExhibitList',
         payload: {
@@ -1691,6 +1728,18 @@ const Model: InformalNodeManagerPageModelType = {
       const result: RuleMatchAndResultReturn = yield call(ruleMatchAndResult, params1);
 
       // console.log(data1, 'data1!@#$!@#$@#');
+      console.log(result, 'resultiosdjflksdjflsdjflljlksdf');
+
+      const rule_CodeExecutionWarnings: InformalNodeManagerPageModelState['rule_CodeExecutionErrors'] = result.testRules
+        .filter((tr: any) => {
+          return tr.matchWarnings.length > 0;
+        })
+        .map((tr: any) => {
+          return {
+            ruleText: tr.ruleInfo.text,
+            errors: tr.matchWarnings,
+          };
+        });
 
       const rule_CodeExecutionErrors: InformalNodeManagerPageModelState['rule_CodeExecutionErrors'] = result.testRules
         .filter((tr: any) => {
@@ -1723,7 +1772,10 @@ const Model: InformalNodeManagerPageModelType = {
           node_RuleInfo: result,
           rule_CodeIsDirty: false,
           rule_CodeState: rule_CodeExecutionErrors.length === 0 ? 'noError' : 'executionError',
-          rule_CodeExecutionErrors: rule_CodeExecutionErrors,
+          rule_CodeExecutionErrors: [
+            ...rule_CodeExecutionErrors,
+            ...rule_CodeExecutionWarnings,
+          ],
           rule_CodeEfficients: rule_CodeEfficients,
           rule_RuleList: result.testRules.map((tr: any) => {
             return {

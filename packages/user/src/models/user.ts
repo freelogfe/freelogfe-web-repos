@@ -1,10 +1,9 @@
 import { DvaReducer, WholeReadonly } from '@/models/shared';
 import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription, SubscriptionAPI } from 'dva';
-import { FServiceAPI, FUtil, FI18n } from '@freelog/tools-lib';
+import { FUtil, FI18n } from '@freelog/tools-lib';
 import { ConnectState } from '@/models/connect';
 import fConfirmModal from '@/components/fConfirmModal';
-// import FUtil1 from '@/utils';
 import userPermission from '@/permissions/UserPermission';
 
 export interface UserModelState {
@@ -76,24 +75,32 @@ const Model: UserModelType = {
   state: initStates,
   effects: {
     * fetchInfo({}: FetchInfoAction, { call, put }: EffectsCommandMap) {
-      // if (!FUtil.Tool.getUserIDByCookies()) {
-      //   return;
-      // }
-      // const { data } = yield call(FServiceAPI.User.currentUserInfo);
-      // // console.log(data, '!@#$!@#$@#$@#$');
-      // yield put<ChangeAction>({
-      //   type: 'change',
-      //   payload: {
-      //     userInfo: data,
-      //   },
-      // });
-      const data: any = yield call(userPermission.getUserInfo);
+      const data: {
+        createDate: string;
+        email: string;
+        headImage: string;
+        mobile: string;
+        status: number;
+        tokenSn: string;
+        userDetail: {
+          sex: 0 | 1 | 2;
+          birthday: string;
+          occupation: string;
+          areaCode: string;
+        };
+        userId: number;
+        userType: 0 | 1;
+        username: string;
+      } = yield call(userPermission.getUserInfo);
       // console.log(data, 'data2q3e@@!!@@#!@#!@#@');
 
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          userInfo: data,
+          userInfo: data ? {
+            ...data,
+            headImage: FUtil.Tool.getAvatarUrl(),
+          } : null,
         },
       });
     },
@@ -138,55 +145,34 @@ const Model: UserModelType = {
   },
   subscriptions: {
     setup({ dispatch }: SubscriptionAPI) {
-      // dispatch<FetchInfoAction>({
-      //   type: 'fetchInfo',
-      // });
+
     },
-    // checkUser({ dispatch }: SubscriptionAPI) {
-    //   window.document.addEventListener('visibilitychange', () => {
-    //     // console.log(document.hidden, 'document.hidden 9032rweopfdslj.,');
-    //     // Modify behavior...
-    //     dispatch<OnVisibilityChangeAction>({
-    //       type: 'onVisibilityChange',
-    //       payload: {
-    //         hidden: document.hidden,
-    //       },
-    //     });
-    //   });
-    //   window.addEventListener('pagehide', event => {
-    //     if (event.persisted) {
-    //       /* the page isn't being discarded, so it can be reused later */
-    //       console.log(event.persisted, 'event.persiste d0923jlsdijfldskjl');
-    //     }
-    //   }, false);
-    // },
     checkUser({ dispatch }) {
-      window.document.addEventListener('visibilitychange', function() {
-        // console.log(document.hidden, 'document.hidden 9032rweopfdslj.,');
-        // Modify behavior...
-        // dispatch<OnVisibilityChangeAction>({
-        //   type: 'onVisibilityChange',
-        //   payload: {
-        //     hidden: document.hidden,
-        //   },
-        // });
+      window.document.addEventListener('visibilitychange', () => {
         userPermission.check()
           .then((code) => {
             if (code === 'ERR_SWITCHED_USER' && !document.hidden) {
-              co();
+              co(FI18n.i18nNext.t('msg_account_switched'));
+            }
+
+            // if (code === 'ERR_NOT_LOGIN' && !document.hidden) {
+            //   co('用户已登出');
+            // }
+
+            const url: string = self.location.pathname;
+            if (code === 'ERR_NOT_LOGIN'
+              && !document.hidden
+              && !url.startsWith(FUtil.LinkTo.login())
+              && !url.startsWith(FUtil.LinkTo.logon())
+              && !url.startsWith(FUtil.LinkTo.retrieveUserPassword())) {
+              co('用户已登出');
             }
           });
       });
-      // window.addEventListener('pagehide', event => {
-      //   if (event.persisted) {
-      //     /* the page isn't being discarded, so it can be reused later */
-      //     console.log(event.persisted, 'event.persiste d0923jlsdijfldskjl');
-      //   }
-      // }, false);
     },
     checkUserPermission({ dispatch, history }) {
       // console.log(history, 'history09i3o2lskdfjlaskdjflsdkfj;l');
-      history.listen((listener) => {
+      history.listen(() => {
         // console.log(listener, 'listener098phijnoweklf');
         userPermission.checkUrl(history.location.pathname)
           .then(({ code, goToUrl }) => {
@@ -205,10 +191,10 @@ const Model: UserModelType = {
 
 export default Model;
 
-function co() {
+function co(message: string) {
   fConfirmModal({
     afterClose() {
-      co();
+      co(message);
     },
     onOk() {
       window.location.reload();
@@ -218,6 +204,6 @@ function co() {
         display: 'none',
       },
     },
-    message: FI18n.i18nNext.t('msg_account_switched'),
+    message: message,
   });
 }

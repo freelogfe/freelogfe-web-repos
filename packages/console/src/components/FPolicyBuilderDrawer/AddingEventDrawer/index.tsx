@@ -27,12 +27,13 @@ function FAddingEventDrawer({ visible, disabledTerminateEvent, onClose, onSelect
 
   return (<FDrawer
     width={640}
-    visible={visible}
+    // visible={visible}
+    open={visible}
     title={'添加事件或指令'}
     onClose={() => {
       onClose();
     }}
-    afterVisibleChange={async (visible) => {
+    afterOpenChange={async (visible) => {
       if (visible) {
         const params: Parameters<typeof FServiceAPI.Transaction.individualAccounts>[0] = {
           userId: FUtil.Tool.getUserIDByCookies(),

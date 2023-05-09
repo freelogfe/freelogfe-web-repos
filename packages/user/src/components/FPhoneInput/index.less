@@ -1,0 +1,54 @@
+@import '../../config.less';
+
+.FPhoneInput {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  //height: 38px;
+  //gap: 10px;
+}
+
+.select {
+  height: 38px;
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+
+  :global(.ant-select-selector) {
+    height: 38px !important;
+    border-color: #E4E7EB !important;
+    border-right: none !important;
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+
+    :global(.ant-select-selection-item) {
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  &:hover {
+    border-color: #CBCBCB !important;
+  }
+}
+
+.input {
+  //border-width: 1px;
+  //border-style: solid;
+  border-color: #E4E7EB;
+  background-color: white;
+  height: 38px;
+  display: inline-block;
+  flex-shrink: 1;
+  width: 100%;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+
+  &:hover {
+    border-color: #CBCBCB !important;
+  }
+
+  &:focus {
+    border-color: @f-primary-color !important;
+  }
+}

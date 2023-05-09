@@ -58,14 +58,14 @@ function FInput({
 
   const commentClass: string [] = [styles.Input, className, errorText ? styles.InputError : ''];
 
-  // console.log(errorText, 'errorText!@#$!@#$@#$');
+  // console.log(value, 'valuevaluevaluevaluevalue!@#$!@#$@#$');
   return (<div className={styles.wrap + ' ' + (wrapClassName || '')}>
     {
       theme === 'dark'
         ? (
           <Input
             // prefix={<SearchOutlined style={{color: '#8E8E93'}}/>}
-            prefix={<i className={'freelog fl-icon-content' + ' ' + styles.darkPrefix} />}
+            prefix={<i className={['freelog', 'fl-icon-content', styles.darkPrefix].join(' ')} />}
             className={[...commentClass, styles.dark].join(' ')}
             allowClear={true}
             style={{ height: size === 'middle' ? 38 : 32 }}
@@ -77,7 +77,7 @@ function FInput({
           style={{ height: size === 'middle' ? 38 : 32 }}
           suffix={lengthLimit > 0
             ? (<span
-              className={[styles.FInputWordCount, lengthLimit - inputText.length < 0 ? styles.beyond : ''].join(' ')}
+              className={[styles.FInputWordCount, lengthLimit - (debounce ? inputText.length : (value?.length || 0)) < 0 ? styles.beyond : ''].join(' ')}
             >{lengthLimit - (debounce ? inputText.length : (value?.length || 0))}</span>)
             : undefined}
           {...inputProps}

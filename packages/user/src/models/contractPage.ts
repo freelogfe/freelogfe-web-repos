@@ -24,6 +24,7 @@ export interface ContractPageModelState {
     value: 'all' | Authorize_Status
     text: string;
   }[];
+  authorized_SubjectIds: string;
   authorize_Status: 'all' | Authorize_Status;
   authorize_Date: [Moment, Moment] | null;
   authorize_Keywords: string;
@@ -32,6 +33,7 @@ export interface ContractPageModelState {
   authorize_List: {
     cover: string;
     subjectType: 'resource' | 'exhibit';
+    subjectID: string;
     subjectName: string;
     contractName: string;
     licensorId: string;
@@ -62,6 +64,7 @@ export interface ContractPageModelState {
   authorized_List: {
     cover: string;
     subjectType: 'resource' | 'exhibit';
+    subjectID: string;
     subjectName: string;
     contractName: string;
     licensorId: string;
@@ -155,6 +158,15 @@ export interface OnChange_Authorized_Status_Action extends AnyAction {
   };
 }
 
+export interface OnChange_Authorized_SubjectIds_Action extends AnyAction {
+  type: 'contractPage/onChange_Authorized_SubjectIds';
+  payload: {
+    authorized_Status: 'all' | Authorized_Status,
+    authorized_SubjectType: 'all' | Authorized_SubjectType;
+    authorized_SubjectIds: string,
+  };
+}
+
 export interface OnChange_Authorized_Date_Action extends AnyAction {
   type: 'contractPage/onChange_Authorized_Date';
   payload: {
@@ -202,7 +214,7 @@ interface ContractPageModelType {
     onChange_Authorize_Date: (action: OnChange_Authorize_Date_Action, effects: EffectsCommandMap) => void;
     onChange_Authorize_KeywordsInput: (action: OnChange_Authorize_KeywordsInput_Action, effects: EffectsCommandMap) => void;
     onClick_Authorize_LoadMoreBtn: (action: OnClick_Authorize_LoadMoreBtn_Action, effects: EffectsCommandMap) => void;
-
+    onChange_Authorized_SubjectIds: (action: OnChange_Authorized_SubjectIds_Action, effects: EffectsCommandMap) => void;
     onChange_Authorized_SubjectType: (action: OnChange_Authorized_SubjectType_Action, effects: EffectsCommandMap) => void;
     onChange_Authorized_Status: (action: OnChange_Authorized_Status_Action, effects: EffectsCommandMap) => void;
     onChange_Authorized_Date: (action: OnChange_Authorized_Date_Action, effects: EffectsCommandMap) => void;
@@ -234,6 +246,7 @@ const initStates: ContractPageModelState = {
     text: '展品',
   }],
   authorize_SubjectType: 'all',
+  authorized_SubjectIds: '',
   authorize_Status_Options: [{
     value: 'all',
     text: '全部',
@@ -400,6 +413,22 @@ const Model: ContractPageModelType = {
         type: 'fetch_Authorized_List',
       });
     },
+    * onChange_Authorized_SubjectIds({ payload }: OnChange_Authorized_SubjectIds_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          authorized_Status: payload.authorized_Status,
+          authorized_SubjectType: payload.authorized_SubjectType,
+          authorized_SubjectIds: payload.authorized_SubjectIds,
+        },
+      });
+      if (payload.authorized_SubjectIds) {
+        return null;
+      }
+      yield put<Fetch_Authorized_List_Action>({
+        type: 'fetch_Authorized_List',
+      });
+    },
     * onChange_Authorized_Status({ payload }: OnChange_Authorized_Status_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
@@ -512,7 +541,6 @@ const Model: ContractPageModelType = {
           ...contractPage.authorize_List,
         ];
       }
-
       const params: Parameters<typeof FServiceAPI.Contract.contracts>[0] = {
         skip: beforeData.length,
         limit: FUtil.Predefined.pageSize,
@@ -526,20 +554,20 @@ const Model: ContractPageModelType = {
         keywords: contractPage.authorize_Keywords || undefined,
       };
 
-      const data = yield call(contractList, params);
+      const data: { dataList: any[]; totalItem: number; } = yield call(contractList, params);
 
       // console.log(data, '@2222222222')
 
       const resultList: ContractPageModelState['authorize_List'] = [
         ...beforeData,
-        ...(data.dataList as any[]).map<ContractPageModelState['authorize_List'][number]>((al: any) => {
-
+        ...(data.dataList as any[]).map<ContractPageModelState['authorize_List'][number]>((al) => {
           return {
             cover: al.subjectInfo?.coverImages[0] || '',
             subjectType: al.subjectType === 1 ? 'resource' : 'exhibit',
+            subjectID: al.subjectId,
             subjectName: al.subjectName,
             contractName: al.contractName,
-            licensorId: al.licenseeId,
+            licensorId: al.licensorId,
             licensorType: al.subjectType === 1 ? 'resource' : 'node',
             licensorName: al.licensorName,
             licenseeId: al.licenseeId,
@@ -658,7 +686,7 @@ const Model: ContractPageModelType = {
       }
 
       // console.log(contractPage, 'contractPagecontractPage@#%@#@#@#@@@');
-      const params: Parameters<typeof FServiceAPI.Contract.contracts>[0] = {
+      let params: Parameters<typeof FServiceAPI.Contract.contracts>[0] = {
         skip: beforeData.length,
         limit: FUtil.Predefined.pageSize,
         // limit: 100,
@@ -670,20 +698,26 @@ const Model: ContractPageModelType = {
         endDate: contractPage.authorized_Date ? contractPage.authorized_Date[1].format(FUtil.Predefined.momentDateFormat) + ' 23:59:59' : undefined,
         keywords: contractPage.authorized_Keywords || undefined,
       };
-
-      const data = yield call(contractList, params);
+      if (contractPage.authorized_SubjectIds) {
+        params = {
+          ...params,
+          subjectIds: contractPage.authorized_SubjectIds,
+        };
+      }
+      const data: { dataList: any[]; totalItem: number; } = yield call(contractList, params);
 
       // console.log(data, 'DDDDF093ujlksjdlfsdkflsdfls');
       // const data1 = { dataList: [] };
       const resultList: ContractPageModelState['authorized_List'] = [
         ...beforeData,
-        ...(data.dataList as any[]).map<ContractPageModelState['authorized_List'][number]>((al: any) => {
+        ...data.dataList.map<ContractPageModelState['authorized_List'][number]>((al) => {
           return {
             cover: al.subjectInfo?.coverImages[0] || '',
             subjectType: al.subjectType === 1 ? 'resource' : 'exhibit',
+            subjectID: al.subjectId,
             subjectName: al.subjectName,
             contractName: al.contractName,
-            licensorId: al.licenseeId,
+            licensorId: al.licensorId,
             licensorType: al.subjectType === 1 ? 'resource' : 'node',
             licensorName: al.licensorName,
             licenseeId: al.licenseeId,

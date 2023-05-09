@@ -2,14 +2,11 @@ import * as React from 'react';
 import styles from './index.less';
 import FInput from '../FInput';
 import { Space, Divider, DatePicker, Modal } from 'antd';
-import { FCheck, FCode, FDown, FFileText, FInfo, FLoading } from '../FIcons';
 import PolicyTemplates from './PolicyTemplates';
 import FDrawer from '../FDrawer';
-import FComposition from '../FIcons/FComposition';
 import FSelect from '../FSelect';
 import FCheckbox from '../FCheckbox';
-import FGuideDown from '../FIcons/FGuideDown';
-import { FUtil, FI18n ,FServiceAPI} from '@freelog/tools-lib';
+import { FUtil, FI18n, FServiceAPI } from '@freelog/tools-lib';
 import moment, { Moment } from 'moment';
 import FTooltip from '../FTooltip';
 import FMonacoEditor from '../FMonacoEditor';
@@ -18,10 +15,11 @@ import * as AHooks from 'ahooks';
 import FAddingEventDrawer from '@/components/FPolicyBuilderDrawer/AddingEventDrawer';
 import FComponentsLib from '@freelog/components-lib';
 import { Base64 } from 'js-base64';
+// import FHotspotTooltip from '@/components/FHotspotTooltip';
 
 const FDatePicker: any = DatePicker;
 
-const { compile, report } = require('@freelog/resource-policy-lang');
+const { compile } = require('@freelog/resource-policy-lang');
 
 interface FPolicyBuilderDrawerProps {
   visible?: boolean;
@@ -34,6 +32,8 @@ interface FPolicyBuilderDrawerProps {
   onConfirm?({ title, text }: { title: string, text: string }): void;
 
   onCancel?(): void;
+
+  afterVisibleChange?(visible: boolean): void;
 }
 
 type CombinationStructureType = {
@@ -80,6 +80,10 @@ interface FPolicyBuilderDrawerStates {
 
   failResult: {
     errorText: string;
+    title: string;
+    code: string;
+    translation: string;
+    view: any;
   } | null;
 
   successResult: {
@@ -162,6 +166,7 @@ function FPolicyBuilder({
                           onConfirm,
                           alreadyUsedTitles = [],
                           alreadyUsedTexts = [],
+                          afterVisibleChange,
                         }: FPolicyBuilderDrawerProps) {
   const refBottomDiv = React.useRef<any>(null);
   const refMaskingContainer = React.useRef<any>(null);
@@ -440,131 +445,27 @@ function FPolicyBuilder({
     setTemplateVisible(false);
     // if (num === 1) {
 
-      setTitleInput(title);
-      setTitleInputError(verifyTitle(title, alreadyUsedTitles));
+    setTitleInput(title);
+    setTitleInputError(verifyTitle(title, alreadyUsedTitles));
 
-      if (editMode === 'code') {
-        set_Code_IsDirty(true);
-        set_Code_Input(text);
-        set_Code_InputErrors([]);
-      } else {
-        // const initialRandomID: string = FUtil.Tool.generateRandomCode(10);
-        // const finishRandomID: string = FUtil.Tool.generateRandomCode(10);
-        // const result: CombinationStructureType = codeToData()
-        const { errors, results } = await codeToData({
-          text: text,
-          targetType: targetType,
-        });
-        //   [
-        //   {
-        //     randomID: initialRandomID,
-        //     type: 'initial',
-        //     name: 'initial',
-        //     nameError: '',
-        //     isNameDuplicate: false,
-        //     // authorizationOptions: targetType === 'resource' ? resourceAuthColor : exhibitAuthColor,
-        //     authorizationChecked: ['active'],
-        //     events: [
-        //       {
-        //         randomID: FUtil.Tool.generateRandomCode(10),
-        //         type: 'relativeTime',
-        //         target: finishRandomID,
-        //         relativeTime_Num: '1',
-        //         relativeTime_NumError: '',
-        //         relativeTime_Unit: 'month',
-        //       },
-        //     ],
-        //   },
-        //   {
-        //     randomID: finishRandomID,
-        //     type: 'other',
-        //     name: 'finish',
-        //     nameError: '',
-        //     isNameDuplicate: false,
-        //     // authorizationOptions: targetType === 'resource' ? resourceAuthColor : exhibitAuthColor,
-        //     authorizationChecked: [],
-        //     events: [
-        //       {
-        //         randomID: FUtil.Tool.generateRandomCode(10),
-        //         type: 'terminate',
-        //       },
-        //     ],
-        //   },
-        // ];
-        results && set_Combination_Data(results);
-      }
-    // } else {
-    //   setTitleInput(title2);
-    //   setTitleInputError(verifyTitle(title2, alreadyUsedTitles));
-    //   if (editMode === 'code') {
-    //     set_Code_IsDirty(true);
-    //     set_Code_Input(text2);
-    //     set_Code_InputErrors([]);
-    //   } else {
-    //     const initialRandomID: string = FUtil.Tool.generateRandomCode(10);
-    //     const authRandomID: string = FUtil.Tool.generateRandomCode(10);
-    //     const finishRandomID: string = FUtil.Tool.generateRandomCode(10);
-    //     const result: CombinationStructureType = [
-    //       {
-    //         randomID: initialRandomID,
-    //         type: 'initial',
-    //         name: 'initial',
-    //         nameError: '',
-    //         isNameDuplicate: false,
-    //         // authorizationOptions: targetType === 'resource' ? resourceAuthColor : exhibitAuthColor,
-    //         authorizationChecked: [],
-    //         events: [
-    //           {
-    //             randomID: FUtil.Tool.generateRandomCode(10),
-    //             type: 'payment',
-    //             target: authRandomID,
-    //             payment_Amount: '10',
-    //             payment_AmountError: '',
-    //           },
-    //         ],
-    //       },
-    //       {
-    //         randomID: authRandomID,
-    //         type: 'other',
-    //         name: 'auth',
-    //         nameError: '',
-    //         isNameDuplicate: false,
-    //         // authorizationOptions: targetType === 'resource' ? resourceAuthColor : exhibitAuthColor,
-    //         authorizationChecked: ['active'],
-    //         events: [
-    //           {
-    //             randomID: FUtil.Tool.generateRandomCode(10),
-    //             type: 'relativeTime',
-    //             target: finishRandomID,
-    //             relativeTime_Num: '1',
-    //             relativeTime_NumError: '',
-    //             relativeTime_Unit: 'month',
-    //           },
-    //         ],
-    //       },
-    //       {
-    //         randomID: finishRandomID,
-    //         type: 'other',
-    //         name: 'finish',
-    //         nameError: '',
-    //         isNameDuplicate: false,
-    //         // authorizationOptions: targetType === 'resource' ? resourceAuthColor : exhibitAuthColor,
-    //         authorizationChecked: [],
-    //         events: [
-    //           {
-    //             randomID: FUtil.Tool.generateRandomCode(10),
-    //             type: 'terminate',
-    //           },
-    //         ],
-    //       },
-    //     ];
-    //     set_Combination_Data(result);
-    //   }
-    // }
+    if (editMode === 'code') {
+      set_Code_IsDirty(true);
+      set_Code_Input(text);
+      set_Code_InputErrors([]);
+    } else {
+      const { errors, results } = await codeToData({
+        text: text,
+        targetType: targetType,
+      });
+      results && set_Combination_Data(results);
+    }
   }
 
   async function onClick_VerifyBtn() {
+    // console.log('****88888sdfsdfsdfsdf');
+    self._czc?.push(['_trackEvent', targetType === 'resource' ? '授权信息页' : '授权策略页', '检验', '', 1]);
     setIsVerifying(true);
+
 
     if (editMode === 'code') {
       const { errors } = await compileCodeText({
@@ -577,25 +478,41 @@ function FPolicyBuilder({
         return;
       }
 
+      // new RegExp()
       const t: string = (code_Input || '').replace(/(\t|\r)/g, ' ');
       const e: string = Base64.encode(t);
-      const { data:text }: { data: string } = await FServiceAPI.Policy.policyTranslation({ contract: e });
+      const { data: text }: { data: string } = await FServiceAPI.Policy.policyTranslation({ contract: e });
 
-
-      // const { error, text } = await policyCodeTranslationToText(code_Input, targetType);
       setIsVerifying(false);
-
-      // if (error) {
-      //   setShowView('fail');
-      //   setFailResult({ errorText: error.join(',') });
-      //   return;
-      // }
 
       if (alreadyUsedTexts?.includes(code_Input)) {
         setShowView('fail');
-        setFailResult({ errorText: '当前策略已存在' });
+        setFailResult({
+          errorText: '当前策略已存在',
+          title: titleInput,
+          code: code_Input,
+          translation: text || '',
+          view: [],
+        });
         return;
       }
+
+      // const params: Parameters<typeof FServiceAPI.Transaction.individualAccounts>[0] = {
+      //   userId: FUtil.Tool.getUserIDByCookies(),
+      // };
+      // const { data } = await FServiceAPI.Transaction.individualAccounts(params);
+      //
+      // if (data.status === 0) {
+      //   setShowView('fail');
+      //   setFailResult({
+      //     errorText: '当前账户未激活',
+      //     title: titleInput,
+      //     code: code_Input,
+      //     translation: text || '',
+      //     view: [],
+      //   });
+      //   return;
+      // }
 
       // setIsVerifying(false);
       setShowView('success');
@@ -607,26 +524,41 @@ function FPolicyBuilder({
       });
     } else {
       const combinationCode: string = dataToCode(combination_Data);
-      // const {
-      //   error,
-      //   text: translationText,
-      // } = await policyCodeTranslationToText(combinationCode, targetType);
 
       const t: string = (combinationCode || '').replace(/(\t|\r)/g, ' ');
       const e: string = Base64.encode(t);
-      const { data:translationText }: { data: string } = await FServiceAPI.Policy.policyTranslation({ contract: e });
+      const { data: translationText }: { data: string } = await FServiceAPI.Policy.policyTranslation({ contract: e });
 
       setIsVerifying(false);
-      // if (error) {
-      //   setShowView('fail');
-      //   setFailResult({ errorText: error.join(',') });
-      //   return;
-      // }
       if (alreadyUsedTexts?.includes(combinationCode)) {
         setShowView('fail');
-        setFailResult({ errorText: '当前策略已存在' });
+        setFailResult({
+          errorText: '当前策略已存在',
+          title: titleInput,
+          code: combinationCode,
+          translation: translationText || '',
+          view: [],
+        });
         return;
       }
+
+      // const params: Parameters<typeof FServiceAPI.Transaction.individualAccounts>[0] = {
+      //   userId: FUtil.Tool.getUserIDByCookies(),
+      // };
+      // const { data } = await FServiceAPI.Transaction.individualAccounts(params);
+      //
+      // if (data.status === 0) {
+      //   setShowView('fail');
+      //   setFailResult({
+      //     errorText: '当前账户未激活',
+      //     title: titleInput,
+      //     code: code_Input,
+      //     translation: translationText || '',
+      //     view: [],
+      //   });
+      //   return;
+      // }
+
       // setIsVerifying(false);
       setShowView('success');
       setSuccessResult({
@@ -652,6 +584,7 @@ function FPolicyBuilder({
   const combinationDataHasError: boolean = (combination_Data.some((cd) => {
     return cd.name.trim() === ''
       || !!cd.nameError
+      || cd.events.length === 0
       || cd.events.some((et) => {
         if (et.type === 'payment') {
           return et.payment_Amount === '' || et.payment_AmountError !== '' || !et.target;
@@ -677,6 +610,35 @@ function FPolicyBuilder({
     };
   });
 
+  if (!disabledExecute) {
+
+    FComponentsLib.fSetHotspotTooltipVisible(targetType === 'resource'
+      ? 'policyBuilder.resource.policyTemplateBtn'
+      : 'policyBuilder.exhibit.policyTemplateBtn', {
+      value: false,
+      effectiveImmediately: true,
+      onlyNullish: false,
+    });
+
+    FComponentsLib.fSetHotspotTooltipVisible(targetType === 'resource'
+      ? 'policyBuilder.resource.policyVerifyBtn'
+      : 'policyBuilder.exhibit.policyVerifyBtn', {
+      value: true,
+      effectiveImmediately: true,
+      onlyNullish: true,
+    });
+
+    setTimeout(() => {
+      FComponentsLib.fSetHotspotTooltipVisible(targetType === 'resource'
+        ? 'policyBuilder.resource.policyVerifyBtn'
+        : 'policyBuilder.exhibit.policyVerifyBtn', {
+        value: false,
+        effectiveImmediately: false,
+        onlyNullish: false,
+      });
+    });
+  }
+
   const DrawerTopRight = (<Space size={30}>
     <FComponentsLib.FTextBtn
       onClick={() => {
@@ -691,11 +653,22 @@ function FPolicyBuilder({
               disabled={true}
               type='primary'
             >校验中</FComponentsLib.FRectBtn>)
-            : (<FComponentsLib.FRectBtn
-              onClick={onClick_VerifyBtn}
-              type='primary'
-              disabled={disabledExecute}
-            >校验</FComponentsLib.FRectBtn>)
+            : (<FComponentsLib.FHotspotTooltip
+              id={targetType === 'resource'
+                ? 'policyBuilder.resource.policyVerifyBtn'
+                : 'policyBuilder.exhibit.policyVerifyBtn'}
+              style={{ left: '50%', marginLeft: -16, bottom: -42 }}
+              text={targetType === 'resource'
+                ? FI18n.i18nNext.t('hotpots_createauthplan_resource_btn_verify')
+                : FI18n.i18nNext.t('hotpots_createauthplan_exhibit_btn_verify')
+              }
+            >
+              <FComponentsLib.FRectBtn
+                onClick={onClick_VerifyBtn}
+                type='primary'
+                disabled={disabledExecute}
+              >校验</FComponentsLib.FRectBtn>
+            </FComponentsLib.FHotspotTooltip>)
         }
       </>
     }
@@ -708,15 +681,37 @@ function FPolicyBuilder({
     }
 
     {
-      showView === 'success' && (<FComponentsLib.FRectBtn
-        onClick={() => {
-          onConfirm && onConfirm({
-            title: successResult?.title || '',
-            text: successResult?.code || '',
+      showView === 'success' && (<FComponentsLib.FHotspotTooltip
+        id={targetType === 'resource'
+          ? 'policyBuilder.resource.policyCreateBtn'
+          : 'policyBuilder.exhibit.policyCreateBtn'}
+        style={{ left: '60%', marginLeft: -16, bottom: -42 }}
+        text={targetType === 'resource'
+          ? FI18n.i18nNext.t('hotpots_createauthplan_resource_btn_create')
+          : FI18n.i18nNext.t('hotpots_createauthplan_exhibit_btn_create')
+        }
+        onMount={() => {
+          FComponentsLib.fSetHotspotTooltipVisible(targetType === 'resource'
+            ? 'policyBuilder.resource.policyCreateBtn'
+            : 'policyBuilder.exhibit.policyCreateBtn', {
+            value: false,
+            effectiveImmediately: false,
+            onlyNullish: false,
           });
         }}
-        type='primary'
-      >创建</FComponentsLib.FRectBtn>)
+      >
+        <FComponentsLib.FRectBtn
+          onClick={() => {
+            self._czc?.push(['_trackEvent', targetType === 'resource' ? '授权信息页' : '授权策略页', '创建', '', 1]);
+
+            onConfirm && onConfirm({
+              title: successResult?.title || '',
+              text: successResult?.code || '',
+            });
+          }}
+          type='primary'
+        >创建</FComponentsLib.FRectBtn>
+      </FComponentsLib.FHotspotTooltip>)
     }
 
   </Space>);
@@ -747,15 +742,18 @@ function FPolicyBuilder({
         </FTooltip>
       </Space>}
       onClose={() => onCancel && onCancel()}
-      visible={visible}
+      open={visible}
       width={720}
       topRight={DrawerTopRight}
-      afterVisibleChange={onChange_DrawerVisible}
+      afterOpenChange={(visible) => {
+        onChange_DrawerVisible(visible);
+        afterVisibleChange && afterVisibleChange(visible);
+      }}
     >
       {
         showView === 'success' && (<div>
           <div className={styles.PolicyVerifySuccess}>
-            <FCheck />
+            <FComponentsLib.FIcons.FCheck />
             <div style={{ width: 5 }} />
             <div>校验成功</div>
             <div style={{ width: 20 }} />
@@ -791,16 +789,37 @@ function FPolicyBuilder({
       {
         showView === 'fail' && (<div>
           <div className={styles.PolicyVerifyFail}>
-            <FInfo />
+            <FComponentsLib.FIcons.FFail
+              style={{
+                fontSize: 14,
+                color: '#EE4040',
+              }}
+            />
             <div style={{ width: 5 }} />
             <div>校验失败</div>
             <div style={{ width: 20 }} />
-            <span>以下是错误信息</span>
+            {/*<span>以下是错误信息</span>*/}
+            <span>{failResult?.errorText}</span>
+            {
+              failResult?.errorText === '当前账户未激活' && (<>
+                <div style={{ width: 20 }} />
+                <FComponentsLib.FTextBtn onClick={() => {
+                  self.open(FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.wallet());
+                  setShowView('edit');
+                  // setSuccessResult(null);
+                  setFailResult(null);
+                }}>去激活</FComponentsLib.FTextBtn>
+              </>)
+            }
+
           </div>
           <div style={{ height: 30 }} />
 
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <div />
+            <FComponentsLib.FTitleText
+              type='h1'
+              text={failResult?.title || ''}
+            />
 
             <FComponentsLib.FTextBtn
               type='primary'
@@ -815,9 +834,15 @@ function FPolicyBuilder({
 
           <div style={{ height: 30 }} />
 
-          <div>
-            <FComponentsLib.FContentText text={failResult?.errorText || ''} />
-          </div>
+          {/*<div>*/}
+          {/*  <FComponentsLib.FContentText text={failResult?.errorText || ''} />*/}
+          {/*</div>*/}
+
+          <PolicyShowcase
+            content={failResult?.translation || ''}
+            code={failResult?.code || ''}
+            view={failResult?.view || ''}
+          />
 
         </div>)
       }
@@ -827,7 +852,7 @@ function FPolicyBuilder({
           {
             isVerifying && (<>
               <div className={styles.isCheckingTip}>
-                <FLoading />
+                <FComponentsLib.FIcons.FLoading />
                 <div style={{ width: 5 }} />
                 <span>校验中，请勿离开</span>
               </div>
@@ -860,7 +885,7 @@ function FPolicyBuilder({
                       // disabled={codeMirrorInputHasError || isVerifying}
                       onClick={onClick_SwitchMode_Composition}>
                       <Space size={4}>
-                        <FComposition />
+                        <FComponentsLib.FIcons.FComposition />
                         <span>{FI18n.i18nNext.t('toggle_authplan_visual_editor')}</span>
                       </Space>
                     </FComponentsLib.FTextBtn>)
@@ -869,20 +894,39 @@ function FPolicyBuilder({
                       // disabled={combinationDataHasError}
                       onClick={onClick_SwitchMode_Code}>
                       <Space size={4}>
-                        <FCode />
+                        <FComponentsLib.FIcons.FCode />
                         <span>{FI18n.i18nNext.t('toggle_authplan_code_editor')}</span>
                       </Space>
                     </FComponentsLib.FTextBtn>)
                 }
 
-                <FComponentsLib.FTextBtn
-                  type='default'
-                  onClick={() => setTemplateVisible(true)}>
-                  <Space size={4}>
-                    <FFileText />
-                    <span>策略模板</span>
-                  </Space>
-                </FComponentsLib.FTextBtn>
+                <FComponentsLib.FHotspotTooltip
+                  id={targetType === 'resource'
+                    ? 'policyBuilder.resource.policyTemplateBtn'
+                    : 'policyBuilder.exhibit.policyTemplateBtn'}
+                  style={{ left: '50%', marginLeft: -16, bottom: -42 }}
+                  text={targetType === 'resource'
+                    ? FI18n.i18nNext.t('hotpots_createauthplan_resource_btn_templates')
+                    : FI18n.i18nNext.t('hotpots_createauthplan_exhibit_btn_templates')}
+                  onMount={() => {
+                    FComponentsLib.fSetHotspotTooltipVisible(targetType === 'resource'
+                      ? 'policyBuilder.resource.policyTemplateBtn'
+                      : 'policyBuilder.exhibit.policyTemplateBtn', {
+                      value: false,
+                      effectiveImmediately: false,
+                      onlyNullish: false,
+                    });
+                  }}
+                >
+                  <FComponentsLib.FTextBtn
+                    type='default'
+                    onClick={() => setTemplateVisible(true)}>
+                    <Space size={4}>
+                      <FComponentsLib.FIcons.FFileText />
+                      <span>策略模板</span>
+                    </Space>
+                  </FComponentsLib.FTextBtn>
+                </FComponentsLib.FHotspotTooltip>
               </Space>
             </div>
             {titleInputError && <>
@@ -900,7 +944,7 @@ function FPolicyBuilder({
                       <span>所有人</span>
                     </Space>
 
-                    <FDown />
+                    <FComponentsLib.FIcons.FDown />
                   </div>
 
                   <div style={{ height: 20 }} />
@@ -1174,7 +1218,7 @@ function FPolicyBuilder({
                                         <div style={{ height: 10 }} />
 
                                         <Divider style={{ margin: 0, borderTopColor: '#E5E7EB' }}>
-                                          <FComponentsLib.FTitleText type='h4'>跳转至&nbsp;<FGuideDown
+                                          <FComponentsLib.FTitleText type='h4'>跳转至&nbsp;<FComponentsLib.FIcons.FGuideDown
                                             style={{ fontSize: 10 }} />
                                           </FComponentsLib.FTitleText>
                                         </Divider>
@@ -1300,33 +1344,33 @@ function FPolicyBuilder({
 
       <FDrawer
         width={640}
-        visible={templateVisible}
+        open={templateVisible}
         title={'策略模板'}
         onClose={() => setTemplateVisible(false)}
       >
         <div className={styles.SelectTemplateTip}>
-          <FInfo style={{ fontSize: 16 }} />
+          <FComponentsLib.FIcons.FInfo style={{ fontSize: 16 }} />
           <div style={{ width: 5 }} />
           <span>选择模版后可对其进行编辑</span>
         </div>
         <div style={{ height: 30 }} />
         <PolicyTemplates
           // onClickSelect={(num) => {
-            // if (editMode === 'composition' && JSON.stringify(combination_Data) === JSON.stringify(initStates.combination_Data)) {
-            //   return onClick_SelectTemplateBtn(num);
-            // }
-            // if (editMode === 'code' && code_Input === initStates.code_Input) {
-            //   return onClick_SelectTemplateBtn(num);
-            // }
-            // Modal.confirm({
-            //   title: FI18n.i18nNext.t('alert_plan_cover'),
-            //   okText: FI18n.i18nNext.t('btn_import'),
-            //   cancelText: FI18n.i18nNext.t('btn_cancel'),
-            //   onOk() {
-            //     // onClick_SelectTemplateBtn(num);
-            //   },
-            // });
-            // }}
+          // if (editMode === 'composition' && JSON.stringify(combination_Data) === JSON.stringify(initStates.combination_Data)) {
+          //   return onClick_SelectTemplateBtn(num);
+          // }
+          // if (editMode === 'code' && code_Input === initStates.code_Input) {
+          //   return onClick_SelectTemplateBtn(num);
+          // }
+          // Modal.confirm({
+          //   title: FI18n.i18nNext.t('alert_plan_cover'),
+          //   okText: FI18n.i18nNext.t('btn_import'),
+          //   cancelText: FI18n.i18nNext.t('btn_cancel'),
+          //   onOk() {
+          //     // onClick_SelectTemplateBtn(num);
+          //   },
+          // });
+          // }}
           onSelect={({ title, text }) => {
             if (editMode === 'composition' && JSON.stringify(combination_Data) === JSON.stringify(initStates.combination_Data)) {
               return onClick_SelectTemplateBtn(title, text);

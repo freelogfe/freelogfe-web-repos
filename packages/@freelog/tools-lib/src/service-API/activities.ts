@@ -58,6 +58,33 @@ export function adsDetails(params: AdsDetailsParamsType) {
   });
 }
 
+// 访问广告（埋点）
+interface EventTrackingAdsVisitParamsType {
+  _id: string;
+}
+
+export function eventTrackingAdsVisit(params: EventTrackingAdsVisitParamsType) {
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/activities/ads/visit`,
+    params: params,
+  });
+}
+
+// 点击广告（埋点）
+interface EventTrackingAdsClickParamsType {
+  _id: string;
+}
+
+export function eventTrackingAdsClick(params: EventTrackingAdsClickParamsType) {
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/activities/ads/click`,
+    params: params,
+  });
+}
+
+
 // 获取基本任务详情
 interface GetBaseTaskInfoParamsType {
 }

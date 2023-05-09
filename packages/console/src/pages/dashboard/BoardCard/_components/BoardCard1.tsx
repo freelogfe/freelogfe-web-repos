@@ -17,77 +17,47 @@ const tasks = {
   TS000011: {
     name: '查看Freelog使用教程',
     popoverContent: (<div className={styles.tooltipDisplay}>
-      <FComponentsLib.FContentText
-        text={'Freelog平台存在资源作者和节点商两个角色：'}
-        type='highlight'
-      />
-      <div style={{ height: 15 }} />
-      <div style={{ display: 'flex' }}>
-        <i
-          style={{
-            width: 3,
-            height: 3,
-            borderRadius: '50%',
-            marginTop: 8,
-            marginRight: 5,
-            backgroundColor: '#666',
-          }}
-        />
+      <div>
+        <FComponentsLib.FContentText text={'查看'} style={{ display: 'contents' }} />
+        &nbsp;
+        <a
+          href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f&title=1.+%E5%A6%82%E4%BD%95%E5%8F%91%E8%A1%8C%E8%B5%84%E6%BA%90'}
+          target={'_blank'}
+        >资源发行教程</a>
+        &nbsp;
+        <FComponentsLib.FContentText text={'或'} style={{ display: 'contents' }} />
+        &nbsp;
+        <a
+          href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f&title=2.+%E5%A6%82%E4%BD%95%E8%BF%90%E8%90%A5%E8%8A%82%E7%82%B9'}
+          target={'_blank'}
+        >节点运营教程</a>
+        &nbsp;
         <FComponentsLib.FContentText
-          text={'「资源作者」可通过创建并发行资源获取收益；'}
+          text={'，完整观看任一视频教程即可完成任务，并获得一个邀请名额！'}
           type='highlight'
+          style={{ display: 'contents' }}
         />
       </div>
-      <div style={{ height: 15 }} />
-      <div style={{ display: 'flex' }}>
-        <i
-          style={{
-            width: 3,
-            height: 3,
-            borderRadius: '50%',
-            marginTop: 8,
-            marginRight: 5,
-            backgroundColor: '#666',
-          }}
-        />
-        <FComponentsLib.FContentText
-          text={'「节点商」是资源的整合者，通过在节点展示推广资源获取中间人收益。'}
-          type='highlight'
-        />
-      </div>
-      <div style={{ height: 15 }} />
-      <Space size={5}>
-        <FComponentsLib.FContentText text={'查看'} />
-        <a
-          href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
-          target={'_blank'}
-          type='primary'
-        >资源作者使用教程</a>
-        <FComponentsLib.FContentText text={'或'} />
-        <a
-          href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
-          target={'_blank'}
-          type='primary'
-        >节点商使用教程</a>
-      </Space>
     </div>),
     onClick() {
+      self._czc?.push(['_trackEvent', 'Console页', '查看Freelog使用教程', '', 1]);
       self.open('https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f');
     },
   },
-  TS000012: {
-    name: '完善个人信息',
-    popoverContent: (<div className={styles.tooltipDisplay}>
-      <FComponentsLib.FContentText text={'完善【个人中心】里的标星内容即可，更了解你一点，才能为你提供更精准的高质量内容哦。'} type='highlight' />
-    </div>),
-    onClick() {
-      self.open(FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.setting());
-    },
-  },
+  // TS000012: {
+  //   name: '完善个人信息',
+  //   popoverContent: (<div className={styles.tooltipDisplay}>
+  //     <FComponentsLib.FContentText text={'完善【个人资料】中的基本信息即可，更了解你一点，才能为你提供更高质量的服务哦，完成此任务可获得一个邀请名额。'} type='highlight' />
+  //   </div>),
+  //   onClick() {
+  //     self.open(FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.setting());
+  //   },
+  // },
   TS000013: {
     name: 'Freelog社区签到',
     popoverContent: (<div className={styles.tooltipDisplay}>
-      <FComponentsLib.FContentText text={'Freelog社区旨在为用户提供一个高质量内容的论坛社区，包括资源讨论、节点运营、产品吐槽等。'} type='highlight' />
+      <FComponentsLib.FContentText text={'Freelog社区旨在为用户提供一个高质量内容的论坛社区，包括资源讨论、节点运营、产品吐槽等，完成此任务可获得一个邀请名额。'}
+                                   type='highlight' />
     </div>),
     onClick() {
       // self.open('https://forum.freelog.com/topic/2/freelog%E5%86%85%E6%B5%8B%E7%AD%BE%E5%88%B0%E6%A5%BC-%E5%AE%8C%E6%88%90%E7%AD%BE%E5%88%B0%E5%8D%B3%E6%9C%89%E6%9C%BA%E4%BC%9A%E9%A2%866%E5%85%83%E7%8E%B0%E9%87%91%E5%A5%96%E5%8A%B1');
@@ -104,19 +74,19 @@ const tasks = {
       self.open(FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.wallet());
     },
   },
-  TS000015: {
-    name: '邀请一位好友',
-    popoverContent: (<div className={styles.tooltipDisplay}>
-      <FComponentsLib.FContentText
-        text={'参与【邀请好友活动】邀请更多好友参与Freelog内测，可重复领取邀请好友活动奖励， 且被邀请好友可领取3元现金奖励。'}
-        type='highlight'
-      />
-    </div>),
-    url: FI18n.i18nNext.t('event_newbie_invitefriend_link'),
-    onClick() {
-      self.open(FI18n.i18nNext.t('event_newbie_invitefriend_link'));
-    },
-  },
+  // TS000015: {
+  //   name: '邀请一位好友',
+  //   popoverContent: (<div className={styles.tooltipDisplay}>
+  //     <FComponentsLib.FContentText
+  //       text={'参与【邀请好友活动】邀请更多好友参与Freelog内测，可重复领取邀请好友活动奖励， 且被邀请好友可领取3元现金奖励。'}
+  //       type='highlight'
+  //     />
+  //   </div>),
+  //   url: FI18n.i18nNext.t('event_newbie_invitefriend_link'),
+  //   onClick() {
+  //     self.open(FI18n.i18nNext.t('event_newbie_invitefriend_link'));
+  //   },
+  // },
 } as const;
 
 function BoardCard1({ unfold, onMouseEnter }: BoardCard1Props) {
@@ -125,7 +95,10 @@ function BoardCard1({ unfold, onMouseEnter }: BoardCard1Props) {
 
   AHooks.useMount(async () => {
     const { data } = await FServiceAPI.Activity.getBaseTaskInfo();
-    set_dataSource(data);
+    // console.log(data, 'dataisdflkjsdlfkjlk');
+    set_dataSource(data.filter((d: any) => {
+      return d.taskConfigCode in tasks;
+    }));
   });
 
   const needSteps: number = dataSource.filter((item: any) => item.status === 1).length;

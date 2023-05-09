@@ -64,7 +64,7 @@ class I18nNext {
   }
 
   t(this: I18nNext, key: string, options?: { [key: string]: any }) {
-    return i18next.t(key, options);
+    return i18next.t(key.trim(), options);
   }
 
   changeLanguage(this: I18nNext, lng: LanguageKeyType) {
@@ -117,7 +117,8 @@ class I18nNext {
   }
 
   private async _fetchData(this: I18nNext): Promise<Resource> {
-    const res: any = await axios.get(window.location.origin.includes('.freelog.com') ? ossJsonUrl : ossJsonUrl_Test, {
+    const url: string = window.location.origin.includes('.freelog.com') ? ossJsonUrl : ossJsonUrl_Test;
+    const res: any = await axios.get(url + '?timestamp=' + Date.now(), {
       withCredentials: false,
     });
     // console.log(res, 'data09oiw3qjelsfkdfjlsdkfjl');

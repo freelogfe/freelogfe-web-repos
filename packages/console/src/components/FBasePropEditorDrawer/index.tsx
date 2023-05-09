@@ -36,7 +36,7 @@ function FBasePropEditorDrawer({
     onClose={() => {
       onCancel && onCancel();
     }}
-    visible={visible}
+    open={visible}
     width={720}
     topRight={<Space size={30}>
       <FComponentsLib.FTextBtn

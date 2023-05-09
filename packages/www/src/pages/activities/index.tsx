@@ -2,7 +2,8 @@ import * as React from 'react';
 import styles from './index.less';
 import { FUtil } from '@freelog/tools-lib';
 import { Popover, Space } from 'antd';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ActivitiesPageModelState, ConnectState } from '@/models/connect';
 import * as AHooks from 'ahooks';
 import { OnMountPageAction, OnUnmountPageAction } from '@/models/activitiesPage';
@@ -10,7 +11,7 @@ import FLoadingTip from '@/components/FLoadingTip';
 import FNoDataTip from '@/components/FNoDataTip';
 // import AOrLink from '@/components/FHeaderNavigation/AOrLink';
 import FComponentsLib from '@freelog/components-lib';
-import {Link} from 'umi';
+import { Link } from 'umi';
 
 interface ActivityProps {
   dispatch: Dispatch;

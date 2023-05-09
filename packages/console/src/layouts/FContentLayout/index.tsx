@@ -17,7 +17,6 @@ function FContentLayout({header, children, containerClassName, contentClassName}
     <div className={styles.content}>
       {children}
     </div>
-    <div style={{height: 100}}/>
   </div>);
 }
 

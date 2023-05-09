@@ -1,7 +1,7 @@
 {
   "name": "@freelog/components-lib",
   "author": "liu-kai-github",
-  "version": "0.1.20",
+  "version": "0.1.26",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -49,7 +49,7 @@
   ],
   "devDependencies": {
     "@size-limit/preset-small-lib": "^7.0.8",
-    "@types/react": "^18.0.17",
+    "@types/react": "^18.0.18",
     "@types/react-dom": "^18.0.6",
     "husky": "^8.0.1",
     "less": "^4.1.2",

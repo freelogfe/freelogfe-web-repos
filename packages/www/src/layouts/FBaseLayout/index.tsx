@@ -68,8 +68,8 @@ function FBaseLayout({ children, global }: FBaseLayoutProps) {
     }
   }, [global.routerHistories]);
 
-  return (<Layout className={styles.Layout}>
-    <Layout.Header className={styles.Header}>
+  return (<div className={styles.Layout1}>
+    <div className={styles.Header1}>
 
       <FComponentsLib.FHeaderNavigation
         UmiLinkPatch={Link}
@@ -127,7 +127,8 @@ function FBaseLayout({ children, global }: FBaseLayoutProps) {
         showGotoConsole={!!userInfo}
         userPanel={userInfo ? {
           info: {
-            avatar: userInfo.headImage,
+            // avatar: userInfo.headImage,
+            avatar: FUtil.Tool.getAvatarUrl(),
             userName: userInfo.username,
             email: userInfo.email,
             phone: userInfo.mobile,
@@ -148,14 +149,17 @@ function FBaseLayout({ children, global }: FBaseLayoutProps) {
             },
           ],
         } : null}
+        showHotspotTooltip
       />
-    </Layout.Header>
-    <Space>
-      <div style={{ height: 70 }} />
-    </Space>
+    </div>
+    {/*<Space>*/}
+    {/*  <div style={{ height: 70 }} />*/}
+    {/*</Space>*/}
 
-    <Layout.Content>{children}</Layout.Content>
-  </Layout>);
+    <div className={styles.Content1}>
+      <div>{children}</div>
+    </div>
+  </div>);
 }
 
 export default connect(({ global }: ConnectState) => ({

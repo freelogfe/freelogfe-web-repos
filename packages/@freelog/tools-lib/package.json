@@ -1,6 +1,6 @@
 {
   "name": "@freelog/tools-lib",
-  "version": "0.1.135",
+  "version": "0.1.151",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -19,7 +19,7 @@
     "prepare": "tsdx build",
     "size": "size-limit",
     "analyze": "size-limit --why",
-    "publish": "npm publish --access public"
+    "publish": "npm publish --access=public"
   },
   "husky": {
     "hooks": {}

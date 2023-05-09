@@ -4,10 +4,9 @@ import FTable from '@/components/FTable';
 import { ColumnsType } from 'antd/lib/table';
 import { Space, DatePicker } from 'antd';
 import FIdentityTypeBadge from '@/components/FIdentityTypeBadge';
-import FResource from '@/components/FIcons/FResource';
-import { FLoading, FNodes, FUser } from '@/components/FIcons';
 import * as AHooks from 'ahooks';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState, NodeManager_Contract_Page_ModelState } from '@/models/connect';
 import {
   OnChange_Authorize_Date_Action,
@@ -28,15 +27,14 @@ import {
 import FContractDetailsDrawer from '@/components/FContractDetailsDrawer';
 import FInput from '@/components/FInput';
 import FDropdownMenu from '@/components/FDropdownMenu';
-import moment, { Moment } from 'moment';
+import moment from 'moment';
 import FNoDataTip from '@/components/FNoDataTip';
 import FLoadingTip from '@/components/FLoadingTip';
 import FCoverImage from '@/components/FCoverImage';
 import FComponentsLib from '@freelog/components-lib';
 import Sider from '@/pages/node/formal/$id/Sider';
 import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
-
-// const RangePicker: any = DatePicker.RangePicker;
+import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
 
 interface ContractProps {
   dispatch: Dispatch;
@@ -49,6 +47,12 @@ function Contract({ dispatch, nodeManager_Contract_Page }: ContractProps) {
     dispatch<OnMountPageAction>({
       type: 'nodeManager_Contract_Page/onMountPage',
     });
+  });
+
+  AHooks.useUnmount(() => {
+    // dispatch<OnMountPageAction>({
+    //   type: 'nodeManager_Contract_Page/onMountPage',
+    // });
   });
 
   const columns1: ColumnsType<typeof nodeManager_Contract_Page.authorize_List[number]> = [
@@ -72,7 +76,17 @@ function Contract({ dispatch, nodeManager_Contract_Page }: ContractProps) {
 
           <div style={{ width: 10 }} />
           <div className={styles.targetInfo}>
-            <FComponentsLib.FContentText text={record.subjectName} type='highlight' />
+            <FComponentsLib.FTextBtn onClick={() => {
+              self.open(`${FUtil.Format.completeUrlByDomain('console')}${record.subjectType === 'resource'
+                ? FUtil.LinkTo.resourceDetails({
+                  resourceID: record.subjectID,
+                })
+                : FUtil.LinkTo.exhibitManagement({
+                  exhibitID: record.subjectID,
+                })}`);
+            }}>
+              <FComponentsLib.FContentText text={record.subjectName} type='highlight' />
+            </FComponentsLib.FTextBtn>
             <div style={{ height: 10 }} />
             {/*<Space size={5} className={styles.targetInfoLabels}>*/}
             {/*  <label>{record.contractName}</label>*/}
@@ -90,32 +104,67 @@ function Contract({ dispatch, nodeManager_Contract_Page }: ContractProps) {
         return (<div className={styles.signatory}>
           <Space size={5}>
             {
-              record.licensorType === 'resource' && (<FResource style={{ fontSize: 14 }} />)
+              record.licensorType === 'resource' && (<FComponentsLib.FIcons.FResource style={{ fontSize: 14 }} />)
             }
             {
-              record.licensorType === 'node' && (<FNodes style={{ fontSize: 14 }} />)
+              record.licensorType === 'node' && (<FComponentsLib.FIcons.FNodes style={{ fontSize: 14 }} />)
             }
 
             {/*{*/}
             {/*  record.licensorType === '' && (<FUser style={{ fontSize: 14 }} />)*/}
             {/*}*/}
+            <FComponentsLib.FTextBtn
+              onClick={async () => {
+                if (record.licensorType === 'resource') {
+                  self.open(FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.resourceDetails({
+                    resourceID: record.licensorId,
+                  }));
+                }
 
-            <FComponentsLib.FContentText text={record.licensorName} type='highlight' />
+                if (record.licensorType === 'node') {
+                  const { data } = await FServiceAPI.Node.details({
+                    nodeId: Number(record.licensorId),
+                  });
+
+                  self.open(FUtil.Format.completeUrlByDomain(data.nodeDomain));
+                }
+              }}
+            >
+              <FComponentsLib.FContentText text={record.licensorName} type='highlight' />
+            </FComponentsLib.FTextBtn>
           </Space>
           <div style={{ height: 10 }} />
           <Space size={5}>
             {
-              record.licenseeType === 'resource' && (<FResource style={{ fontSize: 14 }} />)
+              record.licenseeType === 'resource' && (<FComponentsLib.FIcons.FResource style={{ fontSize: 14 }} />)
             }
             {
-              record.licenseeType === 'node' && (<FNodes style={{ fontSize: 14 }} />)
+              record.licenseeType === 'node' && (<FComponentsLib.FIcons.FNodes style={{ fontSize: 14 }} />)
             }
 
             {
-              record.licenseeType === 'user' && (<FUser style={{ fontSize: 14 }} />)
+              record.licenseeType === 'user' && (<FComponentsLib.FIcons.FUser style={{ fontSize: 14 }} />)
             }
 
-            <FComponentsLib.FContentText text={record.licenseeName} type='highlight' />
+            <FComponentsLib.FTextBtn
+              onClick={async () => {
+                if (record.licenseeType === 'resource') {
+                  self.open(FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.resourceDetails({
+                    resourceID: record.licenseeId,
+                  }));
+                }
+
+                if (record.licenseeType === 'node') {
+                  const { data } = await FServiceAPI.Node.details({
+                    nodeId: Number(record.licenseeId),
+                  });
+                  // console.log(data, 'GFi8ov sdikjflksdjflsdkjflkj');
+                  self.open(FUtil.Format.completeUrlByDomain(data.nodeDomain));
+                }
+              }}
+            >
+              <FComponentsLib.FContentText text={record.licenseeName} type='highlight' />
+            </FComponentsLib.FTextBtn>
           </Space>
         </div>);
       },
@@ -185,7 +234,17 @@ function Contract({ dispatch, nodeManager_Contract_Page }: ContractProps) {
 
           <div style={{ width: 10 }} />
           <div className={styles.targetInfo}>
-            <FComponentsLib.FContentText text={record.subjectName} type='highlight' />
+            <FComponentsLib.FTextBtn onClick={() => {
+              self.open(`${FUtil.Format.completeUrlByDomain('console')}${record.subjectType === 'resource'
+                ? FUtil.LinkTo.resourceDetails({
+                  resourceID: record.subjectID,
+                })
+                : FUtil.LinkTo.exhibitManagement({
+                  exhibitID: record.subjectID,
+                })}`);
+            }}>
+              <FComponentsLib.FContentText text={record.subjectName} type='highlight' />
+            </FComponentsLib.FTextBtn>
             <div style={{ height: 10 }} />
             <Space size={5} className={styles.targetInfoLabels}>
               <label>{record.contractName}</label>
@@ -202,32 +261,68 @@ function Contract({ dispatch, nodeManager_Contract_Page }: ContractProps) {
         return (<div className={styles.signatory}>
           <Space size={5}>
             {
-              record.licensorType === 'resource' && (<FResource style={{ fontSize: 14 }} />)
+              record.licensorType === 'resource' && (<FComponentsLib.FIcons.FResource style={{ fontSize: 14 }} />)
             }
             {
-              record.licensorType === 'node' && (<FNodes style={{ fontSize: 14 }} />)
+              record.licensorType === 'node' && (<FComponentsLib.FIcons.FNodes style={{ fontSize: 14 }} />)
             }
 
             {/*{*/}
             {/*  record.licensorType === '' && (<FUser style={{ fontSize: 14 }} />)*/}
             {/*}*/}
 
-            <FComponentsLib.FContentText text={record.licensorName} type='highlight' />
+            <FComponentsLib.FTextBtn
+              onClick={async () => {
+                if (record.licensorType === 'resource') {
+                  self.open(FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.resourceDetails({
+                    resourceID: record.licensorId,
+                  }));
+                }
+
+                if (record.licensorType === 'node') {
+                  const { data } = await FServiceAPI.Node.details({
+                    nodeId: Number(record.licensorId),
+                  });
+
+                  self.open(FUtil.Format.completeUrlByDomain(data.nodeDomain));
+                }
+              }}
+            >
+              <FComponentsLib.FContentText text={record.licensorName} type='highlight' />
+            </FComponentsLib.FTextBtn>
           </Space>
           <div style={{ height: 10 }} />
           <Space size={5}>
             {
-              record.licenseeType === 'resource' && (<FResource style={{ fontSize: 14 }} />)
+              record.licenseeType === 'resource' && (<FComponentsLib.FIcons.FResource style={{ fontSize: 14 }} />)
             }
             {
-              record.licenseeType === 'node' && (<FNodes style={{ fontSize: 14 }} />)
+              record.licenseeType === 'node' && (<FComponentsLib.FIcons.FNodes style={{ fontSize: 14 }} />)
             }
 
             {
-              record.licenseeType === 'user' && (<FUser style={{ fontSize: 14 }} />)
+              record.licenseeType === 'user' && (<FComponentsLib.FIcons.FUser style={{ fontSize: 14 }} />)
             }
 
-            <FComponentsLib.FContentText text={record.licenseeName} type='highlight' />
+            <FComponentsLib.FTextBtn
+              onClick={async () => {
+                if (record.licenseeType === 'resource') {
+                  self.open(FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.resourceDetails({
+                    resourceID: record.licenseeId,
+                  }));
+                }
+
+                if (record.licenseeType === 'node') {
+                  const { data } = await FServiceAPI.Node.details({
+                    nodeId: Number(record.licenseeId),
+                  });
+                  // console.log(data, 'GFi8ov sdikjflksdjflsdkjflkj');
+                  self.open(FUtil.Format.completeUrlByDomain(data.nodeDomain));
+                }
+              }}
+            >
+              <FComponentsLib.FContentText text={record.licenseeName} type='highlight' />
+            </FComponentsLib.FTextBtn>
           </Space>
         </div>);
       },
@@ -317,23 +412,6 @@ function Contract({ dispatch, nodeManager_Contract_Page }: ContractProps) {
                 : (<>
                   <div className={styles.filter}>
                     <Space size={50}>
-                      {/*<Space size={2}>*/}
-                      {/*  <FContentText text={'标的物类型：'} />*/}
-                      {/*  <FDropdownMenu*/}
-                      {/*    options={nodeManager_Contract_Page.authorize_SubjectType_Options}*/}
-                      {/*    text={nodeManager_Contract_Page.authorize_SubjectType_Options.find((so) => {*/}
-                      {/*      return nodeManager_Contract_Page.authorize_SubjectType === so.value;*/}
-                      {/*    })?.text || ''}*/}
-                      {/*    onChange={(value) => {*/}
-                      {/*      dispatch<OnChange_Authorize_SubjectType_Action>({*/}
-                      {/*        type: 'nodeManager_Contract_Page/onChange_Authorize_SubjectType',*/}
-                      {/*        payload: {*/}
-                      {/*          value: value as 'all',*/}
-                      {/*        },*/}
-                      {/*      });*/}
-                      {/*    }}*/}
-                      {/*  />*/}
-                      {/*</Space>*/}
                       <Space size={2}>
                         <FComponentsLib.FContentText text={'合约状态：'} />
                         <FDropdownMenu
@@ -387,6 +465,7 @@ function Contract({ dispatch, nodeManager_Contract_Page }: ContractProps) {
                           },
                         });
                       }}
+                      placeholder={FI18n.i18nNext.t('nodemgmt_search_contracts_hint')}
                     />
                   </div>
                   {
@@ -425,7 +504,7 @@ function Contract({ dispatch, nodeManager_Contract_Page }: ContractProps) {
 
                         {
                           nodeManager_Contract_Page.authorize_ListMore === 'loading' && (
-                            <FLoading style={{ fontSize: 24 }} />)
+                            <FComponentsLib.FIcons.FLoading style={{ fontSize: 24 }} />)
                         }
 
                         {
@@ -447,23 +526,6 @@ function Contract({ dispatch, nodeManager_Contract_Page }: ContractProps) {
                 : (<>
                   <div className={styles.filter}>
                     <Space size={50}>
-                      {/*<Space size={2}>*/}
-                      {/*  <FContentText text={'标的物类型：'} />*/}
-                      {/*  <FDropdownMenu*/}
-                      {/*    options={nodeManager_Contract_Page.authorized_SubjectType_Options}*/}
-                      {/*    text={nodeManager_Contract_Page.authorized_SubjectType_Options.find((so) => {*/}
-                      {/*      return nodeManager_Contract_Page.authorized_SubjectType === so.value;*/}
-                      {/*    })?.text || ''}*/}
-                      {/*    onChange={(value) => {*/}
-                      {/*      dispatch<OnChange_Authorized_SubjectType_Action>({*/}
-                      {/*        type: 'nodeManager_Contract_Page/onChange_Authorized_SubjectType',*/}
-                      {/*        payload: {*/}
-                      {/*          value: value as 'all',*/}
-                      {/*        },*/}
-                      {/*      });*/}
-                      {/*    }}*/}
-                      {/*  />*/}
-                      {/*</Space>*/}
                       <Space size={2}>
                         <FComponentsLib.FContentText text={'合约状态：'} />
                         <FDropdownMenu
@@ -554,7 +616,7 @@ function Contract({ dispatch, nodeManager_Contract_Page }: ContractProps) {
 
                         {
                           nodeManager_Contract_Page.authorized_ListMore === 'loading' && (
-                            <FLoading style={{ fontSize: 24 }} />)
+                            <FComponentsLib.FIcons.FLoading style={{ fontSize: 24 }} />)
                         }
 
                         {

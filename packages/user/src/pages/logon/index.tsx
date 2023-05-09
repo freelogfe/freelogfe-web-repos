@@ -2,7 +2,8 @@ import * as React from 'react';
 import styles from './index.less';
 import FInput from '@/components/FInput';
 import { Popover, Space } from 'antd';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState, LogonPageModelState } from '@/models/connect';
 import { FUtil } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
@@ -11,16 +12,20 @@ import {
   OnBlurPasswordInputAction,
   OnBlurPhoneInputAction,
   OnBlurUsernameInputAction,
-  OnBlurVerifyCodeInputAction,
+  OnBlur_Phone_VerifyCodeInput_Action,
+  OnBlur_Email_VerifyCodeInput_Action,
   OnChangeAccountTypeAction,
   OnChangeEmailInputAction,
   OnChangePasswordInputAction,
   OnChangePhoneInputAction,
   OnChangeUsernameInputAction,
-  OnChangeVerifyCodeInputAction,
-  OnChangeVerifyCodeReSendWaitAction,
+  OnChange_Phone_VerifyCodeInput_Action,
+  OnChange_Email_VerifyCodeInput_Action,
+  OnChange_Phone_VerifyCodeReSendWait_Action,
+  OnChange_Email_VerifyCodeReSendWait_Action,
   OnClickLogonBtnAction,
-  OnClickSendVerifyCodeBtnAction,
+  OnClick_Phone_SendVerifyCodeBtn_Action,
+  OnClick_Email_SendVerifyCodeBtn_Action,
   OnMountPageAction,
   OnUnmountPageAction,
   OnChangeWaitingTimeAction,
@@ -30,7 +35,8 @@ import * as AHooks from 'ahooks';
 import { history } from '@@/core/history';
 import useUrlState from '@ahooksjs/use-url-state';
 import FRadio from '@/components/FRadio';
-import { FCheck } from '@/components/FIcons';
+import FPasswordInput from '@/components/FPasswordInput';
+import FPhoneInput from '@/components/FPhoneInput';
 
 interface LogonProps {
   dispatch: Dispatch;
@@ -38,13 +44,15 @@ interface LogonProps {
 }
 
 function Logon({ dispatch, logonPage }: LogonProps) {
-  const [urlParams] = useUrlState<{ goTo: string }>();
+  const [urlParams] = useUrlState<{ goTo: string; invitationCode?: string; }>();
 
   AHooks.useMount(() => {
+    self._czc?.push(['_trackPageview', self.location.pathname]);
     dispatch<OnMountPageAction>({
       type: 'logonPage/onMountPage',
       payload: {
         url: urlParams.goTo ? decodeURIComponent(urlParams.goTo) : '',
+        invitationCode: urlParams.invitationCode || '',
       },
     });
   });
@@ -57,14 +65,26 @@ function Logon({ dispatch, logonPage }: LogonProps) {
 
   AHooks.useInterval(
     () => {
-      dispatch<OnChangeVerifyCodeReSendWaitAction>({
-        type: 'logonPage/onChangeVerifyCodeReSendWait',
+      dispatch<OnChange_Phone_VerifyCodeReSendWait_Action>({
+        type: 'logonPage/onChange_Phone_VerifyCodeReSendWait',
         payload: {
-          value: logonPage.verifyCodeReSendWait - 1,
+          value: logonPage.phone_verifyCodeReSendWait - 1,
         },
       });
     },
-    logonPage.verifyCodeReSendWait === 0 ? undefined : 1000,
+    logonPage.phone_verifyCodeReSendWait === 0 ? undefined : 1000,
+  );
+
+  AHooks.useInterval(
+    () => {
+      dispatch<OnChange_Email_VerifyCodeReSendWait_Action>({
+        type: 'logonPage/onChange_Email_VerifyCodeReSendWait',
+        payload: {
+          value: logonPage.email_verifyCodeReSendWait - 1,
+        },
+      });
+    },
+    logonPage.email_verifyCodeReSendWait === 0 ? undefined : 1000,
   );
 
   AHooks.useInterval(
@@ -84,9 +104,6 @@ function Logon({ dispatch, logonPage }: LogonProps) {
   );
 
   function gotoLogin() {
-    // history.replace(FUtil.LinkTo.login(urlParams.goTo ? {
-    //   goTo: decodeURIComponent(urlParams.goTo),
-    // } : {}));
     dispatch<OnTrigger_Login_Action>({
       type: 'logonPage/onTrigger_Login',
       payload: {
@@ -97,15 +114,15 @@ function Logon({ dispatch, logonPage }: LogonProps) {
 
   const isVerifyAccountError: boolean =
     logonPage.accountType === 'email'
-      ? logonPage.emailInput === '' || logonPage.emailInputError !== ''
-      : logonPage.phoneInput === '' || logonPage.phoneInputError !== '';
+      ? (logonPage.emailInput === '' || logonPage.emailInputError !== '')
+      : (logonPage.phoneInput === '' || logonPage.phoneInputError !== '');
 
   const isVerifyAllFormError: boolean =
     logonPage.usernameInput === '' ||
     logonPage.usernameInputError !== '' ||
     isVerifyAccountError ||
-    logonPage.verificationCodeInput === '' ||
-    logonPage.verificationCodeInputError !== '' ||
+    (logonPage.accountType === 'email' ? logonPage.email_verificationCodeInput : logonPage.phone_verificationCodeInput) === '' ||
+    (logonPage.accountType === 'email' ? logonPage.email_verificationCodeInputError : logonPage.phone_verificationCodeInputError) !== '' ||
     logonPage.passwordInput === '' ||
     logonPage.passwordInputError !== '';
 
@@ -113,7 +130,7 @@ function Logon({ dispatch, logonPage }: LogonProps) {
     return (
       <div className={styles.resetPasswordSuccess}>
         <div className={styles.box}>
-          <FCheck style={{ fontSize: 96 }} />
+          <FComponentsLib.FIcons.FCheck style={{ fontSize: 96 }} />
           <div style={{ height: 30 }} />
           <FComponentsLib.FTitleText text={'注册成功'} />
           <div style={{ height: 40 }} />
@@ -142,11 +159,11 @@ function Logon({ dispatch, logonPage }: LogonProps) {
         className={styles.container + ' flex-column align-center w-100x h-100x'}
       >
         <div className='flex-column align-center flex-1'>
-          <div className='flex-3'></div>
+          <div className='flex-3' />
           <div className='shrink-0 flex-column-center'>
             <FComponentsLib.FTitleText text={'注册freelog帐户'} type='h1' />
           </div>
-          <div className='flex-2'></div>
+          <div className='flex-2' />
         </div>
         <div className=' flex-column-center shrink-0'>
           <div>
@@ -226,20 +243,19 @@ function Logon({ dispatch, logonPage }: LogonProps) {
             <div style={{ height: 5 }} />
             {logonPage.accountType === 'phone' ? (
               <>
-                <FInput
+                <FPhoneInput
+                  width={360}
                   placeholder='输入11位手机号码'
-                  className={styles.verificationModeInput}
-                  wrapClassName={styles.verificationModeInput}
-                  value={logonPage.phoneInput}
-                  onChange={(e) => {
+                  inputValue={logonPage.phoneInput}
+                  onChangeInput={(value) => {
                     dispatch<OnChangePhoneInputAction>({
                       type: 'logonPage/onChangePhoneInput',
                       payload: {
-                        value: e.target.value,
+                        value: value,
                       },
                     });
                   }}
-                  onBlur={() => {
+                  onBlurInput={() => {
                     dispatch<OnBlurPhoneInputAction>({
                       type: 'logonPage/onBlurPhoneInput',
                     });
@@ -290,47 +306,104 @@ function Logon({ dispatch, logonPage }: LogonProps) {
               </div>
             </div>
             <div style={{ height: 5 }} />
-            <div className={styles.identifyingCodeBody}>
-              <FInput
-                className={styles.identifyingCodeInput}
-                wrapClassName={styles.identifyingCodeInput}
-                placeholder='输入验证码'
-                value={logonPage.verificationCodeInput}
-                onChange={(e) => {
-                  dispatch<OnChangeVerifyCodeInputAction>({
-                    type: 'logonPage/onChangeVerifyCodeInput',
-                    payload: {
-                      value: e.target.value,
-                    },
-                  });
-                }}
-                onBlur={() => {
-                  dispatch<OnBlurVerifyCodeInputAction>({
-                    type: 'logonPage/onBlurVerifyCodeInput',
-                  });
-                }}
-              />
-              <FComponentsLib.FRectBtn
-                style={{ width: 110 }}
-                disabled={
-                  logonPage.verifyCodeReSendWait > 0 || isVerifyAccountError
-                }
-                onClick={() => {
-                  dispatch<OnClickSendVerifyCodeBtnAction>({
-                    type: 'logonPage/onClickSendVerifyCodeBtn',
-                  });
-                }}
-              >
-                {logonPage.verifyCodeReSendWait === 0
-                  ? '获取验证码'
-                  : `${logonPage.verifyCodeReSendWait}秒`}
-              </FComponentsLib.FRectBtn>
-            </div>
-            {logonPage.verificationCodeInputError && (
-              <div className={styles.errorTip}>
-                {logonPage.verificationCodeInputError}
-              </div>
-            )}
+            {
+              logonPage.accountType === 'phone'
+                ? (<>
+                  <div className={styles.identifyingCodeBody}>
+                    <FInput
+                      className={styles.identifyingCodeInput}
+                      wrapClassName={styles.identifyingCodeInput}
+                      placeholder='输入验证码'
+                      value={logonPage.phone_verificationCodeInput}
+                      onChange={(e) => {
+                        dispatch<OnChange_Phone_VerifyCodeInput_Action>({
+                          type: 'logonPage/onChange_Phone_VerifyCodeInput',
+                          payload: {
+                            value: e.target.value,
+                          },
+                        });
+                      }}
+                      onBlur={() => {
+                        dispatch<OnBlur_Phone_VerifyCodeInput_Action>({
+                          type: 'logonPage/onBlur_Phone_VerifyCodeInput',
+                        });
+                      }}
+                    />
+                    <FComponentsLib.FRectBtn
+                      style={{ width: 110 }}
+                      disabled={
+                        logonPage.phone_verifyCodeReSendWait > 0 || logonPage.phoneInput === '' || logonPage.phoneInputError !== ''
+                      }
+                      onClick={() => {
+                        dispatch<OnClick_Phone_SendVerifyCodeBtn_Action>({
+                          type: 'logonPage/onClick_Phone_SendVerifyCodeBtn',
+                        });
+                      }}
+                    >
+                      {
+                        logonPage.phone_verifyCodeReSendWait === 0
+                          ? '获取验证码'
+                          : `${logonPage.phone_verifyCodeReSendWait}秒`
+                      }
+                    </FComponentsLib.FRectBtn>
+                  </div>
+                  {
+                    logonPage.phone_verificationCodeInputError && (
+                      <div className={styles.errorTip}>
+                        {logonPage.phone_verificationCodeInputError}
+                      </div>
+                    )
+                  }
+                </>)
+                : (<>
+                  <div className={styles.identifyingCodeBody}>
+                    <FInput
+                      className={styles.identifyingCodeInput}
+                      wrapClassName={styles.identifyingCodeInput}
+                      placeholder='输入验证码'
+                      value={logonPage.email_verificationCodeInput}
+                      onChange={(e) => {
+                        dispatch<OnChange_Email_VerifyCodeInput_Action>({
+                          type: 'logonPage/onChange_Email_VerifyCodeInput',
+                          payload: {
+                            value: e.target.value,
+                          },
+                        });
+                      }}
+                      onBlur={() => {
+                        dispatch<OnBlur_Email_VerifyCodeInput_Action>({
+                          type: 'logonPage/onBlur_Email_VerifyCodeInput',
+                        });
+                      }}
+                    />
+                    <FComponentsLib.FRectBtn
+                      style={{ width: 110 }}
+                      disabled={
+                        logonPage.email_verifyCodeReSendWait > 0 || logonPage.emailInput === '' || logonPage.emailInputError !== ''
+                      }
+                      onClick={() => {
+                        dispatch<OnClick_Email_SendVerifyCodeBtn_Action>({
+                          type: 'logonPage/onClick_Email_SendVerifyCodeBtn',
+                        });
+                      }}
+                    >
+                      {
+                        logonPage.email_verifyCodeReSendWait === 0
+                          ? '获取验证码'
+                          : `${logonPage.email_verifyCodeReSendWait}秒`
+                      }
+                    </FComponentsLib.FRectBtn>
+                  </div>
+                  {
+                    logonPage.email_verificationCodeInputError && (
+                      <div className={styles.errorTip}>
+                        {logonPage.email_verificationCodeInputError}
+                      </div>
+                    )
+                  }
+                </>)
+            }
+
           </div>
 
           <div style={{ height: 20 }} />
@@ -344,11 +417,11 @@ function Logon({ dispatch, logonPage }: LogonProps) {
               </div>
             </div>
             <div style={{ height: 5 }} />
-            <FInput
-              type='password'
+            <FPasswordInput
+              // type='password'
               placeholder='密码必须包含数字和字母；且由6-24个字符组成'
               className={styles.input}
-              wrapClassName={styles.input}
+              // wrapClassName={styles.input}
               value={logonPage.passwordInput}
               onChange={(e) => {
                 dispatch<OnChangePasswordInputAction>({
@@ -370,6 +443,44 @@ function Logon({ dispatch, logonPage }: LogonProps) {
               </div>
             )}
           </div>
+
+          {/*<div style={{ height: 20 }} />*/}
+
+          {/*<div>*/}
+          {/*  <div>*/}
+          {/*    <div className={styles.title}>*/}
+          {/*      /!*<i>*</i>*!/*/}
+          {/*      /!*<div style={{ width: 5 }} />*!/*/}
+          {/*      <FComponentsLib.FTitleText type='h4' text={'内测邀请码'} />*/}
+          {/*    </div>*/}
+          {/*  </div>*/}
+          {/*  <div style={{ height: 5 }} />*/}
+          {/*  <FInput*/}
+          {/*    // type='password'*/}
+          {/*    placeholder='请输入内测邀请码'*/}
+          {/*    className={styles.input}*/}
+          {/*    wrapClassName={styles.input}*/}
+          {/*    value={logonPage.invitationCodeInput}*/}
+          {/*    onChange={(e) => {*/}
+          {/*      dispatch<OnChange_InvitationCodeInput_Action>({*/}
+          {/*        type: 'logonPage/onChange_InvitationCodeInput',*/}
+          {/*        payload: {*/}
+          {/*          value: e.target.value,*/}
+          {/*        },*/}
+          {/*      });*/}
+          {/*    }}*/}
+          {/*    onBlur={() => {*/}
+          {/*      // dispatch<OnBlurPasswordInputAction>({*/}
+          {/*      //   type: 'logonPage/onBlurPasswordInput',*/}
+          {/*      // });*/}
+          {/*    }}*/}
+          {/*  />*/}
+          {/*  {logonPage.passwordInputError && (*/}
+          {/*    <div className={styles.errorTip}>*/}
+          {/*      {logonPage.passwordInputError}*/}
+          {/*    </div>*/}
+          {/*  )}*/}
+          {/*</div>*/}
 
           <div style={{ height: 40 }} />
           <FComponentsLib.FRectBtn

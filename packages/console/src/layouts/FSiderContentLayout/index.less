@@ -1,0 +1,23 @@
+@import '../../config.less';
+
+
+.styles {
+  background: #FAFBFC;
+  width: 100vw;
+  height: calc(100vh - 70px);
+  //width: calc(100% - 80px);
+  display: flex;
+  align-items: stretch;
+
+  .sider {
+    flex-basis: 280px;
+    flex-shrink: 0;
+    border-right: 1px solid @f-sub-color3;
+  }
+
+  .children {
+    //width: calc(100wv - 280px);
+    width:  calc(100vw - 280px);
+    flex-shrink: 1;
+  }
+}

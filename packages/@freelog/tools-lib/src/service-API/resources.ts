@@ -23,7 +23,7 @@ interface IResourceInfo {
     version: string;
     versionId: string;
   }[];
-  status: 0 | 1 | 2 | 3; // 资源状态(0:未上线 1:已上线 2:被冻结且未上线 3:被冻结且上线)
+  status: 0 | 1 | 2 | 4; // 0:待发行(初始状态) 1:上架 2:冻结 4:下架(也叫待上架)
   tags: string[];
   updateDate: string;
   userId: number;
@@ -33,7 +33,9 @@ interface IResourceInfo {
 // 创建资源
 export interface CreateParamsType {
   name: string;
-  resourceType: string[]
+  // resourceType: string[]
+  resourceTypeCode: string;
+  resourceTypeName?: string;
   policies?: any[];
   coverImages?: string[];
   intro?: string;
@@ -51,6 +53,7 @@ export function create(params: CreateParamsType) {
 // 更新资源信息
 interface UpdateParamsType {
   resourceId: string;
+  status?: 0 | 1;
   intro?: string;
   tags?: string[];
   coverImages?: string[];
@@ -79,10 +82,11 @@ interface ListParamsType {
   limit?: number;
   keywords?: string;
   resourceType?: string;
+  resourceTypeCode?: string;
   omitResourceType?: string;
   isSelf?: 0 | 1;
   userId?: number;
-  status?: 0 | 1 | 2;
+  status?: 0 | 1 | 2 | 4; // 分别是 0:待发行(初始状态) 1:上架 2:冻结 4:下架(也叫待上架)
   isLoadPolicyInfo?: 0 | 1;
   isLoadLatestVersionInfo?: 0 | 1;
   isLoadFreezeReason?: 0 | 1;
@@ -92,13 +96,14 @@ interface ListParamsType {
   tags?: string;
   sort?: string;
   // startResourceId?: string;
+  operationCategoryCode?: string;
 }
 
 // interface ListReturnType extends CommonReturn {
 //   data: IResourceInfo[];
 // }
 
-export function list(params: ListParamsType){
+export function list(params: ListParamsType) {
   return FUtil.Request({
     method: 'GET',
     url: `/v2/resources`,
@@ -195,6 +200,7 @@ interface CreateVersionParamsType {
   }[];
   customPropertyDescriptors?: {
     key: string;
+    name: string;
     defaultValue: string;
     type: 'editableText' | 'readonlyText' | 'radio' | 'checkbox' | 'select';
     candidateItems?: string[];
@@ -289,6 +295,7 @@ interface UpdateResourceVersionInfoParamsType {
   description?: string;
   customPropertyDescriptors?: {
     key: string;
+    name: string;
     defaultValue: string;
     type: 'editableText' | 'readonlyText' | 'radio' | 'checkbox' | 'select';
     candidateItems?: string[];
@@ -530,3 +537,86 @@ export function resourcesRecommend({...params}: ResourcesRecommendParamsType) {
   });
 }
 
+// 根据资源类型查看推荐的标签
+interface AvailableTagsParamsType {
+  resourceType: string;
+}
+
+export function availableTags({...params}: AvailableTagsParamsType) {
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/resources/tags/availableTags`,
+    params: params,
+  });
+}
+
+// 列出资源类型分组排序
+interface ResourceTypesParamsType {
+  codeOrName?: string;
+  category?: 1 | 2; // 种类 1：基础资源类型 2：自定义资源类型
+  isMine?: boolean;
+  status?: 0 | 1;
+}
+
+export function resourceTypes({...params}: ResourceTypesParamsType = {}) {
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/resources/types/listSimpleByGroup`,
+    params: params,
+  });
+}
+
+// 简单根据父类型列出资源类型
+interface ListSimpleByParentCodeParamsType {
+  parentCode: string;
+  name?: string;
+  category?: 1 | 2; // 种类 1：基础资源类型 2：自定义资源类型
+  excludeParentCode?: boolean;
+  isTerminate?: boolean;
+}
+
+export function ListSimpleByParentCode({...params}: ListSimpleByParentCodeParamsType) {
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/resources/types/listSimpleByParentCode`,
+    params: params,
+  });
+}
+
+// 根据编号取资源类型
+interface GetResourceTypeInfoByCodeParamsType {
+  code: string;
+}
+
+export function getResourceTypeInfoByCode({...params}: GetResourceTypeInfoByCodeParamsType) {
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/resources/types/getInfoByCode`,
+    params: params,
+  });
+}
+
+//
+interface GetResourceAttrListSimple {
+
+}
+
+export function getResourceAttrListSimple({...params}: GetResourceAttrListSimple) {
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/resources/attrs/listSimple`,
+    params: params,
+  });
+}
+
+interface ListSimple4RecentlySimple {
+
+}
+
+export function listSimple4Recently({...params}: ListSimple4RecentlySimple = {}) {
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/resources/types/listSimple4Recently`,
+    params: params,
+  });
+}

@@ -1,10 +1,10 @@
 import * as React from 'react';
 import styles from './index.less';
-import {Space} from "antd";
-import FTooltip from "../FTooltip";
-import {FInfo} from "../FIcons";
+import { Space } from 'antd';
+import FTooltip from '../FTooltip';
 import fConfirmModal from '@/components/fConfirmModal';
 import FComponentsLib from '@freelog/components-lib';
+import FOverflowTooltip from '@/components/FOverflowTooltip';
 
 interface FBasePropertiesCardsProps {
   rawProperties: {
@@ -22,16 +22,33 @@ interface FBasePropertiesCardsProps {
   onDelete?(theKey: string): void;
 }
 
-function FBasePropertiesCards({rawProperties, baseProperties, onEdit, onDelete}: FBasePropertiesCardsProps) {
+function FBasePropertiesCards({ rawProperties, baseProperties, onEdit, onDelete }: FBasePropertiesCardsProps) {
   return (<div className={styles.styles}>
     {
       rawProperties.map((rp) => {
         return (<div className={styles.rawProperties} key={rp.theKey}>
           <div>
-            <div style={{height: 5}}/>
-            <FComponentsLib.FContentText text={rp.theKey} type="additional2"/>
-            <div style={{height: 10}}/>
-            <FComponentsLib.FContentText singleRow text={rp.value}/>
+            <div style={{ height: 5 }} />
+            {/*<FComponentsLib.FContentText text={rp.theKey} type='additional2' />*/}
+            <FOverflowTooltip
+              text={rp.theKey}
+              style={{
+                lineHeight: '18px',
+                color: '#999',
+                fontSize: 12,
+              }}
+            />
+            <div style={{ height: 10 }} />
+            {/*<FComponentsLib.FContentText singleRow text={rp.value} />*/}
+            <FOverflowTooltip
+              text={rp.value}
+              style={{
+                fontWeight: 400,
+                lineHeight: '20px',
+                color: '#222',
+                fontSize: 14,
+              }}
+            />
           </div>
         </div>);
       })
@@ -43,22 +60,42 @@ function FBasePropertiesCards({rawProperties, baseProperties, onEdit, onDelete}:
           <div>
             <div>
               <Space size={5}>
-                <FComponentsLib.FContentText
+                {/*<FComponentsLib.FContentText*/}
+                {/*  text={bp.theKey}*/}
+                {/*  type='additional2'*/}
+                {/*  singleRow*/}
+                {/*  style={{*/}
+                {/*    maxWidth: 80,*/}
+                {/*  }}*/}
+                {/*/>*/}
+                <FOverflowTooltip
                   text={bp.theKey}
-                  type="additional2"
-                  singleRow
                   style={{
-                    maxWidth: 80
+                    lineHeight: '18px',
+                    color: '#999',
+                    fontSize: 12,
+                    maxWidth: 80,
                   }}
                 />
                 {bp.description && (
-                  <FTooltip title={bp.description}><FInfo style={{cursor: 'pointer', fontSize: 14}}/></FTooltip>)}
+                  <FTooltip title={bp.description}><FComponentsLib.FIcons.FInfo
+                    style={{ cursor: 'pointer', fontSize: 14 }} /></FTooltip>)}
               </Space>
-              <div style={{height: 10}}/>
-              <FComponentsLib.FContentText
-                singleRow
+              <div style={{ height: 10 }} />
+              {/*<FComponentsLib.FContentText*/}
+              {/*  singleRow*/}
+              {/*  text={bp.value}*/}
+              {/*  style={{ maxWidth: 110 }}*/}
+              {/*/>*/}
+              <FOverflowTooltip
                 text={bp.value}
-                style={{maxWidth: 110}}
+                style={{
+                  fontWeight: 400,
+                  lineHeight: '20px',
+                  color: '#222',
+                  fontSize: 14,
+                  maxWidth: 110,
+                }}
               />
             </div>
             <Space size={10} className={styles.Operation}>
@@ -66,7 +103,7 @@ function FBasePropertiesCards({rawProperties, baseProperties, onEdit, onDelete}:
                 onEdit && (<FTooltip title={'编辑'}>
                   <div>
                     <FComponentsLib.FCircleBtn
-                      type="minor"
+                      type='minor'
                       onClick={() => {
                         onEdit(bp.theKey);
                       }}
@@ -79,7 +116,7 @@ function FBasePropertiesCards({rawProperties, baseProperties, onEdit, onDelete}:
                 onDelete && (<FTooltip title={'删除'}>
                   <div>
                     <FComponentsLib.FCircleBtn
-                      type="danger"
+                      type='danger'
                       onClick={() => {
                         fConfirmModal({
                           message: '一旦删除则无法恢复，确认删除吗？',

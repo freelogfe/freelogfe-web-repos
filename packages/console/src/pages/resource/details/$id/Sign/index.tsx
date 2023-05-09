@@ -11,15 +11,14 @@ import Bottom from './Bottom';
 import { Space, Tooltip } from 'antd';
 import FCoverImage from '@/components/FCoverImage';
 import FComponentsLib from '@freelog/components-lib';
+import { FI18n } from '@freelog/tools-lib';
 
 interface SignProps {
   dispatch: Dispatch;
   resourceDetailPage: ResourceDetailPageModelState;
-  // nodes: NodesModelState;
 }
 
 function Sign({ dispatch, resourceDetailPage }: SignProps) {
-  // console.log(resourceDetailPage.resource_Info, 'resourceDetailPage.resource_Info898888888');
   const resourceInfoLength: number = resourceDetailPage.resource_Info?.about.length || 0;
 
   const resource = resourceDetailPage.sign_SignResources.find((r) => r.selected);
@@ -54,9 +53,22 @@ function Sign({ dispatch, resourceDetailPage }: SignProps) {
     </div>
     <div className={styles.cell} />
     <div className={styles.infoRight}>
-      <div className={styles.top}>
-        <NodeSelector />
-      </div>
+      <FComponentsLib.FHotspotTooltip
+        id={'resourceDetailPage.nodeSelector'}
+        style={{ left: '44%', top: 8 }}
+        text={FI18n.i18nNext.t('hotpots_createnode_selectnode')}
+        onMount={() => {
+          FComponentsLib.fSetHotspotTooltipVisible('resourceDetailPage.nodeSelector', {
+            value: false,
+            effectiveImmediately: false,
+            onlyNullish: true,
+          });
+        }}
+      >
+        <div className={styles.top}>
+          <NodeSelector />
+        </div>
+      </FComponentsLib.FHotspotTooltip>
       <div className={styles.mid}>
         <div className={styles.sign}>
           <div className={styles.signLeft}>
@@ -70,45 +82,50 @@ function Sign({ dispatch, resourceDetailPage }: SignProps) {
                 </div>)
                 : (<>
                   {
-                    resource?.error === 'offline' && (<div className={styles.noNode}>
-                      资源已下线
-                    </div>)
-                  }
-                  {
-                    resource?.error === 'freeze' && <div className={styles.noNode}>
-                      资源已封禁
-                    </div>
-                  }
-                  <>
-                    {
-                      resource?.error === '' && (<>
-                        {
-                          resource.warning === 'authException' && (<>
-                            <div style={{ height: 15 }} />
-                            <Space size={10}>
-                              <FComponentsLib.FIcons.FWarning style={{ fontSize: 20 }} />
-                              <span style={{ fontSize: 16, color: '#C78D12' }}>该资源授权链异常，请谨慎签约。</span>
-                            </Space>
-                          </>)
-                        }
+                    resource && (resource.error === '' || (resource.error === 'offline' && resource.contracts.length > 0) ? (<>
+                      {
+                        resource.warning === 'authException' && (<>
+                          <div style={{ height: 15 }} />
+                          <Space size={10}>
+                            <FComponentsLib.FIcons.FWarning style={{ fontSize: 20 }} />
+                            <span style={{ fontSize: 16, color: '#C78D12' }}>该资源授权链异常，请谨慎签约。</span>
+                          </Space>
+                        </>)
+                      }
 
-                        {
-                          resource.warning === 'ownerFreeze' && (<>
-                            <div style={{ height: 15 }} />
-                            <Space size={10}>
-                              <FComponentsLib.FIcons.FWarning style={{ fontSize: 20 }} />
-                              <span style={{ fontSize: 16, color: '#C78D12' }}>该资源发行方账号因违规已被冻结，请谨慎处理授权。</span>
-                            </Space>
-                          </>)
-                        }
+                      {
+                        resource.warning === 'ownerFreeze' && (<>
+                          <div style={{ height: 15 }} />
+                          <Space size={10}>
+                            <FComponentsLib.FIcons.FWarning style={{ fontSize: 20 }} />
+                            <span style={{
+                              fontSize: 16,
+                              color: '#C78D12',
+                            }}>该资源发行方账号因违规已被冻结，请谨慎处理授权。</span>
+                          </Space>
+                        </>)
+                      }
 
-                        <div style={{ height: 15 }} />
-                        <Contracts />
-                        <Policies />
-                        <div style={{ height: 15 }} />
-                      </>)
-                    }
-                  </>
+                      <div style={{ height: 15 }} />
+                      <Contracts />
+                      {
+                        resource.error === '' && (<Policies />)
+                      }
+
+                      <div style={{ height: 15 }} />
+                    </>) : (<>
+                      {
+                        resource?.error === 'offline' && (<div className={styles.noNode}>
+                          {FI18n.i18nNext.t('alarm_resource_not_available')}
+                        </div>)
+                      }
+                      {
+                        resource?.error === 'freeze' && <div className={styles.noNode}>
+                          资源已封禁
+                        </div>
+                      }
+                    </>))
+                  }
                 </>)
             }
 

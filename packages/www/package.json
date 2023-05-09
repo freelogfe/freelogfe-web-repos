@@ -22,6 +22,8 @@
   "dependencies": {
     "@ahooksjs/use-url-state": "^3.5.0",
     "@ant-design/icons": "^4.7.0",
+    "@freelog/components-lib": "^0.1.22",
+    "@freelog/tools-lib": "^0.1.148",
     "animate.css": "^4.1.1",
     "antd": "^4.21.7",
     "dva": "^2",

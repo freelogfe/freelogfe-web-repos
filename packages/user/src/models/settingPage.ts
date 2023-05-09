@@ -1,4 +1,4 @@
-import { DvaReducer, WholeReadonly } from '@/models/shared';
+import { DvaReducer } from '@/models/shared';
 import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription } from 'dva';
 import { FServiceAPI, FUtil, FI18n } from '@freelog/tools-lib';
@@ -6,7 +6,6 @@ import { ConnectState } from '@/models/connect';
 import fMessage from '@/components/fMessage';
 import moment, { Moment } from 'moment';
 import { FetchInfoAction } from '@/models/user';
-// import FUtil1 from '@/utils';
 
 type ResidenceOptions = {
   value: string | number;
@@ -19,13 +18,25 @@ type VerifyState = 'unverified' | 'verifying' | 'verified';
 export interface SettingPageModelState {
   showPage: 'profile' | 'security' | 'privacy';
 
-  avatar: string;
-  gender: 'male' | 'female' | 'unknown';
-  profileText: string;
-  birthday: Moment | null;
-  residenceOptions: ResidenceOptions;
-  residence: Array<string | number>;
-  career: string;
+  profile_state: 'editing' | 'normal';
+  profile_avatar: string;
+  profileInfo: {
+    gender: 'male' | 'female' | 'unknown';
+    profileText: string;
+    birthday: Moment | null;
+    residenceOptions: ResidenceOptions;
+    residence: Array<string | number>;
+    residenceText: string;
+    career: string;
+  };
+  profile_gender: 'male' | 'female' | 'unknown';
+  profile_profileText: string;
+  profile_birthday: Moment | null;
+  // profile_residenceOptions: ResidenceOptions;
+  profile_residence: Array<string | number>;
+  profile_residenceText: string;
+  profile_career: string;
+  // profile_careerError: string;
 
   username: string;
   email: string;
@@ -37,43 +48,36 @@ export interface SettingPageModelState {
     | 'bindEmail' | 'changeEmail_VerifyPass' | 'changeEmail_Old' | 'changeEmail_New'
     | 'bindPhone' | 'changePhone_VerifyPass' | 'changePhone_Old' | 'changePhone_New'
     | 'changePassword';
-  // bindEmail_ModalVisible: boolean;
   bindEmail_EmailInput: string;
   bindEmail_EmailInput_VerifyState: VerifyState;
   bindEmail_EmailInputError: string;
   bindEmail_CaptchaInput: string;
   bindEmail_CaptchaWait: number;
 
-  // changeEmail_Old_ModalVisible: boolean;
   changeEmail_Old_CaptchaInput: string;
   changeEmail_Old_CaptchaWait: number;
 
-  // changeEmail_New_ModalVisible: boolean;
   changeEmail_New_EmailInput: string;
   changeEmail_New_EmailInput_VerifyState: VerifyState;
   changeEmail_New_EmailInputError: string;
   changeEmail_New_CaptchaInput: string;
   changeEmail_New_CaptchaWait: number;
 
-  // bindPhone_ModalVisible: boolean;
   bindPhone_PhoneInput: string;
   bindPhone_PhoneInput_VerifyState: VerifyState;
   bindPhone_PhoneInputError: string;
   bindPhone_CaptchaInput: string;
   bindPhone_CaptchaWait: number;
 
-  // changePhone_Old_ModalVisible: boolean;
   changePhone_Old_CaptchaInput: string;
   changePhone_Old_CaptchaWait: number;
 
-  // changePhone_New_ModalVisible: boolean;
   changePhone_New_PhoneInput: string;
   changePhone_New_PhoneInput_VerifyState: VerifyState;
   changePhone_New_PhoneInputError: string;
   changePhone_New_CaptchaInput: string;
   changePhone_New_CaptchaWait: number;
 
-  // changePassword_ModalVisible: boolean;
   changePassword_Old_PasswordInput: string;
   changePassword_New1_PasswordInput: string;
   changePassword_New1_PasswordInput_Error: string;
@@ -144,6 +148,7 @@ export interface OnChange_Residence_Action extends AnyAction {
   type: 'settingPage/onChange_Residence';
   payload: {
     value: Array<string | number>;
+    text: string;
   };
 }
 
@@ -156,6 +161,14 @@ export interface OnChange_Career_Action extends AnyAction {
 
 export interface OnClick_SubmitUserInfoBtn_Action extends AnyAction {
   type: 'settingPage/onClick_SubmitUserInfoBtn';
+}
+
+export interface OnClick_CancelEditUserInfoBtn_Action extends AnyAction {
+  type: 'settingPage/onClick_CancelEditUserInfoBtn';
+}
+
+export interface OnClick_EditUserInfoBtn_Action extends AnyAction {
+  type: 'settingPage/onClick_EditUserInfoBtn';
 }
 
 
@@ -478,6 +491,8 @@ interface SettingPageModelType {
     onChange_Residence: (action: OnChange_Residence_Action, effects: EffectsCommandMap) => void;
     onChange_Career: (action: OnChange_Career_Action, effects: EffectsCommandMap) => void;
     onClick_SubmitUserInfoBtn: (action: OnClick_SubmitUserInfoBtn_Action, effects: EffectsCommandMap) => void;
+    onClick_CancelEditUserInfoBtn: (action: OnClick_CancelEditUserInfoBtn_Action, effects: EffectsCommandMap) => void;
+    onClick_EditUserInfoBtn: (action: OnClick_EditUserInfoBtn_Action, effects: EffectsCommandMap) => void;
     onClick_BindEmailBtn: (action: OnClick_BindEmailBtn_Action, effects: EffectsCommandMap) => void;
     onClick_ReplaceEmailBtn: (action: OnClick_ReplaceEmailBtn_Action, effects: EffectsCommandMap) => void;
     onClick_BindPhoneBtn: (action: OnClick_BindPhoneBtn_Action, effects: EffectsCommandMap) => void;
@@ -642,13 +657,23 @@ const initStates_ChangePassword: Pick<SettingPageModelState,
 const initStates: SettingPageModelState = {
   showPage: 'profile',
 
-  avatar: '',
-  gender: 'unknown',
-  profileText: '',
-  birthday: null,
-  residenceOptions: [],
-  residence: [],
-  career: '',
+  profile_state: 'normal',
+  profile_avatar: FUtil.Tool.getAvatarUrl(),
+  profileInfo: {
+    gender: 'unknown',
+    profileText: '',
+    birthday: null,
+    residenceOptions: [],
+    residence: [],
+    residenceText: '',
+    career: '',
+  },
+  profile_gender: 'unknown',
+  profile_profileText: '',
+  profile_birthday: null,
+  profile_residence: [],
+  profile_residenceText: '',
+  profile_career: '',
 
   username: '',
   email: '',
@@ -675,7 +700,11 @@ const Model: SettingPageModelType = {
   namespace: 'settingPage',
   state: initStates,
   effects: {
-    * onMount_Page({}: OnMount_Page_Action, { call, put }: EffectsCommandMap) {
+    * onMount_Page({}: OnMount_Page_Action, { select, call, put }: EffectsCommandMap) {
+
+      const { settingPage }: ConnectState = yield select(({ settingPage }: ConnectState) => ({
+        settingPage,
+      }));
       // console.log('onMountPage111111');
       const { data } = yield call(FServiceAPI.User.currentUserInfo);
       // console.log(data, 'data!@#$!@#$!@#$!21111');
@@ -693,29 +722,55 @@ const Model: SettingPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          avatar: data.headImage,
-          gender: userDetail?.sex === 1 ? 'male' : userDetail?.sex === 2 ? 'female' : 'unknown',
-          profileText: userDetail?.intro || '',
-          birthday: userDetail?.birthday ? moment(userDetail?.birthday, FUtil.Predefined.momentDateFormat) : null,
-          residence: userDetail?.areaCode ? [userDetail?.areaCode.substr(0, 2), userDetail?.areaCode] : [],
-          career: userDetail?.occupation || '',
+          // profile_avatar: FUtil.,
+          profileInfo: {
+            ...settingPage.profileInfo,
+            residenceOptions: data1.map((d1: any) => {
+              return {
+                value: d1.code,
+                label: d1.name,
+                children: d1.children.map((d2: any) => {
+                  return {
+                    value: d2.code,
+                    label: d2.name,
+                  };
+                }),
+              };
+            }),
+            gender: userDetail?.sex === 1 ? 'male' : userDetail?.sex === 2 ? 'female' : 'unknown',
+            profileText: userDetail?.intro || '',
+            birthday: userDetail?.birthday ? moment(userDetail?.birthday, FUtil.Predefined.momentDateFormat) : null,
+            residence: userDetail?.areaCode
+              ? [userDetail?.areaCode.substr(0, 2), userDetail?.areaCode]
+              : [],
+            residenceText: userDetail?.areaName || '',
+            career: userDetail?.occupation || '',
+          },
+          // profile_gender: userDetail?.sex === 1 ? 'male' : userDetail?.sex === 2 ? 'female' : 'unknown',
+          // profile_profileText: userDetail?.intro || '',
+          // profile_birthday: userDetail?.birthday ? moment(userDetail?.birthday, FUtil.Predefined.momentDateFormat) : null,
+          // profile_residence: userDetail?.areaCode
+          //   ? [userDetail?.areaCode.substr(0, 2), userDetail?.areaCode]
+          //   : [],
+          // profile_residenceText: userDetail?.areaName || '',
+          // profile_career: userDetail?.occupation || '',
 
           username: data.username,
           email: data.email,
           phone: data.mobile,
 
-          residenceOptions: data1.map((d1: any) => {
-            return {
-              value: d1.code,
-              label: d1.name,
-              children: d1.children.map((d2: any) => {
-                return {
-                  value: d2.code,
-                  label: d2.name,
-                };
-              }),
-            };
-          }),
+          // profile_residenceOptions: data1.map((d1: any) => {
+          //   return {
+          //     value: d1.code,
+          //     label: d1.name,
+          //     children: d1.children.map((d2: any) => {
+          //       return {
+          //         value: d2.code,
+          //         label: d2.name,
+          //       };
+          //     }),
+          //   };
+          // }),
 
           nodeDataSize: FUtil.Format.humanizeSize(data2?.totalFileSize || 0),
         },
@@ -747,7 +802,7 @@ const Model: SettingPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          gender: payload.value,
+          profile_gender: payload.value,
         },
       });
     },
@@ -755,7 +810,7 @@ const Model: SettingPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          profileText: payload.value,
+          profile_profileText: payload.value,
         },
       });
     },
@@ -763,7 +818,7 @@ const Model: SettingPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          birthday: payload.value,
+          profile_birthday: payload.value,
         },
       });
     },
@@ -771,15 +826,18 @@ const Model: SettingPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          residence: payload.value,
+          profile_residence: payload.value,
+          profile_residenceText: payload.text,
         },
       });
     },
     * onChange_Career({ payload }: OnChange_Career_Action, { put }: EffectsCommandMap) {
+      // console.log(payload, '(***(*UOIJOIJLKJLJ');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          career: payload.value,
+          profile_career: payload.value,
+          // profile_careerError: payload.value.length > 20 ? '不超过20个字符' : '',
         },
       });
     },
@@ -789,19 +847,60 @@ const Model: SettingPageModelType = {
       }));
 
       const params: Parameters<typeof FServiceAPI.User.updateDetailInfo>[0] = {
-        areaCode: settingPage.residence.length === 2 ? String(settingPage.residence[settingPage.residence.length - 1]) : undefined,
-        occupation: settingPage.career,
-        birthday: settingPage.birthday?.format(FUtil.Predefined.momentDateFormat) || undefined,
-        sex: settingPage.gender === 'male' ? 1 : settingPage.gender === 'female' ? 2 : 0,
-        intro: settingPage.profileText,
+        areaCode: settingPage.profile_residence.length === 2 ? String(settingPage.profile_residence[settingPage.profile_residence.length - 1]) : undefined,
+        occupation: settingPage.profile_career,
+        birthday: settingPage.profile_birthday?.format(FUtil.Predefined.momentDateFormat) || undefined,
+        sex: settingPage.profile_gender === 'male' ? 1 : settingPage.profile_gender === 'female' ? 2 : 0,
+        intro: settingPage.profile_profileText,
       };
 
       const { ret, errCode, msg } = yield call(FServiceAPI.User.updateDetailInfo, params);
       if (ret !== 0 || errCode !== 0) {
+        self._czc?.push(['_trackEvent', '个人中心页', '提交修改', '', 1]);
         return fMessage(msg, 'error');
       }
 
-      fMessage(FI18n.i18nNext.t('saved_successfully'));
+      self._czc?.push(['_trackEvent', '个人中心页', '提交修改', '', 0]);
+      fMessage(FI18n.i18nNext.t('msg_updated_successfully'));
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          profile_state: 'normal',
+          profileInfo: {
+            ...settingPage.profileInfo,
+            residence: settingPage.profile_residence,
+            residenceText: settingPage.profile_residenceText,
+            career: settingPage.profile_career,
+            birthday: settingPage.profile_birthday,
+            gender: settingPage.profile_gender,
+            profileText: settingPage.profile_profileText,
+          },
+        },
+      });
+    },
+    * onClick_CancelEditUserInfoBtn({}: OnClick_CancelEditUserInfoBtn_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          profile_state: 'normal',
+        },
+      });
+    },
+    * onClick_EditUserInfoBtn({}: OnClick_EditUserInfoBtn_Action, { select, put }: EffectsCommandMap) {
+      const { settingPage }: ConnectState = yield select(({ settingPage }: ConnectState) => ({
+        settingPage,
+      }));
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          profile_state: 'editing',
+          profile_gender: settingPage.profileInfo.gender,
+          profile_profileText: settingPage.profileInfo.profileText,
+          profile_birthday: settingPage.profileInfo.birthday,
+          profile_residence: settingPage.profileInfo.residence,
+          profile_career: settingPage.profileInfo.career,
+        },
+      });
     },
     * onClick_BindEmailBtn(action: OnClick_BindEmailBtn_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
@@ -876,7 +975,6 @@ const Model: SettingPageModelType = {
           }),
         },
       });
-
     },
 
     * onCancel_BindEmail_Modal(action: OnCancel_BindEmail_Modal_Action, { put }: EffectsCommandMap) {
@@ -953,7 +1051,7 @@ const Model: SettingPageModelType = {
       select,
       call,
       put,
-    }: EffectsCommandMap) {
+    }: EffectsCommandMap): any {
       const { settingPage }: ConnectState = yield select(({ settingPage }: ConnectState) => ({
         settingPage,
       }));
@@ -982,6 +1080,11 @@ const Model: SettingPageModelType = {
       const { settingPage }: ConnectState = yield select(({ settingPage }: ConnectState) => ({
         settingPage,
       }));
+
+      if (!new RegExp(/^[0-9]*$/).test(settingPage.bindEmail_CaptchaInput)) {
+        fMessage('验证码必须全部为数字', 'error');
+        return;
+      }
 
       const params: Parameters<typeof FServiceAPI.User.updateMobileOrEmail>[0] = {
         // oldAuthCod?: string;
@@ -1048,7 +1151,7 @@ const Model: SettingPageModelType = {
       select,
       call,
       put,
-    }: EffectsCommandMap) {
+    }: EffectsCommandMap): any {
       const { settingPage }: ConnectState = yield select(({ settingPage }: ConnectState) => ({
         settingPage,
       }));
@@ -1089,6 +1192,11 @@ const Model: SettingPageModelType = {
       const { settingPage }: ConnectState = yield select(({ settingPage }: ConnectState) => ({
         settingPage,
       }));
+
+      if (!new RegExp(/^[0-9]*$/).test(settingPage.changeEmail_Old_CaptchaInput)) {
+        fMessage('验证码必须全部为数字', 'error');
+        return;
+      }
 
       const params: Parameters<typeof FServiceAPI.Captcha.verifyVerificationCode>[0] = {
         authCode: settingPage.changeEmail_Old_CaptchaInput,
@@ -1179,7 +1287,7 @@ const Model: SettingPageModelType = {
       select,
       call,
       put,
-    }: EffectsCommandMap) {
+    }: EffectsCommandMap): any {
 
       const { settingPage }: ConnectState = yield select(({ settingPage }: ConnectState) => ({
         settingPage,
@@ -1221,6 +1329,16 @@ const Model: SettingPageModelType = {
       const { settingPage }: ConnectState = yield select(({ settingPage }: ConnectState) => ({
         settingPage,
       }));
+
+      if (!new RegExp(/^[0-9]*$/).test(settingPage.changeEmail_Old_CaptchaInput)) {
+        fMessage('验证码必须全部为数字', 'error');
+        return;
+      }
+
+      if (!new RegExp(/^[0-9]*$/).test(settingPage.changeEmail_New_CaptchaInput)) {
+        fMessage('验证码必须全部为数字', 'error');
+        return;
+      }
 
       const params: Parameters<typeof FServiceAPI.User.updateMobileOrEmail>[0] = {
         oldAuthCode: settingPage.changeEmail_Old_CaptchaInput,
@@ -1324,7 +1442,7 @@ const Model: SettingPageModelType = {
       select,
       call,
       put,
-    }: EffectsCommandMap) {
+    }: EffectsCommandMap): any {
       const { settingPage }: ConnectState = yield select(({ settingPage }: ConnectState) => ({
         settingPage,
       }));
@@ -1353,6 +1471,11 @@ const Model: SettingPageModelType = {
       const { settingPage }: ConnectState = yield select(({ settingPage }: ConnectState) => ({
         settingPage,
       }));
+
+      if (!new RegExp(/^[0-9]*$/).test(settingPage.bindPhone_CaptchaInput)) {
+        fMessage('验证码必须全部为数字', 'error');
+        return;
+      }
 
       const params: Parameters<typeof FServiceAPI.User.updateMobileOrEmail>[0] = {
         newAuthCode: settingPage.bindPhone_CaptchaInput,
@@ -1418,7 +1541,7 @@ const Model: SettingPageModelType = {
       select,
       call,
       put,
-    }: EffectsCommandMap) {
+    }: EffectsCommandMap): any {
 
       const { settingPage }: ConnectState = yield select(({ settingPage }: ConnectState) => ({
         settingPage,
@@ -1462,6 +1585,11 @@ const Model: SettingPageModelType = {
       const { settingPage }: ConnectState = yield select(({ settingPage }: ConnectState) => ({
         settingPage,
       }));
+
+      if (!new RegExp(/^[0-9]*$/).test(settingPage.changePhone_Old_CaptchaInput)) {
+        fMessage('验证码必须全部为数字', 'error');
+        return;
+      }
 
       const params: Parameters<typeof FServiceAPI.Captcha.verifyVerificationCode>[0] = {
         authCode: settingPage.changePhone_Old_CaptchaInput,
@@ -1553,7 +1681,7 @@ const Model: SettingPageModelType = {
       select,
       call,
       put,
-    }: EffectsCommandMap) {
+    }: EffectsCommandMap): any {
       const { settingPage }: ConnectState = yield select(({ settingPage }: ConnectState) => ({
         settingPage,
       }));
@@ -1594,6 +1722,11 @@ const Model: SettingPageModelType = {
       const { settingPage }: ConnectState = yield select(({ settingPage }: ConnectState) => ({
         settingPage,
       }));
+
+      if (!new RegExp(/^[0-9]*$/).test(settingPage.changePhone_Old_CaptchaInput)) {
+        fMessage('验证码必须全部为数字', 'error');
+        return;
+      }
 
       const params: Parameters<typeof FServiceAPI.User.updateMobileOrEmail>[0] = {
         oldAuthCode: settingPage.changePhone_Old_CaptchaInput,
@@ -1669,7 +1802,7 @@ const Model: SettingPageModelType = {
       }
 
       if (settingPage.changePassword_New1_PasswordInput !== '' && settingPage.changePassword_New2_PasswordInput !== '' && (settingPage.changePassword_New2_PasswordInput !== settingPage.changePassword_New1_PasswordInput)) {
-        changePassword_New2_PasswordInput_Error = '两次密码输入不一致';
+        changePassword_New2_PasswordInput_Error = FI18n.i18nNext.t('changepassword_alarm_notmatch');
       }
 
       yield put<ChangeAction>({
@@ -1700,7 +1833,7 @@ const Model: SettingPageModelType = {
       if (settingPage.changePassword_New2_PasswordInput === '') {
         changePassword_New2_PasswordInput_Error = '请输入确认密码';
       } else if (settingPage.changePassword_New2_PasswordInput !== settingPage.changePassword_New1_PasswordInput) {
-        changePassword_New2_PasswordInput_Error = '两次密码输入不一致';
+        changePassword_New2_PasswordInput_Error = FI18n.i18nNext.t('changepassword_alarm_notmatch');
       }
 
       yield put<ChangeAction>({

@@ -4,22 +4,23 @@ import { EffectsCommandMap, Subscription } from 'dva';
 import { ConnectState } from '@/models/connect';
 import { FUtil, FServiceAPI ,FI18n} from '@freelog/tools-lib';
 import { FCustomOptionsEditorDrawerStates } from '@/components/FCustomOptionsEditorDrawer';
-import {
-  IGraph_Relationship_Edges,
-  IGraph_Relationship_Nodes,
-} from '@/components/FAntvG6/FAntvG6RelationshipGraph';
-import {
-  IGraph_Authorization_Edges,
-  IGraph_Authorization_Nodes,
-} from '@/components/FAntvG6/FAntvG6AuthorizationGraph';
-import {
-  IGraph_Dependency_Edges,
-  IGraph_Dependency_Nodes,
-} from '@/components/FAntvG6/FAntvG6DependencyGraph';
+// import {
+//   IGraph_Relationship_Edges,
+//   IGraph_Relationship_Nodes,
+// } from '@/components/FAntvG6/FAntvG6RelationshipGraph';
+// import {
+//   IGraph_Authorization_Edges,
+//   IGraph_Authorization_Nodes,
+// } from '@/components/FAntvG6/FAntvG6AuthorizationGraph';
+// import {
+//   IGraph_Dependency_Edges,
+//   IGraph_Dependency_Nodes,
+// } from '@/components/FAntvG6/FAntvG6DependencyGraph';
 import { IActions, IRules, ruleMatchAndResult, RuleMatchAndResultReturn } from '@/models/informalNodeManagerPage';
 import fMessage from '@/components/fMessage';
 import { history } from 'umi';
 import { OperationAndActionRecords } from '@/type/InformalNodeTypes';
+import { fileAttrUnits } from '@/utils/format';
 
 const { decompile } = require('@freelog/nmr_translator');
 
@@ -117,14 +118,16 @@ export interface InformExhibitInfoPageModelState {
     isAuth: boolean;
   };
 
-  graph_FullScreen: boolean;
-  graph_Viewport_Show: 'relationship' | 'authorization' | 'dependency';
-  graph_Viewport_RelationGraph_Nodes: IGraph_Relationship_Nodes;
-  graph_Viewport_RelationGraph_Edges: IGraph_Relationship_Edges;
-  graph_Viewport_AuthorizationGraph_Nodes: IGraph_Authorization_Nodes;
-  graph_Viewport_AuthorizationGraph_Edges: IGraph_Authorization_Edges;
-  graph_Viewport_DependencyGraph_Nodes: IGraph_Dependency_Nodes;
-  graph_Viewport_DependencyGraph_Edges: IGraph_Dependency_Edges;
+  // graph_FullScreen: boolean;
+  // graph_Viewport_Show: 'relationship' | 'authorization' | 'dependency';
+  // graph_Viewport_RelationGraph_Nodes: IGraph_Relationship_Nodes;
+  // graph_Viewport_RelationGraph_Edges: IGraph_Relationship_Edges;
+  // graph_Viewport_AuthorizationGraph_Nodes: IGraph_Authorization_Nodes;
+  // graph_Viewport_AuthorizationGraph_Edges: IGraph_Authorization_Edges;
+  // graph_Viewport_DependencyGraph_Nodes: IGraph_Dependency_Nodes;
+  // graph_Viewport_DependencyGraph_Edges: IGraph_Dependency_Edges;
+
+  graphShow: boolean;
 
   side_Exhibit_Cover: string;
   side_Exhibit_Title: string;
@@ -438,14 +441,15 @@ const initStates: InformExhibitInfoPageModelState = {
   // contract_Associated_Selected: '',
   // contract_Associated: [],
 
-  graph_FullScreen: false,
-  graph_Viewport_Show: 'relationship',
-  graph_Viewport_RelationGraph_Nodes: [],
-  graph_Viewport_RelationGraph_Edges: [],
-  graph_Viewport_AuthorizationGraph_Nodes: [],
-  graph_Viewport_AuthorizationGraph_Edges: [],
-  graph_Viewport_DependencyGraph_Nodes: [],
-  graph_Viewport_DependencyGraph_Edges: [],
+  // graph_FullScreen: false,
+  // graph_Viewport_Show: 'relationship',
+  // graph_Viewport_RelationGraph_Nodes: [],
+  // graph_Viewport_RelationGraph_Edges: [],
+  // graph_Viewport_AuthorizationGraph_Nodes: [],
+  // graph_Viewport_AuthorizationGraph_Edges: [],
+  // graph_Viewport_DependencyGraph_Nodes: [],
+  // graph_Viewport_DependencyGraph_Edges: [],
+  graphShow: true,
 
   side_Exhibit_Cover: '',
   side_Exhibit_Title: '',
@@ -614,7 +618,7 @@ const Model: ExhibitInfoPageModelType = {
             .map<InformExhibitInfoPageModelState['side_Exhibit_OnlyReadAttrs'][number]>((cr: any) => {
               return {
                 theKey: cr.key,
-                value: cr.key === 'fileSize' ? FUtil.Format.humanizeSize(cr.value) : cr.value,
+                value: fileAttrUnits[cr.key] ? fileAttrUnits[cr.key](cr.value) : cr.value,
               };
             }),
           side_Exhibit_OnlyEditAttrs: (testResourceDetail.stateInfo.propertyInfo.testResourceProperty as any[])
@@ -782,7 +786,7 @@ const Model: ExhibitInfoPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          graph_FullScreen: true,
+          // graph_FullScreen: true,
         },
       });
     },
@@ -790,7 +794,7 @@ const Model: ExhibitInfoPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          graph_FullScreen: false,
+          // graph_FullScreen: false,
         },
       });
     },
@@ -798,7 +802,7 @@ const Model: ExhibitInfoPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          graph_Viewport_Show: payload.value,
+          // graph_Viewport_Show: payload.value,
         },
       });
     },

@@ -9,7 +9,7 @@ export interface CreateBucketParamsType {
 export function createBucket(params: CreateBucketParamsType) {
   return FUtil.Request({
     method: 'POST',
-    url: `/v1/storages/buckets`,
+    url: `/v2/storages/buckets`,
     data: params,
   });
 }
@@ -22,7 +22,7 @@ interface BucketListParamsType {
 export function bucketList(params: BucketListParamsType) {
   return FUtil.Request({
     method: 'GET',
-    url: `/v1/storages/buckets`,
+    url: `/v2/storages/buckets`,
     params: params,
   });
 }
@@ -34,7 +34,7 @@ interface SpaceStatisticsParamsType {
 export function spaceStatistics(params: SpaceStatisticsParamsType = {}) {
   return FUtil.Request({
     method: 'GET',
-    url: `/v1/storages/buckets/spaceStatistics`,
+    url: `/v2/storages/buckets/spaceStatistics`,
     params: params,
   });
 }
@@ -47,7 +47,7 @@ interface DeleteBucketParamsType {
 export function deleteBucket(params: DeleteBucketParamsType) {
   return FUtil.Request({
     method: 'DELETE',
-    url: `/v1/storages/buckets/${params.bucketName}`,
+    url: `/v2/storages/buckets/${params.bucketName}`,
     // params: params,
   });
 }
@@ -60,7 +60,7 @@ interface BucketDetailsParamsType {
 export function bucketDetails({bucketName}: BucketDetailsParamsType) {
   return FUtil.Request({
     method: 'GET',
-    url: `/v1/storages/buckets/${bucketName}`,
+    url: `/v2/storages/buckets/${bucketName}`,
     // params: params,
   });
 }
@@ -71,6 +71,7 @@ interface ObjectListParamsType {
   skip?: number;
   bucketName: string;
   resourceType?: string;
+  resourceTypeCode?: string;
   isLoadingTypeless?: 0 | 1;
   keywords?: string;
   projection?: string;
@@ -81,7 +82,7 @@ interface ObjectListParamsType {
 export function objectList({bucketName, ...params}: ObjectListParamsType) {
   return FUtil.Request({
     method: 'GET',
-    url: `/v1/storages/buckets/${bucketName}/objects`,
+    url: `/v2/storages/buckets/${bucketName}/objects`,
     params: params,
   });
 }
@@ -111,7 +112,7 @@ interface CreateObjectParamsType {
 export function createObject({bucketName, ...params}: CreateObjectParamsType) {
   return FUtil.Request({
     method: 'POST',
-    url: `/v1/storages/buckets/${bucketName}/objects`,
+    url: `/v2/storages/buckets/${bucketName}/objects`,
     data: params,
   });
 }
@@ -130,13 +131,13 @@ export function objectDetails(params: ObjectDetailsParamsType1 | ObjectDetailsPa
   if ((params as ObjectDetailsParamsType2).objectIdOrName) {
     return FUtil.Request({
       method: 'GET',
-      url: `/v1/storages/objects/${encodeURIComponent((params as ObjectDetailsParamsType2).objectIdOrName)}`,
+      url: `/v2/storages/objects/${encodeURIComponent((params as ObjectDetailsParamsType2).objectIdOrName)}`,
       params: params,
     });
   }
   return FUtil.Request({
     method: 'GET',
-    url: `/v1/storages/buckets/${(params as ObjectDetailsParamsType1).bucketName}/objects/${(params as ObjectDetailsParamsType1).objectId}`,
+    url: `/v2/storages/buckets/${(params as ObjectDetailsParamsType1).bucketName}/objects/${(params as ObjectDetailsParamsType1).objectId}`,
     params: params,
   });
 }
@@ -150,7 +151,7 @@ interface DeleteObjectsParamsType {
 export function deleteObjects(params: DeleteObjectsParamsType) {
   return FUtil.Request({
     method: 'DELETE',
-    url: `/v1/storages/buckets/${params.bucketName}/objects/${params.objectIds}`,
+    url: `/v2/storages/buckets/${params.bucketName}/objects/${params.objectIds}`,
     data: params,
   });
 }
@@ -163,7 +164,7 @@ interface BucketIsExistParamsType {
 export function bucketIsExist({bucketName}: BucketIsExistParamsType) {
   return FUtil.Request({
     method: 'GET',
-    url: `/v1/storages/buckets/${bucketName}/isExist`,
+    url: `/v2/storages/buckets/${bucketName}/isExist`,
     // params: params,
   });
 }
@@ -174,7 +175,7 @@ interface DownloadObjectParamsType {
 }
 
 export function downloadObject(params: DownloadObjectParamsType) {
-  return window.location.href = FUtil.Format.completeUrlByDomain('qi') + `/v1/storages/objects/${params.objectIdOrName}/file`;
+  return window.location.href = FUtil.Format.completeUrlByDomain('qi') + `/v2/storages/objects/${params.objectIdOrName}/file`;
 }
 
 // 根据sha1查询文件是否存在
@@ -185,7 +186,7 @@ interface FileIsExistParamsType {
 export function fileIsExist(params: FileIsExistParamsType) {
   return FUtil.Request({
     method: 'GET',
-    url: `/v1/storages/files/fileIsExist`,
+    url: `/v2/storages/files/fileIsExist`,
     params: params,
   });
 }
@@ -205,17 +206,17 @@ export function uploadFile(params: UploadFileParamsType, config?: AxiosRequestCo
   }
 
   if (!returnCancel) {
-    // return FUtil.Axios.post('/v1/storages/files/upload', formData, config);
+    // return FUtil.Axios.post('/v2/storages/files/upload', formData, config);
     return FUtil.Request({
       method: 'POST',
-      url: `/v1/storages/files/upload`,
+      url: `/v2/storages/files/upload`,
       data: formData,
       ...config,
     });
   }
 
   let cancel: any = null;
-  // const promise = FUtil.Axios.post('/v1/storages/files/upload', formData, {
+  // const promise = FUtil.Axios.post('/v2/storages/files/upload', formData, {
   //   cancelToken: new FUtil.Axios.CancelToken((c) => {
   //     cancel = c;
   //   }),
@@ -223,7 +224,7 @@ export function uploadFile(params: UploadFileParamsType, config?: AxiosRequestCo
 
   const promise = FUtil.Request({
     method: 'POST',
-    url: `/v1/storages/files/upload`,
+    url: `/v2/storages/files/upload`,
     data: formData,
     cancelToken: new FUtil.Axios.CancelToken((c) => {
       cancel = c;
@@ -251,7 +252,7 @@ export function uploadImage(params: UploadImageParamsType, config?: AxiosRequest
   }
   return FUtil.Request({
     method: 'POST',
-    url: `/v1/storages/files/uploadImage`,
+    url: `/v2/storages/files/uploadImage`,
     data: formData,
     ...config,
   });
@@ -273,6 +274,7 @@ interface UpdateObjectParamsType {
     versionRange?: string;
   }[];
   resourceType?: string[];
+  resourceTypeCode?: string;
 }
 
 export function updateObject({objectIdOrName, ...params}: UpdateObjectParamsType) {
@@ -293,7 +295,7 @@ interface BatchObjectListParamsType {
 export function batchObjectList(params: BatchObjectListParamsType) {
   return FUtil.Request({
     method: 'GET',
-    url: `/v1/storages/objects/list`,
+    url: `/v2/storages/objects/list`,
     params: params,
   });
 }
@@ -307,7 +309,7 @@ interface FilePropertyParamsType {
 export function fileProperty({sha1, ...params}: FilePropertyParamsType) {
   return FUtil.Request({
     method: 'GET',
-    url: `/v1/storages/files/${sha1}/property`,
+    url: `/v2/storages/files/${sha1}/property`,
     params: params,
   });
 }
@@ -325,7 +327,7 @@ interface CycleDependencyCheckParamsType {
 export function cycleDependencyCheck({objectIdOrName, ...params}: CycleDependencyCheckParamsType) {
   return FUtil.Request({
     method: 'POST',
-    url: `/v1/storages/objects/${objectIdOrName}/cycleDependencyCheck`,
+    url: `/v2/storages/objects/${objectIdOrName}/cycleDependencyCheck`,
     data: params,
   });
 }
@@ -347,6 +349,7 @@ export function clearUserNodeData({...params}: ClearUserNodeDataParamsType) {
 // 批量查询文件信息通过sha1
 interface FilesListInfoParamsType {
   sha1: string;
+  resourceTypeCode: string;
 }
 
 export function filesListInfo({...params}: FilesListInfoParamsType) {

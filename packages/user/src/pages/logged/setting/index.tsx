@@ -1,8 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
-// import FFormLayout from '@/components/FFormLayout';
-// import { Space } from 'antd';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState, SettingPageModelState } from '@/models/connect';
 import Profile from './Profile';
 import Security from './Security';
@@ -74,21 +73,21 @@ function Setting({ dispatch, settingPage }: SettingProps) {
         >
           账号安全
         </a>
-        <div style={{ width: 30 }} />
-        <a
-          onClick={() => {
-            // console.log('123412341234');
-            dispatch<OnChange_ShowPage_Action>({
-              type: 'settingPage/onChange_ShowPage',
-              payload: {
-                value: 'privacy',
-              },
-            });
-          }}
-          className={settingPage.showPage === 'privacy' ? styles.active : ''}
-        >
-          隐私
-        </a>
+        {/*<div style={{ width: 30 }} />*/}
+        {/*<a*/}
+        {/*  onClick={() => {*/}
+        {/*    // console.log('123412341234');*/}
+        {/*    dispatch<OnChange_ShowPage_Action>({*/}
+        {/*      type: 'settingPage/onChange_ShowPage',*/}
+        {/*      payload: {*/}
+        {/*        value: 'privacy',*/}
+        {/*      },*/}
+        {/*    });*/}
+        {/*  }}*/}
+        {/*  className={settingPage.showPage === 'privacy' ? styles.active : ''}*/}
+        {/*>*/}
+        {/*  隐私*/}
+        {/*</a>*/}
       </div>
       <div className={styles.content}>
         {settingPage.showPage === 'profile' && <Profile />}
@@ -100,10 +99,6 @@ function Setting({ dispatch, settingPage }: SettingProps) {
     </div>
   );
 }
-
-// export default connect(({ settingPage }: ConnectState) => ({
-//   settingPage,
-// }))(Setting);
 
 export default connect(({ settingPage }: ConnectState) => ({
   settingPage,

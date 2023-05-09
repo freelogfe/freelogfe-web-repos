@@ -1,6 +1,6 @@
 import axios, {AxiosRequestConfig} from 'axios';
-import NProgress from 'nprogress';
-import "nprogress/nprogress.css";
+// import NProgress from 'nprogress';
+// import "nprogress/nprogress.css";
 import {completeUrlByDomain} from "./format";
 import * as LinkTo from './linkTo';
 // import {CommonReturn, RequestParamsType} from "../service-API/tools";
@@ -56,58 +56,63 @@ if (window.location.hostname.includes('.com')) {
 // };
 //
 // // Add a request interceptor
-axios.interceptors.request.use(function (config) {
-  // Do something before request is sent
-  NProgress.start();
-  return config;
-}, function (error) {
-  // Do something with request error
-  NProgress.done();
-  return Promise.reject(error);
-});
+axios.interceptors.request.use(
+  (config) => {
+    // Do something before request is sent
+    // NProgress.start();
+    return config;
+  },
+  (error) => {
+    // Do something with request error
+    // NProgress.done();
+    return Promise.reject(error);
+  }
+);
 
 /**
  * 配置request请求时的默认参数
  */
-axios.interceptors.response.use(function (response) {
-  // Do something with response data
-  // console.log(response, 'response!!!!!!');
-  NProgress.done();
-  if (response.status !== 200) {
+axios.interceptors.response.use(
+  (response) => {
+    // Do something with response data
+    // console.log(response, 'response!!!!!!');
+    // NProgress.done();
+    if (response.status !== 200) {
 
-    const error = {
-      description: codeMessage[response.status],
-      message: response.status,
-    };
+      const error = {
+        description: codeMessage[response.status],
+        message: response.status,
+      };
 
-    // notification.error(error);
-    throw new Error(JSON.stringify(error));
-  }
-  const {data, headers} = response;
-  if (headers['content-disposition']?.includes('attachment;')) {
-    // downloadFile(response);
-    return;
-  }
+      // notification.error(error);
+      throw new Error(JSON.stringify(error));
+    }
+    const {data, headers} = response;
+    if (headers['content-disposition']?.includes('attachment;')) {
+      // downloadFile(response);
+      return;
+    }
 
-  // console.log(data, 'data2390jasdflkf');
+    // console.log(data, 'data2390jasdflkf');
 
 
-  // if ((data.errcode === undefined
-  //   ? (data.errCode !== 0 && data.errCode !== 2)
-  //   : (data.errcode !== 0 && data.errcode !== 2))
-  //   || data.ret !== 0) {
-  //
-  //   // notification.error({
-  //   //   message: data.msg,
-  //   // });
-  //   throw new Error(JSON.stringify(data));
-  // }
-  return data;
-}, function (error) {
-  // Do something with response error
-  NProgress.done();
-  return Promise.reject(error);
-});
+    // if ((data.errcode === undefined
+    //   ? (data.errCode !== 0 && data.errCode !== 2)
+    //   : (data.errcode !== 0 && data.errcode !== 2))
+    //   || data.ret !== 0) {
+    //
+    //   // notification.error({
+    //   //   message: data.msg,
+    //   // });
+    //   throw new Error(JSON.stringify(data));
+    // }
+    return data;
+  },
+  (error) => {
+    // Do something with response error
+    // NProgress.done();
+    return Promise.reject(error);
+  });
 
 export default axios;
 
@@ -125,21 +130,12 @@ export async function request(config: AxiosRequestConfig, {
   if (result.ret === 0 && result.errCode === 30 && !noRedirect) {
     await FServiceAPI.User.logout();
     window.location.replace(`${completeUrlByDomain('user')}${LinkTo.login({goTo: window.location.href})}`);
-  }
-  if (result.ret === 4 && result.errCode === 10 && !noRedirect) {
+  } else if (result.ret === 4 && result.errCode === 10 && !noRedirect) {
     window.location.replace(`${completeUrlByDomain('user')}${LinkTo.userFreeze({goTo: window.location.href})}`);
-  }
-  if ((result.errcode !== 0 || result.errCode !== 0) && !noErrorAlert) {
+  } else if ((result.errcode !== 0 || result.errCode !== 0) && !noErrorAlert) {
     // window.alert(result.msg);
     // return;
+
   }
   return result;
 }
-
-// export function downloadFile(res: AxiosResponse) {
-//   const {data, headers} = res;
-//   // const fileName = headers['content-disposition'].replace(/attachment; filename="(.*)"/, '$1');
-//   const fileName = headers['content-disposition'].replace(/attachment; filename="(.*)"/, '$1');
-//   const blob = new Blob([data], {});
-//   FileSaver.saveAs(blob, fileName);
-// }

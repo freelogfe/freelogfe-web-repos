@@ -20,8 +20,9 @@ interface CollectionResourcesParamsType {
   limit?: number;
   keywords?: string;
   resourceType?: string;
+  resourceTypeCode?: string;
   omitResourceType?: string;
-  resourceStatus?: 0 | 1 | 2;
+  resourceStatus?: 0 | 1 | 2 | 4;
 }
 
 export function collectionResources(params: CollectionResourcesParamsType) {

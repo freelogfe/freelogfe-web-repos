@@ -3,7 +3,6 @@ import styles from './index.less';
 import { FServiceAPI, FUtil, FI18n } from '@freelog/tools-lib';
 import FResourceContractLabels from '@/components/FResourceContractLabels';
 import FResourceContractPanelNoContractTip from '@/components/FResourceContractPanelNoContractTip';
-import { FFileSearch, FInfo } from '@/components/FIcons';
 import { Space } from 'antd';
 import FContractDisplay from '@/components/FContractDisplay';
 import FDivider from '@/components/FDivider';
@@ -11,9 +10,10 @@ import FSwitch from '@/components/FSwitch';
 import FPolicyDisplay from '@/components/FPolicyDisplay';
 import fMessage from '@/components/fMessage';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
-import FTerminatedContractListDrawer from '@/components/FTerminatedContractListDrawer';
 import FComponentsLib from '@freelog/components-lib';
 import FTooltip from '@/components/FTooltip';
+import fViewTerminatedContracts from '@/components/fViewTerminatedContracts';
+import FAutoOverflowTooltipTitle from '@/components/FAutoOverflowTooltipTitle';
 
 interface FExhibitAuthorizedContractsProps {
   exhibitID: string;
@@ -44,14 +44,14 @@ interface FExhibitAuthorizedContractsStates {
     terminatedContractIDs: string[];
     policies: PolicyFullInfo_Type[];
   }[];
-  terminatedContractIDs: string[];
+  // terminatedContractIDs: string[];
 }
 
 function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitAuthorizedContractsProps) {
 
   const [selectedID, set_SelectedID] = React.useState<FExhibitAuthorizedContractsStates['selectedID']>('1');
   const [authorizedContracts, set_AuthorizedContracts] = React.useState<FExhibitAuthorizedContractsStates['authorizedContracts']>([]);
-  const [terminatedContractIDs, set_TerminatedContractIDs] = React.useState<FExhibitAuthorizedContractsStates['terminatedContractIDs']>([]);
+  // const [terminatedContractIDs, set_TerminatedContractIDs] = React.useState<FExhibitAuthorizedContractsStates['terminatedContractIDs']>([]);
 
   // 当前激活的标的物（资源或对象）
   const selectedAuthorizedContract: FExhibitAuthorizedContractsStates['authorizedContracts'][0] | undefined = authorizedContracts.find((i) => {
@@ -161,21 +161,39 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
                 set_SelectedID(ac.subjectID);
               }}
             >
-              <div style={{ display: 'flex', alignItems: 'center' }}>
-                <FTooltip title={ac.subjectName}><span><FComponentsLib.FContentText
-                  type='highlight'
-                  text={ac.subjectName}
-                  singleRow
-                  className={styles.FContentText}
-                /></span></FTooltip>
-                <FTooltip title={FI18n.i18nNext.t('tip_check_relevant_resource')}><span><FComponentsLib.FTextBtn
-                  type={'primary'}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    window.open(ac.detailsUrl);
-                  }}
-                ><FFileSearch /></FComponentsLib.FTextBtn></span></FTooltip>
-              </div>
+              <FAutoOverflowTooltipTitle
+                title={ac.subjectName}
+                right={<>
+                  <FTooltip title={FI18n.i18nNext.t('tip_check_relevant_resource')}>
+                    <div>
+                      <FComponentsLib.FTextBtn
+                        type={'primary'}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          window.open(ac.detailsUrl);
+                        }}
+                      >
+                        <FComponentsLib.FIcons.FFileSearch className={styles.FFileSearch} />
+                      </FComponentsLib.FTextBtn>
+                    </div>
+                  </FTooltip>
+                </>}
+              />
+              {/*<div style={{ display: 'flex', alignItems: 'center' }}>*/}
+              {/*  <FTooltip title={ac.subjectName}><span><FComponentsLib.FContentText*/}
+              {/*    type='highlight'*/}
+              {/*    text={ac.subjectName}*/}
+              {/*    singleRow*/}
+              {/*    className={styles.FContentText}*/}
+              {/*  /></span></FTooltip>*/}
+              {/*  <FTooltip title={FI18n.i18nNext.t('tip_check_relevant_resource')}><span><FComponentsLib.FTextBtn*/}
+              {/*    type={'primary'}*/}
+              {/*    onClick={(e) => {*/}
+              {/*      e.stopPropagation();*/}
+              {/*      window.open(ac.detailsUrl);*/}
+              {/*    }}*/}
+              {/*  ><FComponentsLib.FIcons.FFileSearch /></FComponentsLib.FTextBtn></span></FTooltip>*/}
+              {/*</div>*/}
               <div style={{ height: 5 }} />
               <FComponentsLib.FContentText
                 type='additional2'
@@ -231,7 +249,7 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
             selectedAuthorizedContract.contracts.length > 0 && selectedAuthorizedContract.policies.length > 0 && (<>
               <div style={{ height: 15 }} />
               <div className={styles.hasPolicyTip}>
-                <FInfo style={{ fontSize: 14 }} />
+                <FComponentsLib.FIcons.FInfo style={{ fontSize: 14 }} />
                 <div style={{ width: 5 }} />
                 <span>最下方有可签约的策略</span>
               </div>
@@ -324,9 +342,12 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
 
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                   {/*<FContentText text={'查看已终止的合约请移至'} type='negative' />*/}
-                  <FComponentsLib.FTextBtn onClick={() => {
-                    set_TerminatedContractIDs(selectedAuthorizedContract.terminatedContractIDs);
+                  <FComponentsLib.FTextBtn onClick={async () => {
+                    // set_TerminatedContractIDs(selectedAuthorizedContract.terminatedContractIDs);
                     // window.open(`${FUtil.Format.completeUrlByDomain('user')}${FUtil.LinkTo.contract()}`);
+                    await fViewTerminatedContracts({
+                      terminatedContractIDs: selectedAuthorizedContract.terminatedContractIDs,
+                    });
                   }}>查看已终止合约</FComponentsLib.FTextBtn>
                 </div>
               </>)
@@ -379,12 +400,12 @@ function FExhibitAuthorizedContracts({ exhibitID, onChangeAuthorize }: FExhibitA
         </div>)
     }
 
-    <FTerminatedContractListDrawer
-      terminatedContractIDs={terminatedContractIDs}
-      onClose={() => {
-        set_TerminatedContractIDs([]);
-      }}
-    />
+    {/*<FTerminatedContractListDrawer*/}
+    {/*  terminatedContractIDs={terminatedContractIDs}*/}
+    {/*  onClose={() => {*/}
+    {/*    set_TerminatedContractIDs([]);*/}
+    {/*  }}*/}
+    {/*/>*/}
   </div>);
 }
 
@@ -572,13 +593,13 @@ async function handleExhibitAuthorizedContracts(exhibitID: string): Promise<FExh
     /********* End 处理合约相关数据 *********************************************************/
 
     /************** Start 处理策略相关数据 *********************************************************/
-    // console.log(theResource, 'theResource90oewjlksdfjldskjl');
+      // console.log(theResource, 'theResource90oewjlksdfjldskjl');
     const policies: FExhibitAuthorizedContractsStates['authorizedContracts'][0]['policies'] = (!theResource || theResource.status !== 1)
-      ? []
-      : theResource.policies
-        .filter((thp) => {
-          return thp.status === 1 && !contracts.some((c) => c.policyID === thp.policyId);
-        });
+        ? []
+        : theResource.policies
+          .filter((thp) => {
+            return thp.status === 1 && !contracts.some((c) => c.policyID === thp.policyId);
+          });
     /************** End 处理策略相关数据 *********************************************************/
     return {
       subjectID: rr.resourceId,

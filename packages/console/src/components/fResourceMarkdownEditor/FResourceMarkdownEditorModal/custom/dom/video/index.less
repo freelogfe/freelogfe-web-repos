@@ -1,0 +1,124 @@
+// 授权状态遮罩
+.video-auth {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(10px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+
+  .freelog {
+    font-size: 40px;
+  }
+
+  .auth-text {
+    font-size: 14px;
+    font-weight: 600;
+    color: #ffffff;
+    line-height: 20px;
+    margin-top: 20px;
+  }
+
+  .fl-icon-bofang-daibiankuang {
+    position: absolute;
+    left: 10px;
+    bottom: 10px;
+    font-size: 24px;
+    color: #fff;
+  }
+
+  .auth-btn {
+    padding: 15px 50px;
+    background: #2784ff;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #ffffff;
+    line-height: 20px;
+    margin-top: 20px;
+    cursor: pointer;
+
+    &:hover {
+      background: #529dff;
+    }
+
+    &:active {
+      background: #2376e5;
+    }
+  }
+}
+
+// 图片资源 dom
+.unauthorized-video,
+.authorized-video,
+.invalid-video {
+  position: relative;
+  width: 100%;
+  caret-color: transparent;
+  cursor: default;
+
+  &:hover {
+    .resource-toolbar {
+      transform: none;
+      opacity: 1;
+    }
+
+    .main-area,
+    .video-area {
+      background-color: rgba(0, 0, 0, 0.02);
+    }
+  }
+
+  .main-area {
+    display: flex;
+    justify-content: center;
+    transition: all 0.2s linear;
+
+    .cover {
+      position: relative;
+      width: 400px;
+      height: 300px;
+      overflow: hidden;
+
+      img {
+        max-width: none;
+      }
+    }
+  }
+
+  .video-area {
+    display: flex;
+    justify-content: center;
+    transition: all 0.2s linear;
+  }
+
+  .invalid-tip {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .fl-icon-bofang-daibiankuang {
+    position: absolute;
+    left: 10px;
+    bottom: 10px;
+    font-size: 24px;
+    color: #fff;
+  }
+}

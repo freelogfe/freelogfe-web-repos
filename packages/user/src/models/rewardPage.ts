@@ -24,6 +24,7 @@ export interface RewardPageModelState {
   withdrawModal_RealNameError: string;
   withdrawModal_Amount: string;
   withdrawModal_AmountError: string;
+  withdrawModal_drawing: boolean;
 }
 
 export interface ChangeAction extends AnyAction {
@@ -89,6 +90,10 @@ export interface OnClick_WithdrawModal_ConfirmBtn_Action extends AnyAction {
   type: 'rewardPage/onClick_WithdrawModal_ConfirmBtn';
 }
 
+export interface FetchData_Action extends AnyAction {
+  type: 'fetchData';
+}
+
 interface RewardPageModelType {
   namespace: 'rewardPage';
   state: RewardPageModelState;
@@ -106,6 +111,7 @@ interface RewardPageModelType {
     onBlur_WithdrawModal_AmountInput: (action: OnBlur_WithdrawModal_AmountInput_Action, effects: EffectsCommandMap) => void;
     onClick_WithdrawModal_TotalBtn: (action: OnClick_WithdrawModal_TotalBtn_Action, effects: EffectsCommandMap) => void;
     onClick_WithdrawModal_ConfirmBtn: (action: OnClick_WithdrawModal_ConfirmBtn_Action, effects: EffectsCommandMap) => void;
+    fetchData: (action: FetchData_Action, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<RewardPageModelState, ChangeAction>;
@@ -126,6 +132,7 @@ const initStates: RewardPageModelState = {
   withdrawModal_RealNameError: '',
   withdrawModal_Amount: '',
   withdrawModal_AmountError: '',
+  withdrawModal_drawing: false,
 };
 
 const Model: RewardPageModelType = {
@@ -133,38 +140,8 @@ const Model: RewardPageModelType = {
   state: initStates,
   effects: {
     * onMountPage({}: OnMountPageAction, { call, put }: EffectsCommandMap) {
-      const params: Parameters<typeof FServiceAPI.Activity.getCoinAccount>[0] = {
-        type: 1,
-      };
-      const { data: data_account } = yield call(FServiceAPI.Activity.getCoinAccount, params);
-      // console.log(data_account, 'data_account09iojewflksdjlk');
-
-      const params1: Parameters<typeof FServiceAPI.Activity.getCoinAccountRecords>[0] = {
-        limit: 100,
-        coinAccountType: 1,
-      };
-
-      const { data: data_records } = yield call(FServiceAPI.Activity.getCoinAccountRecords, params1);
-      // console.log(data_records, 'data_records3209osjdflksdjfl');
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          cashAmount: data_account.balance,
-          records: data_records.dataList.map((dr: any) => {
-            const dataAndTime: string[] = FUtil.Format.formatDateTime(dr.createTime, true).split(' ');
-            // console.log(dataAndTime, '9i8ojklwefsdjlfkjldataAndTime');
-            const extra = JSON.parse(dr.extra);
-            return {
-              key: dr.id,
-              date: dataAndTime[0],
-              time: dataAndTime[1],
-              // digest: extra,
-              digest: extra?.mark || extra?.remark || '---',
-              transactionAmount: dr.changedAmount,
-              afterBalance: dr.afterBalance,
-            };
-          }),
-        },
+      yield put<FetchData_Action>({
+        type: 'fetchData',
       });
     },
     * onUnmountPage({}: OnUnmountPageAction, { put }: EffectsCommandMap) {
@@ -323,16 +300,77 @@ const Model: RewardPageModelType = {
       const { rewardPage } = yield select(({ rewardPage }: ConnectState) => ({
         rewardPage,
       }));
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          withdrawModal_drawing: true,
+        },
+      });
       const params: Parameters<typeof FServiceAPI.Activity.withdrawCoinAccount>[0] = {
         reUserName: rewardPage.withdrawModal_RealName,
         amount: Number(rewardPage.withdrawModal_Amount),
       };
       const { ret, errCode, data, msg } = yield call(FServiceAPI.Activity.withdrawCoinAccount, params);
-      if (ret !== 0 || errCode !== 0 || !data) {
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          withdrawModal_drawing: false,
+        },
+      });
+      if (ret !== 0 || errCode !== 0) {
+        self._czc?.push(['_trackEvent', '个人中心页', '提现至微信', '', 1]);
         fMessage(msg, 'error');
       } else {
-        fMessage(msg, 'success');
+        self._czc?.push(['_trackEvent', '个人中心页', '提现至微信', '', 0]);
+        fMessage('提现成功', 'success');
+
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            showModal: '',
+          },
+        });
+
+        yield put<FetchData_Action>({
+          type: 'fetchData',
+        });
       }
+    },
+    * fetchData({}: FetchData_Action, { call, put }: EffectsCommandMap) {
+      const params: Parameters<typeof FServiceAPI.Activity.getCoinAccount>[0] = {
+        type: 1,
+      };
+      const { data: data_account } = yield call(FServiceAPI.Activity.getCoinAccount, params);
+      // console.log(data_account, 'data_account09iojewflksdjlk');
+
+      const params1: Parameters<typeof FServiceAPI.Activity.getCoinAccountRecords>[0] = {
+        limit: 100,
+        coinAccountType: 1,
+      };
+
+      const { data: data_records } = yield call(FServiceAPI.Activity.getCoinAccountRecords, params1);
+      // console.log(data_records, 'data_records3209osjdflksdjfl');
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          cashAmount: data_account.balance,
+          records: data_records.dataList.map((dr: any) => {
+            const dataAndTime: string[] = FUtil.Format.formatDateTime(dr.createTime, true).split(' ');
+            // console.log(dataAndTime, '9i8ojklwefsdjlfkjldataAndTime');
+            const extra = JSON.parse(dr.extra);
+            return {
+              key: dr.id,
+              date: dataAndTime[0],
+              time: dataAndTime[1],
+              // digest: extra,
+              digest: extra?.mark || extra?.remark || '---',
+              transactionAmount: dr.changedAmount,
+              afterBalance: dr.afterBalance,
+            };
+          }),
+        },
+      });
     },
   },
   reducers: {

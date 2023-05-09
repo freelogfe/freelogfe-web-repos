@@ -17,7 +17,17 @@ interface FCustomOptionsEditorDrawerProps {
 }
 
 export interface FCustomOptionsEditorDrawerStates {
-  dataSource: Data[];
+  dataSource: {
+    key: string;
+    keyError: string;
+    description: string;
+    descriptionError: string;
+    custom: 'input' | 'select';
+    defaultValue: string;
+    defaultValueError: string;
+    customOption: string;
+    customOptionError: string;
+  }[];
 }
 
 const initDataSource: FCustomOptionsEditorDrawerStates['dataSource'] = [{
@@ -59,11 +69,12 @@ function FCustomOptionsEditorDrawer({
   }
 
   return (<FDrawer
-    title={'添加自定义选项'}
+    // title={'添加自定义选项'}
+    title={'添加配置'}
     onClose={() => {
       onCancel && onCancel();
     }}
-    visible={visible}
+    open={visible}
     width={720}
     topRight={<Space size={30}>
       <FComponentsLib.FTextBtn
@@ -82,7 +93,7 @@ function FCustomOptionsEditorDrawer({
         onClick={onClick_ConfirmBtn}
       >确定</FComponentsLib.FRectBtn>
     </Space>}
-    afterVisibleChange={(visible) => {
+    afterOpenChange={(visible) => {
       if (!visible) {
         setDataSource(initDataSource);
       } else {

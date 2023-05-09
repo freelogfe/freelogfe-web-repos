@@ -1,11 +1,13 @@
-import { DvaReducer, WholeReadonly } from '@/models/shared';
+import { DvaReducer } from '@/models/shared';
 import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription } from 'dva';
 import { ConnectState } from '@/models/connect';
-import fMessage from '@/components/fMessage';
 import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 import { history } from 'umi';
 import moment, { Moment } from 'moment';
+import { onlineExhibit } from '@/pages/node/utils/tools';
+import { message } from 'antd';
+import fMessage from '@/components/fMessage';
 
 type Authorize_Status = 'terminated' | 'exception' | 'authorized' | 'testAuthorized' | 'unauthorized';
 
@@ -14,18 +16,23 @@ type Authorized_Status = 'terminated' | 'exception' | 'authorized' | 'testAuthor
 export interface NodeManagerModelState {
   nodeId: number;
 
+  nodeCover: string;
   nodeName: string;
   nodeUrl: string;
   testNodeUrl: string;
   nodeThemeId: string;
-  showPage: 'exhibit' | 'theme' | 'contract';
+  showPage: 'exhibit' | 'theme' | 'contract' | 'setting';
   goToTestNodePage: string;
   nodeInfoState: 'loading' | 'loaded';
   listFirstLoaded: boolean;
 
-  exhibit_ResourceTypeOptions: { text: string; value: string }[];
+  exhibit_ResourceTypeCodes: {
+    value: string;
+    label: string;
+    values: string[];
+    labels: string[];
+  };
   exhibit_ResourceStateOptions: { text: string; value: string }[];
-  exhibit_SelectedType: string;
   exhibit_SelectedStatus: string;
   exhibit_InputFilter: string;
   exhibit_List: {
@@ -61,7 +68,6 @@ export interface NodeManagerModelState {
     authErrorText: string;
     resourceId: string;
   }[];
-  // themeDataState: '' | 'noData' | 'noSearchData' | 'loading';
   theme_ListState: 'loading' | 'noData' | 'noSearchResult' | 'loaded';
   theme_ListMore: 'loading' | 'andMore' | 'noMore';
 
@@ -123,6 +129,23 @@ export interface NodeManagerModelState {
 
   policyEditorVisible: boolean;
   policyOperaterVisible: boolean;
+
+  setting_nodeID: number;
+  setting_nodeName: string;
+  setting_nodeUrl: string;
+  setting_state: 'normal' | 'editing';
+  setting_nodeInfo: {
+    cover: string;
+    title: string;
+    introduction: string;
+    limitation: 'public' | 'private' | 'pause';
+    limitationMessage: string;
+  };
+  // setting_nodeCover: string;
+  setting_nodeTitle: string;
+  setting_nodeIntroduction: string;
+  setting_nodeLimitation: 'public' | 'private' | 'pause';
+  setting_nodeLimitationMessage: string;
 }
 
 export interface ChangeAction extends AnyAction {
@@ -144,7 +167,7 @@ export interface OnUnmount_Page_Action extends AnyAction {
 export interface OnChange_ShowPage_Action extends AnyAction {
   type: 'nodeManagerPage/onChange_ShowPage';
   payload: {
-    value: 'exhibit' | 'theme' | 'contract';
+    value: 'exhibit' | 'theme' | 'contract' | 'setting';
   };
 }
 
@@ -164,10 +187,18 @@ export interface OnUnmount_ThemePage_Action extends AnyAction {
   type: 'nodeManagerPage/onUnmount_ThemePage';
 }
 
+export interface OnMount_SettingPage_Action extends AnyAction {
+  type: 'nodeManagerPage/onMount_SettingPage';
+}
+
+export interface OnUnmount_SettingPage_Action extends AnyAction {
+  type: 'nodeManagerPage/onUnmount_SettingPage';
+}
+
 export interface OnChange_Exhibit_SelectedType_Action extends AnyAction {
   type: 'nodeManagerPage/onChange_Exhibit_SelectedType';
   payload: {
-    value: string;
+    value: NodeManagerModelState['exhibit_ResourceTypeCodes'];
   };
 }
 
@@ -204,112 +235,59 @@ export interface OnOnlineOrOfflineAction {
   };
 }
 
+export interface OnChange_Setting_Cover_Action extends AnyAction {
+  type: 'nodeManagerPage/onChange_Setting_Cover';
+  payload: {
+    value: string;
+  };
+}
+
+export interface OnClick_Setting_EditBtn_Action extends AnyAction {
+  type: 'nodeManagerPage/onClick_Setting_EditBtn';
+}
+
+export interface OnClick_Setting_CancelEditBtn_Action extends AnyAction {
+  type: 'nodeManagerPage/onClick_Setting_CancelEditBtn';
+}
+
+export interface OnClick_Setting_SaveEditBtn_Action extends AnyAction {
+  type: 'nodeManagerPage/onClick_Setting_SaveEditBtn';
+}
+
+export interface OnChange_Setting_Title_Action extends AnyAction {
+  type: 'nodeManagerPage/onChange_Setting_Title';
+  payload: {
+    value: string;
+  };
+}
+
+export interface OnChange_Setting_Introduction_Action extends AnyAction {
+  type: 'nodeManagerPage/onChange_Setting_Introduction';
+  payload: {
+    value: string;
+  };
+}
+
+export interface OnChange_Setting_Limitation_Action extends AnyAction {
+  type: 'nodeManagerPage/onChange_Setting_Limitation';
+  payload: {
+    value: NodeManagerModelState['setting_nodeLimitation']
+  };
+}
+
+export interface OnChange_Setting_NodeLimitationMessage_Action extends AnyAction {
+  type: 'nodeManagerPage/onChange_Setting_NodeLimitationMessage';
+  payload: {
+    value: string;
+  };
+}
+
 export interface OnActiveAction {
   type: 'nodeManagerPage/onActive';
   payload: {
     id: string;
   };
 }
-
-/********* Contract start *********************************/
-// export interface OnChangeShowPageAction extends AnyAction {
-//   type: 'contractPage/onChangeShowPage';
-//   payload: {
-//     value: 'authorize' | 'authorized';
-//   };
-// }
-//
-// export interface OnClickViewDetailsBtnAction extends AnyAction {
-//   type: 'contractPage/onClickViewDetailsBtn';
-//   payload: {
-//     value: string;
-//   };
-// }
-//
-// export interface OnCloseContractDetailsDrawerAction extends AnyAction {
-//   type: 'contractPage/onCloseContractDetailsDrawer';
-// }
-//
-// export interface OnChange_Authorize_SubjectType_Action extends AnyAction {
-//   type: 'contractPage/onChange_Authorize_SubjectType';
-//   payload: {
-//     value: 'all' | Authorize_SubjectType;
-//   };
-// }
-//
-// export interface OnChange_Authorize_Status_Action extends AnyAction {
-//   type: 'contractPage/onChange_Authorize_Status';
-//   payload: {
-//     value: 'all' | Authorize_Status;
-//   };
-// }
-//
-// export interface OnChange_Authorize_Date_Action extends AnyAction {
-//   type: 'contractPage/onChange_Authorize_Date';
-//   payload: {
-//     value: [Moment, Moment] | null;
-//   };
-// }
-//
-// export interface OnChange_Authorize_KeywordsInput_Action extends AnyAction {
-//   type: 'contractPage/onChange_Authorize_KeywordsInput';
-//   payload: {
-//     value: string
-//   };
-// }
-//
-// export interface OnClick_Authorize_LoadMoreBtn_Action extends AnyAction {
-//   type: 'contractPage/onClick_Authorize_LoadMoreBtn';
-// }
-//
-// export interface OnChange_Authorized_SubjectType_Action extends AnyAction {
-//   type: 'contractPage/onChange_Authorized_SubjectType';
-//   payload: {
-//     value: 'all' | Authorized_SubjectType;
-//   };
-// }
-//
-// export interface OnChange_Authorized_Status_Action extends AnyAction {
-//   type: 'contractPage/onChange_Authorized_Status';
-//   payload: {
-//     value: 'all' | Authorized_Status;
-//   };
-// }
-//
-// export interface OnChange_Authorized_Date_Action extends AnyAction {
-//   type: 'contractPage/onChange_Authorized_Date';
-//   payload: {
-//     value: [Moment, Moment] | null;
-//   };
-// }
-//
-// export interface OnChange_Authorized_KeywordsInput_Action extends AnyAction {
-//   type: 'contractPage/onChange_Authorized_KeywordsInput';
-//   payload: {
-//     value: string
-//   };
-// }
-//
-// export interface OnClick_Authorized_LoadMoreBtn_Action extends AnyAction {
-//   type: 'contractPage/onClick_Authorized_LoadMoreBtn';
-// }
-//
-// export interface Fetch_Authorize_List_Action extends AnyAction {
-//   type: 'fetch_Authorize_List';
-//   payload?: {
-//     loadMore: boolean;
-//   };
-// }
-//
-// export interface Fetch_Authorized_List_Action extends AnyAction {
-//   type: 'fetch_Authorized_List';
-//   payload?: {
-//     loadMore: boolean;
-//   };
-// }
-
-/********* Contract End *********************************/
-
 
 export interface FetchExhibitsAction extends AnyAction {
   type: 'nodeManagerPage/fetchExhibits' | 'fetchExhibits';
@@ -341,6 +319,8 @@ export interface NodeManagerModelType {
     ) => void;
     onMount_ThemePage: (action: OnMount_ThemePage_Action, effects: EffectsCommandMap) => void;
     onUnmount_ThemePage: (action: OnUnmount_ThemePage_Action, effects: EffectsCommandMap) => void;
+    onMount_SettingPage: (action: OnMount_SettingPage_Action, effects: EffectsCommandMap) => void;
+    onUnmount_SettingPage: (action: OnUnmount_SettingPage_Action, effects: EffectsCommandMap) => void;
 
     onChange_Exhibit_SelectedType: (
       action: OnChange_Exhibit_SelectedType_Action,
@@ -362,6 +342,15 @@ export interface NodeManagerModelType {
     onActive: (action: OnActiveAction, effects: EffectsCommandMap) => void;
     onChangeTheme: (action: OnChangeThemeAction, effects: EffectsCommandMap) => void;
 
+    onChange_Setting_Cover: (action: OnChange_Setting_Cover_Action, effects: EffectsCommandMap) => void;
+    onClick_Setting_EditBtn: (action: OnClick_Setting_EditBtn_Action, effects: EffectsCommandMap) => void;
+    onClick_Setting_CancelEditBtn: (action: OnClick_Setting_CancelEditBtn_Action, effects: EffectsCommandMap) => void;
+    onClick_Setting_SaveEditBtn: (action: OnClick_Setting_SaveEditBtn_Action, effects: EffectsCommandMap) => void;
+    onChange_Setting_Title: (action: OnChange_Setting_Title_Action, effects: EffectsCommandMap) => void;
+    onChange_Setting_Introduction: (action: OnChange_Setting_Introduction_Action, effects: EffectsCommandMap) => void;
+    onChange_Setting_Limitation: (action: OnChange_Setting_Limitation_Action, effects: EffectsCommandMap) => void;
+    onChange_Setting_NodeLimitationMessage: (action: OnChange_Setting_NodeLimitationMessage_Action, effects: EffectsCommandMap) => void;
+
     fetchExhibits: (action: FetchExhibitsAction, effects: EffectsCommandMap) => void;
     fetchThemes: (action: FetchThemesAction, effects: EffectsCommandMap) => void;
   };
@@ -373,25 +362,30 @@ export interface NodeManagerModelType {
   };
 }
 
-const exhibitInitStates: Pick<NodeManagerModelState, 'exhibit_ResourceTypeOptions'
+const exhibitInitStates: Pick<NodeManagerModelState,
+  // 'exhibit_ResourceTypeOptions1'
+  // | 'exhibit_ResourceTypeOptions2'
+  'exhibit_ResourceTypeCodes'
+  // | 'exhibit_SelectedType1'
+  // | 'exhibit_SelectedType2'
   | 'exhibit_ResourceStateOptions'
-  | 'exhibit_SelectedType'
   | 'exhibit_SelectedStatus'
   | 'exhibit_InputFilter'
   | 'exhibit_List'
   | 'exhibit_ListTotal'
   | 'exhibit_ListState'
   | 'exhibit_ListMore'> = {
-  exhibit_ResourceTypeOptions: [
-    { text: '全部', value: '-1' },
-    ...FUtil.Predefined.resourceTypes.map((i) => ({ value: i, text: i })),
-  ],
+  exhibit_ResourceTypeCodes: {
+    value: '#all',
+    label: '全部',
+    values: ['#all'],
+    labels: ['全部'],
+  },
   exhibit_ResourceStateOptions: [
     { text: '全部', value: '2' },
     { text: FI18n.i18nNext.t('filter_exhibit_status_availableforauth'), value: '1' },
     { text: FI18n.i18nNext.t('filter_exhibit_status_pendingauth'), value: '0' },
   ],
-  exhibit_SelectedType: '-1',
   exhibit_SelectedStatus: '2',
   exhibit_InputFilter: '',
   exhibit_List: [],
@@ -474,9 +468,39 @@ const contractInitStates: Pick<NodeManagerModelState,
   contract_ContractDetailsID: '',
 };
 
+const settingInitStates: Pick<NodeManagerModelState,
+  'setting_nodeID'
+  | 'setting_nodeName'
+  | 'setting_nodeUrl'
+  | 'setting_state'
+  | 'setting_nodeInfo'
+  // | 'setting_nodeCover'
+  | 'setting_nodeTitle'
+  | 'setting_nodeIntroduction'
+  | 'setting_nodeLimitation'
+  | 'setting_nodeLimitationMessage'> = {
+  setting_nodeID: -1,
+  setting_nodeName: '',
+  setting_nodeUrl: '',
+  setting_state: 'normal',
+  setting_nodeInfo: {
+    cover: '',
+    title: '',
+    introduction: '',
+    limitation: 'public',
+    limitationMessage: '',
+  },
+  // setting_nodeCover: '',
+  setting_nodeTitle: '',
+  setting_nodeIntroduction: '',
+  setting_nodeLimitation: 'public',
+  setting_nodeLimitationMessage: '',
+};
+
 const initStates: NodeManagerModelState = {
   nodeId: -1,
 
+  nodeCover: '',
   nodeName: '',
   nodeUrl: '',
   testNodeUrl: '',
@@ -494,6 +518,8 @@ const initStates: NodeManagerModelState = {
 
   policyEditorVisible: false,
   policyOperaterVisible: false,
+
+  ...settingInitStates,
 };
 
 const Model: NodeManagerModelType = {
@@ -527,10 +553,11 @@ const Model: NodeManagerModelType = {
         type: 'change',
         payload: {
           nodeId: payload.nodeID,
-          nodeName: data?.nodeName,
+          nodeCover: data?.nodeLogo || '',
+          nodeName: data?.nodeName || '',
           nodeUrl: FUtil.Format.completeUrlByDomain(data?.nodeDomain || ''),
           testNodeUrl: FUtil.Format.completeUrlByDomain((data?.nodeDomain || '') + '.t'),
-          nodeThemeId: data.nodeThemeId,
+          nodeThemeId: data.nodeThemeId || '',
           nodeInfoState: 'loaded',
         },
       });
@@ -558,80 +585,101 @@ const Model: NodeManagerModelType = {
         },
       });
     },
-    // * onChange_NodeID({ payload }: OnChange_NodeID_Action, { select, call, put }: EffectsCommandMap) {
-    //
-    // },
     * onChange_ShowPage({ payload }: OnChange_ShowPage_Action, { put }: EffectsCommandMap) {
-      if (payload.value === 'exhibit') {
-        yield put<ChangeAction>({
-          type: 'change',
-          payload: {
-            showPage: payload.value,
-            ...themeInitStates,
-          },
-        });
-        yield put<FetchExhibitsAction>({
-          type: 'fetchExhibits',
-          payload: {
-            restart: true,
-          },
-        });
-      }
-
-      if (payload.value === 'theme') {
-        yield put<ChangeAction>({
-          type: 'change',
-          payload: {
-            showPage: payload.value,
-            ...exhibitInitStates,
-          },
-        });
-        yield put<FetchThemesAction>({
-          type: 'fetchThemes',
-          payload: {
-            restart: true,
-          },
-        });
-      }
-
-      if (payload.value === 'contract') {
-        yield put<ChangeAction>({
-          type: 'change',
-          payload: {
-            showPage: payload.value,
-            ...exhibitInitStates,
-            ...themeInitStates,
-          },
-        });
-        // yield put<FetchThemesAction>({
-        //   type: 'fetchThemes',
-        //   payload: {
-        //     restart: true,
-        //   },
-        // });
-      }
-    },
-    * onMount_ExhibitPage({}: OnMount_ExhibitPage_Action, { select, put }: EffectsCommandMap) {
-
-    },
-    * onUnmount_ExhibitPage({}: OnUnmount_ExhibitPage_Action, { put }: EffectsCommandMap) {
-
-    },
-    * onMount_ThemePage({}: OnMount_ThemePage_Action, { select, put }: EffectsCommandMap) {
-
-    },
-    * onUnmount_ThemePage({}: OnUnmount_ThemePage_Action, { put }: EffectsCommandMap) {
-
-    },
-
-    * onChange_Exhibit_SelectedType(
-      { payload }: OnChange_Exhibit_SelectedType_Action,
-      { put }: EffectsCommandMap,
-    ) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          exhibit_SelectedType: payload.value,
+          showPage: payload.value,
+        },
+      });
+    },
+    * onMount_ExhibitPage({}: OnMount_ExhibitPage_Action, { select, put }: EffectsCommandMap) {
+      yield put<FetchExhibitsAction>({
+        type: 'fetchExhibits',
+        payload: {
+          restart: true,
+        },
+      });
+    },
+    * onUnmount_ExhibitPage({}: OnUnmount_ExhibitPage_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          ...exhibitInitStates,
+        },
+      });
+    },
+    * onMount_ThemePage({}: OnMount_ThemePage_Action, { select, put }: EffectsCommandMap) {
+      yield put<FetchThemesAction>({
+        type: 'fetchThemes',
+        payload: {
+          restart: true,
+        },
+      });
+    },
+    * onUnmount_ThemePage({}: OnUnmount_ThemePage_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          ...themeInitStates,
+        },
+      });
+    },
+    * onMount_SettingPage({}: OnMount_SettingPage_Action, { select, call, put }: EffectsCommandMap) {
+      const { nodeManagerPage }: ConnectState = yield select(({ nodeManagerPage }: ConnectState) => ({
+          nodeManagerPage,
+        }),
+      );
+
+      const params: Parameters<typeof FServiceAPI.Node.details>[0] = {
+        nodeId: nodeManagerPage.nodeId,
+      };
+
+      const { data: data_nodeDetails }: {
+        data: {
+          nodeLogo: string;
+          nodeId: number;
+          nodeName: string;
+          nodeDomain: string;
+          nodeTitle: string;
+          nodeShortDescription: string;
+          status: 1 | 2 | 3;
+          nodeSuspendInfo: string;
+        }
+      } = yield call(FServiceAPI.Node.details, params);
+
+      // console.log(data_nodeDetails, 'data_nodeDetailsoisdjflkjsldjflkjskld sdifjlkj****');
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          setting_nodeID: data_nodeDetails.nodeId,
+          setting_nodeTitle: data_nodeDetails.nodeName || '',
+          setting_nodeUrl: FUtil.Format.completeUrlByDomain(data_nodeDetails.nodeDomain).replace(/http(s)?:\/\//, ''),
+          setting_nodeInfo: {
+            cover: data_nodeDetails.nodeLogo || '',
+            title: data_nodeDetails.nodeTitle || '',
+            introduction: data_nodeDetails.nodeShortDescription || '',
+            limitation: data_nodeDetails.status === 1
+              ? 'public'
+              : data_nodeDetails.status === 2
+                ? 'private'
+                : 'pause',
+            limitationMessage: data_nodeDetails.nodeSuspendInfo || '',
+          },
+        },
+      });
+
+    },
+    * onUnmount_SettingPage({}: OnUnmount_SettingPage_Action, {}: EffectsCommandMap) {
+
+    },
+
+    * onChange_Exhibit_SelectedType({ payload }: OnChange_Exhibit_SelectedType_Action, { put }: EffectsCommandMap) {
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          exhibit_ResourceTypeCodes: payload.value,
         },
       });
 
@@ -687,28 +735,38 @@ const Model: NodeManagerModelType = {
       });
     },
 
-    * onOnlineOrOffline(
-      { payload }: OnOnlineOrOfflineAction,
-      { call, put, select }: EffectsCommandMap,
-    ) {
+    * onOnlineOrOffline({ payload }: OnOnlineOrOfflineAction, { call, put, select }: EffectsCommandMap) {
       // console.log(payload, 'PPPPPP');
-      const { nodeManagerPage }: ConnectState = yield select(
-        ({ nodeManagerPage }: ConnectState) => ({
+      const { nodeManagerPage }: ConnectState = yield select(({ nodeManagerPage }: ConnectState) => ({
           nodeManagerPage,
         }),
       );
 
-      const params: Parameters<typeof FServiceAPI.Exhibit.presentablesOnlineStatus>[0] = {
+      if (payload.onlineStatus === 1) {
+        const result: boolean = yield call(onlineExhibit, payload.id);
+        if (!result) {
+          return;
+        }
+      } else {
+        const params2: Parameters<typeof FServiceAPI.Exhibit.presentablesOnlineStatus>[0] = {
+          presentableId: payload.id,
+          onlineStatus: 0,
+        };
+        yield call(FServiceAPI.Exhibit.presentablesOnlineStatus, params2);
+        message.success({
+          content: FI18n.i18nNext.t('remove_resource_from_auth_msg_done'),
+          duration: 2,
+        });
+      }
+
+      const params: Parameters<typeof FServiceAPI.Exhibit.presentableDetails>[0] = {
         presentableId: payload.id,
-        onlineStatus: payload.onlineStatus,
+        // isLoadCustomPropertyDescriptors: 1,
+        isLoadPolicyInfo: 1,
+        isTranslate: 1,
       };
 
-      const { data } = yield call(FServiceAPI.Exhibit.presentablesOnlineStatus, params);
-
-      if (!data) {
-        fMessage('上线失败', 'error');
-        return;
-      }
+      const { data: data_exhibit } = yield call(FServiceAPI.Exhibit.presentableDetails, params);
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -720,6 +778,11 @@ const Model: NodeManagerModelType = {
               return {
                 ...el,
                 isOnline: payload.onlineStatus === 1,
+                policiesList: data_exhibit.policies.reverse(),
+                policies: (data_exhibit.policies as any[])
+                  .filter((p: any) => p.status === 1)
+                  .map<string>((p) => p.policyName),
+                hasPolicy: data_exhibit.policies.length > 0,
               };
             })
             .filter((el) => {
@@ -732,9 +795,6 @@ const Model: NodeManagerModelType = {
       });
     },
     * onActive({ payload }: OnActiveAction, { call, select, put }: EffectsCommandMap) {
-      // const { nodeManagerPage }: ConnectState = yield select(({ nodeManagerPage }: ConnectState) => ({
-      //   nodeManagerPage,
-      // }));
 
       yield put<ChangeAction>({
         type: 'change',
@@ -743,29 +803,18 @@ const Model: NodeManagerModelType = {
         },
       });
 
-      const params: Parameters<typeof FServiceAPI.Exhibit.presentablesOnlineStatus>[0] = {
-        presentableId: payload.id,
-        onlineStatus: 1,
-      };
-      const { data } = yield call(FServiceAPI.Exhibit.presentablesOnlineStatus, params);
+      yield call(onlineExhibit, payload.id);
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           theme_ActivatingThemeID: '',
         },
       });
-      if (!data) {
-        fMessage('激活失败', 'error');
-      } else {
-        fMessage('激活成功', 'success');
-        yield put<FetchThemesAction>({
-          type: 'fetchThemes',
-        });
-      }
 
-      // yield put<FetchNodeInfoAction>({
-      //   type: 'fetchNodeInfo',
-      // });
+      yield put<FetchThemesAction>({
+        type: 'fetchThemes',
+      });
     },
     * onChangeTheme({ payload }: OnChangeThemeAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
@@ -776,6 +825,136 @@ const Model: NodeManagerModelType = {
       });
       yield put<FetchThemesAction>({
         type: 'fetchThemes',
+      });
+    },
+
+    * onChange_Setting_Cover({ payload }: OnChange_Setting_Cover_Action, { select, call, put }: EffectsCommandMap) {
+      const { nodeManagerPage }: ConnectState = yield select(({ nodeManagerPage }: ConnectState) => ({
+          nodeManagerPage,
+        }),
+      );
+      const params: Parameters<typeof FServiceAPI.Node.setNodeInfo>[0] = {
+        nodeId: nodeManagerPage.nodeId,
+        nodeLogo: payload.value,
+        nodeTitle: nodeManagerPage.setting_nodeInfo.title,
+        nodeShortDescription: nodeManagerPage.setting_nodeInfo.introduction,
+        status: nodeManagerPage.setting_nodeInfo.limitation === 'public'
+          ? 1
+          : nodeManagerPage.setting_nodeInfo.limitation === 'private'
+            ? 2
+            : 8, // 可见性 1：公开 2：私密 3：暂停
+        nodeSuspendInfo: nodeManagerPage.setting_nodeInfo.limitationMessage,
+      };
+
+      const { ret, errCode, msg, data } = yield call(FServiceAPI.Node.setNodeInfo, params);
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          setting_nodeInfo: {
+            ...nodeManagerPage.setting_nodeInfo,
+            cover: payload.value,
+          },
+          nodeCover: payload.value,
+        },
+      });
+    },
+    * onClick_Setting_EditBtn({}: OnClick_Setting_EditBtn_Action, { select, put }: EffectsCommandMap) {
+      const { nodeManagerPage }: ConnectState = yield select(({ nodeManagerPage }: ConnectState) => ({
+          nodeManagerPage,
+        }),
+      );
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          setting_state: 'editing',
+          setting_nodeTitle: nodeManagerPage.setting_nodeInfo.title,
+          setting_nodeIntroduction: nodeManagerPage.setting_nodeInfo.introduction,
+          setting_nodeLimitation: nodeManagerPage.setting_nodeInfo.limitation,
+          setting_nodeLimitationMessage: nodeManagerPage.setting_nodeInfo.limitationMessage,
+        },
+      });
+    },
+    * onClick_Setting_CancelEditBtn({}: OnClick_Setting_CancelEditBtn_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          setting_state: 'normal',
+        },
+      });
+    },
+    * onClick_Setting_SaveEditBtn({}: OnClick_Setting_SaveEditBtn_Action, { select, call, put }: EffectsCommandMap) {
+      const { nodeManagerPage }: ConnectState = yield select(({ nodeManagerPage }: ConnectState) => ({
+          nodeManagerPage,
+        }),
+      );
+
+      const params: Parameters<typeof FServiceAPI.Node.setNodeInfo>[0] = {
+        nodeId: nodeManagerPage.setting_nodeID,
+        nodeLogo: nodeManagerPage.setting_nodeInfo.cover,
+        nodeTitle: nodeManagerPage.setting_nodeTitle,
+        nodeShortDescription: nodeManagerPage.setting_nodeIntroduction,
+        status: nodeManagerPage.setting_nodeLimitation === 'public'
+          ? 1
+          : nodeManagerPage.setting_nodeLimitation === 'private'
+            ? 2
+            : 8, // 可见性 1：公开 2：私密 3：暂停
+        nodeSuspendInfo: nodeManagerPage.setting_nodeLimitationMessage,
+      };
+
+      const { ret, errCode, msg, data } = yield call(FServiceAPI.Node.setNodeInfo, params);
+
+      if (ret !== 0 || errCode !== 0) {
+        fMessage(msg, 'error');
+        return;
+      }
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          setting_state: 'normal',
+          setting_nodeInfo: {
+            ...nodeManagerPage.setting_nodeInfo,
+            title: nodeManagerPage.setting_nodeTitle,
+            introduction: nodeManagerPage.setting_nodeIntroduction,
+            limitation: nodeManagerPage.setting_nodeLimitation,
+            limitationMessage: nodeManagerPage.setting_nodeLimitationMessage,
+          },
+          // nodeCover: payload.value,
+        },
+      });
+    },
+    * onChange_Setting_Title({ payload }: OnChange_Setting_Title_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          setting_nodeTitle: payload.value,
+        },
+      });
+    },
+    * onChange_Setting_Introduction({ payload }: OnChange_Setting_Introduction_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          setting_nodeIntroduction: payload.value,
+        },
+      });
+    },
+    * onChange_Setting_Limitation({ payload }: OnChange_Setting_Limitation_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          setting_nodeLimitation: payload.value,
+        },
+      });
+    },
+    * onChange_Setting_NodeLimitationMessage({ payload }: OnChange_Setting_NodeLimitationMessage_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          setting_nodeLimitationMessage: payload.value,
+        },
       });
     },
 
@@ -806,6 +985,10 @@ const Model: NodeManagerModelType = {
         });
       }
 
+      const resourceTypes: Array<string | number> = nodeManagerPage.exhibit_ResourceTypeCodes.labels.filter((rt) => {
+        return rt !== '全部';
+      });
+
       const params: Parameters<typeof FServiceAPI.Exhibit.presentables>[0] = {
         nodeId: nodeManagerPage.nodeId,
         limit: FUtil.Predefined.pageSize,
@@ -813,10 +996,7 @@ const Model: NodeManagerModelType = {
         skip: list.length,
         keywords: nodeManagerPage.exhibit_InputFilter || undefined,
         onlineStatus: Number(nodeManagerPage.exhibit_SelectedStatus),
-        resourceType:
-          nodeManagerPage.exhibit_SelectedType === '-1'
-            ? undefined
-            : nodeManagerPage.exhibit_SelectedType,
+        resourceType: resourceTypes.length === 0 ? undefined : String(resourceTypes[resourceTypes.length - 1]),
         omitResourceType: '主题',
         isLoadPolicyInfo: 1,
         // @ts-ignore
@@ -828,7 +1008,7 @@ const Model: NodeManagerModelType = {
 
       if (data_Exhibits.dataList.length === 0) {
         if (
-          nodeManagerPage.exhibit_SelectedType === '-1' &&
+          nodeManagerPage.exhibit_ResourceTypeCodes.values[0] === '#all' &&
           nodeManagerPage.exhibit_SelectedStatus === '2' &&
           nodeManagerPage.exhibit_InputFilter === ''
         ) {
@@ -892,12 +1072,6 @@ const Model: NodeManagerModelType = {
               resourceId: i.resourceInfo.resourceId,
               isAuth: authInfo.isAuth,
               authErrorText: authInfo.error,
-              // authErrorText:
-              //   authInfo.defaulterIdentityType === 1
-              //     ? FI18n.i18nNext.t('alert_exhibit_auth_abnormal')
-              //     : authInfo.defaulterIdentityType === 2
-              //       ? FI18n.i18nNext.t('alert_exhibit_no_auth')
-              //       : authInfo.error,
             };
           },
         ),
@@ -990,12 +1164,6 @@ const Model: NodeManagerModelType = {
             hasPolicy: i.policies.length > 0,
             isAuth: authInfo.isAuth,
             authErrorText: authInfo.error,
-            // authErrorText:
-            //   authInfo.defaulterIdentityType === 1
-            //     ? FI18n.i18nNext.t('alert_exhibit_auth_abnormal')
-            //     : authInfo.defaulterIdentityType === 2
-            //       ? FI18n.i18nNext.t('alert_exhibit_no_auth')
-            //       : authInfo.error,
             resourceId: i.resourceInfo.resourceId,
           };
         })

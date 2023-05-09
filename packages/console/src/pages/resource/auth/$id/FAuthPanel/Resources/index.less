@@ -6,27 +6,38 @@
     align-items: center;
     height: fit-content;
     justify-content: space-between;
-    padding: 12px 30px 12px 20px;
-    //border-bottom: 1px solid #E5E7EB;
+    padding: 12px 20px 12px 20px;
+    // border-bottom: 1px solid #E5E7EB;
     border-right: 1px solid transparent;
     cursor: pointer;
 
     & > div:first-child {
       flex-shrink: 1;
-      padding-right: 20px;
+      //padding-right: 20px;
       overflow: hidden;
       width: 100%;
     }
 
-    .title {
-      display: flex;
-      align-items: center;
+    //.title {
+    //  display: flex;
+    //  align-items: center;
+    //  gap: 5px;
+    //
+    //  .FContentText {
+    //
+    //    &:hover {
+    //      color: inherit;
+    //    }
+    //  }
+    //}
 
-      .FContentText {
+    .FFileSearch {
+      display: none;
+    }
 
-        &:hover {
-          color: inherit;
-        }
+    &:hover {
+      .FFileSearch {
+        display: block;
       }
     }
 

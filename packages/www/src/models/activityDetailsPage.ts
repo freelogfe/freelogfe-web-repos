@@ -2,7 +2,7 @@ import { DvaReducer, WholeReadonly } from '@/models/shared';
 import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription } from 'dva';
 import { FServiceAPI } from '@freelog/tools-lib';
-import moment from 'moment';
+import moment, { Moment } from 'moment';
 
 
 export interface ActivityDetailsPageModelState {
@@ -11,8 +11,9 @@ export interface ActivityDetailsPageModelState {
   pageTitle: string;
   showActivity: '' | 'play-newer' | 'ResourceCompetition';
 
-  startTime: string | null;
-  endTime: string | null;
+  startTime: Moment | null;
+  endTime: Moment | null;
+  announceTime: Moment | null;
   timeValidity: 'NotStart' | 'Validity' | 'Finished';
 }
 
@@ -55,6 +56,7 @@ const initStates: ActivityDetailsPageModelState = {
 
   startTime: null,
   endTime: null,
+  announceTime: null,
   timeValidity: 'Validity',
 };
 
@@ -88,8 +90,9 @@ const Model: ActivityDetailsPageModelType = {
           showActivity: data?.link || '',
           pageTitle: data?.title || '活动不存在或者已暂停',
 
-          startTime: data.persist ? null : moment(data.startTime).format('YYYY·MM·DD'),
-          endTime: data.persist ? null : moment(data.startTime).format('YYYY·MM·DD'),
+          startTime: data.persist ? null : moment(data.startTime),
+          endTime: data.persist ? null : moment(data.limitTime),
+          announceTime: data.persist ? null : moment(data.limitTime).add(7, 'days'),
           timeValidity: data.persist ?
             'Validity'
             : nowTimestamp < new Date(data.startTime).getTime()

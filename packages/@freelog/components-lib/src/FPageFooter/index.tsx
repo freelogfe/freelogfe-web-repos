@@ -7,13 +7,14 @@ import {Popover} from 'antd';
 
 interface FPageFooterProps {
     PopoverPatch?: React.ForwardRefExoticComponent<any>;
+    style?: React.CSSProperties;
 }
 
-function FPageFooter({PopoverPatch}: FPageFooterProps): React.ReactElement {
+function FPageFooter({PopoverPatch, style = {}}: FPageFooterProps): React.ReactElement {
 
     const FPopover = PopoverPatch || Popover;
 
-    return (<footer className={styles.footer}>
+    return (<footer className={styles.footer} style={style}>
         <div className={styles.footerLeft}>
             <Space size={20}>
                 <a

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import FSwitch from '@/components/FSwitch';
-import { Checkbox, Space } from 'antd';
+import { message, Space } from 'antd';
 import Policies from './Policies';
 import Contracts from './Contracts';
 import Viewports from './Viewports';
@@ -10,26 +10,21 @@ import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import { ConnectState, ExhibitInfoPageModelState } from '@/models/connect';
 import {
-  AddAPolicyAction,
   ChangeAction,
   FetchInfoAction,
   OnMountPageAction,
   OnUnmountPageAction,
-  // UpdateStatusAction,
 } from '@/models/exhibitInfoPage';
 import FTooltip from '@/components/FTooltip';
 import { RouteComponentProps } from 'react-router';
-import fConfirmModal from '@/components/fConfirmModal';
 import { FUtil, FI18n, FServiceAPI } from '@freelog/tools-lib';
 import * as AHooks from 'ahooks';
 import FLoadingTip from '@/components/FLoadingTip';
 import { Helmet } from 'react-helmet';
-import fMessage from '@/components/fMessage';
-import { FDialog } from '@/components/FDialog';
-import FPolicyBuilderDrawer from '@/components/FPolicyBuilderDrawer';
-import { FPolicyOperaterDrawer } from '@/components/FPolicyOperaterDrawer';
-import { LoadingOutlined } from '@ant-design/icons';
 import FComponentsLib from '@freelog/components-lib';
+import useUrlState from '@ahooksjs/use-url-state';
+import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
+import { onlineExhibit } from '@/pages/node/utils/tools';
 
 interface PresentableProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -37,11 +32,8 @@ interface PresentableProps extends RouteComponentProps<{ id: string }> {
 }
 
 function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
-  const [activeDialogShow, setActiveDialogShow] = React.useState(false);
-  const [inactiveDialogShow, setInactiveDialogShow] = React.useState(false);
-  const [resultPopupType, setResultPopupType] = React.useState<null | 0 | 1>(null);
-  const [loading, setLoading] = React.useState(false);
-  const [noLonger, setNoLonger] = React.useState(false);
+
+  const [urlState] = useUrlState<{ openCreatePolicyDrawer: 'true', openOperatePolicyDrawer: 'true' }>();
 
   AHooks.useMount(() => {
     dispatch<OnMountPageAction>({
@@ -52,163 +44,61 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
     });
   });
 
+  AHooks.useMount(() => {
+    if (urlState.openCreatePolicyDrawer) {
+      dispatch<ChangeAction>({
+        type: 'exhibitInfoPage/change',
+        payload: {
+          policyEditorVisible: true,
+        },
+      });
+    }
+
+    if (urlState.openOperatePolicyDrawer) {
+      dispatch<ChangeAction>({
+        type: 'exhibitInfoPage/change',
+        payload: {
+          policyOperaterVisible: true,
+        },
+      });
+    }
+  });
+
   AHooks.useUnmount(() => {
     dispatch<OnUnmountPageAction>({
       type: 'exhibitInfoPage/onUnmountPage',
     });
   });
 
+  async function activateTheme() {
+    const res1: boolean = await fPromiseModalConfirm({
+      title: '提示',
+      // icon: <div />,
+      description: FI18n.i18nNext.t('msg_change_theme_confirm', { ThemeName: exhibitInfoPage.exhibit_Name }),
+      okText: FI18n.i18nNext.t('btn_activate_theme'),
+      cancelText: FI18n.i18nNext.t('keep_current_theme'),
+    });
+
+    if (!res1) {
+      return;
+    }
+
+    await onlineExhibit(exhibitInfoPage.exhibit_ID);
+
+    FComponentsLib.fSetHotspotTooltipVisible('exhibitDetailPage.onlineSwitch', {
+      value: false,
+      effectiveImmediately: true,
+      onlyNullish: false,
+    });
+
+    dispatch<FetchInfoAction>({
+      type: 'exhibitInfoPage/fetchInfo',
+    });
+  }
+
   if (exhibitInfoPage.pageLoading) {
     return <FLoadingTip height={'calc(100vh - 140px)'} />;
   }
-
-  /** 上下架 */
-  const changeStatus = (value: boolean) => {
-    if (value) {
-      // 上架
-      const { policy_List } = exhibitInfoPage;
-      if (policy_List.length === 0) {
-        setActiveDialogShow(true);
-      } else if (policy_List.filter((item: { status: number }) => item.status === 1).length === 0) {
-        exhibitInfoPage.policy_List.forEach((item: any) => {
-          item.checked = false;
-        });
-        dispatch<ChangeAction>({
-          type: 'exhibitInfoPage/change',
-          payload: {
-            policyOperaterVisible: true,
-          },
-        });
-      } else {
-        if (
-          !exhibitInfoPage.side_ResourceType.includes('主题') ||
-          !exhibitInfoPage.exhibit_BelongNode_ActiveThemeId
-        ) {
-          const data = { onlineStatus: 1 };
-          upOrDownExhibit(data);
-        } else {
-          fConfirmModal({
-            // message: FUtil.I18n.message('msg_change_theme_confirm'),
-            message: '激活该主题，将下线其它主题',
-            // okText: FUtil.I18n.message('active_new_theme'),
-            okText: '激活',
-            // cancelText: FUtil.I18n.message('keep_current_theme'),
-            cancelText: '保持当前主题',
-            onOk() {
-              const data = { onlineStatus: 1 };
-              upOrDownExhibit(data);
-            },
-          });
-        }
-      }
-    } else {
-      // 下架
-      const resourceNoTip = localStorage.getItem('exhibitNoTip') || false;
-      if (resourceNoTip) {
-        inactiveResource();
-      } else {
-        setNoLonger(false);
-        setInactiveDialogShow(true);
-      }
-    }
-  };
-
-  /** 打开添加策略弹窗 */
-  const openPolicyBuilder = () => {
-    dispatch<ChangeAction>({
-      type: 'exhibitInfoPage/change',
-      payload: {
-        policyEditorVisible: true,
-      },
-    });
-    setActiveDialogShow(false);
-  };
-
-  /** 上架 */
-  const activeResource = () => {
-    const updatePolicies = exhibitInfoPage.policy_List
-      .filter((item: any) => item.checked)
-      .map((item: { policyId: string }) => {
-        return { policyId: item.policyId, status: 1 };
-      });
-    const data = { onlineStatus: 1, updatePolicies };
-    upOrDownExhibit(data);
-  };
-
-  /** 下架 */
-  const inactiveResource = () => {
-    if (inactiveDialogShow && noLonger) localStorage.setItem('exhibitNoTip', 'true');
-
-    const data = { onlineStatus: 0 };
-    upOrDownExhibit(data);
-  };
-
-  /** 资源上下架 */
-  const upOrDownExhibit = async (data: any) => {
-    setActiveDialogShow(false);
-    setInactiveDialogShow(false);
-    setLoading(true);
-    setResultPopupType(data.onlineStatus);
-
-    const result = await FUtil.Request({
-      method: 'PUT',
-      url: `/v2/presentables/${match.params.id}/onlineStatus`,
-      data,
-    });
-    if (result.errCode === 0) {
-      setTimeout(() => {
-        setLoading(false);
-        setTimeout(() => {
-          setResultPopupType(null);
-        }, 1000);
-      }, 1000);
-
-      exhibitInfoPage.exhibit_Online = data.onlineStatus === 1;
-      if (data.updatePolicies) {
-        dispatch<ChangeAction>({
-          type: 'exhibitInfoPage/change',
-          payload: {
-            policyOperaterVisible: false,
-          },
-        });
-        data.updatePolicies.forEach((item: any) => {
-          const i = exhibitInfoPage.policy_List.findIndex(
-            (policy) => policy.policyId === item.policyId,
-          );
-          exhibitInfoPage.policy_List[i].status = 1;
-        });
-      }
-
-      dispatch<ChangeAction>({
-        type: 'exhibitInfoPage/change',
-        payload: {
-          policy_List: exhibitInfoPage.policy_List,
-        },
-      });
-    } else {
-      fMessage(result.msg, 'error');
-      setLoading(false);
-      setResultPopupType(null);
-    }
-  };
-
-  /** 添加授权策略 */
-  const addPolicy = async (title: string, text: string) => {
-    dispatch<AddAPolicyAction>({
-      type: 'exhibitInfoPage/addAPolicy',
-      payload: {
-        title,
-        text,
-      },
-    });
-
-    dispatch<ChangeAction>({
-      type: 'exhibitInfoPage/change',
-      payload: {
-        policyEditorVisible: false,
-      },
-    });
-  };
 
   return (
     <div className={styles.styles}>
@@ -246,53 +136,89 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
               singleRow
             />
           </div>
-          <Space size={20}>
-            {exhibitInfoPage.side_ResourceType.includes('主题') && (<>
+          <FComponentsLib.FHotspotTooltip
+            id={'exhibitDetailPage.onlineSwitch'}
+            style={{ left: -42, top: -4 }}
+            text={FI18n.i18nNext.t('hotpots_exhibit_toggle_exhibit')}
+          >
+            <Space size={20}>
               {
-                exhibitInfoPage.exhibit_Online
-                  ? (<div style={{
-                    backgroundColor: '#42C28C',
-                    borderRadius: 12,
-                    lineHeight: '18px',
-                    color: 'white',
-                    fontSize: 12,
-                    padding: '3px 10px',
-                  }}>已激活</div>)
-                  : (<>
+                exhibitInfoPage.side_ResourceType.includes('主题') && (<>
+                  {
+                    exhibitInfoPage.exhibit_Online
+                      ? (<div style={{
+                        backgroundColor: '#42C28C',
+                        borderRadius: 12,
+                        lineHeight: '18px',
+                        color: 'white',
+                        fontSize: 12,
+                        padding: '3px 10px',
+                      }}>{FI18n.i18nNext.t('theme_state_active')}</div>)
+                      : (<>
                     <span
                       style={{ color: exhibitInfoPage.exhibit_Online ? '#42C28C' : '#666' }}>{FI18n.i18nNext.t('toggle_activate_theme')}</span>
 
-                    <FSwitch
-                      disabled={!exhibitInfoPage.exhibit_IsAuth && !exhibitInfoPage.exhibit_Online}
-                      checked={exhibitInfoPage.exhibit_Online}
-                      loading={loading}
-                      onClick={(checked) => changeStatus(checked)}
-                    />
-                  </>)
+                        <FSwitch
+                          disabled={!exhibitInfoPage.exhibit_IsAuth && !exhibitInfoPage.exhibit_Online}
+                          checked={exhibitInfoPage.exhibit_Online}
+                          // loading={loading}
+                          onChange={async () => {
+                            activateTheme();
+                          }}
+                        />
+                      </>)
+                  }
+                </>)
               }
 
-            </>)}
-
-            {
-              !exhibitInfoPage.side_ResourceType.includes('主题') && (<>
+              {
+                !exhibitInfoPage.side_ResourceType.includes('主题') && (<>
                 <span
                   style={{ color: exhibitInfoPage.exhibit_Online ? '#42C28C' : '#666' }}>{FI18n.i18nNext.t('switch_set_exhibit_avaliable')}</span>
 
-                <FSwitch
-                  disabled={!exhibitInfoPage.exhibit_IsAuth && !exhibitInfoPage.exhibit_Online}
-                  checked={exhibitInfoPage.exhibit_Online}
-                  loading={loading}
-                  onClick={(checked) => changeStatus(checked)}
-                />
-              </>)
-            }
+                  <FSwitch
+                    disabled={!exhibitInfoPage.exhibit_IsAuth && !exhibitInfoPage.exhibit_Online}
+                    checked={exhibitInfoPage.exhibit_Online}
+                    // loading={loading}
+                    onChange={async (checked) => {
+                      // FComponentsLib.fSetHotspotTooltipVisible('exhibitDetailPage.onlineSwitch', {
+                      //   value: false,
+                      //   effectiveImmediately: true,
+                      //   onlyNullish: false,
+                      // });
+                      if (checked) {
+                        await onlineExhibit(exhibitInfoPage.exhibit_ID);
+                      } else {
+                        const params2: Parameters<typeof FServiceAPI.Exhibit.presentablesOnlineStatus>[0] = {
+                          presentableId: exhibitInfoPage.exhibit_ID,
+                          onlineStatus: 0,
+                        };
+                        await FServiceAPI.Exhibit.presentablesOnlineStatus(params2);
+                        message.success({
+                          content: FI18n.i18nNext.t('remove_resource_from_auth_msg_done'),
+                          duration: 2,
+                        });
+                      }
+                      FComponentsLib.fSetHotspotTooltipVisible('exhibitDetailPage.onlineSwitch', {
+                        value: false,
+                        effectiveImmediately: true,
+                        onlyNullish: false,
+                      });
+                      dispatch<FetchInfoAction>({
+                        type: 'exhibitInfoPage/fetchInfo',
+                      });
+                    }}
+                  />
+                </>)
+              }
 
-            {!exhibitInfoPage.exhibit_IsAuth && (
-              <FTooltip title={exhibitInfoPage.exhibit_AuthErrorText}>
-                <FComponentsLib.FIcons.FWarning />
-              </FTooltip>
-            )}
-          </Space>
+              {!exhibitInfoPage.exhibit_IsAuth && (
+                <FTooltip title={exhibitInfoPage.exhibit_AuthErrorText}>
+                  <FComponentsLib.FIcons.FWarning />
+                </FTooltip>
+              )}
+            </Space>
+          </FComponentsLib.FHotspotTooltip>
         </div>
         <div className={styles.body}>
           <div className={styles.content}>
@@ -309,104 +235,6 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
         </div>
       </div>
       <div style={{ height: 100 }} />
-
-      <FDialog
-        show={activeDialogShow}
-        title='提醒'
-        desc='请先为资源添加一个授权策略，再进行上架操作'
-        sureText='添加策略'
-        cancel={() => {
-          setActiveDialogShow(false);
-        }}
-        sure={openPolicyBuilder}
-        loading={loading}
-      ></FDialog>
-
-      <FDialog
-        show={inactiveDialogShow}
-        title='提醒'
-        desc='下架后其它用户将无法签约该资源，确认要下架吗？'
-        sureText='下架资源'
-        cancel={() => {
-          setInactiveDialogShow(false);
-        }}
-        sure={inactiveResource}
-        loading={loading}
-        footer={
-          <Checkbox
-            className={styles['no-longer']}
-            checked={noLonger}
-            onChange={(e) => setNoLonger(e.target.checked)}
-          >
-            不再提醒
-          </Checkbox>
-        }
-      ></FDialog>
-
-      <FPolicyBuilderDrawer
-        visible={exhibitInfoPage.policyEditorVisible}
-        alreadyUsedTexts={exhibitInfoPage?.policy_List.map((ip: any) => {
-          return ip.policyText;
-        })}
-        alreadyUsedTitles={exhibitInfoPage?.policy_List.map((ip: any) => {
-          return ip.policyName;
-        })}
-        targetType='resource'
-        onCancel={() => {
-          dispatch<ChangeAction>({
-            type: 'exhibitInfoPage/change',
-            payload: {
-              policyEditorVisible: false,
-            },
-          });
-        }}
-        onConfirm={({ title, text }) => addPolicy(title, text)}
-      />
-
-      <FPolicyOperaterDrawer
-        visible={exhibitInfoPage.policyOperaterVisible}
-        type='resource'
-        policiesList={exhibitInfoPage?.policy_List || []}
-        onCancel={() => {
-          dispatch<FetchInfoAction>({
-            type: 'exhibitInfoPage/fetchInfo',
-          });
-          dispatch<ChangeAction>({
-            type: 'exhibitInfoPage/change',
-            payload: {
-              policyOperaterVisible: false,
-            },
-          });
-        }}
-        onConfirm={activeResource}
-        onNewPolicy={openPolicyBuilder}
-      />
-
-      {resultPopupType !== null && (
-        <div className={styles['result-modal']}>
-          <div className={styles['result-popup']}>
-            {loading ? (
-              <div className={styles['loader']}>
-                <LoadingOutlined className={styles['loader-icon']} />
-                <div className={styles['loader-text']}>
-                  正在{resultPopupType === 1 ? '上架' : '下架'}
-                </div>
-              </div>
-            ) : (
-              <div className={styles['result']}>
-                <i
-                  className={`freelog fl-icon-shangpao ${styles['result-icon']} ${
-                    styles[resultPopupType === 1 ? 'up' : 'down']
-                  }`}
-                ></i>
-                <div className={styles['result-text']}>
-                  已{resultPopupType === 1 ? '上架' : '下架'}
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
     </div>
   );
 }
@@ -414,3 +242,4 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
 export default connect(({ exhibitInfoPage }: ConnectState) => ({
   exhibitInfoPage,
 }))(Presentable);
+

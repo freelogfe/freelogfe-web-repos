@@ -1,27 +1,29 @@
 import * as React from 'react';
-import {connect, Dispatch} from 'dva';
-import {ConnectState, ResourceCollectPageModelState} from '@/models/connect';
-import {history} from 'umi';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
+import { ConnectState, ResourceCollectPageModelState } from '@/models/connect';
+import { history } from 'umi';
 import FResourceCardsList from '@/pages/resource/components/FResourceCardsList';
 import {
-  // ChangeStatesAction,
   OnMountAction,
   OnUnmountAction,
   OnChangeResourceTypeAction,
   OnChangeStatusAction,
-  OnChangeKeywordsAction, OnBoomJuiceAction, OnClickLoadingMordAction
+  OnChangeKeywordsAction,
+  OnBoomJuiceAction,
+  OnClickLoadingMordAction,
 } from '@/models/resourceCollectPage';
 import FNoDataTip from '@/components/FNoDataTip';
-import FLoadingTip from "@/components/FLoadingTip";
-import {FUtil} from '@freelog/tools-lib';
-import * as AHooks from "ahooks";
+import FLoadingTip from '@/components/FLoadingTip';
+import { FUtil } from '@freelog/tools-lib';
+import * as AHooks from 'ahooks';
 
 interface ResourceCollectProps {
   dispatch: Dispatch;
   resource: ResourceCollectPageModelState;
 }
 
-function ResourceCollect({dispatch, resource}: ResourceCollectProps) {
+function ResourceCollect({ dispatch, resource }: ResourceCollectProps) {
 
   AHooks.useMount(() => {
     dispatch<OnMountAction>({
@@ -36,11 +38,13 @@ function ResourceCollect({dispatch, resource}: ResourceCollectProps) {
   });
 
   if (resource.totalNum === -1) {
-    return (<FLoadingTip height={'calc(100vh - 140px)'}/>)
+    return (<FLoadingTip height={'calc(100vh - 140px)'} />);
   }
 
-  // console.log(resource.inputText, resource.resourceType, resource.resourceStatus, '@#@#@##@#@#');
-  if (resource.dataSource.length === 0 && !resource.inputText && resource.resourceType === '-1' && resource.resourceStatus === '2') {
+  if (resource.dataSource.length === 0
+    && !resource.inputText
+    && resource.resourceTypeCodes.values.length === 1 && resource.resourceTypeCodes.value === '#all'
+    && resource.resourceStatus === '#') {
     return (<FNoDataTip
       height={'calc(100vh - 140px)'}
       tipText={'未收藏任何资源'}
@@ -50,12 +54,12 @@ function ResourceCollect({dispatch, resource}: ResourceCollectProps) {
   }
 
   return (<FResourceCardsList
-    resourceType={resource.resourceType}
+    resourceTypeCodes={resource.resourceTypeCodes}
     resourceStatus={resource.resourceStatus}
     inputText={resource.inputText}
     dataSource={resource.dataSource}
     totalNum={resource.totalNum}
-    onChangeResourceType={(value) => {
+    onChangeResourceTypeCodes={(value) => {
       dispatch<OnChangeResourceTypeAction>({
         type: 'resourceCollectPage/onChangeResourceType',
         payload: {
@@ -63,7 +67,7 @@ function ResourceCollect({dispatch, resource}: ResourceCollectProps) {
         },
       });
     }}
-    onChangeResourceStatus={(value: string) => {
+    onChangeResourceStatus={(value) => {
       dispatch<OnChangeStatusAction>({
         type: 'resourceCollectPage/onChangeStatus',
         payload: {
@@ -84,7 +88,7 @@ function ResourceCollect({dispatch, resource}: ResourceCollectProps) {
       dispatch<OnBoomJuiceAction>({
         type: 'resourceCollectPage/onBoomJuice',
         payload: id.toString(),
-      })
+      });
     }}
     onClickDetails={(id) => {
       window.open(FUtil.LinkTo.resourceDetails({
@@ -99,6 +103,6 @@ function ResourceCollect({dispatch, resource}: ResourceCollectProps) {
   />);
 }
 
-export default connect(({resourceCollectPage}: ConnectState) => ({
+export default connect(({ resourceCollectPage }: ConnectState) => ({
   resource: resourceCollectPage,
 }))(ResourceCollect);

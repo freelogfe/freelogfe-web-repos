@@ -66,8 +66,10 @@ function FVersionHandlerPopover({value, versionOptions, allowEmpty = false, onCh
   return (<Popover
     placement="bottomLeft"
     trigger="click"
-    onVisibleChange={(visible) => setVisible(visible)}
-    visible={visible}
+    // onVisibleChange={(visible) => setVisible(visible)}
+    onOpenChange={(visible) => setVisible(visible)}
+    // visible={visible}
+    open={visible}
     content={<div onClick={(e) => e.stopPropagation()}>
       <div className={styles.select}>
         <FAutoComplete

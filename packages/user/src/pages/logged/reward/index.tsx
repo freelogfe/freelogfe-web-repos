@@ -237,7 +237,10 @@ function Reward({ dispatch, rewardPage }: RewardProps) {
               }}
             >立即刷新</FComponentsLib.FTextBtn>
             &nbsp;
-            <FComponentsLib.FContentText text={'开始提现'} type={'negative'} />
+            <FComponentsLib.FContentText
+              text={'开始提现'}
+              type={'negative'}
+            />
 
           </div>
           {/*<Space size={30} style={{ width: 440, alignItems: 'center' }}>*/}
@@ -347,7 +350,12 @@ function Reward({ dispatch, rewardPage }: RewardProps) {
             <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
               <FComponentsLib.FRectBtn
                 type='primary'
-                disabled={rewardPage.withdrawModal_RealName === '' || rewardPage.withdrawModal_RealNameError !== '' || rewardPage.withdrawModal_Amount === '' || rewardPage.withdrawModal_AmountError !== ''}
+                disabled={rewardPage.withdrawModal_RealName === ''
+                || rewardPage.withdrawModal_RealNameError !== ''
+                || rewardPage.withdrawModal_Amount === ''
+                || rewardPage.withdrawModal_AmountError !== ''
+                || rewardPage.withdrawModal_drawing
+                }
                 onClick={() => {
                   dispatch<OnClick_WithdrawModal_ConfirmBtn_Action>({
                     type: 'rewardPage/onClick_WithdrawModal_ConfirmBtn',

@@ -1,14 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-import {
-  // FEdit,
-  FMappingRuleAdd, FMappingRuleAttr,
-  FMappingRuleCover,
-  FMappingRuleLabel, FMappingRuleOffline, FMappingRuleOnline, FMappingRuleReplace,
-  FMappingRuleTitle,
-  FMappingRuleVersion,
-} from '@/components/FIcons';
-import FMappingRuleActive from '@/components/FIcons/FMappingRuleActive';
 import FComponentsLib from '@freelog/components-lib';
 
 interface AddRuleProps {
@@ -22,7 +13,7 @@ interface AddRuleProps {
 
 export function AddRule({ exhibit, source }: AddRuleProps) {
   return (<div className={styles.rule}>
-    <div className={styles.ruleIcon}><FMappingRuleAdd /></div>
+    <div className={styles.ruleIcon}><FComponentsLib.FIcons.FMappingRuleAdd /></div>
     <div className={styles.ruleContent}>
       <div><FComponentsLib.FContentText text={'新增'} /></div>
       <div><label className={styles.exhibitLabel}>{exhibit}</label></div>
@@ -60,7 +51,7 @@ interface ActiveRuleProps {
 
 export function ActiveRule({ active }: ActiveRuleProps) {
   return (<div className={styles.rule}>
-    <div className={styles.ruleIcon}><FMappingRuleActive /></div>
+    <div className={styles.ruleIcon}><FComponentsLib.FIcons.FMappingRuleActive /></div>
     <div className={styles.ruleContent}>
       <div><FComponentsLib.FContentText text={'激活主题'} /></div>
       <div><label className={styles.exhibitLabel}>{active}</label></div>
@@ -74,7 +65,7 @@ interface VersionRuleProps {
 
 export function VersionRule({ version }: VersionRuleProps) {
   return (<div className={styles.rule}>
-    <div className={styles.ruleIcon}><FMappingRuleVersion /></div>
+    <div className={styles.ruleIcon}><FComponentsLib.FIcons.FMappingRuleVersion /></div>
     <div className={styles.ruleContent}>
       <div><FComponentsLib.FContentText text={'展示版本'} /></div>
       <div><FComponentsLib.FContentText type='highlight' text={version} /></div>
@@ -88,7 +79,7 @@ interface LabelRuleProps {
 
 export function LabelRule({ labels }: LabelRuleProps) {
   return (<div className={styles.rule}>
-    <div className={styles.ruleIcon}><FMappingRuleLabel /></div>
+    <div className={styles.ruleIcon}><FComponentsLib.FIcons.FMappingRuleLabel /></div>
     <div className={styles.ruleContent}>
       <div><FComponentsLib.FContentText text={'设置标签'} /></div>
       <div><FComponentsLib.FContentText type='highlight' text={labels.join(', ')} /></div>
@@ -102,7 +93,7 @@ interface CoverRuleProps {
 
 export function CoverRule({ cover }: CoverRuleProps) {
   return (<div className={styles.rule}>
-    <div className={styles.ruleIcon}><FMappingRuleCover /></div>
+    <div className={styles.ruleIcon}><FComponentsLib.FIcons.FMappingRuleCover /></div>
     <div className={styles.ruleContent}>
       <div><FComponentsLib.FContentText text={'设置封面'} /></div>
       <div><FComponentsLib.FContentText type='highlight' text={cover} /></div>
@@ -116,7 +107,7 @@ interface TitleRuleProps {
 
 export function TitleRule({ title }: TitleRuleProps) {
   return (<div className={styles.rule}>
-    <div className={styles.ruleIcon}><FMappingRuleTitle /></div>
+    <div className={styles.ruleIcon}><FComponentsLib.FIcons.FMappingRuleTitle /></div>
     <div className={styles.ruleContent}>
       <div><FComponentsLib.FContentText text={'设置标题'} /></div>
       <div><FComponentsLib.FContentText type='highlight' text={title} /></div>
@@ -130,7 +121,7 @@ interface OnlineRuleProps {
 
 export function OnlineRule({ online }: OnlineRuleProps) {
   return (<div className={styles.rule}>
-    <div className={styles.ruleIcon}><FMappingRuleOnline /></div>
+    <div className={styles.ruleIcon}><FComponentsLib.FIcons.FMappingRuleOnline /></div>
     <div className={styles.ruleContent}>
       <div><FComponentsLib.FContentText text={'展品状态'} /></div>
       <div><FComponentsLib.FContentText type='highlight' text={'上线'} /></div>
@@ -144,7 +135,7 @@ interface OfflineRuleProps {
 
 export function OfflineRule({ offline }: OfflineRuleProps) {
   return (<div className={styles.rule}>
-    <div className={styles.ruleIcon}><FMappingRuleOffline /></div>
+    <div className={styles.ruleIcon}><FComponentsLib.FIcons.FMappingRuleOffline /></div>
     <div className={styles.ruleContent}>
       <div><FComponentsLib.FContentText text={'展品状态'} /></div>
       <div><FComponentsLib.FContentText type='highlight' text={'下线'} /></div>
@@ -161,7 +152,7 @@ interface AttrRuleProps {
 
 export function AttrRule({ type, theKey, value, description }: AttrRuleProps) {
   return (<div className={styles.rule}>
-    <div className={styles.ruleIcon}><FMappingRuleAttr /></div>
+    <div className={styles.ruleIcon}><FComponentsLib.FIcons.FMappingRuleAttr /></div>
     {
       type === 'add'
         ? (<div className={styles.ruleContent}>
@@ -203,7 +194,7 @@ interface ReplaceRuleProps {
 
 export function ReplaceRule({ replacer, replaced, scopes }: ReplaceRuleProps) {
   return (<div className={styles.rule}>
-    <div className={styles.ruleIcon}><FMappingRuleReplace /></div>
+    <div className={styles.ruleIcon}><FComponentsLib.FIcons.FMappingRuleReplace /></div>
     <div className={styles.ruleContent}>
       <div><FComponentsLib.FContentText text={'替换'} /></div>
       {/*<div><label className={styles.resourceLabel}>{replaced}</label></div>*/}

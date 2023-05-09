@@ -69,8 +69,8 @@ function UserInfo({ data }: UserInfoProps) {
         type='highlight'
         text={info.userName}
       />
-      <div style={{ height: 8 }} />
-      <FComponentsLib.FContentText text={info.phone || info.email} />
+      {/*<div style={{ height: 8 }} />*/}
+      {/*<FComponentsLib.FContentText text={info.phone || info.email} />*/}
     </div>
     <div className={styles.userPanelMenu}>
       {

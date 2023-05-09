@@ -10,7 +10,8 @@ import {
 } from '@/models/resourceListPage';
 import { history } from 'umi';
 import FResourceCardsList from '@/pages/resource/components/FResourceCardsList';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState } from '@/models/connect';
 import FNoDataTip from '@/components/FNoDataTip';
 import FLoadingTip from '@/components/FLoadingTip';
@@ -42,27 +43,29 @@ function Resources({ dispatch, resource }: ResourceProps) {
   if (
     resource.dataSource.length === 0 &&
     resource.inputText === '' &&
-    resource.resourceType === '-1' &&
-    resource.resourceStatus === '2'
+    resource.resourceTypeCodes.values.length === 1 && resource.resourceTypeCodes.value === '#all' &&
+    resource.resourceStatus === '#'
   ) {
     return (
       <FNoDataTip
         height={'calc(100vh - 140px)'}
         tipText={'未创建任何资源'}
         btnText={'创建资源'}
-        onClick={() => history.push(FUtil.LinkTo.resourceCreator())}
+        onClick={() => {
+          self.open(FUtil.LinkTo.resourceCreator());
+        }}
       />
     );
   }
 
   return (
     <FResourceCardsList
-      resourceType={resource.resourceType}
+      resourceTypeCodes={resource.resourceTypeCodes}
       resourceStatus={resource.resourceStatus}
       inputText={resource.inputText}
       dataSource={resource.dataSource}
       totalNum={resource.totalNum}
-      onChangeResourceType={(value) => {
+      onChangeResourceTypeCodes={(value) => {
         dispatch<OnChangeResourceTypeAction>({
           type: 'resourceListPage/onChangeResourceType',
           payload: {

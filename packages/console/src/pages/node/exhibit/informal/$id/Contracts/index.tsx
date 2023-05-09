@@ -1,6 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState, InformExhibitInfoPageModelState } from '@/models/connect';
 import FExhibitAuthorizedContracts from '@/components/FExhibitAuthorizedContracts';
 import { OnChanged_ExhibitAuthorized_Action } from '@/models/informExhibitInfoPage';

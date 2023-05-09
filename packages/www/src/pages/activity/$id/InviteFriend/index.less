@@ -46,27 +46,35 @@
       border-bottom: 1px solid #2784ff;
     }
   }
-
-  .invite-text {
+  .invite-text-container {
     position: fixed;
-    top: calc(50% - 150px);
-    left: calc(50% - 325px);
-    z-index: 11;
-    width: 650px;
-    background: #ffffff;
-    border-radius: 6px;
-    .input {
-      padding: 10px;
-      width: 590px;
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    z-index: 9;
+    background: rgba(0, 0, 0, 0.4);
+    .invite-text {
+      opacity: 1;
+      position: fixed;
+      top: calc(50% - 150px);
+      left: calc(50% - 325px);
+      z-index: 11;
+      width: 650px;
       background: #ffffff;
-      border-radius: 4px;
-      min-height: 180px;
-      border: 1px solid #d8d8d8;
-      font-size: 14px;
-      font-weight: 400;
-      color: #666666;
-      line-height: 20px;
-      outline: none;
+      border-radius: 6px;
+      .input {
+        padding: 10px;
+        width: 590px;
+        background: #ffffff;
+        border-radius: 4px;
+        min-height: 230px;
+        border: 1px solid #d8d8d8;
+        font-size: 14px;
+        font-weight: 400;
+        color: #666666;
+        line-height: 20px;
+        outline: none;
+      }
     }
   }
 
@@ -110,8 +118,62 @@
     font-weight: 400;
     color: #222222;
     line-height: 46px;
-    padding-top: 116px;
-    padding-bottom: 50px;
+    margin-top: 116px;
+    margin-bottom: 50px;
+    position: relative;
+    z-index: 2;
+    .active-reward {
+      background: linear-gradient(
+        315deg,
+        rgba(233, 169, 35, 0.2),
+        rgba(233, 169, 35, 1)
+      );
+    }
+    .active-step {
+      background: linear-gradient(
+        315deg,
+        rgba(255, 255, 255, 0.2),
+        rgba(66, 194, 140, 0.8)
+      );
+    }
+    .active-policy {
+      background: linear-gradient(
+        315deg,
+        rgba(233, 169, 35, 0.2),
+        rgba(233, 169, 35, 1)
+      );
+    }
+    .active-rule {
+      background: linear-gradient(
+        315deg,
+        rgba(39, 132, 255, 0.2),
+        rgba(39, 132, 255, 1)
+      );
+    }
+    .invite-circle {
+      position: absolute;
+      left: -27px;
+      top: -27px;
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 1;
+
+      .circle-inside {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: #ffffff;
+      }
+    }
+    span {
+      position: relative;
+      z-index: 2;
+    }
   }
   .praise {
     background: #ffffff;
@@ -147,7 +209,6 @@
     background: #ffffff;
     .container {
       width: 1059px;
-      height: 796px;
       background: rgba(66, 194, 140, 0.05);
       border-radius: 50px;
       .arrow {

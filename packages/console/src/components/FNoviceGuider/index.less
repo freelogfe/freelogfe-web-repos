@@ -1,0 +1,24 @@
+@import '../../config.less';
+
+.overlay {
+  inset: 0;
+  position: fixed;
+  //box-sizing: content-box;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 99999;
+  transition: all .3s ease-out;
+  //user-select: none;
+  //pointer-events: none;
+}
+
+.helperLayer {
+  user-select: none;
+  box-shadow: 0 0 0 20000px rgba(0, 0, 0, .4);
+  position: absolute;
+  //z-index: 9999998;
+  border-radius: 6px;
+  transition: all 0.3s ease-out;
+}

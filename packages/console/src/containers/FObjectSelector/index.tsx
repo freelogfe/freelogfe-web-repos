@@ -6,15 +6,13 @@ import FResourceList, { FResourceListProps } from '@/components/FResourceList';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import { ConnectState, StorageHomePageModelState, StorageObjectDepSelectorModelState } from '@/models/connect';
-import { DownOutlined } from '@ant-design/icons';
 import {
   ChangeAction,
   FetchObjectsAction,
   OnChangeOConditionsAction,
-  // storageObjectDepSelectorInitData,
 } from '@/models/storageObjectDepSelector';
 import FDropdownMenu from '@/components/FDropdownMenu';
-// import { storageObjectEditorInitData } from '@/models/storageObjectEditor';
+import FComponentsLib from '@freelog/components-lib';
 
 interface FObjectSelectorProps {
   disabledIDsOrNames?: string[];
@@ -86,8 +84,8 @@ function FObjectSelector({
           });
         }}
       >
-        <a>{(selectOptions.find((rs) => rs.value === selector.oSelect) as any).text} <DownOutlined
-          style={{ marginLeft: 8 }} /></a>
+        <a>{(selectOptions.find((rs) => rs.value === selector.oSelect) as any).text}
+          <FComponentsLib.FIcons.FDown style={{ marginLeft: 8, fontSize: 12 }} /></a>
       </FDropdownMenu>
       <FInput
         theme='dark'

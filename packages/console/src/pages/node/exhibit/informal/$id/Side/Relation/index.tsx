@@ -1,6 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
-import { connect, Dispatch } from 'dva';
+import { connect } from 'dva';
+import { Dispatch } from 'redux';
 import { ConnectState, InformExhibitInfoPageModelState } from '@/models/connect';
 import FCoverImage from '@/components/FCoverImage';
 import FComponentsLib from '@freelog/components-lib';
@@ -49,7 +50,10 @@ function Relation({ informExhibitInfoPage }: RelationProps) {
       />
     </FComponentsLib.FTextBtn>
     <div style={{ height: 10 }} />
-    <div style={{ fontSize: 12, color: '#666' }}>{FUtil.Format.resourceTypeKeyArrToResourceType(informExhibitInfoPage.side_Resource_Relation?.type || [])}</div>
+    <div style={{
+      fontSize: 12,
+      color: '#666',
+    }}>{FUtil.Format.resourceTypeKeyArrToResourceType(informExhibitInfoPage.side_Resource_Relation?.type || [])}</div>
   </div>);
 }
 
