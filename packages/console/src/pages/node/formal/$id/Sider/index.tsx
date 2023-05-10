@@ -39,7 +39,7 @@ function Sider({ dispatch, nodeManagerPage, match }: SiderProps) {
             <div style={{ display: 'inline-block' }}>
               <FComponentsLib.FContentText
                 type={'highlight'}
-                text={nodeManagerPage.nodeName}
+                text={nodeManagerPage.setting_nodeInfo.title || nodeManagerPage.nodeName}
                 singleRow
                 style={{
                   maxWidth: 200,
@@ -50,15 +50,6 @@ function Sider({ dispatch, nodeManagerPage, match }: SiderProps) {
           <div style={{ height: 10 }} />
           <FComponentsLib.FContentText
             type={'highlight'}
-            // style={{ fontSize: 12 }}
-            // onClick={() => {
-            //   window.open(nodeManagerPage.nodeUrl);
-            //   FComponentsLib.fSetHotspotTooltipVisible('nodeManager.nodeLink', {
-            //     value: false,
-            //     effectiveImmediately: true,
-            //     onlyNullish: false,
-            //   });
-            // }}
           >
             {nodeManagerPage.nodeUrl.replace(new RegExp(/http(s)?:\/\//), '')}
           </FComponentsLib.FContentText>
