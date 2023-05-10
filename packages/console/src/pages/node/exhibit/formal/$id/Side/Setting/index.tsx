@@ -375,53 +375,55 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
           }
         </div>
         <div style={{ height: 20 }} />
-        <Space className={styles.addCustomTitle}>
+        <Space
+          className={styles.addCustomTitle}
+          onClick={async () => {
+
+            const dataSource: {
+              key: string;
+              name: string;
+              type: 'input' | 'select';
+              input: string;
+              select: string[];
+              description: string;
+            } | null = await fResourceOptionEditor({
+              disabledKeys: [
+                ...exhibitInfoPage.side_RawProperties.map((ba) => ba.key),
+                ...exhibitInfoPage.side_BaseProperties.map((ba) => ba.key),
+                ...exhibitInfoPage.side_InheritOptions.map((io) => io.key),
+                ...exhibitInfoPage.side_CustomOptions.map((co) => co.key),
+              ],
+              disabledNames: [
+                // ...exhibitInfoPage.side_RawProperties.map((ba) => ba.name),
+                ...exhibitInfoPage.side_BaseProperties.map((ba) => ba.name),
+                ...exhibitInfoPage.side_InheritOptions.map((io) => io.name),
+                ...exhibitInfoPage.side_CustomOptions.map((co) => co.name),
+              ],
+              hideTypeSelect: true,
+            });
+
+            if (!dataSource) {
+              return;
+            }
+
+            dispatch<OnConfirm_AddCustomOptionsDrawer_Action>({
+              type: 'exhibitInfoPage/onConfirm_AddCustomOptionsDrawer',
+              payload: {
+                value: {
+                  key: dataSource.key,
+                  name: dataSource.name,
+                  // type: 'input' | 'select';
+                  input: dataSource.input,
+                  // select: string[];
+                  description: dataSource.description,
+                },
+              },
+            });
+          }}
+        >
           <FComponentsLib.FCircleBtn
             // theme="text"
             size='small'
-            onClick={async () => {
-
-              const dataSource: {
-                key: string;
-                name: string;
-                type: 'input' | 'select';
-                input: string;
-                select: string[];
-                description: string;
-              } | null = await fResourceOptionEditor({
-                disabledKeys: [
-                  ...exhibitInfoPage.side_RawProperties.map((ba) => ba.key),
-                  ...exhibitInfoPage.side_BaseProperties.map((ba) => ba.key),
-                  ...exhibitInfoPage.side_InheritOptions.map((io) => io.key),
-                  ...exhibitInfoPage.side_CustomOptions.map((co) => co.key),
-                ],
-                disabledNames: [
-                  // ...exhibitInfoPage.side_RawProperties.map((ba) => ba.name),
-                  ...exhibitInfoPage.side_BaseProperties.map((ba) => ba.name),
-                  ...exhibitInfoPage.side_InheritOptions.map((io) => io.name),
-                  ...exhibitInfoPage.side_CustomOptions.map((co) => co.name),
-                ],
-                hideTypeSelect: true,
-              });
-
-              if (!dataSource) {
-                return;
-              }
-
-              dispatch<OnConfirm_AddCustomOptionsDrawer_Action>({
-                type: 'exhibitInfoPage/onConfirm_AddCustomOptionsDrawer',
-                payload: {
-                  value: {
-                    key: dataSource.key,
-                    name: dataSource.name,
-                    // type: 'input' | 'select';
-                    input: dataSource.input,
-                    // select: string[];
-                    description: dataSource.description,
-                  },
-                },
-              });
-            }}
           />
           <span
             style={{ cursor: 'pointer', display: 'inline-block' }}
@@ -430,7 +432,7 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
               //   type: 'exhibitInfoPage/onClick_Side_AddCustomOptionsBtn',
               // });
             }}
-          >添加自定义选项</span>
+          >{FI18n.i18nNext.t('create_custom_options')}</span>
         </Space>
       </>)
     }
