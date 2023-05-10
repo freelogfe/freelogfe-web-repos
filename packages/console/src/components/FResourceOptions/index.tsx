@@ -72,7 +72,8 @@ function FResourceOptions({ dataSource, theme = 'light', onEdit, onDelete }: FRe
             </div>
           </div>
           <div style={{ height: 5 }} />
-          <div className={styles.itemContent} style={{ backgroundColor: theme === 'dark' ? '#F7F8F9' : 'white' }}>
+          <div className={styles.itemContent}
+               style={{ backgroundColor: theme === 'dark' ? 'rgba(0,0,0,.02)' : 'white' }}>
             <div className={styles.itemBody}>
               {
                 d.type === 'input' && (
