@@ -280,62 +280,64 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
 
         {
           resourceVersionEditorPage.customOptions.length > 0 && (<FFormLayout.FBlock title={'自定义选项'}>
-            <FResourceOptions
-              dataSource={resourceVersionEditorPage.customOptions}
-              onEdit={async (data) => {
-                const index: number = resourceVersionEditorPage.customOptions.findIndex((p) => {
-                  return p === data;
-                });
+            <div style={{ padding: 15, backgroundColor: '#F7F8F9' }}>
+              <FResourceOptions
+                dataSource={resourceVersionEditorPage.customOptions}
+                onEdit={async (data) => {
+                  const index: number = resourceVersionEditorPage.customOptions.findIndex((p) => {
+                    return p === data;
+                  });
 
-                const dataSource: {
-                  key: string;
-                  name: string;
-                  type: 'input' | 'select';
-                  input: string;
-                  select: string[];
-                  description: string;
-                } | null = await fResourceOptionEditor({
-                  disabledKeys: [
-                    ...resourceVersionEditorPage.rawProperties.map<string>((rp) => rp.key),
-                    ...resourceVersionEditorPage.baseProperties.map<string>((bp) => bp.key),
-                    ...resourceVersionEditorPage.customOptions.map<string>((pp) => pp.key),
-                  ],
-                  disabledNames: [
-                    ...resourceVersionEditorPage.rawProperties.map<string>((rp) => rp.name),
-                    ...resourceVersionEditorPage.baseProperties.map<string>((bp) => bp.name),
-                    ...resourceVersionEditorPage.customOptions.map<string>((pp) => pp.name),
-                  ],
-                  defaultData: data,
-                  noneEditableFields: ['key', 'name', 'type'],
-                });
+                  const dataSource: {
+                    key: string;
+                    name: string;
+                    type: 'input' | 'select';
+                    input: string;
+                    select: string[];
+                    description: string;
+                  } | null = await fResourceOptionEditor({
+                    disabledKeys: [
+                      ...resourceVersionEditorPage.rawProperties.map<string>((rp) => rp.key),
+                      ...resourceVersionEditorPage.baseProperties.map<string>((bp) => bp.key),
+                      ...resourceVersionEditorPage.customOptions.map<string>((pp) => pp.key),
+                    ],
+                    disabledNames: [
+                      ...resourceVersionEditorPage.rawProperties.map<string>((rp) => rp.name),
+                      ...resourceVersionEditorPage.baseProperties.map<string>((bp) => bp.name),
+                      ...resourceVersionEditorPage.customOptions.map<string>((pp) => pp.name),
+                    ],
+                    defaultData: data,
+                    noneEditableFields: ['key', 'name', 'type'],
+                  });
 
-                if (!dataSource) {
-                  return;
-                }
-                await onChange({
-                  customOptions: resourceVersionEditorPage.customOptions
-                    .map<ResourceVersionEditorPageModelState['customOptions'][number]>((bp,i) => {
-                      if (index !== i) {
-                        return bp;
-                      }
-                      return dataSource;
-                    }),
-                  // customOptionEditorVisible: false,
-                  // customOptionKey: '',
-                  // customOptionDescription: '',
-                  // customOptionDescriptionError: '',
-                  // customOptionCustom: 'input',
-                  // customOptionDefaultValue: '',
-                  // customOptionDefaultValueError: '',
-                  // customOptionCustomOption: '',
-                  // customOptionCustomOptionError: '',
-                });
-                await dispatch<SyncAllPropertiesAction>({
-                  type: 'resourceVersionEditorPage/syncAllProperties',
-                });
+                  if (!dataSource) {
+                    return;
+                  }
+                  await onChange({
+                    customOptions: resourceVersionEditorPage.customOptions
+                      .map<ResourceVersionEditorPageModelState['customOptions'][number]>((bp, i) => {
+                        if (index !== i) {
+                          return bp;
+                        }
+                        return dataSource;
+                      }),
+                    // customOptionEditorVisible: false,
+                    // customOptionKey: '',
+                    // customOptionDescription: '',
+                    // customOptionDescriptionError: '',
+                    // customOptionCustom: 'input',
+                    // customOptionDefaultValue: '',
+                    // customOptionDefaultValueError: '',
+                    // customOptionCustomOption: '',
+                    // customOptionCustomOptionError: '',
+                  });
+                  await dispatch<SyncAllPropertiesAction>({
+                    type: 'resourceVersionEditorPage/syncAllProperties',
+                  });
 
-              }}
-            />
+                }}
+              />
+            </div>
           </FFormLayout.FBlock>)
         }
 
