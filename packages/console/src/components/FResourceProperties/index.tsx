@@ -79,7 +79,8 @@ function FResourceProperties({
             <FComponentsLib.FContentText
               text={d.value}
               type={'highlight'}
-              style={{ fontSize: 12 }}
+              style={{ fontSize: 12, maxWidth: 230 }}
+              singleRow
             />
 
             {
