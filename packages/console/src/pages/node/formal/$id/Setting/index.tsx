@@ -99,34 +99,51 @@ function Setting({ dispatch, nodeManagerPage }: SettingProps) {
             text={FI18n.i18nNext.t('nodemgnt_nodesetting_nodelogo')}
           />
           <div style={{ height: 20 }} />
-          <FUploadNodeCover
-            onUploadSuccess={(url) => {
-              // console.log(url, 'sdoifjsdlkfj **(******');
-              dispatch<OnChange_Setting_Cover_Action>({
-                type: 'nodeManagerPage/onChange_Setting_Cover',
-                payload: {
-                  value: url,
-                },
-              });
-            }}
-            onError={(err) => {
-              fMessage(err, 'error');
-            }}
-          >
-            <div className={styles.nodeCover}>
-              <img
-                style={{ height: 72, width: 72, borderRadius: '50%' }}
-                src={nodeManagerPage.setting_nodeInfo.cover || imgSrc}
-                alt=''
-              />
-              <div className={styles.nodeCoverMask}>
-                <span>更换</span>
-              </div>
-            </div>
-          </FUploadNodeCover>
+
+
+          {
+            nodeManagerPage.setting_state === 'normal'
+              ? (<div className={styles.nodeCover} style={{ cursor: 'default' }}>
+                <img
+                  style={{ height: 72, width: 72, borderRadius: '50%' }}
+                  src={nodeManagerPage.setting_nodeInfo.cover || imgSrc}
+                  alt=''
+                />
+              </div>)
+              : (<FUploadNodeCover
+                onUploadSuccess={(url) => {
+                  // console.log(url, 'sdoifjsdlkfj **(******');
+                  dispatch<OnChange_Setting_Cover_Action>({
+                    type: 'nodeManagerPage/onChange_Setting_Cover',
+                    payload: {
+                      value: url,
+                    },
+                  });
+                }}
+                onError={(err) => {
+                  fMessage(err, 'error');
+                }}
+              >
+                <div className={styles.nodeCover}>
+                  <img
+                    style={{ height: 72, width: 72, borderRadius: '50%' }}
+                    src={nodeManagerPage.setting_nodeCover || imgSrc}
+                    alt=''
+                  />
+                  <div className={styles.nodeCoverMask}>
+                    <span>更换</span>
+                  </div>
+                </div>
+              </FUploadNodeCover>)
+          }
+
           <div style={{ height: 40 }} />
 
-          <FComponentsLib.FTitleText type={'h3'} text={FI18n.i18nNext.t('nodemgnt_nodesetting_nodetitle')} />
+          <FComponentsLib.FTitleText
+            type={'h3'}
+            text={FI18n.i18nNext.t('nodemgnt_nodesetting_nodetitle')}
+          />
+
           <div style={{ height: 20 }} />
           {
             nodeManagerPage.setting_state === 'normal'

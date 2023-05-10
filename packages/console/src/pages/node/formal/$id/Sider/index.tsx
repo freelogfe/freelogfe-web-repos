@@ -35,11 +35,11 @@ function Sider({ dispatch, nodeManagerPage, match }: SiderProps) {
         <div style={{ height: 20 }} />
 
         <div className={styles.title}>
-          <FTooltip title={nodeManagerPage.nodeName} placement={'top'}>
+          <FTooltip title={nodeManagerPage.nodeTitle || nodeManagerPage.nodeName} placement={'top'}>
             <div style={{ display: 'inline-block' }}>
               <FComponentsLib.FContentText
                 type={'highlight'}
-                text={nodeManagerPage.setting_nodeInfo.title || nodeManagerPage.nodeName}
+                text={nodeManagerPage.nodeTitle || nodeManagerPage.nodeName}
                 singleRow
                 style={{
                   maxWidth: 200,

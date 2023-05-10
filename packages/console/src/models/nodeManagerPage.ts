@@ -18,6 +18,7 @@ export interface NodeManagerModelState {
 
   nodeCover: string;
   nodeName: string;
+  nodeTitle: string;
   nodeUrl: string;
   testNodeUrl: string;
   nodeThemeId: string;
@@ -141,7 +142,7 @@ export interface NodeManagerModelState {
     limitation: 'public' | 'private' | 'pause';
     limitationMessage: string;
   };
-  // setting_nodeCover: string;
+  setting_nodeCover: string;
   setting_nodeTitle: string;
   setting_nodeIntroduction: string;
   setting_nodeLimitation: 'public' | 'private' | 'pause';
@@ -474,7 +475,7 @@ const settingInitStates: Pick<NodeManagerModelState,
   | 'setting_nodeUrl'
   | 'setting_state'
   | 'setting_nodeInfo'
-  // | 'setting_nodeCover'
+  | 'setting_nodeCover'
   | 'setting_nodeTitle'
   | 'setting_nodeIntroduction'
   | 'setting_nodeLimitation'
@@ -490,7 +491,7 @@ const settingInitStates: Pick<NodeManagerModelState,
     limitation: 'public',
     limitationMessage: '',
   },
-  // setting_nodeCover: '',
+  setting_nodeCover: '',
   setting_nodeTitle: '',
   setting_nodeIntroduction: '',
   setting_nodeLimitation: 'public',
@@ -502,6 +503,7 @@ const initStates: NodeManagerModelState = {
 
   nodeCover: '',
   nodeName: '',
+  nodeTitle: '',
   nodeUrl: '',
   testNodeUrl: '',
   nodeThemeId: '',
@@ -555,6 +557,7 @@ const Model: NodeManagerModelType = {
           nodeId: payload.nodeID,
           nodeCover: data?.nodeLogo || '',
           nodeName: data?.nodeName || '',
+          nodeTitle: data?.nodeTitle || '',
           nodeUrl: FUtil.Format.completeUrlByDomain(data?.nodeDomain || ''),
           testNodeUrl: FUtil.Format.completeUrlByDomain((data?.nodeDomain || '') + '.t'),
           nodeThemeId: data.nodeThemeId || '',
@@ -654,6 +657,7 @@ const Model: NodeManagerModelType = {
         payload: {
           setting_nodeID: data_nodeDetails.nodeId,
           setting_nodeName: data_nodeDetails.nodeName,
+          setting_nodeCover: data_nodeDetails.nodeLogo,
           setting_nodeTitle: data_nodeDetails.nodeName || '',
           setting_nodeUrl: FUtil.Format.completeUrlByDomain(data_nodeDetails.nodeDomain).replace(/http(s)?:\/\//, ''),
           setting_nodeInfo: {
@@ -829,37 +833,7 @@ const Model: NodeManagerModelType = {
       });
     },
 
-    * onChange_Setting_Cover({ payload }: OnChange_Setting_Cover_Action, { select, call, put }: EffectsCommandMap) {
-      const { nodeManagerPage }: ConnectState = yield select(({ nodeManagerPage }: ConnectState) => ({
-          nodeManagerPage,
-        }),
-      );
-      const params: Parameters<typeof FServiceAPI.Node.setNodeInfo>[0] = {
-        nodeId: nodeManagerPage.nodeId,
-        nodeLogo: payload.value,
-        nodeTitle: nodeManagerPage.setting_nodeInfo.title,
-        nodeShortDescription: nodeManagerPage.setting_nodeInfo.introduction,
-        status: nodeManagerPage.setting_nodeInfo.limitation === 'public'
-          ? 1
-          : nodeManagerPage.setting_nodeInfo.limitation === 'private'
-            ? 2
-            : 8, // 可见性 1：公开 2：私密 3：暂停
-        nodeSuspendInfo: nodeManagerPage.setting_nodeInfo.limitationMessage,
-      };
 
-      const { ret, errCode, msg, data } = yield call(FServiceAPI.Node.setNodeInfo, params);
-
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          setting_nodeInfo: {
-            ...nodeManagerPage.setting_nodeInfo,
-            cover: payload.value,
-          },
-          nodeCover: payload.value,
-        },
-      });
-    },
     * onClick_Setting_EditBtn({}: OnClick_Setting_EditBtn_Action, { select, put }: EffectsCommandMap) {
       const { nodeManagerPage }: ConnectState = yield select(({ nodeManagerPage }: ConnectState) => ({
           nodeManagerPage,
@@ -870,6 +844,7 @@ const Model: NodeManagerModelType = {
         type: 'change',
         payload: {
           setting_state: 'editing',
+          setting_nodeCover: nodeManagerPage.setting_nodeInfo.cover,
           setting_nodeTitle: nodeManagerPage.setting_nodeInfo.title,
           setting_nodeIntroduction: nodeManagerPage.setting_nodeInfo.introduction,
           setting_nodeLimitation: nodeManagerPage.setting_nodeInfo.limitation,
@@ -893,7 +868,7 @@ const Model: NodeManagerModelType = {
 
       const params: Parameters<typeof FServiceAPI.Node.setNodeInfo>[0] = {
         nodeId: nodeManagerPage.setting_nodeID,
-        nodeLogo: nodeManagerPage.setting_nodeInfo.cover,
+        nodeLogo: nodeManagerPage.setting_nodeCover,
         nodeTitle: nodeManagerPage.setting_nodeTitle,
         nodeShortDescription: nodeManagerPage.setting_nodeIntroduction,
         status: nodeManagerPage.setting_nodeLimitation === 'public'
@@ -917,14 +892,53 @@ const Model: NodeManagerModelType = {
           setting_state: 'normal',
           setting_nodeInfo: {
             ...nodeManagerPage.setting_nodeInfo,
+            cover: nodeManagerPage.setting_nodeCover,
             title: nodeManagerPage.setting_nodeTitle,
             introduction: nodeManagerPage.setting_nodeIntroduction,
             limitation: nodeManagerPage.setting_nodeLimitation,
             limitationMessage: nodeManagerPage.setting_nodeLimitationMessage,
           },
-          // nodeCover: payload.value,
+          nodeCover: nodeManagerPage.setting_nodeCover,
+          nodeTitle: nodeManagerPage.setting_nodeTitle,
         },
       });
+    },
+    * onChange_Setting_Cover({ payload }: OnChange_Setting_Cover_Action, { select, call, put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          setting_nodeCover: payload.value,
+        },
+      });
+      // const { nodeManagerPage }: ConnectState = yield select(({ nodeManagerPage }: ConnectState) => ({
+      //     nodeManagerPage,
+      //   }),
+      // );
+      // const params: Parameters<typeof FServiceAPI.Node.setNodeInfo>[0] = {
+      //   nodeId: nodeManagerPage.nodeId,
+      //   nodeLogo: payload.value,
+      //   nodeTitle: nodeManagerPage.setting_nodeInfo.title,
+      //   nodeShortDescription: nodeManagerPage.setting_nodeInfo.introduction,
+      //   status: nodeManagerPage.setting_nodeInfo.limitation === 'public'
+      //     ? 1
+      //     : nodeManagerPage.setting_nodeInfo.limitation === 'private'
+      //       ? 2
+      //       : 8, // 可见性 1：公开 2：私密 3：暂停
+      //   nodeSuspendInfo: nodeManagerPage.setting_nodeInfo.limitationMessage,
+      // };
+      //
+      // const { ret, errCode, msg, data } = yield call(FServiceAPI.Node.setNodeInfo, params);
+      //
+      // yield put<ChangeAction>({
+      //   type: 'change',
+      //   payload: {
+      //     setting_nodeInfo: {
+      //       ...nodeManagerPage.setting_nodeInfo,
+      //       cover: payload.value,
+      //     },
+      //     nodeCover: payload.value,
+      //   },
+      // });
     },
     * onChange_Setting_Title({ payload }: OnChange_Setting_Title_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
