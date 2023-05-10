@@ -653,6 +653,7 @@ const Model: NodeManagerModelType = {
         type: 'change',
         payload: {
           setting_nodeID: data_nodeDetails.nodeId,
+          setting_nodeName: data_nodeDetails.nodeName,
           setting_nodeTitle: data_nodeDetails.nodeName || '',
           setting_nodeUrl: FUtil.Format.completeUrlByDomain(data_nodeDetails.nodeDomain).replace(/http(s)?:\/\//, ''),
           setting_nodeInfo: {

@@ -82,11 +82,11 @@ function Setting({ dispatch, nodeManagerPage }: SettingProps) {
                 type={'additional2'}
               />
               <FComponentsLib.FContentText
-                text={String(nodeManagerPage.setting_nodeID)}
+                text={String(nodeManagerPage.setting_nodeName)}
                 type={'additional2'}
               />
               <FComponentsLib.FCopyToClipboard
-                text={String(nodeManagerPage.setting_nodeID)}
+                text={String(nodeManagerPage.setting_nodeName)}
                 iconStyle={{ fontSize: 14 }}
                 title={'复制'}
               />
