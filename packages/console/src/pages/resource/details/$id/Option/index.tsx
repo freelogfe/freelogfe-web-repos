@@ -27,9 +27,12 @@ function Option({ dispatch, resourceDetailPage }: OptionProps) {
         type='h3'
       />
       <div style={{ height: 20 }} />
-      <div style={{ padding: 15, backgroundColor: '#F7F8F9' }}>
-        <FResourceOptions dataSource={resourceDetailPage.resourceVersion_Info.customOptions} />
-      </div>
+      {/*<div style={{ padding: 15, backgroundColor: '#F7F8F9' }}>*/}
+      <FResourceOptions
+        theme={'dark'}
+        dataSource={resourceDetailPage.resourceVersion_Info.customOptions}
+      />
+      {/*</div>*/}
     </div>
     <div style={{ height: 20 }} />
   </>);

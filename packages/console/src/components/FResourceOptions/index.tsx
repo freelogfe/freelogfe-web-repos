@@ -12,13 +12,14 @@ interface FResourceOptionsProps {
     input: string;
     select: string[];
   }[];
+  theme?: 'dark' | 'light';
 
   onEdit?(value: FResourceOptionsProps['dataSource'][number]): void;
 
   onDelete?(value: FResourceOptionsProps['dataSource'][number]): void;
 }
 
-function FResourceOptions({ dataSource, onEdit, onDelete }: FResourceOptionsProps) {
+function FResourceOptions({ dataSource, theme = 'light', onEdit, onDelete }: FResourceOptionsProps) {
   return (<div className={styles.styles}>
     {
       dataSource.map((d) => {
@@ -71,7 +72,7 @@ function FResourceOptions({ dataSource, onEdit, onDelete }: FResourceOptionsProp
             </div>
           </div>
           <div style={{ height: 5 }} />
-          <div className={styles.itemContent}>
+          <div className={styles.itemContent} style={{ backgroundColor: theme === 'dark' ? '#F7F8F9' : 'white' }}>
             <div className={styles.itemBody}>
               {
                 d.type === 'input' && (
