@@ -5,8 +5,6 @@ import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import { ConnectState, ResourceInfoModelState, ResourceSiderModelState } from '@/models/connect';
 import { withRouter, history } from 'umi';
-// import { ChangeAction, FetchDataSourceAction, InitModelStatesAction } from '@/models/resourceInfo';
-// import { ChangeAction as ResourceAuthPage_ChangeAction } from '@/models/resourceAuthPage';
 import FLink from '@/components/FLink';
 import { FUtil, FI18n, FServiceAPI } from '@freelog/tools-lib';
 import fMessage from '@/components/fMessage';
@@ -15,7 +13,6 @@ import { Checkbox, Modal, Popconfirm, Space } from 'antd';
 import FTooltip from '@/components/FTooltip';
 import FSwitch from '@/components/FSwitch';
 import { FDialog } from '@/components/FDialog';
-// import FPolicyOperatorDrawer from '@/components/FPolicyOperatorDrawer';
 import { FetchResourceInfoAction, UpdatePoliciesAction } from '@/models/resourceAuthPage';
 import { LoadingOutlined } from '@ant-design/icons';
 import * as AHooks from 'ahooks';
@@ -46,13 +43,6 @@ function Sider({ resourceSider, match, dispatch }: SilderProps) {
   const [noLonger, setNoLonger] = React.useState(false);
 
   AHooks.useMount(() => {
-    // dispatch<ResourceAuthPage_ChangeAction>({
-    //   type: 'resourceAuthPage/change',
-    //   payload: {
-    //     resourceID: match.params.id,
-    //   },
-    // });
-    // console.log('*(****(**(*(MMMMMMMM');
     dispatch<OnMount_Page_Action>({
       type: 'resourceSider/onMount_Page',
       payload: {
