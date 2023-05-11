@@ -52,18 +52,24 @@ function FResourceProperties({
                     d.description && (<div>
                       <FComponentsLib.FContentText type={'additional2'} text={'属性说明'} />
                       <div style={{ height: 5 }} />
-                      <FComponentsLib.FContentText type={'normal'} text={d.description} />
+                      <FComponentsLib.FContentText
+                        type={'normal'}
+                        text={d.description}
+                        style={{ maxWidth: 320, wordBreak: 'break-all' }}
+                      />
                     </div>)
                   }
                 </Space>}
-              ><div>
-                <FComponentsLib.FContentText
-                  text={d.name}
-                  type={'additional2'}
-                  style={{ maxWidth: 100 }}
-                  singleRow
-                />
-              </div></FPopover>
+              >
+                <div>
+                  <FComponentsLib.FContentText
+                    text={d.name}
+                    type={'additional2'}
+                    style={{ maxWidth: 100 }}
+                    singleRow
+                  />
+                </div>
+              </FPopover>
             }
 
 
@@ -107,18 +113,24 @@ function FResourceProperties({
                   d.description && (<div>
                     <FComponentsLib.FContentText type={'additional2'} text={'属性说明'} />
                     <div style={{ height: 5 }} />
-                    <FComponentsLib.FContentText type={'normal'} text={d.description} />
+                    <FComponentsLib.FContentText
+                      type={'normal'}
+                      text={d.description}
+                      style={{ maxWidth: 320, wordBreak: 'break-all' }}
+                    />
                   </div>)
                 }
               </Space>}
-            ><div>
-            <FComponentsLib.FContentText
-              text={d.name}
-              type={'additional2'}
-              singleRow
-              style={{ maxWidth: 100 }}
-            />
-            </div></FPopover>
+            >
+              <div>
+                <FComponentsLib.FContentText
+                  text={d.name}
+                  type={'additional2'}
+                  singleRow
+                  style={{ maxWidth: 100 }}
+                />
+              </div>
+            </FPopover>
             {/*{*/}
             {/*  d.description && (<FTooltip*/}
             {/*    title={d.description}*/}
