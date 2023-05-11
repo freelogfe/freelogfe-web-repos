@@ -2,6 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import FComponentsLib from '@freelog/components-lib';
 import FTooltip from '@/components/FTooltip';
+import FResourcePropertyAndOptionTipPopover from '@/components/FResourcePropertyAndOptionTipPopover';
 
 interface FResourceOptionsProps {
   dataSource: {
@@ -26,23 +27,29 @@ function FResourceOptions({ dataSource, theme = 'light', onEdit, onDelete }: FRe
         return (<div key={d.key} className={styles.item}>
           <div className={styles.itemHeader}>
             <div className={styles.itemHeaderLeft}>
-              <FComponentsLib.FContentText
-                text={d.name}
-                type={'normal'}
-              />
-              <FComponentsLib.FContentText
-                text={`(${d.key})`}
-                type={'additional2'}
-              />
-              {
-                d.description && (<FTooltip
-                  title={d.description}
-                >
-                  <FComponentsLib.FIcons.FInfo
-                    style={{ cursor: 'pointer', fontSize: 12 }}
-                  />
-                </FTooltip>)
-              }
+              <FResourcePropertyAndOptionTipPopover info={{
+                key: d.key,
+                name: d.name,
+                description: d.description,
+              }}>
+                <FComponentsLib.FContentText
+                  text={d.name}
+                  type={'normal'}
+                />
+              </FResourcePropertyAndOptionTipPopover>
+              {/*<FComponentsLib.FContentText*/}
+              {/*  text={`(${d.key})`}*/}
+              {/*  type={'additional2'}*/}
+              {/*/>*/}
+              {/*{*/}
+              {/*  d.description && (<FTooltip*/}
+              {/*    title={d.description}*/}
+              {/*  >*/}
+              {/*    <FComponentsLib.FIcons.FInfo*/}
+              {/*      style={{ cursor: 'pointer', fontSize: 12 }}*/}
+              {/*    />*/}
+              {/*  </FTooltip>)*/}
+              {/*}*/}
             </div>
             <div className={styles.itemHeaderRight}>
               {
