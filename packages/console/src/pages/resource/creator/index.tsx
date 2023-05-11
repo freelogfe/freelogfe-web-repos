@@ -218,7 +218,7 @@ function ResourceCreator({
         </FFormLayout>
       </FContentLayout>
 
-      <div style={{ height: 100 }} />
+      {/*<div style={{ height: 100 }} />*/}
     </>
   );
 }
