@@ -170,7 +170,6 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
           };
         }));
 
-
         const { data: data_list1 }: {
           data: {
             code: string;
