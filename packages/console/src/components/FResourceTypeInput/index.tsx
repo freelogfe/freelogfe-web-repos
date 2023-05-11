@@ -406,10 +406,12 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
         {
           $options.map((o0) => {
             return (<Popover
-
+              // showArrow={false}
+              // arrowPointAtCenter={false}
               getPopupContainer={() => {
                 return ref.current;
               }}
+              zIndex={10000}
               open={o0.children.length === 0 ? false : undefined}
               // trigger={'click'}
               // arrowPointAtCenter={false}
@@ -423,6 +425,8 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
                   o0.children.map((o1, o1Index, data) => {
                     return (<React.Fragment key={o1.value}>
                       <Popover
+                        zIndex={10001}
+                        // showArrow={false}
                         getPopupContainer={() => {
                           return ref.current;
                         }}
