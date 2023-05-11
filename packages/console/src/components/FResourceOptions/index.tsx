@@ -37,19 +37,6 @@ function FResourceOptions({ dataSource, theme = 'light', onEdit, onDelete }: FRe
                   type={'normal'}
                 />
               </FResourcePropertyAndOptionTipPopover>
-              {/*<FComponentsLib.FContentText*/}
-              {/*  text={`(${d.key})`}*/}
-              {/*  type={'additional2'}*/}
-              {/*/>*/}
-              {/*{*/}
-              {/*  d.description && (<FTooltip*/}
-              {/*    title={d.description}*/}
-              {/*  >*/}
-              {/*    <FComponentsLib.FIcons.FInfo*/}
-              {/*      style={{ cursor: 'pointer', fontSize: 12 }}*/}
-              {/*    />*/}
-              {/*  </FTooltip>)*/}
-              {/*}*/}
             </div>
             <div className={styles.itemHeaderRight}>
               {
