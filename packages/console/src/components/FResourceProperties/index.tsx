@@ -4,6 +4,7 @@ import FComponentsLib from '@freelog/components-lib';
 import FTooltip from '@/components/FTooltip';
 import { Space } from 'antd';
 import FPopover from '@/components/FPopover';
+import FResourcePropertyAndOptionTipPopover from '@/components/FResourcePropertyAndOptionTipPopover';
 
 
 interface FResourcePropertiesProps {
@@ -36,41 +37,18 @@ function FResourceProperties({
       immutableData.map((d) => {
         return (<React.Fragment key={d.key}>
           <div className={styles.grid1}>
-            {
-              <FPopover
-                // visible={true}
-                // trigger={['hover']}
-                title={null}
-                placement={'bottomLeft'}
-                content={<Space size={15} direction={'vertical'} style={{ width: 320 }}>
-                  <div>
-                    <FComponentsLib.FContentText type={'additional2'} text={'key'} />
-                    <div style={{ height: 5 }} />
-                    <FComponentsLib.FContentText type={'normal'} text={d.key} />
-                  </div>
-                  {
-                    d.description && (<div>
-                      <FComponentsLib.FContentText type={'additional2'} text={'属性说明'} />
-                      <div style={{ height: 5 }} />
-                      <FComponentsLib.FContentText
-                        type={'normal'}
-                        text={d.description}
-                        style={{ maxWidth: 320, wordBreak: 'break-all' }}
-                      />
-                    </div>)
-                  }
-                </Space>}
-              >
-                <div>
-                  <FComponentsLib.FContentText
-                    text={d.name}
-                    type={'additional2'}
-                    style={{ maxWidth: 100 }}
-                    singleRow
-                  />
-                </div>
-              </FPopover>
-            }
+            <FResourcePropertyAndOptionTipPopover info={{
+              key: d.key,
+              name: d.name,
+              description: d.description,
+            }}>
+              <FComponentsLib.FContentText
+                text={d.name}
+                type={'additional2'}
+                style={{ maxWidth: 100 }}
+                singleRow
+              />
+            </FResourcePropertyAndOptionTipPopover>
 
 
             {/*{*/}
@@ -98,48 +76,18 @@ function FResourceProperties({
       alterableData.map((d) => {
         return (<React.Fragment key={d.key}>
           <div className={styles.grid1}>
-            <FPopover
-              // visible={true}
-              // trigger={['hover']}
-              title={null}
-              placement={'bottomLeft'}
-              content={<Space size={15} direction={'vertical'} style={{ width: 320 }}>
-                <div>
-                  <FComponentsLib.FContentText type={'additional2'} text={'key'} />
-                  <div style={{ height: 5 }} />
-                  <FComponentsLib.FContentText type={'normal'} text={d.key} />
-                </div>
-                {
-                  d.description && (<div>
-                    <FComponentsLib.FContentText type={'additional2'} text={'属性说明'} />
-                    <div style={{ height: 5 }} />
-                    <FComponentsLib.FContentText
-                      type={'normal'}
-                      text={d.description}
-                      style={{ maxWidth: 320, wordBreak: 'break-all' }}
-                    />
-                  </div>)
-                }
-              </Space>}
-            >
-              <div>
-                <FComponentsLib.FContentText
-                  text={d.name}
-                  type={'additional2'}
-                  singleRow
-                  style={{ maxWidth: 100 }}
-                />
-              </div>
-            </FPopover>
-            {/*{*/}
-            {/*  d.description && (<FTooltip*/}
-            {/*    title={d.description}*/}
-            {/*  >*/}
-            {/*    <FComponentsLib.FIcons.FInfo*/}
-            {/*      style={{ cursor: 'pointer', fontSize: 12 }}*/}
-            {/*    />*/}
-            {/*  </FTooltip>)*/}
-            {/*}*/}
+            <FResourcePropertyAndOptionTipPopover info={{
+              key: d.key,
+              name: d.name,
+              description: d.description,
+            }}>
+              <FComponentsLib.FContentText
+                text={d.name}
+                type={'additional2'}
+                singleRow
+                style={{ maxWidth: 100 }}
+              />
+            </FResourcePropertyAndOptionTipPopover>
           </div>
           <div className={styles.grid2}>
             <FComponentsLib.FContentText
