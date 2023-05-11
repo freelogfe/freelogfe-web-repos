@@ -55,7 +55,14 @@ export interface OnClick_CreateBtn_Action extends AnyAction {
 
 export interface OnChange_NameInput_Action extends AnyAction {
   type: 'resourceCreatorPage/onChange_NameInput';
-  payload: ResourceCreatorPageModelState['name'];
+  payload: {
+    value: ResourceCreatorPageModelState['name'],
+  };
+}
+
+export interface OnVerify_NameInput_Action extends AnyAction {
+  type: 'resourceCreatorPage/onVerify_NameInput';
+  // payload: ResourceCreatorPageModelState['name'];
 }
 
 export interface OnChange_ResourceTypeCodes_Action extends AnyAction {
@@ -96,6 +103,7 @@ export interface ResourceCreatorPageModelType {
     onClick_CreateBtn: (action: OnClick_CreateBtn_Action, effects: EffectsCommandMap) => void;
 
     onChange_NameInput: (action: OnChange_NameInput_Action, effects: EffectsCommandMap) => void;
+    onVerify_NameInput: (action: OnVerify_NameInput_Action, effects: EffectsCommandMap) => void;
     onChange_ResourceTypeCodes: (action: OnChange_ResourceTypeCodes_Action, effects: EffectsCommandMap) => void;
     onChange_IntroductionInput: (action: OnChange_IntroductionInput_Action, effects: EffectsCommandMap) => void;
     onChange_Cover: (action: OnChange_Cover_Action, effects: EffectsCommandMap) => void;
@@ -193,6 +201,34 @@ const Model: ResourceCreatorPageModelType = {
 
     },
     * onChange_NameInput({ payload }: OnChange_NameInput_Action, { put, call, select }: EffectsCommandMap) {
+      console.log(payload, 'payload (((((())))))');
+
+      let nameErrorText: string = '';
+      if (!payload.value) {
+        nameErrorText = '请输入资源名称';
+      } else if (payload.value.length > 60) {
+        nameErrorText = '不多于60个字符';
+      } else if (!FUtil.Regexp.RESOURCE_NAME.test(payload.value)) {
+        nameErrorText = `不符合正则 ${FUtil.Regexp.RESOURCE_NAME}`;
+      }
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          name: payload.value,
+          nameErrorText,
+        },
+      });
+      self.onbeforeunload = () => true;
+    },
+    * onVerify_NameInput({}: OnVerify_NameInput_Action, { select, call, put }: EffectsCommandMap) {
+      const { resourceCreatorPage }: ConnectState = yield select(({ resourceCreatorPage }: ConnectState) => ({
+        resourceCreatorPage,
+      }));
+
+      if (resourceCreatorPage.name === '' && resourceCreatorPage.nameErrorText !== '') {
+        return;
+      }
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -202,23 +238,15 @@ const Model: ResourceCreatorPageModelType = {
 
       let nameErrorText: string = '';
 
-      if (!payload) {
-        nameErrorText = '请输入资源名称';
-      } else if (payload.length > 60) {
-        nameErrorText = '不多于60个字符';
-      } else if (!FUtil.Regexp.RESOURCE_NAME.test(payload)) {
-        nameErrorText = `不符合正则 /^(?!.*(\\\\|\\/|:|\\*|\\?|"|<|>|\\||\\s|@|\\$|#)).{1,60}$/`;
-      } else {
-        const { user } = yield select(({ user }: ConnectState) => ({
-          user,
-        }));
-        const params1: Parameters<typeof FServiceAPI.Resource.info>[0] = {
-          resourceIdOrName: encodeURIComponent(`${user.info.username}/${payload}`),
-        };
-        const { data: data1 } = yield call(FServiceAPI.Resource.info, params1);
-        if (data1) {
-          nameErrorText = '资源名已存在';
-        }
+      const { user } = yield select(({ user }: ConnectState) => ({
+        user,
+      }));
+      const params1: Parameters<typeof FServiceAPI.Resource.info>[0] = {
+        resourceIdOrName: encodeURIComponent(`${user.info.username}/${resourceCreatorPage.name}`),
+      };
+      const { data: data1 } = yield call(FServiceAPI.Resource.info, params1);
+      if (data1) {
+        nameErrorText = '资源名已存在';
       }
 
       yield put<ChangeAction>({
@@ -230,7 +258,7 @@ const Model: ResourceCreatorPageModelType = {
           dataIsDirty: true,
         },
       });
-      self.onbeforeunload = () => true;
+
     },
     * onChange_ResourceTypeCodes({ payload }: OnChange_ResourceTypeCodes_Action, { select, put }: EffectsCommandMap) {
       yield put<ChangeAction>({

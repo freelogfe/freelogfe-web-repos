@@ -382,13 +382,13 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
           {
             $recommend.map((r) => {
               return (<label
+                key={r.value}
                 onClick={() => {
                   onDropdownChange({
                     value: r.value,
                     labels: r.labels,
                   });
                 }}
-                key={r.value}
               >{r.labels.join('/')}</label>);
             })
           }
@@ -406,6 +406,7 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
         {
           $options.map((o0) => {
             return (<Popover
+              key={o0.value}
               // showArrow={false}
               // arrowPointAtCenter={false}
               getPopupContainer={() => {
