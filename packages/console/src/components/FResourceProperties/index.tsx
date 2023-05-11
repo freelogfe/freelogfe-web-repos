@@ -2,6 +2,9 @@ import * as React from 'react';
 import styles from './index.less';
 import FComponentsLib from '@freelog/components-lib';
 import FTooltip from '@/components/FTooltip';
+import { Space } from 'antd';
+import FPopover from '@/components/FPopover';
+
 
 interface FResourcePropertiesProps {
   immutableData: {
@@ -33,17 +36,46 @@ function FResourceProperties({
       immutableData.map((d) => {
         return (<React.Fragment key={d.key}>
           <div className={styles.grid1}>
-            <FComponentsLib.FContentText text={d.name || d.key} type={'additional2'} />
-
             {
-              d.description && (<FTooltip
-                title={d.description}
-              >
-                <FComponentsLib.FIcons.FInfo
-                  style={{ cursor: 'pointer', fontSize: 12 }}
+              <FPopover
+                // visible={true}
+                // trigger={['hover']}
+                title={null}
+                placement={'bottomLeft'}
+                content={<Space size={15} direction={'vertical'} style={{ width: 320 }}>
+                  <div>
+                    <FComponentsLib.FContentText type={'additional2'} text={'key'} />
+                    <div style={{ height: 5 }} />
+                    <FComponentsLib.FContentText type={'normal'} text={d.key} />
+                  </div>
+                  {
+                    d.description && (<div>
+                      <FComponentsLib.FContentText type={'additional2'} text={'属性说明'} />
+                      <div style={{ height: 5 }} />
+                      <FComponentsLib.FContentText type={'normal'} text={d.description} />
+                    </div>)
+                  }
+                </Space>}
+              ><div>
+                <FComponentsLib.FContentText
+                  text={d.name}
+                  type={'additional2'}
+                  style={{ maxWidth: 100 }}
+                  singleRow
                 />
-              </FTooltip>)
+              </div></FPopover>
             }
+
+
+            {/*{*/}
+            {/*  d.description && (<FTooltip*/}
+            {/*    title={d.description}*/}
+            {/*  >*/}
+            {/*    <FComponentsLib.FIcons.FInfo*/}
+            {/*      style={{ cursor: 'pointer', fontSize: 12 }}*/}
+            {/*    />*/}
+            {/*  </FTooltip>)*/}
+            {/*}*/}
           </div>
           <div>
             <FComponentsLib.FContentText
@@ -60,20 +92,42 @@ function FResourceProperties({
       alterableData.map((d) => {
         return (<React.Fragment key={d.key}>
           <div className={styles.grid1}>
+            <FPopover
+              // visible={true}
+              // trigger={['hover']}
+              title={null}
+              placement={'bottomLeft'}
+              content={<Space size={15} direction={'vertical'} style={{ width: 320 }}>
+                <div>
+                  <FComponentsLib.FContentText type={'additional2'} text={'key'} />
+                  <div style={{ height: 5 }} />
+                  <FComponentsLib.FContentText type={'normal'} text={d.key} />
+                </div>
+                {
+                  d.description && (<div>
+                    <FComponentsLib.FContentText type={'additional2'} text={'属性说明'} />
+                    <div style={{ height: 5 }} />
+                    <FComponentsLib.FContentText type={'normal'} text={d.description} />
+                  </div>)
+                }
+              </Space>}
+            ><div>
             <FComponentsLib.FContentText
               text={d.name}
               type={'additional2'}
               singleRow
+              style={{ maxWidth: 100 }}
             />
-            {
-              d.description && (<FTooltip
-                title={d.description}
-              >
-                <FComponentsLib.FIcons.FInfo
-                  style={{ cursor: 'pointer', fontSize: 12 }}
-                />
-              </FTooltip>)
-            }
+            </div></FPopover>
+            {/*{*/}
+            {/*  d.description && (<FTooltip*/}
+            {/*    title={d.description}*/}
+            {/*  >*/}
+            {/*    <FComponentsLib.FIcons.FInfo*/}
+            {/*      style={{ cursor: 'pointer', fontSize: 12 }}*/}
+            {/*    />*/}
+            {/*  </FTooltip>)*/}
+            {/*}*/}
           </div>
           <div className={styles.grid2}>
             <FComponentsLib.FContentText
