@@ -70,11 +70,12 @@ function Sider({ dispatch, nodeManagerPage, match }: SiderProps) {
             <Space size={30}>
               <FComponentsLib.FTextBtn
                 onClick={async () => {
-
+                  self.open(nodeManagerPage.nodeUrl);
                 }}
               >
                 <FTooltip title={FI18n.i18nNext.t('nodemgnt_btn_viewnode_tooltip')}>
-                  <i className={`freelog fl-icon-fenxiang`} style={{ fontSize: '14px' }} />
+
+                  <i className={`freelog fl-icon-fangwen`} style={{ fontSize: '14px' }} />
                 </FTooltip>
               </FComponentsLib.FTextBtn>
               <FComponentsLib.FCopyToClipboard
