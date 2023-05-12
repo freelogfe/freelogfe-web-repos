@@ -28,12 +28,20 @@ function FResourcePropertyAndOptionTipPopover({
       <div>
         <FComponentsLib.FContentText type={'additional2'} text={type === 'property' ? '属性名称' : '配置名称'} />
         <div style={{ height: 5 }} />
-        <FComponentsLib.FContentText type={'normal'} text={info.name} />
+        <FComponentsLib.FContentText
+          type={'normal'}
+          text={info.name}
+          style={{ maxWidth: 320, wordBreak: 'break-all' }}
+        />
       </div>
       <div>
         <FComponentsLib.FContentText type={'additional2'} text={'key'} />
         <div style={{ height: 5 }} />
-        <FComponentsLib.FContentText type={'normal'} text={info.key} />
+        <FComponentsLib.FContentText
+          type={'normal'}
+          text={info.key}
+          style={{ maxWidth: 320, wordBreak: 'break-all' }}
+        />
       </div>
       {
         info.description && (<div>

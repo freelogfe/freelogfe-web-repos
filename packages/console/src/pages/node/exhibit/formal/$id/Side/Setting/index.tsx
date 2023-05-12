@@ -181,19 +181,31 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
             exhibitInfoPage.side_InheritOptions.map((io, index) => {
               return (<div key={io.key}>
                 <div className={styles.optionTitle}>
-                  <Space size={10}>
-                    <FComponentsLib.FContentText text={io.name} />
-                    {
-                      io.description && (<FTooltip
-                        title={io.description}
-                        color={'#fff'}
-                      >
-                        <FComponentsLib.FIcons.FInfo
-                          style={{ cursor: 'pointer', fontSize: 14 }}
-                        />
-                      </FTooltip>)
-                    }
-                  </Space>
+                  <FResourcePropertyAndOptionTipPopover
+                    info={{
+                      key: io.key,
+                      name: io.name,
+                      description: io.description,
+                    }}
+                    type={'option'}
+                  >
+                    <div><FComponentsLib.FContentText
+                      text={io.name} singleRow style={{ maxWidth: 160 }} /></div>
+                  </FResourcePropertyAndOptionTipPopover>
+
+                  {/*<Space size={10}>*/}
+                  {/*  <FComponentsLib.FContentText text={io.name} />*/}
+                  {/*  {*/}
+                  {/*    io.description && (<FTooltip*/}
+                  {/*      title={io.description}*/}
+                  {/*      color={'#fff'}*/}
+                  {/*    >*/}
+                  {/*      <FComponentsLib.FIcons.FInfo*/}
+                  {/*        style={{ cursor: 'pointer', fontSize: 14 }}*/}
+                  {/*      />*/}
+                  {/*    </FTooltip>)*/}
+                  {/*  }*/}
+                  {/*</Space>*/}
 
                   <FTooltip title={FI18n.i18nNext.t('tip_reset_value')}>
                     <div>
@@ -279,19 +291,30 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
             exhibitInfoPage.side_CustomOptions.map((co, index) => {
               return (<div key={co.key}>
                 <div className={styles.optionTitle}>
-                  <Space size={10}>
-                    <FComponentsLib.FContentText text={co.name} />
-                    {
-                      co.description && (<FTooltip
-                        title={co.description}
-                        color={'#fff'}
-                      >
-                        <FComponentsLib.FIcons.FInfo
-                          style={{ cursor: 'pointer', fontSize: 14 }}
-                        />
-                      </FTooltip>)
-                    }
-                  </Space>
+                  <FResourcePropertyAndOptionTipPopover
+                    info={{
+                      key: co.key,
+                      name: co.name,
+                      description: co.description,
+                    }}
+                    type={'option'}
+                  >
+                    <div><FComponentsLib.FContentText
+                      text={co.name} singleRow style={{ maxWidth: 160 }} /></div>
+                  </FResourcePropertyAndOptionTipPopover>
+                  {/*<Space size={10}>*/}
+                  {/*  <FComponentsLib.FContentText text={co.name} />*/}
+                  {/*  {*/}
+                  {/*    co.description && (<FTooltip*/}
+                  {/*      title={co.description}*/}
+                  {/*      color={'#fff'}*/}
+                  {/*    >*/}
+                  {/*      <FComponentsLib.FIcons.FInfo*/}
+                  {/*        style={{ cursor: 'pointer', fontSize: 14 }}*/}
+                  {/*      />*/}
+                  {/*    </FTooltip>)*/}
+                  {/*  }*/}
+                  {/*</Space>*/}
                   <Space size={10}>
                     <FTooltip title={FI18n.i18nNext.t('tips_edit')}>
                       <div>
