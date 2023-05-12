@@ -31,6 +31,7 @@ import { FI18n } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 import FOverflowTooltip from '@/components/FOverflowTooltip';
 import fResourceOptionEditor from '@/components/fResourceOptionEditor';
+import FResourcePropertyAndOptionTipPopover from '@/components/FResourcePropertyAndOptionTipPopover';
 
 // import fResourcePropertyEditor from '@/components/fResourcePropertyEditor';
 
@@ -76,16 +77,30 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
                 return (<tr key={rp.key}>
                   {/*<td><FComponentsLib.FContentText text={pb.key} /></td>*/}
                   <td>
-                    <FOverflowTooltip
-                      text={rp.name}
-                      style={{
-                        fontWeight: 400,
-                        lineHeight: '20px',
-                        color: '#222',
-                        fontSize: 14,
-                        maxWidth: 90,
+                    <FResourcePropertyAndOptionTipPopover
+                      info={{
+                        key: rp.key,
+                        name: rp.name,
+                        description: rp.description,
                       }}
-                    />
+                      type={'property'}
+                    >
+                      <div><FComponentsLib.FContentText
+                        text={rp.name}
+                        style={{ maxWidth: 90 }}
+                        singleRow
+                      /></div>
+                    </FResourcePropertyAndOptionTipPopover>
+                    {/*<FOverflowTooltip*/}
+                    {/*  text={rp.name}*/}
+                    {/*  style={{*/}
+                    {/*    fontWeight: 400,*/}
+                    {/*    lineHeight: '20px',*/}
+                    {/*    color: '#222',*/}
+                    {/*    fontSize: 14,*/}
+                    {/*    maxWidth: 90,*/}
+                    {/*  }}*/}
+                    {/*/>*/}
                   </td>
                   {/*<td><FComponentsLib.FContentText text={pb.value} /></td>*/}
                   <td>
@@ -99,6 +114,7 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
                         maxWidth: 90,
                       }}
                     />
+
                   </td>
                 </tr>);
               })
@@ -108,16 +124,31 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
                 return (<tr key={pb.key}>
                   {/*<td><FComponentsLib.FContentText text={pb.key} /></td>*/}
                   <td>
-                    <FOverflowTooltip
-                      text={pb.name}
-                      style={{
-                        fontWeight: 400,
-                        lineHeight: '20px',
-                        color: '#222',
-                        fontSize: 14,
-                        maxWidth: 90,
+                    {/*<FOverflowTooltip*/}
+                    {/*  text={pb.name}*/}
+                    {/*  style={{*/}
+                    {/*    fontWeight: 400,*/}
+                    {/*    lineHeight: '20px',*/}
+                    {/*    color: '#222',*/}
+                    {/*    fontSize: 14,*/}
+                    {/*    maxWidth: 90,*/}
+                    {/*  }}*/}
+                    {/*/>*/}
+                    <FResourcePropertyAndOptionTipPopover
+                      info={{
+                        key: pb.key,
+                        name: pb.name,
+                        description: pb.description,
                       }}
-                    /></td>
+                      type={'property'}
+                    >
+                      <div><FComponentsLib.FContentText
+                        text={pb.name}
+                        style={{ maxWidth: 90 }}
+                        singleRow
+                      /></div>
+                    </FResourcePropertyAndOptionTipPopover>
+                  </td>
                   {/*<td><FComponentsLib.FContentText text={pb.value} /></td>*/}
                   <td><FOverflowTooltip
                     text={pb.value}
