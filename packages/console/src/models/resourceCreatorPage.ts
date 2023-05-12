@@ -10,18 +10,11 @@ export interface ResourceCreatorPageModelState {
   userName: string;
 
   name: string;
-  nameVerify: 0 | 1 | 2;
+  nameVerify: 'none' | 'validating' | 'error' | 'success';
   nameErrorText: string;
 
-  // resource_Type: {
-  //   value: string;
-  //   valueError: string;
-  //   // options: string[];
-  // }[];
   resourceTypeCodes: {
     value: string;
-    // label: string;
-    // values: Array<string | number>;
     labels: string[];
     customInput?: string;
   } | null;
@@ -32,7 +25,6 @@ export interface ResourceCreatorPageModelState {
   cover: string;
   labels: string[];
 
-  // promptLeavePath: string;
   dataIsDirty: boolean;
 }
 
@@ -119,7 +111,7 @@ export const initStates: ResourceCreatorPageModelState = {
   userName: '',
 
   name: '',
-  nameVerify: 0,
+  nameVerify: 'none',
   nameErrorText: '',
 
   resourceTypeCodes: null,
@@ -201,7 +193,7 @@ const Model: ResourceCreatorPageModelType = {
 
     },
     * onChange_NameInput({ payload }: OnChange_NameInput_Action, { put, call, select }: EffectsCommandMap) {
-      console.log(payload, 'payload (((((())))))');
+      // console.log(payload, 'payload (((((())))))');
 
       let nameErrorText: string = '';
       if (!payload.value) {
@@ -216,7 +208,9 @@ const Model: ResourceCreatorPageModelType = {
         type: 'change',
         payload: {
           name: payload.value,
+          nameVerify: nameErrorText !== '' ? 'error' : 'none',
           nameErrorText,
+          dataIsDirty: true,
         },
       });
       self.onbeforeunload = () => true;
@@ -226,36 +220,31 @@ const Model: ResourceCreatorPageModelType = {
         resourceCreatorPage,
       }));
 
-      if (resourceCreatorPage.name === '' && resourceCreatorPage.nameErrorText !== '') {
+      if (resourceCreatorPage.name === '' || resourceCreatorPage.nameErrorText !== '') {
         return;
       }
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          nameVerify: 1,
+          nameVerify: 'validating',
         },
       });
 
       let nameErrorText: string = '';
 
-      const { user } = yield select(({ user }: ConnectState) => ({
-        user,
-      }));
       const params1: Parameters<typeof FServiceAPI.Resource.info>[0] = {
-        resourceIdOrName: encodeURIComponent(`${user.info.username}/${resourceCreatorPage.name}`),
+        resourceIdOrName: encodeURIComponent(`${resourceCreatorPage.userName}/${resourceCreatorPage.name}`),
       };
-      const { data: data1 } = yield call(FServiceAPI.Resource.info, params1);
-      if (data1) {
+      const { data: data_info } = yield call(FServiceAPI.Resource.info, params1);
+      if (!!data_info) {
         nameErrorText = '资源名已存在';
       }
 
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          // name: payload,
           nameErrorText,
-          nameVerify: 2,
-          dataIsDirty: true,
+          nameVerify: nameErrorText !== '' ? 'error' : 'success',
         },
       });
 

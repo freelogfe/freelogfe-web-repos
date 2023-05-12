@@ -67,7 +67,7 @@ function ResourceCreator({
   // });
 
   const createBtnDisabled: boolean = resourceCreatorPage.name === '' ||
-    resourceCreatorPage.nameVerify !== 2 ||
+    resourceCreatorPage.nameVerify !== 'success' ||
     // resourceCreatorPage.resourceTypeVerify !== 2 ||
     resourceCreatorPage.nameErrorText !== '' ||
     // !!resourceCreatorPage.resourceTypeErrorText ||
@@ -176,10 +176,10 @@ function ResourceCreator({
 
               </div>
               <div style={{ width: 10 }} />
-              {resourceCreatorPage.nameVerify === 1 &&
-              <FComponentsLib.FIcons.FLoading style={{ lineHeight: '38px' }} />}
-              {resourceCreatorPage.nameVerify === 2 && resourceCreatorPage.name !== '' && resourceCreatorPage.nameErrorText === '' && (
-                <FComponentsLib.FIcons.FCheck style={{ lineHeight: '38px' }} />)}
+              {resourceCreatorPage.nameVerify === 'validating' &&
+              (<FComponentsLib.FIcons.FLoading style={{ lineHeight: '38px' }} />)}
+              {resourceCreatorPage.nameVerify === 'success' &&
+              (<FComponentsLib.FIcons.FCheck style={{ lineHeight: '38px' }} />)}
             </div>
           </FFormLayout.FBlock>
 
