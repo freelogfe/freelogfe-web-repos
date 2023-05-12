@@ -27,11 +27,14 @@ function FResourceOptions({ dataSource, theme = 'light', onEdit, onDelete }: FRe
         return (<div key={d.key} className={styles.item}>
           <div className={styles.itemHeader}>
             <div className={styles.itemHeaderLeft}>
-              <FResourcePropertyAndOptionTipPopover info={{
-                key: d.key,
-                name: d.name,
-                description: d.description,
-              }}>
+              <FResourcePropertyAndOptionTipPopover
+                info={{
+                  key: d.key,
+                  name: d.name,
+                  description: d.description,
+                }}
+                type={'option'}
+              >
                 <FComponentsLib.FContentText
                   text={d.name}
                   type={'normal'}

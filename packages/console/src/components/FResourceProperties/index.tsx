@@ -1,9 +1,9 @@
 import * as React from 'react';
 import styles from './index.less';
 import FComponentsLib from '@freelog/components-lib';
-import FTooltip from '@/components/FTooltip';
-import { Space } from 'antd';
-import FPopover from '@/components/FPopover';
+// import FTooltip from '@/components/FTooltip';
+// import { Space } from 'antd';
+// import FPopover from '@/components/FPopover';
 import FResourcePropertyAndOptionTipPopover from '@/components/FResourcePropertyAndOptionTipPopover';
 
 
@@ -37,11 +37,14 @@ function FResourceProperties({
       immutableData.map((d) => {
         return (<React.Fragment key={d.key}>
           <div className={styles.grid1}>
-            <FResourcePropertyAndOptionTipPopover info={{
-              key: d.key,
-              name: d.name,
-              description: d.description,
-            }}>
+            <FResourcePropertyAndOptionTipPopover
+              info={{
+                key: d.key,
+                name: d.name,
+                description: d.description,
+              }}
+              type={'property'}
+            >
               <FComponentsLib.FContentText
                 text={d.name}
                 type={'additional2'}
@@ -76,11 +79,14 @@ function FResourceProperties({
       alterableData.map((d) => {
         return (<React.Fragment key={d.key}>
           <div className={styles.grid1}>
-            <FResourcePropertyAndOptionTipPopover info={{
-              key: d.key,
-              name: d.name,
-              description: d.description,
-            }}>
+            <FResourcePropertyAndOptionTipPopover
+              info={{
+                key: d.key,
+                name: d.name,
+                description: d.description,
+              }}
+              type={'property'}
+            >
               <FComponentsLib.FContentText
                 text={d.name}
                 type={'additional2'}
