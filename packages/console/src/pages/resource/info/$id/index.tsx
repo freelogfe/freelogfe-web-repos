@@ -26,6 +26,7 @@ import { FI18n } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 import FSkeletonNode from '@/components/FSkeletonNode';
 import * as AHooks from 'ahooks';
+import FInput_MultiLine from '@/components/FInput_MultiLine';
 
 interface InfoProps extends RouteComponentProps<{ id: string; }> {
   dispatch: Dispatch;
@@ -140,20 +141,41 @@ function Info({ dispatch, resourceInfoPage, match }: InfoProps) {
 
             {
               resourceInfoPage.introduction_IsEditing
-                ? (<FIntroductionEditor
-                  value={resourceInfoPage.introduction_EditorText}
-                  errorText={resourceInfoPage.introduction_EditorText_Error}
-                  onChange={(e) => {
-                    dispatch<OnChange_IntroductionEditor_Action>({
-                      type: 'resourceInfoPage/onChange_IntroductionEditor',
-                      payload: {
-                        value: e.target.value,
-                      },
-                    });
-                  }
+                // ? (<FIntroductionEditor
+                //   value={resourceInfoPage.introduction_EditorText}
+                //   errorText={resourceInfoPage.introduction_EditorText_Error}
+                //   onChange={(e) => {
+                //     dispatch<OnChange_IntroductionEditor_Action>({
+                //       type: 'resourceInfoPage/onChange_IntroductionEditor',
+                //       payload: {
+                //         value: e.target.value,
+                //       },
+                //     });
+                //   }
+                //
+                //   }
+                // />)
+                ? (<div>
+                  <FInput_MultiLine
+                    value={resourceInfoPage.introduction_EditorText}
+                    lengthLimit={1000}
+                    onChange={(e) => {
+                      dispatch<OnChange_IntroductionEditor_Action>({
+                        type: 'resourceInfoPage/onChange_IntroductionEditor',
+                        payload: {
+                          value: e.target.value,
+                        },
+                      });
+                    }}
+                  />
 
+                  {
+                    resourceInfoPage.introduction_EditorText_Error !== '' && (<>
+                      <div style={{ height: 5 }} />
+                      <div style={{ color: '#EE4040' }}>{resourceInfoPage.introduction_EditorText_Error}</div>
+                    </>)
                   }
-                />)
+                </div>)
                 : resourceInfoPage.resourceInfo.intro !== ''
                   ? (<div className={styles.aboutPanel}>
                     <FComponentsLib.FContentText text={resourceInfoPage.resourceInfo.intro} />

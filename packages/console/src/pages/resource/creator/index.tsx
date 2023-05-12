@@ -19,7 +19,7 @@ import * as AHooks from 'ahooks';
 import FResourceTypeInput from '@/components/FResourceTypeInput';
 import FComponentsLib from '@freelog/components-lib';
 import FPrompt from '@/components/FPrompt';
-import FSingleLineInput from '@/components/FSinglelineInput';
+import FSingleLineInput from '@/components/FInput_SingleLine';
 
 interface ResourceCreatorProps {
   dispatch: Dispatch;

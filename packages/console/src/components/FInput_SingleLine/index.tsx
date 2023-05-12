@@ -3,7 +3,7 @@ import styles from './index.less';
 import { Input, InputRef } from 'antd';
 import { ChangeEventHandler, KeyboardEventHandler } from 'react';
 
-interface FSingleLineInputProps {
+interface FInput_SingleLine_Props {
   value: string;
   placeholder?: string;
   className?: string;
@@ -16,7 +16,7 @@ interface FSingleLineInputProps {
   onPressEnter?: KeyboardEventHandler<HTMLInputElement>;
 }
 
-function FSingleLineInput({
+function FInput_SingleLine({
                             value,
                             placeholder = '',
                             className = '',
@@ -26,7 +26,7 @@ function FSingleLineInput({
                             lengthLimit = 100,
                             onChange,
                             onPressEnter,
-                          }: FSingleLineInputProps, ref: React.Ref<InputRef> | undefined) {
+                          }: FInput_SingleLine_Props, ref: React.Ref<InputRef> | undefined) {
   return (<Input
     value={value}
     ref={ref}
@@ -46,4 +46,4 @@ function FSingleLineInput({
   />);
 }
 
-export default React.forwardRef(FSingleLineInput);
+export default React.forwardRef(FInput_SingleLine);
