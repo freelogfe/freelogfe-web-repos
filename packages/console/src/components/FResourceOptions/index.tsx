@@ -35,10 +35,10 @@ function FResourceOptions({ dataSource, theme = 'light', onEdit, onDelete }: FRe
                 }}
                 type={'option'}
               >
-                <FComponentsLib.FContentText
+                <div><FComponentsLib.FContentText
                   text={d.name}
                   type={'normal'}
-                />
+                /></div>
               </FResourcePropertyAndOptionTipPopover>
             </div>
             <div className={styles.itemHeaderRight}>
