@@ -11,6 +11,7 @@ import { history } from 'umi';
 import FMenu from '@/components/FMenu';
 import { ColumnsType } from 'antd/lib/table/interface';
 import {
+  FetchExhibitsAction,
   // ChangeAction,
   OnChange_Exhibit_InputFilter_Action,
   OnChange_Exhibit_SelectedStatus_Action,
@@ -33,6 +34,7 @@ import FCoverImage from '@/components/FCoverImage';
 import { Helmet } from 'react-helmet';
 import FComponentsLib from '@freelog/components-lib';
 import FResourceTypeFilter from '@/components/FResourceTypeFilter';
+import FInput_Search from '@/components/FInput_Search';
 
 interface ExhibitsProps {
   dispatch: Dispatch;
@@ -51,6 +53,17 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
     dispatch<OnUnmount_ExhibitPage_Action>({
       type: 'nodeManagerPage/onUnmount_ExhibitPage',
     });
+  });
+
+  AHooks.useDebounceEffect(() => {
+    dispatch<FetchExhibitsAction>({
+      type: 'nodeManagerPage/fetchExhibits',
+      payload: {
+        restart: true,
+      },
+    });
+  }, [nodeManagerPage.exhibit_InputFilter], {
+    wait: 300,
   });
 
   const dataSource: NodeManagerModelState['exhibit_List'] = nodeManagerPage.exhibit_List.map(
@@ -324,21 +337,34 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                   </FDropdownMenu>
                 </div>
                 <div>
-                  <FInput
-                    className={styles.input}
-                    theme='dark'
+                  <FInput_Search
                     value={nodeManagerPage.exhibit_InputFilter}
-                    debounce={300}
-                    onDebounceChange={(value) => {
+                    onChange={(e) => {
                       dispatch<OnChange_Exhibit_InputFilter_Action>({
                         type: 'nodeManagerPage/onChange_Exhibit_InputFilter',
                         payload: {
-                          value: value,
+                          value: e.target.value,
                         },
                       });
                     }}
+                    className={styles.input}
                     placeholder={FI18n.i18nNext.t('nodemgmt_search_exhibits_hint')}
                   />
+                  {/*<FInput*/}
+                  {/*  className={styles.input}*/}
+                  {/*  theme='dark'*/}
+                  {/*  value={nodeManagerPage.exhibit_InputFilter}*/}
+                  {/*  debounce={300}*/}
+                  {/*  onDebounceChange={(value) => {*/}
+                  {/*    dispatch<OnChange_Exhibit_InputFilter_Action>({*/}
+                  {/*      type: 'nodeManagerPage/onChange_Exhibit_InputFilter',*/}
+                  {/*      payload: {*/}
+                  {/*        value: value,*/}
+                  {/*      },*/}
+                  {/*    });*/}
+                  {/*  }}*/}
+                  {/*  placeholder={FI18n.i18nNext.t('nodemgmt_search_exhibits_hint')}*/}
+                  {/*/>*/}
                 </div>
               </Space>
             </div>)

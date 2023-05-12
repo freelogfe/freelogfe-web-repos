@@ -724,12 +724,12 @@ const Model: NodeManagerModelType = {
         },
       });
 
-      yield put<FetchExhibitsAction>({
-        type: 'fetchExhibits',
-        payload: {
-          restart: true,
-        },
-      });
+      // yield put<FetchExhibitsAction>({
+      //   type: 'fetchExhibits',
+      //   payload: {
+      //     restart: true,
+      //   },
+      // });
     },
     * onLoadMore_ExhibitList({}: OnLoadMore_ExhibitList_Action, { put }: EffectsCommandMap) {
       yield put<FetchExhibitsAction>({
