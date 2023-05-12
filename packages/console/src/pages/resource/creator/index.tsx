@@ -155,6 +155,7 @@ function ResourceCreator({
                 <FSingleLineInput
                   value={resourceCreatorPage.name}
                   className={styles.FInput}
+                  style={{ width: 610 }}
                   lengthLimit={60}
                   placeholder={FI18n.i18nNext.t('hint_enter_resource_name')}
                   onChange={(e) => {
