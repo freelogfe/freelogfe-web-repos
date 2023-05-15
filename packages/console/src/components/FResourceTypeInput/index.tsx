@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import { AutoComplete, Dropdown, Popover } from 'antd';
+import { AutoComplete, Dropdown, Popover, Space } from 'antd';
 import * as AHooks from 'ahooks';
 import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
@@ -249,115 +249,123 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
   }
 
   if (_mode === 'input' && _selectedCache) {
-    return (<AutoComplete
-      autoFocus={true}
-      allowClear={true}
-      defaultOpen={true}
-      options={[
-        ...(_autoCompleteInputIsNew ? [
-          {
-            value: '#new',
-            label: (<div className={styles.autoCompleteOption}>
-              <span>{_autoCompleteInput}</span>
-              {/*<FComponentsLib.FTextBtn>添加新类型</FComponentsLib.FTextBtn>*/}
-              <FComponentsLib.FTextBtn>{FI18n.i18nNext.t('createresource_selectresourcetype_btn_addthis')}</FComponentsLib.FTextBtn>
-            </div>),
-            data: {
+    return (<div style={{ display: 'block' }}>
+      <AutoComplete
+        autoFocus={true}
+        allowClear={true}
+        defaultOpen={true}
+        options={[
+          ...(_autoCompleteInputIsNew ? [
+            {
               value: '#new',
-              label: '',
-              values: [],
-              labels: _autoCompleteInput.split('/'),
+              label: (<div className={styles.autoCompleteOption}>
+                <span>{_autoCompleteInput}</span>
+                {/*<FComponentsLib.FTextBtn>添加新类型</FComponentsLib.FTextBtn>*/}
+                <FComponentsLib.FTextBtn>{FI18n.i18nNext.t('createresource_selectresourcetype_btn_addthis')}</FComponentsLib.FTextBtn>
+              </div>),
+              data: {
+                value: '#new',
+                label: '',
+                values: [],
+                labels: _autoCompleteInput.split('/'),
+              },
             },
-          },
-        ] : []),
-        ..._autoCompleteOptions.map((aco) => {
-          return {
-            value: aco.value,
-            label: (<div className={styles.autoCompleteOption}>
-              <span>{aco.labels.join('/')}</span>
-              <FComponentsLib.FContentText
-                // text={`${aco.count}个资源`}
-                text={FI18n.i18nNext.t('createresource_selectresourcetype_input_resourceqty', {
-                  ResourceQty: aco.count,
-                })}
-                type={'additional2'}
-              />
-            </div>),
-            data: aco,
-          };
-        }),
-        ..._autoCompleteOptionsOther.map((aco) => {
-          return {
-            value: aco.value,
-            label: (<div className={styles.autoCompleteOption}>
-              <span>{aco.labels.join('/')}</span>
-              <FComponentsLib.FContentText
-                // text={`${aco.count}个资源`}
-                text={FI18n.i18nNext.t('createresource_selectresourcetype_input_resourceqty', {
-                  ResourceQty: aco.count,
-                })}
-                type={'additional2'}
-              />
-            </div>),
-            data: aco,
-          };
-        }),
-      ]}
-      style={{ width: 360 }}
-      value={_autoCompleteInput}
-      className={styles.AutoComplete}
-      // filterOption={(inputValue, option: any) => {
-      //   return option.data.labels[option.data.labels.length - 1].length <= 40 && option.data.labels.join('/').startsWith(inputValue);
-      // }}
-      onChange={(value: string) => {
-        // console.log(value, 'value 908wieojfklsdfjasldkfjlkj');
-        if (!value) {
-          return;
-        }
-        const startStr: string = [..._selectedCache.labels, ''].join('/');
-        if (!value.startsWith(startStr)) {
-          return;
-        }
-        set_autoCompleteInput(value);
-
-
-        const custom: string = value.replace(startStr, '');
-        set_autoCompleteInputIsNew(value !== startStr && FUtil.Regexp.RESOURCE_TYPE.test(custom) && _autoCompleteOptions.every((aco) => {
-          return aco.labels.join('/') !== value;
-        }));
-      }}
-      onSelect={(value: any, op: any) => {
-        const data: FResourceTypeInputStates['_autoCompleteOptions'][number] = op.data;
-        // console.log(value, option, 'value : any sdfoisdjf lskdjlkj');
-        if (value !== '#new') {
-          onChange && onChange({
-            value: data.value,
-            // label: data.label,
-            // values: data.values,
-            labels: data.labels,
-          });
-        } else {
-          const customInputLabels: string[] = _autoCompleteInput.split('/');
-          onChange && onChange({
-            value: _selectedCache.value,
-            // label: _selectedCache.label,
-            // values: _selectedCache.values,
-            labels: _selectedCache.labels,
-            customInput: customInputLabels[customInputLabels.length - 1],
-          });
-        }
-        init();
-      }}
-      onClear={() => {
-        onChange && onChange(null);
-        init();
-      }}
-    >
-      <FInput
-        // value={'autoCompleteInput'}
+          ] : []),
+          ..._autoCompleteOptions.map((aco) => {
+            return {
+              value: aco.value,
+              label: (<div className={styles.autoCompleteOption}>
+                <span>{aco.labels.join('/')}</span>
+                <FComponentsLib.FContentText
+                  // text={`${aco.count}个资源`}
+                  text={FI18n.i18nNext.t('createresource_selectresourcetype_input_resourceqty', {
+                    ResourceQty: aco.count,
+                  })}
+                  type={'additional2'}
+                />
+              </div>),
+              data: aco,
+            };
+          }),
+          ..._autoCompleteOptionsOther.map((aco) => {
+            return {
+              value: aco.value,
+              label: (<div className={styles.autoCompleteOption}>
+                <span>{aco.labels.join('/')}</span>
+                <FComponentsLib.FContentText
+                  // text={`${aco.count}个资源`}
+                  text={FI18n.i18nNext.t('createresource_selectresourcetype_input_resourceqty', {
+                    ResourceQty: aco.count,
+                  })}
+                  type={'additional2'}
+                />
+              </div>),
+              data: aco,
+            };
+          }),
+        ]}
         style={{ width: 360 }}
-      />
-    </AutoComplete>);
+        value={_autoCompleteInput}
+        className={styles.AutoComplete}
+        // filterOption={(inputValue, option: any) => {
+        //   return option.data.labels[option.data.labels.length - 1].length <= 40 && option.data.labels.join('/').startsWith(inputValue);
+        // }}
+        onChange={(value: string) => {
+          // console.log(value, 'value 908wieojfklsdfjasldkfjlkj');
+          if (!value) {
+            return;
+          }
+          const startStr: string = [..._selectedCache.labels, ''].join('/');
+          if (!value.startsWith(startStr)) {
+            return;
+          }
+          set_autoCompleteInput(value);
+
+
+          const custom: string = value.replace(startStr, '');
+          set_autoCompleteInputIsNew(value !== startStr && FUtil.Regexp.RESOURCE_TYPE.test(custom) && _autoCompleteOptions.every((aco) => {
+            return aco.labels.join('/') !== value;
+          }));
+        }}
+        onSelect={(value: any, op: any) => {
+          const data: FResourceTypeInputStates['_autoCompleteOptions'][number] = op.data;
+          // console.log(value, option, 'value : any sdfoisdjf lskdjlkj');
+          if (value !== '#new') {
+            onChange && onChange({
+              value: data.value,
+              // label: data.label,
+              // values: data.values,
+              labels: data.labels,
+            });
+          } else {
+            const customInputLabels: string[] = _autoCompleteInput.split('/');
+            onChange && onChange({
+              value: _selectedCache.value,
+              // label: _selectedCache.label,
+              // values: _selectedCache.values,
+              labels: _selectedCache.labels,
+              customInput: customInputLabels[customInputLabels.length - 1],
+            });
+          }
+          init();
+        }}
+        onClear={() => {
+          onChange && onChange(null);
+          init();
+        }}
+      >
+        <FInput
+          // value={'autoCompleteInput'}
+          style={{ width: 360 }}
+        />
+      </AutoComplete>
+      <div style={{ height: 30 }} />
+      <Space style={{ display: 'flex' }} size={5} direction={'vertical'}>
+        <FComponentsLib.FContentText text={'目前仅支持中文、英文、数字，及符号“-”、“&”、“.”、“,”'} type={'additional2'} />
+        <FComponentsLib.FContentText text={'英文区分大小写'} type={'additional2'} />
+        <FComponentsLib.FContentText text={'长度必须在1-40个字符之间'} type={'additional2'} />
+      </Space>
+    </div>);
   }
 
   return (<Dropdown
