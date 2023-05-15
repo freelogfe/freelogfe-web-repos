@@ -232,6 +232,7 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
     values: Array<string | number>;
     labels: string[];
   }) {
+    onChange && onChange(null);
     // console.log(labels, 'labelsiosdjflksjdlkfjsldkjl');
     set_isOpen(false);
     set_mode('input');
