@@ -869,14 +869,14 @@ const Model: NodeManagerModelType = {
       const params: Parameters<typeof FServiceAPI.Node.setNodeInfo>[0] = {
         nodeId: nodeManagerPage.setting_nodeID,
         nodeLogo: nodeManagerPage.setting_nodeCover,
-        nodeTitle: nodeManagerPage.setting_nodeTitle,
-        nodeShortDescription: nodeManagerPage.setting_nodeIntroduction,
+        nodeTitle: nodeManagerPage.setting_nodeTitle.trim(),
+        nodeShortDescription: nodeManagerPage.setting_nodeIntroduction.trim(),
         status: nodeManagerPage.setting_nodeLimitation === 'public'
           ? 1
           : nodeManagerPage.setting_nodeLimitation === 'private'
             ? 2
             : 8, // 可见性 1：公开 2：私密 3：暂停
-        nodeSuspendInfo: nodeManagerPage.setting_nodeLimitationMessage,
+        nodeSuspendInfo: nodeManagerPage.setting_nodeLimitationMessage.trim(),
       };
 
       const { ret, errCode, msg, data } = yield call(FServiceAPI.Node.setNodeInfo, params);
