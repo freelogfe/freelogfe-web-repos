@@ -316,7 +316,9 @@ const Model: StorageObjectEditorModelType = {
         resourceTypeCode: String(storageObjectEditor.resourceTypeValue.value),
         resourceType: storageObjectEditor.resourceTypeValue.customInput
           ? [...storageObjectEditor.resourceTypeValue.labels, storageObjectEditor.resourceTypeValue.customInput]
-          : storageObjectEditor.resourceTypeValue.labels,
+          : storageObjectEditor.resourceTypeValue.labels.length > 0
+            ? storageObjectEditor.resourceTypeValue.labels
+            : undefined,
         dependencies: [
           ...storageObjectEditor.depRs.map((r) => ({
             name: r.name,
