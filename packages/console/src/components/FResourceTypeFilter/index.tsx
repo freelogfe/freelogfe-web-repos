@@ -65,7 +65,6 @@ function FResourceTypeFilter({ value, omitTheme = false, onChange }: FResourceTy
       data: ServerData[];
     } = await FServiceAPI.Resource.resourceTypes({
       category: 1,
-      // @ts-ignore
       isMine: false,
       status: 1,
     });

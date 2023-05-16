@@ -5,7 +5,6 @@ import * as AHooks from 'ahooks';
 import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 import FInput from '@/components/FInput';
-// import FDropdown from '../../../../@freelog/components-lib/src/FDropdown';
 
 interface Option {
   value: string;
