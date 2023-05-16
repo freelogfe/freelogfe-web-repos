@@ -105,7 +105,8 @@ function FResourceOptionEditorDrawer({
   }
 
   return (<FDrawer
-    title={defaultData ? '编辑配置' : '添加配置'}
+    // title={defaultData ? '编辑配置' : '添加配置'}
+    title={defaultData ? FI18n.i18nNext.t('resourceoptions_edit_title') : FI18n.i18nNext.t('resourceoptions_add_title')}
     onClose={() => {
       set_visible(false);
     }}
@@ -124,7 +125,7 @@ function FResourceOptionEditorDrawer({
         onClick={() => {
           set_visible(false);
         }}
-      >取消</FComponentsLib.FTextBtn>
+      >{FI18n.i18nNext.t('btn_cancel')}</FComponentsLib.FTextBtn>
 
       <FComponentsLib.FRectBtn
         type='primary'
@@ -135,14 +136,6 @@ function FResourceOptionEditorDrawer({
           return si.value === '' || si.error !== '';
         })))}
         onClick={async () => {
-          // console.log(selectInputs, 'selectInputsopisdjfl;ksdjflkjlk');
-          // if (typeSelect === 'select' && selectInputs.map((s) => {
-          //   return s.value;
-          // }).join(',').length > 500) {
-          //   fMessage('自定义选项总长度不超过500个字符', 'error');
-          //   return;
-          // }
-
           onOk && onOk({
             key: keyInput,
             name: nameInput,
@@ -155,7 +148,7 @@ function FResourceOptionEditorDrawer({
           });
           set_visible(false);
         }}
-      >保存</FComponentsLib.FRectBtn>
+      >{FI18n.i18nNext.t('btn_save')}</FComponentsLib.FRectBtn>
     </Space>}
   >
     <Space
@@ -166,13 +159,19 @@ function FResourceOptionEditorDrawer({
 
       <div className={styles.optionItem}>
         <div className={styles.title}>
-          <FComponentsLib.FContentText style={{ fontSize: 12 }} type={'highlight'} text={'配置名称'} />
+          {/*<FComponentsLib.FContentText style={{ fontSize: 12 }} type={'highlight'} text={'配置名称'} />*/}
+          <FComponentsLib.FContentText
+            style={{ fontSize: 12 }}
+            type={'highlight'}
+            text={FI18n.i18nNext.t('resourceoptions_add_input_name')}
+          />
         </div>
         <div style={{ height: 5 }} />
         <FInput
           // disabled={true}
           disabled={noneEditableFields.includes('name')}
-          placeholder={'输入配置名称'}
+          // placeholder={'输入配置名称'}
+          placeholder={FI18n.i18nNext.t('resourceoptions_add_input_name_hint')}
           value={nameInput}
           className={styles.input}
           onChange={(e) => {
@@ -206,13 +205,15 @@ function FResourceOptionEditorDrawer({
           <FComponentsLib.FContentText
             style={{ fontSize: 12 }}
             type={'highlight'}
-            text={'key'}
+            // text={'key'}
+            text={FI18n.i18nNext.t('resourceoptions_add_input_key')}
           />
         </div>
         <div style={{ height: 5 }} />
         <FInput
           disabled={noneEditableFields.includes('key')}
-          placeholder={'输入key'}
+          // placeholder={'输入key'}
+          placeholder={FI18n.i18nNext.t('resourceoptions_add_input_key_hint')}
           value={keyInput}
           className={styles.input}
           onChange={(e) => {
@@ -244,8 +245,18 @@ function FResourceOptionEditorDrawer({
       <div className={styles.optionItem}>
         <div className={styles.title}>
           {/*<FComponentsLib.FTitleText type='h4'>属性说明</FComponentsLib.FTitleText>*/}
-          <FComponentsLib.FContentText style={{ fontSize: 12 }} type={'highlight'} text={'配置说明'} />
-          <FComponentsLib.FContentText style={{ fontSize: 12 }} type={'additional2'} text={'（选填）'} />
+          {/*<FComponentsLib.FContentText style={{ fontSize: 12 }} type={'highlight'} text={'配置说明'} />*/}
+          <FComponentsLib.FContentText
+            style={{ fontSize: 12 }}
+            type={'highlight'}
+            text={FI18n.i18nNext.t('resourceoptions_add_input_desc')}
+          />
+          {/*<FComponentsLib.FContentText style={{ fontSize: 12 }} type={'additional2'} text={'（选填）'} />*/}
+          <FComponentsLib.FContentText
+            style={{ fontSize: 12 }}
+            type={'additional2'}
+            text={FI18n.i18nNext.t('form_input_label_optional')}
+          />
         </div>
         <div style={{ height: 5 }} />
         <FInput
@@ -263,7 +274,8 @@ function FResourceOptionEditorDrawer({
             set_descriptionInput(value);
             set_descriptionInputError(errorText);
           }}
-          placeholder={'输入配置说明'}
+          // placeholder={'输入配置说明'}
+          placeholder={FI18n.i18nNext.t('resourceoptions_add_input_desc_hint')}
         />
         {descriptionInputError && (<>
           <div style={{ height: 5 }} />
@@ -274,7 +286,12 @@ function FResourceOptionEditorDrawer({
       {
         !hideTypeSelect && (<div className={styles.optionItem}>
           <div className={styles.title}>
-            <FComponentsLib.FContentText style={{ fontSize: 12 }} type={'highlight'} text={'配置方式'} />
+            {/*<FComponentsLib.FContentText style={{ fontSize: 12 }} type={'highlight'} text={'配置方式'} />*/}
+            <FComponentsLib.FContentText
+              style={{ fontSize: 12 }}
+              type={'highlight'}
+              text={FI18n.i18nNext.t('resourceoptions_add_input_type')}
+            />
           </div>
           <div style={{ height: 5 }} />
           <div
@@ -294,8 +311,7 @@ function FResourceOptionEditorDrawer({
                 }
                 set_typeSelect('input');
               }}
-            >输入框
-            </div>
+            >{FI18n.i18nNext.t('resourceoptions_add_input_type_textfield')}</div>
             <div
               style={{
                 cursor: noneEditableFields.includes('type') ? 'not-allowed' : 'pointer',
@@ -307,7 +323,7 @@ function FResourceOptionEditorDrawer({
                 }
                 set_typeSelect('select');
               }}
-            >下拉选择器
+            >{FI18n.i18nNext.t('resourceoptions_add_input_type_dropdownlist')}
             </div>
           </div>
         </div>)
@@ -316,8 +332,18 @@ function FResourceOptionEditorDrawer({
       {
         typeSelect === 'input' && (<div className={styles.optionItem}>
           <div className={styles.title}>
-            <FComponentsLib.FContentText style={{ fontSize: 12 }} type={'highlight'} text={'默认值'} />
-            <FComponentsLib.FContentText style={{ fontSize: 12 }} type={'additional2'} text={'（选填）'} />
+            {/*<FComponentsLib.FContentText style={{ fontSize: 12 }} type={'highlight'} text={'默认值'} />*/}
+            <FComponentsLib.FContentText
+              style={{ fontSize: 12 }}
+              type={'highlight'}
+              text={FI18n.i18nNext.t('resourceoptions_add_input_default')}
+            />
+            {/*<FComponentsLib.FContentText style={{ fontSize: 12 }} type={'additional2'} text={'（选填）'} />*/}
+            <FComponentsLib.FContentText
+              style={{ fontSize: 12 }}
+              type={'additional2'}
+              text={FI18n.i18nNext.t('form_input_label_optional')}
+            />
           </div>
           <div style={{ height: 5 }} />
           <FInput
@@ -336,7 +362,8 @@ function FResourceOptionEditorDrawer({
               set_inputInput(value);
               set_inputInputError(errorText);
             }}
-            placeholder={'输入value'}
+            // placeholder={'输入value'}
+            placeholder={FI18n.i18nNext.t('resourceoptions_add_input_default_hint')}
           />
           {inputInputError && (<>
             <div style={{ height: 5 }} />
@@ -348,7 +375,17 @@ function FResourceOptionEditorDrawer({
       {
         typeSelect === 'select' && (<div className={styles.optionItem}>
           <div className={styles.title}>
-            <FComponentsLib.FContentText style={{ fontSize: 12 }} type={'highlight'} text={'下拉选择器中的配置值'} />
+            {/*<FComponentsLib.FContentText style={{ fontSize: 12 }} type={'highlight'} text={'下拉选择器中的配置值'} />*/}
+            <FComponentsLib.FContentText
+              style={{ fontSize: 12 }}
+              type={'highlight'}
+              text={FI18n.i18nNext.t('resourceoptions_add_input_optionvalues')}
+            />
+            <FComponentsLib.FContentText
+              style={{ fontSize: 12 }}
+              type={'additional2'}
+              text={FI18n.i18nNext.t('resourceoptions_add_optionvalues_info')}
+            />
           </div>
           <div style={{ height: 5 }} />
           <Space size={8} direction={'vertical'} style={{ width: '100%' }}>
@@ -379,7 +416,8 @@ function FResourceOptionEditorDrawer({
                           };
                         })));
                       }}
-                      placeholder={'输入配置值'}
+                      // placeholder={'输入配置值'}
+                      placeholder={FI18n.i18nNext.t('resourceoptions_add_input_optionvalues_hint')}
                     />
                     <FComponentsLib.FCircleBtn
                       type={'danger'}
@@ -414,7 +452,11 @@ function FResourceOptionEditorDrawer({
                 }}
               >
                 <FComponentsLib.FCircleBtn type={'primary'} size={'small'} />
-                <span style={{ color: '#2784FF', fontSize: 12 }}>增加配置选项</span>
+                {/*<span style={{ color: '#2784FF', fontSize: 12 }}>增加配置选项</span>*/}
+                <span style={{
+                  color: '#2784FF',
+                  fontSize: 12,
+                }}>{FI18n.i18nNext.t('resourceoptions_add_btn_addanothervalue')}</span>
               </div>
             </>)
           }
