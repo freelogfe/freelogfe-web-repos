@@ -5,9 +5,7 @@ import { ConnectState } from '@/models/connect';
 import fMessage from '@/components/fMessage';
 import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 import { history } from 'umi';
-// import { FCustomOptionsEditorDrawerStates } from '@/components/FCustomOptionsEditorDrawer';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
-// import { fileAttrUnits } from '@/utils/format';
 import FComponentsLib from '@freelog/components-lib';
 import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
 

@@ -281,11 +281,6 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
           />
           <div style={{ height: 15 }} />
         </div>
-        {/*{*/}
-        {/*  resourceVersionCreatorPage.rawPropertiesState !== 'success' && (<div style={{ backgroundColor: '#F7F8F9' }}>*/}
-        {/*    <FLoadingTip height={100} />*/}
-        {/*  </div>)*/}
-        {/*}*/}
 
         <div style={{ height: 5 }} />
 

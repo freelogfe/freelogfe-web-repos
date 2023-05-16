@@ -138,5 +138,33 @@ function verifyDuplication(data: Data[], disabledKeys: string[], disabledNames: 
         ...d,
         nameError: (nameMap.has(d.name) && nameMap.get(d.name) !== 1) ? nameErrorText : '',
       };
+    })
+    .map<Data>((d) => {
+      return {
+        ...d,
+        select: verifyDuplicationOptions(d.select),
+      };
     });
 }
+
+function verifyDuplicationOptions(selectInputs: Data['select']): Data['select'] {
+  const map: Map<string, number> = new Map<string, number>();
+  for (const item of selectInputs) {
+    if (item.value === '') {
+      continue;
+    }
+    map.set(item.value, (map.get(item.value) || 0) + 1);
+  }
+  const errorText: string = '不能重复';
+
+  return selectInputs.map<Data['select'][number]>((d) => {
+    if (d.error !== '' && d.error !== errorText) {
+      return d;
+    }
+    return {
+      ...d,
+      error: (map.get(d.value) || 0) > 1 ? errorText : '',
+    };
+  });
+}
+
