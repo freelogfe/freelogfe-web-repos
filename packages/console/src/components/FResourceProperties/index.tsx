@@ -1,9 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
 import FComponentsLib from '@freelog/components-lib';
-// import FTooltip from '@/components/FTooltip';
-// import { Space } from 'antd';
-// import FPopover from '@/components/FPopover';
 import FResourcePropertyAndOptionTipPopover from '@/components/FResourcePropertyAndOptionTipPopover';
 
 
@@ -52,23 +49,13 @@ function FResourceProperties({
                 singleRow
               />
             </FResourcePropertyAndOptionTipPopover>
-
-
-            {/*{*/}
-            {/*  d.description && (<FTooltip*/}
-            {/*    title={d.description}*/}
-            {/*  >*/}
-            {/*    <FComponentsLib.FIcons.FInfo*/}
-            {/*      style={{ cursor: 'pointer', fontSize: 12 }}*/}
-            {/*    />*/}
-            {/*  </FTooltip>)*/}
-            {/*}*/}
           </div>
           <div>
             <FComponentsLib.FContentText
               text={d.value}
               type={'highlight'}
-              style={{ fontSize: 12 }}
+              style={{ fontSize: 12, maxWidth: 230 }}
+              singleRow
             />
           </div>
         </React.Fragment>);
