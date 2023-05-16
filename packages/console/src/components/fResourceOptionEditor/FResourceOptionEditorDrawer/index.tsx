@@ -5,8 +5,8 @@ import { Space } from 'antd';
 import FComponentsLib from '@freelog/components-lib';
 import FInput from '@/components/FInput';
 import { FI18n, FUtil } from '@freelog/tools-lib';
-import fMessage from '@/components/fMessage';
-import { Data } from '@/components/FCustomOptionsEditorDrawer/FCustomOptions';
+// import fMessage from '@/components/fMessage';
+// import { Data } from '@/components/FCustomOptionsEditorDrawer/FCustomOptions';
 
 interface FResourceOptionEditorDrawerProps {
   disabledKeys: string[];
