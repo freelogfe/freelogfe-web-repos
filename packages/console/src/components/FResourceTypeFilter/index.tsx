@@ -67,7 +67,6 @@ function FResourceTypeFilter({ value, omitTheme = false, onChange }: FResourceTy
       category: 1,
       // @ts-ignore
       isMine: false,
-      // @ts-ignore
       status: 1,
     });
     // console.log(data_resourceTypes, 'data_resourceTypessiodjdflkjsdlkjflksdjlk');

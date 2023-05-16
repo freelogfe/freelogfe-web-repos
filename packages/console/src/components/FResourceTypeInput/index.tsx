@@ -99,7 +99,6 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
       data: ServerData[];
     } = await FServiceAPI.Resource.resourceTypes({
       category: 1,
-      // @ts-ignore
       status: 1,
     });
     const options: Option[] = handledData(data_resourceTypes, null);
