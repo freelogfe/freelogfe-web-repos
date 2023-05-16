@@ -422,9 +422,9 @@ function FResourceOptionEditorDrawer({
                     <FComponentsLib.FCircleBtn
                       type={'danger'}
                       onClick={() => {
-                        set_selectInputs(selectInputs.filter((a, b) => {
+                        set_selectInputs(verifyDuplication(selectInputs.filter((a, b) => {
                           return b !== i;
-                        }));
+                        })));
                       }}
                     />
                   </Space>
