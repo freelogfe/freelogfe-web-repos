@@ -1,14 +1,12 @@
 import * as React from 'react';
 import styles from './index.less';
-import { ResourceVersionCreatorPageModelState } from '@/models/resourceVersionCreatorPage';
-import FBasePropsEditorDrawer from '@/components/FBasePropsEditorDrawer';
+// import { ResourceVersionCreatorPageModelState } from '@/models/resourceVersionCreatorPage';
+// import FBasePropsEditorDrawer from '@/components/FBasePropsEditorDrawer';
 import FDrawer from '@/components/FDrawer';
-import { Drawer, Space } from 'antd';
+import { Space } from 'antd';
 import FComponentsLib from '@freelog/components-lib';
 import FInput from '@/components/FInput';
 import { FUtil } from '@freelog/tools-lib';
-
-// import displayName = Drawer.displayName;
 
 interface FAddFileBasePropsDrawerProps {
   disabledKeys: string[];
