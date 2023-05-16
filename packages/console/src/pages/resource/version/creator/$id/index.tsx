@@ -179,6 +179,7 @@ function VersionCreator({
               id={'createResourceVersionPage.createBtn'}
               style={{ left: '50%', marginLeft: -16, bottom: -42 }}
               text={FI18n.i18nNext.t('hotpots_createversion_btn_release')}
+              zIndex={1}
             >
               <FComponentsLib.FRectBtn
                 style={{ display: 'flex', alignItems: 'center' }}
