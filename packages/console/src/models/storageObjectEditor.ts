@@ -314,11 +314,12 @@ const Model: StorageObjectEditorModelType = {
       const params: Parameters<typeof FServiceAPI.Storage.updateObject>[0] = {
         objectIdOrName: encodeURIComponent(`${storageObjectEditor.bucketName}/${storageObjectEditor.objectName}`),
         resourceTypeCode: storageObjectEditor.resourceTypeValue?.value || undefined,
-        resourceType: storageObjectEditor.resourceTypeValue?.customInput
-          ? [...storageObjectEditor.resourceTypeValue.labels, storageObjectEditor.resourceTypeValue.customInput]
-          : (storageObjectEditor.resourceTypeValue?.labels || []).length > 0
-            ? storageObjectEditor.resourceTypeValue?.labels
-            : undefined,
+        resourceTypeName: storageObjectEditor.resourceTypeValue?.customInput || undefined,
+        // resourceType: storageObjectEditor.resourceTypeValue?.customInput
+        //   ? [...storageObjectEditor.resourceTypeValue.labels, storageObjectEditor.resourceTypeValue.customInput]
+        //   : (storageObjectEditor.resourceTypeValue?.labels || []).length > 0
+        //     ? storageObjectEditor.resourceTypeValue?.labels
+        //     : undefined,
         dependencies: [
           ...storageObjectEditor.depRs.map((r) => ({
             name: r.name,
