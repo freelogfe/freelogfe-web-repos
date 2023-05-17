@@ -59,7 +59,7 @@ function ResourceDetails({ match, dispatch, resourceDetailPage }: ResourceDetail
         version: state.version,
       },
     });
-  }, [state]);
+  }, [state.version]);
 
   if (resourceDetailPage.page_State === 'loading') {
     return <FLoadingTip height={'calc(100vh - 140px)'} />;

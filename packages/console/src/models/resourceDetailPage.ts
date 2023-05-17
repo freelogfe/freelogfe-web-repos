@@ -215,10 +215,6 @@ const initStates: ResourceDetailPageModelState = {
     baseProperties: [],
     customOptions: [],
   },
-
-  // graph_FullScreen: false,
-  // graph_ViewportGraphShow: 'dependency',
-  // graphShow: true,
 };
 
 const Model: ResourceDetailPageModelType = {
@@ -254,11 +250,12 @@ const Model: ResourceDetailPageModelType = {
       });
     },
     * onChangeVersion({ payload }: OnChangeVersionAction, { put }: EffectsCommandMap) {
-      // console.log('onChangeVersion 9832piohksdflkj');
+      console.log(payload, 'onChangeVersion 9832piohksdflkj');
       yield put({
         type: 'change',
         payload: {
-          version: payload.version,
+          // version: '',
+          resourceVersion_SelectedVersion: payload.version,
         },
       });
 
