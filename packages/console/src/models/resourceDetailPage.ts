@@ -6,7 +6,7 @@ import { history } from 'umi';
 import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 import fMessage from '@/components/fMessage';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
-import { fileAttrUnits } from '@/utils/format';
+// import { fileAttrUnits } from '@/utils/format';
 
 export interface ResourceDetailPageModelState {
   page_State: 'loading' | 'details' | 'signPage';
