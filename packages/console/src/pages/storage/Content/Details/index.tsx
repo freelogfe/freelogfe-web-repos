@@ -75,6 +75,7 @@ function Details({ storageObjectEditor, dispatch }: DetailsProps) {
   }
 
   return (<FDrawer
+    destroyOnClose={true}
     title={'编辑对象信息'}
     open={!!storageObjectEditor.objectId}
     width={720}

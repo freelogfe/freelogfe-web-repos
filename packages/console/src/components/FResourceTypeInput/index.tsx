@@ -78,6 +78,9 @@ const initStates: FResourceTypeInputStates = {
 };
 
 function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
+
+  // console.log(value, 'valuesiodjflksdjflkjdslkfjlkjdslkjl***************');
+
   const ref = React.useRef<any>();
   // const refAutoComplete = React.useRef(null);
 
