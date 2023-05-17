@@ -780,9 +780,6 @@ const Model: ResourceDetailPageModelType = {
           description: string;
         }
       } = yield call(FServiceAPI.Resource.resourceVersionInfo1, params);
-      // console.log(data, 'redataceVersionInfo1239weiojfasdlkfjslkdata');
-      // console.log(params, 'params0932jklsdjflsdk');
-      // console.log(data, 'data0932jklsdjflsdk');
 
       yield put<ChangeAction>({
         type: 'change',

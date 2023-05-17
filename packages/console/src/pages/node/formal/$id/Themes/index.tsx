@@ -10,7 +10,7 @@ import {
   OnChangeThemeAction,
   OnChange_ShowPage_Action,
   OnMount_ThemePage_Action,
-  OnUnmount_ThemePage_Action,
+  OnUnmount_ThemePage_Action, FetchThemesAction,
 } from '@/models/nodeManagerPage';
 import { history, withRouter } from 'umi';
 import FNoDataTip from '@/components/FNoDataTip';
@@ -28,6 +28,7 @@ import fMessage from '@/components/fMessage';
 import FComponentsLib from '@freelog/components-lib';
 import { LoadingOutlined } from '@ant-design/icons';
 import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
+
 // import { onlineExhibit } from '@/pages/node/utils/tools';
 
 interface ThemesProps {
@@ -124,11 +125,14 @@ function Themes({ match, dispatch, nodeManagerPage }: ThemesProps) {
     setActiveId(null);
     setEmptyPopupShow(false);
     fMessage('激活成功', 'success');
-    dispatch<OnChange_ShowPage_Action>({
-      type: 'nodeManagerPage/onChange_ShowPage',
-      payload: {
-        value: 'theme',
-      },
+    // dispatch<OnChange_ShowPage_Action>({
+    //   type: 'nodeManagerPage/onChange_ShowPage',
+    //   payload: {
+    //     value: 'theme',
+    //   },
+    // });
+    dispatch<FetchThemesAction>({
+      type: 'nodeManagerPage/fetchThemes',
     });
   };
 
