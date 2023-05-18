@@ -141,20 +141,6 @@ function Info({ dispatch, resourceInfoPage, match }: InfoProps) {
 
             {
               resourceInfoPage.introduction_IsEditing
-                // ? (<FIntroductionEditor
-                //   value={resourceInfoPage.introduction_EditorText}
-                //   errorText={resourceInfoPage.introduction_EditorText_Error}
-                //   onChange={(e) => {
-                //     dispatch<OnChange_IntroductionEditor_Action>({
-                //       type: 'resourceInfoPage/onChange_IntroductionEditor',
-                //       payload: {
-                //         value: e.target.value,
-                //       },
-                //     });
-                //   }
-                //
-                //   }
-                // />)
                 ? (<div>
                   <FInput_MultiLine
                     value={resourceInfoPage.introduction_EditorText}
@@ -178,7 +164,7 @@ function Info({ dispatch, resourceInfoPage, match }: InfoProps) {
                 </div>)
                 : resourceInfoPage.resourceInfo.intro !== ''
                   ? (<div className={styles.aboutPanel}>
-                    <FComponentsLib.FContentText text={resourceInfoPage.resourceInfo.intro} />
+                    <pre>{resourceInfoPage.resourceInfo.intro}</pre>
                   </div>)
                   : (<FComponentsLib.FRectBtn
                     type='default'

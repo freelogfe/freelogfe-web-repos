@@ -220,7 +220,7 @@ const Model: ResourceInfoPageModelType = {
         payload: {
           resourceInfo: {
             ...resourceInfoPage.resourceInfo,
-            intro: resourceInfoPage.introduction_EditorText,
+            intro: resourceInfoPage.introduction_EditorText.trim(),
           },
           introduction_IsEditing: false,
         },

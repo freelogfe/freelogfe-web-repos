@@ -64,7 +64,9 @@ export async function onlineExhibit(exhibit_ID: string): Promise<boolean> {
         ? '提示'
         : FI18n.i18nNext.t('set_resource_available_for_auth_activate_auth_plan_title'),
       // icon: <div />,
-      description: isTheme ? FI18n.i18nNext.t('msg_activate_theme_for_auth') : '启用此展品需要至少一个授权策略，请选择你想要使用的授权策略',
+      description: isTheme
+        ? FI18n.i18nNext.t('msg_activate_theme_for_auth')
+        : FI18n.i18nNext.t('msg_set_exhibits_avaliable_for_auth'),
       okText: FI18n.i18nNext.t('activatetheme_activate_btn_select_auth_plan'),
       cancelText: FI18n.i18nNext.t('btn_cancel'),
     });
