@@ -8,7 +8,7 @@ import { ConnectState, NodeManagerModelState } from '@/models/connect';
 import {
   OnActiveAction,
   OnChangeThemeAction,
-  OnChange_ShowPage_Action,
+  // OnChange_ShowPage_Action,
   OnMount_ThemePage_Action,
   OnUnmount_ThemePage_Action, FetchThemesAction,
 } from '@/models/nodeManagerPage';
@@ -18,7 +18,7 @@ import FLoadingTip from '@/components/FLoadingTip';
 import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
 import Sider from '../Sider';
 import FTooltip from '@/components/FTooltip';
-import fConfirmModal from '@/components/fConfirmModal';
+// import fConfirmModal from '@/components/fConfirmModal';
 import { FUtil, FI18n, FServiceAPI } from '@freelog/tools-lib';
 import * as AHooks from 'ahooks';
 import FCoverImage from '@/components/FCoverImage';
@@ -28,8 +28,6 @@ import fMessage from '@/components/fMessage';
 import FComponentsLib from '@freelog/components-lib';
 import { LoadingOutlined } from '@ant-design/icons';
 import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
-
-// import { onlineExhibit } from '@/pages/node/utils/tools';
 
 interface ThemesProps {
   match: any;
