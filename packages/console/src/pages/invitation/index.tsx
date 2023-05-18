@@ -5,7 +5,6 @@ import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import InviteForm from './components/form';
 import Invite from './components/invite';
 import InviteStatus from './components/status';
-// import { Form } from 'antd';
 import useUrlState from '@ahooksjs/use-url-state';
 import { history } from 'umi';
 
