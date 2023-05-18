@@ -35,6 +35,7 @@ function FInput_MultiLine({
       style={style}
       onChange={onChange}
       onPressEnter={onPressEnter}
+      autoSize={true}
     />
     <span
       className={[styles.FInputWordCount, value.length > lengthLimit ? styles.beyond : ''].join(' ')}>{lengthLimit - value.length}</span>
