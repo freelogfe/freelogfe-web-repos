@@ -140,10 +140,12 @@ function FResourceOptionEditorDrawer({
             key: keyInput,
             name: nameInput,
             type: typeSelect,
-            input: inputInput,
-            select: selectInputs.map((s) => {
-              return s.value;
-            }),
+            input: typeSelect === 'input' ? inputInput : '',
+            select: typeSelect === 'select'
+              ? selectInputs.map((s) => {
+                return s.value;
+              })
+              : [],
             description: descriptionInput,
           });
           set_visible(false);

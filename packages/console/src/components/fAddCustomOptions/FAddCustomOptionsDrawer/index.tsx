@@ -151,10 +151,12 @@ function FAddCustomOptionsDrawer({
               name: ds.name,
               description: ds.description,
               type: ds.type,
-              input: ds.input,
-              select: ds.select.map((s) => {
-                return s.value;
-              }),
+              input: ds.type === 'input' ? ds.input : '',
+              select: ds.type === 'select'
+                ? ds.select.map((s) => {
+                  return s.value;
+                })
+                : [],
             };
           }));
           set_visible(false);
