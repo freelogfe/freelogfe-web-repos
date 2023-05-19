@@ -7,31 +7,31 @@
     "registOss": "node registOssConfig.js"
   },
   "devDependencies": {
-    "@types/react": "^18.0.17",
+    "@types/react": "^18.2.6",
     "@types/react-copy-to-clipboard": "^5.0.4",
-    "@types/react-dom": "^18.0.6",
-    "@types/react-helmet": "^6.1.5",
-    "@umijs/preset-react": "1.x",
-    "@umijs/test": "^3.5.23",
+    "@types/react-dom": "^18.2.4",
+    "@types/react-helmet": "^6.1.6",
+    "@umijs/preset-react": "~1.8.32",
+    "@umijs/test": "^3.5.40",
     "lerna": "^3.22.1",
-    "lint-staged": "^10.0.7",
-    "prettier": "^2.2.0",
+    "lint-staged": "^10.5.4",
+    "prettier": "^2.8.8",
     "typescript": "^4.7.4",
     "xproxy": "^0.2.2",
     "yorkie": "^2.0.0"
   },
   "dependencies": {
-    "@ant-design/pro-layout": "^6.5.0",
-    "@freelog/components-lib": "^0.1.24",
-    "@freelog/tools-lib": "^0.1.147",
-    "ahooks": "^3.3.8",
-    "antd": "^4.21.6",
-    "copy-to-clipboard": "^3.3.1",
-    "moment": "^2.29.3",
+    "@ant-design/pro-layout": "^6.38.22",
+    "@freelog/components-lib": "^0.1.27",
+    "@freelog/tools-lib": "^0.1.151",
+    "ahooks": "^3.7.7",
+    "antd": "^4.24.10",
+    "copy-to-clipboard": "^3.3.3",
+    "moment": "^2.29.4",
     "react": "^18.2.0",
     "react-copy-to-clipboard": "^5.1.0",
     "react-dom": "^18.2.0",
     "react-helmet": "^6.1.0",
-    "typescript": "^4.7.4"
+    "typescript": "^4.9.5"
   }
 }
