@@ -86,7 +86,7 @@ function FAddCustomOptionsDrawer({
       set_dataSource(defaultData.map((dd) => {
         return {
           key: dd.key,
-          keyError: disabledKeys.includes(dd.key) ? '键不能重复' : '',
+          keyError: disabledKeys.includes(dd.key) ? FI18n.i18nNext.t('alert_key_exist') : '',
           name: dd.name,
           nameError: disabledNames.includes(dd.name) ? '名称不能重复' : '',
           description: dd.description,
