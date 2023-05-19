@@ -227,11 +227,8 @@ function FResourceOptionEditorDrawer({
               // errorText = FI18n.i18nNext.t('alert_key_convention_key');
               errorText = '不超过20个字符';
             } else if (disabledKeys.includes(value) && value !== defaultData?.key) {
-              // errorText = '键不能重复';
               errorText = FI18n.i18nNext.t('alert_key_exist');
             } else if (!FUtil.Regexp.CUSTOM_KEY.test(value)) {
-              // errorText = `不符合${FUtil.Regexp.CUSTOM_KEY}`;
-              // errorText = FI18n.i18nNext.t('alert_key_convention_key');
               errorText = FI18n.i18nNext.t('alert_naming_convention_key');
             }
             set_keyInput(value);
@@ -246,14 +243,11 @@ function FResourceOptionEditorDrawer({
 
       <div className={styles.optionItem}>
         <div className={styles.title}>
-          {/*<FComponentsLib.FTitleText type='h4'>属性说明</FComponentsLib.FTitleText>*/}
-          {/*<FComponentsLib.FContentText style={{ fontSize: 12 }} type={'highlight'} text={'配置说明'} />*/}
           <FComponentsLib.FContentText
             style={{ fontSize: 12 }}
             type={'highlight'}
             text={FI18n.i18nNext.t('resourceoptions_add_input_desc')}
           />
-          {/*<FComponentsLib.FContentText style={{ fontSize: 12 }} type={'additional2'} text={'（选填）'} />*/}
           <FComponentsLib.FContentText
             style={{ fontSize: 12 }}
             type={'additional2'}
@@ -264,7 +258,6 @@ function FResourceOptionEditorDrawer({
         <FInput
           disabled={noneEditableFields.includes('description')}
           value={descriptionInput}
-          // errorText={resourceVersionEditorPage.basePDescriptionInputError}
           className={styles.input}
           onChange={(e) => {
             const value: string = e.target.value;
@@ -276,7 +269,6 @@ function FResourceOptionEditorDrawer({
             set_descriptionInput(value);
             set_descriptionInputError(errorText);
           }}
-          // placeholder={'输入配置说明'}
           placeholder={FI18n.i18nNext.t('resourceoptions_add_input_desc_hint')}
         />
         {descriptionInputError && (<>
@@ -288,7 +280,6 @@ function FResourceOptionEditorDrawer({
       {
         !hideTypeSelect && (<div className={styles.optionItem}>
           <div className={styles.title}>
-            {/*<FComponentsLib.FContentText style={{ fontSize: 12 }} type={'highlight'} text={'配置方式'} />*/}
             <FComponentsLib.FContentText
               style={{ fontSize: 12 }}
               type={'highlight'}
@@ -334,13 +325,11 @@ function FResourceOptionEditorDrawer({
       {
         typeSelect === 'input' && (<div className={styles.optionItem}>
           <div className={styles.title}>
-            {/*<FComponentsLib.FContentText style={{ fontSize: 12 }} type={'highlight'} text={'默认值'} />*/}
             <FComponentsLib.FContentText
               style={{ fontSize: 12 }}
               type={'highlight'}
               text={FI18n.i18nNext.t('resourceoptions_add_input_default')}
             />
-            {/*<FComponentsLib.FContentText style={{ fontSize: 12 }} type={'additional2'} text={'（选填）'} />*/}
             <FComponentsLib.FContentText
               style={{ fontSize: 12 }}
               type={'additional2'}
@@ -355,16 +344,12 @@ function FResourceOptionEditorDrawer({
             onChange={(e) => {
               const value: string = e.target.value;
               let errorText: string = '';
-              // if (value === '') {
-              //   errorText = '输入value';
-              // } else
               if (value.length > 140) {
                 errorText = '不超过140个字符';
               }
               set_inputInput(value);
               set_inputInputError(errorText);
             }}
-            // placeholder={'输入value'}
             placeholder={FI18n.i18nNext.t('resourceoptions_add_input_default_hint')}
           />
           {inputInputError && (<>
@@ -377,7 +362,6 @@ function FResourceOptionEditorDrawer({
       {
         typeSelect === 'select' && (<div className={styles.optionItem}>
           <div className={styles.title}>
-            {/*<FComponentsLib.FContentText style={{ fontSize: 12 }} type={'highlight'} text={'下拉选择器中的配置值'} />*/}
             <FComponentsLib.FContentText
               style={{ fontSize: 12 }}
               type={'highlight'}
@@ -418,7 +402,6 @@ function FResourceOptionEditorDrawer({
                           };
                         })));
                       }}
-                      // placeholder={'输入配置值'}
                       placeholder={FI18n.i18nNext.t('resourceoptions_add_input_optionvalues_hint')}
                     />
                     <FComponentsLib.FCircleBtn
@@ -454,7 +437,6 @@ function FResourceOptionEditorDrawer({
                 }}
               >
                 <FComponentsLib.FCircleBtn type={'primary'} size={'small'} />
-                {/*<span style={{ color: '#2784FF', fontSize: 12 }}>增加配置选项</span>*/}
                 <span style={{
                   color: '#2784FF',
                   fontSize: 12,

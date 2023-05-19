@@ -44,9 +44,6 @@ function Property({ data, hideTypeSelect = false, onChange }: PropertyProps) {
             } else if (value.length > 50) {
               errorText = FI18n.i18nNext.t('alert_naming_convention_attribute_name');
             }
-            // else if (!FUtil.Regexp.CUSTOM_KEY.test(value)) {
-            //   errorText = `不符合${FUtil.Regexp.CUSTOM_KEY}`;
-            // }
 
             onChangeData({
               name: value,
@@ -68,7 +65,6 @@ function Property({ data, hideTypeSelect = false, onChange }: PropertyProps) {
       <Col span={12}>
         <Space size={5}>
           <i className={styles.dot} />
-          {/*<FComponentsLib.FTitleText type='h4' text={FI18n.i18nNext.t('key')} />*/}
           <FComponentsLib.FTitleText type='h4' text={FI18n.i18nNext.t('resourceoptions_add_input_key')} />
         </Space>
         <div style={{ height: 5 }} />
@@ -139,8 +135,6 @@ function Property({ data, hideTypeSelect = false, onChange }: PropertyProps) {
       {
         !hideTypeSelect && (<Col span={12}>
           <Space size={5}>
-            {/*<i className={styles.dot} />*/}
-            {/*<FComponentsLib.FTitleText type='h4' text={FI18n.i18nNext.t('value_input_mode')} />*/}
             <FComponentsLib.FTitleText type='h4' text={FI18n.i18nNext.t('resourceoptions_add_input_type')} />
           </Space>
           <div style={{ height: 5 }} />
@@ -149,7 +143,6 @@ function Property({ data, hideTypeSelect = false, onChange }: PropertyProps) {
             <div
               className={[styles.typeSelect_option, data.type === 'input' ? styles.active : ''].join(' ')}
               onClick={() => {
-                // set_typeSelect('input');
                 onChangeData({ type: 'input' });
               }}
             >{FI18n.i18nNext.t('resourceoptions_add_input_type_textfield')}
@@ -182,9 +175,6 @@ function Property({ data, hideTypeSelect = false, onChange }: PropertyProps) {
               onChange={(e) => {
                 const value: string = e.target.value;
                 let errorText: string = '';
-                // if (value === '') {
-                //   errorText = '请输入';
-                // } else
                 if (value.length > 140) {
                   errorText = '不超过140个字符';
                 }
@@ -204,7 +194,6 @@ function Property({ data, hideTypeSelect = false, onChange }: PropertyProps) {
           : (<Col span={18}>
             <Space size={5}>
               <i className={styles.dot} />
-              {/*<FComponentsLib.FTitleText type='h4' text={'自定义选项(首个选项为默认值)'} />*/}
               <FComponentsLib.FTitleText type='h4' text={FI18n.i18nNext.t('resourceoptions_add_input_optionvalues')} />
             </Space>
             <div style={{ height: 5 }} />
@@ -216,15 +205,14 @@ function Property({ data, hideTypeSelect = false, onChange }: PropertyProps) {
                     <Space size={12}>
                       <FInput
                         value={si.value}
-                        // className={styles.input}
                         style={{ width: 480 }}
                         onChange={(e) => {
                           const value: string = e.target.value;
                           let errorText: string = '';
                           if (value === '') {
                             errorText = '输入配置值';
-                          } else if (value.length > 500) {
-                            errorText = '不超过500个字符';
+                          } else if (value.length > 140) {
+                            errorText = '不超过140个字符';
                           }
                           onChangeData({
                             select: data.select.map((sss, iii) => {
