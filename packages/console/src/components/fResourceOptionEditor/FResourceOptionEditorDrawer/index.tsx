@@ -478,7 +478,8 @@ function verifyDuplication(selectInputs: FResourceOptionEditorDrawerStates['sele
     }
     map.set(item.value, (map.get(item.value) || 0) + 1);
   }
-  const errorText: string = '不能重复';
+  // const errorText: string = '不能重复';
+  const errorText: string = FI18n.i18nNext.t('alert_cutstom_option_value_exist');
 
   return selectInputs.map<FResourceOptionEditorDrawerStates['selectInputs'][number]>((d) => {
     if (d.error !== '' && d.error !== errorText) {
