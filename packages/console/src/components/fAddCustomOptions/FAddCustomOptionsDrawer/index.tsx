@@ -140,12 +140,12 @@ function FAddCustomOptionsDrawer({
             || eds.descriptionError !== '';
         })}
         onClick={() => {
-          if (dataSource.some((ds) => {
-            return ds.select.join(',').length > 500;
-          })) {
-            fMessage('存在可配置项超过500个字符');
-            return;
-          }
+          // if (dataSource.some((ds) => {
+          //   return ds.select.join(',').length > 500;
+          // })) {
+          //   fMessage('存在可配置项超过500个字符');
+          //   return;
+          // }
           onOk && onOk(dataSource.map((ds) => {
             return {
               key: ds.key,

@@ -247,24 +247,33 @@ function Property({ data, hideTypeSelect = false, onChange }: PropertyProps) {
                 })
               }
             </Space>
-            <div style={{ height: 10 }} />
-            <div
-              style={{ display: 'flex', alignItems: 'center', gap: 5, cursor: 'pointer' }}
-              onClick={() => {
-                onChangeData({
-                  select: [
-                    ...data.select,
-                    {
-                      value: '',
-                      error: '',
-                    },
-                  ],
-                });
-              }}
-            >
-              <FComponentsLib.FCircleBtn type={'primary'} size={'small'} />
-              <span style={{ color: '#2784FF', fontSize: 12 }}>{FI18n.i18nNext.t('resourceoptions_add_btn_addanothervalue')}</span>
-            </div>
+
+            {
+              data.select.length < 30 && (<>
+                <div style={{ height: 10 }} />
+                <div
+                  style={{ display: 'flex', alignItems: 'center', gap: 5, cursor: 'pointer' }}
+                  onClick={() => {
+                    onChangeData({
+                      select: [
+                        ...data.select,
+                        {
+                          value: '',
+                          error: '',
+                        },
+                      ],
+                    });
+                  }}
+                >
+                  <FComponentsLib.FCircleBtn type={'primary'} size={'small'} />
+                  <span style={{
+                    color: '#2784FF',
+                    fontSize: 12,
+                  }}>{FI18n.i18nNext.t('resourceoptions_add_btn_addanothervalue')}</span>
+                </div>
+              </>)
+            }
+
           </Col>)
       }
 
