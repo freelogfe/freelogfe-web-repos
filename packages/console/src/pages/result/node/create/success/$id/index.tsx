@@ -63,11 +63,20 @@ function Success({ match, dispatch }: SuccessProps) {
       resolveResources: [
         {
           resourceId: theme.resourceId,
-          contracts: [
-            {
-              policyId: theme.policies.find((item: any) => item.policyName === '开放授权').policyId,
-            },
-          ],
+          // contracts: [
+          //   {
+          //     policyId: theme.policies.find((item: any) => item.policyName === '开放授权').policyId,
+          //   },
+          // ],
+          contracts: theme.policies
+            .filter((p: any) => {
+              return p.status === 1;
+            })
+            .map((p: any) => {
+              return {
+                policyId: p.policyId,
+              };
+            }),
         },
       ],
       presentableName: theme.resourceName.split('/')[1],
@@ -150,8 +159,8 @@ function Success({ match, dispatch }: SuccessProps) {
             return (
               <div className={styles.theme} key={item.resourceId}>
                 <div className={styles.cover}>
-                  <img className={styles['cover-img']} src={item.coverImages[0]} />
-                  <div className={styles.triangle}></div>
+                  <img className={styles['cover-img']} src={item.coverImages[0]} alt={''} />
+                  <div className={styles.triangle}/>
                   <div className={styles['free-text']}>免费</div>
                 </div>
                 <div className={styles['right-area']}>
