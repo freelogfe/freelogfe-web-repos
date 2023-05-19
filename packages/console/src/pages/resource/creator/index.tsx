@@ -131,26 +131,6 @@ function ResourceCreator({
                 style={{ lineHeight: '38px' }}
               />
               &nbsp;
-              {/*<FInput*/}
-              {/*  errorText={resourceCreatorPage.nameErrorText}*/}
-              {/*  value={resourceCreatorPage.name}*/}
-              {/*  onChange={(e) => {*/}
-              {/*  }}*/}
-              {/*  debounce={300}*/}
-              {/*  onDebounceChange={(value) => {*/}
-              {/*    onChange({*/}
-              {/*      name: value,*/}
-              {/*    });*/}
-              {/*    // console.log(value, value.length, '!@#$!@#$!!!!!!');*/}
-              {/*    dispatch<OnChange_NameInput_Action>({*/}
-              {/*      type: 'resourceCreatorPage/onChange_NameInput',*/}
-              {/*      payload: value,*/}
-              {/*    });*/}
-              {/*  }}*/}
-              {/*  className={styles.FInput}*/}
-              {/*  placeholder={FI18n.i18nNext.t('hint_enter_resource_name')}*/}
-              {/*  lengthLimit={60}*/}
-              {/*/>*/}
               <div>
                 <FSingleLineInput
                   value={resourceCreatorPage.name}

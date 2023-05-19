@@ -201,7 +201,8 @@ const Model: ResourceCreatorPageModelType = {
       } else if (payload.value.length > 60) {
         nameErrorText = '不多于60个字符';
       } else if (!FUtil.Regexp.RESOURCE_NAME.test(payload.value)) {
-        nameErrorText = `不符合正则 ${FUtil.Regexp.RESOURCE_NAME}`;
+        // nameErrorText = `不符合正则 ${FUtil.Regexp.RESOURCE_NAME}`;
+        nameErrorText = FI18n.i18nNext.t('naming_convention_resource_name');
       }
 
       yield put<ChangeAction>({
