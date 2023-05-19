@@ -5,6 +5,7 @@ import FCustomOptions from '../FCustomOptions';
 import FDrawer from '../../FDrawer';
 import FComponentsLib from '@freelog/components-lib';
 import fMessage from '@/components/fMessage';
+import { FI18n } from '../../../../../@freelog/tools-lib';
 
 interface FAddCustomOptionsDrawerProps {
 
@@ -106,7 +107,7 @@ function FAddCustomOptionsDrawer({
 
   return (<FDrawer
     // title={'添加自定义选项'}
-    title={'配置名称'}
+    title={FI18n.i18nNext.t('resourceoptions_add_title')}
     open={visible}
     onClose={() => {
       set_visible(false);
@@ -125,7 +126,7 @@ function FAddCustomOptionsDrawer({
         onClick={() => {
           set_visible(false);
         }}
-      >取消</FComponentsLib.FTextBtn>
+      >{FI18n.i18nNext.t('btn_cancel')}</FComponentsLib.FTextBtn>
       <FComponentsLib.FRectBtn
         disabled={dataSource.length === 0
         || dataSource.some((eds) => {
@@ -161,7 +162,7 @@ function FAddCustomOptionsDrawer({
           }));
           set_visible(false);
         }}
-      >确定</FComponentsLib.FRectBtn>
+      >{FI18n.i18nNext.t('btn_save')}</FComponentsLib.FRectBtn>
     </Space>}
   >
 
