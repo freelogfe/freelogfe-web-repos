@@ -91,9 +91,13 @@ function Invite({ jump }: InviteProps) {
             setCode(e.currentTarget.value.trim());
           }}
         />
-        <div className={styles.codeError}/>
+        <div className={styles.codeError} />
         <FComponentsLib.FRectBtn
           onClick={() => {
+            if (code.length !== 8) {
+              fMessage('邀请码长度为8个字符', 'error');
+              return;
+            }
             submit();
           }}
           disabled={code === '' || loading}
