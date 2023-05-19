@@ -208,6 +208,10 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
         type={nodeManagerPage.exhibit_ListState === 'noData' ? 'empty' : 'table'}
         sider={<Sider />}
         // header={}
+        contentStyles={{
+          backgroundColor: '#fafbfc',
+          boxShadow: 'none',
+        }}
       >
         {nodeManagerPage.exhibit_ListState === 'noData' && (
           <FNoDataTip
@@ -228,7 +232,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
 
         {
           nodeManagerPage.exhibit_ListState !== 'noData' && (
-            <div className={styles.header} style={{ padding: '0 20px' }}>
+            <div className={styles.header} style={{ padding: '0 20px', backgroundColor: '#fafbfc' }}>
               <FComponentsLib.FTitleText type='h1' text={`展品管理 (${nodeManagerPage.exhibit_ListTotal})`} />
               <Space size={80}>
                 <div>
