@@ -126,7 +126,7 @@ export interface OnChange_Avatar_Action extends AnyAction {
 export interface OnChange_Gender_Action extends AnyAction {
   type: 'settingPage/onChange_Gender';
   payload: {
-    value: 'male' | 'female';
+    value: SettingPageModelState['profile_gender'];
   };
 }
 
