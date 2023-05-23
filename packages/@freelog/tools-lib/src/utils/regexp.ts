@@ -43,7 +43,8 @@ export const NATURAL_NUMBER: RegExp = new RegExp(/^[0-9]*$/);
 export const POSITIVE_INTEGER = new RegExp(/^[1-9]\d*$/);
 
 // 最多两位小数的正数
-export const MAX_2_DECIMAL_POSITIVE_NUMBER = new RegExp(/^\d+(.\d{1,2})?$/);
+// export const MAX_2_DECIMAL_POSITIVE_NUMBER = new RegExp(/^\d+(.\d{1,2})?$/);
+export const MAX_2_DECIMAL_POSITIVE_NUMBER = new RegExp(/^\d+(\.\d{1,2})?$/);
 
 // 对象的Bucket名称
 export const BUCKET_NAME: RegExp = new RegExp(/^([a-z0-9][a-z0-9-]{0,61})?[a-z0-9]$/);
