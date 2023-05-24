@@ -122,17 +122,11 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
         version={resourceVersionEditorPage.version}
         signingDate={resourceVersionEditorPage.signingDate}
         resourceID={resourceVersionEditorPage.resourceID}
-        // onClickDownload={() => window.location.href = apiHost + `/v2/resources/${match.params.id}/versions/${match.params.$version}/download`}
         onClickDownload={() => {
-          // FUtil.Format.completeUrlByDomain('qi') +
           FServiceAPI.Resource.resourcesDownload({
             resourceId: match.params.id,
             version: match.params.version,
           });
-          // console.log(FUtil.Format.completeUrlByDomain('qi'), '1111111');
-          // const href = FUtil.Format.completeUrlByDomain('qi') + `/v2/resources/${match.params.id}/versions/${match.params.version}/download`;
-          // console.log(href, '!@#$@!#$');
-          // return window.location.href;
         }}
       />}>
       <FFormLayout>
@@ -158,12 +152,14 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
                     onClick={onUpdateEditorText}
                   >{FI18n.i18nNext.t('save')}</FComponentsLib.FTextBtn>
                 </>)
-                : !!resourceVersionEditorPage.description
+                : resourceVersionEditorPage.description !== ''
                   ? (<>
                     <FComponentsLib.FTextBtn
                       type='default'
                       onClick={() => {
                         onChange({ descriptionFullScreen: true });
+                        // const s = self.open();
+                        // s.document.write(buildPreviewHtml(resourceVersionEditorPage.description))
                       }}
                     >全屏查看</FComponentsLib.FTextBtn>
                     <FDivider />
@@ -322,15 +318,6 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
                       }
                       return dataSource;
                     }),
-                  // customOptionEditorVisible: false,
-                  // customOptionKey: '',
-                  // customOptionDescription: '',
-                  // customOptionDescriptionError: '',
-                  // customOptionCustom: 'input',
-                  // customOptionDefaultValue: '',
-                  // customOptionDefaultValueError: '',
-                  // customOptionCustomOption: '',
-                  // customOptionCustomOptionError: '',
                 });
                 await dispatch<SyncAllPropertiesAction>({
                   type: 'resourceVersionEditorPage/syncAllProperties',
@@ -344,223 +331,6 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
 
       </FFormLayout>
     </FLeftSiderLayout>
-
-    {/*<FDrawer*/}
-    {/*  title={'编辑基础属性'}*/}
-    {/*  onClose={() => {*/}
-    {/*    onCloseBaseAttrDrawer();*/}
-    {/*  }}*/}
-    {/*  open={resourceVersionEditorPage.basePEditorVisible}*/}
-    {/*  width={720}*/}
-    {/*  topRight={<Space size={30}>*/}
-    {/*    <FComponentsLib.FTextBtn*/}
-    {/*      type='default'*/}
-    {/*      onClick={() => {*/}
-    {/*        onCloseBaseAttrDrawer();*/}
-    {/*      }}*/}
-    {/*    >取消</FComponentsLib.FTextBtn>*/}
-
-    {/*    <FComponentsLib.FRectBtn*/}
-    {/*      type='primary'*/}
-    {/*      disabled={!!resourceVersionEditorPage.basePDescriptionInputError || !!resourceVersionEditorPage.basePValueInputError}*/}
-    {/*      onClick={async () => {*/}
-    {/*        await onChange({*/}
-    {/*          baseProperties: resourceVersionEditorPage.baseProperties.map((bp) => {*/}
-    {/*            if (bp.key !== resourceVersionEditorPage.basePKeyInput) {*/}
-    {/*              return bp;*/}
-    {/*            }*/}
-    {/*            return {*/}
-    {/*              ...bp,*/}
-    {/*              value: resourceVersionEditorPage.basePValueInput,*/}
-    {/*              description: resourceVersionEditorPage.basePDescriptionInput,*/}
-    {/*            };*/}
-    {/*          }),*/}
-    {/*          basePEditorVisible: false,*/}
-    {/*          basePKeyInput: '',*/}
-    {/*          basePValueInput: '',*/}
-    {/*          basePDescriptionInput: '',*/}
-    {/*          basePDescriptionInputError: '',*/}
-    {/*        });*/}
-    {/*        await dispatch<SyncAllPropertiesAction>({*/}
-    {/*          type: 'resourceVersionEditorPage/syncAllProperties',*/}
-    {/*        });*/}
-    {/*      }}*/}
-    {/*    >保存</FComponentsLib.FRectBtn>*/}
-    {/*  </Space>}*/}
-    {/*>*/}
-    {/*  <Space*/}
-    {/*    size={20}*/}
-    {/*    direction='vertical'*/}
-    {/*    style={{ width: '100%' }}*/}
-    {/*  >*/}
-    {/*    <div className={styles.input}>*/}
-    {/*      <div className={styles.title}>*/}
-    {/*        <i className={styles.dot} />*/}
-    {/*        <FComponentsLib.FTitleText type='h4'>key</FComponentsLib.FTitleText>*/}
-    {/*      </div>*/}
-    {/*      <div style={{ height: 5 }} />*/}
-    {/*      <FInput*/}
-    {/*        disabled={true}*/}
-    {/*        value={resourceVersionEditorPage.basePKeyInput}*/}
-    {/*        className={styles.input}*/}
-    {/*      />*/}
-    {/*    </div>*/}
-
-    {/*    <div className={styles.input}>*/}
-    {/*      <div className={styles.title}>*/}
-    {/*        <i className={styles.dot} />*/}
-    {/*        <FComponentsLib.FTitleText type='h4'>value</FComponentsLib.FTitleText>*/}
-    {/*      </div>*/}
-    {/*      <div style={{ height: 5 }} />*/}
-    {/*      <FInput*/}
-    {/*        value={resourceVersionEditorPage.basePValueInput}*/}
-    {/*        // errorText={}*/}
-    {/*        className={styles.input}*/}
-    {/*        onChange={(e) => {*/}
-    {/*          const value: string = e.target.value;*/}
-    {/*          let valueError: string = '';*/}
-    {/*          if (value === '') {*/}
-    {/*            valueError = '请输入';*/}
-    {/*          } else if (value.length > 30) {*/}
-    {/*            valueError = '不超过30个字符';*/}
-    {/*          }*/}
-    {/*          onChange({*/}
-    {/*            basePValueInput: value,*/}
-    {/*            basePValueInputError: valueError,*/}
-    {/*          });*/}
-    {/*        }}*/}
-    {/*        placeholder={'输入value'}*/}
-    {/*      />*/}
-    {/*      {resourceVersionEditorPage.basePValueInputError && (<>*/}
-    {/*        <div style={{ height: 5 }} />*/}
-    {/*        <div className={styles.errorTip}>{resourceVersionEditorPage.basePValueInputError}</div>*/}
-    {/*      </>)}*/}
-    {/*    </div>*/}
-
-    {/*    <div className={styles.input}>*/}
-    {/*      <div className={styles.title}>*/}
-    {/*        <FComponentsLib.FTitleText type='h4'>属性说明</FComponentsLib.FTitleText>*/}
-    {/*      </div>*/}
-    {/*      <div style={{ height: 5 }} />*/}
-    {/*      <FInput*/}
-    {/*        value={resourceVersionEditorPage.basePDescriptionInput}*/}
-    {/*        errorText={resourceVersionEditorPage.basePDescriptionInputError}*/}
-    {/*        className={styles.input}*/}
-    {/*        onChange={(e) => {*/}
-    {/*          const value: string = e.target.value;*/}
-    {/*          let descriptionError: string = '';*/}
-    {/*          if (value.length > 50) {*/}
-    {/*            descriptionError = '不超过50个字符';*/}
-    {/*          }*/}
-    {/*          onChange({*/}
-    {/*            basePDescriptionInput: value,*/}
-    {/*            basePDescriptionInputError: descriptionError,*/}
-    {/*          });*/}
-    {/*        }}*/}
-    {/*        placeholder={'输入属性说明'}*/}
-    {/*      />*/}
-    {/*    </div>*/}
-
-    {/*  </Space>*/}
-    {/*</FDrawer>*/}
-
-    {/*<FCustomOptionEditorDrawer*/}
-    {/*  disabledKeyInput*/}
-    {/*  disabledValueTypeSelect*/}
-    {/*  visible={resourceVersionEditorPage.customOptionEditorVisible}*/}
-    {/*  dataSource={{*/}
-    {/*    key: resourceVersionEditorPage.customOptionKey,*/}
-    {/*    value: (resourceVersionEditorPage.customOptionCustom === 'input' ? resourceVersionEditorPage.customOptionDefaultValue : resourceVersionEditorPage.customOptionCustomOption) || '',*/}
-    {/*    description: resourceVersionEditorPage.customOptionDescription,*/}
-    {/*    valueType: resourceVersionEditorPage.customOptionCustom || 'input',*/}
-    {/*  }}*/}
-    {/*  onCancel={() => {*/}
-    {/*    onCloseCustomOptionDrawer();*/}
-    {/*  }}*/}
-    {/*  onConfirm={async (value) => {*/}
-    {/*    await onChange({*/}
-    {/*      customOptions: resourceVersionEditorPage.customOptions*/}
-    {/*        .map<ResourceVersionEditorPageModelState['customOptions'][number]>((bp) => {*/}
-    {/*          if (bp.key !== resourceVersionEditorPage.customOptionKey) {*/}
-    {/*            return bp;*/}
-    {/*          }*/}
-    {/*          return {*/}
-    {/*            ...bp,*/}
-    {/*            description: value.description,*/}
-    {/*            defaultValue: value.value,*/}
-    {/*            customOption: value.value,*/}
-    {/*          };*/}
-    {/*        }),*/}
-    {/*      customOptionEditorVisible: false,*/}
-    {/*      customOptionKey: '',*/}
-    {/*      customOptionDescription: '',*/}
-    {/*      customOptionDescriptionError: '',*/}
-    {/*      customOptionCustom: 'input',*/}
-    {/*      customOptionDefaultValue: '',*/}
-    {/*      customOptionDefaultValueError: '',*/}
-    {/*      customOptionCustomOption: '',*/}
-    {/*      customOptionCustomOptionError: '',*/}
-    {/*    });*/}
-    {/*    await dispatch<SyncAllPropertiesAction>({*/}
-    {/*      type: 'resourceVersionEditorPage/syncAllProperties',*/}
-    {/*    });*/}
-    {/*  }}*/}
-    {/*/>*/}
-
-    {/*<FDrawer*/}
-    {/*  open={resourceVersionEditorPage.graphFullScreen}*/}
-    {/*  title={'相关视图'}*/}
-    {/*  destroyOnClose*/}
-    {/*  width={'100%'}*/}
-    {/*  onClose={() => {*/}
-    {/*    onChange({*/}
-    {/*      graphFullScreen: false,*/}
-    {/*    });*/}
-    {/*  }}*/}
-    {/*>*/}
-
-    {/*  <FViewportTabs*/}
-    {/*    options={[*/}
-    {/*      { label: '关系树', value: 'relationship' },*/}
-    {/*      { label: '授权链', value: 'authorization' },*/}
-    {/*      { label: '依赖树', value: 'dependency' },*/}
-    {/*    ]}*/}
-    {/*    value={resourceVersionEditorPage.viewportGraphShow}*/}
-    {/*    onChange={(value) => {*/}
-    {/*      onChange({*/}
-    {/*        viewportGraphShow: value as 'relationship',*/}
-    {/*      });*/}
-    {/*    }}*/}
-    {/*  >*/}
-
-    {/*    {*/}
-    {/*      resourceVersionEditorPage.viewportGraphShow === 'relationship' && (<FGraph_Tree_Relationship_Resource*/}
-    {/*        resourceID={resourceVersionEditorPage.resourceID}*/}
-    {/*        version={resourceVersionEditorPage.version}*/}
-    {/*        width={window.innerWidth - 60}*/}
-    {/*        height={window.innerHeight - 60 - 70 - 50}*/}
-    {/*      />)*/}
-    {/*    }*/}
-
-    {/*    {*/}
-    {/*      resourceVersionEditorPage.viewportGraphShow === 'authorization' && (<FGraph_Tree_Authorization_Resource*/}
-    {/*        resourceID={resourceVersionEditorPage.resourceID}*/}
-    {/*        version={resourceVersionEditorPage.version}*/}
-    {/*        width={window.innerWidth - 60}*/}
-    {/*        height={window.innerHeight - 60 - 70 - 50}*/}
-    {/*      />)*/}
-    {/*    }*/}
-
-    {/*    {*/}
-    {/*      resourceVersionEditorPage.viewportGraphShow === 'dependency' && (<FGraph_Tree_Dependency_Resource*/}
-    {/*        resourceID={resourceVersionEditorPage.resourceID}*/}
-    {/*        version={resourceVersionEditorPage.version}*/}
-    {/*        width={window.innerWidth - 60}*/}
-    {/*        height={window.innerHeight - 60 - 70 - 50}*/}
-    {/*      />)*/}
-    {/*    }*/}
-    {/*  </FViewportTabs>*/}
-    {/*</FDrawer>*/}
 
     <FDrawer
       open={resourceVersionEditorPage.descriptionFullScreen}
@@ -759,3 +529,61 @@ function Header({ version, resourceID, signingDate, onClickDownload }: HeaderPro
  </body>
  </html>
  **/
+
+
+function buildPreviewHtml(htmlStr: string) {
+
+  return `
+      <!Doctype html>
+      <html>
+        <head>
+          <title>Preview Content</title>
+          <style>
+            html,body{
+              height: 100%;
+              margin: 0;
+              padding: 0;
+              overflow: auto;
+              background-color: #f1f2f3;
+            }
+            .container{
+              box-sizing: border-box;
+              width: 1000px;
+              max-width: 100%;
+              min-height: 100%;
+              margin: 0 auto;
+              padding: 30px 20px;
+              overflow: hidden;
+              background-color: #fff;
+              border-right: solid 1px #eee;
+              border-left: solid 1px #eee;
+            }
+            .container img,
+            .container audio,
+            .container video{
+              max-width: 100%;
+              height: auto;
+            }
+            .container p{
+              white-space: pre-wrap;
+              min-height: 1em;
+            }
+            .container pre{
+              padding: 15px;
+              background-color: #f1f1f1;
+              border-radius: 5px;
+            }
+            .container blockquote{
+              margin: 0;
+              padding: 15px;
+              background-color: #f1f1f1;
+              border-left: 3px solid #d1d1d1;
+            }
+          </style>
+        </head>
+        <body>
+          <div class='container'>${htmlStr}</div>
+        </body>
+      </html>
+    `;
+}
