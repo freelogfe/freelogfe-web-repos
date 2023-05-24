@@ -11,7 +11,7 @@ import {
   OnBlur_BindPhone_PhoneInput_Action,
   OnBlur_ChangeEmail_New_EmailInput_Action,
   OnBlur_ChangePassword_New1_PasswordInput_Action,
-  OnBlur_ChangePassword_New2_PasswordInput_Action,
+  OnBlur_ChangePassword_New2_PasswordInput_Action, OnBlur_ChangePassword_Old_PasswordInput_Action,
   OnBlur_ChangePhone_New_PhoneInput_Action,
   OnCancel_BindEmail_Modal_Action,
   OnCancel_BindPhone_Modal_Action,
@@ -1134,8 +1134,22 @@ function Security({ dispatch, settingPage }: SecurityProps) {
             }}
             placeholder='请输入原密码'
             className={styles.modalBlockInput}
+            onBlur={() => {
+              // console.log('*******')
+              dispatch<OnBlur_ChangePassword_Old_PasswordInput_Action>({
+                type: 'settingPage/onBlur_ChangePassword_Old_PasswordInput',
+              });
+            }}
             // wrapClassName={styles.modalBlockInput}
           />
+
+          {
+            settingPage.changePassword_Old_PasswordInput_Error && (<>
+              <div style={{ height: 5 }} />
+              <div style={{ color: 'red' }}>{settingPage.changePassword_Old_PasswordInput_Error}</div>
+            </>)
+          }
+
           <div style={{ height: 25 }} />
 
           <FComponentsLib.FTipText text={'新密码'} type='third' />

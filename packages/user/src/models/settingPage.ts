@@ -79,6 +79,7 @@ export interface SettingPageModelState {
   changePhone_New_CaptchaWait: number;
 
   changePassword_Old_PasswordInput: string;
+  changePassword_Old_PasswordInput_Error: string;
   changePassword_New1_PasswordInput: string;
   changePassword_New1_PasswordInput_Error: string;
   changePassword_New2_PasswordInput: string;
@@ -428,6 +429,10 @@ export interface OnChange_ChangePassword_Old_PasswordInput_Action extends AnyAct
   };
 }
 
+export interface OnBlur_ChangePassword_Old_PasswordInput_Action extends AnyAction {
+  type: 'settingPage/onBlur_ChangePassword_Old_PasswordInput';
+}
+
 export interface OnChange_ChangePassword_New1_PasswordInput_Action extends AnyAction {
   type: 'settingPage/onChange_ChangePassword_New1_PasswordInput';
   payload: {
@@ -546,6 +551,7 @@ interface SettingPageModelType {
 
     onCancel_ChangePassword_Modal: (action: OnCancel_ChangePassword_Modal_Action, effects: EffectsCommandMap) => void;
     onChange_ChangePassword_Old_PasswordInput: (action: OnChange_ChangePassword_Old_PasswordInput_Action, effects: EffectsCommandMap) => void;
+    onBlur_ChangePassword_Old_PasswordInput: (action: OnBlur_ChangePassword_Old_PasswordInput_Action, effects: EffectsCommandMap) => void;
     onChange_ChangePassword_New1_PasswordInput: (action: OnChange_ChangePassword_New1_PasswordInput_Action, effects: EffectsCommandMap) => void;
     onBlur_ChangePassword_New1_PasswordInput: (action: OnBlur_ChangePassword_New1_PasswordInput_Action, effects: EffectsCommandMap) => void;
     onChange_ChangePassword_New2_PasswordInput: (action: OnChange_ChangePassword_New2_PasswordInput_Action, effects: EffectsCommandMap) => void;
@@ -642,12 +648,14 @@ const initStates_ChangePhone: Pick<SettingPageModelState,
 const initStates_ChangePassword: Pick<SettingPageModelState,
   // 'changePassword_ModalVisible' |
   'changePassword_Old_PasswordInput' |
+  'changePassword_Old_PasswordInput_Error' |
   'changePassword_New1_PasswordInput' |
   'changePassword_New1_PasswordInput_Error' |
   'changePassword_New2_PasswordInput' |
   'changePassword_New2_PasswordInput_Error'> = {
   // changePassword_ModalVisible: false,
   changePassword_Old_PasswordInput: '',
+  changePassword_Old_PasswordInput_Error: '',
   changePassword_New1_PasswordInput: '',
   changePassword_New1_PasswordInput_Error: '',
   changePassword_New2_PasswordInput: '',
@@ -1769,7 +1777,23 @@ const Model: SettingPageModelType = {
         type: 'change',
         payload: {
           changePassword_Old_PasswordInput: payload.value,
-          // changePassword_Old_PasswordInputE: payload.value,
+          changePassword_Old_PasswordInput_Error: '',
+        },
+      });
+    },
+    * onBlur_ChangePassword_Old_PasswordInput({}: OnBlur_ChangePassword_Old_PasswordInput_Action, {
+      select,
+      put,
+    }: EffectsCommandMap) {
+      const { settingPage }: ConnectState = yield select(({ settingPage }: ConnectState) => ({
+        settingPage,
+      }));
+
+      // console.log(settingPage.changePassword_Old_PasswordInput, 'settingPage.changePassword_Old_PasswordInputio dsifjsdlkf');
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          changePassword_Old_PasswordInput_Error: settingPage.changePassword_Old_PasswordInput === '' ? '请输入密码' : '',
         },
       });
     },
