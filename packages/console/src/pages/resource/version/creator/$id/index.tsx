@@ -487,9 +487,9 @@ function VersionCreator({
                     },
                   });
                 }}
-                style={{
-                  height: 500,
-                }}
+                // style={{
+                //   height: 500,
+                // }}
               />
             </FFormLayout.FBlock>
           </FFormLayout>

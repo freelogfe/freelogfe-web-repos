@@ -32,8 +32,9 @@ function FBraftEditor({ global, value, onChange, ...props }: FBraftEditorProps) 
       }}
       language={global.locale === 'en-US' ? 'en' : 'zh'}
       className={styles.styles}
-      controls={['bold', 'italic', 'underline', 'media', 'blockquote', 'code', 'list-ul', 'list-ol', 'headings', 'text-color', 'link',
-        // 'fullscreen',
+      controls={['bold',
+        'italic', 'underline', 'media', 'blockquote', 'code', 'list-ul', 'list-ol', 'headings', 'text-color', 'link',
+        'fullscreen',
       ]}
       media={{
         async uploadFn(fileParams) {
@@ -80,6 +81,15 @@ function FBraftEditor({ global, value, onChange, ...props }: FBraftEditorProps) 
         },
         // pasteImage: true,
       }}
+      // extendControls={{
+      //   key: 'custom-button',
+      //   type: 'button',
+      //   text: '预览',
+      //   onClick: () => {
+      //
+      //   }
+      // }}
+      // excludeControls={}
     />
   );
 }
