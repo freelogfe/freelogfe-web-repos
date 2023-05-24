@@ -1852,6 +1852,11 @@ const Model: SettingPageModelType = {
         settingPage,
       }));
 
+      if (!FUtil.Regexp.PASSWORD.test(settingPage.changePassword_Old_PasswordInput)) {
+        fMessage(FI18n.i18nNext.t('password_incorrect'), 'error');
+        return;
+      }
+
       const params: Parameters<typeof FServiceAPI.User.updatePassword>[0] = {
         oldPassword: settingPage.changePassword_Old_PasswordInput,
         newPassword: settingPage.changePassword_New1_PasswordInput,
