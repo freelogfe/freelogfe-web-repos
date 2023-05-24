@@ -3,7 +3,7 @@ import styles from './index.less';
 import { Space } from 'antd';
 import FLabelEditor from '@/components/FLabelEditor';
 import FUploadResourceCover from '@/pages/resource/components/FUploadResourceCover';
-import FIntroductionEditor from '@/pages/resource/components/FIntroductionEditor';
+// import FIntroductionEditor from '@/pages/resource/components/FIntroductionEditor';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import { ConnectState, ResourceInfoPageModelState } from '@/models/connect';
