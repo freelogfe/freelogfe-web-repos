@@ -132,6 +132,7 @@ function Info({ dispatch, resourceInfoPage, match }: InfoProps) {
                         type: 'resourceInfoPage/onClick_SaveIntroductionBtn',
                       });
                     }}
+                    disabled={resourceInfoPage.introduction_EditorText_Error !== ''}
                   >{FI18n.i18nNext.t('save')}</FComponentsLib.FTextBtn>
                 </>)
               }

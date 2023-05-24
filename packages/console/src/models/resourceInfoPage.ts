@@ -232,6 +232,8 @@ const Model: ResourceInfoPageModelType = {
         type: 'change',
         payload: {
           introduction_IsEditing: false,
+          introduction_EditorText: '',
+          introduction_EditorText_Error: '',
         },
       });
     },
