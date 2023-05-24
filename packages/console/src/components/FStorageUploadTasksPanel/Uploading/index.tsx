@@ -11,7 +11,7 @@ interface UploadingProps {
 }
 
 function Uploading({ progress, cancel }: UploadingProps) {
-  console.log(progress, 'progress*(&(*&(*&*(&*(');
+  // console.log(progress, 'progress*(&(*&(*&*(&*(');
   return (<div className={styles.Uploading}>
     <Space
       className={styles.status}

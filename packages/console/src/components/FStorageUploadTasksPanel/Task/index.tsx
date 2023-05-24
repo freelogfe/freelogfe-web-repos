@@ -47,12 +47,10 @@ function Task({
 
   AHooks.useMount(async () => {
     fileSha1.current = await fileSha1Queue.getSha1(task.file);
-    // console.log('useMount sdiofjsd;lkfjsldkfjlksdjflksdjlkfjdslkjflksdjflkjlk');
     await verifySameName();
   });
 
   AHooks.useUnmount(() => {
-    // console.log('(*(**((*(((((( CCCCCCCCCCCC');
     canceler.current && canceler.current();
   });
 
