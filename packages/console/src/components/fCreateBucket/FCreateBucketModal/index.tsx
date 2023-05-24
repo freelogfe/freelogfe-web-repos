@@ -24,14 +24,9 @@ function FCreateBucketModal({ onOk, onClose }: FCreateBucketModalProps) {
     width={640}
     okButtonProps={{
       disabled: newBucketName === '' || newBucketNameError !== '',
-      // disabled: true,
     }}
     cancelText={FI18n.i18nNext.t('btn_cancel')}
     onOk={async () => {
-      // dispatch<CreateBucketAction>({
-      //   type: 'storageHomePage/createBucket',
-      // });
-      // setModalVisible(false);
       const params: Parameters<typeof FServiceAPI.Storage.createBucket>[0] = {
         bucketName: newBucketName,
       };
@@ -45,9 +40,6 @@ function FCreateBucketModal({ onOk, onClose }: FCreateBucketModalProps) {
       set_visible(false);
     }}
     onCancel={() => {
-      // history.replace(FUtil.LinkTo.storageSpace({
-      //   bucketName: storageHomePage.activatedBucket,
-      // }));
       set_visible(false);
     }}
     afterClose={() => {
@@ -55,7 +47,6 @@ function FCreateBucketModal({ onOk, onClose }: FCreateBucketModalProps) {
       onClose && onClose();
     }}
   >
-    {/*<div style={{ height: 20 }} />*/}
     <div style={{ padding: 20 }}>
       <FComponentsLib.FTitleText text={FI18n.i18nNext.t('create_bucket_popup_title')} type='h2' />
     </div>
@@ -77,6 +68,7 @@ function FCreateBucketModal({ onOk, onClose }: FCreateBucketModalProps) {
         placeholder={FI18n.i18nNext.t('enter_bucket_name')}
         onChange={(e) => {
           set_newBucketName(e.target.value);
+          set_newBucketNameError('');
         }}
         onBlur={async () => {
 

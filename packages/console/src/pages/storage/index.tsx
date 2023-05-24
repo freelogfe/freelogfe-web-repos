@@ -18,6 +18,7 @@ import Details from '@/pages/storage/Content/Details';
 import useUrlState from '@ahooksjs/use-url-state';
 import { FUtil, FI18n } from '@freelog/tools-lib';
 import fCreateBucket from '@/components/fCreateBucket';
+import * as AHooks from 'ahooks';
 
 interface StorageProps extends RouteComponentProps<{}> {
   dispatch: Dispatch;
@@ -40,56 +41,40 @@ function Storage({ match, history, storageHomePage, storageObjectEditor, dispatc
     });
   }, [state.bucketName]);
 
-  React.useEffect(() => {
+  AHooks.useAsyncEffect(async () => {
     if (state.createBucket) {
-      // dispatch<StorageHomePageChangeAction>({
-      //   type: 'storageHomePage/change',
-      //   payload: {
-      //     newBucketModalVisible: true,
-      //   },
-      // });
-      onCreateBucket();
-    } else {
-      // dispatch<StorageHomePageChangeAction>({
-      //   type: 'storageHomePage/change',
-      //   payload: {
-      //     newBucketName: '',
-      //     newBucketNameError: '',
-      //     newBucketModalVisible: false,
-      //   },
-      // });
-    }
-
-  }, [state.createBucket]);
-
-  async function onCreateBucket() {
-    const bucketName: string | null = await fCreateBucket();
-    if (!bucketName) {
-      history.replace(FUtil.LinkTo.storageSpace({
-        bucketName: storageHomePage.activatedBucket,
-      }));
-      return;
-    }
-    dispatch<OnSucceed_CreateBucket_Action>({
-      type: 'storageHomePage/onSucceed_CreateBucket',
-      payload: {
-        newBucketName: bucketName,
-      },
-    });
-  }
-
-  React.useEffect(() => {
-    handleObject();
-
-    return () => {
-      dispatch<ChangeAction>({
-        type: 'storageObjectEditor/change',
+      const bucketName: string | null = await fCreateBucket();
+      if (!bucketName) {
+        history.replace(FUtil.LinkTo.storageSpace({
+          bucketName: storageHomePage.activatedBucket,
+        }));
+        return;
+      }
+      dispatch<OnSucceed_CreateBucket_Action>({
+        type: 'storageHomePage/onSucceed_CreateBucket',
         payload: {
-          ...storageObjectEditorInitData,
+          newBucketName: bucketName,
         },
       });
-    };
-  }, [state.objectID]);
+    }
+  }, [state.createBucket]);
+
+  // async function onCreateBucket() {
+  //
+  // }
+
+  // React.useEffect(() => {
+  //   handleObject();
+  //
+  //   return () => {
+  //     dispatch<ChangeAction>({
+  //       type: 'storageObjectEditor/change',
+  //       payload: {
+  //         ...storageObjectEditorInitData,
+  //       },
+  //     });
+  //   };
+  // }, [state.objectID]);
 
   async function handleObject() {
     await dispatch<ChangeAction>({

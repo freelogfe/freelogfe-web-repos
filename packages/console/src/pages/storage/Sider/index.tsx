@@ -55,7 +55,6 @@ function Sider({ storageHomePage, dispatch }: SiderProps) {
                     bucketName: storageHomePage.activatedBucket,
                     createBucket: true,
                   }));
-
                 }}
               />)
               : (<FTooltip
