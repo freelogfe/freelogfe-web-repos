@@ -26,7 +26,6 @@ import { FI18n } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 import FSkeletonNode from '@/components/FSkeletonNode';
 import * as AHooks from 'ahooks';
-// import FInput_MultiLine from '@/components/FInput_MultiLine';
 
 interface InfoProps extends RouteComponentProps<{ id: string; }> {
   dispatch: Dispatch;
@@ -175,7 +174,6 @@ function Info({ dispatch, resourceInfoPage, match }: InfoProps) {
                       // onChangeIsEditing(true);
                     }}
                   >
-                    {/*{FUtil.I18n.message('resource_short_description')}*/}
                     添加简介
                   </FComponentsLib.FRectBtn>)
             }
