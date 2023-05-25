@@ -72,15 +72,13 @@ function FVersionHandlerPopover({
   }
 
   return (<Popover
-    // getTooltipContainer={() => {
-    //
-    // }}
     placement='bottomLeft'
-    trigger='click'
+    trigger={['click']}
     // onVisibleChange={(visible) => setVisible(visible)}
     onOpenChange={(visible) => setVisible(visible)}
     // visible={visible}
     open={visible}
+
     content={<div
       onClick={(e) => e.stopPropagation()}
     >
@@ -145,6 +143,7 @@ function FVersionHandlerPopover({
         e.stopPropagation();
         setVisible(true);
       }}
+      
     >{children}</div>
   </Popover>);
 }
