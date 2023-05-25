@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
-import {Button, Checkbox, Popover} from 'antd';
-import FAutoComplete from "../FAutoComplete";
+import { Button, Checkbox, Popover } from 'antd';
+import FAutoComplete from '../FAutoComplete';
 import * as AHooks from 'ahooks';
 import * as semver from 'semver';
 import FComponentsLib from '@freelog/components-lib';
@@ -15,7 +15,15 @@ interface FVersionHandlerPopoverProps {
   onChange?(version: FVersionHandlerPopoverProps['value']): void;
 }
 
-function FVersionHandlerPopover({value, versionOptions, allowEmpty = false, onChange, children}: FVersionHandlerPopoverProps) {
+function FVersionHandlerPopover({
+                                  value,
+                                  versionOptions,
+                                  allowEmpty = false,
+                                  onChange,
+                                  children,
+                                }: FVersionHandlerPopoverProps) {
+
+  const ref = React.useRef(null);
   const [visible, setVisible] = React.useState<boolean>(false);
   const [input, setInput] = React.useState<string>(value);
   const [inputError, setInputError] = React.useState<string>('');
@@ -26,7 +34,7 @@ function FVersionHandlerPopover({value, versionOptions, allowEmpty = false, onCh
     }
   }, [value]);
 
-  const {run} = AHooks.useDebounceFn<(value: string, bool?: boolean) => void>(
+  const { run } = AHooks.useDebounceFn<(value: string, bool?: boolean) => void>(
     (value, bool) => {
       if (bool) {
         if (input.startsWith('^')) {
@@ -64,30 +72,39 @@ function FVersionHandlerPopover({value, versionOptions, allowEmpty = false, onCh
   }
 
   return (<Popover
-    placement="bottomLeft"
-    trigger="click"
+    // getTooltipContainer={() => {
+    //
+    // }}
+    placement='bottomLeft'
+    trigger='click'
     // onVisibleChange={(visible) => setVisible(visible)}
     onOpenChange={(visible) => setVisible(visible)}
     // visible={visible}
     open={visible}
-    content={<div onClick={(e) => e.stopPropagation()}>
+    content={<div
+      onClick={(e) => e.stopPropagation()}
+    >
       <div className={styles.select}>
+        <div ref={ref} style={{ position: 'relative' }} />
         <FAutoComplete
-          size="small"
+          getPopupContainer={() => {
+            return ref.current || document.body;
+          }}
+          size='small'
           className={styles.FAutoComplete}
           value={input}
-          options={versionOptions.map<{ value: string, label: string }>((vo) => ({value: vo, label: vo}))}
+          options={versionOptions.map<{ value: string, label: string }>((vo) => ({ value: vo, label: vo }))}
           onSelect={(value: string) => run(value, true)}
           onChange={(value) => run(value)}
         />
         {
           inputError && (<>
-            <div style={{height: 2}}/>
+            <div style={{ height: 2 }} />
             <div className={styles.errorTip}>{inputError}</div>
           </>)
         }
 
-        <div style={{height: 10}}/>
+        <div style={{ height: 10 }} />
         <div className={styles.Checkbox}>
           <Checkbox
             checked={input.startsWith('^')}
@@ -95,37 +112,40 @@ function FVersionHandlerPopover({value, versionOptions, allowEmpty = false, onCh
               if (e.target.checked) {
                 onChangeInput('^' + input);
               } else {
-                onChangeInput(input.substring(1))
+                onChangeInput(input.substring(1));
               }
             }}
           />
-          <div style={{width: 5}}/>
+          <div style={{ width: 5 }} />
           <div>允许使用当前版本的最新变动</div>
         </div>
       </div>
 
-      <div style={{height: 10}}/>
+      <div style={{ height: 10 }} />
       <div className={styles.footer}>
         <Button
-          size="small"
-          type="default"
+          size='small'
+          type='default'
           onClick={() => setVisible(false)}
         >取消</Button>
-        <div style={{width: 10}}/>
+        <div style={{ width: 10 }} />
         <FComponentsLib.FRectBtn
-          size="small"
+          size='small'
           disabled={!!inputError}
           onClick={onConfirm}
-          type="primary"
+          type='primary'
         >确定</FComponentsLib.FRectBtn>
       </div>
     </div>}
     title={null}
   >
-    <div className={styles.children} onClick={(e) => {
-      e.stopPropagation();
-      setVisible(true);
-    }}>{children}</div>
+    <div
+      className={styles.children}
+      onClick={(e) => {
+        e.stopPropagation();
+        setVisible(true);
+      }}
+    >{children}</div>
   </Popover>);
 }
 
