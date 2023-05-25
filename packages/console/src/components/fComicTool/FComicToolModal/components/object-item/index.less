@@ -1,0 +1,131 @@
+.object-item-wrapper {
+  width: 100%;
+  height: 65px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #e5e7eb;
+
+  .info-area {
+    flex: 1;
+
+    .object-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: #222222;
+      line-height: 20px;
+    }
+
+    .other-info {
+      margin-top: 2px;
+      font-size: 12px;
+      font-weight: 400;
+      color: #999999;
+      line-height: 17px;
+    }
+  }
+
+  .status {
+    width: 141px;
+    display: flex;
+    align-items: center;
+    margin: 0 24px;
+    font-size: 14px;
+
+    &.success {
+      color: #44c28c;
+    }
+
+    &.cancel {
+      color: #222;
+    }
+
+    &.fail {
+      color: #ee4040;
+    }
+
+    &.repeatName {
+      color: #e9a923;
+    }
+
+    .percent {
+      color: #222222;
+      line-height: 20px;
+    }
+
+    .ant-progress {
+      width: 100px;
+      margin-left: 10px;
+    }
+  }
+
+  .choose-btn {
+    padding: 6px 15px;
+    background: #edf6ff;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #2784ff;
+    line-height: 20px;
+    cursor: pointer;
+
+    &:hover {
+      background: #f1f8ff;
+      color: #529dff;
+    }
+
+    &:active {
+      background: #e4f0ff;
+      color: #187afc;
+    }
+  }
+
+  .other-btn {
+    width: 58px;
+    display: flex;
+    justify-content: flex-end;
+
+    .freelog {
+      font-size: 16px;
+      color: #000;
+    }
+
+    .update-btn {
+      font-size: 14px;
+      color: #2784ff;
+      line-height: 20px;
+    }
+
+    .freelog,
+    .update-btn {
+      cursor: pointer;
+
+      &:hover {
+        color: #529dff;
+      }
+
+      &:active {
+        color: #2376e5;
+      }
+    }
+  }
+}
+
+.object-btn-tooltip {
+  padding-top: 5px;
+
+  .ant-tooltip-arrow {
+    display: none;
+  }
+
+  .ant-tooltip-inner {
+    min-height: 23px;
+    font-size: 12px;
+    color: #222222;
+    line-height: 17px;
+    padding: 3px 6px;
+    background: #ffffff;
+    box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+  }
+}

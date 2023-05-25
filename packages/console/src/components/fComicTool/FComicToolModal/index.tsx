@@ -12,6 +12,7 @@ import { Modal } from 'antd';
 import FComponentsLib from '@freelog/components-lib';
 import FPopover from '@/components/FPopover';
 import { ImgInComicTool } from './core/interface';
+import { ImportDrawer } from './components/import-drawer';
 const saveAs = require('file-saver');
 
 interface ToolProps {
@@ -27,12 +28,21 @@ interface ToolProps {
 
 const myWindow: any = window;
 
-export const editorContext = React.createContext<any>({});
+export const comicToolContext = React.createContext<any>({});
 
 const { confirm } = Modal;
 
 /** 排版工具 */
 export const ComicTool = (props: ToolProps) => {
+  /** 最大图片大小（20MB） */
+  const MAX_IMG_SIZE = 1024 * 1024 * 20;
+  /** 图片总数量上限 */
+  const MAX_IMG_LENGTH = 300;
+  /** 上传本地图片格式限制 */
+  const UPLOAD_LOCAL_ACCEPT = '.jpg,.jpeg,.png,.gif';
+  /** 切图图片格式限制 */
+  const CUT_IMG_ACCEPT = '.jpg,.jpeg,.png';
+
   const { resourceId, show, close, setSaved } = props;
 
   const inputTimer = useRef<Timeout | null>(null);
@@ -44,8 +54,7 @@ export const ComicTool = (props: ToolProps) => {
   const [imgList, setImgList] = useState<ImgInComicTool[]>([]);
   const [canvasList, setCanvasList] = useState<any[]>([]);
 
-  /** 最大图片大小（20MB） */
-  const MAX_IMG_SIZE = 1024 * 1024 * 20;
+  const [importDrawer, setImportDrawer] = useState(false);
 
   /** 退出 */
   const exit = async () => {
@@ -156,7 +165,9 @@ export const ComicTool = (props: ToolProps) => {
   };
 
   /** 关闭所有弹窗 */
-  const closeAllPopup = () => {};
+  const closeAllPopup = () => {
+    setImportDrawer(false);
+  };
 
   /** 换算图片大小 */
   const conversionSize = (size: number) => {
@@ -192,27 +203,29 @@ export const ComicTool = (props: ToolProps) => {
 
   /** 上传本地图片 */
   const uploadLocalImg = (files: FileList) => {
-    if (imgList.length + files.length > 2) {
+    const list = [...files];
+
+    if (imgList.length + list.length > MAX_IMG_LENGTH) {
       fMessage(FI18n.i18nNext.t('cbformatter_add_error_qtylimitation'));
-      return;
+      list.splice(MAX_IMG_LENGTH - imgList.length);
     }
 
-    let list: ImgInComicTool[] = [];
+    const imgs: ImgInComicTool[] = [];
     let doneCount = 0;
 
-    [...files].forEach((file, index) => {
+    list.forEach((file, index) => {
       const { type, name, size } = file;
 
-      if (!['image/png', 'image/jpeg'].includes(type)) {
+      if (!['image/png', 'image/jpeg', 'image/gif'].includes(type)) {
         fMessage(FI18n.i18nNext.t('cbformatter_add_error_format'));
         return;
       }
 
       if (size > MAX_IMG_SIZE) {
         const img = { name, size, base64: require('./images/oversize.png') };
-        list[index] = img;
+        imgs[index] = img;
         doneCount++;
-        if (doneCount === files.length) setImgList((pre) => [...pre, ...list]);
+        if (doneCount === list.length) setImgList((pre) => [...pre, ...imgs]);
         return;
       }
 
@@ -221,9 +234,9 @@ export const ComicTool = (props: ToolProps) => {
       reader.onload = (evt) => {
         const base64: string = evt!.target!.result as string;
         const img = { name, size, base64 };
-        list[index] = img;
+        imgs[index] = img;
         doneCount++;
-        if (doneCount === files.length) setImgList((pre) => [...pre, ...list]);
+        if (doneCount === list.length) setImgList((pre) => [...pre, ...imgs]);
       };
     });
   };
@@ -254,15 +267,17 @@ export const ComicTool = (props: ToolProps) => {
   };
 
   /** 切图 */
-  const cutImage = (e: any) => {
+  const cutImage = (files: FileList) => {
     console.time('first');
     console.log('开始切图...');
     setCanvasList([]);
-    const file = e.target.files[0];
+    const file = files[0];
     if (file.type != 'image/png' && file.type != 'image/jpeg') {
       console.log('请上传正确的文件类型');
     }
-    if (file.size > 5 * 1024 * 1024) {
+    console.error(file.size);
+    console.error(MAX_IMG_SIZE);
+    if (file.size > MAX_IMG_SIZE) {
       console.log('图片文件过大');
     }
     const reader = new FileReader();
@@ -277,31 +292,32 @@ export const ComicTool = (props: ToolProps) => {
         const pieceNum = Math.ceil(height / MAX_HEIGHT_PER_PIECE);
         const list: string[] = [];
         for (let i = 0; i < pieceNum; i++) {
-          list.push(`${e.target.files[0].name.split('.')[0]}${i + 1}.jpg`);
+          list.push(`${files[0].name.split('.')[0]}${i + 1}.jpg`);
         }
         setCanvasList(list);
-        setTimeout(() => {
-          const heightPerPiece = height / pieceNum;
-          for (let i = 0; i < list.length; i++) {
-            const canvas: any = document.getElementById(list[i]);
-            canvas.width = 300;
-            canvas.height = (300 / width) * heightPerPiece;
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(
-              image,
-              0,
-              heightPerPiece * i,
-              width,
-              heightPerPiece,
-              0,
-              0,
-              canvas.width,
-              canvas.height,
-            );
-          }
-          console.timeEnd('first');
-          console.log('切图完成');
-        }, 0);
+        console.error(canvasList);
+        // setTimeout(() => {
+        //   const heightPerPiece = height / pieceNum;
+        //   for (let i = 0; i < list.length; i++) {
+        //     const canvas: any = document.getElementById(list[i]);
+        //     canvas.width = 300;
+        //     canvas.height = (300 / width) * heightPerPiece;
+        //     const ctx = canvas.getContext('2d');
+        //     ctx.drawImage(
+        //       image,
+        //       0,
+        //       heightPerPiece * i,
+        //       width,
+        //       heightPerPiece,
+        //       0,
+        //       0,
+        //       canvas.width,
+        //       canvas.height,
+        //     );
+        //   }
+        //   console.timeEnd('first');
+        //   console.log('切图完成');
+        // }, 0);
       };
     };
   };
@@ -447,13 +463,20 @@ export const ComicTool = (props: ToolProps) => {
   }, [edited]);
 
   return (
-    <editorContext.Provider value={{ resourceId }}>
+    <comicToolContext.Provider value={{ resourceId, tool: { setImgList } }}>
       <input
         type="file"
-        id="file"
+        id="uploadLocalImg"
         multiple={true}
-        accept=".jpg,.jpeg,.png"
+        accept={UPLOAD_LOCAL_ACCEPT}
         onChange={(e) => uploadLocalImg(e.target.files!)}
+      />
+      <input
+        type="file"
+        id="cutImage"
+        multiple={true}
+        accept={CUT_IMG_ACCEPT}
+        onChange={(e) => cutImage(e.target.files!)}
       />
 
       <div className={`comic-tool-wrapper ${show && 'show'}`}>
@@ -499,16 +522,21 @@ export const ComicTool = (props: ToolProps) => {
                 <div
                   className="primary-btn"
                   onClick={() => {
-                    document.getElementById('file')?.click();
+                    document.getElementById('uploadLocalImg')?.click();
                   }}
                 >
                   {FI18n.i18nNext.t('cbformatter_add_btn')}
                 </div>
-                <div className="text-btn" onClick={save}>
+                <div className="text-btn" onClick={() => setImportDrawer(true)}>
                   <i className="freelog fl-icon-daoruwendang" />
                   {FI18n.i18nNext.t('cbformatter_import_btn')}
                 </div>
-                <div className="text-btn" onClick={save}>
+                <div
+                  className="text-btn"
+                  onClick={() => {
+                    document.getElementById('cutImage')?.click();
+                  }}
+                >
                   <i className="freelog fl-icon-jiandao" />
                   {FI18n.i18nNext.t('cbformatter_batchslice_btn')}
                 </div>
@@ -593,7 +621,7 @@ export const ComicTool = (props: ToolProps) => {
                   <div className="box-body">
                     {imgList.map((item, index) => {
                       return (
-                        <div className="img-card" key={item.name}>
+                        <div className="img-card" key={item.name + index}>
                           <div className="card-main">
                             <div
                               className={`card-header ${
@@ -679,6 +707,11 @@ export const ComicTool = (props: ToolProps) => {
           </div>
         </div>
 
+        <ImportDrawer
+          show={importDrawer}
+          close={() => setImportDrawer(false)}
+        />
+
         {/* <div className="test-wrapper">
           <div className="btns">
             <input type="file" id="file" onChange={uploadFile} />
@@ -710,6 +743,6 @@ export const ComicTool = (props: ToolProps) => {
           </div>
         </div> */}
       </div>
-    </editorContext.Provider>
+    </comicToolContext.Provider>
   );
 };

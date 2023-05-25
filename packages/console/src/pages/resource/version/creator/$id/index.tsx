@@ -43,6 +43,7 @@ import fConfirmModal from '@/components/fConfirmModal';
 import FTooltip from '@/components/FTooltip';
 import FSkeletonNode from '@/components/FSkeletonNode';
 import FTable from '@/components/FTable';
+import fComicTool from '@/components/fComicTool';
 
 interface VersionCreatorProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -392,52 +393,58 @@ function VersionCreator({
                 <Space size={15}>
                   <FComponentsLib.FRectBtn
                     onClick={async () => {
-                      const p = await getProcessor('resourceVersionCreator');
-                      await fAddDependencies({
-                        // resourceTypeCode: resourceVersionCreatorPage.resourceInfo?.resourceTypeCode || '',
-                        existingResources: (await p.getAllTargets()).map((t) => {
-                          return {
-                            resourceID: t.id,
-                            resourceNme: t.name,
-                          };
-                        }),
-                        baseUpcastResources: resourceVersionCreatorPage.resourceInfo?.baseUpcastResources.map((r) => {
-                          return {
-                            resourceID: r.resourceID,
-                            resourceNme: r.resourceName,
-                          };
-                        }) || [],
-                        async onSelect_Resource({ resourceID, resourceName }) {
-                          // console.log('8***********8sdflksdjlkj');
-                          const p = await getProcessor('resourceVersionCreator');
-                          await p.addTargets([{
-                            id: resourceID,
-                            name: resourceName,
-                            type: 'resource',
-                            // versionRange: '^0.1.0',
-                          }]);
-                          await dispatch<OnChange_DataIsDirty_Action>({
-                            type: 'resourceVersionCreatorPage/onChange_DataIsDirty',
-                            payload: {
-                              value: true,
-                            },
-                          });
-                        },
-                        async onDeselect_Resource({ resourceID, resourceName }) {
-                          const p = await getProcessor('resourceVersionCreator');
-                          await p.removeTarget({
-                            id: resourceID,
-                            name: resourceName,
-                            type: 'resource',
-                          });
-                          await dispatch<OnChange_DataIsDirty_Action>({
-                            type: 'resourceVersionCreatorPage/onChange_DataIsDirty',
-                            payload: {
-                              value: true,
-                            },
-                          });
+                      await fComicTool({
+                        resourceID: resourceVersionCreatorPage.resourceInfo?.resourceID || '',
+                        async onChange_Saved(saved: boolean) {
+                          set_isMarkdownEditorDirty(!saved);
                         },
                       });
+                      // const p = await getProcessor('resourceVersionCreator');
+                      // await fAddDependencies({
+                      //   // resourceTypeCode: resourceVersionCreatorPage.resourceInfo?.resourceTypeCode || '',
+                      //   existingResources: (await p.getAllTargets()).map((t) => {
+                      //     return {
+                      //       resourceID: t.id,
+                      //       resourceNme: t.name,
+                      //     };
+                      //   }),
+                      //   baseUpcastResources: resourceVersionCreatorPage.resourceInfo?.baseUpcastResources.map((r) => {
+                      //     return {
+                      //       resourceID: r.resourceID,
+                      //       resourceNme: r.resourceName,
+                      //     };
+                      //   }) || [],
+                      //   async onSelect_Resource({ resourceID, resourceName }) {
+                      //     // console.log('8***********8sdflksdjlkj');
+                      //     const p = await getProcessor('resourceVersionCreator');
+                      //     await p.addTargets([{
+                      //       id: resourceID,
+                      //       name: resourceName,
+                      //       type: 'resource',
+                      //       // versionRange: '^0.1.0',
+                      //     }]);
+                      //     await dispatch<OnChange_DataIsDirty_Action>({
+                      //       type: 'resourceVersionCreatorPage/onChange_DataIsDirty',
+                      //       payload: {
+                      //         value: true,
+                      //       },
+                      //     });
+                      //   },
+                      //   async onDeselect_Resource({ resourceID, resourceName }) {
+                      //     const p = await getProcessor('resourceVersionCreator');
+                      //     await p.removeTarget({
+                      //       id: resourceID,
+                      //       name: resourceName,
+                      //       type: 'resource',
+                      //     });
+                      //     await dispatch<OnChange_DataIsDirty_Action>({
+                      //       type: 'resourceVersionCreatorPage/onChange_DataIsDirty',
+                      //       payload: {
+                      //         value: true,
+                      //       },
+                      //     });
+                      //   },
+                      // });
                     }}
                     type='default'
                   >添加依赖</FComponentsLib.FRectBtn>
