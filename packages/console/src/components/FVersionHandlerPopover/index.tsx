@@ -143,7 +143,7 @@ function FVersionHandlerPopover({
         e.stopPropagation();
         setVisible(true);
       }}
-      
+
     >{children}</div>
   </Popover>);
 }
