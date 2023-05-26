@@ -3,17 +3,17 @@ import styles from './index.less';
 import FResourceCover from '@/components/FResourceCover';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
-import { ConnectState, ResourceInfoModelState, ResourceSiderModelState } from '@/models/connect';
+import { ConnectState, ResourceSiderModelState } from '@/models/connect';
 import { withRouter, history } from 'umi';
 import FLink from '@/components/FLink';
 import { FUtil, FI18n, FServiceAPI } from '@freelog/tools-lib';
 import fMessage from '@/components/fMessage';
 import { RouteComponentProps } from 'react-router';
-import { Checkbox, Modal, Popconfirm, Space } from 'antd';
+import { Checkbox, Popconfirm, Space } from 'antd';
 import FTooltip from '@/components/FTooltip';
 import FSwitch from '@/components/FSwitch';
 import { FDialog } from '@/components/FDialog';
-import { FetchResourceInfoAction, UpdatePoliciesAction } from '@/models/resourceAuthPage';
+import { FetchResourceInfoAction } from '@/models/resourceAuthPage';
 import { LoadingOutlined } from '@ant-design/icons';
 import * as AHooks from 'ahooks';
 import FComponentsLib from '@freelog/components-lib';
@@ -36,6 +36,13 @@ interface SilderProps extends RouteComponentProps<{
 }
 
 function Sider({ resourceSider, match, dispatch }: SilderProps) {
+
+  const [$resourceAuthShownArray, set$resourceAuthShownArray] = AHooks.useLocalStorageState<{ [k: string]: string }>(
+    'resourceAuthShownArray',
+    {
+      defaultValue: {},
+    },
+  );
 
   const [inactiveDialogShow, setInactiveDialogShow] = React.useState(false);
   const [resultPopupType, setResultPopupType] = React.useState<null | 0 | 1>(null);
@@ -65,6 +72,10 @@ function Sider({ resourceSider, match, dispatch }: SilderProps) {
       page = 'info';
     } else if (match.path === '/resource/auth/:id') {
       page = 'auth';
+      set$resourceAuthShownArray({
+        ...$resourceAuthShownArray,
+        [match.params.id]: match.params.id,
+      });
     } else if (match.path === '/resource/version/creator/:id') {
       page = 'versionCreator';
     } else if (match.path === '/resource/version/info/:id/:version') {
@@ -223,14 +234,14 @@ function Sider({ resourceSider, match, dispatch }: SilderProps) {
           })}
         >
           <Space size={10}>
-            <span>{FI18n.i18nNext.t('authorization_infomation')}</span>
+            <span>{FI18n.i18nNext.t('authorization_infomation')} 111</span>
             {resourceSider.hasAuthProblem && (
               <FTooltip title={'存在授权问题'}>
                 <FComponentsLib.FIcons.FWarning style={{ fontSize: 16 }} />
               </FTooltip>
             )}
           </Space>
-          {resourceSider.policies.length === 0 && (<div className={styles.redDot} />)}
+          {resourceSider.policies.length === 0 && !$resourceAuthShownArray[match.params.id] && (<div className={styles.redDot} />)}
         </FLink>
         <div className={styles.versionControl}>
           <div className={styles.versionControlTitle}>
@@ -331,24 +342,6 @@ function Sider({ resourceSider, match, dispatch }: SilderProps) {
           </Checkbox>
         }
       />
-
-      {/*<FPolicyOperatorDrawer*/}
-      {/*  visible={resourceInfo.policyOperaterVisible}*/}
-      {/*  titleText={FI18n.i18nNext.t('set_resource_available_for_auth_activate_auth_plan_title')}*/}
-      {/*  confirmText={FI18n.i18nNext.t('set_resource_available_for_auth_activate_auth_plan_btn_done')}*/}
-      {/*  tipText={FI18n.i18nNext.t('msg_set_resource_avaliable_for_auth02')}*/}
-      {/*  policiesList={resourceInfo.policies}*/}
-      {/*  onCancel={() => {*/}
-      {/*    dispatch<ChangeAction>({*/}
-      {/*      type: 'resourceInfo/change',*/}
-      {/*      payload: {*/}
-      {/*        policyOperaterVisible: false,*/}
-      {/*      },*/}
-      {/*    });*/}
-      {/*  }}*/}
-      {/*  onConfirm={activeResource}*/}
-      {/*  onNewPolicy={openPolicyBuilder}*/}
-      {/*/>*/}
 
       {resultPopupType !== null && (
         <div className={styles['result-modal']}>

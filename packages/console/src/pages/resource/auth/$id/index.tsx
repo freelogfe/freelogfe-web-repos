@@ -1,8 +1,8 @@
 import * as React from 'react';
 import styles from './index.less';
-import FPolicies from '@/pages/resource/containers/FPolicies';
+import FPolicies from '../../containers/FPolicies';
 import FAuthPanel from './FAuthPanel';
-import { Skeleton, Space } from 'antd';
+import { Space } from 'antd';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import {
@@ -29,7 +29,6 @@ import { RouteComponentProps } from 'react-router';
 import FBasicUpcastCard from '@/components/FBasicUpcastCard';
 import { Helmet } from 'react-helmet';
 import FComponentsLib from '@freelog/components-lib';
-// import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
 import * as AHooks from 'ahooks';
 import FSkeletonNode from '@/components/FSkeletonNode';
 
@@ -41,10 +40,6 @@ interface AuthProps extends RouteComponentProps<{ id: string }> {
 
 function Auth({ dispatch, resourceAuthPage, resourceInfo, match }: AuthProps) {
 
-  // React.useEffect(() => {
-  //
-  // }, [dispatch, match.params.id]);
-  // pageState
   AHooks.useMount(async () => {
     await dispatch<ChangeAction>({
       type: 'resourceAuthPage/change',
