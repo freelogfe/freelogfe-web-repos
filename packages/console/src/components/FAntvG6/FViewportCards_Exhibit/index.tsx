@@ -1,13 +1,14 @@
 import * as React from 'react';
 import styles from './index.less';
 import FComponentsLib from '@freelog/components-lib';
-import { useGetState } from '@/utils/hooks';
+// import { useGetState } from '@/utils/hooks';
 import FGraph_Tree_Relationship_Exhibit from '@/components/FAntvG6/FGraph_Tree_Relationship_Exhibit';
 import fGraphTree_Relationship_Exhibit from '@/components/FAntvG6/fGraphTree_Relationship_Exhibit';
 import FGraph_Tree_Authorization_Exhibit from '@/components/FAntvG6/FGraph_Tree_Authorization_Exhibit';
 import fGraphTree_Authorization_Exhibit from '@/components/FAntvG6/fGraphTree_Authorization_Exhibit';
 import FGraph_Tree_Dependency_Exhibit from '@/components/FAntvG6/FGraph_Tree_Dependency_Exhibit';
 import fGraphTree_Dependency_Exhibit from '@/components/FAntvG6/fGraphTree_Dependency_Exhibit';
+import * as AHooks from 'ahooks';
 
 interface FViewportCards_Exhibit_Props {
   graphShow: Array<'relationship' | 'authorization' | 'dependency'>;
@@ -24,7 +25,7 @@ function FViewportCards_Exhibit({
                                    onMount,
                                  }: FViewportCards_Exhibit_Props) {
 
-  const [show, set_show, get_show] = useGetState<Array<'relationship' | 'authorization' | 'dependency'>>(graphShow);
+  const [show, set_show, get_show] = AHooks.useGetState<Array<'relationship' | 'authorization' | 'dependency'>>(graphShow);
 
   React.useEffect(() => {
     if (get_show().length === 0) {

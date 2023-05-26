@@ -204,7 +204,6 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
                 </div>))
           }
         </FFormLayout.FBlock>
-
         {
           resourceVersionEditorPage.graphShow && (<FFormLayout.FBlock
             title={'相关视图'}
@@ -215,6 +214,7 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
               version={resourceVersionEditorPage.version}
               graphShow={['relationship', 'authorization', 'dependency']}
               onMount={({ hasData }) => {
+                // console.log(hasData, 'hasDataiosdjflkjsdflkjlk');
                 dispatch<ChangeAction>({
                   type: 'resourceVersionEditorPage/change',
                   payload: {

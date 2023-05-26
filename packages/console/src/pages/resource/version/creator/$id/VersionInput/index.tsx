@@ -3,7 +3,8 @@ import styles from './index.less';
 // import { ChangeAction, VerifyVersionInputAction } from '@/models/resourceVersionCreatorPage';
 import FInput from '@/components/FInput';
 import * as semver from 'semver';
-import { useGetState } from '@/utils/hooks';
+// import { useGetState } from '@/utils/hooks';
+import * as AHooks from 'ahooks';
 
 interface VersionInputProps {
   value: string;
@@ -23,8 +24,8 @@ const initStates: VersionInputStates = {
 };
 
 function VersionInput({ value, resourceLatestVersion, onChange }: VersionInputProps) {
-  const [input, set_input, get_input] = useGetState<VersionInputStates['input']>(initStates['input']);
-  const [inputError, set_inputError, get_inputError] = useGetState<VersionInputStates['inputError']>(initStates['inputError']);
+  const [input, set_input, get_input] = AHooks.useGetState<VersionInputStates['input']>(initStates['input']);
+  const [inputError, set_inputError, get_inputError] = AHooks.useGetState<VersionInputStates['inputError']>(initStates['inputError']);
 
   React.useEffect(() => {
     // console.log(get_input(), value, 'value89888********88');

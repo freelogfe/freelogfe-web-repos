@@ -150,17 +150,6 @@ function FHeaderNavigation({
 
         </div>
         <div className={styles.FHeaderNavigation_Right}>
-            {/*{*/}
-            {/*  showGlobalSearch && (<>*/}
-            {/*    <FInput*/}
-            {/*      size='small'*/}
-            {/*      theme='dark'*/}
-            {/*      style={{ width: 200 }}*/}
-            {/*      value={''}*/}
-            {/*    />*/}
-            {/*    <div style={{ width: 30 }} />*/}
-            {/*  </>)*/}
-            {/*}*/}
             {extra}
 
             <div style={{width: 30}}/>
