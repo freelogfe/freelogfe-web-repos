@@ -94,7 +94,7 @@ export interface ResourceDetailPageModelState {
     }[];
   };
 
-  // graphShow: boolean;
+  graphShow: boolean;
 }
 
 export interface ChangeAction extends AnyAction {
@@ -215,6 +215,8 @@ const initStates: ResourceDetailPageModelState = {
     baseProperties: [],
     customOptions: [],
   },
+
+  graphShow: true,
 };
 
 const Model: ResourceDetailPageModelType = {
