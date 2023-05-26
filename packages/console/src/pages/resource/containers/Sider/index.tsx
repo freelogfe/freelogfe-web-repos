@@ -234,7 +234,7 @@ function Sider({ resourceSider, match, dispatch }: SilderProps) {
           })}
         >
           <Space size={10}>
-            <span>{FI18n.i18nNext.t('authorization_infomation')} 111</span>
+            <span>{FI18n.i18nNext.t('authorization_infomation')}</span>
             {resourceSider.hasAuthProblem && (
               <FTooltip title={'存在授权问题'}>
                 <FComponentsLib.FIcons.FWarning style={{ fontSize: 16 }} />
