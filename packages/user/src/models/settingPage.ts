@@ -754,31 +754,10 @@ const Model: SettingPageModelType = {
             residenceText: userDetail?.areaName || '',
             career: userDetail?.occupation || '',
           },
-          // profile_gender: userDetail?.sex === 1 ? 'male' : userDetail?.sex === 2 ? 'female' : 'unknown',
-          // profile_profileText: userDetail?.intro || '',
-          // profile_birthday: userDetail?.birthday ? moment(userDetail?.birthday, FUtil.Predefined.momentDateFormat) : null,
-          // profile_residence: userDetail?.areaCode
-          //   ? [userDetail?.areaCode.substr(0, 2), userDetail?.areaCode]
-          //   : [],
-          // profile_residenceText: userDetail?.areaName || '',
-          // profile_career: userDetail?.occupation || '',
 
           username: data.username,
           email: data.email,
           phone: data.mobile,
-
-          // profile_residenceOptions: data1.map((d1: any) => {
-          //   return {
-          //     value: d1.code,
-          //     label: d1.name,
-          //     children: d1.children.map((d2: any) => {
-          //       return {
-          //         value: d2.code,
-          //         label: d2.name,
-          //       };
-          //     }),
-          //   };
-          // }),
 
           nodeDataSize: FUtil.Format.humanizeSize(data2?.totalFileSize || 0),
         },
@@ -906,6 +885,7 @@ const Model: SettingPageModelType = {
           profile_profileText: settingPage.profileInfo.profileText,
           profile_birthday: settingPage.profileInfo.birthday,
           profile_residence: settingPage.profileInfo.residence,
+          profile_residenceText: settingPage.profileInfo.residenceText,
           profile_career: settingPage.profileInfo.career,
         },
       });
