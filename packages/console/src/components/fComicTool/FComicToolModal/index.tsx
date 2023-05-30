@@ -13,6 +13,9 @@ import FComponentsLib from '@freelog/components-lib';
 import FPopover from '@/components/FPopover';
 import { ImgInComicTool } from './core/interface';
 import { ImportDrawer } from './components/import-drawer';
+import { ImgCard } from './components/img-card';
+import { MAX_IMG_LENGTH, MAX_IMG_SIZE, UPLOAD_LOCAL_ACCEPT, CUT_IMG_ACCEPT } from './core/assets';
+import { PreviewBox } from './components/preview-box';
 const saveAs = require('file-saver');
 
 interface ToolProps {
@@ -34,15 +37,6 @@ const { confirm } = Modal;
 
 /** 排版工具 */
 export const ComicTool = (props: ToolProps) => {
-  /** 最大图片大小（20MB） */
-  const MAX_IMG_SIZE = 1024 * 1024 * 20;
-  /** 图片总数量上限 */
-  const MAX_IMG_LENGTH = 300;
-  /** 上传本地图片格式限制 */
-  const UPLOAD_LOCAL_ACCEPT = '.jpg,.jpeg,.png,.gif';
-  /** 切图图片格式限制 */
-  const CUT_IMG_ACCEPT = '.jpg,.jpeg,.png';
-
   const { resourceId, show, close, setSaved } = props;
 
   const inputTimer = useRef<Timeout | null>(null);
@@ -167,38 +161,6 @@ export const ComicTool = (props: ToolProps) => {
   /** 关闭所有弹窗 */
   const closeAllPopup = () => {
     setImportDrawer(false);
-  };
-
-  /** 换算图片大小 */
-  const conversionSize = (size: number) => {
-    if (size < 1024) return `${size}B`;
-
-    if (size >= 1024 * 1024) {
-      return `${Math.floor((size / 1024 / 1024) * 100) / 100}MB`;
-    } else {
-      return `${Math.floor((size / 1024) * 100) / 100}KB`;
-    }
-  };
-
-  /** 格式化图片名称（超长时中间部分省略，并保证尾部显示不含后缀名至少四位字符） */
-  const formatName = (name: string) => {
-    const _div = document.createElement('div');
-    _div.innerText = name;
-    _div.style.fontSize = '12px';
-    _div.style.position = 'absolute';
-    document.body.appendChild(_div);
-    if (_div.clientWidth < 200) {
-      return name;
-    } else {
-      const [filename, suffix] = name.split('.');
-      const lastWords = '...' + filename.slice(-4) + '.' + suffix;
-      for (let i = 0; i < filename.length; i++) {
-        const newName = filename.slice(0, i + 1) + lastWords;
-        _div.innerText = newName;
-        if (_div.clientWidth > 200) return filename.slice(0, i) + lastWords;
-      }
-    }
-    document.body.removeChild(_div);
   };
 
   /** 上传本地图片 */
@@ -463,7 +425,9 @@ export const ComicTool = (props: ToolProps) => {
   }, [edited]);
 
   return (
-    <comicToolContext.Provider value={{ resourceId, tool: { setImgList } }}>
+    <comicToolContext.Provider
+      value={{ resourceId, tool: { MAX_IMG_SIZE, imgList, setImgList } }}
+    >
       <input
         type="file"
         id="uploadLocalImg"
@@ -620,79 +584,7 @@ export const ComicTool = (props: ToolProps) => {
                   </div>
                   <div className="box-body">
                     {imgList.map((item, index) => {
-                      return (
-                        <div className="img-card" key={item.name + index}>
-                          <div className="card-main">
-                            <div
-                              className={`card-header ${
-                                item.size > MAX_IMG_SIZE && 'oversize'
-                              }`}
-                            >
-                              <div className="order">{index + 1}</div>
-                              <div className="size">
-                                {conversionSize(item.size)}
-                              </div>
-                              <i className="freelog fl-icon-tuodong dragger" />
-                              <div className="drag-tip">
-                                {FI18n.i18nNext.t('按住可拖拽排序')}
-                              </div>
-                            </div>
-                            <div className="card-body">
-                              {item.size <= MAX_IMG_SIZE ? (
-                                <img className="img" src={item.base64} />
-                              ) : (
-                                <div className="oversize-box">
-                                  <img
-                                    className="oversize-img"
-                                    src={item.base64}
-                                  />
-                                  <div className="oversize-tip">
-                                    {FI18n.i18nNext.t('单张图片不超过20MB')}
-                                  </div>
-                                </div>
-                              )}
-
-                              <div className="cut-mark">
-                                <i className="freelog fl-icon-jiandao" />
-                                {FI18n.i18nNext.t('已切图')}
-                              </div>
-                              <div className="operate-btns">
-                                <div className="btn">
-                                  <i className="freelog fl-icon-jiandao" />
-                                  <div className="btn-name">
-                                    {FI18n.i18nNext.t('切图')}
-                                  </div>
-                                </div>
-                                {/* <div className="btn">
-                                <i className="freelog fl-icon-jiandao" />
-                                <div className="btn-name">
-                                  {FI18n.i18nNext.t('查看切图详情')}
-                                </div>
-                              </div> */}
-                                <div className="btn">
-                                  <i className="freelog fl-icon-shanchu" />
-                                  <div className="btn-name">
-                                    {FI18n.i18nNext.t('删除')}
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="name">{formatName(item.name)}</div>
-                          <div className="insert-btn pre">
-                            <i className="freelog fl-icon-tianjia" />
-                            <div className="insert-tip">
-                              {FI18n.i18nNext.t('向左侧插入图片')}
-                            </div>
-                          </div>
-                          <div className="insert-btn next">
-                            <i className="freelog fl-icon-tianjia" />
-                            <div className="insert-tip">
-                              {FI18n.i18nNext.t('向右侧插入图片')}
-                            </div>
-                          </div>
-                        </div>
-                      );
+                      return <ImgCard index={index} data={item} key={item.name + index} />;
                     })}
                   </div>
                 </div>
@@ -712,36 +604,7 @@ export const ComicTool = (props: ToolProps) => {
           close={() => setImportDrawer(false)}
         />
 
-        {/* <div className="test-wrapper">
-          <div className="btns">
-            <input type="file" id="file" onChange={uploadFile} />
-            <button className="btn" onClick={exportFile}>
-              导出漫画文件
-            </button>
-          </div>
-
-          <div className="img-list">
-            {canvasList.map((item) => {
-              return (
-                <div className="comic-img" key={item}>
-                  <canvas id={item}></canvas>
-                  <div className="name">{item}</div>
-                </div>
-              );
-            })}
-            {imgList.map((item) => {
-              return (
-                <div className="comic-img" key={item.name}>
-                  <img
-                    className="img"
-                    src={'data:image/jpg;base64,' + item.base64}
-                  />
-                  <div className="name">{item.name}</div>
-                </div>
-              );
-            })}
-          </div>
-        </div> */}
+        <PreviewBox />
       </div>
     </comicToolContext.Provider>
   );
