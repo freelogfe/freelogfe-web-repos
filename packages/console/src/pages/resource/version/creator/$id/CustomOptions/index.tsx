@@ -19,7 +19,7 @@ import FResourceProperties from '@/components/FResourceProperties';
 import fResourcePropertyEditor from '@/components/fResourcePropertyEditor';
 import FResourceOptions from '@/components/FResourceOptions';
 import fResourceOptionEditor from '@/components/fResourceOptionEditor';
-import { FI18n } from '../../../../../../../../@freelog/tools-lib';
+import { FI18n } from '@freelog/tools-lib';
 import FTooltip from '@/components/FTooltip';
 
 interface CustomOptionsProps {
