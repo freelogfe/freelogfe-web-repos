@@ -79,6 +79,7 @@ export interface SettingPageModelState {
   changePhone_New_CaptchaWait: number;
 
   changePassword_Old_PasswordInput: string;
+  changePassword_Old_PasswordInput_Error: string;
   changePassword_New1_PasswordInput: string;
   changePassword_New1_PasswordInput_Error: string;
   changePassword_New2_PasswordInput: string;
@@ -126,7 +127,7 @@ export interface OnChange_Avatar_Action extends AnyAction {
 export interface OnChange_Gender_Action extends AnyAction {
   type: 'settingPage/onChange_Gender';
   payload: {
-    value: 'male' | 'female';
+    value: SettingPageModelState['profile_gender'];
   };
 }
 
@@ -428,6 +429,10 @@ export interface OnChange_ChangePassword_Old_PasswordInput_Action extends AnyAct
   };
 }
 
+export interface OnBlur_ChangePassword_Old_PasswordInput_Action extends AnyAction {
+  type: 'settingPage/onBlur_ChangePassword_Old_PasswordInput';
+}
+
 export interface OnChange_ChangePassword_New1_PasswordInput_Action extends AnyAction {
   type: 'settingPage/onChange_ChangePassword_New1_PasswordInput';
   payload: {
@@ -546,6 +551,7 @@ interface SettingPageModelType {
 
     onCancel_ChangePassword_Modal: (action: OnCancel_ChangePassword_Modal_Action, effects: EffectsCommandMap) => void;
     onChange_ChangePassword_Old_PasswordInput: (action: OnChange_ChangePassword_Old_PasswordInput_Action, effects: EffectsCommandMap) => void;
+    onBlur_ChangePassword_Old_PasswordInput: (action: OnBlur_ChangePassword_Old_PasswordInput_Action, effects: EffectsCommandMap) => void;
     onChange_ChangePassword_New1_PasswordInput: (action: OnChange_ChangePassword_New1_PasswordInput_Action, effects: EffectsCommandMap) => void;
     onBlur_ChangePassword_New1_PasswordInput: (action: OnBlur_ChangePassword_New1_PasswordInput_Action, effects: EffectsCommandMap) => void;
     onChange_ChangePassword_New2_PasswordInput: (action: OnChange_ChangePassword_New2_PasswordInput_Action, effects: EffectsCommandMap) => void;
@@ -642,12 +648,14 @@ const initStates_ChangePhone: Pick<SettingPageModelState,
 const initStates_ChangePassword: Pick<SettingPageModelState,
   // 'changePassword_ModalVisible' |
   'changePassword_Old_PasswordInput' |
+  'changePassword_Old_PasswordInput_Error' |
   'changePassword_New1_PasswordInput' |
   'changePassword_New1_PasswordInput_Error' |
   'changePassword_New2_PasswordInput' |
   'changePassword_New2_PasswordInput_Error'> = {
   // changePassword_ModalVisible: false,
   changePassword_Old_PasswordInput: '',
+  changePassword_Old_PasswordInput_Error: '',
   changePassword_New1_PasswordInput: '',
   changePassword_New1_PasswordInput_Error: '',
   changePassword_New2_PasswordInput: '',
@@ -746,31 +754,10 @@ const Model: SettingPageModelType = {
             residenceText: userDetail?.areaName || '',
             career: userDetail?.occupation || '',
           },
-          // profile_gender: userDetail?.sex === 1 ? 'male' : userDetail?.sex === 2 ? 'female' : 'unknown',
-          // profile_profileText: userDetail?.intro || '',
-          // profile_birthday: userDetail?.birthday ? moment(userDetail?.birthday, FUtil.Predefined.momentDateFormat) : null,
-          // profile_residence: userDetail?.areaCode
-          //   ? [userDetail?.areaCode.substr(0, 2), userDetail?.areaCode]
-          //   : [],
-          // profile_residenceText: userDetail?.areaName || '',
-          // profile_career: userDetail?.occupation || '',
 
           username: data.username,
           email: data.email,
           phone: data.mobile,
-
-          // profile_residenceOptions: data1.map((d1: any) => {
-          //   return {
-          //     value: d1.code,
-          //     label: d1.name,
-          //     children: d1.children.map((d2: any) => {
-          //       return {
-          //         value: d2.code,
-          //         label: d2.name,
-          //       };
-          //     }),
-          //   };
-          // }),
 
           nodeDataSize: FUtil.Format.humanizeSize(data2?.totalFileSize || 0),
         },
@@ -898,6 +885,7 @@ const Model: SettingPageModelType = {
           profile_profileText: settingPage.profileInfo.profileText,
           profile_birthday: settingPage.profileInfo.birthday,
           profile_residence: settingPage.profileInfo.residence,
+          profile_residenceText: settingPage.profileInfo.residenceText,
           profile_career: settingPage.profileInfo.career,
         },
       });
@@ -1769,7 +1757,23 @@ const Model: SettingPageModelType = {
         type: 'change',
         payload: {
           changePassword_Old_PasswordInput: payload.value,
-          // changePassword_Old_PasswordInputE: payload.value,
+          changePassword_Old_PasswordInput_Error: '',
+        },
+      });
+    },
+    * onBlur_ChangePassword_Old_PasswordInput({}: OnBlur_ChangePassword_Old_PasswordInput_Action, {
+      select,
+      put,
+    }: EffectsCommandMap) {
+      const { settingPage }: ConnectState = yield select(({ settingPage }: ConnectState) => ({
+        settingPage,
+      }));
+
+      // console.log(settingPage.changePassword_Old_PasswordInput, 'settingPage.changePassword_Old_PasswordInputio dsifjsdlkf');
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          changePassword_Old_PasswordInput_Error: settingPage.changePassword_Old_PasswordInput === '' ? '请输入密码' : '',
         },
       });
     },
@@ -1851,6 +1855,11 @@ const Model: SettingPageModelType = {
       const { settingPage }: ConnectState = yield select(({ settingPage }: ConnectState) => ({
         settingPage,
       }));
+
+      if (!FUtil.Regexp.PASSWORD.test(settingPage.changePassword_Old_PasswordInput)) {
+        fMessage(FI18n.i18nNext.t('password_incorrect'), 'error');
+        return;
+      }
 
       const params: Parameters<typeof FServiceAPI.User.updatePassword>[0] = {
         oldPassword: settingPage.changePassword_Old_PasswordInput,

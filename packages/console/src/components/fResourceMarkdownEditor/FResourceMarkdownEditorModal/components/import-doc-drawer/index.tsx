@@ -571,6 +571,7 @@ export const ImportDocDrawer = (props: Props) => {
 
     const result = await FServiceAPI.recombination.getFilesSha1Info({
       sha1: [task.sha1],
+      resourceTypeCode: '',
     });
 
     if (

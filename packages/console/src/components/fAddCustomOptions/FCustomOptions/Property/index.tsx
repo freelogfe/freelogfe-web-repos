@@ -28,13 +28,13 @@ function Property({ data, hideTypeSelect = false, onChange }: PropertyProps) {
         <Space size={5}>
           <i className={styles.dot} />
           {/*<FComponentsLib.FTitleText type='h4' text={'属性名称'} />*/}
-          <FComponentsLib.FTitleText type='h4' text={'配置名称'} />
+          <FComponentsLib.FTitleText type='h4' text={FI18n.i18nNext.t('resourceoptions_add_input_name')} />
         </Space>
         <div style={{ height: 5 }} />
         <FInput
           className={styles.input}
           wrapClassName={styles.input}
-          placeholder={'输入配置名称'}
+          placeholder={FI18n.i18nNext.t('resourceoptions_add_input_name_hint')}
           value={data.name}
           onChange={(e) => {
             const value: string = e.target.value;
@@ -42,11 +42,8 @@ function Property({ data, hideTypeSelect = false, onChange }: PropertyProps) {
             if (value === '') {
               errorText = '请输入配置名称';
             } else if (value.length > 50) {
-              errorText = '不超过50个字符';
+              errorText = FI18n.i18nNext.t('alert_naming_convention_attribute_name');
             }
-            // else if (!FUtil.Regexp.CUSTOM_KEY.test(value)) {
-            //   errorText = `不符合${FUtil.Regexp.CUSTOM_KEY}`;
-            // }
 
             onChangeData({
               name: value,
@@ -68,14 +65,13 @@ function Property({ data, hideTypeSelect = false, onChange }: PropertyProps) {
       <Col span={12}>
         <Space size={5}>
           <i className={styles.dot} />
-          {/*<FComponentsLib.FTitleText type='h4' text={FI18n.i18nNext.t('key')} />*/}
-          <FComponentsLib.FTitleText type='h4' text={'key'} />
+          <FComponentsLib.FTitleText type='h4' text={FI18n.i18nNext.t('resourceoptions_add_input_key')} />
         </Space>
         <div style={{ height: 5 }} />
         <FInput
           className={styles.input}
           wrapClassName={styles.input}
-          placeholder={'输入key'}
+          placeholder={FI18n.i18nNext.t('resourceoptions_add_input_key_hint')}
           value={data.key}
           onChange={(e) => {
             const value: string = e.target.value;
@@ -105,19 +101,19 @@ function Property({ data, hideTypeSelect = false, onChange }: PropertyProps) {
       <Col span={12}>
         <Space size={5}>
           {/*<FComponentsLib.FTitleText type='h4' text={FI18n.i18nNext.t('property_remark')} />*/}
-          <FComponentsLib.FTitleText type='h4' text={FI18n.i18nNext.t('配置说明')} />
+          <FComponentsLib.FTitleText type='h4' text={FI18n.i18nNext.t('resourceoptions_add_input_desc')} />
         </Space>
         <div style={{ height: 5 }} />
         <FInput
           className={styles.input}
           wrapClassName={styles.input}
-          placeholder={'输入配置说明'}
+          placeholder={FI18n.i18nNext.t('resourceoptions_add_input_desc_hint')}
           value={data.description}
           onChange={(e) => {
             const value: string = e.target.value;
             let errorText: string = '';
             if (value.length > 50) {
-              errorText = '不超过50个字符';
+              errorText = FI18n.i18nNext.t('alert_key_remark_length');
             }
 
             onChangeData({
@@ -139,9 +135,7 @@ function Property({ data, hideTypeSelect = false, onChange }: PropertyProps) {
       {
         !hideTypeSelect && (<Col span={12}>
           <Space size={5}>
-            {/*<i className={styles.dot} />*/}
-            {/*<FComponentsLib.FTitleText type='h4' text={FI18n.i18nNext.t('value_input_mode')} />*/}
-            <FComponentsLib.FTitleText type='h4' text={'配置方式'} />
+            <FComponentsLib.FTitleText type='h4' text={FI18n.i18nNext.t('resourceoptions_add_input_type')} />
           </Space>
           <div style={{ height: 5 }} />
 
@@ -149,10 +143,9 @@ function Property({ data, hideTypeSelect = false, onChange }: PropertyProps) {
             <div
               className={[styles.typeSelect_option, data.type === 'input' ? styles.active : ''].join(' ')}
               onClick={() => {
-                // set_typeSelect('input');
                 onChangeData({ type: 'input' });
               }}
-            >输入框
+            >{FI18n.i18nNext.t('resourceoptions_add_input_type_textfield')}
             </div>
             <div
               className={[styles.typeSelect_option, data.type === 'select' ? styles.active : ''].join(' ')}
@@ -160,7 +153,7 @@ function Property({ data, hideTypeSelect = false, onChange }: PropertyProps) {
                 // set_typeSelect('select');
                 onChangeData({ type: 'select' });
               }}
-            >下拉选择器
+            >{FI18n.i18nNext.t('resourceoptions_add_input_type_dropdownlist')}
             </div>
           </div>
         </Col>)
@@ -171,24 +164,17 @@ function Property({ data, hideTypeSelect = false, onChange }: PropertyProps) {
       {
         data.type === 'input' ? (<Col span={18}>
             <Space size={5}>
-              {/*<i className={styles.dot} />*/}
-              {/*<FTitleText type='h4' text={'自定义选项(填写一个默认值)'} />*/}
-              {/*<FComponentsLib.FTitleText type='h4' text={'自定义选项'} />*/}
-              <FComponentsLib.FTitleText type='h4' text={'默认值'} />
+              <FComponentsLib.FTitleText type='h4' text={FI18n.i18nNext.t('resourceoptions_add_input_default')} />
             </Space>
             <div style={{ height: 5 }} />
             <FInput
               className={styles.input}
               wrapClassName={styles.input}
-              // placeholder={'输入自定义选项'}
-              placeholder={'输入value'}
+              placeholder={FI18n.i18nNext.t('resourceoptions_add_input_default_hint')}
               value={data.input}
               onChange={(e) => {
                 const value: string = e.target.value;
                 let errorText: string = '';
-                // if (value === '') {
-                //   errorText = '请输入';
-                // } else
                 if (value.length > 140) {
                   errorText = '不超过140个字符';
                 }
@@ -208,8 +194,7 @@ function Property({ data, hideTypeSelect = false, onChange }: PropertyProps) {
           : (<Col span={18}>
             <Space size={5}>
               <i className={styles.dot} />
-              {/*<FComponentsLib.FTitleText type='h4' text={'自定义选项(首个选项为默认值)'} />*/}
-              <FComponentsLib.FTitleText type='h4' text={'下拉选择器中的配置值'} />
+              <FComponentsLib.FTitleText type='h4' text={FI18n.i18nNext.t('resourceoptions_add_input_optionvalues')} />
             </Space>
             <div style={{ height: 5 }} />
 
@@ -220,15 +205,14 @@ function Property({ data, hideTypeSelect = false, onChange }: PropertyProps) {
                     <Space size={12}>
                       <FInput
                         value={si.value}
-                        // className={styles.input}
                         style={{ width: 480 }}
                         onChange={(e) => {
                           const value: string = e.target.value;
                           let errorText: string = '';
                           if (value === '') {
                             errorText = '输入配置值';
-                          } else if (value.length > 500) {
-                            errorText = '不超过500个字符';
+                          } else if (value.length > 140) {
+                            errorText = '不超过140个字符';
                           }
                           onChangeData({
                             select: data.select.map((sss, iii) => {
@@ -242,7 +226,7 @@ function Property({ data, hideTypeSelect = false, onChange }: PropertyProps) {
                             }),
                           });
                         }}
-                        placeholder={'输入配置值'}
+                        placeholder={FI18n.i18nNext.t('resourceoptions_add_input_optionvalues_hint')}
                       />
                       <FComponentsLib.FCircleBtn
                         type={'danger'}
@@ -263,24 +247,33 @@ function Property({ data, hideTypeSelect = false, onChange }: PropertyProps) {
                 })
               }
             </Space>
-            <div style={{ height: 10 }} />
-            <div
-              style={{ display: 'flex', alignItems: 'center', gap: 5, cursor: 'pointer' }}
-              onClick={() => {
-                onChangeData({
-                  select: [
-                    ...data.select,
-                    {
-                      value: '',
-                      error: '',
-                    },
-                  ],
-                });
-              }}
-            >
-              <FComponentsLib.FCircleBtn type={'primary'} size={'small'} />
-              <span style={{ color: '#2784FF', fontSize: 12 }}>增加配置选项</span>
-            </div>
+
+            {
+              data.select.length < 30 && (<>
+                <div style={{ height: 10 }} />
+                <div
+                  style={{ display: 'flex', alignItems: 'center', gap: 5, cursor: 'pointer' }}
+                  onClick={() => {
+                    onChangeData({
+                      select: [
+                        ...data.select,
+                        {
+                          value: '',
+                          error: '',
+                        },
+                      ],
+                    });
+                  }}
+                >
+                  <FComponentsLib.FCircleBtn type={'primary'} size={'small'} />
+                  <span style={{
+                    color: '#2784FF',
+                    fontSize: 12,
+                  }}>{FI18n.i18nNext.t('resourceoptions_add_btn_addanothervalue')}</span>
+                </div>
+              </>)
+            }
+
           </Col>)
       }
 

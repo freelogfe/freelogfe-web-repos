@@ -106,19 +106,18 @@ function Profile({ dispatch, user, settingPage }: ProfileProps) {
               </div>
               <div className={styles.right}>
                 {
-                  settingPage.profile_state === 'editing' && (<><FRadio
-                    checked={settingPage.profile_gender === 'male'}
-                    onClick={() => {
-                      dispatch<OnChange_Gender_Action>({
-                        type: 'settingPage/onChange_Gender',
-                        payload: {
-                          value: 'male',
-                        },
-                      });
-                    }}
-                  >
-                    男
-                  </FRadio>
+                  settingPage.profile_state === 'editing' && (<>
+                    <FRadio
+                      checked={settingPage.profile_gender === 'male'}
+                      onClick={() => {
+                        dispatch<OnChange_Gender_Action>({
+                          type: 'settingPage/onChange_Gender',
+                          payload: {
+                            value: 'male',
+                          },
+                        });
+                      }}
+                    >男</FRadio>
                     <div style={{ width: 20 }} />
                     <FRadio
                       checked={settingPage.profile_gender === 'female'}
@@ -130,9 +129,19 @@ function Profile({ dispatch, user, settingPage }: ProfileProps) {
                           },
                         });
                       }}
-                    >
-                      女
-                    </FRadio>
+                    >女</FRadio>
+                    <div style={{ width: 20 }} />
+                    <FRadio
+                      checked={settingPage.profile_gender === 'unknown'}
+                      onClick={() => {
+                        dispatch<OnChange_Gender_Action>({
+                          type: 'settingPage/onChange_Gender',
+                          payload: {
+                            value: 'unknown',
+                          },
+                        });
+                      }}
+                    >保密</FRadio>
                   </>)
                 }
 
@@ -150,7 +159,7 @@ function Profile({ dispatch, user, settingPage }: ProfileProps) {
 
                     {
                       settingPage.profileInfo.gender === 'unknown' && (
-                        <FComponentsLib.FContentText text={'未填写'} type={'negative'} />)
+                        <FComponentsLib.FContentText text={'保密'} type={'negative'} />)
                     }
                   </>)
                 }

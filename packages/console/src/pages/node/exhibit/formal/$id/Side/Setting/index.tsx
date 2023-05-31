@@ -31,6 +31,7 @@ import { FI18n } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 import FOverflowTooltip from '@/components/FOverflowTooltip';
 import fResourceOptionEditor from '@/components/fResourceOptionEditor';
+import FResourcePropertyAndOptionTipPopover from '@/components/FResourcePropertyAndOptionTipPopover';
 
 // import fResourcePropertyEditor from '@/components/fResourcePropertyEditor';
 
@@ -76,16 +77,30 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
                 return (<tr key={rp.key}>
                   {/*<td><FComponentsLib.FContentText text={pb.key} /></td>*/}
                   <td>
-                    <FOverflowTooltip
-                      text={rp.name}
-                      style={{
-                        fontWeight: 400,
-                        lineHeight: '20px',
-                        color: '#222',
-                        fontSize: 14,
-                        maxWidth: 90,
+                    <FResourcePropertyAndOptionTipPopover
+                      info={{
+                        key: rp.key,
+                        name: rp.name,
+                        description: rp.description,
                       }}
-                    />
+                      type={'property'}
+                    >
+                      <div><FComponentsLib.FContentText
+                        text={rp.name}
+                        style={{ maxWidth: 90 }}
+                        singleRow
+                      /></div>
+                    </FResourcePropertyAndOptionTipPopover>
+                    {/*<FOverflowTooltip*/}
+                    {/*  text={rp.name}*/}
+                    {/*  style={{*/}
+                    {/*    fontWeight: 400,*/}
+                    {/*    lineHeight: '20px',*/}
+                    {/*    color: '#222',*/}
+                    {/*    fontSize: 14,*/}
+                    {/*    maxWidth: 90,*/}
+                    {/*  }}*/}
+                    {/*/>*/}
                   </td>
                   {/*<td><FComponentsLib.FContentText text={pb.value} /></td>*/}
                   <td>
@@ -99,6 +114,7 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
                         maxWidth: 90,
                       }}
                     />
+
                   </td>
                 </tr>);
               })
@@ -108,16 +124,31 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
                 return (<tr key={pb.key}>
                   {/*<td><FComponentsLib.FContentText text={pb.key} /></td>*/}
                   <td>
-                    <FOverflowTooltip
-                      text={pb.name}
-                      style={{
-                        fontWeight: 400,
-                        lineHeight: '20px',
-                        color: '#222',
-                        fontSize: 14,
-                        maxWidth: 90,
+                    {/*<FOverflowTooltip*/}
+                    {/*  text={pb.name}*/}
+                    {/*  style={{*/}
+                    {/*    fontWeight: 400,*/}
+                    {/*    lineHeight: '20px',*/}
+                    {/*    color: '#222',*/}
+                    {/*    fontSize: 14,*/}
+                    {/*    maxWidth: 90,*/}
+                    {/*  }}*/}
+                    {/*/>*/}
+                    <FResourcePropertyAndOptionTipPopover
+                      info={{
+                        key: pb.key,
+                        name: pb.name,
+                        description: pb.description,
                       }}
-                    /></td>
+                      type={'property'}
+                    >
+                      <div><FComponentsLib.FContentText
+                        text={pb.name}
+                        style={{ maxWidth: 90 }}
+                        singleRow
+                      /></div>
+                    </FResourcePropertyAndOptionTipPopover>
+                  </td>
                   {/*<td><FComponentsLib.FContentText text={pb.value} /></td>*/}
                   <td><FOverflowTooltip
                     text={pb.value}
@@ -150,19 +181,31 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
             exhibitInfoPage.side_InheritOptions.map((io, index) => {
               return (<div key={io.key}>
                 <div className={styles.optionTitle}>
-                  <Space size={10}>
-                    <FComponentsLib.FContentText text={io.name} />
-                    {
-                      io.description && (<FTooltip
-                        title={io.description}
-                        color={'#fff'}
-                      >
-                        <FComponentsLib.FIcons.FInfo
-                          style={{ cursor: 'pointer', fontSize: 14 }}
-                        />
-                      </FTooltip>)
-                    }
-                  </Space>
+                  <FResourcePropertyAndOptionTipPopover
+                    info={{
+                      key: io.key,
+                      name: io.name,
+                      description: io.description,
+                    }}
+                    type={'option'}
+                  >
+                    <div><FComponentsLib.FContentText
+                      text={io.name} singleRow style={{ maxWidth: 160 }} /></div>
+                  </FResourcePropertyAndOptionTipPopover>
+
+                  {/*<Space size={10}>*/}
+                  {/*  <FComponentsLib.FContentText text={io.name} />*/}
+                  {/*  {*/}
+                  {/*    io.description && (<FTooltip*/}
+                  {/*      title={io.description}*/}
+                  {/*      color={'#fff'}*/}
+                  {/*    >*/}
+                  {/*      <FComponentsLib.FIcons.FInfo*/}
+                  {/*        style={{ cursor: 'pointer', fontSize: 14 }}*/}
+                  {/*      />*/}
+                  {/*    </FTooltip>)*/}
+                  {/*  }*/}
+                  {/*</Space>*/}
 
                   <FTooltip title={FI18n.i18nNext.t('tip_reset_value')}>
                     <div>
@@ -248,19 +291,30 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
             exhibitInfoPage.side_CustomOptions.map((co, index) => {
               return (<div key={co.key}>
                 <div className={styles.optionTitle}>
-                  <Space size={10}>
-                    <FComponentsLib.FContentText text={co.name} />
-                    {
-                      co.description && (<FTooltip
-                        title={co.description}
-                        color={'#fff'}
-                      >
-                        <FComponentsLib.FIcons.FInfo
-                          style={{ cursor: 'pointer', fontSize: 14 }}
-                        />
-                      </FTooltip>)
-                    }
-                  </Space>
+                  <FResourcePropertyAndOptionTipPopover
+                    info={{
+                      key: co.key,
+                      name: co.name,
+                      description: co.description,
+                    }}
+                    type={'option'}
+                  >
+                    <div><FComponentsLib.FContentText
+                      text={co.name} singleRow style={{ maxWidth: 160 }} /></div>
+                  </FResourcePropertyAndOptionTipPopover>
+                  {/*<Space size={10}>*/}
+                  {/*  <FComponentsLib.FContentText text={co.name} />*/}
+                  {/*  {*/}
+                  {/*    co.description && (<FTooltip*/}
+                  {/*      title={co.description}*/}
+                  {/*      color={'#fff'}*/}
+                  {/*    >*/}
+                  {/*      <FComponentsLib.FIcons.FInfo*/}
+                  {/*        style={{ cursor: 'pointer', fontSize: 14 }}*/}
+                  {/*      />*/}
+                  {/*    </FTooltip>)*/}
+                  {/*  }*/}
+                  {/*</Space>*/}
                   <Space size={10}>
                     <FTooltip title={FI18n.i18nNext.t('tips_edit')}>
                       <div>
@@ -375,53 +429,55 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
           }
         </div>
         <div style={{ height: 20 }} />
-        <Space className={styles.addCustomTitle}>
+        <Space
+          className={styles.addCustomTitle}
+          onClick={async () => {
+
+            const dataSource: {
+              key: string;
+              name: string;
+              type: 'input' | 'select';
+              input: string;
+              select: string[];
+              description: string;
+            } | null = await fResourceOptionEditor({
+              disabledKeys: [
+                ...exhibitInfoPage.side_RawProperties.map((ba) => ba.key),
+                ...exhibitInfoPage.side_BaseProperties.map((ba) => ba.key),
+                ...exhibitInfoPage.side_InheritOptions.map((io) => io.key),
+                ...exhibitInfoPage.side_CustomOptions.map((co) => co.key),
+              ],
+              disabledNames: [
+                // ...exhibitInfoPage.side_RawProperties.map((ba) => ba.name),
+                ...exhibitInfoPage.side_BaseProperties.map((ba) => ba.name),
+                ...exhibitInfoPage.side_InheritOptions.map((io) => io.name),
+                ...exhibitInfoPage.side_CustomOptions.map((co) => co.name),
+              ],
+              hideTypeSelect: true,
+            });
+
+            if (!dataSource) {
+              return;
+            }
+
+            dispatch<OnConfirm_AddCustomOptionsDrawer_Action>({
+              type: 'exhibitInfoPage/onConfirm_AddCustomOptionsDrawer',
+              payload: {
+                value: {
+                  key: dataSource.key,
+                  name: dataSource.name,
+                  // type: 'input' | 'select';
+                  input: dataSource.input,
+                  // select: string[];
+                  description: dataSource.description,
+                },
+              },
+            });
+          }}
+        >
           <FComponentsLib.FCircleBtn
             // theme="text"
             size='small'
-            onClick={async () => {
-
-              const dataSource: {
-                key: string;
-                name: string;
-                type: 'input' | 'select';
-                input: string;
-                select: string[];
-                description: string;
-              } | null = await fResourceOptionEditor({
-                disabledKeys: [
-                  ...exhibitInfoPage.side_RawProperties.map((ba) => ba.key),
-                  ...exhibitInfoPage.side_BaseProperties.map((ba) => ba.key),
-                  ...exhibitInfoPage.side_InheritOptions.map((io) => io.key),
-                  ...exhibitInfoPage.side_CustomOptions.map((co) => co.key),
-                ],
-                disabledNames: [
-                  // ...exhibitInfoPage.side_RawProperties.map((ba) => ba.name),
-                  ...exhibitInfoPage.side_BaseProperties.map((ba) => ba.name),
-                  ...exhibitInfoPage.side_InheritOptions.map((io) => io.name),
-                  ...exhibitInfoPage.side_CustomOptions.map((co) => co.name),
-                ],
-                hideTypeSelect: true,
-              });
-
-              if (!dataSource) {
-                return;
-              }
-
-              dispatch<OnConfirm_AddCustomOptionsDrawer_Action>({
-                type: 'exhibitInfoPage/onConfirm_AddCustomOptionsDrawer',
-                payload: {
-                  value: {
-                    key: dataSource.key,
-                    name: dataSource.name,
-                    // type: 'input' | 'select';
-                    input: dataSource.input,
-                    // select: string[];
-                    description: dataSource.description,
-                  },
-                },
-              });
-            }}
           />
           <span
             style={{ cursor: 'pointer', display: 'inline-block' }}
@@ -430,7 +486,7 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
               //   type: 'exhibitInfoPage/onClick_Side_AddCustomOptionsBtn',
               // });
             }}
-          >添加自定义选项</span>
+          >{FI18n.i18nNext.t('create_custom_options')}</span>
         </Space>
       </>)
     }

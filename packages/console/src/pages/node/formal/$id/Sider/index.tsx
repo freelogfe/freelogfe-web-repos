@@ -35,11 +35,11 @@ function Sider({ dispatch, nodeManagerPage, match }: SiderProps) {
         <div style={{ height: 20 }} />
 
         <div className={styles.title}>
-          <FTooltip title={nodeManagerPage.nodeName} placement={'top'}>
+          <FTooltip title={nodeManagerPage.nodeTitle || nodeManagerPage.nodeName} placement={'top'}>
             <div style={{ display: 'inline-block' }}>
               <FComponentsLib.FContentText
                 type={'highlight'}
-                text={nodeManagerPage.nodeName}
+                text={nodeManagerPage.nodeTitle || nodeManagerPage.nodeName}
                 singleRow
                 style={{
                   maxWidth: 200,
@@ -50,15 +50,6 @@ function Sider({ dispatch, nodeManagerPage, match }: SiderProps) {
           <div style={{ height: 10 }} />
           <FComponentsLib.FContentText
             type={'highlight'}
-            // style={{ fontSize: 12 }}
-            // onClick={() => {
-            //   window.open(nodeManagerPage.nodeUrl);
-            //   FComponentsLib.fSetHotspotTooltipVisible('nodeManager.nodeLink', {
-            //     value: false,
-            //     effectiveImmediately: true,
-            //     onlyNullish: false,
-            //   });
-            // }}
           >
             {nodeManagerPage.nodeUrl.replace(new RegExp(/http(s)?:\/\//), '')}
           </FComponentsLib.FContentText>
@@ -79,11 +70,12 @@ function Sider({ dispatch, nodeManagerPage, match }: SiderProps) {
             <Space size={30}>
               <FComponentsLib.FTextBtn
                 onClick={async () => {
-
+                  self.open(nodeManagerPage.nodeUrl);
                 }}
               >
                 <FTooltip title={FI18n.i18nNext.t('nodemgnt_btn_viewnode_tooltip')}>
-                  <i className={`freelog fl-icon-fenxiang`} style={{ fontSize: '14px' }} />
+
+                  <i className={`freelog fl-icon-fangwen`} style={{ fontSize: '14px' }} />
                 </FTooltip>
               </FComponentsLib.FTextBtn>
               <FComponentsLib.FCopyToClipboard

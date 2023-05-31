@@ -564,7 +564,7 @@ function FPublishObjectFile({
                 width: 100,
                 render(value: any, record: any, index: number) {
                   return (<FComponentsLib.FContentText
-                    text={record.resourceType}
+                    text={record.resourceType.join(' / ')}
                   />);
                 },
               },

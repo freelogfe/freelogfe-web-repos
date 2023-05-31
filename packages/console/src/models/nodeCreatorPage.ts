@@ -228,7 +228,7 @@ const Model: NodeCreatorPageModelType = {
         return;
       }
 
-      console.log(data, 'dataiosdjflksjdlfkjsdlkfjsldkjl');
+      // console.log(data, 'dataiosdjflksjdlfkjsdlkfjsldkjl');
 
       yield put<OnAdd_Node_Action>({
         type: 'nodes/onAdd_Node',

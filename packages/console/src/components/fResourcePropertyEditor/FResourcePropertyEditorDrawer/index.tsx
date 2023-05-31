@@ -78,7 +78,8 @@ function FResourcePropertyEditorDrawer({
   }
 
   return (<FDrawer
-    title={defaultData ? '编辑基础属性' : '补充属性'}
+    // title={defaultData ? '编辑基础属性' : '补充属性'}
+    title={defaultData ? FI18n.i18nNext.t('resourceinfo_edit_title') : FI18n.i18nNext.t('resourceinfo_add_title')}
     onClose={() => {
       set_visible(false);
     }}
@@ -97,7 +98,7 @@ function FResourcePropertyEditorDrawer({
         onClick={() => {
           set_visible(false);
         }}
-      >取消</FComponentsLib.FTextBtn>
+      >{FI18n.i18nNext.t('btn_cancel')}</FComponentsLib.FTextBtn>
 
       <FComponentsLib.FRectBtn
         type='primary'
@@ -114,7 +115,7 @@ function FResourcePropertyEditorDrawer({
           });
           set_visible(false);
         }}
-      >保存</FComponentsLib.FRectBtn>
+      >{FI18n.i18nNext.t('btn_save')}</FComponentsLib.FRectBtn>
     </Space>}
   >
     <Space
@@ -126,12 +127,18 @@ function FResourcePropertyEditorDrawer({
       <div className={styles.input}>
         <div className={styles.title}>
           {/*<i className={styles.dot} />*/}
-          <FComponentsLib.FContentText style={{ fontSize: 12 }} type={'highlight'} text={'属性名称'} />
+          {/*<FComponentsLib.FContentText style={{ fontSize: 12 }} type={'highlight'} text={'属性名称'} />*/}
+          <FComponentsLib.FContentText
+            style={{ fontSize: 12 }}
+            type={'highlight'}
+            text={FI18n.i18nNext.t('resourceinfo_add_input_name')}
+          />
         </div>
         <div style={{ height: 5 }} />
         <FInput
           // disabled={true}
-          placeholder={'输入属性名称'}
+          // placeholder={'输入属性名称'}
+          placeholder={FI18n.i18nNext.t('resourceinfo_add_input_name_hint')}
           disabled={noneEditableFields.includes('name')}
           value={nameInput}
           className={styles.input}
@@ -163,12 +170,18 @@ function FResourcePropertyEditorDrawer({
         <div className={styles.title}>
           {/*<i className={styles.dot} />*/}
           {/*<FComponentsLib.FTitleText type='h4'>key</FComponentsLib.FTitleText>*/}
-          <FComponentsLib.FContentText style={{ fontSize: 12 }} type={'highlight'} text={'key'} />
+          {/*<FComponentsLib.FContentText style={{ fontSize: 12 }} type={'highlight'} text={'key'} />*/}
+          <FComponentsLib.FContentText
+            style={{ fontSize: 12 }}
+            type={'highlight'}
+            text={FI18n.i18nNext.t('resourceinfo_add_input_key')}
+          />
         </div>
         <div style={{ height: 5 }} />
         <FInput
           // disabled={true}
-          placeholder={'输入key'}
+          // placeholder={'输入key'}
+          placeholder={FI18n.i18nNext.t('resourceinfo_add_input_key_hint')}
           value={keyInput}
           disabled={noneEditableFields.includes('key')}
           className={styles.input}
@@ -201,8 +214,16 @@ function FResourcePropertyEditorDrawer({
       <div className={styles.input}>
         <div className={styles.title}>
           {/*<FComponentsLib.FTitleText type='h4'>属性说明</FComponentsLib.FTitleText>*/}
-          <FComponentsLib.FContentText style={{ fontSize: 12 }} type={'highlight'} text={'属性说明'} />
-          <FComponentsLib.FContentText style={{ fontSize: 12 }} type={'additional2'} text={'（选填）'} />
+          <FComponentsLib.FContentText
+            style={{ fontSize: 12 }}
+            type={'highlight'}
+            text={FI18n.i18nNext.t('resourceinfo_add_input_desc')}
+          />
+          <FComponentsLib.FContentText
+            style={{ fontSize: 12 }}
+            type={'additional2'}
+            text={FI18n.i18nNext.t('form_input_label_optional')}
+          />
         </div>
         <div style={{ height: 5 }} />
         <FInput
@@ -224,7 +245,8 @@ function FResourcePropertyEditorDrawer({
             set_descriptionInput(value);
             set_descriptionInputError(errorText);
           }}
-          placeholder={'输入属性说明'}
+          // placeholder={'输入属性说明'}
+          placeholder={FI18n.i18nNext.t('resourceinfo_add_input_desc_hint')}
         />
         {descriptionInputError && (<>
           <div style={{ height: 5 }} />
@@ -236,7 +258,12 @@ function FResourcePropertyEditorDrawer({
         <div className={styles.title}>
           {/*<i className={styles.dot} />*/}
           {/*<FComponentsLib.FTitleText type='h4'>value</FComponentsLib.FTitleText>*/}
-          <FComponentsLib.FContentText style={{ fontSize: 12 }} type={'highlight'} text={'value'} />
+          {/*<FComponentsLib.FContentText style={{ fontSize: 12 }} type={'highlight'} text={'value'} />*/}
+          <FComponentsLib.FContentText
+            style={{ fontSize: 12 }}
+            type={'highlight'}
+            text={FI18n.i18nNext.t('resourceinfo_add_input_value')}
+          />
         </div>
         <div style={{ height: 5 }} />
         <FInput
@@ -259,7 +286,8 @@ function FResourcePropertyEditorDrawer({
             set_valueInput(value);
             set_valueInputError(errorText);
           }}
-          placeholder={'输入value'}
+          // placeholder={'输入value'}
+          placeholder={FI18n.i18nNext.t('resourceinfo_add_input_value_hint')}
         />
         {valueInputError && (<>
           <div style={{ height: 5 }} />

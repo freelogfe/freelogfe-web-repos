@@ -7,6 +7,7 @@ import { ConnectState, ResourceDetailPageModelState } from '@/models/connect';
 // import { Space } from 'antd';
 import FComponentsLib from '@freelog/components-lib';
 import FResourceProperties from '@/components/FResourceProperties';
+
 // import FResourceOptions from '@/components/FResourceOptions';
 
 interface PropertyProps {
@@ -24,10 +25,12 @@ function Property({ dispatch, resourceDetailPage }: PropertyProps) {
         type='h3'
       />
       <div style={{ height: 20 }} />
-      <FResourceProperties
-        immutableData={resourceDetailPage.resourceVersion_Info.rawProperties}
-        alterableData={resourceDetailPage.resourceVersion_Info.baseProperties}
-      />
+      {/*<div style={{ padding: 15, backgroundColor: '#F7F8F9' }}>*/}
+        <FResourceProperties
+          immutableData={resourceDetailPage.resourceVersion_Info.rawProperties}
+          alterableData={resourceDetailPage.resourceVersion_Info.baseProperties}
+        />
+      {/*</div>*/}
     </div>
     <div style={{ height: 20 }} />
   </>);

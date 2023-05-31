@@ -2,13 +2,13 @@ import * as React from 'react';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import { ConnectState, DiscoverPageModelState } from '@/models/connect';
-import categoryData from '@/utils/category';
+// import categoryData from '@/utils/category';
 import styles from './index.less';
-import useUrlState from '@ahooksjs/use-url-state';
+// import useUrlState from '@ahooksjs/use-url-state';
 import {
-  OnChangeResourceTypeAction,
+  // OnChangeResourceTypeAction,
   OnClickLoadMoreBtnAction,
-  OnChangeTagsAction,
+  // OnChangeTagsAction,
   OnUnmountMarketPageAction, OnMountMarketPageAction, OnChange_SelectedOperationCategoryIDs_Action,
 } from '@/models/discoverPage';
 import FResourceCard from '@/components/FResourceCard';
@@ -25,76 +25,6 @@ interface MarketProps {
 }
 
 function Market({ dispatch, discoverPage }: MarketProps) {
-  // const [urlState] = useUrlState<any>();
-  // -3 小说大赛   -2  漫画大赛    -1 全部
-  // const [category, setCategory] = React.useState<any>({
-  //   first: -4,
-  //   second: '',
-  // });
-
-  // React.useEffect(() => {
-  //   if (category.first === -4) {
-  //     return;
-  //   }
-  //   if ([-3, -2].includes(category.first)) {
-  //     dispatch<OnChangeTagsAction>({
-  //       type: 'discoverPage/onChangeTags',
-  //       payload: {
-  //         value: category.first === -3 ? '内测集结！小说家召集令' : '内测集结！漫画家召集令',
-  //       },
-  //     });
-  //     return;
-  //   }
-  //   let str = '';
-  //   if (category.first !== -1) {
-  //     str = categoryData.first[category.first];
-  //     // @ts-ignore
-  //     if (categoryData.second[category.first] && category.second) {
-  //       str = category.second;
-  //     }
-  //   }
-  //   dispatch<OnChangeResourceTypeAction>({
-  //     type: 'discoverPage/onChangeResourceType',
-  //     payload: {
-  //       value: str,
-  //     },
-  //   });
-  // }, [category]);
-
-  // AHooks.useMount(() => {
-  //   if (urlState.query) {
-  //     const data: any = urlState.query.split('%');
-  //     let first = -1,
-  //       second = '';
-  //     categoryData.first.some((item: string, index: number) => {
-  //       if (item === data[0]) {
-  //         first = index;
-  //         return true;
-  //       }
-  //     });
-  //     // @ts-ignore
-  //     first > 1 &&
-  //     // @ts-ignore
-  //     categoryData.second[first].some((item: string, index: number) => {
-  //       if (item === data[1]) {
-  //         second = item;
-  //         return true;
-  //       }
-  //     });
-  //     setCategory({
-  //       first,
-  //       second,
-  //     });
-  //   } else {
-  //     setCategory({
-  //       first: -1,
-  //       second: '',
-  //     });
-  //   }
-  //   // dispatch<OnMountMarketPageAction>({
-  //   //   type: 'discoverPage/onMountMarketPage',
-  //   // });
-  // });
 
   AHooks.useMount(() => {
     dispatch<OnMountMarketPageAction>({

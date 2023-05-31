@@ -9,6 +9,7 @@ import { PolicyFullInfo_Type } from '@/type/contractTypes';
 import fMessage from '@/components/fMessage';
 import fPolicyBuilder from '@/components/fPolicyBuilder';
 import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
+import { OnUpdate_Data_Action } from '@/models/resourceSider';
 
 export interface ResourceAuthPageModelState {
   resourceID: string;
@@ -452,12 +453,17 @@ const Model: ResourceAuthPageModelType = {
 
       yield call(online_afterSuccessCreatePolicy, resourceAuthPage.resourceID);
 
-      yield put<FetchDataSourceAction>({
-        type: 'resourceInfo/fetchDataSource',
-        payload: resourceAuthPage.resourceID,
-      });
+      // yield put<FetchDataSourceAction>({
+      //   type: 'resourceInfo/fetchDataSource',
+      //   payload: resourceAuthPage.resourceID,
+      // });
       yield put<FetchResourceInfoAction>({
         type: 'fetchResourceInfo',
+      });
+
+      yield put<OnUpdate_Data_Action>({
+        type: 'resourceSider/onUpdate_Data',
+        // payload: resourceInfoPage.resourceID,
       });
     },
     * onTrigger_AuthorizedContractEvent({}: OnTrigger_AuthorizedContractEvent_Action, {

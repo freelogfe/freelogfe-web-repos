@@ -65,7 +65,7 @@ function FLabelEditor({ values = [], resourceType = '', onChange }: FLabelEditor
     // if (!value) {
     //   errorText = '不能为空';
     // } else
-    if (value.length >= 20) {
+    if (value.length > 20) {
       errorText = '不超过20个字符';
     } else if (values.includes(value)) {
       errorText = '不能有重复';

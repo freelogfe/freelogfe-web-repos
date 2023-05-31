@@ -16,11 +16,6 @@ export interface ResourceVersionEditorPageModelState {
   descriptionFullScreen: boolean;
   description: string;
 
-  // graphFullScreen: boolean;
-  // viewportGraphShow: 'relationship' | 'authorization' | 'dependency';
-  // relationshipGraphShow: boolean;
-  // authorizationGraphShow: boolean;
-  // dependencyGraphShow: boolean;
   graphShow: boolean;
 
   rawProperties: {
@@ -109,11 +104,6 @@ const Model: ResourceVersionEditorModelType = {
     descriptionFullScreen: false,
     description: '',
 
-    // graphFullScreen: false,
-    // viewportGraphShow: 'relationship',
-    // relationshipGraphShow: true,
-    // authorizationGraphShow: true,
-    // dependencyGraphShow: true,
     graphShow: true,
 
     rawProperties: [],

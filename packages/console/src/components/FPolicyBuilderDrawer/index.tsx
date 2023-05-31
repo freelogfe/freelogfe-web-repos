@@ -15,7 +15,6 @@ import * as AHooks from 'ahooks';
 import FAddingEventDrawer from '@/components/FPolicyBuilderDrawer/AddingEventDrawer';
 import FComponentsLib from '@freelog/components-lib';
 import { Base64 } from 'js-base64';
-// import FHotspotTooltip from '@/components/FHotspotTooltip';
 
 const FDatePicker: any = DatePicker;
 
@@ -129,7 +128,6 @@ const initStates: FPolicyBuilderDrawerStates = {
       name: 'initial',
       nameError: '',
       isNameDuplicate: false,
-      // authorizationOptions: targetType === 'resource' ? resourceAuthColor : exhibitAuthColor,
       authorizationChecked: [],
       events: [],
     },
@@ -195,7 +193,6 @@ function FPolicyBuilder({
 
   AHooks.useDebounceEffect(
     () => {
-      // console.log(code_Input, 'useDebounceEffect*(*******');
       onDebounceChange_Code_Input();
     },
     [code_Input],
@@ -203,8 +200,6 @@ function FPolicyBuilder({
       wait: 300,
     },
   );
-
-  // console.log(code_Input, 'code_Inputcode_Inputcode_Input0923u4io234jl2k3jl');
 
   function resetAllStates() {
     setShowView(initStates.showView);
@@ -496,25 +491,6 @@ function FPolicyBuilder({
         });
         return;
       }
-
-      // const params: Parameters<typeof FServiceAPI.Transaction.individualAccounts>[0] = {
-      //   userId: FUtil.Tool.getUserIDByCookies(),
-      // };
-      // const { data } = await FServiceAPI.Transaction.individualAccounts(params);
-      //
-      // if (data.status === 0) {
-      //   setShowView('fail');
-      //   setFailResult({
-      //     errorText: '当前账户未激活',
-      //     title: titleInput,
-      //     code: code_Input,
-      //     translation: text || '',
-      //     view: [],
-      //   });
-      //   return;
-      // }
-
-      // setIsVerifying(false);
       setShowView('success');
       setSuccessResult({
         title: titleInput,
@@ -542,24 +518,6 @@ function FPolicyBuilder({
         return;
       }
 
-      // const params: Parameters<typeof FServiceAPI.Transaction.individualAccounts>[0] = {
-      //   userId: FUtil.Tool.getUserIDByCookies(),
-      // };
-      // const { data } = await FServiceAPI.Transaction.individualAccounts(params);
-      //
-      // if (data.status === 0) {
-      //   setShowView('fail');
-      //   setFailResult({
-      //     errorText: '当前账户未激活',
-      //     title: titleInput,
-      //     code: code_Input,
-      //     translation: translationText || '',
-      //     view: [],
-      //   });
-      //   return;
-      // }
-
-      // setIsVerifying(false);
       setShowView('success');
       setSuccessResult({
         title: titleInput,
@@ -716,8 +674,6 @@ function FPolicyBuilder({
 
   </Space>);
 
-  // console.log(combination_Data, 'combination_Data################@@@@@@@@@');
-
   return (<>
     <FDrawer
       title={<Space size={10}>
@@ -833,10 +789,6 @@ function FPolicyBuilder({
           </div>
 
           <div style={{ height: 30 }} />
-
-          {/*<div>*/}
-          {/*  <FComponentsLib.FContentText text={failResult?.errorText || ''} />*/}
-          {/*</div>*/}
 
           <PolicyShowcase
             content={failResult?.translation || ''}
@@ -1090,9 +1042,19 @@ function FPolicyBuilder({
                                             value={et.payment_Amount}
                                             onChange={(e) => {
                                               const value: string = e.target.value;
+                                              if (Number.isNaN(Number(value))) {
+                                                return;
+                                              }
+                                              const valueNum: number = Number(value);
                                               let payment_AmountError: string = '';
-                                              if (!FUtil.Regexp.MAX_2_DECIMAL_POSITIVE_NUMBER.test(value)) {
-                                                payment_AmountError = FI18n.i18nNext.t('alert_authplan_transactionevent_amount_error');
+                                              if (value === '') {
+                                                payment_AmountError = '请输入金额';
+                                              } else if (valueNum <= 0) {
+                                                payment_AmountError = '必须大于0';
+                                              } else if (!new RegExp(/^\d+(\.\d{0,2})?$/).test(value)) {
+                                                payment_AmountError = '不超过2位小数';
+                                              } else if (valueNum >= 1000000) {
+                                                payment_AmountError = FI18n.i18nNext.t('authplan_transactionevent_err_limitation');
                                               }
                                               onChangeCombinationEvent({
                                                 payment_Amount: e.target.value,
@@ -1355,22 +1317,6 @@ function FPolicyBuilder({
         </div>
         <div style={{ height: 30 }} />
         <PolicyTemplates
-          // onClickSelect={(num) => {
-          // if (editMode === 'composition' && JSON.stringify(combination_Data) === JSON.stringify(initStates.combination_Data)) {
-          //   return onClick_SelectTemplateBtn(num);
-          // }
-          // if (editMode === 'code' && code_Input === initStates.code_Input) {
-          //   return onClick_SelectTemplateBtn(num);
-          // }
-          // Modal.confirm({
-          //   title: FI18n.i18nNext.t('alert_plan_cover'),
-          //   okText: FI18n.i18nNext.t('btn_import'),
-          //   cancelText: FI18n.i18nNext.t('btn_cancel'),
-          //   onOk() {
-          //     // onClick_SelectTemplateBtn(num);
-          //   },
-          // });
-          // }}
           onSelect={({ title, text }) => {
             if (editMode === 'composition' && JSON.stringify(combination_Data) === JSON.stringify(initStates.combination_Data)) {
               return onClick_SelectTemplateBtn(title, text);
@@ -1402,94 +1348,6 @@ function FPolicyBuilder({
           onClickAddEventBtn(type);
         }}
       />
-      {/*<FDrawer*/}
-      {/*  width={640}*/}
-      {/*  visible={!!combination_AddingEventStateID}*/}
-      {/*  title={'添加事件或指令'}*/}
-      {/*  onClose={() => {*/}
-      {/*    set_Combination_AddingEventStateID('');*/}
-      {/*  }}*/}
-      {/*>*/}
-      {/*  <FTitleText type='h3' text={'事件'} />*/}
-      {/*  <div style={{ height: 20 }} />*/}
-      {/*  <div className={styles.templateEvent}>*/}
-      {/*    <div>*/}
-      {/*      <div style={{ width: 130 }}>*/}
-      {/*        <FContentText type='normal' text={'相对时间事件'} />*/}
-      {/*      </div>*/}
-      {/*      <div>*/}
-      {/*        <FContentText type='negative' text={'示例：1 周之后'} />*/}
-      {/*      </div>*/}
-      {/*    </div>*/}
-      {/*    <FComponentsLib.FRectBtn*/}
-      {/*      type='secondary'*/}
-      {/*      size='small'*/}
-      {/*      onClick={() => {*/}
-      {/*        onClickAddEventBtn('relativeTime');*/}
-      {/*      }}>选择</FRectBtn>*/}
-      {/*  </div>*/}
-
-      {/*  <div style={{ height: 10 }} />*/}
-
-      {/*  <div className={styles.templateEvent}>*/}
-      {/*    <div>*/}
-      {/*      <div style={{ width: 130 }}>*/}
-      {/*        <FContentText type='normal' text={'绝对时间事件'} />*/}
-      {/*      </div>*/}
-      {/*      <div>*/}
-      {/*        <FContentText type='negative' text={'示例：于 2021/05/03'} />*/}
-      {/*      </div>*/}
-      {/*    </div>*/}
-      {/*    <FComponentsLib.FRectBtn*/}
-      {/*      type='secondary'*/}
-      {/*      size='small'*/}
-      {/*      onClick={() => {*/}
-      {/*        onClickAddEventBtn('absoluteTime');*/}
-      {/*      }}>选择</FRectBtn>*/}
-      {/*  </div>*/}
-
-      {/*  <div style={{ height: 10 }} />*/}
-
-      {/*  <div className={styles.templateEvent}>*/}
-      {/*    <div>*/}
-      {/*      <div style={{ width: 130 }}>*/}
-      {/*        <FContentText type='normal' text={'支付事件'} />*/}
-      {/*      </div>*/}
-      {/*      <div>*/}
-      {/*        <FContentText type='negative' text={'示例：支付 10 羽币 至 我的代币账户'} />*/}
-      {/*      </div>*/}
-      {/*    </div>*/}
-      {/*    <FComponentsLib.FRectBtn*/}
-      {/*      type='secondary'*/}
-      {/*      size='small'*/}
-      {/*      onClick={() => {*/}
-      {/*        onClickAddEventBtn('payment');*/}
-      {/*      }}*/}
-      {/*    >选择</FRectBtn>*/}
-      {/*  </div>*/}
-
-      {/*  <div style={{ height: 30 }} />*/}
-
-      {/*  <FTitleText type='h3' text={'指令'} />*/}
-
-      {/*  <div style={{ height: 20 }} />*/}
-
-      {/*  <div className={styles.templateEvent}>*/}
-      {/*    <div>*/}
-      {/*      <FContentText type='normal' text={'状态机终止，停止接收事件'} />*/}
-      {/*    </div>*/}
-      {/*    <FComponentsLib.FRectBtn*/}
-      {/*      type='secondary'*/}
-      {/*      size='small'*/}
-      {/*      disabled={!!(combination_Data.find((cd) => {*/}
-      {/*        return cd.randomID === combination_AddingEventStateID;*/}
-      {/*      })?.events.length)}*/}
-      {/*      onClick={() => {*/}
-      {/*        onClickAddEventBtn('terminate');*/}
-      {/*      }}*/}
-      {/*    >选择</FRectBtn>*/}
-      {/*  </div>*/}
-      {/*</FDrawer>*/}
     </FDrawer>
 
   </>);
@@ -1703,7 +1561,7 @@ function dataToCode(data: CombinationStructureType): string {
 
       const targetStateName: string = data.find((dt) => dt.randomID === (et as any).target)?.name || '';
       if (et.type === 'payment') {
-        result += `~freelog.TransactionEvent("${et.payment_Amount || ''}","self.account") => ${targetStateName}`;
+        result += `~freelog.TransactionEvent("${Number(et.payment_Amount) || ''}","self.account") => ${targetStateName}`;
       } else if (et.type === 'relativeTime') {
         result += `~freelog.RelativeTimeEvent("${et.relativeTime_Num || ''}","${et.relativeTime_Unit}") => ${targetStateName}`;
       } else if (et.type === 'absoluteTime') {

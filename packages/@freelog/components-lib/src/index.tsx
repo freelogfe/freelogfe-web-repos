@@ -10,6 +10,7 @@ import FContractStatusBadge from './FContractStatusBadge';
 import FPaymentPasswordInput from './FPaymentPasswordInput';
 import FCopyToClipboard from './FCopyToClipboard';
 import FHotspotTooltip, {setHotspotTooltipVisible} from './FHotspotTooltip';
+import FInput from './FInput';
 
 const FComponentsLib = {
     FIcons,
@@ -29,5 +30,6 @@ const FComponentsLib = {
     FCopyToClipboard,
     FHotspotTooltip,
     fSetHotspotTooltipVisible: setHotspotTooltipVisible,
+    FInput,
 };
 export default FComponentsLib;

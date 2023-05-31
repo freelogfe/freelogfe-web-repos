@@ -2,6 +2,7 @@ import * as React from 'react';
 import fMessage from '../fMessage';
 import FTooltip from '../FTooltip';
 import styles from './index.less';
+
 const QRCode = require('qrcode.react');
 
 /** 分享按钮 */
@@ -39,7 +40,7 @@ export const FShare = (props: {
     { id: 'qq', name: 'QQ', icon: 'fl-icon-QQ', bgColor: '#5382d3' },
     { id: 'weibo', name: '微博', icon: 'fl-icon-weibo', bgColor: '#ff6f68' },
     { id: 'wechat', name: '微信', icon: 'fl-icon-weixin', bgColor: '#1ec76f' },
-    { id: 'douban', name: '豆瓣', icon: 'fl-icon-douban', bgColor: '#42a151' },
+    // { id: 'douban', name: '豆瓣', icon: 'fl-icon-douban', bgColor: '#42a151' },
   ];
 
   /** 关闭弹窗 */
@@ -63,7 +64,8 @@ export const FShare = (props: {
       );
     } else if (item.id === 'douban') {
       // 豆瓣
-      window.open(`https://www.douban.com/share/service?url=${url}&title=${title}&image=${cover}`);
+      // window.open(`https://www.douban.com/share/service?url=${url}&title=${title}&image=${cover}`);
+      window.open(`https://www.douban.com/share/service?url=${encodeURIComponent(url)}&title=${encodeURIComponent(title)}&image=${encodeURIComponent(cover || '')}`);
     } else if (['qq', 'wechat'].includes(item.id)) {
       // qq、微信
       const qrcodeInfo = { name: item.name, url };
@@ -93,13 +95,13 @@ export const FShare = (props: {
             <div className={styles['share-popup']} onClick={(e) => e.stopPropagation()}>
               <div className={styles['share-title']}>分享</div>
 
-              <input id="url" className={styles['hidden-input']} value={url} readOnly />
+              <input id='url' className={styles['hidden-input']} value={url} readOnly />
 
               <textarea
                 className={styles.textarea}
                 value={shareText}
                 onChange={(e) => setShareText(e.target.value)}
-              ></textarea>
+              />
 
               <div className={styles['btns-box']}>
                 <div className={styles['share-btns']}>
@@ -112,7 +114,7 @@ export const FShare = (props: {
                           style={{ backgroundColor: item.bgColor }}
                           onClick={() => share(item)}
                         >
-                          <i className={`freelog ${item.icon} ${styles.freelog}`}></i>
+                          <i className={`freelog ${item.icon} ${styles.freelog}`} />
                         </div>
                       </FTooltip>
                     );
@@ -131,7 +133,7 @@ export const FShare = (props: {
               <i
                 className={`freelog fl-icon-guanbi ${styles['close-btn']}`}
                 onClick={() => setQrcodeShow(false)}
-              ></i>
+              />
               <div className={styles['qrcode-text']}>分享到{qrcodeInfo.name}</div>
               <QRCode value={qrcodeInfo.url} size={220} />
               <div className={styles['qrcode-text']}>使用{qrcodeInfo.name}扫一扫完成分享</div>

@@ -24,7 +24,8 @@ function FOperationCategoryFilter({ value: selectedOperationCategoryIDs, onChang
   // const [selectedOperationCategoryIDs, set_selectedOperationCategoryIDs] = React.useState<string[]>(['#all']);
 
   AHooks.useMount(async () => {
-    const { data: data_operationCategories }: { data: any[] } = await FServiceAPI.Operation.operationCategories();
+    // @ts-ignore
+    const { data: data_operationCategories }: { data: any[] } = await FServiceAPI.Operation.operationCategories({ status: 1 });
     const payload: HandledOperationCategories = [];
     flatOperationCategories(data_operationCategories, '', 0, payload);
     // console.log(payload, 'payloadoisdlfkjsd;lkfjodsijflksdjflkjl');

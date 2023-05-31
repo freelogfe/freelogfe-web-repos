@@ -5,6 +5,7 @@ import FCustomOptions from '../FCustomOptions';
 import FDrawer from '../../FDrawer';
 import FComponentsLib from '@freelog/components-lib';
 import fMessage from '@/components/fMessage';
+import { FI18n } from '../../../../../@freelog/tools-lib';
 
 interface FAddCustomOptionsDrawerProps {
 
@@ -85,7 +86,7 @@ function FAddCustomOptionsDrawer({
       set_dataSource(defaultData.map((dd) => {
         return {
           key: dd.key,
-          keyError: disabledKeys.includes(dd.key) ? '键不能重复' : '',
+          keyError: disabledKeys.includes(dd.key) ? FI18n.i18nNext.t('alert_key_exist') : '',
           name: dd.name,
           nameError: disabledNames.includes(dd.name) ? '名称不能重复' : '',
           description: dd.description,
@@ -106,7 +107,7 @@ function FAddCustomOptionsDrawer({
 
   return (<FDrawer
     // title={'添加自定义选项'}
-    title={'配置名称'}
+    title={FI18n.i18nNext.t('resourceoptions_add_title')}
     open={visible}
     onClose={() => {
       set_visible(false);
@@ -125,7 +126,7 @@ function FAddCustomOptionsDrawer({
         onClick={() => {
           set_visible(false);
         }}
-      >取消</FComponentsLib.FTextBtn>
+      >{FI18n.i18nNext.t('btn_cancel')}</FComponentsLib.FTextBtn>
       <FComponentsLib.FRectBtn
         disabled={dataSource.length === 0
         || dataSource.some((eds) => {
@@ -139,27 +140,29 @@ function FAddCustomOptionsDrawer({
             || eds.descriptionError !== '';
         })}
         onClick={() => {
-          if (dataSource.some((ds) => {
-            return ds.select.join(',').length > 500;
-          })) {
-            fMessage('存在可配置项超过500个字符');
-            return;
-          }
+          // if (dataSource.some((ds) => {
+          //   return ds.select.join(',').length > 500;
+          // })) {
+          //   fMessage('存在可配置项超过500个字符');
+          //   return;
+          // }
           onOk && onOk(dataSource.map((ds) => {
             return {
               key: ds.key,
               name: ds.name,
               description: ds.description,
               type: ds.type,
-              input: ds.input,
-              select: ds.select.map((s) => {
-                return s.value;
-              }),
+              input: ds.type === 'input' ? ds.input : '',
+              select: ds.type === 'select'
+                ? ds.select.map((s) => {
+                  return s.value;
+                })
+                : [],
             };
           }));
           set_visible(false);
         }}
-      >确定</FComponentsLib.FRectBtn>
+      >{FI18n.i18nNext.t('btn_save')}</FComponentsLib.FRectBtn>
     </Space>}
   >
 

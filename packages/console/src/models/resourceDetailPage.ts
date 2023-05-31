@@ -6,7 +6,7 @@ import { history } from 'umi';
 import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 import fMessage from '@/components/fMessage';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
-import { fileAttrUnits } from '@/utils/format';
+// import { fileAttrUnits } from '@/utils/format';
 
 export interface ResourceDetailPageModelState {
   page_State: 'loading' | 'details' | 'signPage';
@@ -94,7 +94,7 @@ export interface ResourceDetailPageModelState {
     }[];
   };
 
-  // graphShow: boolean;
+  graphShow: boolean;
 }
 
 export interface ChangeAction extends AnyAction {
@@ -216,9 +216,7 @@ const initStates: ResourceDetailPageModelState = {
     customOptions: [],
   },
 
-  // graph_FullScreen: false,
-  // graph_ViewportGraphShow: 'dependency',
-  // graphShow: true,
+  graphShow: true,
 };
 
 const Model: ResourceDetailPageModelType = {
@@ -254,11 +252,12 @@ const Model: ResourceDetailPageModelType = {
       });
     },
     * onChangeVersion({ payload }: OnChangeVersionAction, { put }: EffectsCommandMap) {
-      // console.log('onChangeVersion 9832piohksdflkj');
+      console.log(payload, 'onChangeVersion 9832piohksdflkj');
       yield put({
         type: 'change',
         payload: {
-          version: payload.version,
+          // version: '',
+          resourceVersion_SelectedVersion: payload.version,
         },
       });
 
@@ -783,9 +782,6 @@ const Model: ResourceDetailPageModelType = {
           description: string;
         }
       } = yield call(FServiceAPI.Resource.resourceVersionInfo1, params);
-      // console.log(data, 'redataceVersionInfo1239weiojfasdlkfjslkdata');
-      // console.log(params, 'params0932jklsdjflsdk');
-      // console.log(data, 'data0932jklsdjflsdk');
 
       yield put<ChangeAction>({
         type: 'change',

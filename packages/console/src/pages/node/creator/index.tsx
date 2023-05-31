@@ -70,13 +70,18 @@ function NodeCreator({ nodeCreatorPage, dispatch }: NodeCreatorProps) {
         <div style={{ height: 80 }} />
         <Space size={10}>
           <div className={styles.domain}>
-            <FComponentsLib.FContentText type='negative' text={'节点地址'} />
+            <FComponentsLib.FContentText
+              type='negative'
+              // text={'节点地址'}
+              text={FI18n.i18nNext.t('createnode_input_nodeaddress_label')}
+            />
             <div className={styles.inputWrap}>
               <FInput
                 value={nodeCreatorPage.nodeDomain}
                 // debounce={300}
                 className={styles.input}
-                placeholder={'输入节点地址'}
+                // placeholder={'输入节点地址'}
+                placeholder={FI18n.i18nNext.t('createnode_input_nodeaddress_hint')}
                 onChange={(e) => {
                   dispatch<OnChange_DomainInput_Action>({
                     type: 'nodeCreatorPage/onChange_DomainInput',
@@ -104,7 +109,11 @@ function NodeCreator({ nodeCreatorPage, dispatch }: NodeCreatorProps) {
         <pre className={styles.errorTip}>{nodeCreatorPage.nodeDomainError}</pre>
         <Space size={10}>
           <div className={styles.name}>
-            <FComponentsLib.FContentText type='negative' text={'节点名称'} />
+            <FComponentsLib.FContentText
+              type='negative'
+              // text={'节点名称'}
+              text={FI18n.i18nNext.t('createnode_input_nodeid_label')}
+            />
             <div className={styles.inputWrap}>
               <FInput
                 value={nodeCreatorPage.nodeName}
@@ -121,7 +130,8 @@ function NodeCreator({ nodeCreatorPage, dispatch }: NodeCreatorProps) {
                   });
                 }}
                 className={styles.input}
-                placeholder={'输入节点名称'}
+                // placeholder={'输入节点名称'}
+                placeholder={FI18n.i18nNext.t('createnode_input_nodeid_hint')}
               />
             </div>
           </div>
@@ -151,6 +161,7 @@ function NodeCreator({ nodeCreatorPage, dispatch }: NodeCreatorProps) {
         </FComponentsLib.FHotspotTooltip>
 
         <div style={{ height: 60 }} />
+        <FComponentsLib.FContentText text={FI18n.i18nNext.t('createnode_input_nodeid_alarm')} type={'additional2'} />
         <FComponentsLib.FContentText text={'每个用户最多可创建3个节点，节点创建之后无法删除，请谨慎操作。'} type={'additional2'} />
       </div>
     </FContentLayout>

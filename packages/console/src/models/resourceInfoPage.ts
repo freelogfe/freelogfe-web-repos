@@ -4,6 +4,7 @@ import { DvaReducer } from './shared';
 import { FetchDataSourceAction, ResourceInfoModelState } from '@/models/resourceInfo';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import { ConnectState } from '@/models/connect';
+import { FetchInfoAction, OnUpdate_Data_Action } from '@/models/resourceSider';
 
 // import data from '@/utils/category';
 
@@ -219,7 +220,7 @@ const Model: ResourceInfoPageModelType = {
         payload: {
           resourceInfo: {
             ...resourceInfoPage.resourceInfo,
-            intro: resourceInfoPage.introduction_EditorText,
+            intro: resourceInfoPage.introduction_EditorText.trim(),
           },
           introduction_IsEditing: false,
         },
@@ -231,6 +232,8 @@ const Model: ResourceInfoPageModelType = {
         type: 'change',
         payload: {
           introduction_IsEditing: false,
+          introduction_EditorText: '',
+          introduction_EditorText_Error: '',
         },
       });
     },
@@ -265,9 +268,9 @@ const Model: ResourceInfoPageModelType = {
         },
       });
 
-      yield put<FetchDataSourceAction>({
-        type: 'resourceInfo/fetchDataSource',
-        payload: resourceInfoPage.resourceID,
+      yield put<OnUpdate_Data_Action>({
+        type: 'resourceSider/onUpdate_Data',
+        // payload: resourceInfoPage.resourceID,
       });
     },
     * onChange_Labels({ payload }: OnChange_Labels_Action, { select, call, put }: EffectsCommandMap) {

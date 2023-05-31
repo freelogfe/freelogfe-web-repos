@@ -6,16 +6,12 @@ import UploadCancel from '../UploadCancel';
 import UploadSameName from '../UploadSameName';
 import UploadFailed from '../UploadFailed';
 import { Canceler } from 'axios';
-// import { StorageHomePageModelState } from '@/models/storageHomePage';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 import { getFilesSha1Info } from '@/utils/service';
 import * as AHooks from 'ahooks';
 import { RcFile } from 'antd/lib/upload/interface';
-// import FWorkerPool from '@/utils/FWorkerPool';
 import fileSha1Queue from '@/utils/FileSha1Queue';
-
-// import workerize from 'workerize';
 
 interface TaskProps {
   task: {
@@ -51,12 +47,10 @@ function Task({
 
   AHooks.useMount(async () => {
     fileSha1.current = await fileSha1Queue.getSha1(task.file);
-    // console.log('useMount sdiofjsd;lkfjsldkfjlksdjflksdjlkfjdslkjflksdjflkjlk');
     await verifySameName();
   });
 
   AHooks.useUnmount(() => {
-    // console.log('(*(**((*(((((( CCCCCCCCCCCC');
     canceler.current && canceler.current();
   });
 
@@ -96,14 +90,9 @@ function Task({
       canceler.current = cancel;
       set_progress(0);
       try {
-        // console.log( 'promise sdf09opijweklfjsdlkafjlskdjflksdjflksjdflkjl');
         const { data } = await promise;
-        // console.log(data, 'promise sdf09opijweklfjsdlkafjlskdjflksdjflksjdflkjl');
       } catch (e) {
         if (taskState !== 'uploading') {
-          // console.log('failed  dsifojmsdklfjsda;lfkjsdl;kfj;43wetf3w2rfWEDSFASDF');
-          // set_taskState('failed');
-          // set_progress(0);
           onFail && onFail({ uid: task.uid, objectName: task.name });
           return;
         }
@@ -146,7 +135,6 @@ function Task({
       taskState === 'uploading' && (<Uploading
         progress={progress}
         cancel={() => {
-          console.log('CCCCCCCsdijflksdjalkaasoidfj;lksdjlk ;lasdkjf;lksjd klj');
           canceler.current && canceler.current();
           set_taskState('canceled');
           set_progress(0);

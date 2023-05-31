@@ -3,6 +3,7 @@ import styles from './index.less';
 import { Space } from 'antd';
 import Property from './Property';
 import FComponentsLib from '@freelog/components-lib';
+import { FI18n } from '@freelog/tools-lib';
 
 export interface Data {
   key: string;
@@ -138,5 +139,34 @@ function verifyDuplication(data: Data[], disabledKeys: string[], disabledNames: 
         ...d,
         nameError: (nameMap.has(d.name) && nameMap.get(d.name) !== 1) ? nameErrorText : '',
       };
+    })
+    .map<Data>((d) => {
+      return {
+        ...d,
+        select: verifyDuplicationOptions(d.select),
+      };
     });
 }
+
+function verifyDuplicationOptions(selectInputs: Data['select']): Data['select'] {
+  const map: Map<string, number> = new Map<string, number>();
+  for (const item of selectInputs) {
+    if (item.value === '') {
+      continue;
+    }
+    map.set(item.value, (map.get(item.value) || 0) + 1);
+  }
+  // const errorText: string = '不能重复';
+  const errorText: string = FI18n.i18nNext.t('alert_cutstom_option_value_exist');
+
+  return selectInputs.map<Data['select'][number]>((d) => {
+    if (d.error !== '' && d.error !== errorText) {
+      return d;
+    }
+    return {
+      ...d,
+      error: (map.get(d.value) || 0) > 1 ? errorText : '',
+    };
+  });
+}
+

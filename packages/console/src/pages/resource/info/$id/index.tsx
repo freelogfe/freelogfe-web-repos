@@ -3,7 +3,7 @@ import styles from './index.less';
 import { Space } from 'antd';
 import FLabelEditor from '@/components/FLabelEditor';
 import FUploadResourceCover from '@/pages/resource/components/FUploadResourceCover';
-import FIntroductionEditor from '@/pages/resource/components/FIntroductionEditor';
+// import FIntroductionEditor from '@/pages/resource/components/FIntroductionEditor';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import { ConnectState, ResourceInfoPageModelState } from '@/models/connect';
@@ -132,6 +132,7 @@ function Info({ dispatch, resourceInfoPage, match }: InfoProps) {
                         type: 'resourceInfoPage/onClick_SaveIntroductionBtn',
                       });
                     }}
+                    disabled={resourceInfoPage.introduction_EditorText_Error !== ''}
                   >{FI18n.i18nNext.t('save')}</FComponentsLib.FTextBtn>
                 </>)
               }
@@ -140,23 +141,30 @@ function Info({ dispatch, resourceInfoPage, match }: InfoProps) {
 
             {
               resourceInfoPage.introduction_IsEditing
-                ? (<FIntroductionEditor
-                  value={resourceInfoPage.introduction_EditorText}
-                  errorText={resourceInfoPage.introduction_EditorText_Error}
-                  onChange={(e) => {
-                    dispatch<OnChange_IntroductionEditor_Action>({
-                      type: 'resourceInfoPage/onChange_IntroductionEditor',
-                      payload: {
-                        value: e.target.value,
-                      },
-                    });
-                  }
+                ? (<div>
+                  <FComponentsLib.FInput.FMultiLine
+                    value={resourceInfoPage.introduction_EditorText}
+                    lengthLimit={1000}
+                    onChange={(e) => {
+                      dispatch<OnChange_IntroductionEditor_Action>({
+                        type: 'resourceInfoPage/onChange_IntroductionEditor',
+                        payload: {
+                          value: e.target.value,
+                        },
+                      });
+                    }}
+                  />
 
+                  {
+                    resourceInfoPage.introduction_EditorText_Error !== '' && (<>
+                      <div style={{ height: 5 }} />
+                      <div style={{ color: '#EE4040' }}>{resourceInfoPage.introduction_EditorText_Error}</div>
+                    </>)
                   }
-                />)
+                </div>)
                 : resourceInfoPage.resourceInfo.intro !== ''
                   ? (<div className={styles.aboutPanel}>
-                    <FComponentsLib.FContentText text={resourceInfoPage.resourceInfo.intro} />
+                    <pre>{resourceInfoPage.resourceInfo.intro}</pre>
                   </div>)
                   : (<FComponentsLib.FRectBtn
                     type='default'
@@ -167,7 +175,6 @@ function Info({ dispatch, resourceInfoPage, match }: InfoProps) {
                       // onChangeIsEditing(true);
                     }}
                   >
-                    {/*{FUtil.I18n.message('resource_short_description')}*/}
                     添加简介
                   </FComponentsLib.FRectBtn>)
             }
