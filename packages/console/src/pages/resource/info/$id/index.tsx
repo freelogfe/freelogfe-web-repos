@@ -212,7 +212,10 @@ function Info({ dispatch, resourceInfoPage, match }: InfoProps) {
             />
           </FFormLayout.FBlock>
           <FFormLayout.FBlock title={FI18n.i18nNext.t('resource_tag')}>
-            <FResourceLabelEditor />
+            <FResourceLabelEditor
+              value={resourceInfoPage.resourceInfo.tags}
+              resourceType={resourceInfoPage.resourceInfo.resourceType[resourceInfoPage.resourceInfo.resourceType.length - 1 || 0]}
+            />
           </FFormLayout.FBlock>
         </FFormLayout>}
     </FLeftSiderLayout>
