@@ -26,6 +26,7 @@ import { FI18n } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 import FSkeletonNode from '@/components/FSkeletonNode';
 import * as AHooks from 'ahooks';
+import FResourceLabelEditor from '@/components/FResourceLabelEditor';
 
 interface InfoProps extends RouteComponentProps<{ id: string; }> {
   dispatch: Dispatch;
@@ -209,6 +210,9 @@ function Info({ dispatch, resourceInfoPage, match }: InfoProps) {
                 });
               }}
             />
+          </FFormLayout.FBlock>
+          <FFormLayout.FBlock title={FI18n.i18nNext.t('resource_tag')}>
+            <FResourceLabelEditor />
           </FFormLayout.FBlock>
         </FFormLayout>}
     </FLeftSiderLayout>

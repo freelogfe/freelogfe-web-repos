@@ -2,7 +2,6 @@ import * as React from 'react';
 import styles from './index.less';
 import { Input, InputRef } from 'antd';
 import { ChangeEventHandler, KeyboardEventHandler } from 'react';
-// import {FSingleLineInput} from "../index";
 
 export interface FSingleLineInputProps {
   value: string;
