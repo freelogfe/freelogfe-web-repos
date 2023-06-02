@@ -5,7 +5,7 @@ import FCustomOptions from '../FCustomOptions';
 import FDrawer from '../../FDrawer';
 import FComponentsLib from '@freelog/components-lib';
 import fMessage from '@/components/fMessage';
-import { FI18n } from '../../../../../@freelog/tools-lib';
+import { FI18n } from '@freelog/tools-lib';
 
 interface FAddCustomOptionsDrawerProps {
 

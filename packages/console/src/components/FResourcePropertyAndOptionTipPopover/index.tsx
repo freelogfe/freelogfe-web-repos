@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import { Space } from 'antd';
-import FComponentsLib from '../../../../@freelog/components-lib';
+import FComponentsLib from '@freelog/components-lib';
 import FPopover from '@/components/FPopover';
 
 interface FResourcePropertyAndOptionTipPopoverProps {
