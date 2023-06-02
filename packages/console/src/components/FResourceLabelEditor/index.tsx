@@ -82,11 +82,6 @@ function FResourceLabelEditor($prop: FResourceLabelEditorProps) {
     });
   });
 
-  // function onPressEnter() {
-  //   // const v = e.target.value;
-  //
-  // }
-
   if ($prop.value.length >= 20) {
     return (<div>
       <div className={styles.selectedLabels}>
@@ -178,7 +173,10 @@ function FResourceLabelEditor($prop: FResourceLabelEditorProps) {
           return (<label key={v} className={styles.selectedLabel}>
             <span>{v}</span>
             <FComponentsLib.FIcons.FClose
-              style={{ fontSize: 12 }}
+              style={{
+                fontSize: 12,
+                transform: 'scale(.8)',
+              }}
               onClick={() => {
                 // set_errorText('');
                 $prop.onChange && $prop.onChange($prop.value.filter((i, j) => j !== w));

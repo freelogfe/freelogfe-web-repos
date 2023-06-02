@@ -18,6 +18,7 @@ import { FI18n } from '@freelog/tools-lib';
 import FCoverImage from '@/components/FCoverImage';
 import FUploadCover from '@/components/FUploadCover';
 import FComponentsLib from '@freelog/components-lib';
+import FExhibitLabelEditor from '@/components/FExhibitLabelEditor';
 
 interface InfoProps {
   dispatch: Dispatch;
@@ -139,8 +140,19 @@ function Info({ dispatch, exhibitInfoPage }: InfoProps) {
 
     <FComponentsLib.FTitleText text={FI18n.i18nNext.t('exhibit_tag')} type='h4' />
     <div style={{ height: 15 }} />
-    <FLabelEditor
-      values={exhibitInfoPage.side_ExhibitTags}
+    {/*<FLabelEditor*/}
+    {/*  values={exhibitInfoPage.side_ExhibitTags}*/}
+    {/*  onChange={(value) => {*/}
+    {/*    dispatch<UpdateBaseInfoAction>({*/}
+    {/*      type: 'exhibitInfoPage/updateBaseInfo',*/}
+    {/*      payload: {*/}
+    {/*        side_ExhibitTags: value,*/}
+    {/*      },*/}
+    {/*    });*/}
+    {/*  }}*/}
+    {/*/>*/}
+    <FExhibitLabelEditor
+      value={exhibitInfoPage.side_ExhibitTags}
       onChange={(value) => {
         dispatch<UpdateBaseInfoAction>({
           type: 'exhibitInfoPage/updateBaseInfo',
@@ -148,8 +160,7 @@ function Info({ dispatch, exhibitInfoPage }: InfoProps) {
             side_ExhibitTags: value,
           },
         });
-      }}
-    />
+      }}/>
     <div style={{ height: 30 }} />
   </>);
 }

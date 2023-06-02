@@ -1,0 +1,38 @@
+@import '../../config.less';
+
+.Input {
+  width: 200px !important;
+  //display: block;
+}
+
+.errorTip {
+  color: @f-error-color1;
+  font-size: 12px;
+}
+
+.selectedLabels {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  flex-wrap: wrap;
+
+  .selectedLabel {
+    font-size: 12px;
+    height: 24px;
+    padding: 0 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    cursor: pointer;
+    background-color: @f-primary-color;
+    color: white;
+    border-radius: 12px;
+  }
+}
+
+
+
+
+

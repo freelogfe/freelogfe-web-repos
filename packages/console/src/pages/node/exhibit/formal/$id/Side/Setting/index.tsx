@@ -24,16 +24,12 @@ import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import { ConnectState } from '@/models/connect';
 import FTooltip from '@/components/FTooltip';
-// import FCustomOptionsEditorDrawer from '@/components/FCustomOptionsEditorDrawer';
-// import FCustomOptionEditorDrawer from '@/components/FCustomOptionEditorDrawer';
 import fConfirmModal from '@/components/fConfirmModal';
 import { FI18n } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 import FOverflowTooltip from '@/components/FOverflowTooltip';
 import fResourceOptionEditor from '@/components/fResourceOptionEditor';
 import FResourcePropertyAndOptionTipPopover from '@/components/FResourcePropertyAndOptionTipPopover';
-
-// import fResourcePropertyEditor from '@/components/fResourcePropertyEditor';
 
 interface SettingProps {
   dispatch: Dispatch;
