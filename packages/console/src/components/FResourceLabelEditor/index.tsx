@@ -4,11 +4,12 @@ import FComponentsLib from '@freelog/components-lib';
 import { FI18n, FServiceAPI } from '@freelog/tools-lib';
 import FTooltip from '@/components/FTooltip';
 import * as AHooks from 'ahooks';
+import { KeyboardEventHandler } from 'react';
 
 interface FResourceLabelEditorProps {
   value: string[];
   resourceType: string;
-  onChange?: (values: string[]) => void;
+  onChange?: (value: string[]) => void;
 }
 
 interface FResourceLabelEditorStates {
@@ -22,19 +23,27 @@ interface FResourceLabelEditorStates {
     name: string;
     description: string;
   }[];
+
+  input: string;
+  inputError: string;
 }
 
 const initState: FResourceLabelEditorStates = {
   labels1: [],
   labels2: [],
+
+  input: '',
+  inputError: '',
 };
 
-function FResourceLabelEditor({ value, resourceType, onChange }: FResourceLabelEditorProps) {
+function FResourceLabelEditor($prop: FResourceLabelEditorProps) {
 
-  const [state, setState] = AHooks.useSetState<FResourceLabelEditorStates>(initState);
+  const inputElementRef = React.useRef<HTMLInputElement>(null);
+
+  const [$state, $setState] = AHooks.useSetState<FResourceLabelEditorStates>(initState);
 
   AHooks.useMount(async () => {
-    if (resourceType === '') {
+    if ($prop.resourceType === '') {
       return;
     }
     const { data: data_availableTags }: {
@@ -44,10 +53,10 @@ function FResourceLabelEditor({ value, resourceType, onChange }: FResourceLabelE
         tagName: string;
       }[];
     } = await FServiceAPI.Resource.availableTags({
-      resourceType: resourceType,
+      resourceType: $prop.resourceType,
     });
     // console.log(data, '*****LJLKJLKJ');
-    setState({
+    $setState({
       labels1: data_availableTags
         .filter((d) => {
           return d.tagType === 1;
@@ -73,26 +82,89 @@ function FResourceLabelEditor({ value, resourceType, onChange }: FResourceLabelE
     });
   });
 
+  // function onPressEnter() {
+  //   // const v = e.target.value;
+  //
+  // }
+
   return (<div>
     <FComponentsLib.FInput.FSingleLine
       lengthLimit={-1}
-      value={''}
+      value={$state.input}
       placeholder={FI18n.i18nNext.t('hint_add_resource_tag')}
       className={[styles.Input].join(' ')}
+      onChange={(e) => {
+        const value = e.target.value.replaceAll('#', '');
+        // set_input(value);
+        $setState({
+          input: value,
+        });
+
+        let errorText: string = '';
+        // if (!value) {
+        //   errorText = '不能为空';
+        // } else
+        if (value.length > 20) {
+          errorText = '不超过20个字符';
+        } else if ($prop.value.includes(value)) {
+          errorText = '不能有重复';
+        }
+        // set_errorText(errorText);
+        $setState({
+          inputError: errorText,
+        });
+      }}
+      onPressEnter={() => {
+        if ($state.inputError) {
+          return;
+        }
+        if ($state.input === '') {
+          // onChangeInput('');
+          // onChangeErrorText('');
+          inputElementRef.current?.blur();
+          return;
+        }
+        if (!$state.input) {
+          $setState({
+            inputError: '不能为空',
+          });
+          return;
+        }
+        $setState({
+          input: '',
+        });
+        $prop.onChange && $prop.onChange([
+          ...$prop.value,
+          $state.input.replace(new RegExp(/#/, 'g'), ''),
+        ]);
+      }}
     />
-    <div style={{ height: 5 }} />
-    <div className={styles.errorTip}>请输入</div>
+    {
+      $state.inputError !== '' && (<>
+        <div style={{ height: 5 }} />
+        <div className={styles.errorTip}>{$state.inputError}</div>
+      </>)
+    }
+
     <div style={{ height: 20 }} />
     <div className={styles.selectedLabels}>
       {
-        value.map((v) => {
+        $prop.value.map((v, w) => {
           return (<label key={v} className={styles.selectedLabel}>
             <span>{v}</span>
-            <FComponentsLib.FIcons.FClose style={{ fontSize: 12 }} />
+            <FComponentsLib.FIcons.FClose
+              style={{ fontSize: 12 }}
+              onClick={() => {
+                // set_errorText('');
+                $prop.onChange && $prop.onChange($prop.value.filter((i, j) => j !== w));
+                $setState({
+                  inputError: $prop.value.includes($state.input) ? '不能有重复' : '',
+                });
+              }}
+            />
           </label>);
         })
       }
-
 
     </div>
 
@@ -102,14 +174,22 @@ function FResourceLabelEditor({ value, resourceType, onChange }: FResourceLabelE
     <div style={{ height: 10 }} />
     <div className={styles.Labels}>
       {
-        state.labels1.map((l) => {
+        $state.labels1.map((l) => {
+          const disabled: boolean = $prop.value.includes(l.name);
           return (<FTooltip
             title={l.description}
             placement={'top'}
             key={l.id}
             visible={l.description === '' ? false : undefined}
           >
-            <label className={[styles.Label, value.includes(l.name) ? styles.selected : ''].join(' ')}>{l.name}</label>
+            <label
+              onClick={() => {
+                if (disabled) {
+                  return;
+                }
+                $prop.onChange && $prop.onChange([...$prop.value, l.name]);
+              }}
+              className={[styles.Label, $prop.value.includes(l.name) ? styles.selected : ''].join(' ')}>{l.name}</label>
           </FTooltip>);
         })
       }
@@ -121,14 +201,22 @@ function FResourceLabelEditor({ value, resourceType, onChange }: FResourceLabelE
     <div style={{ height: 10 }} />
     <div className={styles.Labels}>
       {
-        state.labels2.map((l) => {
+        $state.labels2.map((l) => {
+          const disabled: boolean = $prop.value.includes(l.name);
           return (<FTooltip
             title={l.description}
             placement={'top'}
             key={l.id}
             visible={l.description === '' ? false : undefined}
           >
-            <label className={[styles.Label, value.includes(l.name) ? styles.selected : ''].join(' ')}>#{l.name}#</label>
+            <label
+              onClick={() => {
+                if (disabled) {
+                  return;
+                }
+                $prop.onChange && $prop.onChange([...$prop.value, l.name]);
+              }}
+              className={[styles.Label, $prop.value.includes(l.name) ? styles.selected : ''].join(' ')}>{l.name}</label>
           </FTooltip>);
         })
       }

@@ -196,11 +196,25 @@ function Info({ dispatch, resourceInfoPage, match }: InfoProps) {
               }}
             />
           </FFormLayout.FBlock>
+          {/*<FFormLayout.FBlock title={FI18n.i18nNext.t('resource_tag')}>*/}
+          {/*  <FLabelEditor*/}
+          {/*    // showRecommendation={true}*/}
+          {/*    resourceType={resourceInfoPage.resourceInfo.resourceType[resourceInfoPage.resourceInfo.resourceType.length - 1 || 0]}*/}
+          {/*    values={resourceInfoPage.resourceInfo.tags}*/}
+          {/*    onChange={(value) => {*/}
+          {/*      dispatch<OnChange_Labels_Action>({*/}
+          {/*        type: 'resourceInfoPage/onChange_Labels',*/}
+          {/*        payload: {*/}
+          {/*          value: value,*/}
+          {/*        },*/}
+          {/*      });*/}
+          {/*    }}*/}
+          {/*  />*/}
+          {/*</FFormLayout.FBlock>*/}
           <FFormLayout.FBlock title={FI18n.i18nNext.t('resource_tag')}>
-            <FLabelEditor
-              // showRecommendation={true}
+            <FResourceLabelEditor
+              value={resourceInfoPage.resourceInfo.tags}
               resourceType={resourceInfoPage.resourceInfo.resourceType[resourceInfoPage.resourceInfo.resourceType.length - 1 || 0]}
-              values={resourceInfoPage.resourceInfo.tags}
               onChange={(value) => {
                 dispatch<OnChange_Labels_Action>({
                   type: 'resourceInfoPage/onChange_Labels',
@@ -209,12 +223,6 @@ function Info({ dispatch, resourceInfoPage, match }: InfoProps) {
                   },
                 });
               }}
-            />
-          </FFormLayout.FBlock>
-          <FFormLayout.FBlock title={FI18n.i18nNext.t('resource_tag')}>
-            <FResourceLabelEditor
-              value={resourceInfoPage.resourceInfo.tags}
-              resourceType={resourceInfoPage.resourceInfo.resourceType[resourceInfoPage.resourceInfo.resourceType.length - 1 || 0]}
             />
           </FFormLayout.FBlock>
         </FFormLayout>}
