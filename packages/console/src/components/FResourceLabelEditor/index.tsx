@@ -87,6 +87,31 @@ function FResourceLabelEditor($prop: FResourceLabelEditorProps) {
   //
   // }
 
+  if ($prop.value.length >= 20) {
+    return (<div>
+      <div className={styles.selectedLabels}>
+        {
+          $prop.value.map((v, w) => {
+            return (<label key={v} className={styles.selectedLabel}>
+              <span>{v}</span>
+              <FComponentsLib.FIcons.FClose
+                style={{ fontSize: 12 }}
+                onClick={() => {
+                  // set_errorText('');
+                  $prop.onChange && $prop.onChange($prop.value.filter((i, j) => j !== w));
+                  $setState({
+                    inputError: $prop.value.includes($state.input) ? '不能有重复' : '',
+                  });
+                }}
+              />
+            </label>);
+          })
+        }
+
+      </div>
+    </div>);
+  }
+
   return (<div>
     <FComponentsLib.FInput.FSingleLine
       lengthLimit={-1}
