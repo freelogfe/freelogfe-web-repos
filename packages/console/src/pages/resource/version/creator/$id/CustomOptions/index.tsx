@@ -19,6 +19,8 @@ import FResourceProperties from '@/components/FResourceProperties';
 import fResourcePropertyEditor from '@/components/fResourcePropertyEditor';
 import FResourceOptions from '@/components/FResourceOptions';
 import fResourceOptionEditor from '@/components/fResourceOptionEditor';
+import { FI18n } from '@freelog/tools-lib';
+import FTooltip from '@/components/FTooltip';
 
 interface CustomOptionsProps {
   dispatch: Dispatch;
@@ -124,43 +126,48 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
             <FComponentsLib.FContentText text={'基础属性'} type={'highlight'} style={{ fontSize: 12 }} />
             <div>
               <Space size={20}>
-                <FComponentsLib.FTextBtn
-                  style={{ fontSize: 12, fontWeight: 600 }}
-                  type='primary'
-                  onClick={async () => {
-                    const dataSource: {
-                      key: string;
-                      name: string;
-                      value: string;
-                      description: string;
-                    } | null = await fResourcePropertyEditor({
-                      disabledKeys: [
-                        ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
-                        ...resourceVersionCreatorPage.baseProperties.map<string>((bp) => bp.key),
-                        ...resourceVersionCreatorPage.customOptionsData.map<string>((pp) => pp.key),
-                      ],
-                      disabledNames: [
-                        ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.name),
-                        ...resourceVersionCreatorPage.baseProperties.map<string>((bp) => bp.name),
-                        ...resourceVersionCreatorPage.customOptionsData.map<string>((pp) => pp.name),
-                      ],
-                    });
-                    // console.log(dataSource, 'dataSource9iojskldjflksdjflk');
-                    if (!dataSource) {
-                      return;
-                    }
+                <FTooltip title={FI18n.i18nNext.t('resourceinfo_add_btn_info')}>
+                  <div>
+                    <FComponentsLib.FTextBtn
+                      style={{ fontSize: 12, fontWeight: 600 }}
+                      type='primary'
+                      onClick={async () => {
+                        const dataSource: {
+                          key: string;
+                          name: string;
+                          value: string;
+                          description: string;
+                        } | null = await fResourcePropertyEditor({
+                          disabledKeys: [
+                            ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
+                            ...resourceVersionCreatorPage.baseProperties.map<string>((bp) => bp.key),
+                            ...resourceVersionCreatorPage.customOptionsData.map<string>((pp) => pp.key),
+                          ],
+                          disabledNames: [
+                            ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.name),
+                            ...resourceVersionCreatorPage.baseProperties.map<string>((bp) => bp.name),
+                            ...resourceVersionCreatorPage.customOptionsData.map<string>((pp) => pp.name),
+                          ],
+                        });
+                        // console.log(dataSource, 'dataSource9iojskldjflksdjflk');
+                        if (!dataSource) {
+                          return;
+                        }
 
-                    await dispatch<OnChange_BaseProperties_Action>({
-                      type: 'resourceVersionCreatorPage/onChange_BaseProperties',
-                      payload: {
-                        value: [
-                          ...resourceVersionCreatorPage.baseProperties,
-                          dataSource,
-                        ],
-                      },
-                    });
-                  }}
-                >补充属性</FComponentsLib.FTextBtn>
+                        await dispatch<OnChange_BaseProperties_Action>({
+                          type: 'resourceVersionCreatorPage/onChange_BaseProperties',
+                          payload: {
+                            value: [
+                              ...resourceVersionCreatorPage.baseProperties,
+                              dataSource,
+                            ],
+                          },
+                        });
+                      }}
+                    >补充属性</FComponentsLib.FTextBtn>
+                  </div>
+                </FTooltip>
+
                 {
                   resourceVersionCreatorPage.preVersionBaseProperties.length > 0 &&
                   (<FComponentsLib.FTextBtn
@@ -281,24 +288,23 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
           />
           <div style={{ height: 15 }} />
         </div>
-        {/*{*/}
-        {/*  resourceVersionCreatorPage.rawPropertiesState !== 'success' && (<div style={{ backgroundColor: '#F7F8F9' }}>*/}
-        {/*    <FLoadingTip height={100} />*/}
-        {/*  </div>)*/}
-        {/*}*/}
 
         <div style={{ height: 5 }} />
 
         {
           resourceVersionCreatorPage.customOptionsData.length === 0
             ? (<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 20 }}>
-              <FComponentsLib.FTextBtn
-                type={'default'}
-                style={{ fontSize: 12 }}
-                onClick={() => {
-                  onClick_addOptionBtn();
-                }}
-              >添加可选配置</FComponentsLib.FTextBtn>
+              <FTooltip title={FI18n.i18nNext.t('info_versionoptions')}>
+                <div>
+                  <FComponentsLib.FTextBtn
+                    type={'default'}
+                    style={{ fontSize: 12 }}
+                    onClick={() => {
+                      onClick_addOptionBtn();
+                    }}
+                  >添加可选配置</FComponentsLib.FTextBtn>
+                </div>
+              </FTooltip>
               {
                 resourceVersionCreatorPage.preVersionOptionProperties.length > 0 && (<FComponentsLib.FTextBtn
                   type={'default'}

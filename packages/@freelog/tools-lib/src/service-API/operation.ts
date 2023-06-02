@@ -3,6 +3,7 @@ import FUtil from '../utils';
 // 列出运营分类分组排序
 interface OperationCategoriesParamsType {
   name?: string;
+  status?: number;
 }
 
 export function operationCategories({...params}: OperationCategoriesParamsType = {}) {

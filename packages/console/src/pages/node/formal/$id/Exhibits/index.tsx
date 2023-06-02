@@ -11,6 +11,7 @@ import { history } from 'umi';
 import FMenu from '@/components/FMenu';
 import { ColumnsType } from 'antd/lib/table/interface';
 import {
+  FetchExhibitsAction,
   // ChangeAction,
   OnChange_Exhibit_InputFilter_Action,
   OnChange_Exhibit_SelectedStatus_Action,
@@ -33,6 +34,7 @@ import FCoverImage from '@/components/FCoverImage';
 import { Helmet } from 'react-helmet';
 import FComponentsLib from '@freelog/components-lib';
 import FResourceTypeFilter from '@/components/FResourceTypeFilter';
+import FInput_Search from '@/components/FInput_Search';
 
 interface ExhibitsProps {
   dispatch: Dispatch;
@@ -51,6 +53,17 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
     dispatch<OnUnmount_ExhibitPage_Action>({
       type: 'nodeManagerPage/onUnmount_ExhibitPage',
     });
+  });
+
+  AHooks.useDebounceEffect(() => {
+    dispatch<FetchExhibitsAction>({
+      type: 'nodeManagerPage/fetchExhibits',
+      payload: {
+        restart: true,
+      },
+    });
+  }, [nodeManagerPage.exhibit_InputFilter], {
+    wait: 300,
   });
 
   const dataSource: NodeManagerModelState['exhibit_List'] = nodeManagerPage.exhibit_List.map(
@@ -166,15 +179,6 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
               // loading={loading && operateExhibit.id === record.id}
               // onClick={(checked) => changeStatus(checked, record)}
               onChange={async (value) => {
-                // if (value && record.policies.length === 0) {
-                //   if (!record.hasPolicy) {
-                //     fMessage(FI18n.i18nNext.t('alarm_exhibits_show_plan '), 'error');
-                //   } else {
-                //     fMessage(FI18n.i18nNext.t('msg_set_exhibits_avaliable_for_auth  '), 'error');
-                //   }
-                //   return;
-                // }
-
                 dispatch<OnOnlineOrOfflineAction>({
                   type: 'nodeManagerPage/onOnlineOrOffline',
                   payload: {
@@ -204,6 +208,10 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
         type={nodeManagerPage.exhibit_ListState === 'noData' ? 'empty' : 'table'}
         sider={<Sider />}
         // header={}
+        contentStyles={{
+          backgroundColor: '#fafbfc',
+          boxShadow: 'none',
+        }}
       >
         {nodeManagerPage.exhibit_ListState === 'noData' && (
           <FNoDataTip
@@ -224,7 +232,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
 
         {
           nodeManagerPage.exhibit_ListState !== 'noData' && (
-            <div className={styles.header} style={{ padding: '0 20px' }}>
+            <div className={styles.header} style={{ padding: '0 20px', backgroundColor: '#fafbfc' }}>
               <FComponentsLib.FTitleText type='h1' text={`展品管理 (${nodeManagerPage.exhibit_ListTotal})`} />
               <Space size={80}>
                 <div>
@@ -243,62 +251,6 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                     }}
                   />
 
-                  {/*<FComponentsLib.FDropdown*/}
-                  {/*  overlay={*/}
-                  {/*    <FMenu*/}
-                  {/*      options={nodeManagerPage.exhibit_ResourceTypeOptions1}*/}
-                  {/*      value={nodeManagerPage.exhibit_SelectedType1}*/}
-                  {/*      onClick={(value) => {*/}
-                  {/*        dispatch<OnChange_Exhibit_SelectedType_Action>({*/}
-                  {/*          type: 'nodeManagerPage/onChange_Exhibit_SelectedType',*/}
-                  {/*          payload: {*/}
-                  {/*            value: value,*/}
-                  {/*            level: 1,*/}
-                  {/*          },*/}
-                  {/*        });*/}
-                  {/*      }}*/}
-                  {/*    />*/}
-                  {/*  }*/}
-                  {/*>*/}
-                  {/*  <span style={{ cursor: 'pointer' }}>*/}
-                  {/*    /!*{categoryData.first[category.first] || '全部'}*!/*/}
-                  {/*    {nodeManagerPage.exhibit_ResourceTypeOptions1.find((rt) => {*/}
-                  {/*      return rt.value === nodeManagerPage.exhibit_SelectedType1;*/}
-                  {/*    })?.text || '全部'}*/}
-                  {/*    <FComponentsLib.FIcons.FDown style={{ marginLeft: 8, fontSize: 12 }} />*/}
-                  {/*  </span>*/}
-                  {/*</FComponentsLib.FDropdown>*/}
-
-                  {/*{nodeManagerPage.exhibit_ResourceTypeOptions2.length > 0 ? (*/}
-                  {/*  <>*/}
-                  {/*    <span className='ml-30'>子类型：</span>*/}
-                  {/*    <FComponentsLib.FDropdown*/}
-                  {/*      overlay={*/}
-                  {/*        <FMenu*/}
-                  {/*          value={nodeManagerPage.exhibit_SelectedType2}*/}
-                  {/*          options={nodeManagerPage.exhibit_ResourceTypeOptions2}*/}
-                  {/*          onClick={(value) => {*/}
-                  {/*            dispatch<OnChange_Exhibit_SelectedType_Action>({*/}
-                  {/*              type: 'nodeManagerPage/onChange_Exhibit_SelectedType',*/}
-                  {/*              payload: {*/}
-                  {/*                value: value,*/}
-                  {/*                level: 2,*/}
-                  {/*              },*/}
-                  {/*            });*/}
-                  {/*            // onChangeResourceType && onChangeResourceType(value)*/}
-                  {/*          }}*/}
-                  {/*        />*/}
-                  {/*      }*/}
-                  {/*    >*/}
-                  {/*      <span style={{ cursor: 'pointer' }}>*/}
-                  {/*        {nodeManagerPage.exhibit_ResourceTypeOptions2.find((rt) => {*/}
-                  {/*          return rt.value === nodeManagerPage.exhibit_SelectedType2;*/}
-                  {/*        })?.text || '全部'}*/}
-                  {/*        <FComponentsLib.FIcons.FDown style={{ marginLeft: 8, fontSize: 12 }} />*/}
-                  {/*      </span>*/}
-                  {/*    </FComponentsLib.FDropdown>*/}
-                  {/*  </>*/}
-                  {/*) : null}*/}
                 </div>
                 <div>
                   <span>状态：</span>
@@ -324,19 +276,17 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                   </FDropdownMenu>
                 </div>
                 <div>
-                  <FInput
-                    className={styles.input}
-                    theme='dark'
+                  <FInput_Search
                     value={nodeManagerPage.exhibit_InputFilter}
-                    debounce={300}
-                    onDebounceChange={(value) => {
+                    onChange={(e) => {
                       dispatch<OnChange_Exhibit_InputFilter_Action>({
                         type: 'nodeManagerPage/onChange_Exhibit_InputFilter',
                         payload: {
-                          value: value,
+                          value: e.target.value,
                         },
                       });
                     }}
+                    className={styles.input}
                     placeholder={FI18n.i18nNext.t('nodemgmt_search_exhibits_hint')}
                   />
                 </div>
@@ -356,7 +306,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
             <FTable
               rowClassName={styles.rowClassName}
               columns={columns}
-              dataSource={dataSource as any}
+              dataSource={dataSource}
               pagination={false}
             />
 

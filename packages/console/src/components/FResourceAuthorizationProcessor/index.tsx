@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import * as AHooks from 'ahooks';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
-import { useGetState } from '@/utils/hooks';
+// import { useGetState } from '@/utils/hooks';
 import Nav from './Nav';
 import Content from './Content';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
@@ -103,11 +103,11 @@ function FResourceAuthorizationProcessor({
 
   // const addingTargetsRef = React.useRef<Target[]>([]);
 
-  const [licenseeResource, set_licenseeResource, get_licenseeResource] = useGetState<FResourceAuthorizationProcessorStates['licenseeResource']>(initStates['licenseeResource']);
-  const [relations, set_relations, get_relations] = useGetState<FResourceAuthorizationProcessorStates['relations']>(initStates['relations']);
-  const [targetInfos, set_targetInfos, get_targetInfos] = useGetState<FResourceAuthorizationProcessorStates['targetInfos']>(initStates['targetInfos']);
-  const [activatedTarget, set_activatedTarget, get_activatedTarget] = useGetState<FResourceAuthorizationProcessorStates['activatedTarget']>(initStates['activatedTarget']);
-  const [baseUpcastResources, set_baseUpcastResources, get_baseUpcastResources] = useGetState<FResourceAuthorizationProcessorStates['baseUpcastResources']>(initStates['baseUpcastResources']);
+  const [licenseeResource, set_licenseeResource, get_licenseeResource] = AHooks.useGetState<FResourceAuthorizationProcessorStates['licenseeResource']>(initStates['licenseeResource']);
+  const [relations, set_relations, get_relations] = AHooks.useGetState<FResourceAuthorizationProcessorStates['relations']>(initStates['relations']);
+  const [targetInfos, set_targetInfos, get_targetInfos] = AHooks.useGetState<FResourceAuthorizationProcessorStates['targetInfos']>(initStates['targetInfos']);
+  const [activatedTarget, set_activatedTarget, get_activatedTarget] = AHooks.useGetState<FResourceAuthorizationProcessorStates['activatedTarget']>(initStates['activatedTarget']);
+  const [baseUpcastResources, set_baseUpcastResources, get_baseUpcastResources] = AHooks.useGetState<FResourceAuthorizationProcessorStates['baseUpcastResources']>(initStates['baseUpcastResources']);
 
   AHooks.useAsyncEffect(async () => {
     if (resourceID !== '') {

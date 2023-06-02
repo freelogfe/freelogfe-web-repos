@@ -11,7 +11,7 @@ import {
   OnBlur_BindPhone_PhoneInput_Action,
   OnBlur_ChangeEmail_New_EmailInput_Action,
   OnBlur_ChangePassword_New1_PasswordInput_Action,
-  OnBlur_ChangePassword_New2_PasswordInput_Action,
+  OnBlur_ChangePassword_New2_PasswordInput_Action, OnBlur_ChangePassword_Old_PasswordInput_Action,
   OnBlur_ChangePhone_New_PhoneInput_Action,
   OnCancel_BindEmail_Modal_Action,
   OnCancel_BindPhone_Modal_Action,
@@ -72,7 +72,7 @@ import bindError from '@/assets/bind-error.png';
 import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 import { getUrlOfBindingWechat } from '@/utils';
-import FPasswordInput from '@/components/FPasswordInput';
+// import FPasswordInput from '@/components/FPasswordInput';
 import FPhoneInput from '@/components/FPhoneInput';
 
 interface SecurityProps {
@@ -1121,7 +1121,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
           <FComponentsLib.FTipText text={'原密码'} type='third' />
 
           <div style={{ height: 5 }} />
-          <FPasswordInput
+          <FComponentsLib.FInput.FPassword
             // type='password'
             value={settingPage.changePassword_Old_PasswordInput}
             onChange={(e) => {
@@ -1134,14 +1134,28 @@ function Security({ dispatch, settingPage }: SecurityProps) {
             }}
             placeholder='请输入原密码'
             className={styles.modalBlockInput}
+            onBlur={() => {
+              // console.log('*******')
+              dispatch<OnBlur_ChangePassword_Old_PasswordInput_Action>({
+                type: 'settingPage/onBlur_ChangePassword_Old_PasswordInput',
+              });
+            }}
             // wrapClassName={styles.modalBlockInput}
           />
+
+          {
+            settingPage.changePassword_Old_PasswordInput_Error && (<>
+              <div style={{ height: 5 }} />
+              <div style={{ color: 'red' }}>{settingPage.changePassword_Old_PasswordInput_Error}</div>
+            </>)
+          }
+
           <div style={{ height: 25 }} />
 
           <FComponentsLib.FTipText text={'新密码'} type='third' />
 
           <div style={{ height: 5 }} />
-          <FPasswordInput
+          <FComponentsLib.FInput.FPassword
             // type='password'
             value={settingPage.changePassword_New1_PasswordInput}
             // errorText={}
@@ -1175,7 +1189,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
           <FComponentsLib.FTipText text={FI18n.i18nNext.t('account_reenter_password')} type='third' />
 
           <div style={{ height: 5 }} />
-          <FPasswordInput
+          <FComponentsLib.FInput.FPassword
             // type='password'
             value={settingPage.changePassword_New2_PasswordInput}
             // errorText={settingPage.changePassword_New2_PasswordInput_Error}

@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
 import * as AHooks from 'ahooks';
-// import { policyCodeTranslationToText } from '../index';
 import FComponentsLib from '@freelog/components-lib';
 import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 import { Space } from 'antd';
@@ -12,8 +11,6 @@ interface PolicyTemplatesProps {
 }
 
 function PolicyTemplates({ onSelect }: PolicyTemplatesProps) {
-  // const [translation1, setTranslation1] = React.useState<string>('');
-  // const [translation2, setTranslation2] = React.useState<string>('');
 
   const [templates, set_templates] = React.useState<{
     id: string;
@@ -22,19 +19,6 @@ function PolicyTemplates({ onSelect }: PolicyTemplatesProps) {
     translation: string;
   }[]>([]);
   AHooks.useMount(async () => {
-
-//     console.log(Base64.encode(`for public
-//
-// initial:
-// ~freelog.RelativeTimeEvent("24","hour")  =>  auth_expiration//设置等待周期
-// ~freelog.TransactionEvent("0.19","self.account") => auth_permanent//设置价格
-//
-// auth_expiration [active]:
-// ~freelog.RelativeTimeEvent("72","hour")  =>  initial// 设置免费周期
-//
-// auth_permanent [active]:
-// terminate`), '*(*********')
-
     const { data }: { data: any[] } = await FServiceAPI.Policy.policyTemplates();
     // console.log(data, ' 98ioskdjfksdjlfsjdflksjdlkj');
     const allP: Array<Promise<any>> = data.map((d: any, i) => {
@@ -73,16 +57,6 @@ function PolicyTemplates({ onSelect }: PolicyTemplatesProps) {
       })
     }
 
-    {/*<div style={{ height: 20 }} />*/}
-    {/*<PolicyTemplate*/}
-    {/*  text={text2}*/}
-    {/*  title={title2}*/}
-    {/*  translation={translation2}*/}
-    {/*  onSelect={() => {*/}
-    {/*    onSelect && onSelect({ text: text2, title: '收费策略' });*/}
-    {/*    onClickSelect && onClickSelect(2);*/}
-    {/*  }}*/}
-    {/*/>*/}
   </Space>);
 }
 
@@ -132,20 +106,6 @@ function PolicyTemplate({ text, title, translation, onSelect }: PolicyTemplatePr
       }
 
       <div style={{ width: 20 }} />
-
-      {/*{*/}
-      {/*  visible === 'view'*/}
-      {/*    ? (<FComponentsLib.FTextBtn*/}
-      {/*      type='primary'*/}
-      {/*      onClick={() => {*/}
-      {/*        setVisible('none');*/}
-      {/*      }}>隐藏状态机视图</FComponentsLib.FTextBtn>)*/}
-      {/*    : (<FComponentsLib.FTextBtn*/}
-      {/*      type='primary'*/}
-      {/*      onClick={() => {*/}
-      {/*        setVisible('view');*/}
-      {/*      }}>显示状态机视图</FComponentsLib.FTextBtn>)*/}
-      {/*}*/}
 
     </div>
 

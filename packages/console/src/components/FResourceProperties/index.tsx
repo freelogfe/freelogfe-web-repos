@@ -1,7 +1,8 @@
 import * as React from 'react';
 import styles from './index.less';
 import FComponentsLib from '@freelog/components-lib';
-import FTooltip from '@/components/FTooltip';
+import FResourcePropertyAndOptionTipPopover from '@/components/FResourcePropertyAndOptionTipPopover';
+
 
 interface FResourcePropertiesProps {
   immutableData: {
@@ -33,23 +34,28 @@ function FResourceProperties({
       immutableData.map((d) => {
         return (<React.Fragment key={d.key}>
           <div className={styles.grid1}>
-            <FComponentsLib.FContentText text={d.name || d.key} type={'additional2'} />
-
-            {
-              d.description && (<FTooltip
-                title={d.description}
-              >
-                <FComponentsLib.FIcons.FInfo
-                  style={{ cursor: 'pointer', fontSize: 12 }}
-                />
-              </FTooltip>)
-            }
+            <FResourcePropertyAndOptionTipPopover
+              info={{
+                key: d.key,
+                name: d.name,
+                description: d.description,
+              }}
+              type={'property'}
+            >
+              <FComponentsLib.FContentText
+                text={d.name}
+                type={'additional2'}
+                style={{ maxWidth: 100 }}
+                singleRow
+              />
+            </FResourcePropertyAndOptionTipPopover>
           </div>
           <div>
             <FComponentsLib.FContentText
               text={d.value}
               type={'highlight'}
-              style={{ fontSize: 12 }}
+              style={{ fontSize: 12, maxWidth: 230 }}
+              singleRow
             />
           </div>
         </React.Fragment>);
@@ -60,26 +66,28 @@ function FResourceProperties({
       alterableData.map((d) => {
         return (<React.Fragment key={d.key}>
           <div className={styles.grid1}>
-            <FComponentsLib.FContentText
-              text={d.name}
-              type={'additional2'}
-              singleRow
-            />
-            {
-              d.description && (<FTooltip
-                title={d.description}
-              >
-                <FComponentsLib.FIcons.FInfo
-                  style={{ cursor: 'pointer', fontSize: 12 }}
-                />
-              </FTooltip>)
-            }
+            <FResourcePropertyAndOptionTipPopover
+              info={{
+                key: d.key,
+                name: d.name,
+                description: d.description,
+              }}
+              type={'property'}
+            >
+              <FComponentsLib.FContentText
+                text={d.name}
+                type={'additional2'}
+                singleRow
+                style={{ maxWidth: 100 }}
+              />
+            </FResourcePropertyAndOptionTipPopover>
           </div>
           <div className={styles.grid2}>
             <FComponentsLib.FContentText
               text={d.value}
               type={'highlight'}
-              style={{ fontSize: 12 }}
+              style={{ fontSize: 12, maxWidth: 230 }}
+              singleRow
             />
 
             {

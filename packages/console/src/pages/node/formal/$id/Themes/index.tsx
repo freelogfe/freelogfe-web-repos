@@ -8,9 +8,9 @@ import { ConnectState, NodeManagerModelState } from '@/models/connect';
 import {
   OnActiveAction,
   OnChangeThemeAction,
-  OnChange_ShowPage_Action,
+  // OnChange_ShowPage_Action,
   OnMount_ThemePage_Action,
-  OnUnmount_ThemePage_Action,
+  OnUnmount_ThemePage_Action, FetchThemesAction,
 } from '@/models/nodeManagerPage';
 import { history, withRouter } from 'umi';
 import FNoDataTip from '@/components/FNoDataTip';
@@ -18,7 +18,7 @@ import FLoadingTip from '@/components/FLoadingTip';
 import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
 import Sider from '../Sider';
 import FTooltip from '@/components/FTooltip';
-import fConfirmModal from '@/components/fConfirmModal';
+// import fConfirmModal from '@/components/fConfirmModal';
 import { FUtil, FI18n, FServiceAPI } from '@freelog/tools-lib';
 import * as AHooks from 'ahooks';
 import FCoverImage from '@/components/FCoverImage';
@@ -28,7 +28,6 @@ import fMessage from '@/components/fMessage';
 import FComponentsLib from '@freelog/components-lib';
 import { LoadingOutlined } from '@ant-design/icons';
 import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
-// import { onlineExhibit } from '@/pages/node/utils/tools';
 
 interface ThemesProps {
   match: any;
@@ -78,18 +77,27 @@ function Themes({ match, dispatch, nodeManagerPage }: ThemesProps) {
     setActiveId(theme.resourceId);
 
     // const params: Parameters<typeof FServiceAPI.Exhibit.createPresentable>[0] = {
-    const params: any = {
+    const params: Parameters<typeof FServiceAPI.Exhibit.createPresentable>[0] = {
       nodeId: Number(match.params.id),
       resourceId: theme.resourceId,
       version: theme.latestVersion,
       resolveResources: [
         {
           resourceId: theme.resourceId,
-          contracts: [
-            {
-              policyId: theme.policies.find((item: any) => item.policyName === '开放授权').policyId,
-            },
-          ],
+          // contracts: [
+          //   {
+          //     policyId: theme.policies.find((item: any) => item.policyName === '开放授权').policyId,
+          //   },
+          // ],
+          contracts: theme.policies
+            .filter((p: any) => {
+              return p.status === 1;
+            })
+            .map((p: any) => {
+              return {
+                policyId: p.policyId,
+              };
+            }),
         },
       ],
       presentableName: theme.resourceName.split('/')[1],
@@ -124,11 +132,14 @@ function Themes({ match, dispatch, nodeManagerPage }: ThemesProps) {
     setActiveId(null);
     setEmptyPopupShow(false);
     fMessage('激活成功', 'success');
-    dispatch<OnChange_ShowPage_Action>({
-      type: 'nodeManagerPage/onChange_ShowPage',
-      payload: {
-        value: 'theme',
-      },
+    // dispatch<OnChange_ShowPage_Action>({
+    //   type: 'nodeManagerPage/onChange_ShowPage',
+    //   payload: {
+    //     value: 'theme',
+    //   },
+    // });
+    dispatch<FetchThemesAction>({
+      type: 'nodeManagerPage/fetchThemes',
     });
   };
 

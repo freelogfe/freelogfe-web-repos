@@ -27,30 +27,11 @@ function Option({ dispatch, resourceDetailPage }: OptionProps) {
         type='h3'
       />
       <div style={{ height: 20 }} />
-      <FResourceOptions dataSource={resourceDetailPage.resourceVersion_Info.customOptions} />
-      {/*<div className={styles.content}>*/}
-      {/*  */}
-      {/*  /!*{*!/*/}
-      {/*  /!*  resourceDetailPage.resourceVersion_Info.options.map((i) => {*!/*/}
-      {/*  /!*    return (<div key={i.key}>*!/*/}
-      {/*  /!*      <Space size={10}>*!/*/}
-      {/*  /!*        <FComponentsLib.FContentText*!/*/}
-      {/*  /!*          text={i.key}*!/*/}
-      {/*  /!*        />*!/*/}
-      {/*  /!*        {*!/*/}
-      {/*  /!*          i.description && (<FTooltip*!/*/}
-      {/*  /!*            title={i.description}*!/*/}
-      {/*  /!*            color={'#fff'}*!/*/}
-      {/*  /!*          >*!/*/}
-      {/*  /!*            <FComponentsLib.FIcons.FInfo*!/*/}
-      {/*  /!*              style={{ cursor: 'pointer', fontSize: 14 }}*!/*/}
-      {/*  /!*            />*!/*/}
-      {/*  /!*          </FTooltip>)*!/*/}
-      {/*  /!*        }*!/*/}
-      {/*  /!*      </Space>*!/*/}
-      {/*  /!*    </div>);*!/*/}
-      {/*  /!*  })*!/*/}
-      {/*  /!*}*!/*/}
+      {/*<div style={{ padding: 15, backgroundColor: '#F7F8F9' }}>*/}
+      <FResourceOptions
+        theme={'dark'}
+        dataSource={resourceDetailPage.resourceVersion_Info.customOptions}
+      />
       {/*</div>*/}
     </div>
     <div style={{ height: 20 }} />

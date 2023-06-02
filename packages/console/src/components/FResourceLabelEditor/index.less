@@ -1,0 +1,70 @@
+@import '../../config.less';
+
+.Input {
+  width: 200px !important;
+  //display: block;
+}
+
+.errorTip {
+  color: @f-error-color1;
+  font-size: 12px;
+}
+
+.selectedLabels {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  flex-wrap: wrap;
+
+  .selectedLabel {
+    font-size: 14px;
+    height: 32px;
+    padding: 0 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    cursor: pointer;
+    background-color: @f-primary-color;
+    color: white;
+    border-radius: 16px;
+  }
+}
+
+.Labels {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  flex-wrap: wrap;
+
+  .Label {
+    height: 32px;
+    padding: 0 10px;
+    font-size: 14px;
+    color: #222;
+    background-color: white;
+    border-radius: 16px;
+    border: 1px solid #D4D4D4;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+
+    &:hover {
+      color: @f-hover-color;
+      border-color: @f-hover-color;
+    }
+
+    &:active {
+      color: @f-active-color;
+      border-color: @f-active-color;
+    }
+
+    &.selected {
+      background-color: @f-primary-color;
+      color: white;
+      border-color: @f-primary-color;
+    }
+  }
+}

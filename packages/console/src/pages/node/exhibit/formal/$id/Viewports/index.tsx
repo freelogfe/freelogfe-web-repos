@@ -4,13 +4,6 @@ import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import { ConnectState, ExhibitInfoPageModelState } from '@/models/connect';
 import { ChangeAction } from '@/models/exhibitInfoPage';
-import {
-  FViewportTabs,
-} from '@/components/FAntvG6';
-import FDrawer from '@/components/FDrawer';
-import FGraph_Tree_Authorization_Exhibit from '@/components/FAntvG6/FGraph_Tree_Authorization_Exhibit';
-import FGraph_Tree_Relationship_Exhibit from '@/components/FAntvG6/FGraph_Tree_Relationship_Exhibit';
-import FGraph_Tree_Dependency_Exhibit from '@/components/FAntvG6/FGraph_Tree_Dependency_Exhibit';
 import { FI18n } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 import FViewportCards_Exhibit from '@/components/FAntvG6/FViewportCards_Exhibit';
@@ -23,12 +16,12 @@ interface ViewportsProps {
 
 function Viewports({ dispatch, exhibitInfoPage }: ViewportsProps) {
 
-  async function onChange(payload: Partial<ExhibitInfoPageModelState>) {
-    await dispatch<ChangeAction>({
-      type: 'exhibitInfoPage/change',
-      payload,
-    });
-  }
+  // async function onChange(payload: Partial<ExhibitInfoPageModelState>) {
+  //   await dispatch<ChangeAction>({
+  //     type: 'exhibitInfoPage/change',
+  //     payload,
+  //   });
+  // }
 
   if (!exhibitInfoPage.graphShow) {
     return null;
@@ -36,7 +29,10 @@ function Viewports({ dispatch, exhibitInfoPage }: ViewportsProps) {
 
   return (<div>
     <div className={styles.title}>
-      <FComponentsLib.FTitleText text={FI18n.i18nNext.t('title_exhibit_maps')} type='h3' />
+      <FComponentsLib.FTitleText
+        text={FI18n.i18nNext.t('title_exhibit_maps')}
+        type='h3'
+      />
       {/*<FComponentsLib.FTextBtn*/}
       {/*  type='default'*/}
       {/*  onClick={() => {*/}

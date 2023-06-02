@@ -24,14 +24,17 @@ function Bind() {
     passwordError: '',
     loading: false,
   });
-  AHooks.useMount(() => {
+
+  AHooks.useDebounceEffect(() => {
+    loginNameChange();
+  }, [bindData.loginName], {
+    wait: 300,
   });
 
-  AHooks.useUnmount(() => {
-  });
-  const loginNameChange = async (val: string) => {
+  const loginNameChange = async () => {
+
     let loginNameError: string = '';
-
+    const val: string = bindData.loginName;
     if (val === '') {
       loginNameError = '用户名称不能为空';
     } else if (val.length > 30) {
@@ -64,10 +67,11 @@ function Bind() {
     }
     setBindData({
       ...bindData,
-      loginName: val,
+      // loginName: val,
       loginNameError,
     });
   };
+
   const passwordChange = (val: string) => {
     let passwordError: string = '';
     if (!val) {
@@ -130,7 +134,13 @@ function Bind() {
                 className={styles.Input}
                 wrapClassName={styles.Input}
                 onChange={(e) => {
-                  loginNameChange(e.target.value);
+                  // loginNameChange(e.target.value);
+
+                  setBindData({
+                    ...bindData,
+                    loginName: e.target.value,
+                    // loginNameError,
+                  });
                 }}
               />
               {bindData.loginNameError && (

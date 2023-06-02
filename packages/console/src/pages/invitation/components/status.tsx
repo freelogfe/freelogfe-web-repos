@@ -62,7 +62,7 @@ function Status({ status, tipData, jump }: StatusProps) {
 
   return (
     <div className={'flex-column-center ' + styles.style}>
-      <div className="flex-2"></div>
+      <div className="flex-2"/>
       <div className={'mb-31 h-78'}>
         <i
           className={['freelog', 'fl-icon-shenhe'].join(' ')}
@@ -87,7 +87,7 @@ function Status({ status, tipData, jump }: StatusProps) {
           我有内测邀请码
         </span>
       )}
-      <div className="flex-3"></div>
+      <div className="flex-3"/>
     </div>
   );
 }

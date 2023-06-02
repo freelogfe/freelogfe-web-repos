@@ -10,14 +10,14 @@ import UserList from './_components/user';
 import Drawer from './_components/drawer';
 import fMessage from '@/components/fMessage';
 import FOperationCategoryFilter from '@/components/FOperationCategoryFilter';
-import {
-  OnChangeResourceTypeAction,
-  OnClickLoadMoreBtnAction,
-  OnChangeTagsAction,
-  OnUnmountMarketPageAction,
-  OnMountMarketPageAction,
-  OnChange_SelectedOperationCategoryIDs_Action,
-} from '@/models/discoverPage';
+// import {
+//   OnChangeResourceTypeAction,
+//   OnClickLoadMoreBtnAction,
+//   OnChangeTagsAction,
+//   OnUnmountMarketPageAction,
+//   OnMountMarketPageAction,
+//   OnChange_SelectedOperationCategoryIDs_Action,
+// } from '@/models/discoverPage';
 interface SearchProps {}
 
 function Search({}: SearchProps) {
@@ -405,11 +405,11 @@ function Search({}: SearchProps) {
               </div>
               {!resourcesListPure.length ? (
                 <div className="flex-column-center w-100x h-100x">
-                  <div className="flex-2" />
+                  {/*<div className="flex-2" />*/}
                   <span className={styles.none}>
                     抱歉，没有找到与{' ' + keywords + ' '}相关的结果
                   </span>
-                  <div className="flex-3" />
+                  {/*<div className="flex-3" />*/}
                 </div>
               ) : (
                 <>

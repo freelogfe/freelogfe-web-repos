@@ -179,6 +179,7 @@ function VersionCreator({
               id={'createResourceVersionPage.createBtn'}
               style={{ left: '50%', marginLeft: -16, bottom: -42 }}
               text={FI18n.i18nNext.t('hotpots_createversion_btn_release')}
+              zIndex={1}
             >
               <FComponentsLib.FRectBtn
                 style={{ display: 'flex', alignItems: 'center' }}
@@ -280,7 +281,7 @@ function VersionCreator({
                           width: 100,
                           render(value: any, record: any, index: number) {
                             return (<FComponentsLib.FContentText
-                              text={record.resourceType}
+                              text={record.resourceType.join(' / ')}
                             />);
                           },
                         },
@@ -486,9 +487,9 @@ function VersionCreator({
                     },
                   });
                 }}
-                style={{
-                  height: 500,
-                }}
+                // style={{
+                //   height: 500,
+                // }}
               />
             </FFormLayout.FBlock>
           </FFormLayout>

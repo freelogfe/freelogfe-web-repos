@@ -4,18 +4,6 @@ import { EffectsCommandMap, Subscription } from 'dva';
 import { ConnectState } from '@/models/connect';
 import { FUtil, FServiceAPI ,FI18n} from '@freelog/tools-lib';
 import { FCustomOptionsEditorDrawerStates } from '@/components/FCustomOptionsEditorDrawer';
-// import {
-//   IGraph_Relationship_Edges,
-//   IGraph_Relationship_Nodes,
-// } from '@/components/FAntvG6/FAntvG6RelationshipGraph';
-// import {
-//   IGraph_Authorization_Edges,
-//   IGraph_Authorization_Nodes,
-// } from '@/components/FAntvG6/FAntvG6AuthorizationGraph';
-// import {
-//   IGraph_Dependency_Edges,
-//   IGraph_Dependency_Nodes,
-// } from '@/components/FAntvG6/FAntvG6DependencyGraph';
 import { IActions, IRules, ruleMatchAndResult, RuleMatchAndResultReturn } from '@/models/informalNodeManagerPage';
 import fMessage from '@/components/fMessage';
 import { history } from 'umi';

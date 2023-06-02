@@ -4,6 +4,8 @@ import { RcFile } from 'antd/lib/upload/interface';
 import { Upload } from 'antd';
 import FCropperModal from '@/components/FUploadCover/FCropperModal';
 import { FServiceAPI, FI18n } from '@freelog/tools-lib';
+import fMessage from '@/components/fMessage';
+
 // import FUtil1 from '@/utils';
 
 interface FUploadCoverProps {
@@ -54,23 +56,27 @@ function FUploadCover({ children, onUploadSuccess, onError }: FUploadCoverProps)
     if (!image || !naturalFile) {
       return;
     }
-    const res = await FServiceAPI.Storage.uploadImage({
+    const { ret, errCode, data, msg } = await FServiceAPI.Storage.uploadImage({
       file: naturalFile,
     });
+
+    if (ret !== 0 || errCode !== 0) {
+      fMessage(msg, 'error');
+      return;
+    }
+
     const img = new Image();
-    img.src = res.data.url;
+    img.src = data.url;
 
     img.onload = () => {
       const hash: string = `#x=${cropArea.x}&y=${cropArea.y}&r=${cropArea.r}&w=${cropArea.w}&h=${cropArea.h}&width=${img.width}&height=${img.height}`;
-      const url: string = res.data.url + hash;
+      const url: string = data.url + hash;
       // console.log(url, 'url2222222');
       onUploadSuccess && onUploadSuccess(url);
 
       setNaturalFile(initStates['naturalFile']);
       setImage(initStates['image']);
     };
-
-
   }
 
   return (<div className={styles.styles}>

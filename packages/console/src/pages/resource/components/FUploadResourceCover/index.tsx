@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
 import FUploadCover from '@/components/FUploadCover';
-// import { FCloudUpload } from '@/components/FIcons';
 import fMessage from '@/components/fMessage';
 import FCoverImage from '@/components/FCoverImage';
 import { FI18n } from '@freelog/tools-lib';
@@ -28,7 +27,6 @@ function FUploadResourceCover({ value, onChange }: FUploadResourceCoverProps) {
         </a>
       </FUploadCover>)
       : (<div className={styles.FUploadImageChildren}>
-        {/*<img src={value} alt=""/>*/}
         <FCoverImage src={value} width={200}/>
       </div>)
     }

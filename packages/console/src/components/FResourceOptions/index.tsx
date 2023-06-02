@@ -1,7 +1,8 @@
 import * as React from 'react';
 import styles from './index.less';
 import FComponentsLib from '@freelog/components-lib';
-import FTooltip from '@/components/FTooltip';
+// import FTooltip from '@/components/FTooltip';
+import FResourcePropertyAndOptionTipPopover from '@/components/FResourcePropertyAndOptionTipPopover';
 
 interface FResourceOptionsProps {
   dataSource: {
@@ -12,36 +13,33 @@ interface FResourceOptionsProps {
     input: string;
     select: string[];
   }[];
+  theme?: 'dark' | 'light';
 
   onEdit?(value: FResourceOptionsProps['dataSource'][number]): void;
 
   onDelete?(value: FResourceOptionsProps['dataSource'][number]): void;
 }
 
-function FResourceOptions({ dataSource, onEdit, onDelete }: FResourceOptionsProps) {
+function FResourceOptions({ dataSource, theme = 'light', onEdit, onDelete }: FResourceOptionsProps) {
   return (<div className={styles.styles}>
     {
       dataSource.map((d) => {
         return (<div key={d.key} className={styles.item}>
           <div className={styles.itemHeader}>
             <div className={styles.itemHeaderLeft}>
-              <FComponentsLib.FContentText
-                text={d.name}
-                type={'normal'}
-              />
-              <FComponentsLib.FContentText
-                text={`(${d.key})`}
-                type={'additional2'}
-              />
-              {
-                d.description && (<FTooltip
-                  title={d.description}
-                >
-                  <FComponentsLib.FIcons.FInfo
-                    style={{ cursor: 'pointer', fontSize: 12 }}
-                  />
-                </FTooltip>)
-              }
+              <FResourcePropertyAndOptionTipPopover
+                info={{
+                  key: d.key,
+                  name: d.name,
+                  description: d.description,
+                }}
+                type={'option'}
+              >
+                <div><FComponentsLib.FContentText
+                  text={d.name}
+                  type={'normal'}
+                /></div>
+              </FResourcePropertyAndOptionTipPopover>
             </div>
             <div className={styles.itemHeaderRight}>
               {
@@ -71,7 +69,8 @@ function FResourceOptions({ dataSource, onEdit, onDelete }: FResourceOptionsProp
             </div>
           </div>
           <div style={{ height: 5 }} />
-          <div className={styles.itemContent}>
+          <div className={styles.itemContent}
+               style={{ backgroundColor: theme === 'dark' ? 'rgba(0,0,0,.02)' : 'white' }}>
             <div className={styles.itemBody}>
               {
                 d.type === 'input' && (

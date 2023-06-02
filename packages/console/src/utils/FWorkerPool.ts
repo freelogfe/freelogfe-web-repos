@@ -1,6 +1,6 @@
 class FWorkerPool {
 
-  private _scriptURL: string;
+  private readonly _scriptURL: string;
   private _worker: Worker | null = null;
   private _referenceCount: number = 0;
 

@@ -1,0 +1,46 @@
+@import '../../config.less';
+
+.Input {
+  border-width: 1px;
+  border-style: solid;
+  width: 160px;
+
+  &:hover {
+    border-color: #CBCBCB;
+  }
+
+  &:focus {
+    //border-color: @f-primary-color;
+    border-color: @f-primary-color !important;
+  }
+
+  &.InputError {
+    &, &:hover, &:active, &:focus {
+      border-color: @f-error-color1;
+    }
+  }
+
+  //:global(.ant-input:focus) {
+  //
+  //}
+
+  //&.ant-input-affix-wrapper:focus, &.ant-input-affix-wrapper-focused {
+  //  border-color: @f-primary-color !important;
+  //}
+
+}
+
+.dark {
+  border-color: rgba(0, 0, 0, 0.03);
+  background-color: rgba(0, 0, 0, 0.03);
+  border-radius: 22px;
+
+  input {
+    background-color: transparent;
+  }
+}
+
+.darkPrefix {
+  color: #8E8E93;
+  font-size: 14px;
+}

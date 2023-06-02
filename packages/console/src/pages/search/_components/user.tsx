@@ -25,9 +25,9 @@ export default function ResourceList({
     <>
       {!userList.length ? (
         <div className='flex-column-center w-100x h-100x'>
-          <div className='flex-2' />
+          {/*<div className='flex-2' />*/}
           <span className={styles.none}>抱歉，没有找到与{' ' + keywords + ' '}相关的结果</span>
-          <div className='flex-3' />
+          {/*<div className='flex-3' />*/}
         </div>
       ) : (
         <div className={styles.tip + ' mb-40 w-100x'}>

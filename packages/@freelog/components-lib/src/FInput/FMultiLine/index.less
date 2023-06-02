@@ -1,0 +1,47 @@
+@import '../../config.less';
+
+.introduction {
+  //width: 800px;
+  //height: 100px;
+  display: flex;
+  position: relative;
+
+  & > span {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+  }
+
+  .TextArea {
+    width: 100%;
+    //min-height: 100px;
+    display: block;
+    //resize: none;
+
+    //overflow: hidden;
+    //scrollbar-width: none; /* Firefox */
+    //-ms-overflow-style: none; /* Internet Explorer 10+ */
+    //
+    //&::-webkit-scrollbar {
+    //  display: none; /* Google Chrome and Safari */
+    //}
+  }
+
+  :global(.ant-input) {
+    &:focus {
+      border-color: @f-primary-color;
+    }
+  }
+
+  :global(.ant-input-focused) {
+    border-color: @f-primary-color;
+  }
+
+  .FInputWordCount {
+    color: #C4C4C4;
+  }
+
+  .beyond {
+    color: @f-error-color1;
+  }
+}

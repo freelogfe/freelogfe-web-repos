@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import { AutoComplete, Dropdown } from 'antd';
+import { AutoComplete, Dropdown, Popover, Space } from 'antd';
 import * as AHooks from 'ahooks';
 import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
@@ -78,6 +78,9 @@ const initStates: FResourceTypeInputStates = {
 };
 
 function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
+
+  // console.log(value, 'valuesiodjflksdjflkjdslkfjlkjdslkjl***************');
+
   const ref = React.useRef<any>();
   // const refAutoComplete = React.useRef(null);
 
@@ -98,7 +101,6 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
       data: ServerData[];
     } = await FServiceAPI.Resource.resourceTypes({
       category: 1,
-      // @ts-ignore
       status: 1,
     });
     const options: Option[] = handledData(data_resourceTypes, null);
@@ -170,7 +172,6 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
           };
         }));
 
-
         const { data: data_list1 }: {
           data: {
             code: string;
@@ -232,6 +233,7 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
     values: Array<string | number>;
     labels: string[];
   }) {
+    onChange && onChange(null);
     // console.log(labels, 'labelsiosdjflksjdlkfjsldkjl');
     set_isOpen(false);
     set_mode('input');
@@ -248,115 +250,123 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
   }
 
   if (_mode === 'input' && _selectedCache) {
-    return (<AutoComplete
-      autoFocus={true}
-      allowClear={true}
-      defaultOpen={true}
-      options={[
-        ...(_autoCompleteInputIsNew ? [
-          {
-            value: '#new',
-            label: (<div className={styles.autoCompleteOption}>
-              <span>{_autoCompleteInput}</span>
-              {/*<FComponentsLib.FTextBtn>添加新类型</FComponentsLib.FTextBtn>*/}
-              <FComponentsLib.FTextBtn>{FI18n.i18nNext.t('createresource_selectresourcetype_btn_addthis')}</FComponentsLib.FTextBtn>
-            </div>),
-            data: {
+    return (<div style={{ display: 'block' }}>
+      <AutoComplete
+        autoFocus={true}
+        allowClear={true}
+        defaultOpen={true}
+        options={[
+          ...(_autoCompleteInputIsNew ? [
+            {
               value: '#new',
-              label: '',
-              values: [],
-              labels: _autoCompleteInput.split('/'),
+              label: (<div className={styles.autoCompleteOption}>
+                <span>{_autoCompleteInput}</span>
+                {/*<FComponentsLib.FTextBtn>添加新类型</FComponentsLib.FTextBtn>*/}
+                <FComponentsLib.FTextBtn>{FI18n.i18nNext.t('createresource_selectresourcetype_btn_addthis')}</FComponentsLib.FTextBtn>
+              </div>),
+              data: {
+                value: '#new',
+                label: '',
+                values: [],
+                labels: _autoCompleteInput.split('/'),
+              },
             },
-          },
-        ] : []),
-        ..._autoCompleteOptions.map((aco) => {
-          return {
-            value: aco.value,
-            label: (<div className={styles.autoCompleteOption}>
-              <span>{aco.labels.join('/')}</span>
-              <FComponentsLib.FContentText
-                // text={`${aco.count}个资源`}
-                text={FI18n.i18nNext.t('createresource_selectresourcetype_input_resourceqty', {
-                  ResourceQty: aco.count,
-                })}
-                type={'additional2'}
-              />
-            </div>),
-            data: aco,
-          };
-        }),
-        ..._autoCompleteOptionsOther.map((aco) => {
-          return {
-            value: aco.value,
-            label: (<div className={styles.autoCompleteOption}>
-              <span>{aco.labels.join('/')}</span>
-              <FComponentsLib.FContentText
-                // text={`${aco.count}个资源`}
-                text={FI18n.i18nNext.t('createresource_selectresourcetype_input_resourceqty', {
-                  ResourceQty: aco.count,
-                })}
-                type={'additional2'}
-              />
-            </div>),
-            data: aco,
-          };
-        }),
-      ]}
-      style={{ width: 360 }}
-      value={_autoCompleteInput}
-      className={styles.AutoComplete}
-      // filterOption={(inputValue, option: any) => {
-      //   return option.data.labels[option.data.labels.length - 1].length <= 40 && option.data.labels.join('/').startsWith(inputValue);
-      // }}
-      onChange={(value: string) => {
-        // console.log(value, 'value 908wieojfklsdfjasldkfjlkj');
-        if (!value) {
-          return;
-        }
-        const startStr: string = [..._selectedCache.labels, ''].join('/');
-        if (!value.startsWith(startStr)) {
-          return;
-        }
-        set_autoCompleteInput(value);
-
-
-        const custom: string = value.replace(startStr, '');
-        set_autoCompleteInputIsNew(value !== startStr && FUtil.Regexp.RESOURCE_TYPE.test(custom) && _autoCompleteOptions.every((aco) => {
-          return aco.labels.join('/') !== value;
-        }));
-      }}
-      onSelect={(value: any, op: any) => {
-        const data: FResourceTypeInputStates['_autoCompleteOptions'][number] = op.data;
-        // console.log(value, option, 'value : any sdfoisdjf lskdjlkj');
-        if (value !== '#new') {
-          onChange && onChange({
-            value: data.value,
-            // label: data.label,
-            // values: data.values,
-            labels: data.labels,
-          });
-        } else {
-          const customInputLabels: string[] = _autoCompleteInput.split('/');
-          onChange && onChange({
-            value: _selectedCache.value,
-            // label: _selectedCache.label,
-            // values: _selectedCache.values,
-            labels: _selectedCache.labels,
-            customInput: customInputLabels[customInputLabels.length - 1],
-          });
-        }
-        init();
-      }}
-      onClear={() => {
-        onChange && onChange(null);
-        init();
-      }}
-    >
-      <FInput
-        // value={'autoCompleteInput'}
+          ] : []),
+          ..._autoCompleteOptions.map((aco) => {
+            return {
+              value: aco.value,
+              label: (<div className={styles.autoCompleteOption}>
+                <span>{aco.labels.join('/')}</span>
+                <FComponentsLib.FContentText
+                  // text={`${aco.count}个资源`}
+                  text={FI18n.i18nNext.t('createresource_selectresourcetype_input_resourceqty', {
+                    ResourceQty: aco.count,
+                  })}
+                  type={'additional2'}
+                />
+              </div>),
+              data: aco,
+            };
+          }),
+          ..._autoCompleteOptionsOther.map((aco) => {
+            return {
+              value: aco.value,
+              label: (<div className={styles.autoCompleteOption}>
+                <span>{aco.labels.join('/')}</span>
+                <FComponentsLib.FContentText
+                  // text={`${aco.count}个资源`}
+                  text={FI18n.i18nNext.t('createresource_selectresourcetype_input_resourceqty', {
+                    ResourceQty: aco.count,
+                  })}
+                  type={'additional2'}
+                />
+              </div>),
+              data: aco,
+            };
+          }),
+        ]}
         style={{ width: 360 }}
-      />
-    </AutoComplete>);
+        value={_autoCompleteInput}
+        className={styles.AutoComplete}
+        // filterOption={(inputValue, option: any) => {
+        //   return option.data.labels[option.data.labels.length - 1].length <= 40 && option.data.labels.join('/').startsWith(inputValue);
+        // }}
+        onChange={(value: string) => {
+          // console.log(value, 'value 908wieojfklsdfjasldkfjlkj');
+          if (!value) {
+            return;
+          }
+          const startStr: string = [..._selectedCache.labels, ''].join('/');
+          if (!value.startsWith(startStr)) {
+            return;
+          }
+          set_autoCompleteInput(value);
+
+
+          const custom: string = value.replace(startStr, '');
+          set_autoCompleteInputIsNew(value !== startStr && FUtil.Regexp.RESOURCE_TYPE.test(custom) && _autoCompleteOptions.every((aco) => {
+            return aco.labels.join('/') !== value;
+          }));
+        }}
+        onSelect={(value: any, op: any) => {
+          const data: FResourceTypeInputStates['_autoCompleteOptions'][number] = op.data;
+          // console.log(value, option, 'value : any sdfoisdjf lskdjlkj');
+          if (value !== '#new') {
+            onChange && onChange({
+              value: data.value,
+              // label: data.label,
+              // values: data.values,
+              labels: data.labels,
+            });
+          } else {
+            const customInputLabels: string[] = _autoCompleteInput.split('/');
+            onChange && onChange({
+              value: _selectedCache.value,
+              // label: _selectedCache.label,
+              // values: _selectedCache.values,
+              labels: _selectedCache.labels,
+              customInput: customInputLabels[customInputLabels.length - 1],
+            });
+          }
+          init();
+        }}
+        onClear={() => {
+          onChange && onChange(null);
+          init();
+        }}
+      >
+        <FInput
+          // value={'autoCompleteInput'}
+          style={{ width: 360 }}
+        />
+      </AutoComplete>
+      <div style={{ height: 30 }} />
+      <Space style={{ display: 'flex' }} size={5} direction={'vertical'}>
+        <FComponentsLib.FContentText text={'目前仅支持中文、英文、数字，及符号“-”、“&”、“.”、“,”'} type={'additional2'} />
+        <FComponentsLib.FContentText text={'英文区分大小写'} type={'additional2'} />
+        <FComponentsLib.FContentText text={'长度必须在1-40个字符之间'} type={'additional2'} />
+      </Space>
+    </div>);
   }
 
   return (<Dropdown
@@ -369,6 +379,7 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
       return ref.current;
     }}
     trigger={['click']}
+    destroyPopupOnHide={true}
     overlayClassName={styles.overlayClassName}
     overlay={(<div className={styles.overlay}>
       <div className={styles.recommend}>
@@ -381,13 +392,13 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
           {
             $recommend.map((r) => {
               return (<label
+                key={r.value}
                 onClick={() => {
                   onDropdownChange({
                     value: r.value,
                     labels: r.labels,
                   });
                 }}
-                key={r.value}
               >{r.labels.join('/')}</label>);
             })
           }
@@ -404,106 +415,138 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
       <div className={styles.FCascader}>
         {
           $options.map((o0) => {
-            return (<div
-              className={styles.item}
+            return (<Popover
               key={o0.value}
-              onClick={() => {
-                if (o0.children.length === 0) {
-                  onDropdownChange({
-                    value: o0.value,
-                    labels: o0.labels,
-                  });
-                }
+              // showArrow={false}
+              // arrowPointAtCenter={false}
+              getPopupContainer={() => {
+                return ref.current;
               }}
-            >
-              <span>{o0.label}</span>
-              {
-                o0.children.length > 0 && (<>
-                  <FComponentsLib.FIcons.FRight className={styles.itemRightIcon} />
-                  <div className={styles.itemChildren}>
-                    {
-                      o0.children.map((o1, o1Index, data) => {
-                        return (<React.Fragment key={o1.value}>
-                          <div
-                            className={styles.item}
-                            onClick={() => {
-                              if (o1.children.length === 0) {
-                                onDropdownChange({
-                                  value: o1.value,
-                                  labels: o1.labels,
-                                });
-                              }
-                            }}
-                          >
-                            <span>{o1.label}</span>
-                            {
-                              o1.children.length > 0 && (<>
-                                <FComponentsLib.FIcons.FRight className={styles.itemRightIcon} />
-                                <div className={styles.itemChildren}>
-                                  {
-                                    o1.children.map((o2) => {
-                                      return (<React.Fragment key={o2.value}>
-                                        <div
-                                          className={styles.item}
-                                          onClick={() => {
-                                            if (o2.children.length === 0) {
-                                              onDropdownChange({
-                                                value: o2.value,
-                                                labels: o2.labels,
-                                              });
-                                            }
-                                          }}
-                                        >
-                                          <span>{o2.label}</span>
-                                        </div>
-
-                                        {
-                                          o1Index + 1 === data.length && (<div
-                                            className={styles.item + ' ' + styles.itemLatest}
-                                            onClick={() => {
-                                              onDropdownClickCustom({
-                                                value: o1.value,
-                                                values: o1.values,
-                                                label: o1.label,
-                                                labels: o1.labels,
-                                              });
-                                            }}
-                                          >
-                                            {/*<span>添加新类型</span>*/}
-                                            <span>{FI18n.i18nNext.t('createresource_selectresourcetype_btn_addnewtype')}</span>
-                                          </div>)
-                                        }
-                                      </React.Fragment>);
-                                    })
-                                  }
-
-                                </div>
-                              </>)
-                            }
-                          </div>
+              zIndex={10000}
+              open={o0.children.length === 0 ? false : undefined}
+              // trigger={'click'}
+              // arrowPointAtCenter={false}
+              // overlayInnerStyle={{ padding: 0, width: 200 }}
+              // overlayStyle={{ padding: 0 }}
+              overlayClassName={styles.PopoverOverlayClassName}
+              placement={'rightTop'}
+              title={null}
+              content={<div className={styles.itemChildren}>
+                {
+                  o0.children.map((o1, o1Index, data) => {
+                    return (<React.Fragment key={o1.value}>
+                      <Popover
+                        zIndex={10001}
+                        // showArrow={false}
+                        getPopupContainer={() => {
+                          return ref.current;
+                        }}
+                        open={o1.children.length === 0 ? false : undefined}
+                        // overlayInnerStyle={{ padding: 0 }}
+                        // overlayStyle={{ padding: 0 }}
+                        // trigger={'click'}
+                        overlayClassName={styles.PopoverOverlayClassName}
+                        title={null}
+                        placement={'rightTop'}
+                        content={<div className={styles.itemChildren}>
                           {
-                            o1Index + 1 === data.length && (<div
-                              className={styles.item + ' ' + styles.itemLatest}
-                              onClick={() => {
-                                onDropdownClickCustom({
-                                  value: o0.value,
-                                  values: o0.values,
-                                  label: o0.label,
-                                  labels: o0.labels,
-                                });
-                              }}
-                            >
-                              {/*<span>添加新类型</span>*/}
-                              <span>{FI18n.i18nNext.t('createresource_selectresourcetype_btn_addnewtype')}</span>
-                            </div>)
+                            o1.children.map((o2) => {
+                              return (<React.Fragment key={o2.value}>
+                                <div
+                                  className={styles.item}
+                                  onClick={() => {
+                                    if (o2.children.length === 0) {
+                                      onDropdownChange({
+                                        value: o2.value,
+                                        labels: o2.labels,
+                                      });
+                                    }
+                                  }}
+                                >
+                                  <span>{o2.label}</span>
+                                </div>
+
+                                {
+                                  o1Index + 1 === data.length && (<div
+                                    className={styles.item + ' ' + styles.itemLatest}
+                                    onClick={() => {
+                                      onDropdownClickCustom({
+                                        value: o1.value,
+                                        values: o1.values,
+                                        label: o1.label,
+                                        labels: o1.labels,
+                                      });
+                                    }}
+                                  >
+                                    {/*<span>添加新类型</span>*/}
+                                    <span>{FI18n.i18nNext.t('createresource_selectresourcetype_btn_addnewtype')}</span>
+                                  </div>)
+                                }
+                              </React.Fragment>);
+                            })
                           }
-                        </React.Fragment>);
-                      })
-                    }
-                  </div>
-                </>)
-              }
-            </div>);
+                        </div>}
+                      >
+                        <div
+                          className={styles.item}
+                          onClick={() => {
+                            if (o1.children.length === 0) {
+                              onDropdownChange({
+                                value: o1.value,
+                                labels: o1.labels,
+                              });
+                            }
+                          }}
+                        >
+                          <span>{o1.label}</span>
+                          {
+                            o1.children.length > 0 && (<>
+                              <FComponentsLib.FIcons.FRight className={styles.itemRightIcon} />
+                            </>)
+                          }
+                        </div>
+                      </Popover>
+                      {
+                        o1Index + 1 === data.length && (<div
+                          className={styles.item + ' ' + styles.itemLatest}
+                          onClick={() => {
+                            onDropdownClickCustom({
+                              value: o0.value,
+                              values: o0.values,
+                              label: o0.label,
+                              labels: o0.labels,
+                            });
+                          }}
+                        >
+                          {/*<span>添加新类型</span>*/}
+                          <span>{FI18n.i18nNext.t('createresource_selectresourcetype_btn_addnewtype')}</span>
+                        </div>)
+                      }
+                    </React.Fragment>);
+                  })
+                }
+              </div>}
+            >
+              <div
+                className={styles.item}
+                key={o0.value}
+                onClick={() => {
+                  if (o0.children.length === 0) {
+                    onDropdownChange({
+                      value: o0.value,
+                      labels: o0.labels,
+                    });
+                  }
+                }}
+              >
+                <span>{o0.label}</span>
+                {
+                  o0.children.length > 0 && (<>
+                    <FComponentsLib.FIcons.FRight className={styles.itemRightIcon} />
+                  </>)
+                }
+              </div>
+            </Popover>);
           })
         }
       </div>

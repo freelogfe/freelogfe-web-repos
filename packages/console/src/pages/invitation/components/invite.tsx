@@ -17,48 +17,54 @@ function Invite({ jump }: InviteProps) {
   const [urlState] = useUrlState<{ returnUrl?: string; invitationCode?: string; }>();
 
   const [code, setCode] = React.useState<string>(urlState.invitationCode || '');
-  const [errorMessege, setError] = React.useState<string>('');
+  // const [errorMessege, setError] = React.useState<string>('');
   const [loading, setLoading] = React.useState<boolean>(false);
 
-  const { data, error, run } = AHooks.useRequest(submit, {
-    loadingDelay: 100,
-    manual: true,
-  });
-  React.useEffect(() => {
-    if (loading) {
-      setTimeout(() => {
-        setLoading(false);
-        console.log(data, 'data09weiojflsikdjflksadjflksjdflkfjlk');
+  // const { data, error, run } = AHooks.useRequest(submit, {
+  //   loadingDelay: 100,
+  //   manual: true,
+  // });
 
-      }, 1000);
-    }
-  }, [data]);
+  // React.useEffect(() => {
+  //   if (loading) {
+  //     setTimeout(() => {
+  //       setLoading(false);
+  //       // console.log(data, 'data09weiojflsikdjflksadjflksjdflkfjlk');
+  //     }, 1000);
+  //   }
+  // }, [data]);
 
   AHooks.useUnmount(() => {
   });
 
   async function submit() {
-    const { data } = await FServiceAPI.TestQualification.betaCodesActivate({
-      // @ts-ignore
+    setLoading(true);
+    const { ret, errCode, msg, data } = await FServiceAPI.TestQualification.betaCodesActivate({
       code: code,
     });
+    setLoading(false);
 
-    if (data) {
-      if (data.errCode) {
-        setError('无效邀请码，请重新输入');
-      } else {
-        fMessage('验证成功！', 'success');
-        console.log(urlState);
-        if (urlState.returnUrl) {
-          console.log('returnUrl09weiojflksdfjlsdkjl');
-          window.location.replace(decodeURIComponent(urlState.returnUrl));
-        } else {
-          // history.push('/dashboard');
-          console.log(FUtil.LinkTo.dashboard(), 'asd98fiojweikfja;lskdjflsdjl');
-          window.location.replace(FUtil.LinkTo.dashboard());
-        }
-      }
+    // console.log(ret, errCode, msg, 'aiosdjflksdjflkl asdflkasjdlfkjsdalkfjlkj');
+
+    if (ret !== 0 || errCode !== 0) {
+      fMessage(msg, 'error');
+      return;
     }
+
+    // if (data.errCode) {
+    //   setError('无效邀请码，请重新输入');
+    // } else {
+    fMessage('验证成功！', 'success');
+    // console.log(urlState);
+    if (urlState.returnUrl) {
+      // console.log('returnUrl09weiojflksdfjlsdkjl');
+      window.location.replace(decodeURIComponent(urlState.returnUrl));
+    } else {
+      // history.push('/dashboard');
+      // console.log(FUtil.LinkTo.dashboard(), 'asd98fiojweikfja;lskdjflsdjl');
+      window.location.replace(FUtil.LinkTo.dashboard());
+    }
+    // }
   }
 
   function flatCss(arr: Array<string>) {
@@ -81,17 +87,20 @@ function Invite({ jump }: InviteProps) {
           placeholder='请输入内测邀请码'
           wrapClassName={styles.input}
           onChange={(e) => {
-            setError('');
+            // setError('');
             setCode(e.currentTarget.value.trim());
           }}
         />
-        <div className={styles.codeError}>{errorMessege}</div>
+        <div className={styles.codeError} />
         <FComponentsLib.FRectBtn
           onClick={() => {
-            run();
-            setLoading(true);
+            if (code.length !== 8) {
+              fMessage('邀请码长度为8个字符', 'error');
+              return;
+            }
+            submit();
           }}
-          disabled={!code || !!errorMessege}
+          disabled={code === '' || loading}
         >
           验证邀请码
         </FComponentsLib.FRectBtn>
@@ -113,13 +122,13 @@ function Invite({ jump }: InviteProps) {
           </span>
         </div>
       </div>
-      {loading && (
-        <div className={styles.loading + ' flex-column-center'}>
-          <div className={'flex-column-center ' + styles.box}>
-            <span className={styles.text}>验证中</span>
-          </div>
-        </div>
-      )}
+      {/*{loading && (*/}
+      {/*  <div className={styles.loading + ' flex-column-center'}>*/}
+      {/*    <div className={'flex-column-center ' + styles.box}>*/}
+      {/*      <span className={styles.text}>验证中</span>*/}
+      {/*    </div>*/}
+      {/*  </div>*/}
+      {/*)}*/}
     </div>
   );
 }

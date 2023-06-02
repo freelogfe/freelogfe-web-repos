@@ -1,15 +1,15 @@
 import * as React from 'react';
 import styles from './index.less';
-import {
-  FViewportTabs,
-} from '@/components/FAntvG6';
+// import {
+//   FViewportTabs,
+// } from '@/components/FAntvG6';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import { ConnectState, ResourceDetailPageModelState } from '@/models/connect';
 import { ChangeAction } from '@/models/resourceDetailPage';
-import FDrawer from '@/components/FDrawer';
-import FGraph_Tree_Dependency_Resource from '@/components/FAntvG6/FGraph_Tree_Dependency_Resource';
-import FGraph_Tree_Authorization_Resource from '@/components/FAntvG6/FGraph_Tree_Authorization_Resource';
+// import FDrawer from '@/components/FDrawer';
+// import FGraph_Tree_Dependency_Resource from '@/components/FAntvG6/FGraph_Tree_Dependency_Resource';
+// import FGraph_Tree_Authorization_Resource from '@/components/FAntvG6/FGraph_Tree_Authorization_Resource';
 import FComponentsLib from '@freelog/components-lib';
 import FViewportCards_Resource from '@/components/FAntvG6/FViewportCards_Resource';
 

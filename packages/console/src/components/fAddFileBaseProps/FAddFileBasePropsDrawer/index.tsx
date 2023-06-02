@@ -1,14 +1,10 @@
 import * as React from 'react';
 import styles from './index.less';
-import { ResourceVersionCreatorPageModelState } from '@/models/resourceVersionCreatorPage';
-import FBasePropsEditorDrawer from '@/components/FBasePropsEditorDrawer';
 import FDrawer from '@/components/FDrawer';
-import { Drawer, Space } from 'antd';
+import { Space } from 'antd';
 import FComponentsLib from '@freelog/components-lib';
 import FInput from '@/components/FInput';
-import { FUtil } from '@freelog/tools-lib';
-
-// import displayName = Drawer.displayName;
+import { FI18n, FUtil } from '@freelog/tools-lib';
 
 interface FAddFileBasePropsDrawerProps {
   disabledKeys: string[];
@@ -74,7 +70,7 @@ function FAddFileBasePropsDrawer({
       set_dataSource(defaultData.map<FAddFileBasePropsDrawerStates['dataSource'][number]>((cpd) => {
         return {
           key: cpd.key,
-          keyError: disabledKeys.includes(cpd.key) ? '键不能重复' : '',
+          keyError: disabledKeys.includes(cpd.key) ? FI18n.i18nNext.t('alert_key_exist') : '',
           name: cpd.name,
           nameError: disabledNames.includes(cpd.name) ? '名称不能重复' : '',
           value: cpd.value,
@@ -101,7 +97,7 @@ function FAddFileBasePropsDrawer({
 
   // console.log(dataSource, 'dataSourceoikdsfldfjlk');
   return (<FDrawer
-    title={'补充属性'}
+    title={FI18n.i18nNext.t('resourceinfo_add_title')}
     onClose={() => {
       set_visible(false);
     }}
@@ -122,7 +118,7 @@ function FAddFileBasePropsDrawer({
         onClick={() => {
           set_visible(false);
         }}
-      >取消</FComponentsLib.FTextBtn>
+      >{FI18n.i18nNext.t('btn_cancel')}</FComponentsLib.FTextBtn>
 
       <FComponentsLib.FRectBtn
         disabled={dataSource.length === 0 || dataSource.some((eds) => {
@@ -142,7 +138,7 @@ function FAddFileBasePropsDrawer({
           }));
           set_visible(false);
         }}
-      >确定</FComponentsLib.FRectBtn>
+      >{FI18n.i18nNext.t('btn_save')}</FComponentsLib.FRectBtn>
     </Space>}
   >
     <Space
@@ -158,7 +154,7 @@ function FAddFileBasePropsDrawer({
               <div>
                 <div className={styles.title}>
                   <i className={styles.dot} />
-                  <FComponentsLib.FTitleText type='h4'>属性名称</FComponentsLib.FTitleText>
+                  <FComponentsLib.FTitleText type='h4'>{FI18n.i18nNext.t('resourceinfo_add_input_name')}</FComponentsLib.FTitleText>
                 </div>
                 <div style={{ height: 5 }} />
                 <FInput
@@ -170,9 +166,9 @@ function FAddFileBasePropsDrawer({
                     const value: string = e.target.value;
                     let keyError: string = '';
                     if (value === '') {
-                      keyError = '请输入名称';
+                      keyError = '输入属性名称';
                     } else if (value.length > 50) {
-                      keyError = '不超过50个字符';
+                      keyError = FI18n.i18nNext.t('alert_naming_convention_attribute_name');
                     }
                     // else if (!FUtil.Regexp.CUSTOM_KEY.test(value)) {
                     //   keyError = `不符合${FUtil.Regexp.CUSTOM_KEY}`;
@@ -182,14 +178,14 @@ function FAddFileBasePropsDrawer({
                       nameError: keyError,
                     }, index);
                   }}
-                  placeholder={'输入属性说明'}
+                  placeholder={FI18n.i18nNext.t('resourceinfo_add_input_name_hint')}
                 />
               </div>
 
               <div>
                 <div className={styles.title}>
                   <i className={styles.dot} />
-                  <FComponentsLib.FTitleText type='h4'>key</FComponentsLib.FTitleText>
+                  <FComponentsLib.FTitleText type='h4'>{FI18n.i18nNext.t('resourceinfo_add_input_key')}</FComponentsLib.FTitleText>
                 </div>
                 <div style={{ height: 5 }} />
                 <FInput
@@ -205,20 +201,20 @@ function FAddFileBasePropsDrawer({
                     } else if (value.length > 20) {
                       keyError = '不超过20个字符';
                     } else if (!FUtil.Regexp.CUSTOM_KEY.test(value)) {
-                      keyError = `不符合${FUtil.Regexp.CUSTOM_KEY}`;
+                      keyError = FI18n.i18nNext.t('alert_naming_convention_key');
                     }
                     onChangeData({
                       key: value,
                       keyError: keyError,
                     }, index);
                   }}
-                  placeholder={'请输入key'}
+                  placeholder={FI18n.i18nNext.t('resourceinfo_add_input_key_hint')}
                 />
               </div>
               <div>
                 <div className={styles.title}>
                   <i className={styles.dot} />
-                  <FComponentsLib.FTitleText type='h4'>value</FComponentsLib.FTitleText>
+                  <FComponentsLib.FTitleText type='h4'>{FI18n.i18nNext.t('resourceinfo_add_input_value')}</FComponentsLib.FTitleText>
                 </div>
                 <div style={{ height: 5 }} />
                 <FInput
@@ -232,19 +228,19 @@ function FAddFileBasePropsDrawer({
                     if (value === '') {
                       valueError = '请输入';
                     } else if (value.length > 140) {
-                      valueError = '不超过140个字符';
+                      valueError = FI18n.i18nNext.t('alert_custom_option_field');
                     }
                     onChangeData({
                       value: value,
                       valueError: valueError,
                     }, index);
                   }}
-                  placeholder={'输入value'}
+                  placeholder={FI18n.i18nNext.t('resourceinfo_add_input_value_hint')}
                 />
               </div>
               <div>
                 <div className={styles.title}>
-                  <FComponentsLib.FTitleText type='h4'>属性说明</FComponentsLib.FTitleText>
+                  <FComponentsLib.FTitleText type='h4'>{FI18n.i18nNext.t('resourceinfo_add_input_desc')}</FComponentsLib.FTitleText>
                 </div>
                 <div style={{ height: 5 }} />
                 <FInput
@@ -256,14 +252,14 @@ function FAddFileBasePropsDrawer({
                     const value: string = e.target.value;
                     let descriptionError: string = '';
                     if (value.length > 50) {
-                      descriptionError = '不超过50个字符';
+                      descriptionError = FI18n.i18nNext.t('alert_key_remark_length');
                     }
                     onChangeData({
                       description: value,
                       descriptionError: descriptionError,
                     }, index);
                   }}
-                  placeholder={'输入属性说明'}
+                  placeholder={FI18n.i18nNext.t('resourceinfo_add_input_desc_hint')}
                 />
               </div>
 

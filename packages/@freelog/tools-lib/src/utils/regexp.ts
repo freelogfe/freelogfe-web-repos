@@ -5,15 +5,11 @@ export const EXHIBIT_NAME: RegExp = new RegExp(/^(?!.*(\\|\/|:|\*|\?|"|<|>|\||\s
 export const RESOURCE_NAME: RegExp = new RegExp(/^(?!.*(\\|\/|:|\*|\?|"|<|>|\||\s|@|\$|#)).{1,60}$/);
 
 // 资源类型
-// export const RESOURCE_TYPE: RegExp = new RegExp(/^(?!_)[a-z0-9_]{3,20}(?<!_)$/);
-// export const RESOURCE_TYPE: RegExp = new RegExp(/^[a-z0-9][a-z0-9_]{1,18}[a-z0-9]$/);
-// ^[\u4e00-\u9fefa-zA-Z0-9\\-&.,]{1,40}$
 export const RESOURCE_TYPE: RegExp = new RegExp('^[\u4e00-\u9fefa-zA-Z0-9\\-&.,]{1,40}$');
 
 // 自定义属性键
-// export const CUSTOM_KEY: RegExp = new RegExp(/^[a-zA-Z0-9_]{1,20}$/);
-// export const CUSTOM_KEY: RegExp = new RegExp(/^[a-zA-Z_][a-zA-Z0-9_]{1,19}$/);
-export const CUSTOM_KEY: RegExp = new RegExp(/^[a-zA-Z_]([a-zA-Z0-9_]{1,19})?$/);
+// export const CUSTOM_KEY: RegExp = new RegExp(/^[a-zA-Z_]([a-zA-Z0-9_]{1,19})?$/);
+export const CUSTOM_KEY: RegExp = new RegExp('^[a-zA-Z]([a-zA-Z0-9_]{1,19})?$');
 
 // 节点名称
 export const NODE_NAME: RegExp = new RegExp(/^[\u4E00-\u9FA5|a-zA-Z0-9]{2,24}$/);
@@ -47,7 +43,8 @@ export const NATURAL_NUMBER: RegExp = new RegExp(/^[0-9]*$/);
 export const POSITIVE_INTEGER = new RegExp(/^[1-9]\d*$/);
 
 // 最多两位小数的正数
-export const MAX_2_DECIMAL_POSITIVE_NUMBER = new RegExp(/^\d+(.\d{1,2})?$/);
+// export const MAX_2_DECIMAL_POSITIVE_NUMBER = new RegExp(/^\d+(.\d{1,2})?$/);
+export const MAX_2_DECIMAL_POSITIVE_NUMBER = new RegExp(/^\d+(\.\d{0,2})?$/);
 
 // 对象的Bucket名称
 export const BUCKET_NAME: RegExp = new RegExp(/^([a-z0-9][a-z0-9-]{0,61})?[a-z0-9]$/);

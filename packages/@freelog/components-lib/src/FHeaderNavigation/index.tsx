@@ -78,7 +78,8 @@ function FHeaderNavigation({
                                UmiLinkPatch,
                                showHotspotTooltip,
                            }: FHeaderNavigationProps) {
-    return (<div className={styles.FHeaderNavigation}>
+    const ref = React.useRef(null);
+    return (<div className={styles.FHeaderNavigation} ref={ref}>
         <div className={styles.FHeaderNavigation_Left}>
             <AOrLink href={logoBtn.href} className={styles.logoLink} UmiLinkPatch={UmiLinkPatch}>
                 <i className={'freelog fl-icon-a-featherlogo5'}/>
@@ -149,17 +150,6 @@ function FHeaderNavigation({
 
         </div>
         <div className={styles.FHeaderNavigation_Right}>
-            {/*{*/}
-            {/*  showGlobalSearch && (<>*/}
-            {/*    <FInput*/}
-            {/*      size='small'*/}
-            {/*      theme='dark'*/}
-            {/*      style={{ width: 200 }}*/}
-            {/*      value={''}*/}
-            {/*    />*/}
-            {/*    <div style={{ width: 30 }} />*/}
-            {/*  </>)*/}
-            {/*}*/}
             {extra}
 
             <div style={{width: 30}}/>
@@ -203,7 +193,12 @@ function FHeaderNavigation({
                 {
                     createBtnMenu && createBtnMenu.length > 0 && (<>
                         <FComponentsLib.FDropdown
-                            overlay={<NavList items={createBtnMenu} UmiLinkPatch={UmiLinkPatch}/>}
+                            getPopupContainer={() => {
+                                return ref.current || self.document.body;
+                            }}
+                            overlay={<NavList
+                                items={createBtnMenu}
+                                UmiLinkPatch={UmiLinkPatch}/>}
                         >
                             <a
                                 className={styles.createBtnMenu}
