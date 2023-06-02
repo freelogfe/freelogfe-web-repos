@@ -1,27 +1,31 @@
 /** 图片组件 */
 
 import './index.less';
-import { FI18n, FUtil } from '@freelog/tools-lib';
-import { Popconfirm, Progress, Tooltip } from 'antd';
-import { useContext } from 'react';
+import { FI18n } from '@freelog/tools-lib';
+import { useContext, useState } from 'react';
 import { comicToolContext } from '../..';
-import { ImgInComicTool } from '../../core/interface';
-import { MAX_IMG_SIZE } from '../../core/assets';
+import { ImgInComicTool } from '../../utils/interface';
+import { MAX_IMG_SIZE } from '../../utils/assets';
+import { CutDrawer } from '../cut-drawer';
+import { conversionSize } from '../../utils/common';
 
 interface Props {
   index: number;
   data: ImgInComicTool;
+  setInsertIndex: (index: number) => void;
+  cutImage: (item: ImgInComicTool) => void;
 }
 
 export const ImgCard = (props: Props) => {
   const { imgList, setImgList } = useContext(comicToolContext);
-  const { index, data } = props;
+  const { index, data, setInsertIndex, cutImage } = props;
+
+  const [cutDrawerShow, setCutDrawerShow] = useState(false);
 
   /** 删除图片 */
   const deleteImg = (index: number) => {
     const list = [...imgList];
     list.splice(index, 1);
-    console.error(list);
     setImgList(list);
   };
 
@@ -46,15 +50,10 @@ export const ImgCard = (props: Props) => {
     document.body.removeChild(_div);
   };
 
-  /** 换算图片大小 */
-  const conversionSize = (size: number) => {
-    if (size < 1024) return `${size}B`;
-
-    if (size >= 1024 * 1024) {
-      return `${Math.floor((size / 1024 / 1024) * 100) / 100}MB`;
-    } else {
-      return `${Math.floor((size / 1024) * 100) / 100}KB`;
-    }
+  /** 插入图片 */
+  const insert = (i: number) => {
+    setInsertIndex(i);
+    document.getElementById('uploadLocalImg')?.click();
   };
 
   return (
@@ -64,53 +63,94 @@ export const ImgCard = (props: Props) => {
           className={`card-header ${data.size > MAX_IMG_SIZE && 'oversize'}`}
         >
           <div className="order">{index + 1}</div>
-          <div className="size">{conversionSize(data.size)}</div>
+          <div className="size">
+            {data.children && data.size < MAX_IMG_SIZE
+              ? FI18n.i18nNext.t('cbformatter_slice_qty', {
+                  imageQty: data.children.length,
+                })
+              : conversionSize(data.size)}
+          </div>
           <i className="freelog fl-icon-tuodong dragger" />
-          <div className="drag-tip">{FI18n.i18nNext.t('按住可拖拽排序')}</div>
+          <div className="drag-tip">
+            {FI18n.i18nNext.t('cbformatter_dragtoreorder_tooltips')}
+          </div>
         </div>
         <div className="card-body">
           {data.size <= MAX_IMG_SIZE ? (
-            <img className="img" src={data.base64} />
+            data.children ? (
+              <>
+                <div className="cut-img" />
+                <div className="cut-img" />
+                <div className="cut-img" />
+                <img className="cut-img" src={data.base64} loading="lazy" />
+              </>
+            ) : (
+              <img className="img" src={data.base64} loading="lazy" />
+            )
           ) : (
             <div className="oversize-box">
-              <img className="oversize-img" src={data.base64} />
+              <img className="oversize-img" src={data.base64} loading="lazy" />
               <div className="oversize-tip">
-                {FI18n.i18nNext.t('单张图片不超过20MB')}
+                {FI18n.i18nNext.t(
+                  data.children
+                    ? 'cbformatter_err_filesize_sliced'
+                    : 'cbformatter_err_filesize',
+                )}
               </div>
             </div>
           )}
 
-          <div className="cut-mark">
-            <i className="freelog fl-icon-jiandao" />
-            {FI18n.i18nNext.t('已切图')}
-          </div>
-          <div className="operate-btns">
-            <div className="btn">
+          {data.children && (
+            <div className="cut-mark">
               <i className="freelog fl-icon-jiandao" />
-              <div className="btn-name">{FI18n.i18nNext.t('切图')}</div>
+              {FI18n.i18nNext.t('cbformatter_slice_state_done')}
             </div>
-            {/* <div className="btn">
-            <i className="freelog fl-icon-jiandao" />
-            <div className="btn-name">
-              {FI18n.i18nNext.t('查看切图详情')}
-            </div>
-          </div> */}
+          )}
+          <div className="operate-btns">
+            {data.size < MAX_IMG_SIZE &&
+              (!data.children ? (
+                <div className="btn" onClick={() => cutImage(data)}>
+                  <i className="freelog fl-icon-jiandao" />
+                  <div className="btn-name">
+                    {FI18n.i18nNext.t('cbformatter_slice_btn')}
+                  </div>
+                </div>
+              ) : (
+                <div className="btn" onClick={() => setCutDrawerShow(true)}>
+                  <i className="freelog fl-icon-jiandao" />
+                  <div className="btn-name">
+                    {FI18n.i18nNext.t('cbformatter_slice_preview')}
+                  </div>
+                </div>
+              ))}
             <div className="btn" onClick={() => deleteImg(index)}>
               <i className="freelog fl-icon-shanchu" />
-              <div className="btn-name">{FI18n.i18nNext.t('删除')}</div>
+              <div className="btn-name">
+                {FI18n.i18nNext.t('cbformatter_delete_btn')}
+              </div>
             </div>
           </div>
         </div>
       </div>
       <div className="name">{formatName(data.name)}</div>
-      <div className="insert-btn pre">
+      <div className="insert-btn pre" onClick={() => insert(index)}>
         <i className="freelog fl-icon-tianjia" />
-        <div className="insert-tip">{FI18n.i18nNext.t('向左侧插入图片')}</div>
+        <div className="insert-tip">
+          {FI18n.i18nNext.t('cbformatter_insert_tooltips')}
+        </div>
       </div>
-      <div className="insert-btn next">
+      <div className="insert-btn next" onClick={() => insert(index + 1)}>
         <i className="freelog fl-icon-tianjia" />
-        <div className="insert-tip">{FI18n.i18nNext.t('向右侧插入图片')}</div>
+        <div className="insert-tip">
+          {FI18n.i18nNext.t('cbformatter_insert_tooltips')}
+        </div>
       </div>
+
+      <CutDrawer
+        show={cutDrawerShow}
+        close={() => setCutDrawerShow(false)}
+        data={data.children || []}
+      />
     </div>
   );
 };

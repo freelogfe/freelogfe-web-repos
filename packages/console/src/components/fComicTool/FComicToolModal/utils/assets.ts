@@ -11,3 +11,9 @@ export const UPLOAD_LOCAL_ACCEPT = '.jpg,.jpeg,.png,.gif';
 
 /** 切图图片格式限制 */
 export const CUT_IMG_ACCEPT = '.jpg,.jpeg,.png';
+
+/** 同时切图图片数量 */
+export const MAX_CUT_IMG_LENGTH = 60;
+
+/** 切图最大高度 */
+export const MAX_HEIGHT_PER_PIECE = 2000;

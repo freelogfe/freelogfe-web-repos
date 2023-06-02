@@ -5,18 +5,30 @@ import React from 'react';
 import { useState, useEffect, useRef } from 'react';
 import { Timeout } from 'ahooks/lib/useRequest/src/types';
 import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
-import { formatDate } from './core/common';
+import { formatDate } from './utils/common';
 import { IResourceCreateVersionDraft } from '@/type/resourceTypes';
 import fMessage from '@/components/fMessage';
 import { Modal } from 'antd';
 import FComponentsLib from '@freelog/components-lib';
 import FPopover from '@/components/FPopover';
-import { ImgInComicTool } from './core/interface';
+import { ImgInComicTool } from './utils/interface';
 import { ImportDrawer } from './components/import-drawer';
 import { ImgCard } from './components/img-card';
-import { MAX_IMG_LENGTH, MAX_IMG_SIZE, UPLOAD_LOCAL_ACCEPT, CUT_IMG_ACCEPT } from './core/assets';
+import {
+  MAX_IMG_LENGTH,
+  MAX_IMG_SIZE,
+  UPLOAD_LOCAL_ACCEPT,
+  CUT_IMG_ACCEPT,
+  MAX_CUT_IMG_LENGTH,
+  MAX_HEIGHT_PER_PIECE,
+} from './utils/assets';
 import { PreviewBox } from './components/preview-box';
 const saveAs = require('file-saver');
+import Sortable from 'sortablejs';
+import CutDescImg from './images/cut-desc.png';
+import BlueScissors from './images/blue-scissors.png';
+import BlackScissors from './images/black-scissors.png';
+import { Loading3QuartersOutlined } from '@ant-design/icons/lib/icons';
 
 interface ToolProps {
   // 资源 id
@@ -41,14 +53,19 @@ export const ComicTool = (props: ToolProps) => {
 
   const inputTimer = useRef<Timeout | null>(null);
   const stopTimer = useRef<Timeout | null>(null);
+  const sorter = useRef<Sortable | null>(null);
 
   const [edited, setEdited] = useState(false);
   const [saveType, setSaveType] = useState(0);
   const [lastSaveTime, setLastSaveTime] = useState(0);
-  const [imgList, setImgList] = useState<ImgInComicTool[]>([]);
-  const [canvasList, setCanvasList] = useState<any[]>([]);
 
+  const [imgList, setImgList] = useState<ImgInComicTool[]>([]);
+  const [insertIndex, setInsertIndex] = useState(-1);
+  const [canvasList, setCanvasList] = useState<any[]>([]);
   const [importDrawer, setImportDrawer] = useState(false);
+  const [previewShow, setPreviewShow] = useState(false);
+  const [loaderShow, setLoaderShow] = useState(false);
+  const [cuttingLoaderShow, setCuttingLoaderShow] = useState(false);
 
   /** 退出 */
   const exit = async () => {
@@ -160,11 +177,15 @@ export const ComicTool = (props: ToolProps) => {
 
   /** 关闭所有弹窗 */
   const closeAllPopup = () => {
-    setImportDrawer(false);
+    setPreviewShow(false);
   };
 
   /** 上传本地图片 */
   const uploadLocalImg = (files: FileList) => {
+    if (files.length === 0) return;
+
+    setLoaderShow(true);
+    const insertPoint = insertIndex !== -1 ? insertIndex : imgList.length;
     const list = [...files];
 
     if (imgList.length + list.length > MAX_IMG_LENGTH) {
@@ -187,7 +208,12 @@ export const ComicTool = (props: ToolProps) => {
         const img = { name, size, base64: require('./images/oversize.png') };
         imgs[index] = img;
         doneCount++;
-        if (doneCount === list.length) setImgList((pre) => [...pre, ...imgs]);
+        if (doneCount === list.length) {
+          imgList.splice(insertPoint, 0, ...imgs);
+          setImgList([...imgList]);
+          setLoaderShow(false);
+        }
+
         return;
       }
 
@@ -198,7 +224,11 @@ export const ComicTool = (props: ToolProps) => {
         const img = { name, size, base64 };
         imgs[index] = img;
         doneCount++;
-        if (doneCount === list.length) setImgList((pre) => [...pre, ...imgs]);
+        if (doneCount === list.length) {
+          imgList.splice(insertPoint, 0, ...imgs);
+          setImgList([...imgList]);
+          setLoaderShow(false);
+        }
       };
     });
   };
@@ -228,60 +258,240 @@ export const ComicTool = (props: ToolProps) => {
     });
   };
 
-  /** 切图 */
-  const cutImage = (files: FileList) => {
-    console.time('first');
-    console.log('开始切图...');
-    setCanvasList([]);
-    const file = files[0];
-    if (file.type != 'image/png' && file.type != 'image/jpeg') {
-      console.log('请上传正确的文件类型');
+  /** 批量切图 */
+  const cutImages = (files: FileList) => {
+    if (files.length > MAX_CUT_IMG_LENGTH) {
+      // 切图数量超过最大同时切图数量
+      fMessage(FI18n.i18nNext.t('cbformatter_slice_error_qtylimitation'));
+      return;
     }
-    console.error(file.size);
-    console.error(MAX_IMG_SIZE);
-    if (file.size > MAX_IMG_SIZE) {
-      console.log('图片文件过大');
+
+    if (getTotal() === MAX_IMG_LENGTH) {
+      // 数量已达到最大图片总数量
+      fMessage(FI18n.i18nNext.t('cbformatter_add_error_qtylimitation'));
+      return;
     }
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    const image = new Image();
-    reader.onload = (evt) => {
-      const replaceSrc: string = evt!.target!.result as string;
-      image.src = replaceSrc;
-      image.onload = () => {
-        const { width, height } = image;
-        const MAX_HEIGHT_PER_PIECE = 2000;
-        const pieceNum = Math.ceil(height / MAX_HEIGHT_PER_PIECE);
-        const list: string[] = [];
-        for (let i = 0; i < pieceNum; i++) {
-          list.push(`${files[0].name.split('.')[0]}${i + 1}.jpg`);
-        }
-        setCanvasList(list);
-        console.error(canvasList);
-        // setTimeout(() => {
-        //   const heightPerPiece = height / pieceNum;
-        //   for (let i = 0; i < list.length; i++) {
-        //     const canvas: any = document.getElementById(list[i]);
-        //     canvas.width = 300;
-        //     canvas.height = (300 / width) * heightPerPiece;
-        //     const ctx = canvas.getContext('2d');
-        //     ctx.drawImage(
-        //       image,
-        //       0,
-        //       heightPerPiece * i,
-        //       width,
-        //       heightPerPiece,
-        //       0,
-        //       0,
-        //       canvas.width,
-        //       canvas.height,
-        //     );
-        //   }
-        //   console.timeEnd('first');
-        //   console.log('切图完成');
-        // }, 0);
+
+    setCuttingLoaderShow(true);
+    const results: ImgInComicTool[] = [];
+    const list = [...files];
+    let heightTip = false; // 是否需要显示切图高度小于最小指定切图高度 tip
+    let overTotal = false; // 是否已经超过最大数量限制
+    for (let i = 0; i < list.length; i++) {
+      const file = list[i];
+      const { type, name, size } = file;
+
+      if (!['image/png', 'image/jpeg'].includes(type)) {
+        // 切图类型非指定类型
+        fMessage(FI18n.i18nNext.t('cbformatter_slice_error_format'));
+        return;
+      }
+
+      let imgItem: ImgInComicTool = { name, base64: '', size: 0, children: [] };
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = (evt) => {
+        const replaceSrc: string = evt!.target!.result as string;
+        const image = new Image();
+        image.src = replaceSrc;
+        image.onload = () => {
+          const { width, height } = image;
+          if (height <= MAX_HEIGHT_PER_PIECE) {
+            // 原图高度小于规定最小高度，不予切图直接按普通上传图片处理
+            imgItem = { name, size, base64: replaceSrc };
+            results[i] = imgItem;
+            if (!heightTip) {
+              fMessage(FI18n.i18nNext.t('cbformatter_slice_error_height'));
+              heightTip = true;
+            }
+            if (i === list.length - 1) {
+              setImgList([...imgList, ...results]);
+              setCuttingLoaderShow(false);
+            }
+            return;
+          }
+
+          const pieceNum = Math.ceil(height / MAX_HEIGHT_PER_PIECE);
+          const heightPerPiece = height / pieceNum;
+          const canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = heightPerPiece;
+          const ctx = canvas.getContext('2d');
+          for (let j = 0; j < pieceNum; j++) {
+            ctx!.clearRect(0, 0, canvas.width, canvas.height);
+            ctx!.drawImage(
+              image,
+              0,
+              heightPerPiece * j,
+              width,
+              heightPerPiece,
+              0,
+              0,
+              canvas.width,
+              canvas.height,
+            );
+            const base64 = canvas.toDataURL('image/jpeg');
+            const childSize = getSizeByBase64(base64);
+
+            if (childSize > MAX_IMG_SIZE) {
+              // 尺寸大于单张最大尺寸
+              imgItem = {
+                name,
+                size,
+                base64: require('./images/oversize.png'),
+                children: [],
+              };
+              results[i] = imgItem;
+              if (i === list.length - 1) {
+                setImgList([...imgList, ...results]);
+                setCuttingLoaderShow(false);
+              }
+              break;
+            }
+
+            // 列表显示第一张切图
+            if (j === 0) imgItem.base64 = base64;
+
+            const childImg = {
+              name: `${name}-${String(j + 1).padStart(2, '0')}`,
+              base64,
+              size: childSize,
+            };
+            imgItem.children!.push(childImg);
+
+            if (j === pieceNum - 1) {
+              // 最后一张切图，处理完之后将图片加入队列
+
+              const currentTotal = getTotal();
+              if (currentTotal + imgItem.children!.length > MAX_IMG_LENGTH) {
+                // 数量已达到最大图片总数量
+                const restCount = MAX_IMG_LENGTH - currentTotal;
+                if (restCount > 0) {
+                  imgItem.children = imgItem.children!.slice(0, restCount);
+                  results[i] = imgItem;
+                }
+                if (!overTotal) {
+                  fMessage(
+                    FI18n.i18nNext.t('cbformatter_add_error_qtylimitation'),
+                  );
+                  overTotal = true;
+                }
+                if (i === list.length - 1) {
+                  setImgList([...imgList, ...results]);
+                  setCuttingLoaderShow(false);
+                }
+                break;
+              } else {
+                results[i] = imgItem;
+                if (i === list.length - 1) {
+                  setImgList([...imgList, ...results]);
+                  setCuttingLoaderShow(false);
+                }
+              }
+            }
+          }
+        };
       };
+    }
+  };
+
+  /** 单张切图 */
+  const cutImage = (item: ImgInComicTool) => {
+    if (getTotal() === MAX_IMG_LENGTH) {
+      // 数量已达到最大图片总数量
+      fMessage(FI18n.i18nNext.t('cbformatter_add_error_qtylimitation'));
+      return;
+    }
+
+    setCuttingLoaderShow(true);
+    const { name, base64 } = item;
+    const image = new Image();
+    image.src = base64;
+    image.onload = () => {
+      const { width, height } = image;
+      if (height <= MAX_HEIGHT_PER_PIECE) {
+        // 原图高度小于规定最小高度，不予切图
+        fMessage(FI18n.i18nNext.t('cbformatter_slice_error_height'));
+        return;
+      }
+
+      const pieceNum = Math.ceil(height / MAX_HEIGHT_PER_PIECE);
+      const heightPerPiece = height / pieceNum;
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = heightPerPiece;
+      const ctx = canvas.getContext('2d');
+      for (let i = 0; i < pieceNum; i++) {
+        ctx!.clearRect(0, 0, canvas.width, canvas.height);
+        ctx!.drawImage(
+          image,
+          0,
+          heightPerPiece * i,
+          width,
+          heightPerPiece,
+          0,
+          0,
+          canvas.width,
+          canvas.height,
+        );
+        const base64 = canvas.toDataURL('image/jpeg');
+        const childSize = getSizeByBase64(base64);
+
+        if (childSize > MAX_IMG_SIZE) {
+          // 尺寸大于单张最大尺寸
+          item.base64 = require('./images/oversize.png');
+          item.children = [];
+          setImgList([...imgList]);
+          if (i === pieceNum - 1) setCuttingLoaderShow(false);
+          break;
+        }
+
+        // 列表显示第一张切图
+        if (i === 0) item.base64 = base64;
+
+        const currentTotal = getTotal();
+        if (currentTotal === MAX_IMG_LENGTH) {
+          // 数量已达到最大图片总数量
+          setImgList([...imgList]);
+          fMessage(FI18n.i18nNext.t('cbformatter_add_error_qtylimitation'));
+          if (i === pieceNum - 1) setCuttingLoaderShow(false);
+          break;
+        }
+
+        const childImg = {
+          name: `${name}-${String(i + 1).padStart(2, '0')}`,
+          base64,
+          size: childSize,
+        };
+        if (!item.children) item.children = [];
+        item.children.push(childImg);
+
+        if (i === pieceNum - 1) {
+          // 最后一张切图，处理完之后将图片加入队列
+          setImgList([...imgList]);
+          setCuttingLoaderShow(false);
+        }
+      }
     };
+  };
+
+  /** 根据 base64 获取大小 */
+  const getSizeByBase64 = (base64: string = '') => {
+    base64 = base64.split(',')[1];
+    const equalIndex = base64.indexOf('=');
+    const strLength =
+      equalIndex > 0 ? base64.substring(0, equalIndex).length : base64.length;
+    const fileLength = strLength - (strLength / 8) * 2;
+    return Math.floor(fileLength);
+  };
+
+  /** 获取图片总数量 */
+  const getTotal = () => {
+    let total = 0;
+    imgList.forEach((item) => {
+      total += item.children ? item.children.length : 1;
+    });
+    return total;
   };
 
   /** 导出漫画文件 */
@@ -391,6 +601,27 @@ export const ComicTool = (props: ToolProps) => {
     };
   }, [show]);
 
+  useEffect(() => {
+    if (sorter.current) return;
+
+    const sortableList = document.getElementById('sortableList');
+    if (!sortableList) return;
+
+    sorter.current = new Sortable(sortableList, {
+      animation: 150,
+      handle: '.card-header',
+      onEnd(e) {
+        setImgList((pre) => {
+          const { oldIndex, newIndex } = e;
+          const list = [...pre];
+          const items = list.splice(oldIndex!, 1);
+          list.splice(newIndex!, 0, ...items);
+          return [...list];
+        });
+      },
+    });
+  }, [imgList]);
+
   // useEffect(() => {
   // const newMarkdown = html2md(html);
   // if (markdown !== newMarkdown) {
@@ -426,7 +657,7 @@ export const ComicTool = (props: ToolProps) => {
 
   return (
     <comicToolContext.Provider
-      value={{ resourceId, tool: { MAX_IMG_SIZE, imgList, setImgList } }}
+      value={{ resourceId, imgList, setImgList, setLoaderShow }}
     >
       <input
         type="file"
@@ -437,10 +668,10 @@ export const ComicTool = (props: ToolProps) => {
       />
       <input
         type="file"
-        id="cutImage"
+        id="cutImages"
         multiple={true}
         accept={CUT_IMG_ACCEPT}
-        onChange={(e) => cutImage(e.target.files!)}
+        onChange={(e) => cutImages(e.target.files!)}
       />
 
       <div className={`comic-tool-wrapper ${show && 'show'}`}>
@@ -484,70 +715,46 @@ export const ComicTool = (props: ToolProps) => {
             <div className="btns-bar">
               <div className="bar-left">
                 <div
-                  className="primary-btn"
+                  className="primary-btn btn"
                   onClick={() => {
                     document.getElementById('uploadLocalImg')?.click();
                   }}
                 >
                   {FI18n.i18nNext.t('cbformatter_add_btn')}
                 </div>
-                <div className="text-btn" onClick={() => setImportDrawer(true)}>
+                <div
+                  className="text-btn btn"
+                  onClick={() => setImportDrawer(true)}
+                >
                   <i className="freelog fl-icon-daoruwendang" />
                   {FI18n.i18nNext.t('cbformatter_import_btn')}
                 </div>
                 <div
-                  className="text-btn"
+                  className="text-btn btn"
                   onClick={() => {
-                    document.getElementById('cutImage')?.click();
+                    document.getElementById('cutImages')?.click();
                   }}
                 >
                   <i className="freelog fl-icon-jiandao" />
                   {FI18n.i18nNext.t('cbformatter_batchslice_btn')}
                 </div>
-                <FPopover
-                  overlayInnerStyle={{
-                    width: '320px',
-                    borderRadius: '4px',
-                    boxShadow: '0px 1px 4px 0px rgba(0, 0, 0, 0.2)',
-                    padding: '8px 4px',
-                    boxSizing: 'border-box',
-                    transform: 'translateX(-12px)',
-                  }}
-                  placement="rightTop"
-                  content={
-                    <div
-                      style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                      }}
-                    >
-                      <img
-                        style={{
-                          width: '104px',
-                          height: '80px',
-                        }}
-                        src=""
-                      />
-                      <div
-                        style={{
-                          fontSize: '12px',
-                          color: '#222222',
-                          lineHeight: '17px',
-                          marginTop: '20px',
-                        }}
-                      >
-                        {FI18n.i18nNext.t('cbformatter_slice_info')}
-                      </div>
-                    </div>
-                  }
-                >
+                <div className="info-box">
                   <FComponentsLib.FIcons.FInfo className="info-icon" />
-                </FPopover>
+                  <div className="info-popup">
+                    <div className="img-box">
+                      <img className="img" src={CutDescImg} />
+                      <div className="line"></div>
+                      <img className="scissors" src={BlueScissors} />
+                    </div>
+                    <div className="desc">
+                      {FI18n.i18nNext.t('cbformatter_slice_info')}
+                    </div>
+                  </div>
+                </div>
               </div>
               <div
                 className={`primary-btn ${imgList.length === 0 && 'disabled'}`}
-                onClick={save}
+                onClick={() => setPreviewShow(true)}
               >
                 {FI18n.i18nNext.t('cbformatter_preview_btn')}
               </div>
@@ -573,18 +780,30 @@ export const ComicTool = (props: ToolProps) => {
                 </div>
               ) : (
                 <div className="img-box">
-                  <div className="box-header">
-                    <div className="total">
-                      {FI18n.i18nNext.t(`共${imgList.length}张图片`)}
-                    </div>
-                    <div className="clear-btn" onClick={() => setImgList([])}>
-                      <i className="freelog fl-icon-shanchu delete-icon" />
-                      {FI18n.i18nNext.t('清空')}
+                  <div className="img-header">
+                    <div className="box-header">
+                      <div className="total">
+                        {FI18n.i18nNext.t('cbformatter_image_qty', {
+                          imageQty: getTotal(),
+                        })}
+                      </div>
+                      <div className="clear-btn" onClick={() => setImgList([])}>
+                        <i className="freelog fl-icon-shanchu delete-icon" />
+                        {FI18n.i18nNext.t('cbformatter_delete_btn_deleteall')}
+                      </div>
                     </div>
                   </div>
-                  <div className="box-body">
+                  <div id="sortableList" className="box-body">
                     {imgList.map((item, index) => {
-                      return <ImgCard index={index} data={item} key={item.name + index} />;
+                      return (
+                        <ImgCard
+                          index={index}
+                          data={item}
+                          setInsertIndex={setInsertIndex}
+                          cutImage={cutImage}
+                          key={item.name + index}
+                        />
+                      );
                     })}
                   </div>
                 </div>
@@ -604,7 +823,32 @@ export const ComicTool = (props: ToolProps) => {
           close={() => setImportDrawer(false)}
         />
 
-        <PreviewBox />
+        <PreviewBox show={previewShow} close={() => setPreviewShow(false)} />
+
+        {loaderShow && (
+          <div className="loader-wrapper">
+            <div className="loader-box">
+              <Loading3QuartersOutlined className="loader-icon" />
+            </div>
+          </div>
+        )}
+
+        {cuttingLoaderShow && (
+          <div className="cutting-loader-wrapper">
+            <div className="loader-box">
+              <div className="title">
+                {FI18n.i18nNext.t('cbformatter_slice_state_slicing')}
+              </div>
+              <div className="line-box">
+                <img className="scissors" src={BlackScissors} />
+                <div className="line"></div>
+              </div>
+              <div className="desc">
+                {FI18n.i18nNext.t('cbformatter_slice_state_slicing_msg')}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </comicToolContext.Provider>
   );

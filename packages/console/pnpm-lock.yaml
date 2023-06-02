@@ -97,6 +97,9 @@ dependencies:
   semver:
     specifier: ^7.5.1
     version: 7.5.1
+  sortablejs:
+    specifier: ^1.15.0
+    version: 1.15.0
   umi:
     specifier: ^3.5.40
     version: 3.5.40(react-router@5.3.4)
@@ -123,6 +126,9 @@ devDependencies:
   '@types/showdown':
     specifier: ^2.0.1
     version: 2.0.1
+  '@types/sortablejs':
+    specifier: ^1.15.1
+    version: 1.15.1
   '@umijs/plugin-esbuild':
     specifier: ^1.4.2
     version: 1.4.2(umi@3.5.40)(webpack@5.83.1)
@@ -1637,6 +1643,10 @@ packages:
 
   /@types/showdown@2.0.1:
     resolution: {integrity: sha512-xdnAw2nFqomkaL0QdtEk0t7yz26UkaVPl4v1pYJvtE1T0fmfQEH3JaxErEhGByEAl3zUZrkNBlneuJp0WJGqEA==}
+    dev: true
+
+  /@types/sortablejs@1.15.1:
+    resolution: {integrity: sha512-g/JwBNToh6oCTAwNS8UGVmjO7NLDKsejVhvE4x1eWiPTC3uCuNsa/TD4ssvX3du+MLiM+SHPNDuijp8y76JzLQ==}
     dev: true
 
   /@types/stack-utils@2.0.1:
@@ -8588,6 +8598,10 @@ packages:
     engines: {node: '>=0.10.0'}
     dependencies:
       is-plain-obj: 1.1.0
+
+  /sortablejs@1.15.0:
+    resolution: {integrity: sha512-bv9qgVMjUMf89wAvM6AxVvS/4MX3sPeN0+agqShejLU5z5GX4C75ow1O2e5k4L6XItUyAK3gH6AxSbXrOM5e8w==}
+    dev: false
 
   /source-list-map@2.0.1:
     resolution: {integrity: sha512-qnQ7gVMxGNxsiL4lEuJwe/To8UnK7fAnmbGEEH8RpLouuKbeEm0lhbQVFIrNSuB+G7tVrAlVsZgETT5nljf+Iw==}

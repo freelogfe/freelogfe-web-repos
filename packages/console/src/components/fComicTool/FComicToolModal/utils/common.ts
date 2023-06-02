@@ -27,17 +27,13 @@ export const formatDate = (time: number, format = 'YYYY-MM-DD hh:mm:ss') => {
   return result;
 };
 
-/** 解析资源文件路径参数 */
-export const hashImgUrl = (str: string) => {
-  let params = str.split('#')[1];
-  let param = params.split('&');
-  let obj: { [key: string]: number } = {};
-  for (const kv of param) {
-    let [key, value] = kv.split('=');
-    obj[key] = Number(value);
+/** 换算大小 */
+export const conversionSize = (size: number) => {
+  if (size < 1024) return `${size}B`;
+
+  if (size >= 1024 * 1024) {
+    return `${Math.floor((size / 1024 / 1024) * 100) / 100}MB`;
+  } else {
+    return `${Math.floor((size / 1024) * 100) / 100}KB`;
   }
-  if (typeof obj['r'] !== 'number') {
-    obj['r'] = 0;
-  }
-  return obj;
 };

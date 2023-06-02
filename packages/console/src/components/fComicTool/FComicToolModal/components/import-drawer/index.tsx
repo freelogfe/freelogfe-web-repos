@@ -13,8 +13,7 @@ import { RcFile } from 'antd/lib/upload/interface';
 import FModal from '@/components/FModal';
 import FComponentsLib from '@freelog/components-lib';
 import { comicToolContext } from '../..';
-import JSZip from 'jszip';
-import { ImgInComicTool } from '../../core/interface';
+import { ImgInComicTool } from '../../utils/interface';
 
 const myWindow: any = window;
 
@@ -26,7 +25,8 @@ interface Props {
 }
 
 export const ImportDrawer = (props: Props) => {
-  const { resourceId, tool } = useContext(comicToolContext);
+  const { resourceId, setImgList, setLoaderShow } =
+    useContext(comicToolContext);
   const { show, close } = props;
   let body: Element | null = null;
 
@@ -100,9 +100,8 @@ export const ImportDrawer = (props: Props) => {
 
   /** 确认导入 */
   const sureImport = async (file: File) => {
-    tool.setImgList([]);
+    setImgList([]);
 
-    console.error(file);
     myWindow.archiveOpenFile(file, (archive: any, err: any) => {
       if (archive) {
         readContents(archive);
@@ -144,22 +143,23 @@ export const ImportDrawer = (props: Props) => {
       readData: (arg0: (result: BlobPart, err: any) => void) => void;
       name: any;
     },
-    i: any,
-    max: any,
+    i: number,
+    max: number,
   ) => {
     entry.readData((result: BlobPart, err: any) => {
       var blob = new Blob([result], { type: getMIME(entry.name) });
-      blobToDataURI(blob, entry.name);
+      blobToDataURI(blob, entry.name, i, max);
     });
   };
 
   /** 将Blob转为base64 */
-  const blobToDataURI = (blob: Blob, name: any) => {
+  const blobToDataURI = (blob: Blob, name: any, i: number, max: number) => {
     var reader = new FileReader();
     reader.readAsDataURL(blob);
     reader.onload = (e: any) => {
       const img = { name, size: e.total, base64: e.target.result };
-      tool.setImgList((pre: ImgInComicTool[]) => [...pre, img]);
+      setImgList((pre: ImgInComicTool[]) => [...pre, img]);
+      if (i === max - 1) setLoaderShow(false);
     };
   };
 
@@ -267,6 +267,7 @@ export const ImportDrawer = (props: Props) => {
 
   /** 从本地上传导入 */
   const importFromUpload = async () => {
+    setLoaderShow(true);
     sureImport(refs.current.uploadFileData);
   };
 
@@ -275,6 +276,7 @@ export const ImportDrawer = (props: Props) => {
     objectId: string;
     objectName: string;
   }) => {
+    setLoaderShow(true);
     const { objectId, objectName } = item;
     const res = await FUtil.Request({
       method: 'GET',
@@ -290,6 +292,7 @@ export const ImportDrawer = (props: Props) => {
     version: string;
     filename: string;
   }) => {
+    setLoaderShow(true);
     const { version, filename } = item;
     const res = await FUtil.Request({
       method: 'GET',
