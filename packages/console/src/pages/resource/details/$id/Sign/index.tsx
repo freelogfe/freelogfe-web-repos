@@ -31,7 +31,12 @@ function Sign({ dispatch, resourceDetailPage }: SignProps) {
         <div className={styles.babels}>
           {
             (resourceDetailPage.resource_Info?.tags || []).filter((t, i) => i < 5).map((t) => (
-              <label key={t}>{t}</label>))
+              <label
+                key={t}
+                onClick={() => {
+
+                }}
+              >{t}</label>))
           }
         </div>
         <div style={{ height: 20 }} />

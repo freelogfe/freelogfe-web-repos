@@ -10,15 +10,9 @@ import UserList from './_components/user';
 import Drawer from './_components/drawer';
 import fMessage from '@/components/fMessage';
 import FOperationCategoryFilter from '@/components/FOperationCategoryFilter';
-// import {
-//   OnChangeResourceTypeAction,
-//   OnClickLoadMoreBtnAction,
-//   OnChangeTagsAction,
-//   OnUnmountMarketPageAction,
-//   OnMountMarketPageAction,
-//   OnChange_SelectedOperationCategoryIDs_Action,
-// } from '@/models/discoverPage';
-interface SearchProps {}
+
+interface SearchProps {
+}
 
 function Search({}: SearchProps) {
   const [urlParams] = useUrlState<{
@@ -280,11 +274,11 @@ function Search({}: SearchProps) {
             });
             setKeywords(value);
           }}
-          theme="dark"
+          theme='dark'
           className={styles.input}
           placeholder={FI18n.i18nNext.t('输入关键词')}
         />
-        <div className="flex-row ">
+        <div className='flex-row '>
           <span
             onClick={() => {
               setTab('resource');
@@ -312,9 +306,9 @@ function Search({}: SearchProps) {
       </div>
       <div className={styles.list + ' flex-1 w-100x '}>
         {tab === 'user' ? (
-          <div className="w-100x h-100x    flex-column align-center">
+          <div className='w-100x h-100x    flex-column align-center'>
             {showUserResource && (
-              <div className="w-100x h-100x   px-115 flex-column-center">
+              <div className='w-100x h-100x   px-115 flex-column-center'>
                 <div
                   className={
                     'flex-row flex-wrap h-100x   pt-40 w-100x' +
@@ -333,11 +327,11 @@ function Search({}: SearchProps) {
                       <i className={styles.close + ' freelog fl-icon-guanbi'} />
                     </div>
                     <div className={'h-100x ' + styles.cContainer}>
-                      <div className="flex-row align-center mb-20 mt-6 ml-10">
+                      <div className='flex-row align-center mb-20 mt-6 ml-10'>
                         <div className={styles.userimg + ' over-h shrink-0'}>
                           <img
                             src={selectedUser.headImage}
-                            className="w-100x"
+                            className='w-100x'
                           />
                         </div>
                         <span className={styles.userName}>
@@ -389,7 +383,7 @@ function Search({}: SearchProps) {
             </div>
           </div>
         ) : (
-          <div className="w-100x h-100x   px-115 flex-column-center">
+          <div className='w-100x h-100x   px-115 flex-column-center'>
             <div
               className={
                 'h-100x   pt-40  flex-column-center ' + styles.rContainer
@@ -404,7 +398,7 @@ function Search({}: SearchProps) {
                 />
               </div>
               {!resourcesListPure.length ? (
-                <div className="flex-column-center w-100x h-100x">
+                <div className='flex-column-center w-100x h-100x'>
                   {/*<div className="flex-2" />*/}
                   <span className={styles.none}>
                     抱歉，没有找到与{' ' + keywords + ' '}相关的结果

@@ -396,6 +396,17 @@ export function resultBindingSuccess({}: ResultBindingSuccessParamsType = {}) {
   return `/result/binding`;
 }
 
+// 站内搜索
+interface GlobalSearchParamsType {
+  search: string;
+}
+
+export function globalSearch({search}: GlobalSearchParamsType) {
+  return `/search${handleQuery({
+    search,
+  })}`;
+}
+
 
 /************** user End ******************************************************/
 

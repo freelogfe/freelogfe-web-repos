@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './index.less';
-import { Layout } from 'antd';
+// import { Layout } from 'antd';
 import { Link, withRouter } from 'umi';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
@@ -13,12 +13,13 @@ import {
 } from '@/models/connect';
 import { RouteComponentProps } from 'react-router';
 import { FServiceAPI, FUtil, FI18n } from '@freelog/tools-lib';
-import FLoadingTip from '@/components/FLoadingTip';
+// import FLoadingTip from '@/components/FLoadingTip';
 import { Input } from 'antd';
 import FInput from '@/components/FInput';
 import FComponentsLib from '@freelog/components-lib';
+import { history } from 'umi';
 
-const { Search } = Input;
+// const { Search } = Input;
 
 interface FLayoutProps extends RouteComponentProps {
   router: {
@@ -233,8 +234,10 @@ function FLayout({
               placeholder={FI18n.i18nNext.t('general_search_hint')}
               style={{ width: 200 }}
               onPressEnter={(e) => {
-                console.log(e);
-                window.location.href = window.location.origin + `/search?search=${e.target.value}`;
+                // console.log(e);
+                // window.location.href = window.location.origin + `/search?search=${e.target.value}`;
+                // history.push(FUtil.LinkTo.globalSearch({ search: e.target.value }));
+                self.open(FUtil.LinkTo.globalSearch({ search: e.target.value }));
               }}
               // value={''}
             />
