@@ -11,7 +11,7 @@ import Bottom from './Bottom';
 import { Space, Tooltip } from 'antd';
 import FCoverImage from '@/components/FCoverImage';
 import FComponentsLib from '@freelog/components-lib';
-import { FI18n } from '@freelog/tools-lib';
+import { FI18n, FUtil } from '@freelog/tools-lib';
 
 interface SignProps {
   dispatch: Dispatch;
@@ -34,7 +34,7 @@ function Sign({ dispatch, resourceDetailPage }: SignProps) {
               <label
                 key={t}
                 onClick={() => {
-
+                  self.open(FUtil.LinkTo.globalSearch({ search: t }));
                 }}
               >{t}</label>))
           }

@@ -290,6 +290,17 @@ export function resourceFreeze({resourceID}: ResourceFreezeParamsType) {
   return `/result/resource/freeze/${resourceID}`;
 }
 
+// 站内搜索
+interface GlobalSearchParamsType {
+  search: string;
+}
+
+export function globalSearch({search}: GlobalSearchParamsType) {
+  return `/search${handleQuery({
+    search,
+  })}`;
+}
+
 /************** console End ******************************************************/
 
 
@@ -394,17 +405,6 @@ interface ResultBindingSuccessParamsType {
 
 export function resultBindingSuccess({}: ResultBindingSuccessParamsType = {}) {
   return `/result/binding`;
-}
-
-// 站内搜索
-interface GlobalSearchParamsType {
-  search: string;
-}
-
-export function globalSearch({search}: GlobalSearchParamsType) {
-  return `/search${handleQuery({
-    search,
-  })}`;
 }
 
 

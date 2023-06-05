@@ -208,6 +208,7 @@ function Sider({ resourceSider, match, dispatch }: SilderProps) {
           to={FUtil.LinkTo.resourceDetails({
             resourceID: resourceSider.resourceID,
           })}
+          target={'_blank'}
           className={styles.resourceName}
         >
           {resourceSider.resourceName}
@@ -241,7 +242,8 @@ function Sider({ resourceSider, match, dispatch }: SilderProps) {
               </FTooltip>
             )}
           </Space>
-          {resourceSider.policies.length === 0 && !$resourceAuthShownArray[match.params.id] && (<div className={styles.redDot} />)}
+          {resourceSider.policies.length === 0 && !$resourceAuthShownArray[match.params.id] && (
+            <div className={styles.redDot} />)}
         </FLink>
         <div className={styles.versionControl}>
           <div className={styles.versionControlTitle}>
