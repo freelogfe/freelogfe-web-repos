@@ -10,6 +10,7 @@ import FTable from '@/components/FTable';
 import img_upload from '@/assets/createVersion_upload.png';
 import img_markdown from '@/assets/createVersion_markdown.png';
 import fReadLocalFiles from '@/components/fReadLocalFiles';
+import icons from './icons.png';
 
 // import fComicTool from '@/components/fComicTool';
 
@@ -446,12 +447,17 @@ function FPublishObjectFile({
 
       {
         resourceType.names.includes('漫画')
-          ? (<div className={styles.selectObjectCard}>
+          ? (<div className={styles.cartoonCard}>
+            <div style={{ height: 20 }} />
             <FComponentsLib.FRectBtn
               onClick={() => {
                 onClick_OpenCartoonBtn && onClick_OpenCartoonBtn();
               }}
             >开始制作</FComponentsLib.FRectBtn>
+            <div style={{ height: 20 }} />
+            <FComponentsLib.FContentText text={'在线上传、排版、一键切图，快速发布漫画'} type={'additional2'} />
+            <div style={{ height: 50 }} />
+            <img src={icons} style={{width: 400}}/>
           </div>)
           : (<>
             <div className={styles.selectObjectCard}>
