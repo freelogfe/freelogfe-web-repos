@@ -4,7 +4,7 @@ import FComponentsLib from '@freelog/components-lib';
 import { FI18n, FServiceAPI } from '@freelog/tools-lib';
 import FTooltip from '@/components/FTooltip';
 import * as AHooks from 'ahooks';
-import { KeyboardEventHandler } from 'react';
+// import { KeyboardEventHandler } from 'react';
 
 interface FResourceLabelEditorProps {
   value: string[];
