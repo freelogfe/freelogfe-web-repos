@@ -253,7 +253,7 @@ const Model: ResourceDetailPageModelType = {
       });
     },
     * onChangeVersion({ payload }: OnChangeVersionAction, { put }: EffectsCommandMap) {
-      console.log(payload, 'onChangeVersion 9832piohksdflkj');
+      // console.log(payload, 'onChangeVersion 9832piohksdflkj');
       yield put({
         type: 'change',
         payload: {
@@ -629,7 +629,7 @@ const Model: ResourceDetailPageModelType = {
       };
 
       const { data: data_batchUserList } = yield call(FServiceAPI.User.batchUserList, params3);
-      console.log(data_ResourceDetail, 'data_ResourceDetailisodjflksdjflkjsdlkfjlkl klsdjf;lk ');
+      // console.log(data_ResourceDetail, 'data_ResourceDetailisodjflksdjflkjsdlkfjlkl klsdjf;lk ');
       yield put<ChangeAction>({
         type: 'change',
         payload: {

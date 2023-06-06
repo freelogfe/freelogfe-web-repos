@@ -74,9 +74,9 @@ function Sign({ dispatch, resourceDetailPage }: SignProps) {
                 }
               </div>}
             >
-              <div>
+              <span>
                 <FComponentsLib.FTextBtn style={{ fontSize: 12 }}>显示全部</FComponentsLib.FTextBtn>
-              </div>
+              </span>
             </FPopover>
           </>)
         }
