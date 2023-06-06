@@ -72,18 +72,13 @@ const initStates: FResourceTypeInputStates = {
   _selectedCache: null,
   _autoCompleteOptions: [],
   _autoCompleteOptionsOther: [],
-  // autoCompleteInputStarWith: '',
   _autoCompleteInput: '',
   _autoCompleteInputIsNew: false,
 };
 
 function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
 
-  // console.log(value, 'valuesiodjflksdjflkjdslkfjlkjdslkjl***************');
-
   const ref = React.useRef<any>();
-  // const refAutoComplete = React.useRef(null);
-
   const [$options, set$options] = React.useState<FResourceTypeInputStates['$options']>(initStates['$options']);
   const [$recommend, set$recommend] = React.useState<FResourceTypeInputStates['$recommend']>(initStates['$recommend']);
   const [_mode, set_mode] = React.useState<FResourceTypeInputStates['_mode']>(initStates['_mode']);
@@ -91,9 +86,10 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
   const [_selectedCache, set_selectedCache] = React.useState<FResourceTypeInputStates['_selectedCache']>(initStates['_selectedCache']);
   const [_autoCompleteOptions, set_autoCompleteOptions] = React.useState<FResourceTypeInputStates['_autoCompleteOptions']>(initStates['_autoCompleteOptions']);
   const [_autoCompleteOptionsOther, set_autoCompleteOptionsOther] = React.useState<FResourceTypeInputStates['_autoCompleteOptionsOther']>(initStates['_autoCompleteOptionsOther']);
-  // const [autoCompleteInputStarWith, set_autoCompleteInputStarWith] = React.useState<FResourceTypeInputStates['autoCompleteInputStarWith']>(initStates['autoCompleteInputStarWith']);
   const [_autoCompleteInput, set_autoCompleteInput] = React.useState<FResourceTypeInputStates['_autoCompleteInput']>(initStates['_autoCompleteInput']);
   const [_autoCompleteInputIsNew, set_autoCompleteInputIsNew] = React.useState<FResourceTypeInputStates['_autoCompleteInputIsNew']>(initStates['_autoCompleteInputIsNew']);
+
+  const [$state, $setState] = AHooks.useSetState<FResourceTypeInputStates>(initStates);
 
   AHooks.useMount(async () => {
 
@@ -433,7 +429,7 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
               title={null}
               content={<div className={styles.itemChildren}>
                 {
-                  o0.children.map((o1, o1Index, data) => {
+                  o0.children.map((o1, o1Index) => {
                     return (<React.Fragment key={o1.value}>
                       <Popover
                         zIndex={10001}
@@ -450,7 +446,8 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
                         placement={'rightTop'}
                         content={<div className={styles.itemChildren}>
                           {
-                            o1.children.map((o2) => {
+                            o1.children.map((o2, o2Index) => {
+                              console.log(o2Index + 1, o1.children.length, 'o2Index + 1 === o1.children.length 839isdfihsdkf');
                               return (<React.Fragment key={o2.value}>
                                 <div
                                   className={styles.item}
@@ -467,7 +464,7 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
                                 </div>
 
                                 {
-                                  o1Index + 1 === data.length && (<div
+                                  o2Index + 1 === o1.children.length && (<div
                                     className={styles.item + ' ' + styles.itemLatest}
                                     onClick={() => {
                                       onDropdownClickCustom({
@@ -507,7 +504,7 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
                         </div>
                       </Popover>
                       {
-                        o1Index + 1 === data.length && (<div
+                        o1Index + 1 === o0.children.length && (<div
                           className={styles.item + ' ' + styles.itemLatest}
                           onClick={() => {
                             onDropdownClickCustom({
