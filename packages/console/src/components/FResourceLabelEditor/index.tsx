@@ -198,7 +198,7 @@ function FResourceLabelEditor($prop: FResourceLabelEditorProps) {
     <div className={styles.Labels}>
       {
         $state.labels1.map((l) => {
-          const disabled: boolean = $prop.value.includes(l.name);
+          const selected: boolean = $prop.value.includes(l.name);
           return (<FTooltip
             title={l.description}
             placement={'top'}
@@ -207,10 +207,13 @@ function FResourceLabelEditor($prop: FResourceLabelEditorProps) {
           >
             <label
               onClick={() => {
-                if (disabled) {
-                  return;
+                if (selected) {
+                  $prop.onChange && $prop.onChange($prop.value.filter((v) => {
+                    return v !== l.name;
+                  }))
+                } else {
+                  $prop.onChange && $prop.onChange([...$prop.value, l.name]);
                 }
-                $prop.onChange && $prop.onChange([...$prop.value, l.name]);
               }}
               className={[styles.Label, $prop.value.includes(l.name) ? styles.selected : ''].join(' ')}>{l.name}</label>
           </FTooltip>);
@@ -225,7 +228,7 @@ function FResourceLabelEditor($prop: FResourceLabelEditorProps) {
     <div className={styles.Labels}>
       {
         $state.labels2.map((l) => {
-          const disabled: boolean = $prop.value.includes(l.name);
+          const selected: boolean = $prop.value.includes(l.name);
           return (<FTooltip
             title={l.description}
             placement={'top'}
@@ -234,10 +237,13 @@ function FResourceLabelEditor($prop: FResourceLabelEditorProps) {
           >
             <label
               onClick={() => {
-                if (disabled) {
-                  return;
+                if (selected) {
+                  $prop.onChange && $prop.onChange($prop.value.filter((v) => {
+                    return v !== l.name;
+                  }))
+                } else {
+                  $prop.onChange && $prop.onChange([...$prop.value, l.name]);
                 }
-                $prop.onChange && $prop.onChange([...$prop.value, l.name]);
               }}
               className={[styles.Label, $prop.value.includes(l.name) ? styles.selected : ''].join(' ')}>{l.name}</label>
           </FTooltip>);
