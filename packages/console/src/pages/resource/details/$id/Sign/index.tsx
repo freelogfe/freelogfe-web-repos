@@ -13,6 +13,7 @@ import FCoverImage from '@/components/FCoverImage';
 import FComponentsLib from '@freelog/components-lib';
 import { FI18n, FUtil } from '@freelog/tools-lib';
 import * as AHooks from 'ahooks';
+import FPopover from '@/components/FPopover';
 
 interface SignProps {
   dispatch: Dispatch;
@@ -56,7 +57,27 @@ function Sign({ dispatch, resourceDetailPage }: SignProps) {
         {
           (babelsSize?.height || 0) >= 228 && (<>
             <div style={{ height: 5 }} />
-            <FComponentsLib.FTextBtn style={{ fontSize: 12 }}>显示全部</FComponentsLib.FTextBtn>
+            <FPopover
+              style={{ width: 560 }}
+              title={null}
+              placement={'topLeft'}
+              content={<div className={styles.babels} style={{ width: 500, maxHeight: 'max-content' }}>
+                {
+                  (resourceDetailPage.resource_Info?.tags || [])
+                    .map((t) => (
+                      <label
+                        key={t}
+                        onClick={() => {
+                          self.open(FUtil.LinkTo.globalSearch({ search: t }));
+                        }}
+                      >{t}</label>))
+                }
+              </div>}
+            >
+              <div>
+                <FComponentsLib.FTextBtn style={{ fontSize: 12 }}>显示全部</FComponentsLib.FTextBtn>
+              </div>
+            </FPopover>
           </>)
         }
 
