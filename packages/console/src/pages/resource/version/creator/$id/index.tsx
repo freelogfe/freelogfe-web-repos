@@ -43,6 +43,7 @@ import fConfirmModal from '@/components/fConfirmModal';
 import FTooltip from '@/components/FTooltip';
 import FSkeletonNode from '@/components/FSkeletonNode';
 import FTable from '@/components/FTable';
+import fComicTool from '@/components/fComicTool';
 
 interface VersionCreatorProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -115,6 +116,12 @@ function VersionCreator({
     });
     await dispatch<OnClose_MarkdownEditor_Action>({
       type: 'resourceVersionCreatorPage/onClose_MarkdownEditor',
+    });
+  }
+
+  async function onClick_EditCartoonBtn() {
+    await fComicTool({
+      resourceID: resourceVersionCreatorPage.resourceInfo?.resourceID || '',
     });
   }
 
@@ -315,6 +322,7 @@ function VersionCreator({
                 }
 
                 <FPublishObjectFile
+                  // resourceID={resourceVersionCreatorPage.resourceInfo.resourceID}
                   resourceType={{
                     code: resourceVersionCreatorPage.resourceInfo.resourceTypeCode,
                     names: resourceVersionCreatorPage.resourceInfo.resourceType,
@@ -362,19 +370,32 @@ function VersionCreator({
                     }
 
                   }}
-
                   showOpenMarkdownEditor={resourceVersionCreatorPage.resourceInfo.resourceType[0] === '阅读' && resourceVersionCreatorPage.resourceInfo.resourceType[1] === '文章' && !resourceVersionCreatorPage.selectedFileInfo}
+                  showOpenCartoonEditor={resourceVersionCreatorPage.resourceInfo.resourceType.includes('漫画')}
                   onClick_OpenMarkdownBtn={async () => {
                     await onClick_EditMarkdownBtn();
                   }}
-                  showEditBtnAfterSucceed={resourceVersionCreatorPage.resourceInfo.resourceType[0] === '阅读'
-                  && resourceVersionCreatorPage.resourceInfo.resourceType[1] === '文章'
-                  && resourceVersionCreatorPage.rawProperties.some((b) => {
-                    return b.key === 'mime' && (b.value === 'text/markdown' || b.value === 'text/plain');
-                  })}
-                  onClick_EditMarkdownBtn={async () => {
-                    await onClick_EditMarkdownBtn();
+                  onClick_OpenCartoonBtn={async () => {
+                    await onClick_EditCartoonBtn();
                   }}
+                  // showEditBtnAfterSucceed={resourceVersionCreatorPage.resourceInfo.resourceType[0] === '阅读'
+                  // && resourceVersionCreatorPage.resourceInfo.resourceType[1] === '文章'
+                  // && resourceVersionCreatorPage.rawProperties.some((b) => {
+                  //   return b.key === 'mime' && (b.value === 'text/markdown' || b.value === 'text/plain');
+                  // })}
+                  onClick_EditBtn={async () => {
+                    if (resourceVersionCreatorPage.resourceInfo?.resourceType[0] === '阅读' && resourceVersionCreatorPage.resourceInfo?.resourceType[1] === '文章') {
+                      await onClick_EditMarkdownBtn();
+                    }
+
+                    if (resourceVersionCreatorPage.resourceInfo?.resourceType.includes('漫画')) {
+                      await onClick_EditCartoonBtn();
+                    }
+
+                  }}
+                  // onClick_EditCartoonBtn={async () => {
+                  //
+                  // }}
                 />
               </Space>
 

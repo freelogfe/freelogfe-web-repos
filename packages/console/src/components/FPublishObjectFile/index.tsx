@@ -11,7 +11,10 @@ import img_upload from '@/assets/createVersion_upload.png';
 import img_markdown from '@/assets/createVersion_markdown.png';
 import fReadLocalFiles from '@/components/fReadLocalFiles';
 
+// import fComicTool from '@/components/fComicTool';
+
 interface FPublishObjectFileProps {
+  // resourceID: string;
   resourceType: {
     code: string;
     names: string[];
@@ -24,11 +27,17 @@ interface FPublishObjectFileProps {
   } | null;
 
   showOpenMarkdownEditor?: boolean;
+  showOpenCartoonEditor?: boolean;
+
   showEditBtnAfterSucceed?: boolean;
 
   onClick_OpenMarkdownBtn?(): void;
 
-  onClick_EditMarkdownBtn?(): void;
+  onClick_OpenCartoonBtn?(): void;
+
+  onClick_EditBtn?(): void;
+
+  // onClick_EditCartoonBtn?(): void;
 
   onSucceed_UploadFile?(file: {
     fileName: string;
@@ -76,15 +85,19 @@ const initStates: FPublishObjectFileStates = {
 };
 
 function FPublishObjectFile({
+                              // resourceID,
                               resourceType,
                               fileInfo,
                               onSucceed_ImportObject,
                               onSucceed_UploadFile,
                               onClick_DeleteBtn,
                               showOpenMarkdownEditor = false,
+                              showOpenCartoonEditor = false,
                               showEditBtnAfterSucceed = false,
                               onClick_OpenMarkdownBtn,
-                              onClick_EditMarkdownBtn,
+                              onClick_OpenCartoonBtn,
+                              onClick_EditBtn,
+                              // onClick_EditCartoonBtn,
                             }: FPublishObjectFileProps) {
   const [_uploadFileAccept, set_uploadFileAccept] = React.useState<FPublishObjectFileStates['_uploadFileAccept']>(initStates['_uploadFileAccept']);
   const [fInfo, set_fInfo] = React.useState<FPublishObjectFileStates['fInfo']>(initStates['fInfo']);
@@ -111,6 +124,7 @@ function FPublishObjectFile({
   }, [resourceType]);
 
   async function handleResourceType() {
+    // console.log(resourceType, 'resourceTypesdoijfosidjflkjdslk');
     const { data }: {
       data: {
         formats: string[];
@@ -118,6 +132,10 @@ function FPublishObjectFile({
     } = await FServiceAPI.Resource.getResourceTypeInfoByCode({
       code: resourceType.code,
     });
+    // console.log(data, 'data9iosdjlkfjlksdjflkjl');
+    if (!data) {
+      return;
+    }
     set_uploadFileAccept(data.formats.join(','));
     // console.log(data, 'dlikajlsdkfjlksdjlfkjsdlkfjlksdjflkasdjlkfjlk');
   }
@@ -364,7 +382,7 @@ function FPublishObjectFile({
           showEditBtnAfterSucceed && (<FComponentsLib.FTextBtn
             type='primary'
             onClick={() => {
-              onClick_EditMarkdownBtn && onClick_EditMarkdownBtn();
+              onClick_EditBtn && onClick_EditBtn();
             }}
             // className={styles.delete}
           >编辑</FComponentsLib.FTextBtn>)
@@ -425,88 +443,99 @@ function FPublishObjectFile({
 
   return (<Space size={20} direction={'vertical'} style={{ width: '100%' }}>
     <div className={styles.selectObjectCards}>
-      <div className={styles.selectObjectCard}>
-
-        <img src={img_upload} alt={''} />
-        <FComponentsLib.FContentText type={'additional2'} text={'选择本地文件或存储空间对象作为发行对象'} />
-        <Space size={15}>
-          <FComponentsLib.FHotspotTooltip
-            id={'createResourceVersionPage.uploadFileBtn'}
-            style={{ left: -52, top: 4 }}
-            text={FI18n.i18nNext.t('hotpots_createversion_btn_upload')}
-            zIndex={500}
-            onMount={() => {
-              FComponentsLib.fSetHotspotTooltipVisible('createResourceVersionPage.uploadFileBtn', {
-                value: false,
-                effectiveImmediately: false,
-                onlyNullish: false,
-              });
-            }}
-          >
-            <FComponentsLib.FRectBtn
-              type='primary'
-              onClick={async () => {
-                const files = await fReadLocalFiles({
-                  accept: _uploadFileAccept,
-                });
-                if (!files) {
-                  return;
-                }
-                await onUploadFilesLocally(files[0]);
-              }}
-            >{FI18n.i18nNext.t('upload_from_local')}</FComponentsLib.FRectBtn>
-          </FComponentsLib.FHotspotTooltip>
-
-          <FComponentsLib.FRectBtn
-            type='primary'
-            onClick={async () => {
-              const obj = await fObjectSelectorDrawer({
-                resourceTypeCode: resourceType.code,
-              });
-              if (!obj) {
-                return;
-              }
-              await onImportObject({
-                bucketID: obj.bucketID,
-                bucketName: obj.bucketName,
-                objectID: obj.objID,
-                objectName: obj.objName,
-                sha1: obj.sha1,
-              });
-            }}
-          >{FI18n.i18nNext.t('choose_from_storage')}</FComponentsLib.FRectBtn>
-        </Space>
-
-      </div>
 
       {
-        showOpenMarkdownEditor && (
-          <div className={styles.selectObjectCard} style={{ paddingTop: 50, paddingBottom: 50 }}>
-            <img
-              src={img_markdown}
-              alt={''}
-              style={{ width: 42, height: 48 }}
-            />
-            <FComponentsLib.FContentText
-              type={'highlight'}
-              text={FI18n.i18nNext.t('newversion_tool_posteditor_title')}
-            />
-            <FComponentsLib.FContentText
-              type={'additional2'}
-              // text={'在线新建和编辑文章，无需导出本地，快速生产资源'}
-              text={FI18n.i18nNext.t('newversion_tool_posteditor_subtitle')}
-              style={{ color: 'rgba(0,0,0,.3)', width: 280 }}
-            />
-
+        resourceType.names.includes('漫画')
+          ? (<div className={styles.selectObjectCard}>
             <FComponentsLib.FRectBtn
-              type='primary'
               onClick={() => {
-                onClick_OpenMarkdownBtn && onClick_OpenMarkdownBtn();
+                onClick_OpenCartoonBtn && onClick_OpenCartoonBtn();
               }}
-            >立即体验</FComponentsLib.FRectBtn>
+            >开始制作</FComponentsLib.FRectBtn>
           </div>)
-      }
+          : (<>
+            <div className={styles.selectObjectCard}>
 
+              <img src={img_upload} alt={''} />
+              <FComponentsLib.FContentText type={'additional2'} text={'选择本地文件或存储空间对象作为发行对象'} />
+              <Space size={15}>
+                <FComponentsLib.FHotspotTooltip
+                  id={'createResourceVersionPage.uploadFileBtn'}
+                  style={{ left: -52, top: 4 }}
+                  text={FI18n.i18nNext.t('hotpots_createversion_btn_upload')}
+                  zIndex={500}
+                  onMount={() => {
+                    FComponentsLib.fSetHotspotTooltipVisible('createResourceVersionPage.uploadFileBtn', {
+                      value: false,
+                      effectiveImmediately: false,
+                      onlyNullish: false,
+                    });
+                  }}
+                >
+                  <FComponentsLib.FRectBtn
+                    type='primary'
+                    onClick={async () => {
+                      const files = await fReadLocalFiles({
+                        accept: _uploadFileAccept,
+                      });
+                      if (!files) {
+                        return;
+                      }
+                      await onUploadFilesLocally(files[0]);
+                    }}
+                  >{FI18n.i18nNext.t('upload_from_local')}</FComponentsLib.FRectBtn>
+                </FComponentsLib.FHotspotTooltip>
+
+                <FComponentsLib.FRectBtn
+                  type='primary'
+                  onClick={async () => {
+                    const obj = await fObjectSelectorDrawer({
+                      resourceTypeCode: resourceType.code,
+                    });
+                    if (!obj) {
+                      return;
+                    }
+                    await onImportObject({
+                      bucketID: obj.bucketID,
+                      bucketName: obj.bucketName,
+                      objectID: obj.objID,
+                      objectName: obj.objName,
+                      sha1: obj.sha1,
+                    });
+                  }}
+                >{FI18n.i18nNext.t('choose_from_storage')}</FComponentsLib.FRectBtn>
+              </Space>
+
+            </div>
+            {
+              showOpenMarkdownEditor && (
+                <div className={styles.selectObjectCard} style={{ paddingTop: 50, paddingBottom: 50 }}>
+                  <img
+                    src={img_markdown}
+                    alt={''}
+                    style={{ width: 42, height: 48 }}
+                  />
+                  <FComponentsLib.FContentText
+                    type={'highlight'}
+                    text={FI18n.i18nNext.t('newversion_tool_posteditor_title')}
+                  />
+                  <FComponentsLib.FContentText
+                    type={'additional2'}
+                    // text={'在线新建和编辑文章，无需导出本地，快速生产资源'}
+                    text={FI18n.i18nNext.t('newversion_tool_posteditor_subtitle')}
+                    style={{ color: 'rgba(0,0,0,.3)', width: 280 }}
+                  />
+
+                  <FComponentsLib.FRectBtn
+                    type='primary'
+                    onClick={() => {
+                      onClick_OpenMarkdownBtn && onClick_OpenMarkdownBtn();
+                    }}
+                  >立即体验</FComponentsLib.FRectBtn>
+                </div>)
+            }
+          </>)
+      }
     </div>
     <div>
 
