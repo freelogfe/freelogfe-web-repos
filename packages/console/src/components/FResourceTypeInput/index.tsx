@@ -117,6 +117,9 @@ function FResourceTypeInput(
         resourceCount: number;
       }[];
     } = await FServiceAPI.Resource.listSimple4Recently({});
+    if (!data_recently) {
+      return;
+    }
     // console.log(data_recently, 'dataoisdjlfkjsdlkfjsdlkjflkj');
     // set$recommend(data_recently
     //   .filter((r, i) => {

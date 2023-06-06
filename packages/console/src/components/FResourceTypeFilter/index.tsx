@@ -91,6 +91,9 @@ function FResourceTypeFilter({ value, omitTheme = false, onChange }: FResourceTy
       }[];
     } = await FServiceAPI.Resource.listSimple4Recently({});
     // console.log(data_recently, 'dataoisdjlfkjsdlkfjsdlkjflkj');
+    if (!data_recently) {
+      return;
+    }
     set$recommend(data_recently
       .filter((r) => {
         return _localRecently.every((lr) => {

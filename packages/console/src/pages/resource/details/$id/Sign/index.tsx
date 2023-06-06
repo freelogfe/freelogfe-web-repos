@@ -12,6 +12,7 @@ import { Space, Tooltip } from 'antd';
 import FCoverImage from '@/components/FCoverImage';
 import FComponentsLib from '@freelog/components-lib';
 import { FI18n, FUtil } from '@freelog/tools-lib';
+import * as AHooks from 'ahooks';
 
 interface SignProps {
   dispatch: Dispatch;
@@ -19,41 +20,61 @@ interface SignProps {
 }
 
 function Sign({ dispatch, resourceDetailPage }: SignProps) {
-  const resourceInfoLength: number = resourceDetailPage.resource_Info?.about.length || 0;
+  const babelsRef = React.useRef(null);
+  const babelsSize = AHooks.useSize(babelsRef);
+
+  // const resourceInfoLength: number = resourceDetailPage.resource_Info?.about.length || 0;
+
 
   const resource = resourceDetailPage.sign_SignResources.find((r) => r.selected);
 
   return (<div className={styles.info}>
     <div className={styles.infoLeft}>
       <div>
-        <FCoverImage src={resourceDetailPage.resource_Info?.cover || ''} width={260} style={{ borderRadius: 10 }} />
+        <FCoverImage
+          src={resourceDetailPage.resource_Info?.cover || ''}
+          width={260}
+          style={{ borderRadius: 10, display: 'block' }}
+        />
         <div style={{ height: 20 }} />
-        <div className={styles.babels}>
+        <div className={styles.babels} ref={babelsRef}>
           {
-            (resourceDetailPage.resource_Info?.tags || []).filter((t, i) => i < 5).map((t) => (
-              <label
-                key={t}
-                onClick={() => {
-                  self.open(FUtil.LinkTo.globalSearch({ search: t }));
-                }}
-              >{t}</label>))
+            (resourceDetailPage.resource_Info?.tags || [])
+              // .filter((t, i) => {
+              //   return i < 5;
+              // })
+              .map((t) => (
+                <label
+                  key={t}
+                  onClick={() => {
+                    self.open(FUtil.LinkTo.globalSearch({ search: t }));
+                  }}
+                >{t}</label>))
           }
         </div>
-        <div style={{ height: 20 }} />
+        {/*<div>{JSON.stringify(babelsSize)}</div>*/}
+        {
+          (babelsSize?.height || 0) >= 228 && (<>
+            <div style={{ height: 5 }} />
+            <FComponentsLib.FTextBtn style={{ fontSize: 12 }}>显示全部</FComponentsLib.FTextBtn>
+          </>)
+        }
 
-        <Tooltip
-          title={resourceDetailPage.resource_Info?.about}
-          mouseEnterDelay={3}
-          overlayClassName={styles.TooltipOverlay}
-          color={'rgba(0, 0, 0, 0.5)'}
-          // visible={true}
-          placement='right'
-        >
-          <div>
-            <FComponentsLib.FContentText
-              text={resourceInfoLength < 205 ? (resourceDetailPage.resource_Info?.about || '') : (resourceDetailPage.resource_Info?.about.substr(0, 205) + '...')} />
-          </div>
-        </Tooltip>
+        {/*<div style={{ height: 20 }} />*/}
+
+        {/*<Tooltip*/}
+        {/*  title={resourceDetailPage.resource_Info?.about}*/}
+        {/*  mouseEnterDelay={3}*/}
+        {/*  overlayClassName={styles.TooltipOverlay}*/}
+        {/*  color={'rgba(0, 0, 0, 0.5)'}*/}
+        {/*  // visible={true}*/}
+        {/*  placement='right'*/}
+        {/*>*/}
+        {/*  <div>*/}
+        {/*    <FComponentsLib.FContentText*/}
+        {/*      text={resourceInfoLength < 205 ? (resourceDetailPage.resource_Info?.about || '') : (resourceDetailPage.resource_Info?.about.substr(0, 205) + '...')} />*/}
+        {/*  </div>*/}
+        {/*</Tooltip>*/}
       </div>
     </div>
     <div className={styles.cell} />

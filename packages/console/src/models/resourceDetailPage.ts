@@ -6,6 +6,7 @@ import { history } from 'umi';
 import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 import fMessage from '@/components/fMessage';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
+
 // import { fileAttrUnits } from '@/utils/format';
 
 export interface ResourceDetailPageModelState {
@@ -628,7 +629,7 @@ const Model: ResourceDetailPageModelType = {
       };
 
       const { data: data_batchUserList } = yield call(FServiceAPI.User.batchUserList, params3);
-
+      console.log(data_ResourceDetail, 'data_ResourceDetailisodjflksdjflkjsdlkfjlkl klsdjf;lk ');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
