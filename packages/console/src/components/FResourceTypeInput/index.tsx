@@ -76,18 +76,20 @@ const initStates: FResourceTypeInputStates = {
   _autoCompleteInputIsNew: false,
 };
 
-function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
+function FResourceTypeInput(
+  // { value, onChange }
+  $prop: FResourceTypeInputProps) {
 
   const ref = React.useRef<any>();
-  const [$options, set$options] = React.useState<FResourceTypeInputStates['$options']>(initStates['$options']);
-  const [$recommend, set$recommend] = React.useState<FResourceTypeInputStates['$recommend']>(initStates['$recommend']);
-  const [_mode, set_mode] = React.useState<FResourceTypeInputStates['_mode']>(initStates['_mode']);
-  const [_isOpen, set_isOpen] = React.useState<FResourceTypeInputStates['_isOpen']>(initStates['_isOpen']);
-  const [_selectedCache, set_selectedCache] = React.useState<FResourceTypeInputStates['_selectedCache']>(initStates['_selectedCache']);
-  const [_autoCompleteOptions, set_autoCompleteOptions] = React.useState<FResourceTypeInputStates['_autoCompleteOptions']>(initStates['_autoCompleteOptions']);
-  const [_autoCompleteOptionsOther, set_autoCompleteOptionsOther] = React.useState<FResourceTypeInputStates['_autoCompleteOptionsOther']>(initStates['_autoCompleteOptionsOther']);
-  const [_autoCompleteInput, set_autoCompleteInput] = React.useState<FResourceTypeInputStates['_autoCompleteInput']>(initStates['_autoCompleteInput']);
-  const [_autoCompleteInputIsNew, set_autoCompleteInputIsNew] = React.useState<FResourceTypeInputStates['_autoCompleteInputIsNew']>(initStates['_autoCompleteInputIsNew']);
+  // const [$options, set$options] = React.useState<FResourceTypeInputStates['$options']>(initStates['$options']);
+  // const [$recommend, set$recommend] = React.useState<FResourceTypeInputStates['$recommend']>(initStates['$recommend']);
+  // const [_mode, set_mode] = React.useState<FResourceTypeInputStates['_mode']>(initStates['_mode']);
+  // const [_isOpen, set_isOpen] = React.useState<FResourceTypeInputStates['_isOpen']>(initStates['_isOpen']);
+  // const [_selectedCache, set_selectedCache] = React.useState<FResourceTypeInputStates['_selectedCache']>(initStates['_selectedCache']);
+  // const [_autoCompleteOptions, set_autoCompleteOptions] = React.useState<FResourceTypeInputStates['_autoCompleteOptions']>(initStates['_autoCompleteOptions']);
+  // const [_autoCompleteOptionsOther, set_autoCompleteOptionsOther] = React.useState<FResourceTypeInputStates['_autoCompleteOptionsOther']>(initStates['_autoCompleteOptionsOther']);
+  // const [_autoCompleteInput, set_autoCompleteInput] = React.useState<FResourceTypeInputStates['_autoCompleteInput']>(initStates['_autoCompleteInput']);
+  // const [_autoCompleteInputIsNew, set_autoCompleteInputIsNew] = React.useState<FResourceTypeInputStates['_autoCompleteInputIsNew']>(initStates['_autoCompleteInputIsNew']);
 
   const [$state, $setState] = AHooks.useSetState<FResourceTypeInputStates>(initStates);
 
@@ -100,7 +102,10 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
       status: 1,
     });
     const options: Option[] = handledData(data_resourceTypes, null);
-    set$options(options);
+    // set$options(options);
+    $setState({
+      $options: options,
+    });
   });
 
   AHooks.useMount(async () => {
@@ -113,16 +118,28 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
       }[];
     } = await FServiceAPI.Resource.listSimple4Recently({});
     // console.log(data_recently, 'dataoisdjlfkjsdlkfjsdlkjflkj');
-    set$recommend(data_recently
-      .filter((r, i) => {
-        return i < 6;
-      })
-      .map<FResourceTypeInputStates['$recommend'][number]>((r) => {
-        return {
-          value: r.code,
-          labels: r.names.split('/'),
-        };
-      }));
+    // set$recommend(data_recently
+    //   .filter((r, i) => {
+    //     return i < 6;
+    //   })
+    //   .map<FResourceTypeInputStates['$recommend'][number]>((r) => {
+    //     return {
+    //       value: r.code,
+    //       labels: r.names.split('/'),
+    //     };
+    //   }));
+    $setState({
+      $recommend: data_recently
+        .filter((r, i) => {
+          return i < 6;
+        })
+        .map<FResourceTypeInputStates['$recommend'][number]>((r) => {
+          return {
+            value: r.code,
+            labels: r.names.split('/'),
+          };
+        }),
+    });
   });
 
   AHooks.useUnmount(() => {
@@ -135,12 +152,16 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
       (async () => {
 
         // console.log(_autoCompleteInput, '_autoCompleteInputisdjflksdjflksdjflkjl');
-        if (_autoCompleteInput === '' || _autoCompleteInput.endsWith('/')) {
-          set_autoCompleteOptions([]);
-          set_autoCompleteOptionsOther([]);
+        if ($state._autoCompleteInput === '' || $state._autoCompleteInput.endsWith('/')) {
+          // set_autoCompleteOptions([]);
+          // set_autoCompleteOptionsOther([]);
+          $setState({
+            _autoCompleteOptions: [],
+            _autoCompleteOptionsOther: [],
+          });
           return;
         }
-        const search: string[] = _autoCompleteInput.split('/');
+        const search: string[] = $state._autoCompleteInput.split('/');
 
         const { data: data_list }: {
           data: {
@@ -151,22 +172,34 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
           }[];
         } = await FServiceAPI.Resource.ListSimpleByParentCode({
           // parentCode: String(value),
-          parentCode: _selectedCache?.value || '',
+          parentCode: $state._selectedCache?.value || '',
           category: 1,
           name: search[search.length - 1],
           // @ts-ignore
           isTerminate: true,
         });
 
-        set_autoCompleteOptions(data_list.map((l) => {
-          return {
-            value: l.code,
-            label: l.name,
-            values: [l.code],
-            labels: l.names.split('/'),
-            count: l.resourceCount,
-          };
-        }));
+        // set_autoCompleteOptions(data_list.map((l) => {
+        //   return {
+        //     value: l.code,
+        //     label: l.name,
+        //     values: [l.code],
+        //     labels: l.names.split('/'),
+        //     count: l.resourceCount,
+        //   };
+        // }));
+
+        $setState({
+          _autoCompleteOptions: data_list.map((l) => {
+            return {
+              value: l.code,
+              label: l.name,
+              values: [l.code],
+              labels: l.names.split('/'),
+              count: l.resourceCount,
+            };
+          }),
+        });
 
         const { data: data_list1 }: {
           data: {
@@ -176,7 +209,7 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
             resourceCount: number;
           }[];
         } = await FServiceAPI.Resource.ListSimpleByParentCode({
-          parentCode: _selectedCache?.value || '',
+          parentCode: $state._selectedCache?.value || '',
           category: 1,
           name: search[search.length - 1],
           excludeParentCode: true,
@@ -184,30 +217,49 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
           isTerminate: true,
         });
 
-        set_autoCompleteOptionsOther(data_list1.map((l) => {
-          return {
-            value: l.code,
-            label: l.name,
-            values: [l.code],
-            labels: l.names.split('/'),
-            count: l.resourceCount,
-          };
-        }));
+        // set_autoCompleteOptionsOther(data_list1.map((l) => {
+        //   return {
+        //     value: l.code,
+        //     label: l.name,
+        //     values: [l.code],
+        //     labels: l.names.split('/'),
+        //     count: l.resourceCount,
+        //   };
+        // }));
+        $setState({
+          _autoCompleteOptionsOther: data_list1.map((l) => {
+            return {
+              value: l.code,
+              label: l.name,
+              values: [l.code],
+              labels: l.names.split('/'),
+              count: l.resourceCount,
+            };
+          }),
+        });
       })();
     },
-    [_autoCompleteInput],
+    [$state._autoCompleteInput],
     {
       wait: 300,
     },
   );
 
   function init() {
-    set_mode(initStates['_mode']);
-    set_isOpen(initStates['_isOpen']);
-    set_selectedCache(initStates['_selectedCache']);
-    set_autoCompleteOptions(initStates['_autoCompleteOptions']);
-    set_autoCompleteInput(initStates['_autoCompleteInput']);
-    set_autoCompleteInputIsNew(initStates['_autoCompleteInputIsNew']);
+    // set_mode(initStates['_mode']);
+    // set_isOpen(initStates['_isOpen']);
+    // set_selectedCache(initStates['_selectedCache']);
+    // set_autoCompleteOptions(initStates['_autoCompleteOptions']);
+    // set_autoCompleteInput(initStates['_autoCompleteInput']);
+    // set_autoCompleteInputIsNew(initStates['_autoCompleteInputIsNew']);
+    $setState({
+      _mode: initStates['_mode'],
+      _isOpen: initStates['_isOpen'],
+      _selectedCache: initStates['_selectedCache'],
+      _autoCompleteOptions: initStates['_autoCompleteOptions'],
+      _autoCompleteInput: initStates['_autoCompleteInput'],
+      _autoCompleteInputIsNew: initStates['_autoCompleteInputIsNew'],
+    });
   }
 
   // console.log(autoCompleteInput, 'autoCompleteInput sd9ifoj;sldkfjsdlfjlkj');
@@ -216,11 +268,14 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
     value: string;
     labels: string[];
   }) {
-    onChange && onChange({
+    $prop.onChange && $prop.onChange({
       value: v.value,
       labels: v.labels,
     });
-    set_isOpen(false);
+    // set_isOpen(false);
+    $setState({
+      _isOpen: false,
+    });
   }
 
   async function onDropdownClickCustom({ value, values, label, labels }: {
@@ -229,34 +284,47 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
     values: Array<string | number>;
     labels: string[];
   }) {
-    onChange && onChange(null);
+    $prop.onChange && $prop.onChange(null);
     // console.log(labels, 'labelsiosdjflksjdlkfjsldkjl');
-    set_isOpen(false);
-    set_mode('input');
-    set_selectedCache({
-      value,
-      values,
-      label,
-      labels,
-    });
+
 
     const startWidth: string = [...labels, ''].join('/');
     // set_autoCompleteInputStarWith(startWidth);
-    set_autoCompleteInput(startWidth);
+    // set_autoCompleteInput(startWidth);
+    // set_isOpen(false);
+    // set_mode('input');
+    // set_selectedCache({
+    //   value,
+    //   values,
+    //   label,
+    //   labels,
+    // });
+
+    $setState({
+      _autoCompleteInput: startWidth,
+      _isOpen: false,
+      _mode: 'input',
+      _selectedCache: {
+        value,
+        values,
+        label,
+        labels,
+      },
+    });
   }
 
-  if (_mode === 'input' && _selectedCache) {
+  if ($state._mode === 'input' && $state._selectedCache) {
     return (<div style={{ display: 'block' }}>
       <AutoComplete
         autoFocus={true}
         allowClear={true}
         defaultOpen={true}
         options={[
-          ...(_autoCompleteInputIsNew ? [
+          ...($state._autoCompleteInputIsNew ? [
             {
               value: '#new',
               label: (<div className={styles.autoCompleteOption}>
-                <span>{_autoCompleteInput}</span>
+                <span>{$state._autoCompleteInput}</span>
                 {/*<FComponentsLib.FTextBtn>添加新类型</FComponentsLib.FTextBtn>*/}
                 <FComponentsLib.FTextBtn>{FI18n.i18nNext.t('createresource_selectresourcetype_btn_addthis')}</FComponentsLib.FTextBtn>
               </div>),
@@ -264,11 +332,11 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
                 value: '#new',
                 label: '',
                 values: [],
-                labels: _autoCompleteInput.split('/'),
+                labels: $state._autoCompleteInput.split('/'),
               },
             },
           ] : []),
-          ..._autoCompleteOptions.map((aco) => {
+          ...$state._autoCompleteOptions.map((aco) => {
             return {
               value: aco.value,
               label: (<div className={styles.autoCompleteOption}>
@@ -284,7 +352,7 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
               data: aco,
             };
           }),
-          ..._autoCompleteOptionsOther.map((aco) => {
+          ...$state._autoCompleteOptionsOther.map((aco) => {
             return {
               value: aco.value,
               label: (<div className={styles.autoCompleteOption}>
@@ -302,7 +370,7 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
           }),
         ]}
         style={{ width: 360 }}
-        value={_autoCompleteInput}
+        value={$state._autoCompleteInput}
         className={styles.AutoComplete}
         // filterOption={(inputValue, option: any) => {
         //   return option.data.labels[option.data.labels.length - 1].length <= 40 && option.data.labels.join('/').startsWith(inputValue);
@@ -312,42 +380,48 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
           if (!value) {
             return;
           }
-          const startStr: string = [..._selectedCache.labels, ''].join('/');
+          const startStr: string = [...($state._selectedCache?.labels || []), ''].join('/');
           if (!value.startsWith(startStr)) {
             return;
           }
-          set_autoCompleteInput(value);
-
 
           const custom: string = value.replace(startStr, '');
-          set_autoCompleteInputIsNew(value !== startStr && FUtil.Regexp.RESOURCE_TYPE.test(custom) && _autoCompleteOptions.every((aco) => {
-            return aco.labels.join('/') !== value;
-          }));
+          // set_autoCompleteInputIsNew(value !== startStr && FUtil.Regexp.RESOURCE_TYPE.test(custom) && _autoCompleteOptions.every((aco) => {
+          //   return aco.labels.join('/') !== value;
+          // }));
+          // set_autoCompleteInput(value);
+
+          $setState({
+            _autoCompleteInputIsNew: value !== startStr && FUtil.Regexp.RESOURCE_TYPE.test(custom) && $state._autoCompleteOptions.every((aco) => {
+              return aco.labels.join('/') !== value;
+            }),
+            _autoCompleteInput: value,
+          });
         }}
         onSelect={(value: any, op: any) => {
           const data: FResourceTypeInputStates['_autoCompleteOptions'][number] = op.data;
           // console.log(value, option, 'value : any sdfoisdjf lskdjlkj');
           if (value !== '#new') {
-            onChange && onChange({
+            $prop.onChange && $prop.onChange({
               value: data.value,
               // label: data.label,
               // values: data.values,
               labels: data.labels,
             });
           } else {
-            const customInputLabels: string[] = _autoCompleteInput.split('/');
-            onChange && onChange({
-              value: _selectedCache.value,
+            const customInputLabels: string[] = $state._autoCompleteInput.split('/');
+            $prop.onChange && $prop.onChange({
+              value: $state._selectedCache?.value || '',
               // label: _selectedCache.label,
               // values: _selectedCache.values,
-              labels: _selectedCache.labels,
+              labels: $state._selectedCache?.labels || [],
               customInput: customInputLabels[customInputLabels.length - 1],
             });
           }
           init();
         }}
         onClear={() => {
-          onChange && onChange(null);
+          $prop.onChange && $prop.onChange(null);
           init();
         }}
       >
@@ -367,9 +441,12 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
 
   return (<Dropdown
     // open={true}
-    open={_isOpen}
+    open={$state._isOpen}
     onOpenChange={(o) => {
-      set_isOpen(o);
+      // set_isOpen(o);
+      $setState({
+        _isOpen: o,
+      });
     }}
     getPopupContainer={() => {
       return ref.current;
@@ -386,7 +463,7 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
         <div style={{ height: 20 }} />
         <div className={styles.recommendResourceTypes}>
           {
-            $recommend.map((r) => {
+            $state.$recommend.map((r) => {
               return (<label
                 key={r.value}
                 onClick={() => {
@@ -410,7 +487,7 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
       <div style={{ height: 20 }} />
       <div className={styles.FCascader}>
         {
-          $options.map((o0) => {
+          $state.$options.map((o0) => {
             return (<Popover
               key={o0.value}
               // showArrow={false}
@@ -551,20 +628,20 @@ function FResourceTypeInput({ value, onChange }: FResourceTypeInputProps) {
   >
     <div
       className={styles.square}
-      style={{ borderColor: _isOpen ? '#2784FF' : '#D4D4D4' }}
+      style={{ borderColor: $state._isOpen ? '#2784FF' : '#D4D4D4' }}
       ref={ref}
     >
       {
-        value === null
+        $prop.value === null
           ? (<span>{FI18n.i18nNext.t('createresource_selectresourcetype_input_hint')}</span>)
           : (<FComponentsLib.FContentText
-            text={(value.customInput ? [...value.labels, value.customInput] : value.labels).join(' / ')}
+            text={($prop.value.customInput ? [...$prop.value.labels, $prop.value.customInput] : $prop.value.labels).join(' / ')}
             type={'normal'}
           />)
       }
 
       {
-        _isOpen
+        $state._isOpen
           ? (<FComponentsLib.FIcons.FUp style={{ fontSize: 12 }} />)
           : (<FComponentsLib.FIcons.FDown style={{ fontSize: 12 }} />)
       }
