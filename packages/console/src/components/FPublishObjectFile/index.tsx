@@ -11,6 +11,7 @@ import img_upload from '@/assets/createVersion_upload.png';
 import img_markdown from '@/assets/createVersion_markdown.png';
 import fReadLocalFiles from '@/components/fReadLocalFiles';
 import icons from './icons.png';
+import FDropdownMenu from '@/components/FDropdownMenu';
 
 // import fComicTool from '@/components/fComicTool';
 
@@ -389,13 +390,44 @@ function FPublishObjectFile({
           >编辑</FComponentsLib.FTextBtn>)
         }
 
-        <FComponentsLib.FTextBtn
-          type='primary'
-          onClick={() => {
-            self.location.href = FUtil.Format.completeUrlByDomain('qi')
-              + `/v2/storages/files/${fileInfo.sha1}/download?attachmentName=${fileInfo.name}`;
-          }}
-        >下载</FComponentsLib.FTextBtn>
+        {
+          showOpenCartoonEditor
+            ? (<FDropdownMenu
+              options={[{
+                text: 'ZIP格式文件',
+                value: 'zip',
+              }, {
+                text: 'CBZ格式文件',
+                value: 'cbz',
+              }]}
+              onChange={(value) => {
+                if (value === 'zip') {
+
+                }
+                if (value === 'cbz') {
+
+                }
+              }}
+            >
+              <div>
+                <FComponentsLib.FTextBtn
+                  type='primary'
+                  onClick={() => {
+                    self.location.href = FUtil.Format.completeUrlByDomain('qi')
+                      + `/v2/storages/files/${fileInfo.sha1}/download?attachmentName=${fileInfo.name}`;
+                  }}
+                >下载</FComponentsLib.FTextBtn>
+              </div>
+            </FDropdownMenu>)
+            : (<FComponentsLib.FTextBtn
+              type='primary'
+              onClick={() => {
+                self.location.href = FUtil.Format.completeUrlByDomain('qi')
+                  + `/v2/storages/files/${fileInfo.sha1}/download?attachmentName=${fileInfo.name}`;
+              }}
+            >下载</FComponentsLib.FTextBtn>)
+        }
+
 
         <FComponentsLib.FTextBtn
           type='danger'
@@ -457,7 +489,7 @@ function FPublishObjectFile({
             <div style={{ height: 20 }} />
             <FComponentsLib.FContentText text={'在线上传、排版、一键切图，快速发布漫画'} type={'additional2'} />
             <div style={{ height: 50 }} />
-            <img src={icons} style={{width: 400}}/>
+            <img src={icons} style={{ width: 400 }} />
           </div>)
           : (<>
             <div className={styles.selectObjectCard}>
