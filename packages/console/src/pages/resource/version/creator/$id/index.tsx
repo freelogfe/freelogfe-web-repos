@@ -120,9 +120,19 @@ function VersionCreator({
   }
 
   async function onClick_EditCartoonBtn() {
+    await dispatch<OnTrigger_SaveDraft_Action>({
+      type: 'resourceVersionCreatorPage/onTrigger_SaveDraft',
+      payload: {
+        showSuccessTip: false,
+      },
+    });
     await fComicTool({
       resourceID: resourceVersionCreatorPage.resourceInfo?.resourceID || '',
     });
+    await dispatch<OnClose_MarkdownEditor_Action>({
+      type: 'resourceVersionCreatorPage/onClose_MarkdownEditor',
+    });
+
   }
 
   if (!hasError) {
