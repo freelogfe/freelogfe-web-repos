@@ -3,6 +3,7 @@ import styles from './index.less';
 import { FI18n } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 import * as AHooks from 'ahooks';
+import { InputRef } from 'antd';
 
 interface FExhibitLabelEditorProps {
   value: string[];
@@ -21,7 +22,7 @@ const initStates: FExhibitLabelEditorStates = {
 
 function FExhibitLabelEditor($prop: FExhibitLabelEditorProps) {
 
-  const inputElementRef = React.useRef<HTMLInputElement>(null);
+  const inputElementRef = React.useRef<InputRef>(null);
   // const [input, set_input] = React.useState<string>('');
   // const [errorText, set_errorText] = React.useState<string>('');
 
@@ -29,6 +30,7 @@ function FExhibitLabelEditor($prop: FExhibitLabelEditorProps) {
 
   return (<div>
     <FComponentsLib.FInput.FSingleLine
+      ref={inputElementRef}
       size={'small'}
       lengthLimit={-1}
       value={$state.input}
@@ -75,6 +77,17 @@ function FExhibitLabelEditor($prop: FExhibitLabelEditorProps) {
           ...$prop.value,
           $state.input.replace(new RegExp(/#/, 'g'), ''),
         ]);
+      }}
+      onKeyUp={(event) => {
+        if (event.key === 'Escape') {
+          // set_input('');
+          // set_errorText('');
+          $setState({
+            input: '',
+            inputError: '',
+          });
+          inputElementRef.current?.blur();
+        }
       }}
     />
     {
