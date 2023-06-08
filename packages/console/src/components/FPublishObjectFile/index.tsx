@@ -558,7 +558,7 @@ function FPublishObjectFile(
     <div className={styles.selectObjectCards}>
 
       {
-        $prop.resourceType.names.includes('漫画')
+        $prop.showOpenCartoonEditor
           ? (<div className={styles.cartoonCard}>
             <div style={{ height: 20 }} />
             <FComponentsLib.FRectBtn

@@ -5,7 +5,13 @@ export interface IResourceCreateVersionDraft {
     sha1: string;
     from: string;
   } | null;
-  baseProperties: {
+  additionalProperties: {
+    key: string;
+    name: string;
+    value: string;
+    description: string;
+  }[];
+  additionalProperties: {
     key: string;
     name: string;
     value: string;
