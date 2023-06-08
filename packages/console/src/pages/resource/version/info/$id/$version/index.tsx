@@ -80,19 +80,19 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
     }
   }
 
-  function onCloseCustomOptionDrawer() {
-    onChange({
-      customOptionEditorVisible: false,
-      customOptionKey: '',
-      customOptionDescription: '',
-      customOptionDescriptionError: '',
-      customOptionCustom: 'input',
-      customOptionDefaultValue: '',
-      customOptionDefaultValueError: '',
-      customOptionCustomOption: '',
-      customOptionCustomOptionError: '',
-    });
-  }
+  // function onCloseCustomOptionDrawer() {
+  //   onChange({
+  //     customOptionEditorVisible: false,
+  //     customOptionKey: '',
+  //     customOptionDescription: '',
+  //     customOptionDescriptionError: '',
+  //     customOptionCustom: 'input',
+  //     customOptionDefaultValue: '',
+  //     customOptionDefaultValueError: '',
+  //     customOptionCustomOption: '',
+  //     customOptionCustomOptionError: '',
+  //   });
+  // }
 
   async function onChange(payload: Partial<ResourceVersionEditorPageModelState>) {
     await dispatch<ChangeAction>({
@@ -101,15 +101,15 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
     });
   }
 
-  function onCloseBaseAttrDrawer() {
-    onChange({
-      basePEditorVisible: false,
-      basePKeyInput: '',
-      basePValueInput: '',
-      basePDescriptionInput: '',
-      basePDescriptionInputError: '',
-    });
-  }
+  // function onCloseBaseAttrDrawer() {
+  //   onChange({
+  //     basePEditorVisible: false,
+  //     basePKeyInput: '',
+  //     basePValueInput: '',
+  //     basePDescriptionInput: '',
+  //     basePDescriptionInputError: '',
+  //   });
+  // }
 
   return (<>
     <Helmet>
@@ -232,9 +232,9 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
           <FResourceProperties
             immutableData={resourceVersionEditorPage.rawProperties}
             onlyEditValueData={[]}
-            alterableData={resourceVersionEditorPage.baseProperties}
+            alterableData={resourceVersionEditorPage.customProperties}
             onEdit_alterableData={async (data) => {
-              const index: number = resourceVersionEditorPage.baseProperties.findIndex((p) => {
+              const index: number = resourceVersionEditorPage.customProperties.findIndex((p) => {
                 return p === data;
               });
               const dataSource: {
@@ -245,12 +245,15 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
               } | null = await fResourcePropertyEditor({
                 disabledKeys: [
                   ...resourceVersionEditorPage.rawProperties.map<string>((rp) => rp.key),
-                  ...resourceVersionEditorPage.baseProperties.map<string>((bp) => bp.key),
-                  ...resourceVersionEditorPage.customOptions.map<string>((pp) => pp.key),
+                  ...resourceVersionEditorPage.additionalProperties.map<string>((rp) => rp.key),
+                  ...resourceVersionEditorPage.customProperties.map<string>((bp) => bp.key),
+                  ...resourceVersionEditorPage.customConfigurations.map<string>((pp) => pp.key),
                 ],
                 disabledNames: [
-                  ...resourceVersionEditorPage.baseProperties.map<string>((bp) => bp.name),
-                  ...resourceVersionEditorPage.customOptions.map<string>((pp) => pp.name),
+                  ...resourceVersionEditorPage.rawProperties.map<string>((bp) => bp.name),
+                  ...resourceVersionEditorPage.additionalProperties.map<string>((bp) => bp.name),
+                  ...resourceVersionEditorPage.customProperties.map<string>((bp) => bp.name),
+                  ...resourceVersionEditorPage.customConfigurations.map<string>((pp) => pp.name),
                 ],
                 defaultData: data,
                 noneEditableFields: ['key', 'name'],
@@ -260,7 +263,7 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
               }
 
               await onChange({
-                baseProperties: resourceVersionEditorPage.baseProperties.map((bp, i) => {
+                customProperties: resourceVersionEditorPage.customProperties.map((bp, i) => {
                   if (index !== i) {
                     return bp;
                   }
@@ -276,13 +279,13 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
         </FFormLayout.FBlock>
 
         {
-          resourceVersionEditorPage.customOptions.length > 0 && (<FFormLayout.FBlock title={'自定义选项'}>
+          resourceVersionEditorPage.customConfigurations.length > 0 && (<FFormLayout.FBlock title={'自定义选项'}>
             {/*<div style={{ padding: 15, backgroundColor: '#F7F8F9' }}>*/}
             <FResourceOptions
               theme={'dark'}
-              dataSource={resourceVersionEditorPage.customOptions}
+              dataSource={resourceVersionEditorPage.customConfigurations}
               onEdit={async (data) => {
-                const index: number = resourceVersionEditorPage.customOptions.findIndex((p) => {
+                const index: number = resourceVersionEditorPage.customConfigurations.findIndex((p) => {
                   return p === data;
                 });
 
@@ -296,13 +299,15 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
                 } | null = await fResourceOptionEditor({
                   disabledKeys: [
                     ...resourceVersionEditorPage.rawProperties.map<string>((rp) => rp.key),
-                    ...resourceVersionEditorPage.baseProperties.map<string>((bp) => bp.key),
-                    ...resourceVersionEditorPage.customOptions.map<string>((pp) => pp.key),
+                    ...resourceVersionEditorPage.additionalProperties.map<string>((rp) => rp.key),
+                    ...resourceVersionEditorPage.customProperties.map<string>((bp) => bp.key),
+                    ...resourceVersionEditorPage.customConfigurations.map<string>((pp) => pp.key),
                   ],
                   disabledNames: [
                     ...resourceVersionEditorPage.rawProperties.map<string>((rp) => rp.name),
-                    ...resourceVersionEditorPage.baseProperties.map<string>((bp) => bp.name),
-                    ...resourceVersionEditorPage.customOptions.map<string>((pp) => pp.name),
+                    ...resourceVersionEditorPage.additionalProperties.map<string>((rp) => rp.name),
+                    ...resourceVersionEditorPage.customProperties.map<string>((bp) => bp.name),
+                    ...resourceVersionEditorPage.customConfigurations.map<string>((pp) => pp.name),
                   ],
                   defaultData: data,
                   noneEditableFields: ['key', 'name', 'type'],
@@ -312,8 +317,8 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
                   return;
                 }
                 await onChange({
-                  customOptions: resourceVersionEditorPage.customOptions
-                    .map<ResourceVersionEditorPageModelState['customOptions'][number]>((bp, i) => {
+                  customConfigurations: resourceVersionEditorPage.customConfigurations
+                    .map<ResourceVersionEditorPageModelState['customConfigurations'][number]>((bp, i) => {
                       if (index !== i) {
                         return bp;
                       }

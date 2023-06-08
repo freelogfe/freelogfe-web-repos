@@ -24,22 +24,27 @@ export interface ResourceVersionEditorPageModelState {
     value: string;
     description: string;
   }[];
-
-  baseProperties: {
+  additionalProperties: {
+    key: string;
+    name: string;
+    value: string;
+    description: string;
+  }[];
+  customProperties: {
     key: string;
     name: string;
     value: string;
     description: string;
   }[];
 
-  basePEditorVisible: boolean;
-  basePKeyInput: string;
-  basePValueInput: string;
-  basePValueInputError: string;
-  basePDescriptionInput: string;
-  basePDescriptionInputError: string;
+  // basePEditorVisible: boolean;
+  // basePKeyInput: string;
+  // basePValueInput: string;
+  // basePValueInputError: string;
+  // basePDescriptionInput: string;
+  // basePDescriptionInputError: string;
 
-  customOptions: {
+  customConfigurations: {
     key: string;
     name: string;
     description: string;
@@ -47,15 +52,15 @@ export interface ResourceVersionEditorPageModelState {
     input: string;
     select: string[];
   }[];
-  customOptionEditorVisible: boolean;
-  customOptionKey: string;
-  customOptionDescription: string;
-  customOptionDescriptionError: string;
-  customOptionCustom: 'select' | 'input';
-  customOptionDefaultValue: string;
-  customOptionDefaultValueError: string;
-  customOptionCustomOption: string;
-  customOptionCustomOptionError: string;
+  // customOptionEditorVisible: boolean;
+  // customOptionKey: string;
+  // customOptionDescription: string;
+  // customOptionDescriptionError: string;
+  // customOptionCustom: 'select' | 'input';
+  // customOptionDefaultValue: string;
+  // customOptionDefaultValueError: string;
+  // customOptionCustomOption: string;
+  // customOptionCustomOptionError: string;
 
 }
 
@@ -107,25 +112,26 @@ const Model: ResourceVersionEditorModelType = {
     graphShow: true,
 
     rawProperties: [],
-    baseProperties: [],
+    additionalProperties: [],
+    customProperties: [],
 
-    basePEditorVisible: false,
-    basePKeyInput: '',
-    basePValueInput: '',
-    basePValueInputError: '',
-    basePDescriptionInput: '',
-    basePDescriptionInputError: '',
+    // basePEditorVisible: false,
+    // basePKeyInput: '',
+    // basePValueInput: '',
+    // basePValueInputError: '',
+    // basePDescriptionInput: '',
+    // basePDescriptionInputError: '',
 
-    customOptions: [],
-    customOptionEditorVisible: false,
-    customOptionKey: '',
-    customOptionDescription: '',
-    customOptionDescriptionError: '',
-    customOptionCustom: 'input',
-    customOptionDefaultValue: '',
-    customOptionDefaultValueError: '',
-    customOptionCustomOption: '',
-    customOptionCustomOptionError: '',
+    customConfigurations: [],
+    // customOptionEditorVisible: false,
+    // customOptionKey: '',
+    // customOptionDescription: '',
+    // customOptionDescriptionError: '',
+    // customOptionCustom: 'input',
+    // customOptionDefaultValue: '',
+    // customOptionDefaultValueError: '',
+    // customOptionCustomOption: '',
+    // customOptionCustomOptionError: '',
   },
 
   effects: {
@@ -160,6 +166,7 @@ const Model: ResourceVersionEditorModelType = {
             remark: string;
             valueDisplay: string;
             valueUnit: string;
+            insertMode: 1 | 2;
           }[];
         }
       } = yield call(FServiceAPI.Resource.resourceVersionInfo1, params);
@@ -184,7 +191,11 @@ const Model: ResourceVersionEditorModelType = {
           //     value: fileAttrUnits[sp[0]] ? fileAttrUnits[sp[0]](sp[1]) : sp[1] as string,
           //   };
           // }),
-          rawProperties: data_versionInfo.systemPropertyDescriptors.map<ResourceVersionEditorPageModelState['rawProperties'][number]>((spd) => {
+          rawProperties: data_versionInfo.systemPropertyDescriptors
+            .filter((spd) => {
+              return spd.insertMode === 1;
+            })
+            .map<ResourceVersionEditorPageModelState['rawProperties'][number]>((spd) => {
             return {
               key: spd.key,
               name: spd.name,
@@ -192,15 +203,28 @@ const Model: ResourceVersionEditorModelType = {
               description: spd.remark,
             };
           }),
-          baseProperties: base.map((b) => {
-            return {
-              key: b.key,
-              name: b.name,
-              value: b.defaultValue,
-              description: b.remark,
-            };
-          }),
-          customOptions: opt.map((i) => ({
+          additionalProperties: data_versionInfo.systemPropertyDescriptors
+            .filter((spd) => {
+              return spd.insertMode === 2;
+            })
+            .map<ResourceVersionEditorPageModelState['rawProperties'][number]>((spd) => {
+              return {
+                key: spd.key,
+                name: spd.name,
+                value: spd.valueDisplay,
+                description: spd.remark,
+              };
+            }),
+          customProperties: base
+            .map((b) => {
+              return {
+                key: b.key,
+                name: b.name,
+                value: b.defaultValue,
+                description: b.remark,
+              };
+            }),
+          customConfigurations: opt.map((i) => ({
             key: i.key,
             name: i.name,
             description: i.remark,
@@ -232,7 +256,7 @@ const Model: ResourceVersionEditorModelType = {
       }));
 
       const customPropertyDescriptors: Parameters<typeof FServiceAPI.Resource.updateResourceVersionInfo>[0]['customPropertyDescriptors'] = [
-        ...resourceVersionEditorPage.baseProperties.map((bp) => {
+        ...resourceVersionEditorPage.customProperties.map((bp) => {
           return {
             key: bp.key,
             name: bp.name,
@@ -241,7 +265,7 @@ const Model: ResourceVersionEditorModelType = {
             remark: bp.description,
           };
         }),
-        ...resourceVersionEditorPage.customOptions.map((pp) => {
+        ...resourceVersionEditorPage.customConfigurations.map((pp) => {
           const isInput: boolean = pp.type === 'input';
           const options: string[] = pp.select;
           return {
