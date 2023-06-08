@@ -37,3 +37,9 @@ export const conversionSize = (size: number) => {
     return `${Math.floor((size / 1024) * 100) / 100}KB`;
   }
 };
+
+/** 获取文件后缀 */
+export const getExt = (filename: string = '') => {
+  const ext = filename.split('.').pop() || '';
+  return ext.toLowerCase();
+};

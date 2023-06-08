@@ -2,17 +2,17 @@
 // This software is licensed under a MIT License
 // https://github.com/workhorsy/uncompress.js
 
-"use strict";
+'use strict';
 
 function loadScript(url) {
   // Window
-  if (typeof window === "object") {
-    var script = document.createElement("script");
-    script.type = "text/javascript";
+  if (typeof window === 'object') {
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
     script.src = url;
     document.head.appendChild(script);
     // Web Worker
-  } else if (typeof importScripts === "function") {
+  } else if (typeof importScripts === 'function') {
     importScripts(url);
   }
 }
@@ -21,19 +21,19 @@ function currentScriptPath() {
   // NOTE: document.currentScript does not work in a Web Worker
   // So we have to parse a stack trace maually
   try {
-    throw new Error("");
+    throw new Error('');
   } catch (e) {
     var stack = e.stack;
     var line = null;
 
     // Chrome and IE
-    if (stack.indexOf("@") !== -1) {
-      line = stack.split("@")[1].split("\n")[0];
+    if (stack.indexOf('@') !== -1) {
+      line = stack.split('@')[1].split('\n')[0];
       // Firefox
     } else {
-      line = stack.split("(")[1].split(")")[0];
+      line = stack.split('(')[1].split(')')[0];
     }
-    line = line.substring(0, line.lastIndexOf("/")) + "/";
+    line = line.substring(0, line.lastIndexOf('/')) + '/';
     return line;
   }
 }
@@ -44,7 +44,7 @@ var unrarMemoryFileLocation = null;
 var _loaded_archive_formats = [];
 
 // Polyfill for missing array slice method (IE 11)
-if (typeof Uint8Array !== "undefined") {
+if (typeof Uint8Array !== 'undefined') {
   if (!Uint8Array.prototype.slice) {
     Uint8Array.prototype.slice = function (start, end) {
       var retval = new Uint8Array(end - start);
@@ -60,7 +60,7 @@ if (typeof Uint8Array !== "undefined") {
 
 // FIXME: This function is super inefficient
 function saneJoin(array, separator) {
-  var retval = "";
+  var retval = '';
   for (var i = 0; i < array.length; ++i) {
     if (i === 0) {
       retval += array[i];
@@ -92,17 +92,17 @@ function loadArchiveFormats(formats) {
 
     // Load the archive format
     switch (archive_format) {
-      case "rar":
-        unrarMemoryFileLocation = path + "libunrar.js.mem";
-        loadScript(path + "libunrar.js");
+      case 'rar':
+        unrarMemoryFileLocation = path + 'libunrar.js.mem';
+        loadScript(path + 'libunrar.js');
         _loaded_archive_formats.push(archive_format);
         break;
-      case "zip":
-        loadScript(path + "jszip.js");
+      case 'zip':
+        loadScript(path + 'jszip.js');
         _loaded_archive_formats.push(archive_format);
         break;
-      case "tar":
-        loadScript(path + "libuntar.js");
+      case 'tar':
+        loadScript(path + 'libuntar.js');
         _loaded_archive_formats.push(archive_format);
         break;
       default:
@@ -136,13 +136,13 @@ function archiveOpenArrayBuffer(file_name, array_buffer) {
   // Get the archive type
   var archive_type = null;
   if (isRarFile(array_buffer)) {
-    archive_type = "rar";
+    archive_type = 'rar';
   } else if (isZipFile(array_buffer)) {
-    archive_type = "zip";
+    archive_type = 'zip';
   } else if (isTarFile(array_buffer)) {
-    archive_type = "tar";
+    archive_type = 'tar';
   } else {
-    throw new Error("The archive type is unknown");
+    throw new Error('The archive type is unknown');
   }
 
   // Make sure the archive format is loaded
@@ -155,15 +155,15 @@ function archiveOpenArrayBuffer(file_name, array_buffer) {
   var entries = [];
   try {
     switch (archive_type) {
-      case "rar":
+      case 'rar':
         handle = _rarOpen(file_name, array_buffer);
         entries = _rarGetEntries(handle);
         break;
-      case "zip":
+      case 'zip':
         handle = _zipOpen(file_name, array_buffer);
         entries = _zipGetEntries(handle);
         break;
-      case "tar":
+      case 'tar':
         handle = _tarOpen(file_name, array_buffer);
         entries = _tarGetEntries(handle);
         break;
@@ -203,7 +203,7 @@ function _rarOpen(file_name, array_buffer) {
     {
       name: file_name,
       size: array_buffer.byteLength,
-      type: "",
+      type: '',
       content: new Uint8Array(array_buffer),
     },
   ];
@@ -255,7 +255,12 @@ function _rarGetEntries(rar_handle) {
         setTimeout(function () {
           if (is_file) {
             try {
-              readRARContent(rar_handle.rar_files, rar_handle.password, name, cb);
+              readRARContent(
+                rar_handle.rar_files,
+                rar_handle.password,
+                name,
+                cb,
+              );
             } catch (e) {
               cb(null, e);
             }
@@ -280,7 +285,9 @@ function _zipGetEntries(zip_handle) {
     var name = zip_entry.name;
     var is_file = !zip_entry.dir;
     var size_compressed = zip_entry._data ? zip_entry._data.compressedSize : 0;
-    var size_uncompressed = zip_entry._data ? zip_entry._data.uncompressedSize : 0;
+    var size_uncompressed = zip_entry._data
+      ? zip_entry._data.uncompressedSize
+      : 0;
 
     entries.push({
       name: name,
@@ -304,7 +311,10 @@ function _zipGetEntries(zip_handle) {
 }
 
 function _tarGetEntries(tar_handle) {
-  var tar_entries = tarGetEntries(tar_handle.file_name, tar_handle.array_buffer);
+  var tar_entries = tarGetEntries(
+    tar_handle.file_name,
+    tar_handle.array_buffer,
+  );
 
   // Get all the entries
   var entries = [];
@@ -336,9 +346,12 @@ function _tarGetEntries(tar_handle) {
 
 function isRarFile(array_buffer) {
   // The three styles of RAR headers
-  var rar_header1 = saneJoin([0x52, 0x45, 0x7e, 0x5e], ", "); // old
-  var rar_header2 = saneJoin([0x52, 0x61, 0x72, 0x21, 0x1a, 0x07, 0x00], ", "); // 1.5 to 4.0
-  var rar_header3 = saneJoin([0x52, 0x61, 0x72, 0x21, 0x1a, 0x07, 0x01, 0x00], ", "); // 5.0
+  var rar_header1 = saneJoin([0x52, 0x45, 0x7e, 0x5e], ', '); // old
+  var rar_header2 = saneJoin([0x52, 0x61, 0x72, 0x21, 0x1a, 0x07, 0x00], ', '); // 1.5 to 4.0
+  var rar_header3 = saneJoin(
+    [0x52, 0x61, 0x72, 0x21, 0x1a, 0x07, 0x01, 0x00],
+    ', ',
+  ); // 5.0
 
   // Just return false if the file is smaller than the header
   if (array_buffer.byteLength < 8) {
@@ -346,15 +359,19 @@ function isRarFile(array_buffer) {
   }
 
   // Return true if the header matches one of the RAR headers
-  var header1 = saneJoin(new Uint8Array(array_buffer).slice(0, 4), ", ");
-  var header2 = saneJoin(new Uint8Array(array_buffer).slice(0, 7), ", ");
-  var header3 = saneJoin(new Uint8Array(array_buffer).slice(0, 8), ", ");
-  return header1 === rar_header1 || header2 === rar_header2 || header3 === rar_header3;
+  var header1 = saneJoin(new Uint8Array(array_buffer).slice(0, 4), ', ');
+  var header2 = saneJoin(new Uint8Array(array_buffer).slice(0, 7), ', ');
+  var header3 = saneJoin(new Uint8Array(array_buffer).slice(0, 8), ', ');
+  return (
+    header1 === rar_header1 ||
+    header2 === rar_header2 ||
+    header3 === rar_header3
+  );
 }
 
 function isZipFile(array_buffer) {
   // The ZIP header
-  var zip_header = saneJoin([0x50, 0x4b, 0x03, 0x04], ", ");
+  var zip_header = saneJoin([0x50, 0x4b, 0x03, 0x04], ', ');
 
   // Just return false if the file is smaller than the header
   if (array_buffer.byteLength < 4) {
@@ -362,13 +379,13 @@ function isZipFile(array_buffer) {
   }
 
   // Return true if the header matches the ZIP header
-  var header = saneJoin(new Uint8Array(array_buffer).slice(0, 4), ", ");
+  var header = saneJoin(new Uint8Array(array_buffer).slice(0, 4), ', ');
   return header === zip_header;
 }
 
 function isTarFile(array_buffer) {
   // The TAR header
-  var tar_header = saneJoin(["u", "s", "t", "a", "r"], ", ");
+  var tar_header = saneJoin(['u', 's', 't', 'a', 'r'], ', ');
 
   // Just return false if the file is smaller than the header size
   if (array_buffer.byteLength < 512) {
@@ -376,25 +393,34 @@ function isTarFile(array_buffer) {
   }
 
   // Return true if the header matches the TAR header
-  var header = saneJoin(saneMap(new Uint8Array(array_buffer).slice(257, 257 + 5), String.fromCharCode), ", ");
+  var header = saneJoin(
+    saneMap(
+      new Uint8Array(array_buffer).slice(257, 257 + 5),
+      String.fromCharCode,
+    ),
+    ', ',
+  );
   return header === tar_header;
 }
 
 // Figure out if we are running in a Window or Web Worker
-var scope = null;
-if (typeof window === "object") {
-  scope = window;
-} else if (typeof importScripts === "function") {
-  scope = self;
-}
+// var scope = null;
+// if (typeof window === "object") {
+//   scope = window;
+// } else if (typeof importScripts === "function") {
+//   scope = self;
+// }
+
+export const Uncompress = {
+  loadArchiveFormats: loadArchiveFormats,
+  archiveOpenFile: archiveOpenFile,
+  archiveOpenArrayBuffer: archiveOpenArrayBuffer,
+  archiveClose: archiveClose,
+  isRarFile: isRarFile,
+  isZipFile: isZipFile,
+  isTarFile: isTarFile,
+  saneJoin: saneJoin,
+  saneMap: saneMap,
+};
 
 // Set exports
-scope.loadArchiveFormats = loadArchiveFormats;
-scope.archiveOpenFile = archiveOpenFile;
-scope.archiveOpenArrayBuffer = archiveOpenArrayBuffer;
-scope.archiveClose = archiveClose;
-scope.isRarFile = isRarFile;
-scope.isZipFile = isZipFile;
-scope.isTarFile = isTarFile;
-scope.saneJoin = saneJoin;
-scope.saneMap = saneMap;

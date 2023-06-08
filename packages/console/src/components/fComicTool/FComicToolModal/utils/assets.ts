@@ -17,3 +17,6 @@ export const MAX_CUT_IMG_LENGTH = 60;
 
 /** 切图最大高度 */
 export const MAX_HEIGHT_PER_PIECE = 2000;
+
+/** 最大同时上传图片数量 */
+export const MAX_REQUEST_BATCH_COUNT = 20;
