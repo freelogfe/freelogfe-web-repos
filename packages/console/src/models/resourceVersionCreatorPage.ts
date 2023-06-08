@@ -518,6 +518,7 @@ const Model: ResourceVersionCreatorModelType = {
           };
         });
 
+
       const params: Parameters<typeof FServiceAPI.Resource.createVersion>[0] = {
         resourceId: resourceVersionCreatorPage.resourceInfo.resourceID,
         version: resourceVersionCreatorPage.versionInput,
@@ -528,6 +529,13 @@ const Model: ResourceVersionCreatorModelType = {
         }),
         dependencies: dependencies,
         resolveResources: resolveResources,
+        // @ts-ignore
+        inputAttrs: resourceVersionCreatorPage.additionalProperties.map((ap) => {
+          return {
+            key: ap.key,
+            value: ap.value,
+          };
+        }),
         customPropertyDescriptors: [
           ...resourceVersionCreatorPage.customProperties
             .map<NonNullable<Parameters<typeof FServiceAPI.Resource.createVersion>[0]['customPropertyDescriptors']>[number]>

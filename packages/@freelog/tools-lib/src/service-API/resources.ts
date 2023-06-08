@@ -215,6 +215,10 @@ interface CreateVersionParamsType {
       policyId: string;
     }[];
   }[];
+  inputAttrs: {
+    key: string;
+    value: string;
+  };
 }
 
 export function createVersion({resourceId, ...params}: CreateVersionParamsType) {

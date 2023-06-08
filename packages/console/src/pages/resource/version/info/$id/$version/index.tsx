@@ -13,7 +13,7 @@ import {
 } from '@/models/resourceVersionEditorPage';
 import BraftEditor, { EditorState } from 'braft-editor';
 import { withRouter } from 'umi';
-import FInput from '@/components/FInput';
+// import FInput from '@/components/FInput';
 import FTooltip from '@/components/FTooltip';
 import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
 import Sider from '@/pages/resource/containers/Sider';
@@ -231,6 +231,7 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
         <FFormLayout.FBlock title={'基础属性'}>
           <FResourceProperties
             immutableData={resourceVersionEditorPage.rawProperties}
+            onlyEditValueData={[]}
             alterableData={resourceVersionEditorPage.baseProperties}
             onEdit_alterableData={async (data) => {
               const index: number = resourceVersionEditorPage.baseProperties.findIndex((p) => {
