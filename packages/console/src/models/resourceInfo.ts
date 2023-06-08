@@ -5,7 +5,7 @@ import { ConnectState } from '@/models/connect';
 import { history } from 'umi';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
-import { IResourceCreateVersionDraft } from '@/type/resourceTypes';
+import { IResourceCreateVersionDraftType } from '@/type/resourceTypes';
 
 export interface ResourceInfoModelState {
   resourceID: string;
@@ -47,7 +47,7 @@ export interface ResourceInfoModelState {
   };
   authProblem: boolean;
 
-  draftData: null | IResourceCreateVersionDraft;
+  draftData: null | IResourceCreateVersionDraftType;
 
   policyEditorVisible: boolean;
   policies: PolicyFullInfo_Type[];
@@ -80,7 +80,7 @@ export interface InitModelStatesAction extends AnyAction {
 export interface OnChange_DraftData_Action extends AnyAction {
   type: 'resourceInfo/onChange_DraftData';
   payload: {
-    draftData: IResourceCreateVersionDraft | null;
+    draftData: IResourceCreateVersionDraftType | null;
   };
 }
 

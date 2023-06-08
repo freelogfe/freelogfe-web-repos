@@ -1,4 +1,4 @@
-export interface IResourceCreateVersionDraft {
+export interface IResourceCreateVersionDraftType {
   versionInput: string;
   selectedFileInfo: {
     name: string;
@@ -7,17 +7,17 @@ export interface IResourceCreateVersionDraft {
   } | null;
   additionalProperties: {
     key: string;
-    name: string;
+    // name: string;
     value: string;
-    description: string;
+    // description: string;
   }[];
-  additionalProperties: {
+  customProperties: {
     key: string;
     name: string;
     value: string;
     description: string;
   }[];
-  customOptionsData: {
+  customConfigurations: {
     key: string;
     name: string;
     description: string;

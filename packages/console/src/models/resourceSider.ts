@@ -1,7 +1,7 @@
 import { DvaReducer } from '@/models/shared';
 import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription } from 'dva';
-import { IResourceCreateVersionDraft } from '@/type/resourceTypes';
+import { IResourceCreateVersionDraftType } from '@/type/resourceTypes';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import { history } from '@@/core/history';
@@ -21,7 +21,7 @@ export type ResourceSiderModelState = {
 
   hasAuthProblem: boolean;
   policies: PolicyFullInfo_Type[];
-  draft: null | IResourceCreateVersionDraft;
+  draft: null | IResourceCreateVersionDraftType;
 };
 
 export interface ChangeAction extends AnyAction {
@@ -63,7 +63,7 @@ export interface FetchDraftAction extends AnyAction {
 export interface OnChange_Draft_Action extends AnyAction {
   type: 'resourceSider/onChange_Draft';
   payload: {
-    value: IResourceCreateVersionDraft;
+    value: IResourceCreateVersionDraftType;
   };
 }
 

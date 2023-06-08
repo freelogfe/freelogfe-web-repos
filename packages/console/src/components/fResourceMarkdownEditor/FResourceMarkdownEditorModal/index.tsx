@@ -13,7 +13,7 @@ import { Timeout } from 'ahooks/lib/useRequest/src/types';
 import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
 import { formatDate } from './core/common';
 import FResourceAuthorizationProcessor from '@/components/FResourceAuthorizationProcessor';
-import { IResourceCreateVersionDraft } from '@/type/resourceTypes';
+import { IResourceCreateVersionDraftType } from '@/type/resourceTypes';
 import fMessage from '@/components/fMessage';
 import { CustomResource } from './core/interface';
 import {
@@ -115,7 +115,7 @@ export const MarkdownEditor = (props: EditorProps) => {
       fMessage(draftRes.msg);
       return;
     }
-    editor.draftData = draftRes.data.draftData as IResourceCreateVersionDraft;
+    editor.draftData = draftRes.data.draftData as IResourceCreateVersionDraftType;
     const {
       selectedFileInfo,
       directDependencies = [],

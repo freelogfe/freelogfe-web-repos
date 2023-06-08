@@ -6,7 +6,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Timeout } from 'ahooks/lib/useRequest/src/types';
 import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
 import { formatDate } from './utils/common';
-import { IResourceCreateVersionDraft } from '@/type/resourceTypes';
+import { IResourceCreateVersionDraftType } from '@/type/resourceTypes';
 import fMessage from '@/components/fMessage';
 import { Modal } from 'antd';
 import FComponentsLib from '@freelog/components-lib';

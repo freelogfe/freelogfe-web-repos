@@ -10,7 +10,7 @@ import * as semver from 'semver';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import { fileAttrUnits } from '@/utils/format';
 import { getFilesSha1Info } from '@/utils/service';
-import { IResourceCreateVersionDraft } from '@/type/resourceTypes';
+import { IResourceCreateVersionDraftType } from '@/type/resourceTypes';
 import { getProcessor } from '@/components/FResourceAuthorizationProcessor';
 import { IBaseUpcastResource } from '@/components/FResourceAuthorizationProcessor/types';
 import moment from 'moment';
@@ -868,7 +868,7 @@ const Model: ResourceVersionCreatorModelType = {
       };
       const { data: data_draft }: {
         data: null | {
-          draftData: IResourceCreateVersionDraft;
+          draftData: IResourceCreateVersionDraftType;
         };
       } = yield call(FServiceAPI.Resource.lookDraft, params);
 
@@ -917,8 +917,8 @@ const Model: ResourceVersionCreatorModelType = {
           payload: {
             versionInput: draftData.versionInput,
             selectedFileInfo: draftData.selectedFileInfo,
-            baseProperties: draftData.baseProperties,
-            customOptionsData: draftData.customOptionsData,
+            baseProperties: draftData.customProperties || [],
+            customOptionsData: draftData.customConfigurations || [],
             descriptionEditorState: BraftEditor.createEditorState(draftData.descriptionEditorInput),
           },
         });
@@ -968,11 +968,12 @@ const Model: ResourceVersionCreatorModelType = {
 
       // console.log(baseUpcastResources, 'baseUpcastResourcesoisjdlkfjlsdkjflsdjfljsl');
 
-      const draftData: IResourceCreateVersionDraft = {
+      const draftData: IResourceCreateVersionDraftType = {
         versionInput: resourceVersionCreatorPage.versionInput,
         selectedFileInfo: resourceVersionCreatorPage.selectedFileInfo,
-        baseProperties: resourceVersionCreatorPage.baseProperties,
-        customOptionsData: resourceVersionCreatorPage.customOptionsData,
+        additionalProperties: [],
+        customProperties: resourceVersionCreatorPage.baseProperties,
+        customConfigurations: resourceVersionCreatorPage.customOptionsData,
         directDependencies: directDependencies,
         descriptionEditorInput: resourceVersionCreatorPage.descriptionEditorState.toHTML(),
         baseUpcastResources: baseUpcastResources,
