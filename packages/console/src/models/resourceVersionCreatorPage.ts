@@ -1062,29 +1062,7 @@ const Model: ResourceVersionCreatorModelType = {
       const {
         result,
         error,
-      }: {
-        result: {
-          sha1: string;
-          state: 'success' | 'fail' | 'nonentity';
-          info: {
-            key: string;
-            name: string;
-            remark: string;
-            value: string | number;
-            valueDisplay: string;
-            valueUnit: string;
-            insertMode: 1 | 2;
-          }[];
-        }[]; error: string;
-      } = yield call(getFilesSha1Info, params0);
-
-      // console.log(result, error, 'resultisdjf;olksdjfl;ksjdlkfjsdlkfjlk');
-      // console.log(result, 'result sfdaiofjasldkfj awsedifojasd;lkfj lk');
-
-      // const params1: Parameters<typeof FServiceAPI.Resource.getResourceAttrListSimple> = {};
-
-      // const { data: data_attrList } = yield call(FServiceAPI.Resource.getResourceAttrListSimple);
-      // console.log(data_attrList, 'dataiosdjflkjsadlk jlfkdsjflkjasdlkfjasdlk;fjlskdjl');
+      }: Awaited<ReturnType<typeof getFilesSha1Info>> = yield call(getFilesSha1Info, params0);
 
       if (error !== '') {
         yield put<ChangeAction>({
@@ -1111,30 +1089,51 @@ const Model: ResourceVersionCreatorModelType = {
       }
 
       if (result[0].state === 'success') {
+
+        const params: Parameters<typeof FServiceAPI.Resource.lookDraft>[0] = {
+          resourceId: resourceVersionCreatorPage.resourceInfo?.resourceID || '',
+        };
+        const { data: data_draft }: {
+          data: null | {
+            draftData: IResourceCreateVersionDraftType;
+          };
+        } = yield call(FServiceAPI.Resource.lookDraft, params);
+
         yield put<ChangeAction>({
           type: 'change',
           payload: {
-            // rawProperties: Object.entries(result[0].info.metaInfo).map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((rp: any) => {
-            //   return {
-            //     key: rp[0],
-            //     name: rp[0],
-            //     value: fileAttrUnits[rp[0]] ? fileAttrUnits[rp[0]](rp[1]) : rp[1],
-            //     description: rp[0],
-            //   };
-            // }),
-            rawProperties: result[0].info.map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((i) => {
-              return {
-                key: i.key,
-                name: i.name,
-                value: i.valueDisplay,
-                description: i.remark,
-              };
-            }),
+            rawProperties: result[0].info
+              .filter((i) => {
+                return i.insertMode === 1;
+              })
+              .map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((i) => {
+                return {
+                  key: i.key,
+                  name: i.name,
+                  value: i.valueDisplay,
+                  description: i.remark,
+                };
+              }),
             rawPropertiesState: 'success',
+            additionalProperties: result[0].info
+              .filter((i) => {
+                return i.insertMode === 2;
+              })
+              .map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((i) => {
+                const item = data_draft?.draftData.additionalProperties.find((ap) => {
+                  return ap.key === i.key;
+                }) || {};
+                return {
+                  key: i.key,
+                  name: i.name,
+                  value: i.valueDisplay,
+                  description: i.remark,
+                  ...item,
+                };
+              }),
           },
         });
       }
-
     },
 
   },

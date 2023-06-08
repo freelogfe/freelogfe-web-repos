@@ -389,11 +389,6 @@ function VersionCreator({
                   onClick_OpenCartoonBtn={async () => {
                     await onClick_EditCartoonBtn();
                   }}
-                  // showEditBtnAfterSucceed={resourceVersionCreatorPage.resourceInfo.resourceType[0] === '阅读'
-                  // && resourceVersionCreatorPage.resourceInfo.resourceType[1] === '文章'
-                  // && resourceVersionCreatorPage.rawProperties.some((b) => {
-                  //   return b.key === 'mime' && (b.value === 'text/markdown' || b.value === 'text/plain');
-                  // })}
                   onClick_EditBtn={async () => {
                     if (resourceVersionCreatorPage.resourceInfo?.resourceType[0] === '阅读' && resourceVersionCreatorPage.resourceInfo?.resourceType[1] === '文章') {
                       await onClick_EditMarkdownBtn();

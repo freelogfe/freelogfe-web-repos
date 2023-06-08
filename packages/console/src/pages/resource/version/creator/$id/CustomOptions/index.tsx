@@ -248,6 +248,7 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
 
           <FResourceProperties
             immutableData={resourceVersionCreatorPage.rawProperties}
+            onlyEditValueData={resourceVersionCreatorPage.additionalProperties}
             alterableData={resourceVersionCreatorPage.customProperties}
             onEdit_alterableData={async (value) => {
               const index: number = resourceVersionCreatorPage.customProperties.findIndex((p) => {
