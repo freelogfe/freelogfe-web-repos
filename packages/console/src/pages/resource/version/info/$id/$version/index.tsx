@@ -231,7 +231,48 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
         <FFormLayout.FBlock title={'基础属性'}>
           <FResourceProperties
             immutableData={resourceVersionEditorPage.rawProperties}
-            onlyEditValueData={[]}
+            onlyEditValueData={resourceVersionEditorPage.additionalProperties}
+            onEdit_onlyEditValueData={async (data) => {
+              const index: number = resourceVersionEditorPage.additionalProperties.findIndex((p) => {
+                return p === data;
+              });
+              const dataSource: {
+                key: string;
+                name: string;
+                value: string;
+                description: string;
+              } | null = await fResourcePropertyEditor({
+                disabledKeys: [
+                  ...resourceVersionEditorPage.rawProperties.map<string>((rp) => rp.key),
+                  ...resourceVersionEditorPage.additionalProperties.map<string>((rp) => rp.key),
+                  ...resourceVersionEditorPage.customProperties.map<string>((bp) => bp.key),
+                  ...resourceVersionEditorPage.customConfigurations.map<string>((pp) => pp.key),
+                ],
+                disabledNames: [
+                  ...resourceVersionEditorPage.rawProperties.map<string>((bp) => bp.name),
+                  ...resourceVersionEditorPage.additionalProperties.map<string>((bp) => bp.name),
+                  ...resourceVersionEditorPage.customProperties.map<string>((bp) => bp.name),
+                  ...resourceVersionEditorPage.customConfigurations.map<string>((pp) => pp.name),
+                ],
+                defaultData: data,
+                noneEditableFields: ['key', 'name', 'description'],
+              });
+              if (!dataSource) {
+                return;
+              }
+
+              await onChange({
+                additionalProperties: resourceVersionEditorPage.additionalProperties.map((bp, i) => {
+                  if (index !== i) {
+                    return bp;
+                  }
+                  return dataSource;
+                }),
+              });
+              await dispatch<SyncAllPropertiesAction>({
+                type: 'resourceVersionEditorPage/syncAllProperties',
+              });
+            }}
             alterableData={resourceVersionEditorPage.customProperties}
             onEdit_alterableData={async (data) => {
               const index: number = resourceVersionEditorPage.customProperties.findIndex((p) => {

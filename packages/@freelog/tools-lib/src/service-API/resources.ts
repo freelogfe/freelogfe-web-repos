@@ -218,7 +218,7 @@ interface CreateVersionParamsType {
   inputAttrs: {
     key: string;
     value: string;
-  };
+  }[];
 }
 
 export function createVersion({resourceId, ...params}: CreateVersionParamsType) {
@@ -310,6 +310,10 @@ interface UpdateResourceVersionInfoParamsType {
     contracts: {
       policyId: string;
     }[];
+  }[];
+  inputAttrs: {
+    key: string;
+    value: string;
   }[];
 }
 

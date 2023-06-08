@@ -196,13 +196,13 @@ const Model: ResourceVersionEditorModelType = {
               return spd.insertMode === 1;
             })
             .map<ResourceVersionEditorPageModelState['rawProperties'][number]>((spd) => {
-            return {
-              key: spd.key,
-              name: spd.name,
-              value: spd.valueDisplay,
-              description: spd.remark,
-            };
-          }),
+              return {
+                key: spd.key,
+                name: spd.name,
+                value: spd.valueDisplay,
+                description: spd.remark,
+              };
+            }),
           additionalProperties: data_versionInfo.systemPropertyDescriptors
             .filter((spd) => {
               return spd.insertMode === 2;
@@ -278,10 +278,18 @@ const Model: ResourceVersionEditorModelType = {
           };
         }),
       ];
+
       const params: Parameters<typeof FServiceAPI.Resource.updateResourceVersionInfo>[0] = {
         version: resourceVersionEditorPage.version,
         resourceId: resourceVersionEditorPage.resourceID,
         customPropertyDescriptors: customPropertyDescriptors,
+        // @ts-ignore
+        inputAttrs: resourceVersionEditorPage.additionalProperties.map((ap) => {
+          return {
+            key: ap.key,
+            value: ap.value,
+          };
+        }),
       };
       const { ret, errCode, data, msg } = yield call(FServiceAPI.Resource.updateResourceVersionInfo, params);
       if (ret !== 0 || errCode !== 0) {
