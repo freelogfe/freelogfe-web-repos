@@ -120,9 +120,19 @@ function VersionCreator({
   }
 
   async function onClick_EditCartoonBtn() {
+    await dispatch<OnTrigger_SaveDraft_Action>({
+      type: 'resourceVersionCreatorPage/onTrigger_SaveDraft',
+      payload: {
+        showSuccessTip: false,
+      },
+    });
     await fComicTool({
       resourceID: resourceVersionCreatorPage.resourceInfo?.resourceID || '',
     });
+    await dispatch<OnClose_MarkdownEditor_Action>({
+      type: 'resourceVersionCreatorPage/onClose_MarkdownEditor',
+    });
+
   }
 
   if (!hasError) {
@@ -352,7 +362,7 @@ function VersionCreator({
 
                   }}
                   onClick_DeleteBtn={() => {
-                    if (resourceVersionCreatorPage.baseProperties.length > 0 || resourceVersionCreatorPage.customOptionsData.length > 0) {
+                    if (resourceVersionCreatorPage.customProperties.length > 0 || resourceVersionCreatorPage.customConfigurations.length > 0) {
                       fConfirmModal({
                         message: FI18n.i18nNext.t('createversion_remove_file_confirmation'),
                         okText: FI18n.i18nNext.t('createversion_remove_file_btn_remove'),
@@ -371,18 +381,14 @@ function VersionCreator({
 
                   }}
                   showOpenMarkdownEditor={resourceVersionCreatorPage.resourceInfo.resourceType[0] === '阅读' && resourceVersionCreatorPage.resourceInfo.resourceType[1] === '文章' && !resourceVersionCreatorPage.selectedFileInfo}
-                  showOpenCartoonEditor={resourceVersionCreatorPage.resourceInfo.resourceType[0] === '阅读' && resourceVersionCreatorPage.resourceInfo.resourceType[1] === '漫画'}
+                  // showOpenCartoonEditor={resourceVersionCreatorPage.resourceInfo.resourceType[0] === '阅读' && resourceVersionCreatorPage.resourceInfo.resourceType[1] === '漫画'}
+                  showOpenCartoonEditor={false}
                   onClick_OpenMarkdownBtn={async () => {
                     await onClick_EditMarkdownBtn();
                   }}
                   onClick_OpenCartoonBtn={async () => {
                     await onClick_EditCartoonBtn();
                   }}
-                  // showEditBtnAfterSucceed={resourceVersionCreatorPage.resourceInfo.resourceType[0] === '阅读'
-                  // && resourceVersionCreatorPage.resourceInfo.resourceType[1] === '文章'
-                  // && resourceVersionCreatorPage.rawProperties.some((b) => {
-                  //   return b.key === 'mime' && (b.value === 'text/markdown' || b.value === 'text/plain');
-                  // })}
                   onClick_EditBtn={async () => {
                     if (resourceVersionCreatorPage.resourceInfo?.resourceType[0] === '阅读' && resourceVersionCreatorPage.resourceInfo?.resourceType[1] === '文章') {
                       await onClick_EditMarkdownBtn();

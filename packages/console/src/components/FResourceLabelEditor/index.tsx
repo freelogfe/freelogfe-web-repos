@@ -4,6 +4,9 @@ import FComponentsLib from '@freelog/components-lib';
 import { FI18n, FServiceAPI } from '@freelog/tools-lib';
 import FTooltip from '@/components/FTooltip';
 import * as AHooks from 'ahooks';
+import { InputRef } from 'antd';
+import { Ref } from 'react';
+
 // import { KeyboardEventHandler } from 'react';
 
 interface FResourceLabelEditorProps {
@@ -38,7 +41,7 @@ const initState: FResourceLabelEditorStates = {
 
 function FResourceLabelEditor($prop: FResourceLabelEditorProps) {
 
-  const inputElementRef = React.useRef<HTMLInputElement>(null);
+  const inputElementRef = React.useRef<InputRef>(null);
 
   const [$state, $setState] = AHooks.useSetState<FResourceLabelEditorStates>(initState);
 
@@ -82,6 +85,15 @@ function FResourceLabelEditor($prop: FResourceLabelEditorProps) {
     });
   });
 
+  React.useEffect(() => {
+    if ($state.input === '') {
+      return;
+    }
+    $setState({
+      inputError: $prop.value.includes($state.input) ? '不能有重复' : '',
+    });
+  }, [$prop.value]);
+
   if ($prop.value.length >= 20) {
     return (<div>
       <div className={styles.selectedLabels}>
@@ -94,9 +106,9 @@ function FResourceLabelEditor($prop: FResourceLabelEditorProps) {
                 onClick={() => {
                   // set_errorText('');
                   $prop.onChange && $prop.onChange($prop.value.filter((i, j) => j !== w));
-                  $setState({
-                    inputError: $prop.value.includes($state.input) ? '不能有重复' : '',
-                  });
+                  // $setState({
+                  //   inputError: $prop.value.includes($state.input) ? '不能有重复' : '',
+                  // });
                 }}
               />
             </label>);
@@ -109,6 +121,7 @@ function FResourceLabelEditor($prop: FResourceLabelEditorProps) {
 
   return (<div>
     <FComponentsLib.FInput.FSingleLine
+      ref={inputElementRef}
       lengthLimit={-1}
       value={$state.input}
       placeholder={FI18n.i18nNext.t('hint_add_resource_tag')}
@@ -135,16 +148,16 @@ function FResourceLabelEditor($prop: FResourceLabelEditorProps) {
         });
       }}
       onPressEnter={() => {
-        if ($state.inputError) {
+        if ($state.inputError !== '') {
           return;
         }
+        // if ($state.input === '') {
+        //   // onChangeInput('');
+        //   // onChangeErrorText('');
+        //   inputElementRef.current?.blur();
+        //   return;
+        // }
         if ($state.input === '') {
-          // onChangeInput('');
-          // onChangeErrorText('');
-          inputElementRef.current?.blur();
-          return;
-        }
-        if (!$state.input) {
           $setState({
             inputError: '不能为空',
           });
@@ -157,6 +170,17 @@ function FResourceLabelEditor($prop: FResourceLabelEditorProps) {
           ...$prop.value,
           $state.input.replace(new RegExp(/#/, 'g'), ''),
         ]);
+      }}
+      onKeyUp={(event) => {
+        if (event.key === 'Escape') {
+          // set_input('');
+          // set_errorText('');
+          $setState({
+            input: '',
+            inputError: '',
+          });
+          inputElementRef.current?.blur();
+        }
       }}
     />
     {
@@ -203,14 +227,14 @@ function FResourceLabelEditor($prop: FResourceLabelEditorProps) {
             title={l.description}
             placement={'top'}
             key={l.id}
-            visible={l.description === '' ? false : undefined}
+            open={l.description === '' ? false : undefined}
           >
             <label
               onClick={() => {
                 if (selected) {
                   $prop.onChange && $prop.onChange($prop.value.filter((v) => {
                     return v !== l.name;
-                  }))
+                  }));
                 } else {
                   $prop.onChange && $prop.onChange([...$prop.value, l.name]);
                 }
@@ -233,14 +257,14 @@ function FResourceLabelEditor($prop: FResourceLabelEditorProps) {
             title={l.description}
             placement={'top'}
             key={l.id}
-            visible={l.description === '' ? false : undefined}
+            open={l.description === '' ? false : undefined}
           >
             <label
               onClick={() => {
                 if (selected) {
                   $prop.onChange && $prop.onChange($prop.value.filter((v) => {
                     return v !== l.name;
-                  }))
+                  }));
                 } else {
                   $prop.onChange && $prop.onChange([...$prop.value, l.name]);
                 }

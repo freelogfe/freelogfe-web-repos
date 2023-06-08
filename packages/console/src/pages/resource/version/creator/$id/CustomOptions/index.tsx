@@ -4,9 +4,9 @@ import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import { Space } from 'antd';
 import {
-  OnChange_BaseProperties_Action,
-  OnChange_CustomOptions_Action,
-  ResourceVersionCreatorPageModelState,
+  OnChange_CustomProperties_Action,
+  OnChange_CustomConfigurations_Action,
+  ResourceVersionCreatorPageModelState, OnChange_AdditionalProperties_Action,
 } from '@/models/resourceVersionCreatorPage';
 import {
   ConnectState,
@@ -42,13 +42,15 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
     } | null = await fResourceOptionEditor({
       disabledKeys: [
         ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
-        ...resourceVersionCreatorPage.baseProperties.map<string>((bp) => bp.key),
-        ...resourceVersionCreatorPage.customOptionsData.map<string>((pp) => pp.key),
+        ...resourceVersionCreatorPage.additionalProperties.map<string>((rp) => rp.key),
+        ...resourceVersionCreatorPage.customProperties.map<string>((bp) => bp.key),
+        ...resourceVersionCreatorPage.customConfigurations.map<string>((pp) => pp.key),
       ],
       disabledNames: [
         ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.name),
-        ...resourceVersionCreatorPage.baseProperties.map<string>((bp) => bp.name),
-        ...resourceVersionCreatorPage.customOptionsData.map<string>((pp) => pp.name),
+        ...resourceVersionCreatorPage.additionalProperties.map<string>((rp) => rp.name),
+        ...resourceVersionCreatorPage.customProperties.map<string>((bp) => bp.name),
+        ...resourceVersionCreatorPage.customConfigurations.map<string>((pp) => pp.name),
       ],
     });
 
@@ -56,11 +58,11 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
       return;
     }
 
-    await dispatch<OnChange_CustomOptions_Action>({
-      type: 'resourceVersionCreatorPage/onChange_CustomOptions',
+    await dispatch<OnChange_CustomConfigurations_Action>({
+      type: 'resourceVersionCreatorPage/onChange_CustomConfigurations',
       payload: {
         value: [
-          ...resourceVersionCreatorPage.customOptionsData,
+          ...resourceVersionCreatorPage.customConfigurations,
           dataSource,
         ],
       },
@@ -78,13 +80,15 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
     }[] | null = await fAddCustomOptions({
       disabledKeys: [
         ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
-        ...resourceVersionCreatorPage.baseProperties.map<string>((pp) => pp.key),
-        ...resourceVersionCreatorPage.customOptionsData.map<string>((cod) => cod.key),
+        ...resourceVersionCreatorPage.additionalProperties.map<string>((pp) => pp.key),
+        ...resourceVersionCreatorPage.customProperties.map<string>((pp) => pp.key),
+        ...resourceVersionCreatorPage.customConfigurations.map<string>((cod) => cod.key),
       ],
       disabledNames: [
         ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.name),
-        ...resourceVersionCreatorPage.baseProperties.map<string>((pp) => pp.name),
-        ...resourceVersionCreatorPage.customOptionsData.map<string>((cod) => cod.name),
+        ...resourceVersionCreatorPage.additionalProperties.map<string>((rp) => rp.name),
+        ...resourceVersionCreatorPage.customProperties.map<string>((pp) => pp.name),
+        ...resourceVersionCreatorPage.customConfigurations.map<string>((cod) => cod.name),
       ],
       defaultData: resourceVersionCreatorPage.preVersionOptionProperties,
     });
@@ -93,11 +97,11 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
       return;
     }
 
-    await dispatch<OnChange_CustomOptions_Action>({
-      type: 'resourceVersionCreatorPage/onChange_CustomOptions',
+    await dispatch<OnChange_CustomConfigurations_Action>({
+      type: 'resourceVersionCreatorPage/onChange_CustomConfigurations',
       payload: {
         value: [
-          ...resourceVersionCreatorPage.customOptionsData,
+          ...resourceVersionCreatorPage.customConfigurations,
           ...data,
         ],
       },
@@ -140,13 +144,15 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                         } | null = await fResourcePropertyEditor({
                           disabledKeys: [
                             ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
-                            ...resourceVersionCreatorPage.baseProperties.map<string>((bp) => bp.key),
-                            ...resourceVersionCreatorPage.customOptionsData.map<string>((pp) => pp.key),
+                            ...resourceVersionCreatorPage.additionalProperties.map<string>((bp) => bp.key),
+                            ...resourceVersionCreatorPage.customProperties.map<string>((bp) => bp.key),
+                            ...resourceVersionCreatorPage.customConfigurations.map<string>((pp) => pp.key),
                           ],
                           disabledNames: [
                             ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.name),
-                            ...resourceVersionCreatorPage.baseProperties.map<string>((bp) => bp.name),
-                            ...resourceVersionCreatorPage.customOptionsData.map<string>((pp) => pp.name),
+                            ...resourceVersionCreatorPage.additionalProperties.map<string>((rp) => rp.name),
+                            ...resourceVersionCreatorPage.customProperties.map<string>((bp) => bp.name),
+                            ...resourceVersionCreatorPage.customConfigurations.map<string>((pp) => pp.name),
                           ],
                         });
                         // console.log(dataSource, 'dataSource9iojskldjflksdjflk');
@@ -154,11 +160,11 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                           return;
                         }
 
-                        await dispatch<OnChange_BaseProperties_Action>({
-                          type: 'resourceVersionCreatorPage/onChange_BaseProperties',
+                        await dispatch<OnChange_CustomProperties_Action>({
+                          type: 'resourceVersionCreatorPage/onChange_CustomProperties',
                           payload: {
                             value: [
-                              ...resourceVersionCreatorPage.baseProperties,
+                              ...resourceVersionCreatorPage.customProperties,
                               dataSource,
                             ],
                           },
@@ -185,10 +191,13 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                           ...resourceVersionCreatorPage.rawProperties.map((rp) => {
                             return rp.key;
                           }),
-                          ...resourceVersionCreatorPage.baseProperties.map((pp) => {
+                          ...resourceVersionCreatorPage.additionalProperties.map((rp) => {
+                            return rp.key;
+                          }),
+                          ...resourceVersionCreatorPage.customProperties.map((pp) => {
                             return pp.key;
                           }),
-                          ...resourceVersionCreatorPage.customOptionsData.map((pp) => {
+                          ...resourceVersionCreatorPage.customConfigurations.map((pp) => {
                             return pp.key;
                           }),
                         ],
@@ -196,10 +205,13 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                           ...resourceVersionCreatorPage.rawProperties.map((rp) => {
                             return rp.name;
                           }),
-                          ...resourceVersionCreatorPage.baseProperties.map((pp) => {
+                          ...resourceVersionCreatorPage.additionalProperties.map((rp) => {
+                            return rp.name;
+                          }),
+                          ...resourceVersionCreatorPage.customProperties.map((pp) => {
                             return pp.name;
                           }),
-                          ...resourceVersionCreatorPage.customOptionsData.map((pp) => {
+                          ...resourceVersionCreatorPage.customConfigurations.map((pp) => {
                             return pp.name;
                           }),
                         ],
@@ -208,12 +220,12 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                         return;
                       }
 
-                      await dispatch<OnChange_BaseProperties_Action>({
-                        type: 'resourceVersionCreatorPage/onChange_BaseProperties',
+                      await dispatch<OnChange_CustomProperties_Action>({
+                        type: 'resourceVersionCreatorPage/onChange_CustomProperties',
                         payload: {
                           value: [
-                            ...resourceVersionCreatorPage.baseProperties,
-                            ...dataSource.map<ResourceVersionCreatorPageModelState['baseProperties'][number]>((ds) => {
+                            ...resourceVersionCreatorPage.customProperties,
+                            ...dataSource.map<ResourceVersionCreatorPageModelState['customProperties'][number]>((ds) => {
                               return {
                                 key: ds.key,
                                 name: ds.name,
@@ -236,9 +248,10 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
 
           <FResourceProperties
             immutableData={resourceVersionCreatorPage.rawProperties}
-            alterableData={resourceVersionCreatorPage.baseProperties}
-            onEdit_alterableData={async (value) => {
-              const index: number = resourceVersionCreatorPage.baseProperties.findIndex((p) => {
+            onlyEditValueData={resourceVersionCreatorPage.additionalProperties}
+            alterableData={resourceVersionCreatorPage.customProperties}
+            onEdit_onlyEditValueData={async (value) => {
+              const index: number = resourceVersionCreatorPage.additionalProperties.findIndex((p) => {
                 return p === value;
               });
               const dataSource: {
@@ -249,12 +262,56 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
               } | null = await fResourcePropertyEditor({
                 disabledKeys: [
                   ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
-                  ...resourceVersionCreatorPage.baseProperties.map<string>((bp) => bp.key),
-                  ...resourceVersionCreatorPage.customOptionsData.map<string>((pp) => pp.key),
+                  ...resourceVersionCreatorPage.additionalProperties.map<string>((rp) => rp.key),
+                  ...resourceVersionCreatorPage.customProperties.map<string>((bp) => bp.key),
+                  ...resourceVersionCreatorPage.customConfigurations.map<string>((pp) => pp.key),
                 ],
                 disabledNames: [
-                  ...resourceVersionCreatorPage.baseProperties.map<string>((bp) => bp.name),
-                  ...resourceVersionCreatorPage.customOptionsData.map<string>((pp) => pp.name),
+                  ...resourceVersionCreatorPage.rawProperties.map<string>((bp) => bp.name),
+                  ...resourceVersionCreatorPage.additionalProperties.map<string>((bp) => bp.name),
+                  ...resourceVersionCreatorPage.customProperties.map<string>((bp) => bp.name),
+                  ...resourceVersionCreatorPage.customConfigurations.map<string>((pp) => pp.name),
+                ],
+                defaultData: value,
+                noneEditableFields: ['key', 'description', 'name'],
+              });
+              if (!dataSource) {
+                return;
+              }
+
+              await dispatch<OnChange_AdditionalProperties_Action>({
+                type: 'resourceVersionCreatorPage/onChange_AdditionalProperties',
+                payload: {
+                  value: resourceVersionCreatorPage.additionalProperties.map((v, i) => {
+                    if (i !== index) {
+                      return v;
+                    }
+                    return dataSource;
+                  }),
+                },
+              });
+            }}
+            onEdit_alterableData={async (value) => {
+              const index: number = resourceVersionCreatorPage.customProperties.findIndex((p) => {
+                return p === value;
+              });
+              const dataSource: {
+                key: string;
+                name: string;
+                value: string;
+                description: string;
+              } | null = await fResourcePropertyEditor({
+                disabledKeys: [
+                  ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
+                  ...resourceVersionCreatorPage.additionalProperties.map<string>((rp) => rp.key),
+                  ...resourceVersionCreatorPage.customProperties.map<string>((bp) => bp.key),
+                  ...resourceVersionCreatorPage.customConfigurations.map<string>((pp) => pp.key),
+                ],
+                disabledNames: [
+                  ...resourceVersionCreatorPage.rawProperties.map<string>((bp) => bp.name),
+                  ...resourceVersionCreatorPage.additionalProperties.map<string>((bp) => bp.name),
+                  ...resourceVersionCreatorPage.customProperties.map<string>((bp) => bp.name),
+                  ...resourceVersionCreatorPage.customConfigurations.map<string>((pp) => pp.name),
                 ],
                 defaultData: value,
               });
@@ -262,10 +319,10 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                 return;
               }
 
-              await dispatch<OnChange_BaseProperties_Action>({
-                type: 'resourceVersionCreatorPage/onChange_BaseProperties',
+              await dispatch<OnChange_CustomProperties_Action>({
+                type: 'resourceVersionCreatorPage/onChange_CustomProperties',
                 payload: {
-                  value: resourceVersionCreatorPage.baseProperties.map((v, i) => {
+                  value: resourceVersionCreatorPage.customProperties.map((v, i) => {
                     if (i !== index) {
                       return v;
                     }
@@ -276,10 +333,10 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
             }}
             onDelete_alterableData={async (value) => {
               // console.log(value, 'AAAAAAsdofijsdflksdjfldsjlkj');
-              await dispatch<OnChange_BaseProperties_Action>({
-                type: 'resourceVersionCreatorPage/onChange_BaseProperties',
+              await dispatch<OnChange_CustomProperties_Action>({
+                type: 'resourceVersionCreatorPage/onChange_CustomProperties',
                 payload: {
-                  value: resourceVersionCreatorPage.baseProperties.filter((v, i) => {
+                  value: resourceVersionCreatorPage.customProperties.filter((v, i) => {
                     return v.key !== value.key && v.name !== value.name;
                   }),
                 },
@@ -292,7 +349,7 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
         <div style={{ height: 5 }} />
 
         {
-          resourceVersionCreatorPage.customOptionsData.length === 0
+          resourceVersionCreatorPage.customConfigurations.length === 0
             ? (<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 20 }}>
               <FTooltip title={FI18n.i18nNext.t('info_versionoptions')}>
                 <div>
@@ -347,9 +404,9 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
 
               <FResourceOptions
                 // dataSource={resourceVersionCreatorPage.customOptionsData}
-                dataSource={resourceVersionCreatorPage.customOptionsData}
+                dataSource={resourceVersionCreatorPage.customConfigurations}
                 onEdit={async (value) => {
-                  const index: number = resourceVersionCreatorPage.customOptionsData.findIndex((p) => {
+                  const index: number = resourceVersionCreatorPage.customConfigurations.findIndex((p) => {
                     return p === value;
                   });
 
@@ -363,13 +420,15 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                   } | null = await fResourceOptionEditor({
                     disabledKeys: [
                       ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
-                      ...resourceVersionCreatorPage.baseProperties.map<string>((bp) => bp.key),
-                      ...resourceVersionCreatorPage.customOptionsData.map<string>((pp) => pp.key),
+                      ...resourceVersionCreatorPage.additionalProperties.map<string>((rp) => rp.key),
+                      ...resourceVersionCreatorPage.customProperties.map<string>((bp) => bp.key),
+                      ...resourceVersionCreatorPage.customConfigurations.map<string>((pp) => pp.key),
                     ],
                     disabledNames: [
                       ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.name),
-                      ...resourceVersionCreatorPage.baseProperties.map<string>((bp) => bp.name),
-                      ...resourceVersionCreatorPage.customOptionsData.map<string>((pp) => pp.name),
+                      ...resourceVersionCreatorPage.additionalProperties.map<string>((rp) => rp.name),
+                      ...resourceVersionCreatorPage.customProperties.map<string>((bp) => bp.name),
+                      ...resourceVersionCreatorPage.customConfigurations.map<string>((pp) => pp.name),
                     ],
                     defaultData: value,
                   });
@@ -378,10 +437,10 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                     return;
                   }
 
-                  await dispatch<OnChange_CustomOptions_Action>({
-                    type: 'resourceVersionCreatorPage/onChange_CustomOptions',
+                  await dispatch<OnChange_CustomConfigurations_Action>({
+                    type: 'resourceVersionCreatorPage/onChange_CustomConfigurations',
                     payload: {
-                      value: resourceVersionCreatorPage.customOptionsData.map((a, b) => {
+                      value: resourceVersionCreatorPage.customConfigurations.map((a, b) => {
                         if (b !== index) {
                           return a;
                         }
@@ -391,10 +450,10 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                   });
                 }}
                 onDelete={async (value) => {
-                  await dispatch<OnChange_CustomOptions_Action>({
-                    type: 'resourceVersionCreatorPage/onChange_CustomOptions',
+                  await dispatch<OnChange_CustomConfigurations_Action>({
+                    type: 'resourceVersionCreatorPage/onChange_CustomConfigurations',
                     payload: {
-                      value: resourceVersionCreatorPage.customOptionsData.filter((a) => {
+                      value: resourceVersionCreatorPage.customConfigurations.filter((a) => {
                         return a.key !== value.key && a.name !== value.name;
                       }),
                     },

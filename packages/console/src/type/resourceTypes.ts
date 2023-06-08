@@ -1,17 +1,23 @@
-export interface IResourceCreateVersionDraft {
+export interface IResourceCreateVersionDraftType {
   versionInput: string;
   selectedFileInfo: {
     name: string;
     sha1: string;
     from: string;
   } | null;
-  baseProperties: {
+  additionalProperties: {
+    key: string;
+    // name: string;
+    value: string;
+    // description: string;
+  }[];
+  customProperties: {
     key: string;
     name: string;
     value: string;
     description: string;
   }[];
-  customOptionsData: {
+  customConfigurations: {
     key: string;
     name: string;
     description: string;
