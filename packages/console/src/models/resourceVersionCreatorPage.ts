@@ -56,16 +56,22 @@ export interface ResourceVersionCreatorPageModelState {
     description: string;
   }[];
   rawPropertiesState: 'parsing' | 'success' | 'fail';
-
-  baseProperties: {
+  additionalProperties: {
     key: string;
     name: string;
     value: string;
     description: string;
   }[];
 
-  customOptionsDataVisible: boolean;
-  customOptionsData: {
+  customProperties: {
+    key: string;
+    name: string;
+    value: string;
+    description: string;
+  }[];
+
+  // customOptionsDataVisible: boolean;
+  customConfigurations: {
     key: string;
     name: string;
     description: string;
@@ -170,17 +176,17 @@ export interface OnClose_MarkdownEditor_Action extends AnyAction {
   type: 'resourceVersionCreatorPage/onClose_MarkdownEditor';
 }
 
-export interface OnChange_BaseProperties_Action extends AnyAction {
+export interface OnChange_CustomProperties_Action extends AnyAction {
   type: 'resourceVersionCreatorPage/onChange_BaseProperties';
   payload: {
-    value: ResourceVersionCreatorPageModelState['baseProperties'];
+    value: ResourceVersionCreatorPageModelState['customProperties'];
   };
 }
 
-export interface OnChange_CustomOptions_Action extends AnyAction {
+export interface OnChange_CustomConfigurations_Action extends AnyAction {
   type: 'resourceVersionCreatorPage/onChange_CustomOptions';
   payload: {
-    value: ResourceVersionCreatorPageModelState['customOptionsData'];
+    value: ResourceVersionCreatorPageModelState['customConfigurations'];
   };
 }
 
@@ -232,8 +238,8 @@ export interface ResourceVersionCreatorModelType {
     onSucceed_ImportObject: (action: OnSucceed_ImportObject_Action, effects: EffectsCommandMap) => void;
     onDelete_ObjectFile: (action: OnDelete_ObjectFile_Action, effects: EffectsCommandMap) => void;
     onClose_MarkdownEditor: (action: OnClose_MarkdownEditor_Action, effects: EffectsCommandMap) => void;
-    onChange_BaseProperties: (action: OnChange_BaseProperties_Action, effects: EffectsCommandMap) => void;
-    onChange_CustomOptions: (action: OnChange_CustomOptions_Action, effects: EffectsCommandMap) => void;
+    onChange_CustomProperties: (action: OnChange_CustomProperties_Action, effects: EffectsCommandMap) => void;
+    onChange_CustomConfigurations: (action: OnChange_CustomConfigurations_Action, effects: EffectsCommandMap) => void;
     onClick_ImportLastVersionDependents_Btn: (action: OnClick_ImportLastVersionDependents_Btn_Action, effects: EffectsCommandMap) => void;
     onChange_DescriptionEditorState: (action: OnChange_DescriptionEditorState_Action, effects: EffectsCommandMap) => void;
 
@@ -261,11 +267,11 @@ const initStates: ResourceVersionCreatorPageModelState = {
 
   rawProperties: [],
   rawPropertiesState: 'success',
+  additionalProperties: [],
+  customProperties: [],
 
-  baseProperties: [],
-
-  customOptionsDataVisible: false,
-  customOptionsData: [],
+  // customOptionsDataVisible: false,
+  customConfigurations: [],
 
   descriptionEditorState: BraftEditor.createEditorState(''),
 
@@ -515,29 +521,31 @@ const Model: ResourceVersionCreatorModelType = {
         dependencies: dependencies,
         resolveResources: resolveResources,
         customPropertyDescriptors: [
-          ...resourceVersionCreatorPage.baseProperties.map<NonNullable<Parameters<typeof FServiceAPI.Resource.createVersion>[0]['customPropertyDescriptors']>[number]>
-          ((i) => {
-            return {
-              type: 'readonlyText',
-              key: i.key,
-              name: i.name,
-              remark: i.description,
-              defaultValue: i.value,
-            };
-          }),
-          ...resourceVersionCreatorPage.customOptionsData.map<NonNullable<Parameters<typeof FServiceAPI.Resource.createVersion>[0]['customPropertyDescriptors']>[number]>((i) => {
-            const isInput: boolean = i.type === 'input';
-            const options: string[] = i.select;
-            return {
-              type: isInput ? 'editableText' : 'select',
-              key: i.key,
-              name: i.name,
-              remark: i.description,
-              defaultValue: isInput ? i.input : options[0],
-              // defaultValue: isInput ? i.input : '',
-              candidateItems: isInput ? undefined : options,
-            };
-          }),
+          ...resourceVersionCreatorPage.customProperties
+            .map<NonNullable<Parameters<typeof FServiceAPI.Resource.createVersion>[0]['customPropertyDescriptors']>[number]>
+            ((i) => {
+              return {
+                type: 'readonlyText',
+                key: i.key,
+                name: i.name,
+                remark: i.description,
+                defaultValue: i.value,
+              };
+            }),
+          ...resourceVersionCreatorPage.customConfigurations
+            .map<NonNullable<Parameters<typeof FServiceAPI.Resource.createVersion>[0]['customPropertyDescriptors']>[number]>((i) => {
+              const isInput: boolean = i.type === 'input';
+              const options: string[] = i.select;
+              return {
+                type: isInput ? 'editableText' : 'select',
+                key: i.key,
+                name: i.name,
+                remark: i.description,
+                defaultValue: isInput ? i.input : options[0],
+                // defaultValue: isInput ? i.input : '',
+                candidateItems: isInput ? undefined : options,
+              };
+            }),
         ],
         description: resourceVersionCreatorPage.descriptionEditorState.toHTML() === '<p></p>'
           ? ''
@@ -656,9 +664,9 @@ const Model: ResourceVersionCreatorModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          baseProperties: data_objectDetails.customPropertyDescriptors
+          customProperties: data_objectDetails.customPropertyDescriptors
             .filter((cpd) => cpd.type === 'readonlyText')
-            .map<ResourceVersionCreatorPageModelState['baseProperties'][number]>((cpd: any) => {
+            .map<ResourceVersionCreatorPageModelState['customProperties'][number]>((cpd: any) => {
               return {
                 key: cpd.key,
                 name: cpd.key,
@@ -666,9 +674,9 @@ const Model: ResourceVersionCreatorModelType = {
                 description: cpd.remark,
               };
             }),
-          customOptionsData: data_objectDetails.customPropertyDescriptors
+          customConfigurations: data_objectDetails.customPropertyDescriptors
             .filter((cpd: any) => cpd.type !== 'readonlyText')
-            .map<ResourceVersionCreatorPageModelState['customOptionsData'][number]>((cpd) => {
+            .map<ResourceVersionCreatorPageModelState['customConfigurations'][number]>((cpd) => {
               return {
                 key: cpd.key,
                 name: cpd.name,
@@ -777,8 +785,9 @@ const Model: ResourceVersionCreatorModelType = {
         payload: {
           selectedFileInfo: null,
           rawProperties: [],
-          baseProperties: [],
-          customOptionsData: [],
+          additionalProperties: [],
+          customProperties: [],
+          customConfigurations: [],
           dataIsDirty: true,
           selectedFile_UsedResources: [],
         },
@@ -804,20 +813,20 @@ const Model: ResourceVersionCreatorModelType = {
         },
       });
     },
-    * onChange_BaseProperties({ payload }: OnChange_BaseProperties_Action, { put }: EffectsCommandMap) {
+    * onChange_CustomProperties({ payload }: OnChange_CustomProperties_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          baseProperties: payload.value,
+          customProperties: payload.value,
           dataIsDirty: true,
         },
       });
     },
-    * onChange_CustomOptions({ payload }: OnChange_CustomOptions_Action, { put }: EffectsCommandMap) {
+    * onChange_CustomConfigurations({ payload }: OnChange_CustomConfigurations_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          customOptionsData: payload.value,
+          customConfigurations: payload.value,
           dataIsDirty: true,
         },
       });
@@ -917,8 +926,16 @@ const Model: ResourceVersionCreatorModelType = {
           payload: {
             versionInput: draftData.versionInput,
             selectedFileInfo: draftData.selectedFileInfo,
-            baseProperties: draftData.customProperties || [],
-            customOptionsData: draftData.customConfigurations || [],
+            additionalProperties: draftData.additionalProperties.map((p) => {
+              return {
+                key: p.key,
+                name: '',
+                value: p.value,
+                description: '',
+              };
+            }),
+            customProperties: draftData.customProperties || [],
+            customConfigurations: draftData.customConfigurations || [],
             descriptionEditorState: BraftEditor.createEditorState(draftData.descriptionEditorInput),
           },
         });
@@ -971,9 +988,14 @@ const Model: ResourceVersionCreatorModelType = {
       const draftData: IResourceCreateVersionDraftType = {
         versionInput: resourceVersionCreatorPage.versionInput,
         selectedFileInfo: resourceVersionCreatorPage.selectedFileInfo,
-        additionalProperties: [],
-        customProperties: resourceVersionCreatorPage.baseProperties,
-        customConfigurations: resourceVersionCreatorPage.customOptionsData,
+        additionalProperties: resourceVersionCreatorPage.additionalProperties.map((p) => {
+          return {
+            key: p.key,
+            value: p.value,
+          };
+        }),
+        customProperties: resourceVersionCreatorPage.customProperties,
+        customConfigurations: resourceVersionCreatorPage.customConfigurations,
         directDependencies: directDependencies,
         descriptionEditorInput: resourceVersionCreatorPage.descriptionEditorState.toHTML(),
         baseUpcastResources: baseUpcastResources,
