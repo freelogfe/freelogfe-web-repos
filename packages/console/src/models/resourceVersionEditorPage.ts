@@ -277,6 +277,7 @@ const Model: ResourceVersionEditorModelType = {
             candidateItems: isInput ? undefined : options,
           };
         }),
+
       ];
 
       const params: Parameters<typeof FServiceAPI.Resource.updateResourceVersionInfo>[0] = {
