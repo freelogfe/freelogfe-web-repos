@@ -362,7 +362,7 @@ function VersionCreator({
 
                   }}
                   onClick_DeleteBtn={() => {
-                    if (resourceVersionCreatorPage.baseProperties.length > 0 || resourceVersionCreatorPage.customOptionsData.length > 0) {
+                    if (resourceVersionCreatorPage.customProperties.length > 0 || resourceVersionCreatorPage.customConfigurations.length > 0) {
                       fConfirmModal({
                         message: FI18n.i18nNext.t('createversion_remove_file_confirmation'),
                         okText: FI18n.i18nNext.t('createversion_remove_file_btn_remove'),

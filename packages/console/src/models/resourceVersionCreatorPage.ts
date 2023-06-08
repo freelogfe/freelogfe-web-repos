@@ -176,15 +176,22 @@ export interface OnClose_MarkdownEditor_Action extends AnyAction {
   type: 'resourceVersionCreatorPage/onClose_MarkdownEditor';
 }
 
+export interface OnChange_AdditionalProperties_Action extends AnyAction {
+  type: 'resourceVersionCreatorPage/onChange_AdditionalProperties';
+  payload: {
+    value: ResourceVersionCreatorPageModelState['additionalProperties'];
+  };
+}
+
 export interface OnChange_CustomProperties_Action extends AnyAction {
-  type: 'resourceVersionCreatorPage/onChange_BaseProperties';
+  type: 'resourceVersionCreatorPage/onChange_CustomProperties';
   payload: {
     value: ResourceVersionCreatorPageModelState['customProperties'];
   };
 }
 
 export interface OnChange_CustomConfigurations_Action extends AnyAction {
-  type: 'resourceVersionCreatorPage/onChange_CustomOptions';
+  type: 'resourceVersionCreatorPage/onChange_CustomConfigurations';
   payload: {
     value: ResourceVersionCreatorPageModelState['customConfigurations'];
   };
