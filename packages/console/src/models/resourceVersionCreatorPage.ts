@@ -1073,6 +1073,7 @@ const Model: ResourceVersionCreatorModelType = {
             value: string | number;
             valueDisplay: string;
             valueUnit: string;
+            insertMode: 1 | 2;
           }[];
         }[]; error: string;
       } = yield call(getFilesSha1Info, params0);

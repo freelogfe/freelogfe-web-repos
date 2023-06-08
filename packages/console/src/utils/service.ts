@@ -10,6 +10,7 @@ interface FileInfo {
     value: string | number;
     valueDisplay: string;
     valueUnit: string;
+    insertMode: 1 | 2;
   }[];
 }
 
@@ -48,14 +49,7 @@ export async function getFilesSha1Info({
       data: {
         sha1: string;
         metaAnalyzeStatus: number;
-        metaInfoArray: {
-          key: string;
-          name: string;
-          remark: string;
-          value: string | number;
-          valueDisplay: string;
-          valueUnit: string;
-        }[];
+        metaInfoArray: FileInfo['info'];
       }[];
     } = await FServiceAPI.Storage.filesListInfo({
       sha1: needHandleSha1.join(','),
