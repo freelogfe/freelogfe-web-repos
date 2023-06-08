@@ -6,7 +6,7 @@ import { Space } from 'antd';
 import {
   OnChange_CustomProperties_Action,
   OnChange_CustomConfigurations_Action,
-  ResourceVersionCreatorPageModelState,
+  ResourceVersionCreatorPageModelState, OnChange_AdditionalProperties_Action,
 } from '@/models/resourceVersionCreatorPage';
 import {
   ConnectState,
@@ -250,6 +250,47 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
             immutableData={resourceVersionCreatorPage.rawProperties}
             onlyEditValueData={resourceVersionCreatorPage.additionalProperties}
             alterableData={resourceVersionCreatorPage.customProperties}
+            onEdit_onlyEditValueData={async (value) => {
+              const index: number = resourceVersionCreatorPage.additionalProperties.findIndex((p) => {
+                return p === value;
+              });
+              const dataSource: {
+                key: string;
+                name: string;
+                value: string;
+                description: string;
+              } | null = await fResourcePropertyEditor({
+                disabledKeys: [
+                  ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
+                  ...resourceVersionCreatorPage.additionalProperties.map<string>((rp) => rp.key),
+                  ...resourceVersionCreatorPage.customProperties.map<string>((bp) => bp.key),
+                  ...resourceVersionCreatorPage.customConfigurations.map<string>((pp) => pp.key),
+                ],
+                disabledNames: [
+                  ...resourceVersionCreatorPage.rawProperties.map<string>((bp) => bp.name),
+                  ...resourceVersionCreatorPage.additionalProperties.map<string>((bp) => bp.name),
+                  ...resourceVersionCreatorPage.customProperties.map<string>((bp) => bp.name),
+                  ...resourceVersionCreatorPage.customConfigurations.map<string>((pp) => pp.name),
+                ],
+                defaultData: value,
+                noneEditableFields: ['key', 'description', 'name'],
+              });
+              if (!dataSource) {
+                return;
+              }
+
+              await dispatch<OnChange_AdditionalProperties_Action>({
+                type: 'resourceVersionCreatorPage/onChange_AdditionalProperties',
+                payload: {
+                  value: resourceVersionCreatorPage.additionalProperties.map((v, i) => {
+                    if (i !== index) {
+                      return v;
+                    }
+                    return dataSource;
+                  }),
+                },
+              });
+            }}
             onEdit_alterableData={async (value) => {
               const index: number = resourceVersionCreatorPage.customProperties.findIndex((p) => {
                 return p === value;

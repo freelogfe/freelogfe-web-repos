@@ -245,6 +245,7 @@ export interface ResourceVersionCreatorModelType {
     onSucceed_ImportObject: (action: OnSucceed_ImportObject_Action, effects: EffectsCommandMap) => void;
     onDelete_ObjectFile: (action: OnDelete_ObjectFile_Action, effects: EffectsCommandMap) => void;
     onClose_MarkdownEditor: (action: OnClose_MarkdownEditor_Action, effects: EffectsCommandMap) => void;
+    onChange_AdditionalProperties: (action: OnChange_AdditionalProperties_Action, effects: EffectsCommandMap) => void;
     onChange_CustomProperties: (action: OnChange_CustomProperties_Action, effects: EffectsCommandMap) => void;
     onChange_CustomConfigurations: (action: OnChange_CustomConfigurations_Action, effects: EffectsCommandMap) => void;
     onClick_ImportLastVersionDependents_Btn: (action: OnClick_ImportLastVersionDependents_Btn_Action, effects: EffectsCommandMap) => void;
@@ -817,6 +818,15 @@ const Model: ResourceVersionCreatorModelType = {
         type: '_FetchDraft',
         payload: {
           delay: true,
+        },
+      });
+    },
+    * onChange_AdditionalProperties({ payload }: OnChange_AdditionalProperties_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          additionalProperties: payload.value,
+          dataIsDirty: true,
         },
       });
     },
