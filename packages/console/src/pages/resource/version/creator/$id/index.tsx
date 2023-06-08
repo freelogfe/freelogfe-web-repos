@@ -332,6 +332,7 @@ function VersionCreator({
                 }
 
                 <FPublishObjectFile
+                  showEditBtnAfterSucceed={true}
                   // resourceID={resourceVersionCreatorPage.resourceInfo.resourceID}
                   resourceType={{
                     code: resourceVersionCreatorPage.resourceInfo.resourceTypeCode,
