@@ -190,6 +190,7 @@ function Details({ storageObjectEditor, dispatch }: DetailsProps) {
 
             <FResourceProperties
               immutableData={storageObjectEditor.rawProperties}
+              onlyEditValueData={[]}
               alterableData={storageObjectEditor.baseProperties}
             />
             <div style={{ height: 15 }} />

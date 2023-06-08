@@ -28,6 +28,7 @@ function Property({ dispatch, resourceDetailPage }: PropertyProps) {
       {/*<div style={{ padding: 15, backgroundColor: '#F7F8F9' }}>*/}
         <FResourceProperties
           immutableData={resourceDetailPage.resourceVersion_Info.rawProperties}
+          onlyEditValueData={[]}
           alterableData={resourceDetailPage.resourceVersion_Info.baseProperties}
         />
       {/*</div>*/}
