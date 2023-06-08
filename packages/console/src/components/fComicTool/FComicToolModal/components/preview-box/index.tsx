@@ -8,12 +8,13 @@ import { ImgInComicTool } from '../../utils/interface';
 import LeftToRight from '../../images/left-to-right.png';
 import RightToLeft from '../../images/right-to-left.png';
 import { Timeout } from 'ahooks/lib/useRequest/src/types';
+import { MAX_IMG_SIZE } from '../../utils/assets';
 
 type modeType = 'paging' | 'scroll' | 'single' | 'double' | 'normal' | 'manga';
 
 export const PreviewBox = (props: { show: boolean; close: () => void }) => {
   const { show, close } = props;
-  const { imgList } = useContext(comicToolContext);
+  const { comicMode, imgList } = useContext(comicToolContext);
 
   const tipTimer = useRef<Timeout | null>(null);
   const pagePointList = useRef<number[]>([]);
@@ -89,7 +90,10 @@ export const PreviewBox = (props: { show: boolean; close: () => void }) => {
     mode[index] = value;
     setMode([...mode]);
 
-    localStorage.setItem('comicReadMode', JSON.stringify(mode));
+    if (mode[0] === 'paging') {
+      // 页漫时，将选择的模式保存在本地
+      localStorage.setItem('comicReadMode', JSON.stringify(mode));
+    }
 
     if (value === 'scroll') {
       getPointInScroll();
@@ -176,6 +180,18 @@ export const PreviewBox = (props: { show: boolean; close: () => void }) => {
   };
 
   useEffect(() => {
+    if (comicMode === 1) {
+      // 条漫时，自动选择滚动模式
+      setMode((pre) => {
+        pre[0] = 'scroll';
+        return [...pre];
+      });
+    } else if (comicMode === 2) {
+      // 页漫时，自动选择翻页模式（如本地有记录翻页模式的选择，优先取本地记录的模式）
+      const comicReadMode = localStorage.getItem('comicReadMode');
+      if (comicReadMode) setMode(JSON.parse(comicReadMode));
+    }
+
     return () => {
       if (tipTimer.current) {
         clearTimeout(tipTimer.current);
@@ -185,9 +201,6 @@ export const PreviewBox = (props: { show: boolean; close: () => void }) => {
       setCurrentPage(1);
       setJumpPage(1);
       setModeMenuShow(false);
-
-      const comicReadMode = localStorage.getItem('comicReadMode');
-      if (comicReadMode) setMode(JSON.parse(comicReadMode));
     };
   }, [show]);
 
@@ -199,7 +212,9 @@ export const PreviewBox = (props: { show: boolean; close: () => void }) => {
 
     const list: ImgInComicTool[] = [];
     imgList.forEach((item: ImgInComicTool) => {
-      list.push(...(item.children ? item.children : [item]));
+      const {size, children} = item;
+      if (size > MAX_IMG_SIZE) return;
+      list.push(...(children ? children : [item]));
     });
     setPreviewList(list);
   }, [imgList]);

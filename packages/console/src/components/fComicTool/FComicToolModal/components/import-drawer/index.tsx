@@ -14,8 +14,7 @@ import FModal from '@/components/FModal';
 import FComponentsLib from '@freelog/components-lib';
 import { comicToolContext } from '../..';
 import { ImgInComicTool } from '../../utils/interface';
-
-const myWindow: any = window;
+import { getExt } from '../../utils/common';
 
 const { Option } = Select;
 
@@ -25,7 +24,7 @@ interface Props {
 }
 
 export const ImportDrawer = (props: Props) => {
-  const { resourceId, setImgList, setLoaderShow } =
+  const { resourceId, Uncompress, setComicConfig, setImgList, setLoaderShow } =
     useContext(comicToolContext);
   const { show, close } = props;
   let body: Element | null = null;
@@ -100,14 +99,23 @@ export const ImportDrawer = (props: Props) => {
 
   /** 确认导入 */
   const sureImport = async (file: File) => {
-    setImgList([]);
+    const suffix = getExt(file.name);
+    if (!['zip', 'rar', 'tar', 'cbz', 'cbr', 'cbt'].includes(suffix)) {
+      fMessage(FI18n.i18nNext.t('cbformatter_import_error_format'));
+      setLoaderShow(false);
+      return;
+    }
 
-    myWindow.archiveOpenFile(file, (archive: any, err: any) => {
-      if (archive) {
-        readContents(archive);
-      } else {
-        console.error('no archive', err);
+    setImgList([]);
+    setComicConfig({});
+
+    Uncompress.archiveOpenFile(file, (archive: any, err: any) => {
+      if (!archive) {
+        setLoaderShow(false);
+        false;
       }
+
+      readContents(archive);
     });
 
     setTimeout(() => {
@@ -117,14 +125,14 @@ export const ImportDrawer = (props: Props) => {
 
   /** 获取压缩包内容 */
   const readContents = (archive: { entries: any[] }) => {
-    // 排序
+    // 按图片名称排序
     const entries = archive.entries.sort((a, b) => {
       const indexA = a.name.split('.')[0] * 1;
       const indexB = b.name.split('.')[0] * 1;
       return indexA - indexB;
     });
 
-    for (var i = 0; i < entries.length; i++) {
+    for (let i = 0; i < entries.length; i++) {
       processEntries(entries, i, entries.length);
     }
   };
@@ -132,8 +140,22 @@ export const ImportDrawer = (props: Props) => {
   /** 获取压缩包内容 */
   const processEntries = (entries: any[], i: number, max: number) => {
     const filename = entries[i].name;
-    if (getExt(filename) != '') {
+    const ext = getExt(filename);
+    if (['jpg', 'jpeg', 'gif', 'png'].includes(ext)) {
+      // 图片
       createBlobs(entries[i], i, max);
+    } else if (ext === 'xml' && filename === 'ComicInfo.xml') {
+      // xml
+      entries[i].readData((result: BlobPart, err: any) => {
+        const blob = new Blob([result], { type: getMIME(entries[i].name) });
+        getXML(blob);
+      });
+    } else if (ext === 'json' && filename === 'index.json') {
+      // json
+      entries[i].readData((result: BlobPart, err: any) => {
+        const blob = new Blob([result], { type: getMIME(entries[i].name) });
+        getJson(blob);
+      });
     }
   };
 
@@ -147,14 +169,14 @@ export const ImportDrawer = (props: Props) => {
     max: number,
   ) => {
     entry.readData((result: BlobPart, err: any) => {
-      var blob = new Blob([result], { type: getMIME(entry.name) });
+      const blob = new Blob([result], { type: getMIME(entry.name) });
       blobToDataURI(blob, entry.name, i, max);
     });
   };
 
   /** 将Blob转为base64 */
   const blobToDataURI = (blob: Blob, name: any, i: number, max: number) => {
-    var reader = new FileReader();
+    const reader = new FileReader();
     reader.readAsDataURL(blob);
     reader.onload = (e: any) => {
       const img = { name, size: e.total, base64: e.target.result };
@@ -163,36 +185,91 @@ export const ImportDrawer = (props: Props) => {
     };
   };
 
+  /** 解析 xml 文件 */
+  const getXML = (blob: Blob) => {
+    const reader = new FileReader();
+    reader.readAsText(blob);
+    reader.onload = (e: any) => {
+      const xmlConfig: any = {};
+      const { result } = e.target;
+      console.error(result);
+      const xmlHeader = result
+        .match(/<\?xml.*?\?>/)[0]
+        .replace(`<?xml `, '')
+        .replace(`?>`, '');
+      const attrsList = xmlHeader.split(' ');
+      const attrs: any = {};
+      attrsList.forEach((item: string) => {
+        const [key, valueWithQuota] = item.split('=');
+        const value = valueWithQuota.slice(1, valueWithQuota.length - 1);
+        attrs[key] = value;
+      });
+      xmlConfig.xml = { attrs };
+
+      const xmlDoc = new DOMParser().parseFromString(result, 'text/xml');
+      const infos = xmlDoc.getElementsByTagName('ComicInfo');
+      xmlConfig.children = getXmlNodes(infos);
+      console.error(xmlConfig);
+      setComicConfig((pre: any) => {
+        return { ...xmlConfig, ...pre };
+      });
+    };
+  };
+
+  /** 解析 xml 节点 */
+  const getXmlNodes = (nodes: HTMLCollectionOf<Element>) => {
+    const result: any[] = [];
+    [...nodes].forEach((node) => {
+      const { nodeType, nodeName, attributes, children, firstChild } = node;
+      if (nodeType !== 1) return;
+
+      const attrs: any = {};
+      [...attributes].forEach((attr) => {
+        attrs[attr.nodeName] = attr.nodeValue;
+      });
+      const item = {
+        key: nodeName,
+        value: children.length ? null : firstChild?.nodeValue || null,
+        attrs,
+        children: getXmlNodes(children),
+      };
+      result.push(item);
+    });
+    return result;
+  };
+
+  /** 解析 json 文件 */
+  const getJson = (blob: Blob) => {
+    const reader = new FileReader();
+    reader.readAsText(blob);
+    reader.onload = (e: any) => {
+      const { result } = e.target;
+      const json = JSON.parse(result);
+      setComicConfig((pre: any) => {
+        return { ...pre, ...json };
+      });
+    };
+  };
+
   /** 获取MIME */
   const getMIME = (filename: any) => {
-    var ext = (getExt(filename) || '').toLowerCase();
+    const ext = getExt(filename);
 
     switch (ext) {
       case 'jpg':
       case 'jpeg':
         return 'image/jpeg';
-        break;
       case 'png':
         return 'image/png';
-        break;
       case 'gif':
         return 'image/gif';
-        break;
-      case 'bmp':
-        return 'image/bmp';
-        break;
-      case 'webp':
-        return 'image/webp';
-        break;
+      case 'xml':
+        return 'text/xml';
+      case 'json':
+        return 'application/json';
       default:
         return 'image/jpeg';
     }
-  };
-
-  /** 获取后缀 */
-  const getExt = (filename: string) => {
-    var ext = filename.split('.').pop();
-    return ext == filename ? '' : ext;
   };
 
   /** 上传本地文件 */
@@ -229,7 +306,7 @@ export const ImportDrawer = (props: Props) => {
         FI18n.i18nNext.t('cbformatter_import_filter_allobjects')
           ? '_all'
           : refs.current.bucket,
-      mime: 'application',
+      mime: 'application/zip,application/vnd.rar,application/x-tar,application/x-cbr',
       keywords: refs.current.objectKey,
     };
     const res = await FServiceAPI.Storage.objectList(params);
@@ -710,7 +787,7 @@ export const ImportDrawer = (props: Props) => {
                               }
                               return false;
                             }}
-                            accept=".md,.txt"
+                            accept=".cbz,.cbr,.cbt,.zip,.rar,.tar"
                             disabled={!refs.current.uploadBucket}
                           >
                             <div
@@ -748,7 +825,7 @@ export const ImportDrawer = (props: Props) => {
                 <div className="upload-btn">
                   <i className="freelog fl-icon-shangchuanfengmian"></i>
                   <div className="btn-text">
-                    {FI18n.i18nNext.t('btn_upload_new_post')}
+                    {FI18n.i18nNext.t('cbformatter_import_uploadcb_btn')}
                   </div>
                 </div>
               </Popover>

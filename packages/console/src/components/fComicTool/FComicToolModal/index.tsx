@@ -10,7 +10,6 @@ import { IResourceCreateVersionDraft } from '@/type/resourceTypes';
 import fMessage from '@/components/fMessage';
 import { Modal } from 'antd';
 import FComponentsLib from '@freelog/components-lib';
-import FPopover from '@/components/FPopover';
 import { ImgInComicTool } from './utils/interface';
 import { ImportDrawer } from './components/import-drawer';
 import { ImgCard } from './components/img-card';
@@ -21,14 +20,15 @@ import {
   CUT_IMG_ACCEPT,
   MAX_CUT_IMG_LENGTH,
   MAX_HEIGHT_PER_PIECE,
+  MAX_REQUEST_BATCH_COUNT,
 } from './utils/assets';
 import { PreviewBox } from './components/preview-box';
-const saveAs = require('file-saver');
 import Sortable from 'sortablejs';
 import CutDescImg from './images/cut-desc.png';
 import BlueScissors from './images/blue-scissors.png';
 import BlackScissors from './images/black-scissors.png';
 import { Loading3QuartersOutlined } from '@ant-design/icons/lib/icons';
+const { Uncompress } = require('./core/uncompress');
 
 interface ToolProps {
   // 资源 id
@@ -41,8 +41,6 @@ interface ToolProps {
   setSaved: (saved: boolean) => void;
 }
 
-const myWindow: any = window;
-
 export const comicToolContext = React.createContext<any>({});
 
 const { confirm } = Modal;
@@ -51,21 +49,27 @@ const { confirm } = Modal;
 export const ComicTool = (props: ToolProps) => {
   const { resourceId, show, close, setSaved } = props;
 
+  const resource = useRef<any>({});
+  const deleteItem = useRef<any>(null);
   const inputTimer = useRef<Timeout | null>(null);
   const stopTimer = useRef<Timeout | null>(null);
   const sorter = useRef<Sortable | null>(null);
 
-  const [edited, setEdited] = useState(false);
+  const [edited, setEdited] = useState<boolean | null>(null);
   const [saveType, setSaveType] = useState(0);
   const [lastSaveTime, setLastSaveTime] = useState(0);
 
+  const [comicName, setComicName] = useState('');
+  const [comicMode, setComicMode] = useState(0);
+  const [comicConfig, setComicConfig] = useState<any>({});
   const [imgList, setImgList] = useState<ImgInComicTool[]>([]);
   const [insertIndex, setInsertIndex] = useState(-1);
-  const [canvasList, setCanvasList] = useState<any[]>([]);
   const [importDrawer, setImportDrawer] = useState(false);
   const [previewShow, setPreviewShow] = useState(false);
+  const [deleteConfirmShow, setDeleteConfirmShow] = useState(false);
   const [loaderShow, setLoaderShow] = useState(false);
   const [cuttingLoaderShow, setCuttingLoaderShow] = useState(false);
+  const [saveFailTipShow, setSaveFailTipShow] = useState(false);
 
   /** 退出 */
   const exit = async () => {
@@ -85,89 +89,293 @@ export const ComicTool = (props: ToolProps) => {
 
   /** 获取资源与草稿数据 */
   const getData = async () => {
-    // const resourceRes = await FServiceAPI.Resource.info({
-    //   resourceIdOrName: resourceId,
-    // });
-    // editor.resourceData = resourceRes.data;
-    // const draftRes = await FServiceAPI.Resource.lookDraft({ resourceId });
-    // if (draftRes.errCode !== 0) {
-    //   fMessage(draftRes.msg);
-    //   return;
-    // }
-    // editor.draftData = draftRes.data.draftData as IResourceCreateVersionDraft;
-    // const {
-    //   selectedFileInfo,
-    //   directDependencies = [],
-    //   baseUpcastResources = [],
-    // } = editor.draftData;
-    // const targets = [...directDependencies];
-    // let dependencesByIdentify: string[] = [];
-    // if (selectedFileInfo) {
-    //   const content = await FUtil.Request({
-    //     method: 'GET',
-    //     url: `/v2/storages/files/${selectedFileInfo.sha1}/download`,
-    //   });
-    //   const contentStr = String(content);
-    //   const html = await importDoc(
-    //     { content: contentStr, type: 'draft' },
-    //     editor,
-    //   );
-    //   setHtml(html);
-    //   dependencesByIdentify = getDependencesByContent(contentStr);
-    // }
-    // editor.draftData.directDependencies = targets;
-    // setDepTargets(editor.draftData.directDependencies);
+    const resourceRes = await FServiceAPI.Resource.info({
+      resourceIdOrName: resourceId,
+    });
+    resource.current.resourceData = resourceRes.data;
+    const { resourceType } = resourceRes.data;
+    if (resourceType[2] === '条漫') {
+      setComicMode(1);
+    } else if (resourceType[2] === '日漫') {
+      setComicMode(2);
+    }
+    const draftRes = await FServiceAPI.Resource.lookDraft({ resourceId });
+    if (draftRes.errCode !== 0) {
+      fMessage(draftRes.msg);
+      return;
+    }
+    resource.current.draftData = draftRes.data
+      .draftData as IResourceCreateVersionDraft;
+    const { selectedFileInfo } = resource.current.draftData;
+    if (selectedFileInfo) {
+      const { name, sha1 } = selectedFileInfo;
+      setComicName(name);
+      const content = await FUtil.Request({
+        method: 'GET',
+        url: `/v2/storages/files/${sha1}/download`,
+      });
+    }
+    setEdited(false);
   };
 
   /** 保存 */
   const save = async () => {
-    // if (!editor.draftData) return;
-    // setSaveType(1);
-    // const saveTime = new Date().getTime();
-    // let fileName = editor.draftData.selectedFileInfo?.name;
-    // if (!fileName) {
-    //   // 草稿数据中没有文件名称，说明是新建文件，文件名称命名规则为{资源名称 最后保存时间}
-    //   fileName =
-    //     editor.resourceData.resourceName.split('/')[1] +
-    //     formatDate(saveTime, 'YYYYMMDDhhmm').substring(2) +
-    //     '.md';
-    // }
-    // const params = new FormData();
-    // params.append('file', new File([markdownRef.current], fileName));
-    // const res = await FUtil.Request({
-    //   headers: { 'Content-Type': 'multipart/form-data' },
-    //   method: 'POST',
-    //   url: `/v2/storages/files/upload`,
-    //   data: params,
-    // });
-    // if (res.errCode !== 0) {
-    //   fMessage(res.msg);
-    //   return;
-    // }
-    // editor.draftData.selectedFileInfo = {
-    //   name: fileName,
-    //   sha1: res.data.sha1,
-    //   from: `最近编辑时间 ${formatDate(saveTime)}`,
-    // };
-    // const saveDraftRes = await FServiceAPI.Resource.saveVersionsDraft({
-    //   resourceId,
-    //   draftData: editor.draftData,
-    // });
-    // if (saveDraftRes.errCode !== 0) {
-    //   fMessage(saveDraftRes.msg);
-    //   return;
-    // }
-    // setSaveType(2);
-    // setLastSaveTime(saveTime);
-    // setEdited(false);
-    // if (inputTimer.current) {
-    //   clearTimeout(inputTimer.current);
-    //   inputTimer.current = null;
-    // }
-    // if (stopTimer.current) {
-    //   clearTimeout(stopTimer.current);
-    //   stopTimer.current = null;
-    // }
+    const invalidImgIndex = imgList.findIndex(
+      (item) => item.size > MAX_IMG_SIZE,
+    );
+    if (invalidImgIndex !== -1) {
+      // 存在无效图片
+      if (!saveFailTipShow) {
+        setSaveFailTipShow(true);
+        setTimeout(() => {
+          setSaveFailTipShow(false);
+        }, 2000);
+      }
+      return;
+    }
+
+    if (!resource.current.draftData) return;
+
+    setSaveType(1);
+    const saveTime = Date.now();
+    const list: { name: string; url: string }[] = [];
+    const listInTool: any[] = [];
+    const requestNum = Math.ceil(getTotal() / MAX_REQUEST_BATCH_COUNT); // 请求接口数
+    const formDataList: FormData[] = [];
+    let currentIndex = 0; // 当前图片序号
+
+    /** 上传图片 */
+    for (let i = 0; i < requestNum; i++) {
+      formDataList[i] = new FormData();
+    }
+    imgList.forEach((img, index) => {
+      const { name, base64, children } = img;
+      const suffix = name.split('.')[1];
+      const newImgName = `${String(index + 1).padStart(3, '0')}.${suffix}`;
+      if (!children) {
+        // 非切图
+        const file = base64ToFile(base64, newImgName);
+        const formDataIndex = Math.floor(
+          currentIndex / MAX_REQUEST_BATCH_COUNT,
+        );
+        formDataList[formDataIndex].append('files', file);
+        currentIndex++;
+      } else {
+        // 切图
+        children.forEach((child, i) => {
+          const { base64 } = child;
+          const newName = String(i + 1).padStart(2, '0');
+          const newChildName = newImgName.replace(
+            `.${suffix}`,
+            `_${newName}.${suffix}`,
+          );
+          const file = base64ToFile(base64, newChildName);
+          const formDataIndex = Math.floor(
+            currentIndex / MAX_REQUEST_BATCH_COUNT,
+          );
+          formDataList[formDataIndex].append('files', file);
+          currentIndex++;
+        });
+      }
+    });
+    const requestArr: Promise<any>[] = [];
+    formDataList.forEach((item) => {
+      requestArr.push(batchUploadImg(item));
+    });
+    const imgResArr = await Promise.all(requestArr);
+    const err = imgResArr.findIndex((item) => item.errCode !== 0) !== -1;
+    if (err) return;
+
+    /** 上传图片完成，通过 sha1 获取 url */
+    const resList = imgResArr.map((item) => item.data).flat();
+    resList.forEach(
+      (item: { filename: string; sha1: string; fileSize: number }) => {
+        const { filename, sha1, fileSize } = item;
+        const url = `${FUtil.Format.completeUrlByDomain(
+          'api',
+        )}/v2/storages/files/${sha1}/download`;
+        const img = { name: filename, url, size: fileSize };
+        list.push(img);
+
+        const nameList = filename.split('.')[0].split('_');
+        const parentIndex = Number(nameList[0]) - 1;
+        if (nameList.length === 1) {
+          // 非切图
+          const imgInTool = {
+            name: imgList[parentIndex].name,
+            sha1,
+            size: fileSize,
+          };
+          listInTool.push(imgInTool);
+        } else if (nameList.length === 2) {
+          // 切图
+          const childIndex = Number(nameList[1]) - 1;
+          if (childIndex === 0) {
+            // 切图第一张，将第一张切图作为父级数据
+            const imgInTool = {
+              name: imgList[parentIndex].name,
+              sha1,
+              size: fileSize,
+              children: [],
+            };
+            listInTool.push(imgInTool);
+          }
+          const children = imgList[parentIndex].children;
+          if (!children) return;
+          const name = children[childIndex].name;
+          const imgInTool = { name, sha1, size: fileSize };
+          listInTool[parentIndex].children[childIndex] = imgInTool;
+        }
+      },
+    );
+
+    /** 整理 json 和 xml */
+    let name = comicName;
+    if (!name) {
+      // 新建文件，文件名称命名规则为{资源名称 最后保存时间}
+      name =
+        resource.current.resourceData.resourceName.split('/')[1] +
+        formatDate(saveTime, 'YYYYMMDDhhmm').substring(2);
+    }
+    const json = {
+      name,
+      mode: comicMode,
+      list,
+      config: comicConfig,
+      custom: listInTool,
+    };
+    const xml = json2Xml(comicConfig);
+    const jsonFile = new File([JSON.stringify(json)], 'index.json', {
+      type: 'application/json',
+    });
+    const xmlFile = new File([xml], 'ComicInfo.xml', {
+      type: 'text/xml',
+    });
+
+    /** 上传 json 和 xml */
+    const jsonFormData = new FormData();
+    jsonFormData.append('files', jsonFile);
+    jsonFormData.append('files', xmlFile);
+    const res = await batchUploadImg(jsonFormData);
+    if (res.errCode !== 0) return;
+
+    /** 打包漫画文件 */
+    const sha1Array: { fileName: string; sha1: string }[] = [];
+    list.forEach((item) => {
+      const { name, url } = item;
+      const urlSplit = url.split('/');
+      const sha1Item = { fileName: name, sha1: urlSplit[urlSplit.length - 2] };
+      sha1Array.push(sha1Item);
+    });
+    res.data.forEach((item: { filename: string; sha1: string }) => {
+      const { filename, sha1 } = item;
+      sha1Array.push({ fileName: filename, sha1 });
+    });
+    const compressRes = await compressFiles(sha1Array);
+
+    resource.current.draftData.selectedFileInfo = {
+      name,
+      sha1: compressRes.data.sha1,
+      from: `最近编辑时间 ${formatDate(saveTime)}`,
+    };
+    const saveDraftRes = await FServiceAPI.Resource.saveVersionsDraft({
+      resourceId,
+      draftData: resource.current.draftData,
+    });
+    if (saveDraftRes.errCode !== 0) {
+      fMessage(saveDraftRes.msg);
+      return;
+    }
+    setSaveType(2);
+    setLastSaveTime(saveTime);
+    setEdited(false);
+    if (inputTimer.current) {
+      clearTimeout(inputTimer.current);
+      inputTimer.current = null;
+    }
+    if (stopTimer.current) {
+      clearTimeout(stopTimer.current);
+      stopTimer.current = null;
+    }
+  };
+
+  /** json 转 xml */
+  const json2Xml = (config: any) => {
+    let result = '';
+    let xmlHeader = `<?xml`;
+    const keys = Object.keys(config.xml.attrs);
+    if (keys.length === 0) {
+      xmlHeader += ` ?>\n`;
+    } else {
+      keys.forEach((key) => {
+        xmlHeader += ` ${key}="${config.xml.attrs[key]}"`;
+      });
+    }
+    xmlHeader += `?>\n`;
+    result += xmlHeader;
+
+    const childrenXml = getChildrenXml(config.children, 0);
+    result += childrenXml;
+
+    return result;
+  };
+
+  /** 转换 xml 子元素 */
+  const getChildrenXml = (childrenList: any[], level: number) => {
+    let result = '';
+    const prefix = new Array(level).fill('  ').join('');
+    childrenList.forEach((child: any) => {
+      const { key, value, attrs, children } = child;
+      let childResult = '';
+      let startTag = `${prefix}<${key}`;
+      const endTag = `</${key}>\n`;
+      for (const attrKey in attrs) {
+        startTag += ` ${attrKey}="${attrs[attrKey]}"`;
+      }
+      if (value) {
+        childResult += `${startTag}>${value}${endTag}`;
+      } else if (children.length !== 0) {
+        childResult += startTag + '>\n';
+        const childrenXml = getChildrenXml(children, level + 1);
+        childResult += childrenXml;
+        childResult += `${prefix}${endTag}`;
+      } else {
+        childResult += `${startTag} />\n`;
+      }
+      result += childResult;
+    });
+    return result;
+  };
+
+  /** 批量上传图片 */
+  const batchUploadImg = (formData: FormData) => {
+    return FUtil.Request({
+      method: 'POST',
+      url: `/v2/storages/files/uploadFileMulti`,
+      data: formData,
+    });
+  };
+
+  /** 打包漫画文件 */
+  const compressFiles = (sha1Array: { fileName: string; sha1: string }[]) => {
+    return FUtil.Request({
+      method: 'POST',
+      url: `/v2/storages/files/compressFiles`,
+      data: { sha1Array },
+    });
+  };
+
+  /** base64 转 file */
+  const base64ToFile = (base64: string, name: string) => {
+    const arr = base64.split(',');
+    const mime = arr[0].match(/:(.*?);/)![1];
+    const bstr = atob(arr[1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new File([u8arr], name, { type: mime });
   };
 
   /** 快捷键 */
@@ -180,6 +388,24 @@ export const ComicTool = (props: ToolProps) => {
     setPreviewShow(false);
   };
 
+  /** 更改删除对象 */
+  const setDeleteItem = (item: any) => {
+    deleteItem.current = item;
+  };
+
+  /** 删除图片 */
+  const deleteImg = () => {
+    if (deleteItem.current) {
+      const list = [...imgList];
+      list.splice(deleteItem.current.index, 1);
+      setImgList(list);
+      deleteItem.current = null;
+    } else {
+      setImgList([]);
+    }
+    setDeleteConfirmShow(false);
+  };
+
   /** 上传本地图片 */
   const uploadLocalImg = (files: FileList) => {
     if (files.length === 0) return;
@@ -187,6 +413,7 @@ export const ComicTool = (props: ToolProps) => {
     setLoaderShow(true);
     const insertPoint = insertIndex !== -1 ? insertIndex : imgList.length;
     const list = [...files];
+    let typeTip = true; // 是否需要显示格式错误 tip
 
     if (imgList.length + list.length > MAX_IMG_LENGTH) {
       fMessage(FI18n.i18nNext.t('cbformatter_add_error_qtylimitation'));
@@ -200,7 +427,16 @@ export const ComicTool = (props: ToolProps) => {
       const { type, name, size } = file;
 
       if (!['image/png', 'image/jpeg', 'image/gif'].includes(type)) {
-        fMessage(FI18n.i18nNext.t('cbformatter_add_error_format'));
+        if (typeTip) {
+          fMessage(FI18n.i18nNext.t('cbformatter_add_error_format'));
+          typeTip = false;
+        }
+        doneCount++;
+        if (doneCount === list.length) {
+          imgList.splice(insertPoint, 0, ...imgs.filter((item) => item));
+          setImgList([...imgList]);
+          setLoaderShow(false);
+        }
         return;
       }
 
@@ -209,7 +445,7 @@ export const ComicTool = (props: ToolProps) => {
         imgs[index] = img;
         doneCount++;
         if (doneCount === list.length) {
-          imgList.splice(insertPoint, 0, ...imgs);
+          imgList.splice(insertPoint, 0, ...imgs.filter((item) => item));
           setImgList([...imgList]);
           setLoaderShow(false);
         }
@@ -225,36 +461,11 @@ export const ComicTool = (props: ToolProps) => {
         imgs[index] = img;
         doneCount++;
         if (doneCount === list.length) {
-          imgList.splice(insertPoint, 0, ...imgs);
+          imgList.splice(insertPoint, 0, ...imgs.filter((item) => item));
           setImgList([...imgList]);
           setLoaderShow(false);
         }
       };
-    });
-  };
-
-  /** 上传文件 */
-  const uploadFile = async (e: any) => {
-    setImgList([]);
-
-    // const JSZIP = new JSZip();
-    // const zipData = await JSZIP.loadAsync(e.target.files[0]);
-    // Object.keys(zipData.files).forEach((filename) => {
-    //   JSZIP.files[filename]
-    //     .async('base64')
-    //     .then((result: any) => {
-    //       console.error('done');
-    //       data.imgList.push({ name: e.target.files[0].name, base64: result });
-    //     })
-    //     .catch((error: any) => console.error('error====>', error));
-    // });
-
-    myWindow.archiveOpenFile(e.target.files[0], (archive: any, err: any) => {
-      if (archive) {
-        readContents(archive);
-      } else {
-        console.error('no archive', err);
-      }
     });
   };
 
@@ -275,16 +486,24 @@ export const ComicTool = (props: ToolProps) => {
     setCuttingLoaderShow(true);
     const results: ImgInComicTool[] = [];
     const list = [...files];
-    let heightTip = false; // 是否需要显示切图高度小于最小指定切图高度 tip
-    let overTotal = false; // 是否已经超过最大数量限制
+    let typeTip = true; // 是否需要显示格式错误 tip
+    let heightTip = true; // 是否需要显示切图高度小于最小指定切图高度 tip
+    let overTotal = true; // 是否已经超过最大数量限制
     for (let i = 0; i < list.length; i++) {
       const file = list[i];
       const { type, name, size } = file;
 
       if (!['image/png', 'image/jpeg'].includes(type)) {
         // 切图类型非指定类型
-        fMessage(FI18n.i18nNext.t('cbformatter_slice_error_format'));
-        return;
+        if (typeTip) {
+          fMessage(FI18n.i18nNext.t('cbformatter_slice_error_format'));
+          typeTip = false;
+        }
+        if (i === list.length - 1) {
+          setImgList([...imgList, ...results.filter((item) => item)]);
+          setCuttingLoaderShow(false);
+        }
+        continue;
       }
 
       let imgItem: ImgInComicTool = { name, base64: '', size: 0, children: [] };
@@ -300,12 +519,12 @@ export const ComicTool = (props: ToolProps) => {
             // 原图高度小于规定最小高度，不予切图直接按普通上传图片处理
             imgItem = { name, size, base64: replaceSrc };
             results[i] = imgItem;
-            if (!heightTip) {
+            if (heightTip) {
               fMessage(FI18n.i18nNext.t('cbformatter_slice_error_height'));
-              heightTip = true;
+              heightTip = false;
             }
             if (i === list.length - 1) {
-              setImgList([...imgList, ...results]);
+              setImgList([...imgList, ...results.filter((item) => item)]);
               setCuttingLoaderShow(false);
             }
             return;
@@ -343,7 +562,7 @@ export const ComicTool = (props: ToolProps) => {
               };
               results[i] = imgItem;
               if (i === list.length - 1) {
-                setImgList([...imgList, ...results]);
+                setImgList([...imgList, ...results.filter((item) => item)]);
                 setCuttingLoaderShow(false);
               }
               break;
@@ -352,8 +571,11 @@ export const ComicTool = (props: ToolProps) => {
             // 列表显示第一张切图
             if (j === 0) imgItem.base64 = base64;
 
+            const nameArr = name.split('.');
             const childImg = {
-              name: `${name}-${String(j + 1).padStart(2, '0')}`,
+              name: `${nameArr[0]}-${String(j + 1).padStart(2, '0')}.${
+                nameArr[1]
+              }`,
               base64,
               size: childSize,
             };
@@ -370,21 +592,21 @@ export const ComicTool = (props: ToolProps) => {
                   imgItem.children = imgItem.children!.slice(0, restCount);
                   results[i] = imgItem;
                 }
-                if (!overTotal) {
+                if (overTotal) {
                   fMessage(
                     FI18n.i18nNext.t('cbformatter_add_error_qtylimitation'),
                   );
-                  overTotal = true;
+                  overTotal = false;
                 }
                 if (i === list.length - 1) {
-                  setImgList([...imgList, ...results]);
+                  setImgList([...imgList, ...results.filter((item) => item)]);
                   setCuttingLoaderShow(false);
                 }
                 break;
               } else {
                 results[i] = imgItem;
                 if (i === list.length - 1) {
-                  setImgList([...imgList, ...results]);
+                  setImgList([...imgList, ...results.filter((item) => item)]);
                   setCuttingLoaderShow(false);
                 }
               }
@@ -412,6 +634,7 @@ export const ComicTool = (props: ToolProps) => {
       if (height <= MAX_HEIGHT_PER_PIECE) {
         // 原图高度小于规定最小高度，不予切图
         fMessage(FI18n.i18nNext.t('cbformatter_slice_error_height'));
+        setCuttingLoaderShow(false);
         return;
       }
 
@@ -458,8 +681,9 @@ export const ComicTool = (props: ToolProps) => {
           break;
         }
 
+        const nameArr = name.split('.');
         const childImg = {
-          name: `${name}-${String(i + 1).padStart(2, '0')}`,
+          name: `${nameArr[0]}-${String(i + 1).padStart(2, '0')}.${nameArr[1]}`,
           base64,
           size: childSize,
         };
@@ -494,107 +718,16 @@ export const ComicTool = (props: ToolProps) => {
     return total;
   };
 
-  /** 导出漫画文件 */
-  const exportFile = () => {
-    // const JSZIP = new JSZip();
-    // data.imgList.forEach((item: any, index: string) => {
-    //   JSZIP.file(index + '.jpg', item, { base64: true });
-    // });
-    // JSZIP.generateAsync({ type: 'blob' }).then((content) => {
-    //   saveAs(content, 'example.zip');
-    // });
-  };
-
-  /** 获取压缩包内容 */
-  const readContents = (archive: { entries: any[] }) => {
-    // 排序
-    const entries = archive.entries.sort((a, b) => {
-      const indexA = a.name.split('.')[0] * 1;
-      const indexB = b.name.split('.')[0] * 1;
-      return indexA - indexB;
-    });
-
-    for (var i = 0; i < entries.length; i++) {
-      processEntries(entries, i, entries.length);
-    }
-  };
-
-  /** 获取压缩包内容 */
-  const processEntries = (entries: any[], i: number, max: number) => {
-    const filename = entries[i].name;
-    if (getExt(filename) != '') {
-      createBlobs(entries[i], i, max);
-    }
-  };
-
-  /** 将图片内容转为Blob */
-  const createBlobs = (
-    entry: {
-      readData: (arg0: (result: BlobPart, err: any) => void) => void;
-      name: any;
-    },
-    i: any,
-    max: any,
-  ) => {
-    entry.readData((result: BlobPart, err: any) => {
-      var blob = new Blob([result], { type: getMIME(entry.name) });
-      blobToDataURI(blob, entry.name);
-    });
-  };
-
-  /** 将Blob转为base64 */
-  const blobToDataURI = (blob: Blob, name: any) => {
-    var reader = new FileReader();
-    reader.readAsDataURL(blob);
-    reader.onload = (e: any) => {
-      const img = { name, base64: e.target.result.split(',')[1] };
-      // setImgList((pre) => [...pre, img]);
-    };
-  };
-
-  /** 获取MIME */
-  const getMIME = (filename: any) => {
-    var ext = (getExt(filename) || '').toLowerCase();
-
-    switch (ext) {
-      case 'jpg':
-      case 'jpeg':
-        return 'image/jpeg';
-        break;
-      case 'png':
-        return 'image/png';
-        break;
-      case 'gif':
-        return 'image/gif';
-        break;
-      case 'bmp':
-        return 'image/bmp';
-        break;
-      case 'webp':
-        return 'image/webp';
-        break;
-      default:
-        return 'image/jpeg';
-    }
-  };
-
-  /** 获取后缀 */
-  const getExt = (filename: string) => {
-    var ext = filename.split('.').pop();
-    return ext == filename ? '' : ext;
-  };
-
   useEffect(() => {
     if (show) {
-      myWindow.loadArchiveFormats(['rar', 'zip', 'tar']);
+      Uncompress.loadArchiveFormats(['rar', 'zip', 'tar']);
 
       window.addEventListener('keyup', keyup);
       document.body.style.overflowY = 'hidden';
 
-      setTimeout(() => {
-        getData();
-      }, 400);
+      getData();
     }
+
     return () => {
       window.removeEventListener('keyup', keyup);
       document.body.style.overflowY = 'auto';
@@ -602,6 +735,30 @@ export const ComicTool = (props: ToolProps) => {
   }, [show]);
 
   useEffect(() => {
+    if (edited === false) {
+      setEdited(true);
+
+      // if (!inputTimer.current) {
+      //   inputTimer.current = setTimeout(() => {
+      //     save();
+      //     inputTimer.current = null;
+      //   }, 15000);
+      // }
+
+      // if (stopTimer.current) {
+      //   clearTimeout(stopTimer.current);
+      //   stopTimer.current = null;
+      // }
+      // stopTimer.current = setTimeout(() => {
+      //   save();
+      //   stopTimer.current = null;
+      //   if (inputTimer.current) {
+      //     clearTimeout(inputTimer.current);
+      //     inputTimer.current = null;
+      //   }
+      // }, 3000);
+    }
+
     if (sorter.current) return;
 
     const sortableList = document.getElementById('sortableList');
@@ -609,7 +766,7 @@ export const ComicTool = (props: ToolProps) => {
 
     sorter.current = new Sortable(sortableList, {
       animation: 150,
-      handle: '.card-header',
+      handle: '.drag-handle,.drag-tip',
       onEnd(e) {
         setImgList((pre) => {
           const { oldIndex, newIndex } = e;
@@ -622,42 +779,23 @@ export const ComicTool = (props: ToolProps) => {
     });
   }, [imgList]);
 
-  // useEffect(() => {
-  // const newMarkdown = html2md(html);
-  // if (markdown !== newMarkdown) {
-  //   setEdited(true);
-  //   markdownRef.current = newMarkdown;
-  //   setMarkdown(newMarkdown);
-
-  //   if (!inputTimer.current) {
-  //     inputTimer.current = setTimeout(() => {
-  //       save();
-  //       inputTimer.current = null;
-  //     }, 15000);
-  //   }
-
-  //   if (stopTimer.current) {
-  //     clearTimeout(stopTimer.current);
-  //     stopTimer.current = null;
-  //   }
-  //   stopTimer.current = setTimeout(() => {
-  //     save();
-  //     stopTimer.current = null;
-  //     if (inputTimer.current) {
-  //       clearTimeout(inputTimer.current);
-  //       inputTimer.current = null;
-  //     }
-  //   }, 3000);
-  // }
-  // }, [html]);
-
   useEffect(() => {
     setSaved && setSaved(!edited);
   }, [edited]);
 
   return (
     <comicToolContext.Provider
-      value={{ resourceId, imgList, setImgList, setLoaderShow }}
+      value={{
+        resourceId,
+        Uncompress,
+        comicMode,
+        imgList,
+        setDeleteItem,
+        setDeleteConfirmShow,
+        setComicConfig,
+        setImgList,
+        setLoaderShow,
+      }}
     >
       <input
         type="file"
@@ -680,32 +818,29 @@ export const ComicTool = (props: ToolProps) => {
 
           <div className="header-right">
             <div className="article-info">
-              {/* {saveType === 1 && (
+              {saveType === 1 && (
                 <span>{FI18n.i18nNext.t('posteditor_state_saving')}</span>
               )}
-              {saveType === 2 && ( */}
-              <span>
-                {FI18n.i18nNext.t('posteditor_state_saved', {
-                  LastEditTime: formatDate(lastSaveTime),
-                })}
-              </span>
-              {/* )}
+              {saveType === 2 && (
+                <span>
+                  {FI18n.i18nNext.t('posteditor_state_saved', {
+                    LastEditTime: formatDate(lastSaveTime),
+                  })}
+                </span>
+              )}
               {saveType === 3 && (
                 <span>
                   {FI18n.i18nNext.t('posteditor_state_networkabnormal', {
                     LastEditTime: formatDate(lastSaveTime),
                   })}
                 </span>
-              )} */}
+              )}
             </div>
-            <div className="text-btn" onClick={save}>
-              {FI18n.i18nNext.t('cbformatter_savedraft_btn')}
+            <div className={`save-btn ${!edited && 'disabled'}`} onClick={save}>
+              {FI18n.i18nNext.t('btn_save_post')}
             </div>
             <div className="exit-btn" onClick={exit}>
               {FI18n.i18nNext.t('cbformatter_cancel_btn')}
-            </div>
-            <div className={`save-btn ${!edited && 'disabled'}`} onClick={save}>
-              {FI18n.i18nNext.t('cbformatter_submitnquit_btn')}
             </div>
           </div>
         </div>
@@ -729,28 +864,32 @@ export const ComicTool = (props: ToolProps) => {
                   <i className="freelog fl-icon-daoruwendang" />
                   {FI18n.i18nNext.t('cbformatter_import_btn')}
                 </div>
-                <div
-                  className="text-btn btn"
-                  onClick={() => {
-                    document.getElementById('cutImages')?.click();
-                  }}
-                >
-                  <i className="freelog fl-icon-jiandao" />
-                  {FI18n.i18nNext.t('cbformatter_batchslice_btn')}
-                </div>
-                <div className="info-box">
-                  <FComponentsLib.FIcons.FInfo className="info-icon" />
-                  <div className="info-popup">
-                    <div className="img-box">
-                      <img className="img" src={CutDescImg} />
-                      <div className="line"></div>
-                      <img className="scissors" src={BlueScissors} />
+                {comicMode === 1 && (
+                  <>
+                    <div
+                      className="text-btn btn"
+                      onClick={() => {
+                        document.getElementById('cutImages')?.click();
+                      }}
+                    >
+                      <i className="freelog fl-icon-jiandao" />
+                      {FI18n.i18nNext.t('cbformatter_batchslice_btn')}
                     </div>
-                    <div className="desc">
-                      {FI18n.i18nNext.t('cbformatter_slice_info')}
+                    <div className="info-box">
+                      <FComponentsLib.FIcons.FInfo className="info-icon" />
+                      <div className="info-popup">
+                        <div className="img-box">
+                          <img className="img" src={CutDescImg} />
+                          <div className="line"></div>
+                          <img className="scissors" src={BlueScissors} />
+                        </div>
+                        <div className="desc">
+                          {FI18n.i18nNext.t('cbformatter_slice_info')}
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
+                  </>
+                )}
               </div>
               <div
                 className={`primary-btn ${imgList.length === 0 && 'disabled'}`}
@@ -787,7 +926,10 @@ export const ComicTool = (props: ToolProps) => {
                           imageQty: getTotal(),
                         })}
                       </div>
-                      <div className="clear-btn" onClick={() => setImgList([])}>
+                      <div
+                        className="clear-btn"
+                        onClick={() => setDeleteConfirmShow(true)}
+                      >
                         <i className="freelog fl-icon-shanchu delete-icon" />
                         {FI18n.i18nNext.t('cbformatter_delete_btn_deleteall')}
                       </div>
@@ -825,6 +967,54 @@ export const ComicTool = (props: ToolProps) => {
 
         <PreviewBox show={previewShow} close={() => setPreviewShow(false)} />
 
+        {deleteConfirmShow && (
+          <div className="delete-confirm-popup">
+            <div
+              className="modal"
+              onClick={() => setDeleteConfirmShow(false)}
+            ></div>
+            <div className="confirm-popup">
+              <div className="confirm-header">
+                <div className="title">
+                  {FI18n.i18nNext.t(
+                    deleteItem.current
+                      ? 'cbformatter_delete_confirmation_title'
+                      : 'cbformatter_deleteall_confirmation_title',
+                  )}
+                </div>
+                <i
+                  className="freelog fl-icon-guanbi"
+                  onClick={() => setDeleteConfirmShow(false)}
+                ></i>
+              </div>
+              <div className="desc">
+                {deleteItem.current
+                  ? FI18n.i18nNext.t('cbformatter_delete_confirmation_msg', {
+                      FileName: deleteItem.current.name,
+                    })
+                  : FI18n.i18nNext.t('cbformatter_deleteall_confirmation_msg')}
+              </div>
+              <div className="btns-box">
+                <div
+                  className="btn text-btn"
+                  onClick={() => setDeleteConfirmShow(false)}
+                >
+                  {FI18n.i18nNext.t(
+                    'cbformatter_delete_confirmation_btn_cancel',
+                  )}
+                </div>
+                <div className="btn delete-btn" onClick={() => deleteImg()}>
+                  {FI18n.i18nNext.t(
+                    deleteItem.current
+                      ? 'cbformatter_delete_confirmation_btn_delete'
+                      : 'cbformatter_deleteall_confirmation_btn_deleteall',
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {loaderShow && (
           <div className="loader-wrapper">
             <div className="loader-box">
@@ -849,6 +1039,15 @@ export const ComicTool = (props: ToolProps) => {
             </div>
           </div>
         )}
+
+        <div className={`save-fail-tip ${saveFailTipShow && 'show'}`}>
+          <div className="tip-title">
+            {FI18n.i18nNext.t('cbformatter_submit_err_removewrongpage')}
+          </div>
+          <div className="tip-desc">
+            {FI18n.i18nNext.t('cbformatter_submit_err_removewrongpage_msg')}
+          </div>
+        </div>
       </div>
     </comicToolContext.Provider>
   );
