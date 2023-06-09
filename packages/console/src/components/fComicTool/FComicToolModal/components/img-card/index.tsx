@@ -7,7 +7,7 @@ import { comicToolContext } from '../..';
 import { ImgInComicTool } from '../../utils/interface';
 import { MAX_IMG_SIZE } from '../../utils/assets';
 import { CutDrawer } from '../cut-drawer';
-import { conversionSize, getExt } from '../../utils/common';
+import { conversionSize, formatCardName, getExt } from '../../utils/common';
 
 interface Props {
   index: number;
@@ -27,27 +27,6 @@ export const ImgCard = (props: Props) => {
   const deleteImg = () => {
     setDeleteItem({ ...data, index });
     setDeleteConfirmShow(true);
-  };
-
-  /** 格式化图片名称（超长时中间部分省略，并保证尾部显示不含后缀名至少四位字符） */
-  const formatName = (name: string) => {
-    const _div = document.createElement('div');
-    _div.innerText = name;
-    _div.style.fontSize = '12px';
-    _div.style.position = 'absolute';
-    document.body.appendChild(_div);
-    if (_div.clientWidth < 200) {
-      return name;
-    } else {
-      const [filename, suffix] = name.split('.');
-      const lastWords = '...' + filename.slice(-4) + '.' + suffix;
-      for (let i = 0; i < filename.length; i++) {
-        const newName = filename.slice(0, i + 1) + lastWords;
-        _div.innerText = newName;
-        if (_div.clientWidth > 200) return filename.slice(0, i) + lastWords;
-      }
-    }
-    document.body.removeChild(_div);
   };
 
   /** 插入图片 */
@@ -176,7 +155,7 @@ export const ImgCard = (props: Props) => {
       </div>
 
       {/* 图片名称 */}
-      <div className="name">{formatName(data.name)}</div>
+      <div className="name">{formatCardName(data.name)}</div>
 
       <CutDrawer
         show={cutDrawerShow}

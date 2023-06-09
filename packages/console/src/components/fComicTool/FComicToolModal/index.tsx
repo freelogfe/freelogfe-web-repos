@@ -5,7 +5,7 @@ import React from 'react';
 import { useState, useEffect, useRef } from 'react';
 import { Timeout } from 'ahooks/lib/useRequest/src/types';
 import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
-import { formatDate } from './utils/common';
+import { formatDate, getUrlBySha1 } from './utils/common';
 import { IResourceCreateVersionDraftType } from '@/type/resourceTypes';
 import fMessage from '@/components/fMessage';
 import { Modal } from 'antd';
@@ -28,6 +28,7 @@ import CutDescImg from './images/cut-desc.png';
 import BlueScissors from './images/blue-scissors.png';
 import BlackScissors from './images/black-scissors.png';
 import { Loading3QuartersOutlined } from '@ant-design/icons/lib/icons';
+import { uncompressComicArchive } from './core/import-comic';
 const { Uncompress } = require('./core/uncompress');
 
 interface ToolProps {
@@ -51,24 +52,28 @@ export const ComicTool = (props: ToolProps) => {
 
   const resource = useRef<any>({});
   const deleteItem = useRef<any>(null);
-  const inputTimer = useRef<Timeout | null>(null);
   const stopTimer = useRef<Timeout | null>(null);
   const sorter = useRef<Sortable | null>(null);
+  const saveProgressList = useRef<number[]>([]);
+  const saveTotalList = useRef<number[]>([]);
 
   const [edited, setEdited] = useState<boolean | null>(null);
-  const [saveType, setSaveType] = useState(0);
+  const [saveTipType, setSaveTipType] = useState(0);
+  const [saveStep, setSaveStep] = useState(0);
+  const [saveProgress, setSaveProgress] = useState(0);
   const [lastSaveTime, setLastSaveTime] = useState(0);
-
   const [comicName, setComicName] = useState('');
   const [comicMode, setComicMode] = useState(0);
-  const [comicConfig, setComicConfig] = useState<any>({});
+  const [comicConfig, setComicConfig] = useState<any>(null);
   const [imgList, setImgList] = useState<ImgInComicTool[]>([]);
   const [insertIndex, setInsertIndex] = useState(-1);
+
   const [importDrawer, setImportDrawer] = useState(false);
   const [previewShow, setPreviewShow] = useState(false);
   const [deleteConfirmShow, setDeleteConfirmShow] = useState(false);
   const [loaderShow, setLoaderShow] = useState(false);
   const [cuttingLoaderShow, setCuttingLoaderShow] = useState(false);
+  const [saveLoaderShow, setSaveLoaderShow] = useState(false);
   const [saveFailTipShow, setSaveFailTipShow] = useState(false);
 
   /** 退出 */
@@ -105,27 +110,39 @@ export const ComicTool = (props: ToolProps) => {
       return;
     }
     resource.current.draftData = draftRes.data
-      .draftData as IResourceCreateVersionDraft;
+      .draftData as IResourceCreateVersionDraftType;
     const { selectedFileInfo } = resource.current.draftData;
     if (selectedFileInfo) {
+      setLoaderShow(true);
       const { name, sha1 } = selectedFileInfo;
       setComicName(name);
-      const content = await FUtil.Request({
+      const res = await FUtil.Request({
         method: 'GET',
         url: `/v2/storages/files/${sha1}/download`,
+        responseType: 'blob',
       });
+      const file = new File([res], name);
+      uncompressComicArchive(
+        file,
+        {
+          setLoaderShow,
+          setImgList,
+          setComicConfig,
+        },
+        false,
+      );
     }
     setEdited(false);
   };
 
   /** 保存 */
-  const save = async () => {
+  const save = async (auto: boolean) => {
     const invalidImgIndex = imgList.findIndex(
       (item) => item.size > MAX_IMG_SIZE,
     );
     if (invalidImgIndex !== -1) {
       // 存在无效图片
-      if (!saveFailTipShow) {
+      if (!saveFailTipShow && !auto) {
         setSaveFailTipShow(true);
         setTimeout(() => {
           setSaveFailTipShow(false);
@@ -136,7 +153,18 @@ export const ComicTool = (props: ToolProps) => {
 
     if (!resource.current.draftData) return;
 
-    setSaveType(1);
+    if (stopTimer.current) {
+      clearTimeout(stopTimer.current);
+      stopTimer.current = null;
+    }
+    if (!auto) {
+      setSaveLoaderShow(true);
+      setSaveProgress(0);
+      setSaveStep(1);
+      saveProgressList.current = [];
+      saveTotalList.current = [];
+    }
+    setSaveTipType(1);
     const saveTime = Date.now();
     const list: { name: string; url: string }[] = [];
     const listInTool: any[] = [];
@@ -179,21 +207,30 @@ export const ComicTool = (props: ToolProps) => {
       }
     });
     const requestArr: Promise<any>[] = [];
-    formDataList.forEach((item) => {
-      requestArr.push(batchUploadImg(item));
+    formDataList.forEach((item, index) => {
+      requestArr.push(uploadFile(item, index, 0));
     });
     const imgResArr = await Promise.all(requestArr);
     const err = imgResArr.findIndex((item) => item.errCode !== 0) !== -1;
-    if (err) return;
+    if (err) {
+      if (!auto) {
+        fMessage(FI18n.i18nNext.t('cbformatter_deleteall_confirmation_msg'));
+      }
+      return;
+    }
+
+    if (!auto) {
+      setSaveStep(2);
+      saveProgressList.current = [];
+      saveTotalList.current = [];
+    }
 
     /** 上传图片完成，通过 sha1 获取 url */
     const resList = imgResArr.map((item) => item.data).flat();
     resList.forEach(
       (item: { filename: string; sha1: string; fileSize: number }) => {
         const { filename, sha1, fileSize } = item;
-        const url = `${FUtil.Format.completeUrlByDomain(
-          'api',
-        )}/v2/storages/files/${sha1}/download`;
+        const url = getUrlBySha1(sha1);
         const img = { name: filename, url, size: fileSize };
         list.push(img);
 
@@ -229,7 +266,7 @@ export const ComicTool = (props: ToolProps) => {
       },
     );
 
-    /** 整理 json 和 xml */
+    /** 整理上传 json 和 xml */
     let name = comicName;
     if (!name) {
       // 新建文件，文件名称命名规则为{资源名称 最后保存时间}
@@ -237,27 +274,37 @@ export const ComicTool = (props: ToolProps) => {
         resource.current.resourceData.resourceName.split('/')[1] +
         formatDate(saveTime, 'YYYYMMDDhhmm').substring(2);
     }
+    const jsonFormData = new FormData();
     const json = {
       name,
       mode: comicMode,
       list,
       config: comicConfig,
-      custom: listInTool,
+      custom: { list: listInTool },
     };
-    const xml = json2Xml(comicConfig);
     const jsonFile = new File([JSON.stringify(json)], 'index.json', {
       type: 'application/json',
     });
-    const xmlFile = new File([xml], 'ComicInfo.xml', {
-      type: 'text/xml',
-    });
-
-    /** 上传 json 和 xml */
-    const jsonFormData = new FormData();
     jsonFormData.append('files', jsonFile);
-    jsonFormData.append('files', xmlFile);
-    const res = await batchUploadImg(jsonFormData);
-    if (res.errCode !== 0) return;
+    if (comicConfig) {
+      const xml = json2Xml(comicConfig);
+      const xmlFile = new File([xml], 'ComicInfo.xml', {
+        type: 'text/xml',
+      });
+      jsonFormData.append('files', xmlFile);
+    }
+
+    const res = await uploadFile(jsonFormData, 0, 25);
+    if (res.errCode !== 0) {
+      if (!auto) {
+        fMessage(FI18n.i18nNext.t('cbformatter_deleteall_confirmation_msg'));
+      }
+      return;
+    }
+
+    if (!auto) {
+      setSaveStep(3);
+    }
 
     /** 打包漫画文件 */
     const sha1Array: { fileName: string; sha1: string }[] = [];
@@ -272,31 +319,45 @@ export const ComicTool = (props: ToolProps) => {
       sha1Array.push({ fileName: filename, sha1 });
     });
     const compressRes = await compressFiles(sha1Array);
+    if (compressRes.errCode !== 0) {
+      if (!auto) {
+        fMessage(FI18n.i18nNext.t('cbformatter_deleteall_confirmation_msg'));
+      }
+      return;
+    }
 
+    if (!auto) {
+      setSaveStep(4);
+    }
+
+    /** 保存资源文件草稿 */
     resource.current.draftData.selectedFileInfo = {
       name,
       sha1: compressRes.data.sha1,
       from: `最近编辑时间 ${formatDate(saveTime)}`,
     };
-    const saveDraftRes = await FServiceAPI.Resource.saveVersionsDraft({
+    if (comicConfig) {
+      resource.current.draftData.additionalProperties = await settleAttrs();
+    }
+    const saveDraftRes = await saveDrafts({
       resourceId,
       draftData: resource.current.draftData,
     });
     if (saveDraftRes.errCode !== 0) {
-      fMessage(saveDraftRes.msg);
+      if (!auto) {
+        fMessage(FI18n.i18nNext.t('cbformatter_deleteall_confirmation_msg'));
+      }
       return;
     }
-    setSaveType(2);
+
+    if (!auto) {
+      setTimeout(() => {
+        setSaveLoaderShow(false);
+      }, 100);
+    }
+    setSaveTipType(2);
     setLastSaveTime(saveTime);
     setEdited(false);
-    if (inputTimer.current) {
-      clearTimeout(inputTimer.current);
-      inputTimer.current = null;
-    }
-    if (stopTimer.current) {
-      clearTimeout(stopTimer.current);
-      stopTimer.current = null;
-    }
   };
 
   /** json 转 xml */
@@ -347,12 +408,50 @@ export const ComicTool = (props: ToolProps) => {
     return result;
   };
 
-  /** 批量上传图片 */
-  const batchUploadImg = (formData: FormData) => {
+  /** 资源标准属性处理 */
+  const settleAttrs = async () => {
+    const attrs: { key: string; value: string }[] = [];
+    const res = await FUtil.Request({
+      method: 'GET',
+      url: `/v2/resources/types/getAttrsByCode`,
+      params: { code: resource.current.resourceData.resourceTypeCode },
+    });
+    const configs = comicConfig.children[0].children;
+    res.data.forEach((item: { key: string }) => {
+      const { key } = item;
+      const index = configs.findIndex((config: any) => config.key === key);
+      if (index !== -1) {
+        // 配置没有这个属性
+        const attr = { key, value: configs[index].value };
+        attrs.push(attr);
+      }
+    });
+    return attrs;
+  };
+
+  /** 批量上传文件 */
+  const uploadFile = (
+    formData: FormData,
+    index: number,
+    doneProgress: number,
+  ) => {
     return FUtil.Request({
       method: 'POST',
       url: `/v2/storages/files/uploadFileMulti`,
       data: formData,
+      onUploadProgress(progressEvent) {
+        const { loaded, total } = progressEvent;
+        let loadedCount = 0;
+        let totalCount = 0;
+        saveProgressList.current[index] = loaded;
+        saveTotalList.current[index] = total;
+        for (let i = 0; i < saveProgressList.current.length; i++) {
+          loadedCount += saveProgressList.current[i] || 0;
+          totalCount += saveTotalList.current[i] || 0;
+        }
+        const progress = Math.floor((loadedCount / totalCount) * 25);
+        setSaveProgress(doneProgress + progress);
+      },
     });
   };
 
@@ -362,6 +461,27 @@ export const ComicTool = (props: ToolProps) => {
       method: 'POST',
       url: `/v2/storages/files/compressFiles`,
       data: { sha1Array },
+      onUploadProgress(progressEvent) {
+        const { loaded, total } = progressEvent;
+        const doneProgress = 50;
+        const progress = Math.floor((loaded / total) * 25);
+        setSaveProgress(doneProgress + progress);
+      },
+    });
+  };
+
+  /** 保存资源草稿 */
+  const saveDrafts = (params: { resourceId: string; draftData: any }) => {
+    return FUtil.Request({
+      method: 'POST',
+      url: `/v2/resources/${params.resourceId}/versions/drafts`,
+      data: params,
+      onUploadProgress(progressEvent) {
+        const { loaded, total } = progressEvent;
+        const doneProgress = 75;
+        const progress = Math.floor((loaded / total) * 25);
+        setSaveProgress(doneProgress + progress);
+      },
     });
   };
 
@@ -386,6 +506,11 @@ export const ComicTool = (props: ToolProps) => {
   /** 关闭所有弹窗 */
   const closeAllPopup = () => {
     setPreviewShow(false);
+  };
+
+  /** 修改资源数据 */
+  const setResource = (data: any) => {
+    resource.current = data;
   };
 
   /** 更改删除对象 */
@@ -735,28 +860,17 @@ export const ComicTool = (props: ToolProps) => {
   }, [show]);
 
   useEffect(() => {
-    if (edited === false) {
+    if (edited !== null) {
       setEdited(true);
 
-      // if (!inputTimer.current) {
-      //   inputTimer.current = setTimeout(() => {
-      //     save();
-      //     inputTimer.current = null;
-      //   }, 15000);
-      // }
-
-      // if (stopTimer.current) {
-      //   clearTimeout(stopTimer.current);
-      //   stopTimer.current = null;
-      // }
-      // stopTimer.current = setTimeout(() => {
-      //   save();
-      //   stopTimer.current = null;
-      //   if (inputTimer.current) {
-      //     clearTimeout(inputTimer.current);
-      //     inputTimer.current = null;
-      //   }
-      // }, 3000);
+      if (stopTimer.current) {
+        clearTimeout(stopTimer.current);
+        stopTimer.current = null;
+      }
+      stopTimer.current = setTimeout(() => {
+        save(true);
+        stopTimer.current = null;
+      }, 15000);
     }
 
     if (sorter.current) return;
@@ -787,11 +901,14 @@ export const ComicTool = (props: ToolProps) => {
     <comicToolContext.Provider
       value={{
         resourceId,
+        resource,
         Uncompress,
         comicMode,
         imgList,
+        setResource,
         setDeleteItem,
         setDeleteConfirmShow,
+        setComicName,
         setComicConfig,
         setImgList,
         setLoaderShow,
@@ -818,17 +935,17 @@ export const ComicTool = (props: ToolProps) => {
 
           <div className="header-right">
             <div className="article-info">
-              {saveType === 1 && (
+              {saveTipType === 1 && (
                 <span>{FI18n.i18nNext.t('posteditor_state_saving')}</span>
               )}
-              {saveType === 2 && (
+              {saveTipType === 2 && (
                 <span>
                   {FI18n.i18nNext.t('posteditor_state_saved', {
                     LastEditTime: formatDate(lastSaveTime),
                   })}
                 </span>
               )}
-              {saveType === 3 && (
+              {saveTipType === 3 && (
                 <span>
                   {FI18n.i18nNext.t('posteditor_state_networkabnormal', {
                     LastEditTime: formatDate(lastSaveTime),
@@ -836,7 +953,10 @@ export const ComicTool = (props: ToolProps) => {
                 </span>
               )}
             </div>
-            <div className={`save-btn ${!edited && 'disabled'}`} onClick={save}>
+            <div
+              className={`save-btn ${!edited && 'disabled'}`}
+              onClick={() => save(false)}
+            >
               {FI18n.i18nNext.t('btn_save_post')}
             </div>
             <div className="exit-btn" onClick={exit}>
@@ -1035,6 +1155,35 @@ export const ComicTool = (props: ToolProps) => {
               </div>
               <div className="desc">
                 {FI18n.i18nNext.t('cbformatter_slice_state_slicing_msg')}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {saveLoaderShow && (
+          <div className="save-loader-wrapper">
+            <div className="modal"></div>
+            <div className="save-loader-popup">
+              <div className="title">
+                {FI18n.i18nNext.t('cbformatter_submit_state_processing')}
+              </div>
+              <div className="progress-box">
+                <div
+                  className="progress-bar"
+                  style={{ width: saveProgress + '%' }}
+                ></div>
+              </div>
+              <div className="desc">
+                <span>
+                  {FI18n.i18nNext.t(
+                    'cbformatter_submit_state_processing_msg' +
+                      [2, 3, 4].includes(saveStep)
+                      ? '0' + saveStep
+                      : '',
+                  )}
+                  ...
+                </span>
+                <span className="desc-progress">[{saveStep}/4]</span>
               </div>
             </div>
           </div>

@@ -1,10 +1,8 @@
 - 保存
-- 自动保存
-
+  - 保存时退出需要出现确认弹窗
 - 导入
+  - 有json加载json，无 json 加载 xml => 加载图片 => 根据导入方式，决定图片的name
+  - 导入时给图片打已经上传过的记号，用于保存提交时过滤掉已保存的图片
   - 历史版本导入
-
-package: name(new) 打包的时候传新名字
-list: name(new), size, url 整理的时候给新名字
-custom: name(old), size, sha1 保留旧名字
-草稿取 custom，导入历史版本取 list
+- 预览模式规则重写
+- 库
