@@ -128,6 +128,9 @@ function VersionCreator({
     });
     await fComicTool({
       resourceID: resourceVersionCreatorPage.resourceInfo?.resourceID || '',
+      async onChange_Saved(saved: boolean) {
+        set_isMarkdownEditorDirty(!saved);
+      },
     });
     await dispatch<OnClose_MarkdownEditor_Action>({
       type: 'resourceVersionCreatorPage/onClose_MarkdownEditor',
