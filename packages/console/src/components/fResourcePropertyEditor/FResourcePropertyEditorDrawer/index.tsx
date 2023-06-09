@@ -79,7 +79,7 @@ function FResourcePropertyEditorDrawer({
     set_descriptionInput(defaultData?.description || '');
   }
 
-  console.log(valueAcceptNull, 'valueAcceptNullisdojfl asdiofjlk jlk')
+  // console.log(valueAcceptNull, 'valueAcceptNullisdojfl asdiofjlk jlk')
 
   return (<FDrawer
     // title={defaultData ? '编辑基础属性' : '补充属性'}
