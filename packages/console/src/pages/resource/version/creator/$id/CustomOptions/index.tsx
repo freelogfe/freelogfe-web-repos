@@ -306,6 +306,7 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                 ],
                 defaultData: value,
                 noneEditableFields: ['key', 'description', 'name'],
+                valueAcceptNull: true,
               });
               if (!dataSource) {
                 return;

@@ -13,6 +13,7 @@ interface fResourcePropertyEditorProps {
     description: string;
   } | null;
   noneEditableFields?: Array<'key' | 'name' | 'value' | 'description'>;
+  valueAcceptNull?: boolean;
 }
 
 type ReturnData = {
@@ -27,6 +28,7 @@ function fResourcePropertyEditor({
                                    disabledNames,
                                    defaultData,
                                    noneEditableFields = [],
+                                   valueAcceptNull = false,
                                  }: fResourcePropertyEditorProps): Promise<ReturnData> {
   return new Promise<ReturnData>((resolve) => {
     const drawerRoot: HTMLDivElement | null = self.document.getElementById('drawer-root') as HTMLDivElement;
@@ -38,6 +40,7 @@ function fResourcePropertyEditor({
       disabledKeys={disabledKeys}
       disabledNames={disabledNames}
       noneEditableFields={noneEditableFields}
+      valueAcceptNull={valueAcceptNull}
       onOk={(obj) => {
         resolve(obj);
       }}
