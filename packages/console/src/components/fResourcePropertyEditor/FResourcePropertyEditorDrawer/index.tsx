@@ -16,6 +16,7 @@ interface FResourcePropertyEditorDrawerProps {
     description: string;
   } | null;
   noneEditableFields?: Array<'key' | 'name' | 'value' | 'description'>;
+  valueAcceptNull?: boolean;
 
   onOk?(data: {
     key: string;
@@ -56,6 +57,7 @@ function FResourcePropertyEditorDrawer({
                                          disabledNames,
                                          defaultData,
                                          noneEditableFields = [],
+                                         valueAcceptNull = false,
                                          onOk,
                                          onClose,
                                        }: FResourcePropertyEditorDrawerProps) {
@@ -76,6 +78,8 @@ function FResourcePropertyEditorDrawer({
     set_valueInput(defaultData?.value || '');
     set_descriptionInput(defaultData?.description || '');
   }
+
+  // console.log(valueAcceptNull, 'valueAcceptNullisdojfl asdiofjlk jlk')
 
   return (<FDrawer
     // title={defaultData ? '编辑基础属性' : '补充属性'}
@@ -105,7 +109,7 @@ function FResourcePropertyEditorDrawer({
         disabled={nameInput === '' || nameInputError !== ''
         || keyInput === '' || keyInputError !== ''
         || descriptionInputError !== ''
-        || valueInput === '' || valueInputError !== ''}
+        || (!valueAcceptNull && valueInput === '') || valueInputError !== ''}
         onClick={async () => {
           onOk && onOk({
             key: keyInput,
@@ -273,7 +277,7 @@ function FResourcePropertyEditorDrawer({
           onChange={(e) => {
             const value: string = e.target.value;
             let errorText: string = '';
-            if (value === '') {
+            if (!valueAcceptNull && value === '') {
               errorText = '输入value';
             } else if (value.length > 140) {
               // errorText = '不超过140个字符';

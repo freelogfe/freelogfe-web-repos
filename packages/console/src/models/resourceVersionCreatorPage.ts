@@ -8,7 +8,7 @@ import fMessage from '@/components/fMessage';
 import { OnChange_DraftData_Action } from '@/models/resourceInfo';
 import * as semver from 'semver';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
-import { fileAttrUnits } from '@/utils/format';
+// import { fileAttrUnits } from '@/utils/format';
 import { getFilesSha1Info } from '@/utils/service';
 import { IResourceCreateVersionDraftType } from '@/type/resourceTypes';
 import { getProcessor } from '@/components/FResourceAuthorizationProcessor';
@@ -82,14 +82,20 @@ export interface ResourceVersionCreatorPageModelState {
 
   descriptionEditorState: EditorState;
 
-  preVersionBaseProperties: {
+  preVersion_additionalProperties: {
+    key: string;
+    // name: string;
+    value: string;
+    // description: string;
+  }[];
+  preVersion_customProperties: {
     key: string;
     name: string;
     value: string;
     description: string;
   }[];
 
-  preVersionOptionProperties: {
+  preVersion_customConfigurations: {
     key: string;
     name: string;
     description: string;
@@ -283,8 +289,9 @@ const initStates: ResourceVersionCreatorPageModelState = {
 
   descriptionEditorState: BraftEditor.createEditorState(''),
 
-  preVersionBaseProperties: [],
-  preVersionOptionProperties: [],
+  preVersion_additionalProperties: [],
+  preVersion_customProperties: [],
+  preVersion_customConfigurations: [],
   preVersionDirectDependencies: [],
 
   releaseTipVisible: false,
@@ -343,8 +350,9 @@ const Model: ResourceVersionCreatorModelType = {
       });
 
       let descriptionEditorState: EditorState = BraftEditor.createEditorState('');
-      let preVersionBaseProperties: ResourceVersionCreatorPageModelState['preVersionBaseProperties'] = [];
-      let preVersionOptionProperties: ResourceVersionCreatorPageModelState['preVersionOptionProperties'] = [];
+      let preVersion_additionalProperties: ResourceVersionCreatorPageModelState['preVersion_additionalProperties'] = [];
+      let preVersion_customProperties: ResourceVersionCreatorPageModelState['preVersion_customProperties'] = [];
+      let preVersion_customConfigurations: ResourceVersionCreatorPageModelState['preVersion_customConfigurations'] = [];
       let preVersionDirectDependencies: ResourceVersionCreatorPageModelState['preVersionDirectDependencies'] = [];
       if (data_resourceInfo.latestVersion) {
         const params2: Parameters<typeof FServiceAPI.Resource.resourceVersionInfo1>[0] = {
@@ -367,13 +375,28 @@ const Model: ResourceVersionCreatorModelType = {
               versionRange: string;
             }[];
             description: string;
+            systemPropertyDescriptors: {
+              key: string;
+              valueDisplay: string;
+              insertMode: 1 | 2;
+            }[];
           }
         } = yield call(FServiceAPI.Resource.resourceVersionInfo1, params2);
         // console.log(data_resourceVersionInfo, 'data_resourceVersionInfo90-32iokpsdlfsdfsdlfkjl');
         descriptionEditorState = BraftEditor.createEditorState(data_resourceVersionInfo.description);
-        preVersionBaseProperties = data_resourceVersionInfo.customPropertyDescriptors
+        preVersion_additionalProperties = data_resourceVersionInfo.systemPropertyDescriptors
+          .filter((spd) => {
+            return spd.insertMode === 2;
+          })
+          .map((spd) => {
+            return {
+              key: spd.key,
+              value: spd.valueDisplay,
+            };
+          });
+        preVersion_customProperties = data_resourceVersionInfo.customPropertyDescriptors
           .filter((cpd: any) => cpd.type === 'readonlyText')
-          .map<ResourceVersionCreatorPageModelState['preVersionBaseProperties'][number]>((cpd) => {
+          .map<ResourceVersionCreatorPageModelState['preVersion_customProperties'][number]>((cpd) => {
             // console.log(cpd, 'cpdoidsjflksdjflkjkl');
             return {
               key: cpd.key,
@@ -383,9 +406,9 @@ const Model: ResourceVersionCreatorModelType = {
             };
           });
 
-        preVersionOptionProperties = data_resourceVersionInfo.customPropertyDescriptors
+        preVersion_customConfigurations = data_resourceVersionInfo.customPropertyDescriptors
           .filter((cpd: any) => cpd.type !== 'readonlyText')
-          .map<ResourceVersionCreatorPageModelState['preVersionOptionProperties'][number]>((cpd) => {
+          .map<ResourceVersionCreatorPageModelState['preVersion_customConfigurations'][number]>((cpd) => {
             return {
               key: cpd.key,
               name: cpd.name,
@@ -409,8 +432,9 @@ const Model: ResourceVersionCreatorModelType = {
         type: 'change',
         payload: {
           versionInput: (semver.inc(data_resourceInfo.latestVersion, 'patch') || '0.1.0'),
-          preVersionBaseProperties,
-          preVersionOptionProperties,
+          preVersion_additionalProperties,
+          preVersion_customProperties,
+          preVersion_customConfigurations,
           preVersionDirectDependencies,
           descriptionEditorState,
         },
@@ -909,6 +933,7 @@ const Model: ResourceVersionCreatorModelType = {
           draftData: IResourceCreateVersionDraftType;
         };
       } = yield call(FServiceAPI.Resource.lookDraft, params);
+      // console.log(data_draft, 'data_draftiosdjlfkjsdlkfjklsdjflk');
 
       if (data_draft) {
 
@@ -920,11 +945,6 @@ const Model: ResourceVersionCreatorModelType = {
           };
 
           const { data: data_ResourcesBySha1 }: { data: any[] } = yield call(FServiceAPI.Resource.getResourceBySha1, params3);
-          // console.log(data_ResourcesBySha1, 'data_ResourcesBySha1isdflksdjflkjlk');
-          // if (data_ResourcesBySha1.length > 0 && data_ResourcesBySha1[0].userId !== FUtil.Tool.getUserIDByCookies()) {
-          //
-          // }
-
           yield put<ChangeAction>({
             type: 'change',
             payload: {
@@ -955,14 +975,14 @@ const Model: ResourceVersionCreatorModelType = {
           payload: {
             versionInput: draftData.versionInput,
             selectedFileInfo: draftData.selectedFileInfo,
-            additionalProperties: draftData.additionalProperties.map((p) => {
+            additionalProperties: draftData.additionalProperties?.map((p) => {
               return {
                 key: p.key,
                 name: '',
                 value: p.value,
                 description: '',
               };
-            }),
+            }) || [],
             customProperties: draftData.customProperties || [],
             customConfigurations: draftData.customConfigurations || [],
             descriptionEditorState: BraftEditor.createEditorState(draftData.descriptionEditorInput),
@@ -1142,7 +1162,7 @@ const Model: ResourceVersionCreatorModelType = {
                 return i.insertMode === 2;
               })
               .map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((i) => {
-                const item = data_draft?.draftData.additionalProperties.find((ap) => {
+                const item = data_draft?.draftData.additionalProperties?.find((ap) => {
                   return ap.key === i.key;
                 }) || {};
                 return {
