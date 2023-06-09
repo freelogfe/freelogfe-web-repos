@@ -13,8 +13,8 @@ import { RcFile } from 'antd/lib/upload/interface';
 import FModal from '@/components/FModal';
 import FComponentsLib from '@freelog/components-lib';
 import { comicToolContext } from '../..';
-import { ImgInComicTool } from '../../utils/interface';
 import { getExt } from '../../utils/common';
+import { uncompressComicArchive } from '../../core/import-comic';
 
 const { Option } = Select;
 
@@ -24,8 +24,14 @@ interface Props {
 }
 
 export const ImportDrawer = (props: Props) => {
-  const { resourceId, Uncompress, setComicConfig, setImgList, setLoaderShow } =
-    useContext(comicToolContext);
+  const {
+    resourceId,
+    resource,
+    setComicName,
+    setComicConfig,
+    setImgList,
+    setLoaderShow,
+  } = useContext(comicToolContext);
   const { show, close } = props;
   let body: Element | null = null;
 
@@ -106,170 +112,17 @@ export const ImportDrawer = (props: Props) => {
       return;
     }
 
+    resource.current.draftData.customProperties = [];
+    resource.current.draftData.customConfigurations = [];
+    setComicConfig(null);
     setImgList([]);
-    setComicConfig({});
+    setComicName(file.name);
 
-    Uncompress.archiveOpenFile(file, (archive: any, err: any) => {
-      if (!archive) {
-        setLoaderShow(false);
-        false;
-      }
-
-      readContents(archive);
-    });
+    uncompressComicArchive(file, { setLoaderShow, setImgList, setComicConfig });
 
     setTimeout(() => {
       close();
     }, 0);
-  };
-
-  /** 获取压缩包内容 */
-  const readContents = (archive: { entries: any[] }) => {
-    // 按图片名称排序
-    const entries = archive.entries.sort((a, b) => {
-      const indexA = a.name.split('.')[0] * 1;
-      const indexB = b.name.split('.')[0] * 1;
-      return indexA - indexB;
-    });
-
-    for (let i = 0; i < entries.length; i++) {
-      processEntries(entries, i, entries.length);
-    }
-  };
-
-  /** 获取压缩包内容 */
-  const processEntries = (entries: any[], i: number, max: number) => {
-    const filename = entries[i].name;
-    const ext = getExt(filename);
-    if (['jpg', 'jpeg', 'gif', 'png'].includes(ext)) {
-      // 图片
-      createBlobs(entries[i], i, max);
-    } else if (ext === 'xml' && filename === 'ComicInfo.xml') {
-      // xml
-      entries[i].readData((result: BlobPart, err: any) => {
-        const blob = new Blob([result], { type: getMIME(entries[i].name) });
-        getXML(blob);
-      });
-    } else if (ext === 'json' && filename === 'index.json') {
-      // json
-      entries[i].readData((result: BlobPart, err: any) => {
-        const blob = new Blob([result], { type: getMIME(entries[i].name) });
-        getJson(blob);
-      });
-    }
-  };
-
-  /** 将图片内容转为Blob */
-  const createBlobs = (
-    entry: {
-      readData: (arg0: (result: BlobPart, err: any) => void) => void;
-      name: any;
-    },
-    i: number,
-    max: number,
-  ) => {
-    entry.readData((result: BlobPart, err: any) => {
-      const blob = new Blob([result], { type: getMIME(entry.name) });
-      blobToDataURI(blob, entry.name, i, max);
-    });
-  };
-
-  /** 将Blob转为base64 */
-  const blobToDataURI = (blob: Blob, name: any, i: number, max: number) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(blob);
-    reader.onload = (e: any) => {
-      const img = { name, size: e.total, base64: e.target.result };
-      setImgList((pre: ImgInComicTool[]) => [...pre, img]);
-      if (i === max - 1) setLoaderShow(false);
-    };
-  };
-
-  /** 解析 xml 文件 */
-  const getXML = (blob: Blob) => {
-    const reader = new FileReader();
-    reader.readAsText(blob);
-    reader.onload = (e: any) => {
-      const xmlConfig: any = {};
-      const { result } = e.target;
-      console.error(result);
-      const xmlHeader = result
-        .match(/<\?xml.*?\?>/)[0]
-        .replace(`<?xml `, '')
-        .replace(`?>`, '');
-      const attrsList = xmlHeader.split(' ');
-      const attrs: any = {};
-      attrsList.forEach((item: string) => {
-        const [key, valueWithQuota] = item.split('=');
-        const value = valueWithQuota.slice(1, valueWithQuota.length - 1);
-        attrs[key] = value;
-      });
-      xmlConfig.xml = { attrs };
-
-      const xmlDoc = new DOMParser().parseFromString(result, 'text/xml');
-      const infos = xmlDoc.getElementsByTagName('ComicInfo');
-      xmlConfig.children = getXmlNodes(infos);
-      console.error(xmlConfig);
-      setComicConfig((pre: any) => {
-        return { ...xmlConfig, ...pre };
-      });
-    };
-  };
-
-  /** 解析 xml 节点 */
-  const getXmlNodes = (nodes: HTMLCollectionOf<Element>) => {
-    const result: any[] = [];
-    [...nodes].forEach((node) => {
-      const { nodeType, nodeName, attributes, children, firstChild } = node;
-      if (nodeType !== 1) return;
-
-      const attrs: any = {};
-      [...attributes].forEach((attr) => {
-        attrs[attr.nodeName] = attr.nodeValue;
-      });
-      const item = {
-        key: nodeName,
-        value: children.length ? null : firstChild?.nodeValue || null,
-        attrs,
-        children: getXmlNodes(children),
-      };
-      result.push(item);
-    });
-    return result;
-  };
-
-  /** 解析 json 文件 */
-  const getJson = (blob: Blob) => {
-    const reader = new FileReader();
-    reader.readAsText(blob);
-    reader.onload = (e: any) => {
-      const { result } = e.target;
-      const json = JSON.parse(result);
-      setComicConfig((pre: any) => {
-        return { ...pre, ...json };
-      });
-    };
-  };
-
-  /** 获取MIME */
-  const getMIME = (filename: any) => {
-    const ext = getExt(filename);
-
-    switch (ext) {
-      case 'jpg':
-      case 'jpeg':
-        return 'image/jpeg';
-      case 'png':
-        return 'image/png';
-      case 'gif':
-        return 'image/gif';
-      case 'xml':
-        return 'text/xml';
-      case 'json':
-        return 'application/json';
-      default:
-        return 'image/jpeg';
-    }
   };
 
   /** 上传本地文件 */

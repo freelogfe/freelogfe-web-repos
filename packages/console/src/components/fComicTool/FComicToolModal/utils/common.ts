@@ -1,5 +1,7 @@
 /** 公共方法 */
 
+import { FUtil } from '@freelog/tools-lib';
+
 /**
  * 格式化日期
  * @param time 时间戳、字符串日期等等
@@ -42,4 +44,59 @@ export const conversionSize = (size: number) => {
 export const getExt = (filename: string = '') => {
   const ext = filename.split('.').pop() || '';
   return ext.toLowerCase();
+};
+
+/** 获取MIME */
+export const getMIME = (filename: any) => {
+  const ext = getExt(filename);
+
+  switch (ext) {
+    case 'jpg':
+    case 'jpeg':
+      return 'image/jpeg';
+    case 'png':
+      return 'image/png';
+    case 'gif':
+      return 'image/gif';
+    case 'xml':
+      return 'text/xml';
+    case 'json':
+      return 'application/json';
+    default:
+      return 'image/jpeg';
+  }
+};
+
+/** 格式化卡片图片名称（超长时中间部分省略，并保证尾部显示不含后缀名至少四位字符） */
+export const formatCardName = (name: string) => {
+  const _div = document.createElement('div');
+  _div.innerText = name;
+  _div.style.fontSize = '12px';
+  _div.style.position = 'absolute';
+  document.body.appendChild(_div);
+  if (_div.clientWidth < 200) {
+    return name;
+  } else {
+    const [filename, suffix] = name.split('.');
+    const lastWords = '...' + filename.slice(-4) + '.' + suffix;
+    for (let i = 0; i < filename.length; i++) {
+      const newName = filename.slice(0, i + 1) + lastWords;
+      _div.innerText = newName;
+      if (_div.clientWidth > 200) return filename.slice(0, i) + lastWords;
+    }
+  }
+  document.body.removeChild(_div);
+};
+
+/** 深度融合两个对象（后者优先级高） */
+export const deepAssign = (former: any, latter: any) => {
+  return latter;
+};
+
+/** 根据 sha1 获取 url */
+export const getUrlBySha1 = (sha1: string) => {
+  const url = `${FUtil.Format.completeUrlByDomain(
+    'api',
+  )}/v2/storages/files/${sha1}/download`;
+  return url;
 };
