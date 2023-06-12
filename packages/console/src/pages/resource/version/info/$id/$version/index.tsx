@@ -101,14 +101,15 @@ function VersionEditor({ dispatch, resourceVersionEditorPage, match }: VersionEd
         resourceID={resourceVersionEditorPage.resourceID}
         isCartoon={resourceVersionEditorPage.resourceInfo?.resourceType[0] === '阅读' && resourceVersionEditorPage.resourceInfo?.resourceType[1] === '漫画'}
 
-        onClickDownload={(extension = '') => {
-          // FServiceAPI.Resource.resourcesDownload({
-          //   resourceId: match.params.id,
-          //   version: match.params.version,
-          // });
+        onClickDownload={(extension) => {
+          if (!extension) {
+            self.location.href = FUtil.Format.completeUrlByDomain('qi')
+              + `/v2/resources/${resourceVersionEditorPage.resourceID}/versions/${resourceVersionEditorPage.version}/download`;
+            return;
+          }
+
           self.location.href = FUtil.Format.completeUrlByDomain('qi')
-            // + `/v2/storages/files/${resourceVersionCreatorPage.selectedFileInfo.sha1}/download?attachmentName=${resourceVersionCreatorPage.selectedFileInfo.name}${extension}`;
-            + `http://qi.testfreelog.com/v2/resources/${resourceVersionEditorPage.resourceID}/versions/${resourceVersionEditorPage.version}/download?fileSuffix=${extension}`;
+            + `/v2/resources/${resourceVersionEditorPage.resourceID}/versions/${resourceVersionEditorPage.version}/download?fileSuffix=${extension}`;
         }}
       />}>
       <FFormLayout>
