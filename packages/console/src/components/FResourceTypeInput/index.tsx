@@ -77,19 +77,9 @@ const initStates: FResourceTypeInputStates = {
 };
 
 function FResourceTypeInput(
-  // { value, onChange }
   $prop: FResourceTypeInputProps) {
 
   const ref = React.useRef<any>();
-  // const [$options, set$options] = React.useState<FResourceTypeInputStates['$options']>(initStates['$options']);
-  // const [$recommend, set$recommend] = React.useState<FResourceTypeInputStates['$recommend']>(initStates['$recommend']);
-  // const [_mode, set_mode] = React.useState<FResourceTypeInputStates['_mode']>(initStates['_mode']);
-  // const [_isOpen, set_isOpen] = React.useState<FResourceTypeInputStates['_isOpen']>(initStates['_isOpen']);
-  // const [_selectedCache, set_selectedCache] = React.useState<FResourceTypeInputStates['_selectedCache']>(initStates['_selectedCache']);
-  // const [_autoCompleteOptions, set_autoCompleteOptions] = React.useState<FResourceTypeInputStates['_autoCompleteOptions']>(initStates['_autoCompleteOptions']);
-  // const [_autoCompleteOptionsOther, set_autoCompleteOptionsOther] = React.useState<FResourceTypeInputStates['_autoCompleteOptionsOther']>(initStates['_autoCompleteOptionsOther']);
-  // const [_autoCompleteInput, set_autoCompleteInput] = React.useState<FResourceTypeInputStates['_autoCompleteInput']>(initStates['_autoCompleteInput']);
-  // const [_autoCompleteInputIsNew, set_autoCompleteInputIsNew] = React.useState<FResourceTypeInputStates['_autoCompleteInputIsNew']>(initStates['_autoCompleteInputIsNew']);
 
   const [$state, $setState] = AHooks.useSetState<FResourceTypeInputStates>(initStates);
 
@@ -120,17 +110,7 @@ function FResourceTypeInput(
     if (!data_recently) {
       return;
     }
-    // console.log(data_recently, 'dataoisdjlfkjsdlkfjsdlkjflkj');
-    // set$recommend(data_recently
-    //   .filter((r, i) => {
-    //     return i < 6;
-    //   })
-    //   .map<FResourceTypeInputStates['$recommend'][number]>((r) => {
-    //     return {
-    //       value: r.code,
-    //       labels: r.names.split('/'),
-    //     };
-    //   }));
+
     $setState({
       $recommend: data_recently
         .filter((r, i) => {
@@ -178,19 +158,8 @@ function FResourceTypeInput(
           parentCode: $state._selectedCache?.value || '',
           category: 1,
           name: search[search.length - 1],
-          // @ts-ignore
           isTerminate: true,
         });
-
-        // set_autoCompleteOptions(data_list.map((l) => {
-        //   return {
-        //     value: l.code,
-        //     label: l.name,
-        //     values: [l.code],
-        //     labels: l.names.split('/'),
-        //     count: l.resourceCount,
-        //   };
-        // }));
 
         $setState({
           _autoCompleteOptions: data_list.map((l) => {
@@ -220,15 +189,6 @@ function FResourceTypeInput(
           isTerminate: true,
         });
 
-        // set_autoCompleteOptionsOther(data_list1.map((l) => {
-        //   return {
-        //     value: l.code,
-        //     label: l.name,
-        //     values: [l.code],
-        //     labels: l.names.split('/'),
-        //     count: l.resourceCount,
-        //   };
-        // }));
         $setState({
           _autoCompleteOptionsOther: data_list1.map((l) => {
             return {
@@ -249,12 +209,6 @@ function FResourceTypeInput(
   );
 
   function init() {
-    // set_mode(initStates['_mode']);
-    // set_isOpen(initStates['_isOpen']);
-    // set_selectedCache(initStates['_selectedCache']);
-    // set_autoCompleteOptions(initStates['_autoCompleteOptions']);
-    // set_autoCompleteInput(initStates['_autoCompleteInput']);
-    // set_autoCompleteInputIsNew(initStates['_autoCompleteInputIsNew']);
     $setState({
       _mode: initStates['_mode'],
       _isOpen: initStates['_isOpen'],
@@ -264,8 +218,6 @@ function FResourceTypeInput(
       _autoCompleteInputIsNew: initStates['_autoCompleteInputIsNew'],
     });
   }
-
-  // console.log(autoCompleteInput, 'autoCompleteInput sd9ifoj;sldkfjsdlfjlkj');
 
   function onDropdownChange(v: {
     value: string;
@@ -292,16 +244,6 @@ function FResourceTypeInput(
 
 
     const startWidth: string = [...labels, ''].join('/');
-    // set_autoCompleteInputStarWith(startWidth);
-    // set_autoCompleteInput(startWidth);
-    // set_isOpen(false);
-    // set_mode('input');
-    // set_selectedCache({
-    //   value,
-    //   values,
-    //   label,
-    //   labels,
-    // });
 
     $setState({
       _autoCompleteInput: startWidth,
@@ -375,9 +317,6 @@ function FResourceTypeInput(
         style={{ width: 360 }}
         value={$state._autoCompleteInput}
         className={styles.AutoComplete}
-        // filterOption={(inputValue, option: any) => {
-        //   return option.data.labels[option.data.labels.length - 1].length <= 40 && option.data.labels.join('/').startsWith(inputValue);
-        // }}
         onChange={(value: string) => {
           // console.log(value, 'value 908wieojfklsdfjasldkfjlkj');
           if (!value) {
@@ -389,10 +328,6 @@ function FResourceTypeInput(
           }
 
           const custom: string = value.replace(startStr, '');
-          // set_autoCompleteInputIsNew(value !== startStr && FUtil.Regexp.RESOURCE_TYPE.test(custom) && _autoCompleteOptions.every((aco) => {
-          //   return aco.labels.join('/') !== value;
-          // }));
-          // set_autoCompleteInput(value);
 
           $setState({
             _autoCompleteInputIsNew: value !== startStr && FUtil.Regexp.RESOURCE_TYPE.test(custom) && $state._autoCompleteOptions.every((aco) => {
@@ -500,10 +435,6 @@ function FResourceTypeInput(
               }}
               zIndex={10000}
               open={o0.children.length === 0 ? false : undefined}
-              // trigger={'click'}
-              // arrowPointAtCenter={false}
-              // overlayInnerStyle={{ padding: 0, width: 200 }}
-              // overlayStyle={{ padding: 0 }}
               overlayClassName={styles.PopoverOverlayClassName}
               placement={'rightTop'}
               title={null}
@@ -518,9 +449,6 @@ function FResourceTypeInput(
                           return ref.current;
                         }}
                         open={o1.children.length === 0 ? false : undefined}
-                        // overlayInnerStyle={{ padding: 0 }}
-                        // overlayStyle={{ padding: 0 }}
-                        // trigger={'click'}
                         overlayClassName={styles.PopoverOverlayClassName}
                         title={null}
                         placement={'rightTop'}
