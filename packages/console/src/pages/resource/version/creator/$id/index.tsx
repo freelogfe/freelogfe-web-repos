@@ -29,7 +29,7 @@ import FFormLayout from '@/components/FFormLayout';
 import * as AHooks from 'ahooks';
 import CustomOptions from './CustomOptions';
 import { Helmet } from 'react-helmet';
-import { FI18n } from '@freelog/tools-lib';
+import { FI18n, FUtil } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 import { EditorState } from 'braft-editor';
 import FPublishObjectFile from '@/components/FPublishObjectFile';
@@ -402,6 +402,14 @@ function VersionCreator({
                       await onClick_EditCartoonBtn();
                     }
 
+                  }}
+                  onClick_DownloadBtn={(extension = '') => {
+                    if (!resourceVersionCreatorPage.selectedFileInfo) {
+                      return;
+                    }
+                    // console.log(type, '98ieowjfkldjflksdjflksjdflkjsdlfkjsdlkj');
+                    self.location.href = FUtil.Format.completeUrlByDomain('qi')
+                      + `/v2/storages/files/${resourceVersionCreatorPage.selectedFileInfo.sha1}/download?attachmentName=${resourceVersionCreatorPage.selectedFileInfo.name}${extension}`;
                   }}
                 />
               </Space>

@@ -14,10 +14,7 @@ import icons from './icons.png';
 import FDropdownMenu from '@/components/FDropdownMenu';
 import * as AHooks from 'ahooks';
 
-// import fComicTool from '@/components/fComicTool';
-
 interface FPublishObjectFileProps {
-  // resourceID: string;
   resourceType: {
     code: string;
     names: string[];
@@ -40,8 +37,6 @@ interface FPublishObjectFileProps {
 
   onClick_EditBtn?(): void;
 
-  // onClick_EditCartoonBtn?(): void;
-
   onSucceed_UploadFile?(file: {
     fileName: string;
     sha1: string;
@@ -56,6 +51,8 @@ interface FPublishObjectFileProps {
   }): void;
 
   onClick_DeleteBtn?(): void;
+
+  onClick_DownloadBtn?(extension?: string): void;
 }
 
 interface FPublishObjectFileStates {
@@ -87,30 +84,7 @@ const initStates: FPublishObjectFileStates = {
   fUploadingProgress: 0,
 };
 
-function FPublishObjectFile(
-  // {
-  // resourceID,
-  // resourceType,
-  // fileInfo,
-  // onSucceed_ImportObject,
-  // onSucceed_UploadFile,
-  // onClick_DeleteBtn,
-  // showOpenMarkdownEditor = false,
-  // showOpenCartoonEditor = false,
-  // showEditBtnAfterSucceed = false,
-  // onClick_OpenMarkdownBtn,
-  // onClick_OpenCartoonBtn,
-  // onClick_EditBtn,
-  // onClick_EditCartoonBtn,
-  // }
-  $prop: FPublishObjectFileProps) {
-  // const [_uploadFileAccept, set_uploadFileAccept] = React.useState<FPublishObjectFileStates['_uploadFileAccept']>(initStates['_uploadFileAccept']);
-  // const [fInfo, set_fInfo] = React.useState<FPublishObjectFileStates['fInfo']>(initStates['fInfo']);
-  // const [fState, set_fState] = React.useState<FPublishObjectFileStates['fState']>(initStates['fState']);
-  // const [fUploadedError, set_fUploadedError] = React.useState<FPublishObjectFileStates['fUploadedError']>(initStates['fUploadedError']);
-  // const [fUsedResource, set_fUsedResource] = React.useState<FPublishObjectFileStates['fUsedResource']>(initStates['fUsedResource']);
-  // const [fUploadingProgress, set_fUploadingProgress] = React.useState<FPublishObjectFileStates['fUploadingProgress']>(initStates['fUploadingProgress']);
-
+function FPublishObjectFile($prop: FPublishObjectFileProps) {
 
   const uploadCancelHandler = React.useRef<any>();
   const tempUploadFileInfo = React.useRef<{
@@ -152,10 +126,6 @@ function FPublishObjectFile(
   }
 
   React.useEffect(() => {
-    // set_fInfo(null);
-    // set_fUploadedError('');
-    // set_fUsedResource([]);
-    // set_fUploadingProgress(0);
     $setState({
       fInfo: null,
       fUploadedError: '',
@@ -176,12 +146,6 @@ function FPublishObjectFile(
   }, [$prop.fileInfo]);
 
   function resetData() {
-    // set_fInfo(null);
-    // set_fState('unsuccessful');
-    // set_fUploadedError('');
-    // set_fUsedResource([]);
-    // set_fUploadingProgress(0);
-
     $setState({
       fInfo: null,
       fState: 'unsuccessful',
@@ -193,8 +157,6 @@ function FPublishObjectFile(
 
   async function onUploadFilesLocally(file: RcFile) {
     if (file.size > 200 * 1024 * 1024) {
-      // set_fState('unsuccessful');
-      // set_fUploadedError('unexpectedSize');
       $setState({
         fState: 'unsuccessful',
         fUploadedError: 'unexpectedSize',
@@ -202,13 +164,6 @@ function FPublishObjectFile(
       return;
     }
 
-    // set_fState('parsing');
-    // set_fUploadedError('');
-    // set_fInfo({
-    //   sha1: '',
-    //   name: file.name,
-    //   from: '本地上传',
-    // });
     $setState({
       fState: 'parsing',
       fUploadedError: '',
@@ -249,9 +204,6 @@ function FPublishObjectFile(
             fileName: file.name,
             sha1: sha1,
           };
-          // set_fUsedResource(usedResources);
-          // set_fState('unsuccessful');
-          // set_fUploadedError('selfTakeUp');
 
           $setState({
             fUsedResource: usedResources,
@@ -273,9 +225,6 @@ function FPublishObjectFile(
               };
             });
           }).flat();
-          // set_fUsedResource(usedResources);
-          // set_fState('unsuccessful');
-          // set_fUploadedError('othersTakeUp');
 
           $setState({
             fUsedResource: usedResources,
@@ -290,13 +239,6 @@ function FPublishObjectFile(
         });
       }
     } else {
-      // set_fState('uploading');
-      // set_fUploadedError('');
-      // set_fInfo({
-      //   sha1: '',
-      //   name: file.name,
-      //   from: '本地上传',
-      // });
       $setState({
         fState: 'uploading',
         fUploadedError: '',
@@ -368,9 +310,6 @@ function FPublishObjectFile(
           objName: objectName,
           sha1: sha1,
         };
-        // set_fUsedResource(usedResources);
-        // set_fState('unsuccessful');
-        // set_fUploadedError('selfTakeUp');
 
         $setState({
           fUsedResource: usedResources,
@@ -392,9 +331,6 @@ function FPublishObjectFile(
             };
           });
         }).flat();
-        // set_fUsedResource(usedResources);
-        // set_fState('unsuccessful');
-        // set_fUploadedError('othersTakeUp');
         $setState({
           fUsedResource: usedResources,
           fState: 'unsuccessful',
@@ -481,29 +417,27 @@ function FPublishObjectFile(
                 value: 'cbz',
               }]}
               onChange={(value) => {
-                if (value === 'zip') {
-
-                }
-                if (value === 'cbz') {
-
-                }
+                // if (value === 'zip') {
+                $prop.onClick_DownloadBtn && $prop.onClick_DownloadBtn('.' + value);
+                // }
+                // if (value === 'cbz') {
+                //   $prop.onClick_DownloadBtn && $prop.onClick_DownloadBtn('.cbz');
+                //
+                // }
               }}
             >
               <div>
                 <FComponentsLib.FTextBtn
                   type='primary'
-                  // onClick={() => {
-                  //   self.location.href = FUtil.Format.completeUrlByDomain('qi')
-                  //     + `/v2/storages/files/${fileInfo.sha1}/download?attachmentName=${fileInfo.name}`;
-                  // }}
                 >下载</FComponentsLib.FTextBtn>
               </div>
             </FDropdownMenu>)
             : (<FComponentsLib.FTextBtn
               type='primary'
               onClick={() => {
-                self.location.href = FUtil.Format.completeUrlByDomain('qi')
-                  + `/v2/storages/files/${$prop.fileInfo?.sha1}/download?attachmentName=${$prop.fileInfo?.name}`;
+                // self.location.href = FUtil.Format.completeUrlByDomain('qi')
+                //   + `/v2/storages/files/${$prop.fileInfo?.sha1}/download?attachmentName=${$prop.fileInfo?.name}`;
+                $prop.onClick_DownloadBtn && $prop.onClick_DownloadBtn();
               }}
             >下载</FComponentsLib.FTextBtn>)
         }
