@@ -19,7 +19,7 @@ import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
 import Sider from '@/pages/resource/containers/Sider';
 import FFormLayout from '@/components/FFormLayout';
 import FDrawer from '@/components/FDrawer';
-import { FServiceAPI, FI18n } from '@freelog/tools-lib';
+import { FServiceAPI, FI18n, FUtil } from '@freelog/tools-lib';
 import FDivider from '@/components/FDivider';
 import { RouteComponentProps } from 'react-router';
 import { Helmet } from 'react-helmet';
@@ -29,6 +29,7 @@ import FResourceProperties from '@/components/FResourceProperties';
 import FResourceOptions from '@/components/FResourceOptions';
 import fResourcePropertyEditor from '@/components/fResourcePropertyEditor';
 import fResourceOptionEditor from '@/components/fResourceOptionEditor';
+import FDropdownMenu from '@/components/FDropdownMenu';
 
 interface VersionEditorProps extends RouteComponentProps<{
   id: string;
@@ -36,10 +37,10 @@ interface VersionEditorProps extends RouteComponentProps<{
 }> {
   dispatch: Dispatch;
   resourceVersionEditorPage: ResourceVersionEditorPageModelState;
-  resourceInfo: ResourceInfoModelState,
+  // resourceInfo: ResourceInfoModelState,
 }
 
-function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, match }: VersionEditorProps) {
+function VersionEditor({ dispatch, resourceVersionEditorPage, match }: VersionEditorProps) {
 
   const [isEditing, setIsEditing] = React.useState<boolean>(false);
   const [editor, setEditor] = React.useState<EditorState>(BraftEditor.createEditorState(resourceVersionEditorPage.description));
@@ -80,20 +81,6 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
     }
   }
 
-  // function onCloseCustomOptionDrawer() {
-  //   onChange({
-  //     customOptionEditorVisible: false,
-  //     customOptionKey: '',
-  //     customOptionDescription: '',
-  //     customOptionDescriptionError: '',
-  //     customOptionCustom: 'input',
-  //     customOptionDefaultValue: '',
-  //     customOptionDefaultValueError: '',
-  //     customOptionCustomOption: '',
-  //     customOptionCustomOptionError: '',
-  //   });
-  // }
-
   async function onChange(payload: Partial<ResourceVersionEditorPageModelState>) {
     await dispatch<ChangeAction>({
       type: 'resourceVersionEditorPage/change',
@@ -101,32 +88,27 @@ function VersionEditor({ dispatch, resourceInfo, resourceVersionEditorPage, matc
     });
   }
 
-  // function onCloseBaseAttrDrawer() {
-  //   onChange({
-  //     basePEditorVisible: false,
-  //     basePKeyInput: '',
-  //     basePValueInput: '',
-  //     basePDescriptionInput: '',
-  //     basePDescriptionInputError: '',
-  //   });
-  // }
-
   return (<>
     <Helmet>
-      <title>{`版本 ${resourceVersionEditorPage.version} · ${resourceInfo.info?.resourceName || ''}  - Freelog`}</title>
+      <title>{`版本 ${resourceVersionEditorPage.version} · ${resourceVersionEditorPage.resourceInfo?.resourceName || ''}  - Freelog`}</title>
     </Helmet>
 
     <FLeftSiderLayout
       sider={<Sider />}
       header={<Header
         version={resourceVersionEditorPage.version}
-        signingDate={resourceVersionEditorPage.signingDate}
+        signingDate={resourceVersionEditorPage.resourceVersionInfo?.createData || ''}
         resourceID={resourceVersionEditorPage.resourceID}
-        onClickDownload={() => {
-          FServiceAPI.Resource.resourcesDownload({
-            resourceId: match.params.id,
-            version: match.params.version,
-          });
+        isCartoon={resourceVersionEditorPage.resourceInfo?.resourceType[0] === '阅读' && resourceVersionEditorPage.resourceInfo?.resourceType[1] === '漫画'}
+
+        onClickDownload={(extension = '') => {
+          // FServiceAPI.Resource.resourcesDownload({
+          //   resourceId: match.params.id,
+          //   version: match.params.version,
+          // });
+          self.location.href = FUtil.Format.completeUrlByDomain('qi')
+            // + `/v2/storages/files/${resourceVersionCreatorPage.selectedFileInfo.sha1}/download?attachmentName=${resourceVersionCreatorPage.selectedFileInfo.name}${extension}`;
+            + `http://qi.testfreelog.com/v2/resources/${resourceVersionEditorPage.resourceID}/versions/${resourceVersionEditorPage.version}/download?fileSuffix=${extension}`;
         }}
       />}>
       <FFormLayout>
@@ -467,11 +449,18 @@ interface HeaderProps {
   version: string;
   resourceID: string;
   signingDate: string;
+  isCartoon: boolean;
 
-  onClickDownload?(): void;
+  onClickDownload?(type?: string): void;
 }
 
-function Header({ version, resourceID, signingDate, onClickDownload }: HeaderProps) {
+function Header({
+                  version,
+                  resourceID,
+                  signingDate,
+                  onClickDownload,
+                  isCartoon,
+                }: HeaderProps) {
 
   return (
     <div className={styles.Header}>
@@ -482,18 +471,49 @@ function Header({ version, resourceID, signingDate, onClickDownload }: HeaderPro
         <div style={{ width: 40 }} />
         <FComponentsLib.FContentText type='additional2' text={FI18n.i18nNext.t('object_id') + '：' + resourceID} />
         <div style={{ width: 20 }} />
-        <FTooltip title={'下载'}>
-          <div>
-            <FComponentsLib.FTextBtn
-              type='primary'
-              onClick={() => onClickDownload && onClickDownload()}
+
+        {
+          isCartoon ? (<FDropdownMenu
+              options={[{
+                text: 'ZIP格式文件',
+                value: 'zip',
+              }, {
+                text: 'CBZ格式文件',
+                value: 'cbz',
+              }]}
+              onChange={(value) => {
+                // $prop.onClick_DownloadBtn && $prop.onClick_DownloadBtn('.' + value);
+
+                onClickDownload && onClickDownload('.' + value);
+              }}
             >
-              <FComponentsLib.FIcons.FDownload
-                style={{ fontSize: 16, fontWeight: 600 }}
-              />
-            </FComponentsLib.FTextBtn>
-          </div>
-        </FTooltip>
+              <div>
+                <FComponentsLib.FTextBtn
+                  type='primary'
+                  // onClick={() => onClickDownload && onClickDownload()}
+                >
+                  <FComponentsLib.FIcons.FDownload
+                    style={{ fontSize: 16, fontWeight: 600 }}
+                  />
+                </FComponentsLib.FTextBtn>
+              </div>
+            </FDropdownMenu>)
+            : (<FTooltip title={'下载'}>
+              <div>
+                <FComponentsLib.FTextBtn
+                  type='primary'
+                  onClick={() => onClickDownload && onClickDownload()}
+                >
+                  <FComponentsLib.FIcons.FDownload
+                    style={{ fontSize: 16, fontWeight: 600 }}
+                  />
+                </FComponentsLib.FTextBtn>
+              </div>
+            </FTooltip>)
+        }
+        {/*<FTooltip title={'下载'}>*/}
+
+        {/*</FTooltip>*/}
       </Space>
     </div>
   );

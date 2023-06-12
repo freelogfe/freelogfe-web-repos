@@ -5,13 +5,24 @@ import moment from 'moment';
 import { ConnectState } from '@/models/connect';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import { history } from 'umi';
-import { fileAttrUnits } from '@/utils/format';
+// import { fileAttrUnits } from '@/utils/format';
 import fMessage from '@/components/fMessage';
 
 export interface ResourceVersionEditorPageModelState {
   resourceID: string;
   version: string;
-  signingDate: string;
+  // signingDate: string;
+
+  resourceInfo: {
+    resourceID: string;
+    resourceName: string;
+    resourceType: string[];
+  } | null;
+  resourceVersionInfo: {
+    version: string;
+    sha1: string;
+    createData: string;
+  } | null;
 
   descriptionFullScreen: boolean;
   description: string;
@@ -37,13 +48,6 @@ export interface ResourceVersionEditorPageModelState {
     description: string;
   }[];
 
-  // basePEditorVisible: boolean;
-  // basePKeyInput: string;
-  // basePValueInput: string;
-  // basePValueInputError: string;
-  // basePDescriptionInput: string;
-  // basePDescriptionInputError: string;
-
   customConfigurations: {
     key: string;
     name: string;
@@ -52,16 +56,6 @@ export interface ResourceVersionEditorPageModelState {
     input: string;
     select: string[];
   }[];
-  // customOptionEditorVisible: boolean;
-  // customOptionKey: string;
-  // customOptionDescription: string;
-  // customOptionDescriptionError: string;
-  // customOptionCustom: 'select' | 'input';
-  // customOptionDefaultValue: string;
-  // customOptionDefaultValueError: string;
-  // customOptionCustomOption: string;
-  // customOptionCustomOptionError: string;
-
 }
 
 export interface ChangeAction extends AnyAction {
@@ -104,7 +98,9 @@ const Model: ResourceVersionEditorModelType = {
   state: {
     resourceID: '',
     version: '',
-    signingDate: '',
+    // signingDate: '',
+    resourceInfo: null,
+    resourceVersionInfo: null,
 
     descriptionFullScreen: false,
     description: '',
@@ -115,23 +111,7 @@ const Model: ResourceVersionEditorModelType = {
     additionalProperties: [],
     customProperties: [],
 
-    // basePEditorVisible: false,
-    // basePKeyInput: '',
-    // basePValueInput: '',
-    // basePValueInputError: '',
-    // basePDescriptionInput: '',
-    // basePDescriptionInputError: '',
-
     customConfigurations: [],
-    // customOptionEditorVisible: false,
-    // customOptionKey: '',
-    // customOptionDescription: '',
-    // customOptionDescriptionError: '',
-    // customOptionCustom: 'input',
-    // customOptionDefaultValue: '',
-    // customOptionDefaultValueError: '',
-    // customOptionCustomOption: '',
-    // customOptionCustomOptionError: '',
   },
 
   effects: {
@@ -146,6 +126,12 @@ const Model: ResourceVersionEditorModelType = {
       };
       const { data: data_versionInfo }: {
         data: {
+          resourceId: string;
+          resourceName: string;
+          resourceType: string[];
+          resourceTypeCode: string;
+          version: string;
+          fileSha1: string;
           customPropertyDescriptors: {
             key: string;
             name: string;
@@ -156,9 +142,6 @@ const Model: ResourceVersionEditorModelType = {
           }[],
           createDate: string;
           description: string;
-          // systemProperty: {
-          //   [k: string]: string;
-          // }
           systemPropertyDescriptors: {
             defaultValue: number | string;
             key: string;
@@ -182,15 +165,19 @@ const Model: ResourceVersionEditorModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          signingDate: moment(data_versionInfo.createDate).format('YYYY-MM-DD'),
+          resourceInfo: {
+            resourceID: data_versionInfo.resourceId,
+            resourceName: data_versionInfo.resourceName,
+            resourceType: data_versionInfo.resourceType,
+          },
+          resourceVersionInfo: {
+            version: data_versionInfo.version,
+            sha1: data_versionInfo.fileSha1,
+            createData: moment(data_versionInfo.createDate).format('YYYY-MM-DD'),
+          },
+          // signingDate: moment(data_versionInfo.createDate).format('YYYY-MM-DD'),
           description: data_versionInfo.description,
-          // rawProperties: Object.entries(data_versionInfo.systemProperty).map((sp) => {
-          //   // console.log(sp, 'SSSSSSppppPPPPP90j');
-          //   return {
-          //     key: sp[0],
-          //     value: fileAttrUnits[sp[0]] ? fileAttrUnits[sp[0]](sp[1]) : sp[1] as string,
-          //   };
-          // }),
+
           rawProperties: data_versionInfo.systemPropertyDescriptors
             .filter((spd) => {
               return spd.insertMode === 1;

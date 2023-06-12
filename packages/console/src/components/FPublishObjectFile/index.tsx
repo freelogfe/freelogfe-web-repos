@@ -417,13 +417,7 @@ function FPublishObjectFile($prop: FPublishObjectFileProps) {
                 value: 'cbz',
               }]}
               onChange={(value) => {
-                // if (value === 'zip') {
                 $prop.onClick_DownloadBtn && $prop.onClick_DownloadBtn('.' + value);
-                // }
-                // if (value === 'cbz') {
-                //   $prop.onClick_DownloadBtn && $prop.onClick_DownloadBtn('.cbz');
-                //
-                // }
               }}
             >
               <div>
