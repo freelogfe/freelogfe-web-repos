@@ -527,7 +527,7 @@ function FResourceTypeInput(
                         content={<div className={styles.itemChildren}>
                           {
                             o1.children.map((o2, o2Index) => {
-                              console.log(o2Index + 1, o1.children.length, 'o2Index + 1 === o1.children.length 839isdfihsdkf');
+                              // console.log(o2Index + 1, o1.children.length, 'o2Index + 1 === o1.children.length 839isdfihsdkf');
                               return (<React.Fragment key={o2.value}>
                                 <div
                                   className={styles.item}
