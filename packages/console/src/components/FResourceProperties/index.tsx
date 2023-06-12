@@ -97,15 +97,18 @@ function FResourceProperties($prop: FResourcePropertiesProps) {
                 />)
             }
 
+            {
+              $prop.onEdit_onlyEditValueData && (<FComponentsLib.FTextBtn
+                type={'default'}
+                onClick={() => {
+                  $prop.onEdit_onlyEditValueData && $prop.onEdit_onlyEditValueData(d);
+                }}
+              >
+                <FComponentsLib.FIcons.FCircleDelete style={{ fontSize: 14 }} />
+              </FComponentsLib.FTextBtn>)
+            }
 
-            <FComponentsLib.FTextBtn
-              type={'default'}
-              onClick={() => {
-                $prop.onEdit_onlyEditValueData && $prop.onEdit_onlyEditValueData(d);
-              }}
-            >
-              <FComponentsLib.FIcons.FCircleDelete style={{ fontSize: 14 }} />
-            </FComponentsLib.FTextBtn>
+
           </div>
         </React.Fragment>);
       })
@@ -139,23 +142,26 @@ function FResourceProperties($prop: FResourcePropertiesProps) {
               singleRow
             />
 
-            <FComponentsLib.FTextBtn
-              type={'default'}
-              onClick={() => {
-                $prop.onEdit_alterableData && $prop.onEdit_alterableData(d);
-              }}
-            >
-              <FComponentsLib.FIcons.FCircleDelete style={{ fontSize: 14 }} />
-            </FComponentsLib.FTextBtn>
-
-            <FComponentsLib.FTextBtn
-              type={'danger'}
-              onClick={() => {
-                $prop.onDelete_alterableData && $prop.onDelete_alterableData(d);
-              }}
-            >
-              <FComponentsLib.FIcons.FCircleEdit style={{ fontSize: 14 }} />
-            </FComponentsLib.FTextBtn>
+            {
+              $prop.onEdit_alterableData && (<FComponentsLib.FTextBtn
+                type={'default'}
+                onClick={() => {
+                  $prop.onEdit_alterableData && $prop.onEdit_alterableData(d);
+                }}
+              >
+                <FComponentsLib.FIcons.FCircleDelete style={{ fontSize: 14 }} />
+              </FComponentsLib.FTextBtn>)
+            }
+            {
+              $prop.onDelete_alterableData && (<FComponentsLib.FTextBtn
+                type={'danger'}
+                onClick={() => {
+                  $prop.onDelete_alterableData && $prop.onDelete_alterableData(d);
+                }}
+              >
+                <FComponentsLib.FIcons.FCircleEdit style={{ fontSize: 14 }} />
+              </FComponentsLib.FTextBtn>)
+            }
 
           </div>
         </React.Fragment>);

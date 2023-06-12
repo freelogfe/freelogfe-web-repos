@@ -3,12 +3,8 @@ import styles from './index.less';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import { ConnectState, ResourceDetailPageModelState } from '@/models/connect';
-// import FTooltip from '@/components/FTooltip';
-// import { Space } from 'antd';
 import FComponentsLib from '@freelog/components-lib';
 import FResourceProperties from '@/components/FResourceProperties';
-
-// import FResourceOptions from '@/components/FResourceOptions';
 
 interface PropertyProps {
   dispatch: Dispatch;
@@ -38,27 +34,3 @@ function Property({ dispatch, resourceDetailPage }: PropertyProps) {
 }
 
 export default connect(({ resourceDetailPage }: ConnectState) => ({ resourceDetailPage }))(Property);
-
-// interface ItemProps {
-//   tTey: string;
-//   value: string;
-//   description?: string;
-// }
-//
-// function Item({tTey, value, description}: ItemProps) {
-//   return (<tr key={tTey}>
-//     <td>
-//       <Space size={10}>
-//         <FContentText text={tTey} type="negative"/>
-//         {description && (
-//           <FTooltip title={description}><FInfo style={{cursor: 'pointer'}}/></FTooltip>)}
-//       </Space>
-//       <div style={{height: 10}}/>
-//       <FContentText
-//         style={{maxWidth: 215}}
-//         text={value}
-//         singleRow
-//       />
-//     </td>
-//   </tr>);
-// }
