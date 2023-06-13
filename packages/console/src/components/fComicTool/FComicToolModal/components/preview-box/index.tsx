@@ -22,6 +22,7 @@ export const PreviewBox = (props: { show: boolean; close: () => void }) => {
   const [previewList, setPreviewList] = useState<ImgInComicTool[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [jumpPage, setJumpPage] = useState(1);
+  const [amend, setAmend] = useState(false);
   const [mode, setMode] = useState(['paging', 'single', 'normal']);
   const [modeMenuShow, setModeMenuShow] = useState(false);
   const [directionTipShow, setDirectionTipShow] = useState(false);
@@ -118,33 +119,82 @@ export const PreviewBox = (props: { show: boolean; close: () => void }) => {
     }, 50);
   };
 
-  /** 上一页 */
-  const prePage = () => {
-    const [, type, direction] = mode;
-    const offset = type === 'single' ? 1 : 2;
-    const page =
-      direction === 'normal' ? currentPage - offset : currentPage + offset;
+  /** 左侧切换页面 */
+  const leftSwitchPage = () => {
+    mode[2] === 'normal' ? pageForward() : pageBackward();
+  };
+
+  /** 右侧切换页面 */
+  const rightSwitchPage = () => {
+    mode[2] === 'normal' ? pageBackward() : pageForward();
+  };
+
+  /** 向前翻页 */
+  const pageForward = () => {
+    const pageType = mode[1];
+    let offset = pageType === 'single' ? 1 : 2;
+    if (!amend && pageType === 'double' && currentPage === 2) {
+      // 非跨页匹配、双页模式、当前页为第二页时，仅向前一页
+      offset = 1;
+    }
+    const page = currentPage - offset;
     setCurrentPage(page);
     setJumpPage(page);
   };
 
-  /** 下一页 */
-  const nextPage = () => {
-    const [, type, direction] = mode;
-    const offset = type === 'single' ? 1 : 2;
-    const page =
-      direction === 'normal' ? currentPage + offset : currentPage - offset;
+  /** 向后翻页 */
+  const pageBackward = () => {
+    const pageType = mode[1];
+    let offset = pageType === 'single' ? 1 : 2;
+    if (!amend && pageType === 'double' && currentPage === 1) {
+      // 非跨页匹配、双页模式、当前页为第一页时，仅向后一页
+      offset = 1;
+    }
+    const page = currentPage + offset;
     setCurrentPage(page);
     setJumpPage(page);
+  };
+
+  /** 更改跨页匹配 */
+  const changeAmend = (value: boolean) => {
+    let page;
+    if (currentPage === 1) {
+      page = 1;
+    } else if (value) {
+      page =
+        currentPage === previewList.length ? currentPage - 1 : currentPage + 1;
+    } else {
+      page = currentPage - 1;
+    }
+    setCurrentPage(page);
+    setJumpPage(page);
+    setAmend(value);
   };
 
   /** 跳转 */
   const jump = () => {
-    setCurrentPage(jumpPage);
-    if (mode[0] === 'scroll') {
-      const scrollArea = document.getElementById('scrollArea');
-      scrollArea?.scrollTo({ top: pagePointList.current[jumpPage - 1] });
+    let page = jumpPage;
+    if (page === 1) {
+      setCurrentPage(page);
+      setJumpPage(page);
+      return;
     }
+
+    if (mode[0] === 'paging' && mode[1] === 'double') {
+      // 翻页模式、双页模式下，需对跳转页码进行修正
+      if (amend) {
+        // 跨页匹配时，页码显示双页的奇数页码
+        page = jumpPage % 2 ? jumpPage : jumpPage - 1;
+      } else {
+        // 非跨页匹配时，页码显示双页的偶数页码
+        page = jumpPage % 2 ? jumpPage - 1 : jumpPage;
+      }
+    } else if (mode[0] === 'scroll') {
+      const scrollArea = document.getElementById('scrollArea');
+      scrollArea?.scrollTo({ top: pagePointList.current[page - 1] });
+    }
+    setCurrentPage(page);
+    setJumpPage(page);
   };
 
   /** 滚动模式下获取每页的位置 */
@@ -186,8 +236,8 @@ export const PreviewBox = (props: { show: boolean; close: () => void }) => {
         pre[0] = 'scroll';
         return [...pre];
       });
-    } else if (comicMode === 2) {
-      // 页漫时，自动选择翻页模式（如本地有记录翻页模式的选择，优先取本地记录的模式）
+    } else if ([2, 3].includes(comicMode)) {
+      // 页漫/日漫时，自动选择翻页模式（如本地有记录翻页模式的选择，优先取本地记录的模式）
       const comicReadMode = localStorage.getItem('comicReadMode');
       if (comicReadMode) setMode(JSON.parse(comicReadMode));
     }
@@ -212,7 +262,7 @@ export const PreviewBox = (props: { show: boolean; close: () => void }) => {
 
     const list: ImgInComicTool[] = [];
     imgList.forEach((item: ImgInComicTool) => {
-      const {size, children} = item;
+      const { size, children } = item;
       if (size > MAX_IMG_SIZE) return;
       list.push(...(children ? children : [item]));
     });
@@ -223,41 +273,68 @@ export const PreviewBox = (props: { show: boolean; close: () => void }) => {
     <div className="preview-box-wrapper">
       {mode[0] === 'paging' ? (
         <div className="content-paging-area">
-          {mode[1] === 'double' &&
-            mode[2] === 'manga' &&
-            previewList[currentPage] && (
+          {/* 页漫、双页模式、非跨页匹配、当前为首页时，首页左侧显示空屏 */}
+          {comicMode === 2 &&
+            mode[1] === 'double' &&
+            !amend &&
+            currentPage === 1 && <div className="blank-screen"></div>}
+          {/* 日漫、双页模式、当前为尾页时，尾页左侧显示空屏 */}
+          {comicMode === 3 &&
+            mode[1] === 'double' &&
+            currentPage === previewList.length && (
+              <div className="blank-screen"></div>
+            )}
+          {/* 日漫、双页模式、跨页匹配/非跨页匹配且当前不为首页、当前页不为尾页时，当前页左侧显示下一页 */}
+          {comicMode === 3 &&
+            mode[1] === 'double' &&
+            (amend || (!amend && currentPage !== 1)) &&
+            currentPage !== previewList.length && (
               <img
                 className="content-img"
                 src={previewList[currentPage].base64}
                 loading="lazy"
               />
             )}
+          {/* 当前页 */}
           <img
             className="content-img"
             src={previewList[currentPage - 1].base64}
             loading="lazy"
           />
-          {mode[1] === 'double' &&
-            mode[2] === 'normal' &&
-            previewList[currentPage] && (
+          {/* 页漫、双页模式、跨页匹配/非跨页匹配且当前不为首页、当前页不为尾页时，当前页右侧显示下一页 */}
+          {comicMode === 2 &&
+            mode[1] === 'double' &&
+            (amend || (!amend && currentPage !== 1)) &&
+            currentPage !== previewList.length && (
               <img
                 className="content-img"
                 src={previewList[currentPage].base64}
                 loading="lazy"
               />
             )}
+          {/* 页漫、双页模式、当前为尾页时，尾页右侧显示空屏 */}
+          {comicMode === 2 &&
+            mode[1] === 'double' &&
+            currentPage === previewList.length && (
+              <div className="blank-screen"></div>
+            )}
+          {/* 日漫、双页模式、非跨页匹配、当前为首页时，首页右侧显示空屏 */}
+          {mode[1] === 'double' &&
+            comicMode === 3 &&
+            !amend &&
+            currentPage === 1 && <div className="blank-screen"></div>}
 
           {((currentPage !== 1 && mode[2] === 'normal') ||
             (currentPage <
               previewList.length - (mode[1] === 'single' ? 0 : 1) &&
               mode[2] === 'manga')) && (
-            <div className="pre-btn" onClick={prePage}></div>
+            <div className="pre-btn" onClick={leftSwitchPage}></div>
           )}
           {((currentPage <
             previewList.length - (mode[1] === 'single' ? 0 : 1) &&
             mode[2] === 'normal') ||
             (currentPage !== 1 && mode[2] === 'manga')) && (
-            <div className="next-btn" onClick={nextPage}></div>
+            <div className="next-btn" onClick={rightSwitchPage}></div>
           )}
         </div>
       ) : (
@@ -280,12 +357,59 @@ export const PreviewBox = (props: { show: boolean; close: () => void }) => {
       <div className="footer">
         <div className="pager">
           {FI18n.i18nNext.t('cbformatter_preview_currentpage')}
-          <span className="page-number">{currentPage}</span>
-          {mode[0] === 'paging' &&
+          {/* 页漫、翻页模式、双页模式、非跨页匹配、当前为首页时，左侧显示空屏页码 */}
+          {comicMode === 2 &&
+            mode[0] === 'paging' &&
             mode[1] === 'double' &&
+            !amend &&
+            currentPage === 1 && <span className="page-number">-</span>}
+          {/* 日漫、翻页模式、双页模式、当前为尾页时，左侧显示空屏页码 */}
+          {comicMode === 3 &&
+            mode[0] === 'paging' &&
+            mode[1] === 'double' &&
+            currentPage === previewList.length && (
+              <span className="page-number">-</span>
+            )}
+          {/* 日漫、翻页模式、双页模式、跨页匹配或非跨页匹配且当前不为首页时，左侧显示下一页页码 */}
+          {comicMode === 3 &&
+            mode[0] === 'paging' &&
+            mode[1] === 'double' &&
+            (amend || (!amend && currentPage !== 1)) &&
             currentPage + 1 <= previewList.length && (
               <span className="page-number">{currentPage + 1}</span>
             )}
+          {/* 当前页页码 */}
+          <span className="page-number">{currentPage}</span>
+          {/* 页漫、翻页模式、双页模式、跨页匹配或非跨页匹配且当前不为首页时，左侧显示下一页页码 */}
+          {comicMode === 2 &&
+            mode[0] === 'paging' &&
+            mode[1] === 'double' &&
+            (amend || (!amend && currentPage !== 1)) &&
+            currentPage + 1 <= previewList.length && (
+              <span className="page-number">{currentPage + 1}</span>
+            )}
+          {/* 页漫、翻页模式、双页模式、当前为尾页时，右侧显示空屏页码 */}
+          {comicMode === 2 &&
+            mode[0] === 'paging' &&
+            mode[1] === 'double' &&
+            currentPage === previewList.length && (
+              <span className="page-number">-</span>
+            )}
+          {/* 日漫、翻页模式、双页模式、非跨页匹配、当前为首页时，右侧显示空屏页码 */}
+          {comicMode === 3 &&
+            mode[0] === 'paging' &&
+            mode[1] === 'double' &&
+            !amend &&
+            currentPage === 1 && <span className="page-number">-</span>}
+          {/* 翻页模式、双页模式时，显示跨页匹配按钮 */}
+          {mode[0] === 'paging' && mode[1] === 'double' && (
+            <div
+              className="amend ghost-btn"
+              onClick={() => changeAmend(!amend)}
+            >
+              {FI18n.i18nNext.t('更改跨页匹配')}
+            </div>
+          )}
         </div>
         <div className="jumper">
           <input
@@ -295,13 +419,13 @@ export const PreviewBox = (props: { show: boolean; close: () => void }) => {
             onKeyUp={(e) => e.key === 'Enter' && jump()}
           />
           <div className="page-total">/ {previewList.length}</div>
-          <div className="jump-btn" onClick={jump}>
+          <div className="jump ghost-btn" onClick={jump}>
             {FI18n.i18nNext.t('cbformatter_preview_pagenation_jumpto')}
           </div>
         </div>
         <div className="btn-box">
           <div
-            className="mode-btn"
+            className="mode ghost-btn"
             onClick={() => setModeMenuShow(!modeMenuShow)}
           >
             <i className="freelog fl-icon-shujia1" />

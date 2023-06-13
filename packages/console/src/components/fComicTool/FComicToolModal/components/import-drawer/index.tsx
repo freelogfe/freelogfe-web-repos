@@ -229,7 +229,9 @@ export const ImportDrawer = (props: Props) => {
       url: `/v2/resources/${resourceId}/versions/${version}/download`,
       responseType: 'blob',
     });
-    const file = new File([res], filename, { type: 'application/zip' });
+    const file = new File([res], filename + '.zip', {
+      type: 'application/zip',
+    });
     sureImport(file);
   };
 

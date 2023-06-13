@@ -29,7 +29,6 @@ import BlueScissors from './images/blue-scissors.png';
 import BlackScissors from './images/black-scissors.png';
 import { Loading3QuartersOutlined } from '@ant-design/icons/lib/icons';
 import { uncompressComicArchive } from './core/import-comic';
-const { Uncompress } = require('./core/uncompress');
 
 interface ToolProps {
   // 资源 id
@@ -63,7 +62,7 @@ export const ComicTool = (props: ToolProps) => {
   const [saveProgress, setSaveProgress] = useState(0);
   const [lastSaveTime, setLastSaveTime] = useState(0);
   const [comicName, setComicName] = useState('');
-  const [comicMode, setComicMode] = useState(0);
+  const [comicMode, setComicMode] = useState(0); // 漫画模式 1-条漫 2-页漫 3-日漫
   const [comicConfig, setComicConfig] = useState<any>(null);
   const [imgList, setImgList] = useState<ImgInComicTool[]>([]);
   const [insertIndex, setInsertIndex] = useState(-1);
@@ -101,8 +100,10 @@ export const ComicTool = (props: ToolProps) => {
     const { resourceType } = resourceRes.data;
     if (resourceType[2] === '条漫') {
       setComicMode(1);
-    } else if (resourceType[2] === '日漫') {
+    } else if (resourceType[2] === '页漫') {
       setComicMode(2);
+    } else if (resourceType[2] === '日漫') {
+      setComicMode(3);
     }
     const draftRes = await FServiceAPI.Resource.lookDraft({ resourceId });
     if (draftRes.errCode !== 0) {
@@ -128,11 +129,13 @@ export const ComicTool = (props: ToolProps) => {
           setLoaderShow,
           setImgList,
           setComicConfig,
+          setEdited,
         },
         false,
       );
+    } else {
+      setEdited(false);
     }
-    setEdited(false);
   };
 
   /** 保存 */
@@ -168,29 +171,30 @@ export const ComicTool = (props: ToolProps) => {
     const saveTime = Date.now();
     const list: { name: string; url: string }[] = [];
     const listInTool: any[] = [];
-    const requestNum = Math.ceil(getTotal() / MAX_REQUEST_BATCH_COUNT); // 请求接口数
     const formDataList: FormData[] = [];
     let currentIndex = 0; // 当前图片序号
 
     /** 上传图片 */
-    for (let i = 0; i < requestNum; i++) {
-      formDataList[i] = new FormData();
-    }
     imgList.forEach((img, index) => {
-      const { name, base64, children } = img;
+      const { name, base64, children, sha1 } = img;
+      if (!children && sha1) return;
+
+      const formDataIndex = Math.floor(currentIndex / MAX_REQUEST_BATCH_COUNT);
+      if (!formDataList[formDataIndex]) {
+        formDataList[formDataIndex] = new FormData();
+      }
       const suffix = name.split('.')[1];
       const newImgName = `${String(index + 1).padStart(3, '0')}.${suffix}`;
       if (!children) {
         // 非切图
         const file = base64ToFile(base64, newImgName);
-        const formDataIndex = Math.floor(
-          currentIndex / MAX_REQUEST_BATCH_COUNT,
-        );
         formDataList[formDataIndex].append('files', file);
         currentIndex++;
       } else {
         // 切图
         children.forEach((child, i) => {
+          if (child.sha1) return;
+
           const { base64 } = child;
           const newName = String(i + 1).padStart(2, '0');
           const newChildName = newImgName.replace(
@@ -198,14 +202,12 @@ export const ComicTool = (props: ToolProps) => {
             `_${newName}.${suffix}`,
           );
           const file = base64ToFile(base64, newChildName);
-          const formDataIndex = Math.floor(
-            currentIndex / MAX_REQUEST_BATCH_COUNT,
-          );
           formDataList[formDataIndex].append('files', file);
           currentIndex++;
         });
       }
     });
+
     const requestArr: Promise<any>[] = [];
     formDataList.forEach((item, index) => {
       requestArr.push(uploadFile(item, index, 0));
@@ -219,52 +221,63 @@ export const ComicTool = (props: ToolProps) => {
       return;
     }
 
+    /** 上传图片完成，通过 sha1 获取 url */
+    const resList = imgResArr.map((item) => item.data).flat();
+    imgList.forEach((img, index) => {
+      const { name, size, children, sha1 = '' } = img;
+      const suffix = name.split('.')[1];
+      const newImgName = `${String(index + 1).padStart(3, '0')}.${suffix}`;
+      const imgInTool: any = { name, sha1, size };
+      if (children) {
+        // 切图，处理子集
+        imgInTool.children = [];
+        children.forEach((child, i) => {
+          const newName = String(i + 1).padStart(2, '0');
+          const newChildName = newImgName.replace(
+            `.${suffix}`,
+            `_${newName}.${suffix}`,
+          );
+          const childItem = { name: newChildName, url: '', size: child.size };
+          const childInTool = {
+            name: child.name,
+            sha1: child.sha1,
+            size: child.size,
+          };
+          if (child.sha1) {
+            childItem.url = getUrlBySha1(child.sha1);
+          } else {
+            const res = resList.find((res) => res.filename === newChildName);
+            childItem.url = getUrlBySha1(res.sha1);
+            childInTool.sha1 = res.sha1;
+          }
+          list.push(childItem);
+          imgInTool.children.push(childInTool);
+        });
+        listInTool.push(imgInTool);
+      } else {
+        // 非切图，处理自身
+        if (sha1) {
+          // 已上传过的图片，使用现有数据
+          const url = getUrlBySha1(sha1);
+          const item = { name: newImgName, url, size };
+          list.push(item);
+          listInTool.push(imgInTool);
+        } else {
+          // 未上传过的图片，结合上传后得到的数据进行整理
+          const res = resList.find((res) => res.filename === newImgName);
+          const item = { name: newImgName, url: getUrlBySha1(res.sha1), size };
+          list.push(item);
+          imgInTool.sha1 = res.sha1;
+          listInTool.push(imgInTool);
+        }
+      }
+    });
+
     if (!auto) {
       setSaveStep(2);
       saveProgressList.current = [];
       saveTotalList.current = [];
     }
-
-    /** 上传图片完成，通过 sha1 获取 url */
-    const resList = imgResArr.map((item) => item.data).flat();
-    resList.forEach(
-      (item: { filename: string; sha1: string; fileSize: number }) => {
-        const { filename, sha1, fileSize } = item;
-        const url = getUrlBySha1(sha1);
-        const img = { name: filename, url, size: fileSize };
-        list.push(img);
-
-        const nameList = filename.split('.')[0].split('_');
-        const parentIndex = Number(nameList[0]) - 1;
-        if (nameList.length === 1) {
-          // 非切图
-          const imgInTool = {
-            name: imgList[parentIndex].name,
-            sha1,
-            size: fileSize,
-          };
-          listInTool.push(imgInTool);
-        } else if (nameList.length === 2) {
-          // 切图
-          const childIndex = Number(nameList[1]) - 1;
-          if (childIndex === 0) {
-            // 切图第一张，将第一张切图作为父级数据
-            const imgInTool = {
-              name: imgList[parentIndex].name,
-              sha1,
-              size: fileSize,
-              children: [],
-            };
-            listInTool.push(imgInTool);
-          }
-          const children = imgList[parentIndex].children;
-          if (!children) return;
-          const name = children[childIndex].name;
-          const imgInTool = { name, sha1, size: fileSize };
-          listInTool[parentIndex].children[childIndex] = imgInTool;
-        }
-      },
-    );
 
     /** 整理上传 json 和 xml */
     let name = comicName;
@@ -795,7 +808,10 @@ export const ComicTool = (props: ToolProps) => {
         }
 
         // 列表显示第一张切图
-        if (i === 0) item.base64 = base64;
+        if (i === 0) {
+          item.base64 = base64;
+          item.size = 0;
+        }
 
         const currentTotal = getTotal();
         if (currentTotal === MAX_IMG_LENGTH) {
@@ -845,8 +861,6 @@ export const ComicTool = (props: ToolProps) => {
 
   useEffect(() => {
     if (show) {
-      Uncompress.loadArchiveFormats(['rar', 'zip', 'tar']);
-
       window.addEventListener('keyup', keyup);
       document.body.style.overflowY = 'hidden';
 
@@ -902,7 +916,6 @@ export const ComicTool = (props: ToolProps) => {
       value={{
         resourceId,
         resource,
-        Uncompress,
         comicMode,
         imgList,
         setResource,
@@ -1177,11 +1190,8 @@ export const ComicTool = (props: ToolProps) => {
                 <span>
                   {FI18n.i18nNext.t(
                     'cbformatter_submit_state_processing_msg' +
-                      [2, 3, 4].includes(saveStep)
-                      ? '0' + saveStep
-                      : '',
+                      ([2, 3, 4].includes(saveStep) ? '0' + saveStep : ''),
                   )}
-                  ...
                 </span>
                 <span className="desc-progress">[{saveStep}/4]</span>
               </div>

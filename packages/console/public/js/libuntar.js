@@ -21,6 +21,27 @@ var TAR_SIZE_SIZE = 12;
 var TAR_NAME_OFFSET = 0;
 var TAR_NAME_SIZE = 100;
 
+// FIXME: This function is super inefficient
+function saneJoin(array, separator) {
+  var retval = '';
+  for (var i = 0; i < array.length; ++i) {
+	if (i === 0) {
+	  retval += array[i];
+	} else {
+	  retval += separator + array[i];
+	}
+  }
+  return retval;
+}
+
+function saneMap(array, cb) {
+  var retval = new Array(array.length);
+  for (var i = 0; i < retval.length; ++i) {
+	retval[i] = cb(array[i]);
+  }
+  return retval;
+}
+
 function _tarRead(view, offset, size) {
 	return view.slice(offset, offset + size);
 }

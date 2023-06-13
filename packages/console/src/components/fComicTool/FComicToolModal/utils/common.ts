@@ -88,11 +88,6 @@ export const formatCardName = (name: string) => {
   document.body.removeChild(_div);
 };
 
-/** 深度融合两个对象（后者优先级高） */
-export const deepAssign = (former: any, latter: any) => {
-  return latter;
-};
-
 /** 根据 sha1 获取 url */
 export const getUrlBySha1 = (sha1: string) => {
   const url = `${FUtil.Format.completeUrlByDomain(
