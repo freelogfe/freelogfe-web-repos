@@ -1,10 +1,10 @@
 import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription, SubscriptionAPI } from 'dva';
 import { DvaReducer } from './shared';
-import { FetchDataSourceAction, ResourceInfoModelState } from '@/models/resourceInfo';
+// import { FetchDataSourceAction, ResourceInfoModelState } from '@/models/resourceInfo';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import { ConnectState } from '@/models/connect';
-import { FetchInfoAction, OnUpdate_Data_Action } from '@/models/resourceSider';
+import { OnUpdate_Data_Action } from '@/models/resourceSider';
 
 // import data from '@/utils/category';
 
@@ -93,11 +93,11 @@ export interface OnChangeEditorAction extends AnyAction {
   payload: string;
 }
 
-export interface OnChangeInfoAction extends AnyAction {
-  type: 'resourceInfoPage/onChangeInfo',
-  payload: Partial<ResourceInfoModelState['info']>;
-  id: string;
-}
+// export interface OnChangeInfoAction extends AnyAction {
+//   type: 'resourceInfoPage/onChangeInfo',
+//   payload: Partial<ResourceInfoModelState['info']>;
+//   id: string;
+// }
 
 export interface ResourceInfoPageModelType {
   namespace: 'resourceInfoPage';
@@ -114,7 +114,7 @@ export interface ResourceInfoPageModelType {
     onChange_Cover: (action: OnChange_Cover_Action, effects: EffectsCommandMap) => void;
     onChange_Labels: (action: OnChange_Labels_Action, effects: EffectsCommandMap) => void;
 
-    onChangeInfo: (action: OnChangeInfoAction, effects: EffectsCommandMap) => void;
+    // onChangeInfo: (action: OnChangeInfoAction, effects: EffectsCommandMap) => void;
     // initModelStates: (action: InitModelStatesAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
@@ -294,19 +294,19 @@ const Model: ResourceInfoPageModelType = {
       });
     },
 
-    * onChangeInfo(action: OnChangeInfoAction, { call, put, select }: EffectsCommandMap) {
-      // yield put({type: 'save'});
-
-      const params: Parameters<typeof FServiceAPI.Resource.update>[0] = {
-        ...action.payload,
-        resourceId: action.id,
-      };
-      yield call(FServiceAPI.Resource.update, params);
-      yield put<FetchDataSourceAction>({
-        type: 'resourceInfo/fetchDataSource',
-        payload: action.id,
-      });
-    },
+    // * onChangeInfo(action: OnChangeInfoAction, { call, put, select }: EffectsCommandMap) {
+    //   // yield put({type: 'save'});
+    //
+    //   const params: Parameters<typeof FServiceAPI.Resource.update>[0] = {
+    //     ...action.payload,
+    //     resourceId: action.id,
+    //   };
+    //   yield call(FServiceAPI.Resource.update, params);
+    //   yield put<FetchDataSourceAction>({
+    //     type: 'resourceInfo/fetchDataSource',
+    //     payload: action.id,
+    //   });
+    // },
     // * initModelStates({}: InitModelStatesAction, { put }: EffectsCommandMap) {
     //   yield put<ChangeAction>({
     //     type: 'change',
