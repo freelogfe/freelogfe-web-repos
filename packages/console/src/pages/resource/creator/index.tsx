@@ -32,7 +32,7 @@ function ResourceCreator({
                            resourceCreatorPage,
                            // user,
                          }: ResourceCreatorProps) {
-  console.log(JSON.stringify(resourceCreatorPage.name), '###########09isodjflksdjfl;kjl');
+  // console.log(JSON.stringify(resourceCreatorPage.name), '###########09isodjflksdjfl;kjl');
   AHooks.useMount(() => {
     self._czc?.push(['_trackPageview', self.location.pathname]);
     dispatch<OnMount_Page_Action>({

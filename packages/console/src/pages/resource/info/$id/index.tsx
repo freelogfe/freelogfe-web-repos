@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import { Space } from 'antd';
-import FLabelEditor from '@/components/FLabelEditor';
+// import FLabelEditor from '@/components/FLabelEditor';
 import FUploadResourceCover from '@/pages/resource/components/FUploadResourceCover';
 // import FIntroductionEditor from '@/pages/resource/components/FIntroductionEditor';
 import { connect } from 'dva';
@@ -230,6 +230,6 @@ function Info({ dispatch, resourceInfoPage, match }: InfoProps) {
   </>);
 }
 
-export default connect(({ resourceInfo, resourceInfoPage, user }: ConnectState) => ({
+export default connect(({ resourceInfoPage }: ConnectState) => ({
   resourceInfoPage: resourceInfoPage,
 }))(Info);

@@ -7,7 +7,7 @@ import { ResourceInfoPageModelState } from './resourceInfoPage';
 import { ResourceVersionCreatorPageModelState } from './resourceVersionCreatorPage';
 import { ResourceVersionEditorPageModelState } from './ResourceVersionEditorPage';
 import { ResourceAuthPageModelState } from './resourceAuthPage';
-import { ResourceInfoModelState } from './resourceInfo';
+// import { ResourceInfoModelState } from './resourceInfo';
 import { UserModelState } from './user';
 import { GlobalModelState } from './global';
 import { StorageHomePageModelState } from './storageHomePage';
@@ -37,7 +37,7 @@ export {
   ResourceVersionCreatorPageModelState,
   ResourceVersionEditorPageModelState,
   ResourceAuthPageModelState,
-  ResourceInfoModelState,
+  // ResourceInfoModelState,
   UserModelState,
   GlobalModelState,
   StorageHomePageModelState,
@@ -70,7 +70,7 @@ export interface ConnectState {
   resourceVersionCreatorPage: ResourceVersionCreatorPageModelState;
   resourceVersionEditorPage: ResourceVersionEditorPageModelState;
   resourceAuthPage: ResourceAuthPageModelState;
-  resourceInfo: ResourceInfoModelState;
+  // resourceInfo: ResourceInfoModelState;
   user: UserModelState;
   global: GlobalModelState;
   storageHomePage: StorageHomePageModelState;

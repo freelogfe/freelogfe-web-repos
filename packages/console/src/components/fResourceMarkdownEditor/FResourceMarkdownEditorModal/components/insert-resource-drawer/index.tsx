@@ -200,9 +200,7 @@ export const InsertResourceDrawer = (props: Props) => {
       ? 0
       : refs.current.collectionPageIndex + 1;
 
-    const collectionParams: Parameters<
-      typeof FServiceAPI.Collection.collectionResources
-    >[0] = {
+    const collectionParams: Parameters<typeof FServiceAPI.Collection.collectionResources>[0] = {
       skip: refs.current.collectionPageIndex * 20,
       limit: 20,
       keywords: refs.current.collectionKey,
@@ -428,6 +426,7 @@ export const InsertResourceDrawer = (props: Props) => {
 
     const result = await FServiceAPI.recombination.getFilesSha1Info({
       sha1: [task.sha1],
+      resourceTypeCode: '',
     });
 
     if (
@@ -504,9 +503,9 @@ export const InsertResourceDrawer = (props: Props) => {
       label: FI18n.i18nNext.t('insert_tab_resourcemarket'),
       key: 'market',
       children: (
-        <div className="market-area">
+        <div className='market-area'>
           <FInput
-            wrapClassName="search-input"
+            wrapClassName='search-input'
             value={refs.current.resourceKey}
             debounce={300}
             allowClear={true}
@@ -515,23 +514,23 @@ export const InsertResourceDrawer = (props: Props) => {
               getResourceList(true);
             }}
             onClick={(e) => e.stopPropagation()}
-            theme="dark"
+            theme='dark'
             placeholder={FI18n.i18nNext.t('insert_frommarket_searchbar_hint')}
           />
           {resourceList.length === 0 && refs.current.resourceNoMore && (
-            <div className="no-data-box">
-              <div className="no-data-tip">
-                <i className="freelog fl-icon-liebiaoweikong"></i>
-                <div className="tip">
+            <div className='no-data-box'>
+              <div className='no-data-tip'>
+                <i className='freelog fl-icon-liebiaoweikong'></i>
+                <div className='tip'>
                   {FI18n.i18nNext.t('msg_empty_general')}
                 </div>
               </div>
             </div>
           )}
           {resourceList.length !== 0 && (
-            <div className="resource-list">
+            <div className='resource-list'>
               {resourceList.map((item) => (
-                <div className="resource-item" key={item.resourceId}>
+                <div className='resource-item' key={item.resourceId}>
                   <ResourceCard data={item} />
                 </div>
               ))}
@@ -544,9 +543,9 @@ export const InsertResourceDrawer = (props: Props) => {
       label: FI18n.i18nNext.t('insert_tab_myresources'),
       key: 'mine',
       children: (
-        <div className="mine-area">
+        <div className='mine-area'>
           <FInput
-            wrapClassName="search-input"
+            wrapClassName='search-input'
             value={refs.current.mineKey}
             debounce={300}
             allowClear={true}
@@ -555,23 +554,23 @@ export const InsertResourceDrawer = (props: Props) => {
               getMineList(true);
             }}
             onClick={(e) => e.stopPropagation()}
-            theme="dark"
+            theme='dark'
             placeholder={FI18n.i18nNext.t('insert_frommarket_searchbar_hint')}
           />
           {mineList.length === 0 && refs.current.mineNoMore && (
-            <div className="no-data-box">
-              <div className="no-data-tip">
-                <i className="freelog fl-icon-liebiaoweikong"></i>
-                <div className="tip">
+            <div className='no-data-box'>
+              <div className='no-data-tip'>
+                <i className='freelog fl-icon-liebiaoweikong'></i>
+                <div className='tip'>
                   {FI18n.i18nNext.t('msg_empty_general')}
                 </div>
               </div>
             </div>
           )}
           {mineList.length !== 0 && (
-            <div className="resource-list">
+            <div className='resource-list'>
               {mineList.map((item) => (
-                <div className="resource-item" key={item.resourceId}>
+                <div className='resource-item' key={item.resourceId}>
                   <ResourceCard data={item} />
                 </div>
               ))}
@@ -584,9 +583,9 @@ export const InsertResourceDrawer = (props: Props) => {
       label: FI18n.i18nNext.t('insert_tab_mycollections'),
       key: 'collection',
       children: (
-        <div className="collection-area">
+        <div className='collection-area'>
           <FInput
-            wrapClassName="search-input"
+            wrapClassName='search-input'
             value={refs.current.collectionKey}
             debounce={300}
             allowClear={true}
@@ -595,23 +594,23 @@ export const InsertResourceDrawer = (props: Props) => {
               getCollectionList(true);
             }}
             onClick={(e) => e.stopPropagation()}
-            theme="dark"
+            theme='dark'
             placeholder={FI18n.i18nNext.t('insert_frommarket_searchbar_hint')}
           />
           {collectionList.length === 0 && refs.current.collectionNoMore && (
-            <div className="no-data-box">
-              <div className="no-data-tip">
-                <i className="freelog fl-icon-liebiaoweikong"></i>
-                <div className="tip">
+            <div className='no-data-box'>
+              <div className='no-data-tip'>
+                <i className='freelog fl-icon-liebiaoweikong'></i>
+                <div className='tip'>
                   {FI18n.i18nNext.t('msg_empty_general')}
                 </div>
               </div>
             </div>
           )}
           {collectionList.length !== 0 && (
-            <div className="resource-list">
+            <div className='resource-list'>
               {collectionList.map((item) => (
-                <div className="resource-item" key={item.resourceId}>
+                <div className='resource-item' key={item.resourceId}>
                   <ResourceCard data={item} />
                 </div>
               ))}
@@ -625,11 +624,11 @@ export const InsertResourceDrawer = (props: Props) => {
       key: 'bucket',
       disabled: drawerType === 'text',
       children: (
-        <div className="buckets-area">
-          <div className="header">
-            <div className="left-header">
+        <div className='buckets-area'>
+          <div className='header'>
+            <div className='left-header'>
               <Select
-                className="bucket-select"
+                className='bucket-select'
                 value={refs.current.bucket}
                 onChange={(e) => {
                   refs.current.bucket = e;
@@ -640,7 +639,7 @@ export const InsertResourceDrawer = (props: Props) => {
                       : e;
                   setUploadBucket(
                     e ===
-                      FI18n.i18nNext.t('posteditor_insert_label_all_buckets')
+                    FI18n.i18nNext.t('posteditor_insert_label_all_buckets')
                       ? null
                       : e,
                   );
@@ -661,18 +660,18 @@ export const InsertResourceDrawer = (props: Props) => {
               <Popover
                 open={uploadPopShow}
                 onOpenChange={(e) => setUploadPopShow(e)}
-                placement="bottomLeft"
-                trigger="click"
+                placement='bottomLeft'
+                trigger='click'
                 title={null}
                 content={
-                  <div className="md-upload-bucket-selector">
+                  <div className='md-upload-bucket-selector'>
                     {bucketList.length ? (
                       <>
-                        <div className="tip">
+                        <div className='tip'>
                           {FI18n.i18nNext.t('msg_posteditor_upload_object')}
                         </div>
                         <Select
-                          className="selector"
+                          className='selector'
                           placeholder={FI18n.i18nNext.t(
                             'insert_fromstorage_select_bucket_hint',
                           )}
@@ -687,14 +686,14 @@ export const InsertResourceDrawer = (props: Props) => {
                               {menu}
                               {bucketList.length < 5 && (
                                 <div
-                                  className="create-bucket-btn"
+                                  className='create-bucket-btn'
                                   onClick={() => {
                                     setUploadPopShow(false);
                                     setNewBucketName('');
                                     setCreateBucketShow(true);
                                   }}
                                 >
-                                  <i className="freelog fl-icon-tianjia"></i>
+                                  <i className='freelog fl-icon-tianjia'></i>
                                   <div>
                                     {FI18n.i18nNext.t(
                                       'posteditor_insert_btn_createbucket',
@@ -711,7 +710,7 @@ export const InsertResourceDrawer = (props: Props) => {
                             </Option>
                           ))}
                         </Select>
-                        <div className="btn-box">
+                        <div className='btn-box'>
                           <FUpload
                             showUploadList={false}
                             multiple={true}
@@ -740,12 +739,12 @@ export const InsertResourceDrawer = (props: Props) => {
                         </div>
                       </>
                     ) : (
-                      <div className="no-bucket-box">
-                        <div className="tip">
+                      <div className='no-bucket-box'>
+                        <div className='tip'>
                           {FI18n.i18nNext.t('posteditor_insert_no_bucket')}
                         </div>
                         <div
-                          className="btn"
+                          className='btn'
                           onClick={() => {
                             setUploadPopShow(false);
                             setNewBucketName('');
@@ -761,9 +760,9 @@ export const InsertResourceDrawer = (props: Props) => {
                   </div>
                 }
               >
-                <div className="upload-btn">
-                  <i className="freelog fl-icon-shangchuanfengmian"></i>
-                  <div className="btn-text">
+                <div className='upload-btn'>
+                  <i className='freelog fl-icon-shangchuanfengmian'></i>
+                  <div className='btn-text'>
                     {show ? resourceMapping[drawerType].uploadText : ''}
                   </div>
                 </div>
@@ -778,17 +777,17 @@ export const InsertResourceDrawer = (props: Props) => {
                 getObjects(true);
               }}
               onClick={(e) => e.stopPropagation()}
-              theme="dark"
+              theme='dark'
             />
           </div>
-          <div className="title">
+          <div className='title'>
             {show ? resourceMapping[drawerType].bucketTitle : ''}
           </div>
           {objectList.length === 0 && refs.current.bucketNoMore && (
-            <div className="no-data-box">
-              <div className="no-data-tip">
-                <i className="freelog fl-icon-liebiaoweikong"></i>
-                <div className="tip">
+            <div className='no-data-box'>
+              <div className='no-data-tip'>
+                <i className='freelog fl-icon-liebiaoweikong'></i>
+                <div className='tip'>
                   {FI18n.i18nNext.t('msg_empty_general')}
                 </div>
               </div>
@@ -798,7 +797,7 @@ export const InsertResourceDrawer = (props: Props) => {
             .filter(
               (item) =>
                 refs.current.bucket ===
-                  FI18n.i18nNext.t('posteditor_insert_label_all_buckets') ||
+                FI18n.i18nNext.t('posteditor_insert_label_all_buckets') ||
                 item.bucketName === refs.current.bucket,
             )
             .map((item) => (
@@ -835,13 +834,13 @@ export const InsertResourceDrawer = (props: Props) => {
             <div style={{ padding: 20 }}>
               <FComponentsLib.FTitleText
                 text={FI18n.i18nNext.t('create_bucket_popup_title')}
-                type="h2"
+                type='h2'
               />
             </div>
 
-            <div className="create-bucket-popup">
+            <div className='create-bucket-popup'>
               <div style={{ height: 50 }} />
-              <div className="tip">
+              <div className='tip'>
                 {FI18n.i18nNext
                   .t('create_bucket_popup_msg')
                   .split('\n')
@@ -858,7 +857,7 @@ export const InsertResourceDrawer = (props: Props) => {
                   changeNewBucketName(value);
                 }}
                 onClick={(e) => e.stopPropagation()}
-                wrapClassName="input"
+                wrapClassName='input'
                 errorText={
                   newBucketError === 1 ? (
                     <div>
@@ -887,18 +886,18 @@ export const InsertResourceDrawer = (props: Props) => {
       key: 'url',
       disabled: drawerType === 'text',
       children: (
-        <div className="url-area">
+        <div className='url-area'>
           <textarea
-            className="url-input"
+            className='url-input'
             value={url}
             onChange={(e) => {
               setUrl(e.target.value);
             }}
             onClick={(e) => e.stopPropagation()}
           ></textarea>
-          <div className="btn-box">
+          <div className='btn-box'>
             <div
-              className="insert-btn"
+              className='insert-btn'
               onClick={() => {
                 editor.focus();
                 insertUrlResource(
@@ -919,7 +918,7 @@ export const InsertResourceDrawer = (props: Props) => {
 
   return (
     <Drawer
-      className="insert-resource-drawer-wrapper"
+      className='insert-resource-drawer-wrapper'
       width={700}
       title={show ? resourceMapping[drawerType].key : ''}
       closable={false}
@@ -927,7 +926,7 @@ export const InsertResourceDrawer = (props: Props) => {
       onClose={() => editor.setDrawerType('')}
       extra={
         <i
-          className="freelog fl-icon-guanbi close-btn"
+          className='freelog fl-icon-guanbi close-btn'
           onClick={() => editor.setDrawerType('')}
         />
       }

@@ -1,7 +1,7 @@
 import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription, SubscriptionAPI } from 'dva';
 import { DvaReducer } from './shared';
-import { FetchDataSourceAction } from '@/models/resourceInfo';
+// import { FetchDataSourceAction } from '@/models/resourceInfo';
 import moment from 'moment';
 import { ConnectState } from '@/models/connect';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
@@ -202,7 +202,7 @@ const Model: ResourceAuthPageModelType = {
       });
     },
     * updatePolicies({ payload }: UpdatePoliciesAction, { call, put, select }: EffectsCommandMap) {
-      const { resourceAuthPage }: ConnectState = yield select(({ resourceInfo, resourceAuthPage }: ConnectState) => ({
+      const { resourceAuthPage }: ConnectState = yield select(({ resourceAuthPage }: ConnectState) => ({
         resourceAuthPage,
       }));
       const params: Parameters<typeof FServiceAPI.Resource.update>[0] = {
@@ -210,10 +210,10 @@ const Model: ResourceAuthPageModelType = {
         ...payload,
       };
       yield call(FServiceAPI.Resource.update, params);
-      yield put<FetchDataSourceAction>({
-        type: 'resourceInfo/fetchDataSource',
-        payload: resourceAuthPage.resourceID,
-      });
+      // yield put<FetchDataSourceAction>({
+      //   type: 'resourceInfo/fetchDataSource',
+      //   payload: resourceAuthPage.resourceID,
+      // });
       yield put<FetchResourceInfoAction>({
         type: 'fetchResourceInfo',
       });
@@ -409,10 +409,10 @@ const Model: ResourceAuthPageModelType = {
       yield put<FetchResourceInfoAction>({
         type: 'fetchResourceInfo',
       });
-      yield put<FetchDataSourceAction>({
-        type: 'resourceInfo/fetchDataSource',
-        payload: resourceAuthPage.resourceID,
-      });
+      // yield put<FetchDataSourceAction>({
+      //   type: 'resourceInfo/fetchDataSource',
+      //   payload: resourceAuthPage.resourceID,
+      // });
     },
 
     * onAdd_Policy({}: OnAdd_Policy_Action, { select, call, put }: EffectsCommandMap) {
@@ -473,10 +473,10 @@ const Model: ResourceAuthPageModelType = {
       const { resourceAuthPage }: ConnectState = yield select(({ resourceAuthPage }: ConnectState) => ({
         resourceAuthPage,
       }));
-      yield put<FetchDataSourceAction>({
-        type: 'resourceInfo/fetchDataSource',
-        payload: resourceAuthPage.resourceID,
-      });
+      // yield put<FetchDataSourceAction>({
+      //   type: 'resourceInfo/fetchDataSource',
+      //   payload: resourceAuthPage.resourceID,
+      // });
       yield put<FetchAuthorizedAction>({
         type: 'fetchAuthorized',
         payload: {
