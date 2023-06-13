@@ -396,6 +396,7 @@ export const ImportDrawer = (props: Props) => {
 
     const result = await FServiceAPI.recombination.getFilesSha1Info({
       sha1: [task.sha1],
+      resourceTypeCode: '',
     });
 
     if (
@@ -462,24 +463,24 @@ export const ImportDrawer = (props: Props) => {
       label: FI18n.i18nNext.t('importpost_tab_fromlocal'),
       key: 'upload',
       children: (
-        <div className="upload-area">
+        <div className='upload-area'>
           <input
-            className="hidden-upload-btn"
-            type="file"
-            id="uploadLocalFile"
-            accept=".cbz,.cbr,.cbt,.zip,.rar,.tar"
+            className='hidden-upload-btn'
+            type='file'
+            id='uploadLocalFile'
+            accept='.cbz,.cbr,.cbt,.zip,.rar,.tar'
             onChange={uploadLocalFile}
           />
 
           <div className={`upload-box ${uploadStatus === 1 && 'normal'}`}>
-            <div className="tip">
+            <div className='tip'>
               {FI18n.i18nNext.t('cbformatter_import_msg')}
             </div>
-            <div className="warning">
+            <div className='warning'>
               {FI18n.i18nNext.t('cbformatter_import_msg02')}
             </div>
             <div
-              className="upload-btn"
+              className='upload-btn'
               onClick={() => {
                 document.getElementById('uploadLocalFile')?.click();
               }}
@@ -494,16 +495,16 @@ export const ImportDrawer = (props: Props) => {
                   [3, 4].includes(uploadStatus) && 'uploaded'
                 }`}
               >
-                <div className="sector-box">
-                  <div className="sector"></div>
+                <div className='sector-box'>
+                  <div className='sector'></div>
                 </div>
-                <div className="modal"></div>
-                <div className="icon-box">
-                  <img className="icon-png" src={ObjectIcon} />
+                <div className='modal'></div>
+                <div className='icon-box'>
+                  <img className='icon-png' src={ObjectIcon} />
                 </div>
               </div>
               {uploadStatus === 2 && (
-                <div className="uploading-tip">
+                <div className='uploading-tip'>
                   {FI18n.i18nNext.t('cbformatter_import_state_importing')}
                 </div>
               )}
@@ -513,20 +514,20 @@ export const ImportDrawer = (props: Props) => {
                     uploadStatus === 3 && 'animation'
                   }`}
                 >
-                  <div className="uploaded-tip">
-                    <i className="freelog fl-icon-a-chenggongzhengqueduigou1"></i>
-                    <div className="tip-text">
+                  <div className='uploaded-tip'>
+                    <i className='freelog fl-icon-a-chenggongzhengqueduigou1'></i>
+                    <div className='tip-text'>
                       {FI18n.i18nNext.t('uploadfile_state_uploaded')}
                     </div>
                   </div>
-                  <div className="warning">
+                  <div className='warning'>
                     {FI18n.i18nNext.t('cbformatter_import_confirmation')}
                   </div>
-                  <div className="btns">
-                    <div className="cancel-btn" onClick={cancelImport}>
+                  <div className='btns'>
+                    <div className='cancel-btn' onClick={cancelImport}>
                       {FI18n.i18nNext.t('btn_cancel')}
                     </div>
-                    <div className="import-btn" onClick={importFromUpload}>
+                    <div className='import-btn' onClick={importFromUpload}>
                       {FI18n.i18nNext.t('btn_import_post')}
                     </div>
                   </div>
@@ -541,11 +542,11 @@ export const ImportDrawer = (props: Props) => {
       label: FI18n.i18nNext.t('importpost_tab_fromstorage'),
       key: 'bucket',
       children: (
-        <div className="buckets-area">
-          <div className="header">
-            <div className="left-header">
+        <div className='buckets-area'>
+          <div className='header'>
+            <div className='left-header'>
               <Select
-                className="bucket-select"
+                className='bucket-select'
                 value={refs.current.bucket}
                 onChange={(e) => {
                   refs.current.bucket = e;
@@ -556,7 +557,7 @@ export const ImportDrawer = (props: Props) => {
                       : e;
                   setUploadBucket(
                     e ===
-                      FI18n.i18nNext.t('cbformatter_import_filter_allobjects')
+                    FI18n.i18nNext.t('cbformatter_import_filter_allobjects')
                       ? null
                       : e,
                   );
@@ -577,18 +578,18 @@ export const ImportDrawer = (props: Props) => {
               <Popover
                 open={uploadPopShow}
                 onOpenChange={(e) => setUploadPopShow(e)}
-                placement="bottomLeft"
-                trigger="click"
+                placement='bottomLeft'
+                trigger='click'
                 title={null}
                 content={
-                  <div className="md-upload-bucket-selector">
+                  <div className='md-upload-bucket-selector'>
                     {bucketList.length ? (
                       <>
-                        <div className="tip">
+                        <div className='tip'>
                           {FI18n.i18nNext.t('msg_posteditor_upload_object')}
                         </div>
                         <Select
-                          className="selector"
+                          className='selector'
                           placeholder={FI18n.i18nNext.t(
                             'insert_fromstorage_select_bucket_hint',
                           )}
@@ -603,14 +604,14 @@ export const ImportDrawer = (props: Props) => {
                               {menu}
                               {bucketList.length < 5 && (
                                 <div
-                                  className="create-bucket-btn"
+                                  className='create-bucket-btn'
                                   onClick={() => {
                                     setUploadPopShow(false);
                                     setNewBucketName('');
                                     setCreateBucketShow(true);
                                   }}
                                 >
-                                  <i className="freelog fl-icon-tianjia"></i>
+                                  <i className='freelog fl-icon-tianjia'></i>
                                   <div>
                                     {FI18n.i18nNext.t(
                                       'posteditor_insert_btn_createbucket',
@@ -627,7 +628,7 @@ export const ImportDrawer = (props: Props) => {
                             </Option>
                           ))}
                         </Select>
-                        <div className="btn-box">
+                        <div className='btn-box'>
                           <FUpload
                             showUploadList={false}
                             multiple={true}
@@ -640,7 +641,7 @@ export const ImportDrawer = (props: Props) => {
                               }
                               return false;
                             }}
-                            accept=".cbz,.cbr,.cbt,.zip,.rar,.tar"
+                            accept='.cbz,.cbr,.cbt,.zip,.rar,.tar'
                             disabled={!refs.current.uploadBucket}
                           >
                             <div
@@ -654,12 +655,12 @@ export const ImportDrawer = (props: Props) => {
                         </div>
                       </>
                     ) : (
-                      <div className="no-bucket-box">
-                        <div className="tip">
+                      <div className='no-bucket-box'>
+                        <div className='tip'>
                           {FI18n.i18nNext.t('posteditor_insert_no_bucket')}
                         </div>
                         <div
-                          className="btn"
+                          className='btn'
                           onClick={() => {
                             setUploadPopShow(false);
                             setNewBucketName('');
@@ -675,9 +676,9 @@ export const ImportDrawer = (props: Props) => {
                   </div>
                 }
               >
-                <div className="upload-btn">
-                  <i className="freelog fl-icon-shangchuanfengmian"></i>
-                  <div className="btn-text">
+                <div className='upload-btn'>
+                  <i className='freelog fl-icon-shangchuanfengmian'></i>
+                  <div className='btn-text'>
                     {FI18n.i18nNext.t('cbformatter_import_uploadcb_btn')}
                   </div>
                 </div>
@@ -692,17 +693,17 @@ export const ImportDrawer = (props: Props) => {
                 getObjects(true);
               }}
               onClick={(e) => e.stopPropagation()}
-              theme="dark"
+              theme='dark'
             />
           </div>
-          <div className="title">
+          <div className='title'>
             {FI18n.i18nNext.t('posteditor_insert_label_objectlist_post')}
           </div>
           {objectList.length === 0 && refs.current.noMore && (
-            <div className="no-data-box">
-              <div className="no-data-tip">
-                <i className="freelog fl-icon-liebiaoweikong"></i>
-                <div className="tip">
+            <div className='no-data-box'>
+              <div className='no-data-tip'>
+                <i className='freelog fl-icon-liebiaoweikong'></i>
+                <div className='tip'>
                   {FI18n.i18nNext.t('msg_empty_general')}
                 </div>
               </div>
@@ -712,7 +713,7 @@ export const ImportDrawer = (props: Props) => {
             .filter(
               (item) =>
                 refs.current.bucket ===
-                  FI18n.i18nNext.t('cbformatter_import_filter_allobjects') ||
+                FI18n.i18nNext.t('cbformatter_import_filter_allobjects') ||
                 item.bucketName === refs.current.bucket,
             )
             .map((item) => (
@@ -749,13 +750,13 @@ export const ImportDrawer = (props: Props) => {
             <div style={{ padding: 20 }}>
               <FComponentsLib.FTitleText
                 text={FI18n.i18nNext.t('create_bucket_popup_title')}
-                type="h2"
+                type='h2'
               />
             </div>
 
-            <div className="create-bucket-popup">
+            <div className='create-bucket-popup'>
               <div style={{ height: 50 }} />
-              <div className="tip">
+              <div className='tip'>
                 {FI18n.i18nNext
                   .t('create_bucket_popup_msg')
                   .split('\n')
@@ -772,7 +773,7 @@ export const ImportDrawer = (props: Props) => {
                   changeNewBucketName(value);
                 }}
                 onClick={(e) => e.stopPropagation()}
-                wrapClassName="input"
+                wrapClassName='input'
                 errorText={
                   newBucketError === 1 ? (
                     <div>
@@ -800,9 +801,9 @@ export const ImportDrawer = (props: Props) => {
       label: FI18n.i18nNext.t('importpost_tab_fromreleasedversions'),
       key: 'history',
       children: (
-        <div className="history-area">
+        <div className='history-area'>
           <FInput
-            wrapClassName="search-input"
+            wrapClassName='search-input'
             value={refs.current.historyKey}
             debounce={300}
             allowClear={true}
@@ -811,13 +812,13 @@ export const ImportDrawer = (props: Props) => {
               searchHistoryList();
             }}
             onClick={(e) => e.stopPropagation()}
-            theme="dark"
+            theme='dark'
           />
           {historyList.map((item) => (
-            <div className="history-item" key={item.versionId}>
-              <div className="info-area">
-                <div className="version">{item.version}</div>
-                <div className="other-info">
+            <div className='history-item' key={item.versionId}>
+              <div className='info-area'>
+                <div className='version'>{item.version}</div>
+                <div className='other-info'>
                   <span>
                     {`${FI18n.i18nNext.t(
                       'label_last_updated',
@@ -828,13 +829,13 @@ export const ImportDrawer = (props: Props) => {
               </div>
 
               <Popconfirm
-                placement="bottomRight"
+                placement='bottomRight'
                 title={FI18n.i18nNext.t('confirmation_import_post')}
                 onConfirm={() => importFromHistory(item)}
                 okText={FI18n.i18nNext.t('btn_import_post')}
                 cancelText={FI18n.i18nNext.t('btn_cancel')}
               >
-                <div className="choose-btn">
+                <div className='choose-btn'>
                   {FI18n.i18nNext.t('btn_import_post')}
                 </div>
               </Popconfirm>
@@ -847,13 +848,13 @@ export const ImportDrawer = (props: Props) => {
 
   return (
     <Drawer
-      className="import-drawer-wrapper"
+      className='import-drawer-wrapper'
       width={700}
       title={FI18n.i18nNext.t('cbformatter_import_btn')}
       closable={false}
       open={show}
       onClose={close}
-      extra={<i className="freelog fl-icon-guanbi close-btn" onClick={close} />}
+      extra={<i className='freelog fl-icon-guanbi close-btn' onClick={close} />}
       destroyOnClose
     >
       <Tabs items={tabItems} />
