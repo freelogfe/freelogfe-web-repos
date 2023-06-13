@@ -17,18 +17,18 @@ interface SelectDepsProps {
 
 function SelectDeps({ storageObjectEditor, dispatch }: SelectDepsProps) {
 
-  React.useEffect(() => {
-    // console.log('cra@#!$!@#$');
-    return () => {
-      // console.log('des#@#R#$@#$');
-      // dispatch<ChangeAction>({
-      //   type: 'storageObjectDepSelector/change',
-      //   payload: {
-      //     ...storageObjectDepSelectorInitData,
-      //   },
-      // })
-    };
-  }, []);
+  // React.useEffect(() => {
+  //   // console.log('cra@#!$!@#$');
+  //   return () => {
+  //     // console.log('des#@#R#$@#$');
+  //     // dispatch<ChangeAction>({
+  //     //   type: 'storageObjectDepSelector/change',
+  //     //   payload: {
+  //     //     ...storageObjectDepSelectorInitData,
+  //     //   },
+  //     // })
+  //   };
+  // }, []);
 
   return (<div>
     <Tabs>
