@@ -230,6 +230,6 @@ function Info({ dispatch, resourceInfoPage, match }: InfoProps) {
   </>);
 }
 
-export default connect(({ resourceInfo, resourceInfoPage, user }: ConnectState) => ({
+export default connect(({ resourceInfoPage }: ConnectState) => ({
   resourceInfoPage: resourceInfoPage,
 }))(Info);
