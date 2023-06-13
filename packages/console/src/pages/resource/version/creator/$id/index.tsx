@@ -540,9 +540,8 @@ function VersionCreator({
   );
 }
 
-export default connect(({ resourceVersionCreatorPage, resourceInfo }: ConnectState) => ({
+export default connect(({ resourceVersionCreatorPage }: ConnectState) => ({
   resourceVersionCreatorPage: resourceVersionCreatorPage,
-  resourceInfo: resourceInfo,
 }))(VersionCreator);
 
 interface ReleaseTipProps {
