@@ -5,7 +5,7 @@ import { ConnectState } from '@/models/connect';
 import { history } from 'umi';
 import BraftEditor, { EditorState } from 'braft-editor';
 import fMessage from '@/components/fMessage';
-import { OnChange_DraftData_Action } from '@/models/resourceInfo';
+// import { OnChange_DraftData_Action } from '@/models/resourceInfo';
 import * as semver from 'semver';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 // import { fileAttrUnits } from '@/utils/format';
@@ -619,12 +619,12 @@ const Model: ResourceVersionCreatorModelType = {
         },
       });
 
-      yield put<OnChange_DraftData_Action>({
-        type: 'resourceInfo/onChange_DraftData',
-        payload: {
-          draftData: null,
-        },
-      });
+      // yield put<OnChange_DraftData_Action>({
+      //   type: 'resourceInfo/onChange_DraftData',
+      //   payload: {
+      //     draftData: null,
+      //   },
+      // });
 
       history.replace(FUtil.LinkTo.resourceVersionCreateRelease({
         resourceID: data.resourceId,
