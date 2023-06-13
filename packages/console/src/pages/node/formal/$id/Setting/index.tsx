@@ -10,7 +10,7 @@ import FComponentsLib from '@freelog/components-lib';
 import { Radio, Space } from 'antd';
 import { FI18n } from '@freelog/tools-lib';
 import FInput from '@/components/FInput';
-import FIntroductionEditor from '@/pages/resource/components/FIntroductionEditor';
+// import FIntroductionEditor from '@/pages/resource/components/FIntroductionEditor';
 import * as AHooks from 'ahooks';
 import {
   OnChange_Setting_Cover_Action,
@@ -200,8 +200,19 @@ function Setting({ dispatch, nodeManagerPage }: SettingProps) {
 
               </div>)
               : (<div className={styles.introduction1}>
-                <FIntroductionEditor
-                  // placeholder={FI18n.i18nNext.t('form_input_multiplelinetxt_error_length')}
+                {/*<FIntroductionEditor*/}
+                {/*  // placeholder={FI18n.i18nNext.t('form_input_multiplelinetxt_error_length')}*/}
+                {/*  value={nodeManagerPage.setting_nodeIntroduction}*/}
+                {/*  onChange={(e) => {*/}
+                {/*    dispatch<OnChange_Setting_Introduction_Action>({*/}
+                {/*      type: 'nodeManagerPage/onChange_Setting_Introduction',*/}
+                {/*      payload: {*/}
+                {/*        value: e.target.value,*/}
+                {/*      },*/}
+                {/*    });*/}
+                {/*  }}*/}
+                {/*/>*/}
+                <FComponentsLib.FInput.FMultiLine
                   value={nodeManagerPage.setting_nodeIntroduction}
                   onChange={(e) => {
                     dispatch<OnChange_Setting_Introduction_Action>({
@@ -211,6 +222,7 @@ function Setting({ dispatch, nodeManagerPage }: SettingProps) {
                       },
                     });
                   }}
+                  lengthLimit={1000}
                 />
               </div>)
           }

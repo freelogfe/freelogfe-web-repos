@@ -4,7 +4,7 @@ import styles from './form.less';
 import { FServiceAPI } from '@freelog/tools-lib';
 import FInput from '@/components/FInput';
 import FSelect from '@/components/FSelect';
-import FIntroductionEditor from '@/pages/resource/components/FIntroductionEditor';
+// import FIntroductionEditor from '@/pages/resource/components/FIntroductionEditor';
 import FComponentsLib from '@freelog/components-lib';
 
 interface FormProps {
@@ -21,20 +21,20 @@ function Form({ finished }: FormProps) {
   const [userData, setUserData] = React.useState<any>({});
   AHooks.useMount(async () => {
     const res = await FServiceAPI.User.currentUserInfo();
-    const userData = res.data
-    setUserData(userData)
+    const userData = res.data;
+    setUserData(userData);
     const { ret, errCode, data } = await FServiceAPI.User.areasProvinces();
     const cities = new Map<string, any>();
-    data.some((province:any)=>{
-      return province.children.some((city:any)=>{
-        if(userData.userDetail.areaCode === city.code){
-          setProvince(province.code)
-          setCity(city.code)
-          return true
+    data.some((province: any) => {
+      return province.children.some((city: any) => {
+        if (userData.userDetail.areaCode === city.code) {
+          setProvince(province.code);
+          setCity(city.code);
+          return true;
         }
-      })
-    })
-    setOccupation(userData.userDetail.occupation)
+      });
+    });
+    setOccupation(userData.userDetail.occupation);
     setAreaData([
       { value: '0', title: '请选择省', disabled: false },
       ...data.map((item: any) => {
@@ -57,6 +57,7 @@ function Form({ finished }: FormProps) {
       description,
     });
   }
+
   const { loading, data, error, run } = AHooks.useRequest(submit, {
     loadingDelay: 400,
     manual: true,
@@ -71,38 +72,38 @@ function Form({ finished }: FormProps) {
 
   return (
     <div className={'flex-column flex-1 w-100x align-center ' + styles.style}>
-      <div className="flex-1 flex-column">
-        <div className="flex-3"></div>
-        <div className="shrink-0 flex-column align-center">
+      <div className='flex-1 flex-column'>
+        <div className='flex-3'></div>
+        <div className='shrink-0 flex-column align-center'>
           <div className={styles.title}>内测资格申请</div>
         </div>
-        <div className="flex-2"></div>
+        <div className='flex-2'></div>
       </div>
-      <div className="shrink-0 flex-column  w-900">
+      <div className='shrink-0 flex-column  w-900'>
         <div className={styles.title2 + ' mb-10'}>用户名</div>
         <div className={styles.title3 + ' mb-30'}>{userData.username}</div>
         <div className={styles.title2 + ' mb-10'}>申请结果通知方式</div>
         <div className={styles.title3 + ' mb-20'}>{userData.mobile || userData.email}</div>
-        <div className="flex-row align-center mb-5">
+        <div className='flex-row align-center mb-5'>
           <span className={styles.must}></span>
           <span className={styles.title4}>职业</span>
         </div>
         <FInput
-          placeholder="请输入您的职业"
-          className="w-400"
+          placeholder='请输入您的职业'
+          className='w-400'
           wrapClassName={styles.input}
           value={occupation}
           onChange={(e) => {
             setOccupation(e.currentTarget.value);
           }}
         />
-        <div className="flex-row align-center mt-20 mb-5">
+        <div className='flex-row align-center mt-20 mb-5'>
           <span className={styles.must}></span>
           <span className={styles.title4}>所在区域</span>
         </div>
-        <div className="flex-row align-center">
+        <div className='flex-row align-center'>
           <FSelect
-            className="w-190 mr-20"
+            className='w-190 mr-20'
             value={province}
             dataSource={[...areaData]}
             onChange={(value: string) => {
@@ -111,7 +112,7 @@ function Form({ finished }: FormProps) {
             }}
           />
           <FSelect
-            className="w-190"
+            className='w-190'
             value={city}
             onChange={(value: string) => {
               setCity(value);
@@ -122,21 +123,28 @@ function Form({ finished }: FormProps) {
             ]}
           />
         </div>
-        <div className="flex-row align-center mt-20 mb-5">
+        <div className='flex-row align-center mt-20 mb-5'>
           <span className={styles.must}></span>
           <span className={styles.title4}>
             请留下您常用的创作平台或社区的个人主页网址，或者微信公众号ID
           </span>
         </div>
-        <FIntroductionEditor
+        <FComponentsLib.FInput.FMultiLine
           value={description}
           onChange={(e) => {
             setDescription(e.currentTarget.value);
           }}
+          lengthLimit={1000}
         />
-        <div className="flex-row-center">
+        {/*<FIntroductionEditor*/}
+        {/*  value={description}*/}
+        {/*  onChange={(e) => {*/}
+        {/*    setDescription(e.currentTarget.value);*/}
+        {/*  }}*/}
+        {/*/>*/}
+        <div className='flex-row-center'>
           <FComponentsLib.FRectBtn
-            className="mt-40 "
+            className='mt-40 '
             disabled={city === '0' || !occupation || !description}
             onClick={() => {
               run();
@@ -146,7 +154,7 @@ function Form({ finished }: FormProps) {
           </FComponentsLib.FRectBtn>
         </div>
       </div>
-      <div className="flex-1"></div>
+      <div className='flex-1'></div>
       {loading && (
         <div className={styles.loading + ' flex-column-center'}>
           <div className={'flex-column-center ' + styles.box}>
