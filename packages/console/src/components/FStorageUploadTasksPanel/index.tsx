@@ -8,6 +8,8 @@ import FComponentsLib from '@freelog/components-lib';
 import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
 import { RcFile } from 'antd/lib/upload/interface';
 import fMessage from '@/components/fMessage';
+import { useGetState } from '@/utils/hooks';
+
 // import { useGetState } from '@/utils/hooks';
 
 export interface FStorageUploadTasksPanelProps {
@@ -43,7 +45,7 @@ let storageUploadTasksPanel: TasksPanel | null = null;
 function FStorageUploadTasksPanel({ bucketName, availableStorageSize, onSuccess }: FStorageUploadTasksPanelProps) {
   const availableStorage = React.useRef<number>(availableStorageSize);
 
-  const [uploadTaskQueue, set_uploadTaskQueue, get_uploadTaskQueue] = AHooks.useGetState<FStorageUploadTasksPanelStates['uploadTaskQueue']>(initStates['uploadTaskQueue']);
+  const [uploadTaskQueue, set_uploadTaskQueue, get_uploadTaskQueue] = useGetState<FStorageUploadTasksPanelStates['uploadTaskQueue']>(initStates['uploadTaskQueue']);
   const [uploadPanelVisible, set_uploadPanelVisible] = React.useState<FStorageUploadTasksPanelStates['uploadPanelVisible']>(initStates['uploadPanelVisible']);
   const [uploadPanelOpen, set_uploadPanelOpen] = React.useState<FStorageUploadTasksPanelStates['uploadPanelOpen']>(initStates['uploadPanelOpen']);
 
@@ -131,6 +133,7 @@ function FStorageUploadTasksPanel({ bucketName, availableStorageSize, onSuccess 
         <FComponentsLib.FTextBtn
           onClick={async () => {
             // console.log('####38dshlkfjhsdlkjl');
+            console.log(get_uploadTaskQueue(), 'get_uploadTaskQueue 98weijfslkdjflsdjflsjdfljlfjds');
             const isExits: boolean = get_uploadTaskQueue().some((i) => {
               return i.state !== 'success';
             });
