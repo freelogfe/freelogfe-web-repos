@@ -174,10 +174,10 @@ function Setting({ dispatch, nodeManagerPage }: SettingProps) {
                   style={{ width: 380 }}
                   // placeholder={FI18n.i18nNext.t('form_input_singlelinetxt_error_length')}
                 />
-                <FComponentsLib.FContentText
-                  text={'限制字符数量100'}
-                  type={'additional2'}
-                />
+                {/*<FComponentsLib.FContentText*/}
+                {/*  text={'限制字符数量100'}*/}
+                {/*  type={'additional2'}*/}
+                {/*/>*/}
               </div>)
           }
 
