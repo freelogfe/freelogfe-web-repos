@@ -92,8 +92,8 @@ const readContents = (entries: Entry[]) => {
     return indexA - indexB;
   });
 
-  list.forEach((item) => {
-    getImg(item);
+  list.forEach((item, index) => {
+    getImg(item, index);
   });
 };
 
@@ -119,7 +119,7 @@ const isJson = (entry: Entry) => {
 };
 
 /** 获取图片 */
-const getImg = (entry: Entry) => {
+const getImg = (entry: Entry, index: number) => {
   const { name } = entry;
   entry.readData((res: BlobPart) => {
     const blob = new Blob([res], { type: getMIME(name) });
@@ -129,41 +129,45 @@ const getImg = (entry: Entry) => {
       const size = e.total;
       const base64 = String(e.target?.result);
       const nameSplit = name.split('.')[0].split('_');
-      const parentIndex = Number(nameSplit[0]) - 1;
-      if (!nameSplit[1]) {
-        // 非切图
-        const parentName = fromImport
-          ? name
-          : json.custom.list[parentIndex].name;
-        const sha1 = json ? json.custom.list[parentIndex].sha1 : '';
-        imgList[parentIndex] = { name: parentName, size, base64, sha1 };
+      if (!json) {
+        // 没有 json 配置文件，此包为外部压缩包，直接获取
+        imgList[index] = { name, size, base64 };
       } else {
-        // 切图
-        const childIndex = Number(nameSplit[1]) - 1;
-        if (!imgList[parentIndex]) {
+        // freelog 平台输出的漫画压缩包，需按 json 配置进行整理
+        const parentIndex = Number(nameSplit[0]) - 1;
+        if (!nameSplit[1]) {
+          // 非切图
           const parentName = fromImport
-            ? `${nameSplit[0]}.${getExt(name)}`
+            ? name
             : json.custom.list[parentIndex].name;
-          imgList[parentIndex] = {
-            name: parentName,
-            base64: '',
-            size: 0,
-            children: [],
+          const sha1 = json.custom.list[parentIndex].sha1;
+          imgList[parentIndex] = { name: parentName, size, base64, sha1 };
+        } else {
+          // 切图
+          const childIndex = Number(nameSplit[1]) - 1;
+          if (!imgList[parentIndex]) {
+            const parentName = fromImport
+              ? `${nameSplit[0]}.${getExt(name)}`
+              : json.custom.list[parentIndex].name;
+            imgList[parentIndex] = {
+              name: parentName,
+              base64: '',
+              size: 0,
+              children: [],
+            };
+          }
+          if (childIndex === 0) imgList[parentIndex].base64 = base64;
+          const childName = fromImport
+            ? name
+            : json.custom.list[parentIndex].children[childIndex].name;
+          const sha1 = json.custom.list[parentIndex].children[childIndex].sha1;
+          imgList[parentIndex].children![childIndex] = {
+            name: childName,
+            size,
+            base64,
+            sha1,
           };
         }
-        if (childIndex === 0) imgList[parentIndex].base64 = base64;
-        const childName = fromImport
-          ? name
-          : json.custom.list[parentIndex].children[childIndex].name;
-        const sha1 = json
-          ? json.custom.list[parentIndex].children[childIndex].sha1
-          : '';
-        imgList[parentIndex].children![childIndex] = {
-          name: childName,
-          size,
-          base64,
-          sha1,
-        };
       }
       doneFileCount++;
       if (doneFileCount === imageFileCount) {

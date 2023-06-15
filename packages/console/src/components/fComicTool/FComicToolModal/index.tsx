@@ -107,7 +107,7 @@ export const ComicTool = (props: ToolProps) => {
     }
     const draftRes = await FServiceAPI.Resource.lookDraft({ resourceId });
     if (draftRes.errCode !== 0) {
-      fMessage(draftRes.msg);
+      fMessage(draftRes.msg, 'error');
       return;
     }
     resource.current.draftData = draftRes.data
@@ -178,15 +178,16 @@ export const ComicTool = (props: ToolProps) => {
     imgList.forEach((img, index) => {
       const { name, base64, children, sha1 } = img;
       if (!children && sha1) return;
-
-      const formDataIndex = Math.floor(currentIndex / MAX_REQUEST_BATCH_COUNT);
-      if (!formDataList[formDataIndex]) {
-        formDataList[formDataIndex] = new FormData();
-      }
       const suffix = name.split('.')[1];
       const newImgName = `${String(index + 1).padStart(3, '0')}.${suffix}`;
       if (!children) {
         // 非切图
+        const formDataIndex = Math.floor(
+          currentIndex / MAX_REQUEST_BATCH_COUNT,
+        );
+        if (!formDataList[formDataIndex]) {
+          formDataList[formDataIndex] = new FormData();
+        }
         const file = base64ToFile(base64, newImgName);
         formDataList[formDataIndex].append('files', file);
         currentIndex++;
@@ -195,6 +196,12 @@ export const ComicTool = (props: ToolProps) => {
         children.forEach((child, i) => {
           if (child.sha1) return;
 
+          const formDataIndex = Math.floor(
+            currentIndex / MAX_REQUEST_BATCH_COUNT,
+          );
+          if (!formDataList[formDataIndex]) {
+            formDataList[formDataIndex] = new FormData();
+          }
           const { base64 } = child;
           const newName = String(i + 1).padStart(2, '0');
           const newChildName = newImgName.replace(
@@ -216,7 +223,11 @@ export const ComicTool = (props: ToolProps) => {
     const err = imgResArr.findIndex((item) => item.errCode !== 0) !== -1;
     if (err) {
       if (!auto) {
-        fMessage(FI18n.i18nNext.t('cbformatter_deleteall_confirmation_msg'));
+        fMessage(
+          FI18n.i18nNext.t('createversion_state_networkabnormal2'),
+          'error',
+        );
+        setSaveLoaderShow(false);
       }
       return;
     }
@@ -310,7 +321,11 @@ export const ComicTool = (props: ToolProps) => {
     const res = await uploadFile(jsonFormData, 0, 25);
     if (res.errCode !== 0) {
       if (!auto) {
-        fMessage(FI18n.i18nNext.t('cbformatter_deleteall_confirmation_msg'));
+        fMessage(
+          FI18n.i18nNext.t('createversion_state_networkabnormal2'),
+          'error',
+        );
+        setSaveLoaderShow(false);
       }
       return;
     }
@@ -321,20 +336,24 @@ export const ComicTool = (props: ToolProps) => {
 
     /** 打包漫画文件 */
     const sha1Array: { fileName: string; sha1: string }[] = [];
+    res.data.forEach((item: { filename: string; sha1: string }) => {
+      const { filename, sha1 } = item;
+      sha1Array.push({ fileName: filename, sha1 });
+    });
     list.forEach((item) => {
       const { name, url } = item;
       const urlSplit = url.split('/');
       const sha1Item = { fileName: name, sha1: urlSplit[urlSplit.length - 2] };
       sha1Array.push(sha1Item);
     });
-    res.data.forEach((item: { filename: string; sha1: string }) => {
-      const { filename, sha1 } = item;
-      sha1Array.push({ fileName: filename, sha1 });
-    });
     const compressRes = await compressFiles(sha1Array);
     if (compressRes.errCode !== 0) {
       if (!auto) {
-        fMessage(FI18n.i18nNext.t('cbformatter_deleteall_confirmation_msg'));
+        fMessage(
+          FI18n.i18nNext.t('createversion_state_networkabnormal2'),
+          'error',
+        );
+        setSaveLoaderShow(false);
       }
       return;
     }
@@ -358,7 +377,11 @@ export const ComicTool = (props: ToolProps) => {
     });
     if (saveDraftRes.errCode !== 0) {
       if (!auto) {
-        fMessage(FI18n.i18nNext.t('cbformatter_deleteall_confirmation_msg'));
+        fMessage(
+          FI18n.i18nNext.t('createversion_state_networkabnormal2'),
+          'error',
+        );
+        setSaveLoaderShow(false);
       }
       return;
     }
@@ -554,7 +577,10 @@ export const ComicTool = (props: ToolProps) => {
     let typeTip = true; // 是否需要显示格式错误 tip
 
     if (imgList.length + list.length > MAX_IMG_LENGTH) {
-      fMessage(FI18n.i18nNext.t('cbformatter_add_error_qtylimitation'));
+      fMessage(
+        FI18n.i18nNext.t('cbformatter_add_error_qtylimitation'),
+        'error',
+      );
       list.splice(MAX_IMG_LENGTH - imgList.length);
     }
 
@@ -566,7 +592,7 @@ export const ComicTool = (props: ToolProps) => {
 
       if (!['image/png', 'image/jpeg', 'image/gif'].includes(type)) {
         if (typeTip) {
-          fMessage(FI18n.i18nNext.t('cbformatter_add_error_format'));
+          fMessage(FI18n.i18nNext.t('cbformatter_add_error_format'), 'error');
           typeTip = false;
         }
         doneCount++;
@@ -611,19 +637,26 @@ export const ComicTool = (props: ToolProps) => {
   const cutImages = (files: FileList) => {
     if (files.length > MAX_CUT_IMG_LENGTH) {
       // 切图数量超过最大同时切图数量
-      fMessage(FI18n.i18nNext.t('cbformatter_slice_error_qtylimitation'));
+      fMessage(
+        FI18n.i18nNext.t('cbformatter_slice_error_qtylimitation'),
+        'error',
+      );
       return;
     }
 
     if (getTotal() === MAX_IMG_LENGTH) {
       // 数量已达到最大图片总数量
-      fMessage(FI18n.i18nNext.t('cbformatter_add_error_qtylimitation'));
+      fMessage(
+        FI18n.i18nNext.t('cbformatter_add_error_qtylimitation'),
+        'error',
+      );
       return;
     }
 
     setCuttingLoaderShow(true);
     const results: ImgInComicTool[] = [];
     const list = [...files];
+    let doneCount = 0;
     let typeTip = true; // 是否需要显示格式错误 tip
     let heightTip = true; // 是否需要显示切图高度小于最小指定切图高度 tip
     let overTotal = true; // 是否已经超过最大数量限制
@@ -634,10 +667,11 @@ export const ComicTool = (props: ToolProps) => {
       if (!['image/png', 'image/jpeg'].includes(type)) {
         // 切图类型非指定类型
         if (typeTip) {
-          fMessage(FI18n.i18nNext.t('cbformatter_slice_error_format'));
+          fMessage(FI18n.i18nNext.t('cbformatter_slice_error_format'), 'error');
           typeTip = false;
         }
-        if (i === list.length - 1) {
+        doneCount++;
+        if (doneCount === list.length) {
           setImgList([...imgList, ...results.filter((item) => item)]);
           setCuttingLoaderShow(false);
         }
@@ -658,10 +692,14 @@ export const ComicTool = (props: ToolProps) => {
             imgItem = { name, size, base64: replaceSrc };
             results[i] = imgItem;
             if (heightTip) {
-              fMessage(FI18n.i18nNext.t('cbformatter_slice_error_height'));
+              fMessage(
+                FI18n.i18nNext.t('cbformatter_slice_error_height'),
+                'error',
+              );
               heightTip = false;
             }
-            if (i === list.length - 1) {
+            doneCount++;
+            if (doneCount === list.length) {
               setImgList([...imgList, ...results.filter((item) => item)]);
               setCuttingLoaderShow(false);
             }
@@ -699,7 +737,8 @@ export const ComicTool = (props: ToolProps) => {
                 children: [],
               };
               results[i] = imgItem;
-              if (i === list.length - 1) {
+              doneCount++;
+              if (doneCount === list.length) {
                 setImgList([...imgList, ...results.filter((item) => item)]);
                 setCuttingLoaderShow(false);
               }
@@ -733,17 +772,20 @@ export const ComicTool = (props: ToolProps) => {
                 if (overTotal) {
                   fMessage(
                     FI18n.i18nNext.t('cbformatter_add_error_qtylimitation'),
+                    'error',
                   );
                   overTotal = false;
                 }
-                if (i === list.length - 1) {
+                doneCount++;
+                if (doneCount === list.length) {
                   setImgList([...imgList, ...results.filter((item) => item)]);
                   setCuttingLoaderShow(false);
                 }
                 break;
               } else {
                 results[i] = imgItem;
-                if (i === list.length - 1) {
+                doneCount++;
+                if (doneCount === list.length) {
                   setImgList([...imgList, ...results.filter((item) => item)]);
                   setCuttingLoaderShow(false);
                 }
@@ -759,7 +801,7 @@ export const ComicTool = (props: ToolProps) => {
   const cutImage = (item: ImgInComicTool) => {
     if (getTotal() === MAX_IMG_LENGTH) {
       // 数量已达到最大图片总数量
-      fMessage(FI18n.i18nNext.t('cbformatter_add_error_qtylimitation'));
+      fMessage(FI18n.i18nNext.t('cbformatter_add_error_qtylimitation'), 'error');
       return;
     }
 
@@ -771,7 +813,7 @@ export const ComicTool = (props: ToolProps) => {
       const { width, height } = image;
       if (height <= MAX_HEIGHT_PER_PIECE) {
         // 原图高度小于规定最小高度，不予切图
-        fMessage(FI18n.i18nNext.t('cbformatter_slice_error_height'));
+        fMessage(FI18n.i18nNext.t('cbformatter_slice_error_height'), 'error');
         setCuttingLoaderShow(false);
         return;
       }
@@ -817,7 +859,7 @@ export const ComicTool = (props: ToolProps) => {
         if (currentTotal === MAX_IMG_LENGTH) {
           // 数量已达到最大图片总数量
           setImgList([...imgList]);
-          fMessage(FI18n.i18nNext.t('cbformatter_add_error_qtylimitation'));
+          fMessage(FI18n.i18nNext.t('cbformatter_add_error_qtylimitation'), 'error');
           if (i === pieceNum - 1) setCuttingLoaderShow(false);
           break;
         }
@@ -932,14 +974,22 @@ export const ComicTool = (props: ToolProps) => {
         id="uploadLocalImg"
         multiple={true}
         accept={UPLOAD_LOCAL_ACCEPT}
-        onChange={(e) => uploadLocalImg(e.target.files!)}
+        onChange={(e: any) => {
+          let target = e.target;
+          uploadLocalImg(target.files!);
+          target.value = '';
+        }}
       />
       <input
         type="file"
         id="cutImages"
         multiple={true}
         accept={CUT_IMG_ACCEPT}
-        onChange={(e) => cutImages(e.target.files!)}
+        onChange={(e: any) => {
+          let target = e.target;
+          cutImages(target.files!);
+          target.value = '';
+        }}
       />
 
       <div className={`comic-tool-wrapper ${show && 'show'}`}>
