@@ -5,6 +5,7 @@ import { Upload } from 'antd';
 import FCropperModal from './FCropperModal';
 import { FServiceAPI, FI18n, FUtil } from '@freelog/tools-lib';
 import fMessage from '@/components/fMessage';
+import * as AHooks from 'ahooks';
 
 interface FUploadNodeCoverProps {
   children: React.ReactNode;
@@ -27,8 +28,10 @@ const initStates: FUploadAvatarStates = {
 function FUploadNodeCover({ children, onUploadSuccess, onError }: FUploadNodeCoverProps) {
   const ref = React.useRef<any>(null);
   // const [naturalFile, setNaturalFile] = React.useState<FUploadAvatarStates['naturalFile']>(initStates['naturalFile']);
-  const [image, set_image] = React.useState<FUploadAvatarStates['image']>(initStates['image']);
-  const [uploading, set_uploading] = React.useState<FUploadAvatarStates['uploading']>(initStates['uploading']);
+  // const [image, set_image] = React.useState<FUploadAvatarStates['image']>(initStates['image']);
+  // const [uploading, set_uploading] = React.useState<FUploadAvatarStates['uploading']>(initStates['uploading']);
+
+  const [$state, $setState] = AHooks.useSetState<FUploadAvatarStates>(initStates);
 
 
   function beforeUpload(file: RcFile) {
@@ -46,7 +49,10 @@ function FUploadNodeCover({ children, onUploadSuccess, onError }: FUploadNodeCov
 
     const reader = new FileReader();
     reader.onload = () => {
-      set_image(reader.result as any);
+      // set_image(reader.result as any);
+      $setState({
+        image: reader.result as string,
+      });
     };
     reader.readAsDataURL(file);
     return false;
@@ -57,7 +63,10 @@ function FUploadNodeCover({ children, onUploadSuccess, onError }: FUploadNodeCov
       fMessage('文件为空', 'error');
       return;
     }
-    set_uploading(true);
+    // set_uploading(true);
+    $setState({
+      uploading: true,
+    });
     const myFile = new File([blob], 'image.jpeg', {
       type: blob.type,
     });
@@ -78,8 +87,9 @@ function FUploadNodeCover({ children, onUploadSuccess, onError }: FUploadNodeCov
     } else {
       onUploadSuccess && onUploadSuccess(data_uploadImage.url);
     }
-    set_image(initStates['image']);
-    set_uploading(false);
+    // set_image(initStates['image']);
+    // set_uploading(false);
+    $setState(initStates);
     // console.log(data, 'data900iokewflsdjflkjlk');
   }
 
@@ -97,15 +107,18 @@ function FUploadNodeCover({ children, onUploadSuccess, onError }: FUploadNodeCov
       </div>
     </Upload>
     <FCropperModal
-      uploading={uploading}
+      uploading={$state.uploading}
       uploadRef={ref}
-      imgSrc={image}
+      imgSrc={$state.image}
       onOk={(blob) => {
         upload(blob);
       }}
       onCancel={() => {
         // setNaturalFile(initStates['naturalFile']);
-        set_image(initStates['image']);
+        // set_image(initStates['image']);
+        $setState({
+          image: initStates['image'],
+        });
       }}
     />
   </div>);
