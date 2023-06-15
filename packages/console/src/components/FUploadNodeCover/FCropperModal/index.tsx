@@ -10,7 +10,14 @@ interface FCropperModalProps {
   imgSrc: string;
   uploading: boolean;
 
-  onOk?(blob: Blob | null): void;
+  // onOk?(blob: Blob | null): void;
+  onOk?(info: {
+    h: number;
+    w: number;
+    x: number;
+    y: number;
+    r: number;
+  }): void;
 
   onCancel?(): void;
 }
@@ -25,13 +32,25 @@ function FCropperModal({ uploadRef, imgSrc, uploading, onOk, onCancel }: FCroppe
     destroyOnClose
     bodyStyle={{ padding: '20px 30px' }}
     onOk={() => {
-      const cav = cropper?.getCroppedCanvas();
-      cav
-        ? getRoundedCanvas(cav).toBlob((blob) => {
-          // console.log(blob, '90iowe3jlskdfjsldkjl');
-          onOk && onOk(blob);
-        })
-        : (onOk && onOk(null));
+      if (!cropper) {
+        return;
+      }
+      const info = cropper.getData();
+      // console.log(info, '##SDfsiodlk');
+      onOk && onOk({
+        h: info.height,
+        w: info.width,
+        x: info.x,
+        y: info.y,
+        r: info.rotate,
+      });
+      // const cav = cropper?.getCroppedCanvas();
+      // cav
+      //   ? getRoundedCanvas(cav).toBlob((blob) => {
+      //     // console.log(blob, '90iowe3jlskdfjsldkjl');
+      //     onOk && onOk(blob);
+      //   })
+      //   : (onOk && onOk(null));
     }}
     onCancel={() => {
       onCancel && onCancel();

@@ -16,11 +16,13 @@ interface FUploadNodeCoverProps {
 }
 
 interface FUploadAvatarStates {
+  naturalFile: File | null;
   image: string;
   uploading: boolean;
 }
 
 const initStates: FUploadAvatarStates = {
+  naturalFile: null,
   image: '',
   uploading: false,
 };
@@ -40,6 +42,10 @@ function FUploadNodeCover($prop: FUploadNodeCoverProps) {
       return false;
     }
 
+    $setState({
+      naturalFile: file,
+    });
+
     const reader = new FileReader();
     reader.onload = () => {
       // set_image(reader.result as any);
@@ -51,8 +57,9 @@ function FUploadNodeCover($prop: FUploadNodeCoverProps) {
     return false;
   }
 
-  async function upload(blob: Blob | null) {
-    if (!blob) {
+  // async function upload(blob: Blob | null) {
+  async function upload(cropArea: { x: number, y: number, r: number, w: number, h: number }) {
+    if (!$state.image || !$state.naturalFile) {
       fMessage('文件为空', 'error');
       return;
     }
@@ -60,9 +67,9 @@ function FUploadNodeCover($prop: FUploadNodeCoverProps) {
     $setState({
       uploading: true,
     });
-    const myFile = new File([blob], 'image.jpeg', {
-      type: blob.type,
-    });
+    // const myFile = new File([blob], 'image.jpeg', {
+    //   type: blob.type,
+    // });
     const { ret, errCode, msg, data: data_uploadImage }: {
       ret: number;
       errCode: number;
@@ -71,15 +78,34 @@ function FUploadNodeCover($prop: FUploadNodeCoverProps) {
         url: string;
       };
     } = await FServiceAPI.Storage.uploadImage({
-      file: myFile,
+      // file: myFile,
+      file: $state.naturalFile,
     });
     await FUtil.Tool.promiseSleep(1000);
+    $setState({
+      uploading: initStates['uploading'],
+    });
     if (ret !== 0 || errCode !== 0) {
       fMessage(msg, 'error');
-    } else {
-      $prop.onUploadSuccess && $prop.onUploadSuccess(data_uploadImage.url);
+      return;
     }
-    $setState(initStates);
+
+    // $prop.onUploadSuccess && $prop.onUploadSuccess(data_uploadImage.url);
+    // $setState(initStates);
+
+    const img = new Image();
+    img.src = data_uploadImage.url;
+
+    img.onload = () => {
+      const hash: string = `#x=${cropArea.x}&y=${cropArea.y}&r=${cropArea.r}&w=${cropArea.w}&h=${cropArea.h}&width=${img.width}&height=${img.height}`;
+      const url: string = data_uploadImage.url + hash;
+      // console.log(url, 'url2222222');
+      $prop.onUploadSuccess && $prop.onUploadSuccess(url);
+
+      // setNaturalFile(initStates['naturalFile']);
+      // setImage(initStates['image']);
+      $setState(initStates);
+    };
   }
 
   return (<div className={styles.styles}>
@@ -98,12 +124,13 @@ function FUploadNodeCover($prop: FUploadNodeCoverProps) {
       uploading={$state.uploading}
       uploadRef={ref}
       imgSrc={$state.image}
-      onOk={(blob) => {
-        upload(blob);
+      onOk={(info) => {
+        upload(info);
       }}
       onCancel={() => {
         $setState({
           image: initStates['image'],
+          naturalFile: initStates['naturalFile'],
         });
       }}
     />
