@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import { RcFile } from 'antd/lib/upload/interface';
 import { Upload } from 'antd';
-import FCropperModal from '@/components/FUploadCover/FCropperModal';
+import FCropperModal from './FCropperModal';
 import { FServiceAPI, FI18n } from '@freelog/tools-lib';
 import fMessage from '@/components/fMessage';
 
