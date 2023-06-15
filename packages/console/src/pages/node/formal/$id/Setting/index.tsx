@@ -26,6 +26,8 @@ import {
 import fMessage from '@/components/fMessage';
 import FUploadNodeCover from '@/components/FUploadNodeCover';
 import * as imgSrc from '@/assets/default-node-cover.png';
+import FNodeCoverImage from '@/components/FNodeCoverImage';
+import FCoverImage from '@/components/FCoverImage';
 
 interface SettingProps {
   dispatch: Dispatch;
@@ -104,10 +106,15 @@ function Setting({ dispatch, nodeManagerPage }: SettingProps) {
           {
             nodeManagerPage.setting_state === 'normal'
               ? (<div className={styles.nodeCover} style={{ cursor: 'default' }}>
-                <img
-                  style={{ height: 72, width: 72, borderRadius: '50%' }}
+                {/*<img*/}
+                {/*  style={{ height: 72, width: 72, borderRadius: '50%' }}*/}
+                {/*  src={nodeManagerPage.setting_nodeInfo.cover || imgSrc}*/}
+                {/*  alt=''*/}
+                {/*/>*/}
+                <FNodeCoverImage
                   src={nodeManagerPage.setting_nodeInfo.cover || imgSrc}
-                  alt=''
+                  width={72}
+                  style={{ borderRadius: '50%' }}
                 />
               </div>)
               : (<FUploadNodeCover
@@ -125,10 +132,14 @@ function Setting({ dispatch, nodeManagerPage }: SettingProps) {
                 }}
               >
                 <div className={styles.nodeCover}>
-                  <img
-                    style={{ height: 72, width: 72, borderRadius: '50%' }}
+                  {/*<img*/}
+                  {/*  style={{ height: 72, width: 72, borderRadius: '50%' }}*/}
+                  {/*  src={nodeManagerPage.setting_nodeCover || imgSrc}*/}
+                  {/*  alt=''*/}
+                  {/*/>*/}
+                  <FNodeCoverImage
                     src={nodeManagerPage.setting_nodeCover || imgSrc}
-                    alt=''
+                    width={72}
                   />
                   <div className={styles.nodeCoverMask}>
                     <span>更换</span>

@@ -1,11 +1,9 @@
 import * as React from 'react';
 import styles from './index.less';
-import { CSSProperties, ImgHTMLAttributes } from 'react';
+import { CSSProperties } from 'react';
 import { FUtil } from '@freelog/tools-lib';
 
-// import * as imgSrc from '@/assets/default-resource-cover.jpg';
-
-interface FCoverImageProps {
+interface FNodeCoverImageProps {
   src: string;
   width: number;
 
@@ -13,7 +11,7 @@ interface FCoverImageProps {
   className?: string;
 }
 
-interface FCoverImageStates {
+interface FNodeCoverImageStates {
   imgStyle: {
     width: number;
     height: number;
@@ -23,9 +21,9 @@ interface FCoverImageStates {
   } | null;
 }
 
-function FCoverImage({ src, width, style = {}, className = '' }: FCoverImageProps) {
+function FNodeCoverImage({ src, width, style = {}, className = '' }: FNodeCoverImageProps) {
 
-  const [imgStyle, setImgStyle] = React.useState<FCoverImageStates['imgStyle']>(null);
+  const [imgStyle, setImgStyle] = React.useState<FNodeCoverImageStates['imgStyle']>(null);
 
   React.useEffect(() => {
     if (!src.includes('#')) {
@@ -50,7 +48,7 @@ function FCoverImage({ src, width, style = {}, className = '' }: FCoverImageProp
     style={{
       ...style,
       width,
-      height: width / 4 * 3,
+      height: width,
       // backgroundImage: `url("${src}")`,
       // backgroundPosition: `${-y}px ${w - wh}px ${h - ht}px ${-x}px`,
     }}
@@ -70,7 +68,7 @@ function FCoverImage({ src, width, style = {}, className = '' }: FCoverImageProp
           src={src || (FUtil.Format.completeUrlByDomain('static') + '/static/default_cover.png')}
           style={{
             width: width,
-            height: width / 4 * 3,
+            height: width,
           }}
           alt={''}
         />)
@@ -79,7 +77,7 @@ function FCoverImage({ src, width, style = {}, className = '' }: FCoverImageProp
   </div>);
 }
 
-export default FCoverImage;
+export default FNodeCoverImage;
 
 interface HashStringReturn {
   x: number;

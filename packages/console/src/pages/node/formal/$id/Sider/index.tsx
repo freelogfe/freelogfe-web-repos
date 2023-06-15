@@ -12,6 +12,7 @@ import { FShare } from '@/components/FShare';
 import FTooltip from '@/components/FTooltip';
 import FComponentsLib from '@freelog/components-lib';
 import * as imgSrc from '@/assets/default-node-cover.png';
+import FNodeCoverImage from '@/components/FNodeCoverImage';
 
 interface SiderProps {
   dispatch: Dispatch;
@@ -30,7 +31,8 @@ function Sider({ dispatch, nodeManagerPage, match }: SiderProps) {
         <div style={{ height: 35 }} />
 
         <div className={styles.cover}>
-          <img src={nodeManagerPage.nodeCover || imgSrc} />
+          {/*<img src={nodeManagerPage.nodeCover || imgSrc} />*/}
+          <FNodeCoverImage src={nodeManagerPage.nodeCover || imgSrc} width={80} />
         </div>
         <div style={{ height: 20 }} />
 
