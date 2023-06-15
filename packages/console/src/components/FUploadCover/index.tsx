@@ -6,8 +6,6 @@ import FCropperModal from '@/components/FUploadCover/FCropperModal';
 import { FServiceAPI, FI18n } from '@freelog/tools-lib';
 import fMessage from '@/components/fMessage';
 
-// import FUtil1 from '@/utils';
-
 interface FUploadCoverProps {
   children: React.ReactNode;
 

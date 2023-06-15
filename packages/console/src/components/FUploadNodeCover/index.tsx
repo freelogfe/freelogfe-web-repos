@@ -25,27 +25,20 @@ const initStates: FUploadAvatarStates = {
   uploading: false,
 };
 
-function FUploadNodeCover({ children, onUploadSuccess, onError }: FUploadNodeCoverProps) {
+function FUploadNodeCover($prop: FUploadNodeCoverProps) {
   const ref = React.useRef<any>(null);
-  // const [naturalFile, setNaturalFile] = React.useState<FUploadAvatarStates['naturalFile']>(initStates['naturalFile']);
-  // const [image, set_image] = React.useState<FUploadAvatarStates['image']>(initStates['image']);
-  // const [uploading, set_uploading] = React.useState<FUploadAvatarStates['uploading']>(initStates['uploading']);
-
   const [$state, $setState] = AHooks.useSetState<FUploadAvatarStates>(initStates);
-
 
   function beforeUpload(file: RcFile) {
     if (file.type !== 'image/gif' && file.type !== 'image/png' && file.type !== 'image/jpeg') {
-      onError && onError(FI18n.i18nNext.t('limit_resource_image_format'));
+      $prop.onError && $prop.onError(FI18n.i18nNext.t('limit_resource_image_format'));
       return false;
     }
 
     if (file.size > 5 * 1024 * 1024) {
-      onError && onError(FI18n.i18nNext.t('limit_resource_image_size'));
+      $prop.onError && $prop.onError(FI18n.i18nNext.t('limit_resource_image_size'));
       return false;
     }
-
-    // setNaturalFile(file);
 
     const reader = new FileReader();
     reader.onload = () => {
@@ -81,29 +74,24 @@ function FUploadNodeCover({ children, onUploadSuccess, onError }: FUploadNodeCov
       file: myFile,
     });
     await FUtil.Tool.promiseSleep(1000);
-    // console.log(data, 'datai8o9dsjflksdjflkjklj');
     if (ret !== 0 || errCode !== 0) {
       fMessage(msg, 'error');
     } else {
-      onUploadSuccess && onUploadSuccess(data_uploadImage.url);
+      $prop.onUploadSuccess && $prop.onUploadSuccess(data_uploadImage.url);
     }
-    // set_image(initStates['image']);
-    // set_uploading(false);
     $setState(initStates);
-    // console.log(data, 'data900iokewflsdjflkjlk');
   }
 
   return (<div className={styles.styles}>
 
     <Upload
-      // accept={'image/gif,image/png,.jpg'}
       accept={'.gif,.png,.jpg,.jpeg,.jpe'}
       beforeUpload={beforeUpload}
       multiple={false}
       showUploadList={false}
     >
       <div ref={ref} className={styles.uploadContainer}>
-        {children}
+        {$prop.children}
       </div>
     </Upload>
     <FCropperModal
@@ -114,8 +102,6 @@ function FUploadNodeCover({ children, onUploadSuccess, onError }: FUploadNodeCov
         upload(blob);
       }}
       onCancel={() => {
-        // setNaturalFile(initStates['naturalFile']);
-        // set_image(initStates['image']);
         $setState({
           image: initStates['image'],
         });
