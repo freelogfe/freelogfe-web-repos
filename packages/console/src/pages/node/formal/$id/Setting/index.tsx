@@ -10,7 +10,6 @@ import FComponentsLib from '@freelog/components-lib';
 import { Radio, Space } from 'antd';
 import { FI18n } from '@freelog/tools-lib';
 import FInput from '@/components/FInput';
-// import FIntroductionEditor from '@/pages/resource/components/FIntroductionEditor';
 import * as AHooks from 'ahooks';
 import {
   OnChange_Setting_Cover_Action,
@@ -27,7 +26,6 @@ import fMessage from '@/components/fMessage';
 import FUploadNodeCover from '@/components/FUploadNodeCover';
 import * as imgSrc from '@/assets/default-node-cover.png';
 import FNodeCoverImage from '@/components/FNodeCoverImage';
-import FCoverImage from '@/components/FCoverImage';
 
 interface SettingProps {
   dispatch: Dispatch;
@@ -114,7 +112,6 @@ function Setting({ dispatch, nodeManagerPage }: SettingProps) {
                 <FNodeCoverImage
                   src={nodeManagerPage.setting_nodeInfo.cover || imgSrc}
                   width={72}
-                  style={{ borderRadius: '50%' }}
                 />
               </div>)
               : (<FUploadNodeCover

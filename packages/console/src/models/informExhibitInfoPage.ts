@@ -1077,17 +1077,6 @@ const Model: ExhibitInfoPageModelType = {
           type: 'change',
           payload: {
             side_CustomOptionsDrawer_Visible: true,
-            // pCustomModalVisible: true,
-            // pCustomModalTitle: '添加自定义选项',
-            // pCustomModalConfirmButtonDisabled: true,
-            // pCustomMode: 'add',
-            // pCustomKey: '',
-            // pCustomKeyDisabled: false,
-            // pCustomKeyError: '',
-            // pCustomValue: '',
-            // pCustomValueError: '',
-            // pCustomDescription: '',
-            // pCustomDescriptionError: '',
           },
         });
       } else {
@@ -1103,17 +1092,6 @@ const Model: ExhibitInfoPageModelType = {
               value: attrT?.theValue || '',
               description: attrT?.remark || '',
             },
-            // pCustomModalVisible: true,
-            // pCustomModalTitle: '编辑自定义选项',
-            // pCustomModalConfirmButtonDisabled: true,
-            // pCustomMode: 'edit',
-            // pCustomKey: attrT?.theKey || '',
-            // pCustomKeyDisabled: true,
-            // pCustomKeyError: '',
-            // pCustomValue: attrT?.theValue || '',
-            // pCustomValueError: '',
-            // pCustomDescription: attrT?.remark || '',
-            // pCustomDescriptionError: '',
           },
         });
       }
