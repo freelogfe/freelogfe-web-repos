@@ -8,7 +8,7 @@ import {
   OnUnmountAction,
   ResourceListPageModelState,
 } from '@/models/resourceListPage';
-import { history } from 'umi';
+// import { history } from 'umi';
 import FResourceCardsList from '@/pages/resource/components/FResourceCardsList';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
