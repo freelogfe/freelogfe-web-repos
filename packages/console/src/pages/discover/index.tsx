@@ -6,12 +6,15 @@ import { FUtil } from '@freelog/tools-lib';
 import FCenterLayout from '@/layouts/FCenterLayout';
 import Resources from './market';
 import Examples from './examples';
-import { withRouter, Dispatch } from 'umi';
+import { withRouter } from 'umi';
+import { Dispatch } from 'redux';
 import { connect } from 'dva';
 import { ConnectState, DiscoverPageModelState } from '@/models/connect';
 import { RouteComponentProps } from 'react-router';
 import { OnChange_ShowPage_Action } from '@/models/discoverPage';
 import FComponentsLib from '@freelog/components-lib';
+
+// import * as AHooks from 'ahooks';
 
 interface DiscoverProps extends RouteComponentProps {
   dispatch: Dispatch;
