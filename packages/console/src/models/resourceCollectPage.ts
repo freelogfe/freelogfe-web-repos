@@ -16,7 +16,7 @@ export interface ResourceCollectPageModelState {
   inputText: string;
   // pageCurrent: number;
   // pageSize: number;
-  // totalNum: number;
+  totalNum: number;
   // dataSource: {
   //   id: string;
   //   cover: string;
@@ -131,7 +131,7 @@ const initStates: ResourceCollectPageModelState = {
   inputText: '',
   // dataSource: [],
   // pageSize: 20,
-  // totalNum: -1,
+  totalNum: -1,
   resource_List: [],
   resource_ListState: 'loading',
   resource_ListMore: 'loading',
@@ -235,6 +235,7 @@ const Model: ResourceCollectModelType = {
             resource_List: [],
             resource_ListState: state,
             resource_ListMore: more,
+            totalNum: data_collection.totalItem,
           },
         });
         return;
@@ -296,6 +297,7 @@ const Model: ResourceCollectModelType = {
           resource_List: finalList,
           resource_ListState: state,
           resource_ListMore: more,
+          totalNum: data_collection.totalItem,
         },
       });
     },
@@ -345,7 +347,7 @@ const Model: ResourceCollectModelType = {
       // });
     },
     * onAwaited_KeywordsChange({}: OnAwaited_KeywordsChange_Action, { put }: EffectsCommandMap) {
-      console.log('dddddDDDDDDDfsdf sdfsdf ******');
+      // console.log('dddddDDDDDDDfsdf sdfsdf ******');
       yield put<FetchDataSourceAction>({
         type: 'fetchDataSource',
         payload: {
@@ -369,11 +371,30 @@ const Model: ResourceCollectModelType = {
       const { resourceCollectPage }: ConnectState = yield select(({ resourceCollectPage }: ConnectState) => ({
         resourceCollectPage,
       }));
+      const resourceTypes: Array<string | number> = resourceCollectPage.resourceTypeCodes.labels.filter((rt) => {
+        return rt !== '全部';
+      });
+
+      const finalList = resourceCollectPage.resource_List.filter((ds) => ds.id !== payload);
+      const finalTotalNum = resourceCollectPage.totalNum - 1;
+
+      const { state, more } = listStateAndListMore({
+        list_Length: finalList.length,
+        total_Length: finalTotalNum,
+        has_FilterCriteria: resourceCollectPage.inputText !== ''
+          || resourceTypes.length !== 0
+          || resourceCollectPage.resourceStatus !== '#',
+      });
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          resource_List: resourceCollectPage.resource_List.filter((ds) => ds.id !== payload),
+          // resource_List: resourceCollectPage.resource_List.filter((ds) => ds.id !== payload),
           // totalNum: resourceCollectPage.totalNum - 1,
+          resource_List: finalList,
+          resource_ListState: state,
+          resource_ListMore: more,
+          totalNum: finalTotalNum,
         },
       });
     },
