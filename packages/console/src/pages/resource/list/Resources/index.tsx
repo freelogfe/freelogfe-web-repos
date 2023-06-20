@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {
+  OnAwaited_KeywordsChange_Action,
   OnChangeKeywordsAction,
   OnChangeResourceTypeAction,
   OnChangeStatusAction,
@@ -45,6 +46,7 @@ const resourceStatusOptions = [
 ];
 
 function Resources({ dispatch, resourceListPage }: ResourceProps) {
+
   AHooks.useMount(() => {
     dispatch<OnMountAction>({
       type: 'resourceListPage/onMount',
@@ -55,6 +57,14 @@ function Resources({ dispatch, resourceListPage }: ResourceProps) {
     dispatch<OnUnmountAction>({
       type: 'resourceListPage/onUnmount',
     });
+  });
+
+  AHooks.useDebounceEffect(() => {
+    dispatch<OnAwaited_KeywordsChange_Action>({
+      type: 'resourceListPage/onAwaited_KeywordsChange',
+    });
+  }, [resourceListPage.inputText], {
+    wait: 300,
   });
 
   if (resourceListPage.resource_ListState === 'loading') {
@@ -136,24 +146,38 @@ function Resources({ dispatch, resourceListPage }: ResourceProps) {
         </div>
       </div>
       <Space size={20}>
-        <FInput
+        {/*<FInput*/}
+        {/*  value={resourceListPage.inputText}*/}
+        {/*  debounce={300}*/}
+        {/*  allowClear={true}*/}
+        {/*  // onChange={(e) => onChangeInputText && onChangeInputText(e.target.value)}*/}
+        {/*  onDebounceChange={(value) => {*/}
+        {/*    // onChangeInputText && onChangeInputText(value);*/}
+        {/*    dispatch<OnChangeKeywordsAction>({*/}
+        {/*      type: 'resourceListPage/onChangeKeywords',*/}
+        {/*      payload: {*/}
+        {/*        value: value,*/}
+        {/*      },*/}
+        {/*    });*/}
+        {/*  }}*/}
+        {/*  theme='dark'*/}
+        {/*  className={styles.FInput}*/}
+        {/*  // placeholder={FI18n.i18nNext.t('search_resource')}*/}
+        {/*  placeholder={FI18n.i18nNext.t('myresourses_search_hint')}*/}
+        {/*/>*/}
+
+        <FComponentsLib.FInput.FSearch
           value={resourceListPage.inputText}
-          debounce={300}
-          allowClear={true}
-          // onChange={(e) => onChangeInputText && onChangeInputText(e.target.value)}
-          onDebounceChange={(value) => {
-            // onChangeInputText && onChangeInputText(value);
+          style={{ width: 400 }}
+          placeholder={FI18n.i18nNext.t('myresourses_search_hint')}
+          onChange={(e) => {
             dispatch<OnChangeKeywordsAction>({
               type: 'resourceListPage/onChangeKeywords',
               payload: {
-                value: value,
+                value: e.target.value,
               },
             });
           }}
-          theme='dark'
-          className={styles.FInput}
-          // placeholder={FI18n.i18nNext.t('search_resource')}
-          placeholder={FI18n.i18nNext.t('myresourses_search_hint')}
         />
       </Space>
     </div>

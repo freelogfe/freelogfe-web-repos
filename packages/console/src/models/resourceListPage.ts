@@ -87,6 +87,10 @@ export interface OnChangeKeywordsAction extends AnyAction {
   };
 }
 
+export interface OnAwaited_KeywordsChange_Action extends AnyAction {
+  type: 'resourceListPage/onAwaited_KeywordsChange';
+}
+
 export interface OnClickLoadingMordAction extends AnyAction {
   type: 'resourceListPage/onClickLoadingMord';
 }
@@ -106,6 +110,7 @@ export interface ResourceListPageModelType {
     onChangeResourceType: (action: OnChangeResourceTypeAction, effects: EffectsCommandMap) => void;
     onChangeStatus: (action: OnChangeStatusAction, effects: EffectsCommandMap) => void;
     onChangeKeywords: (action: OnChangeKeywordsAction, effects: EffectsCommandMap) => void;
+    onAwaited_KeywordsChange: (action: OnAwaited_KeywordsChange_Action, effects: EffectsCommandMap) => void;
     onClickLoadingMord: (action: OnClickLoadingMordAction, effects: EffectsCommandMap) => void;
     // clearData: (action: ClearDataAction, effects: EffectsCommandMap) => void;
   };
@@ -175,14 +180,6 @@ const Model: ResourceListPageModelType = {
             resource_ListMore: 'loading',
           },
         });
-      } else {
-        yield put<ChangeAction>({
-          type: 'change',
-          payload: {
-            resource_ListState: 'loading',
-            // resource_ListMore: 'loading',
-          },
-        });
       }
 
       const resourceTypes: Array<string | number> = resourceListPage.resourceTypeCodes.labels.filter((rt) => {
@@ -199,7 +196,6 @@ const Model: ResourceListPageModelType = {
         status: resourceListPage.resourceStatus === '#' ? undefined : (resourceListPage.resourceStatus as 0),
         isSelf: 1,
       };
-
 
 
       const { ret, errCode, data: data_resourceList }: {
@@ -341,6 +337,9 @@ const Model: ResourceListPageModelType = {
         },
       });
 
+
+    },
+    * onAwaited_KeywordsChange({}: OnAwaited_KeywordsChange_Action, { put }: EffectsCommandMap) {
       yield put<FetchDataSourceAction>({
         type: 'fetchDataSource',
         payload: {
