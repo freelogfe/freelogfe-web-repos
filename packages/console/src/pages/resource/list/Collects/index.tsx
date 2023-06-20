@@ -3,7 +3,7 @@ import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import { ConnectState, ResourceCollectPageModelState } from '@/models/connect';
 import { history } from 'umi';
-import FResourceCardsList from '@/pages/resource/components/FResourceCardsList';
+// import FResourceCardsList from '@/pages/resource/components/FResourceCardsList';
 import {
   OnMountAction,
   OnUnmountAction,
@@ -17,7 +17,7 @@ import FNoDataTip from '@/components/FNoDataTip';
 import FLoadingTip from '@/components/FLoadingTip';
 import { FI18n, FUtil } from '@freelog/tools-lib';
 import * as AHooks from 'ahooks';
-import styles from '@/pages/resource/components/FResourceCardsList/index.less';
+import styles from './index.less';
 import FResourceTypeFilter from '@/components/FResourceTypeFilter';
 import FComponentsLib from '@freelog/components-lib';
 import FMenu from '@/components/FMenu';

@@ -1,0 +1,104 @@
+@import '../../../../config.less';
+
+.filter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.filterLeft {
+  display: flex;
+  align-items: center;
+}
+
+.FInput {
+  width: 400px;
+}
+.createCard {
+  width: 280px;
+  height: 210px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  background: #fafbfc;
+  border-radius: 4px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  &:hover {
+    border: 1px solid #529dff;
+    .createButton{
+      background: #529dff;
+      i{
+        color: #FFFFFF;
+      }
+    }
+    .createText{
+      color: #529dff;
+    }
+  }
+  &:active {
+    border: 1px solid #2376e5;
+    .createButton{
+      background: #2376e5;
+      i{
+        color: #FFFFFF;
+      }
+    }
+    .createText{
+      color: #2376e5;
+    }
+  }
+  .createButton {
+    width: 64px;
+    height: 64px;
+    background: rgba(0, 0, 0, 0.03);
+    border-radius: 50%;
+    i{
+      color: #666666;
+      font-size: 28px;
+    }
+  }
+  .createText {
+    font-size: 14px;
+    font-weight: 600;
+    color: #666666;
+    line-height: 22px;
+  }
+}
+.Content {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  //margin-bottom: -10px;
+
+  width: 1540px;
+  margin: 0 auto -10px;
+
+  @media (max-width: 1600px) {
+    width: 1230px;
+    margin: 0;
+  }
+}
+
+.FResourceCard {
+  margin-bottom: 10px;
+}
+
+.bottomPadding {
+  width: 300px;
+
+  //@media (min-width: 1700px) {
+  //  width: 280px;
+  //}
+}
+
+.bottom {
+  display: flex;
+  justify-content: center;
+
+  .loadMore {
+    height: 60px;
+    width: 200px;
+    font-size: 20px;
+    color: #666;
+  }
+}
