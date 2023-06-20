@@ -1,8 +1,9 @@
 import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription, SubscriptionAPI } from 'dva';
 import { DvaReducer } from './shared';
-import { ConnectState, ResourceListPageModelState } from '@/models/connect';
-import { FServiceAPI } from '@freelog/tools-lib';
+import { ConnectState } from '@/models/connect';
+import { FServiceAPI, FUtil } from '@freelog/tools-lib';
+import { listStateAndListMore } from '@/components/FListFooter';
 
 export interface ResourceCollectPageModelState {
   resourceTypeCodes: {
@@ -14,9 +15,19 @@ export interface ResourceCollectPageModelState {
   resourceStatus: 0 | 1 | 2 | 4 | '#';
   inputText: string;
   // pageCurrent: number;
-  pageSize: number;
-  totalNum: number;
-  dataSource: {
+  // pageSize: number;
+  // totalNum: number;
+  // dataSource: {
+  //   id: string;
+  //   cover: string;
+  //   title: string;
+  //   version: string;
+  //   policy: string[];
+  //   type: string[];
+  //   status: 0 | 1;
+  // }[];
+
+  resource_List: {
     id: string;
     cover: string;
     title: string;
@@ -25,6 +36,8 @@ export interface ResourceCollectPageModelState {
     type: string[];
     status: 0 | 1;
   }[];
+  resource_ListState: 'loading' | 'noData' | 'noSearchResult' | 'loaded';
+  resource_ListMore: 'loading' | 'andMore' | 'noMore';
 }
 
 export interface ChangeAction extends AnyAction {
@@ -72,6 +85,10 @@ export interface OnChangeKeywordsAction extends AnyAction {
   };
 }
 
+export interface OnAwaited_KeywordsChange_Action extends AnyAction {
+  type: 'resourceCollectPage/onAwaited_KeywordsChange';
+}
+
 export interface OnClickLoadingMordAction extends AnyAction {
   type: 'resourceCollectPage/onClickLoadingMord';
 }
@@ -93,6 +110,7 @@ export interface ResourceCollectModelType {
     onChangeResourceType: (action: OnChangeResourceTypeAction, effects: EffectsCommandMap) => void;
     onChangeStatus: (action: OnChangeStatusAction, effects: EffectsCommandMap) => void;
     onChangeKeywords: (action: OnChangeKeywordsAction, effects: EffectsCommandMap) => void;
+    onAwaited_KeywordsChange: (action: OnAwaited_KeywordsChange_Action, effects: EffectsCommandMap) => void;
     onClickLoadingMord: (action: OnClickLoadingMordAction, effects: EffectsCommandMap) => void;
     onBoomJuice: (action: OnBoomJuiceAction, effects: EffectsCommandMap) => void;
   };
@@ -111,9 +129,12 @@ const initStates: ResourceCollectPageModelState = {
   },
   resourceStatus: '#',
   inputText: '',
-  dataSource: [],
-  pageSize: 20,
-  totalNum: -1,
+  // dataSource: [],
+  // pageSize: 20,
+  // totalNum: -1,
+  resource_List: [],
+  resource_ListState: 'loading',
+  resource_ListMore: 'loading',
 };
 
 const Model: ResourceCollectModelType = {
@@ -159,9 +180,16 @@ const Model: ResourceCollectModelType = {
         resourceCollectPage,
       }));
 
-      let dataSource: ResourceCollectPageModelState['dataSource'] = [];
+      let resource_List: ResourceCollectPageModelState['resource_List'] = [];
       if (!payload) {
-        dataSource = resourceCollectPage.dataSource;
+        resource_List = resourceCollectPage.resource_List;
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            // resource_ListState: 'loading',
+            resource_ListMore: 'loading',
+          },
+        });
       }
 
       const resourceTypes: Array<string | number> = resourceCollectPage.resourceTypeCodes.labels.filter((rt) => {
@@ -169,53 +197,105 @@ const Model: ResourceCollectModelType = {
       });
 
       const params: Parameters<typeof FServiceAPI.Collection.collectionResources>[0] = {
-        skip: dataSource.length,
-        limit: resourceCollectPage.pageSize,
+        // skip: dataSource.length,
+        skip: resource_List.length,
+        limit: FUtil.Predefined.pageSize,
         keywords: resourceCollectPage.inputText,
         resourceType: resourceTypes.length === 0 ? undefined : String(resourceTypes[resourceTypes.length - 1]),
         resourceStatus: resourceCollectPage.resourceStatus === '#' ? undefined : resourceCollectPage.resourceStatus as 0,
       };
 
-      const { data } = yield call(FServiceAPI.Collection.collectionResources, params);
-      // console.log(data, 'data3290joisdf');
-
-      let data1: any[] = [];
-
-      if (data.dataList.length > 0) {
-
-        const params1: Parameters<typeof FServiceAPI.Resource.batchInfo>[0] = {
-          resourceIds: data.dataList.map((d: any) => d.resourceId).join(','),
+      const { ret, errCode, data: data_collection }: {
+        ret: number;
+        errCode: number;
+        data: {
+          limit: number;
+          skip: number;
+          totalItem: number;
+          dataList: {
+            resourceId: string;
+          }[];
         };
+      } = yield call(FServiceAPI.Collection.collectionResources, params);
+      // console.log(data_collection, ' data_collection data3290joisdf');
 
-        const { data: data2 } = yield call(FServiceAPI.Resource.batchInfo, params1);
+      // let data1: any[] = [];
 
-        data1 = data2;
+      if (data_collection.dataList.length === 0) {
+        const { state, more } = listStateAndListMore({
+          list_Length: 0,
+          total_Length: data_collection.totalItem,
+          has_FilterCriteria: resourceCollectPage.inputText !== ''
+            || resourceTypes.length !== 0
+            || resourceCollectPage.resourceStatus !== '#',
+        });
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            resource_List: [],
+            resource_ListState: state,
+            resource_ListMore: more,
+          },
+        });
+        return;
+        // data1 = data2;
       }
+      const params1: Parameters<typeof FServiceAPI.Resource.batchInfo>[0] = {
+        resourceIds: data_collection.dataList.map((d) => d.resourceId).join(','),
+      };
 
-      // console.log(data1, 'data1w09ejflk23');
+      const { data: data_batchInfo }: {
+        ret: number;
+        errCode: number;
+        data: {
+          resourceId: string;
+          resourceName: string;
+          resourceType: string[];
+          latestVersion: string;
+          coverImages: string[];
+          status: 0 | 1;
+          policies: {
+            policyId: string;
+            policyName: string;
+            status: 0 | 1;
+          }[];
+        }[];
+      } = yield call(FServiceAPI.Resource.batchInfo, params1);
+      // console.log(data_batchInfo, 'data_resourceList data1w09ejflk23');
+
+      const finalList = [
+        ...resource_List,
+        ...data_batchInfo.map<ResourceCollectPageModelState['resource_List'][number]>((i) => {
+          return {
+            id: i.resourceId,
+            cover: i.coverImages.length > 0 ? i.coverImages[0] : '',
+            title: i.resourceName,
+            version: i.latestVersion,
+            policy: i.policies
+              .filter((l: any) => {
+                return l.status === 1;
+              })
+              .map((l: any) => l.policyName),
+            type: i.resourceType,
+            status: i.status,
+          };
+        }),
+      ];
+
+      const { state, more } = listStateAndListMore({
+        list_Length: finalList.length,
+        total_Length: data_collection.totalItem,
+        has_FilterCriteria: resourceCollectPage.inputText !== ''
+          || resourceTypes.length !== 0
+          || resourceCollectPage.resourceStatus !== '#',
+      });
 
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          dataSource: [
-            ...dataSource,
-            ...(data1 as any[]).map<ResourceCollectPageModelState['dataSource'][number]>((i: any) => {
-              return {
-                id: i.resourceId,
-                cover: i.coverImages.length > 0 ? i.coverImages[0] : '',
-                title: i.resourceName,
-                version: i.latestVersion,
-                policy: i.policies
-                  .filter((l: any) => {
-                    return l.status === 1;
-                  })
-                  .map((l: any) => l.policyName),
-                type: i.resourceType,
-                status: i.status,
-              };
-            }),
-          ],
-          totalNum: data.totalItem,
+          resource_List: finalList,
+          resource_ListState: state,
+          resource_ListMore: more,
         },
       });
     },
@@ -257,6 +337,15 @@ const Model: ResourceCollectModelType = {
         },
       });
 
+      // yield put<FetchDataSourceAction>({
+      //   type: 'fetchDataSource',
+      //   payload: {
+      //     restart: true,
+      //   },
+      // });
+    },
+    * onAwaited_KeywordsChange({}: OnAwaited_KeywordsChange_Action, { put }: EffectsCommandMap) {
+      console.log('dddddDDDDDDDfsdf sdfsdf ******');
       yield put<FetchDataSourceAction>({
         type: 'fetchDataSource',
         payload: {
@@ -283,8 +372,8 @@ const Model: ResourceCollectModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          dataSource: resourceCollectPage.dataSource.filter((ds) => ds.id !== payload),
-          totalNum: resourceCollectPage.totalNum - 1,
+          resource_List: resourceCollectPage.resource_List.filter((ds) => ds.id !== payload),
+          // totalNum: resourceCollectPage.totalNum - 1,
         },
       });
     },

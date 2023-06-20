@@ -11,7 +11,7 @@ import {
   OnChangeStatusAction,
   OnChangeKeywordsAction,
   OnBoomJuiceAction,
-  OnClickLoadingMordAction,
+  OnClickLoadingMordAction, OnAwaited_KeywordsChange_Action,
 } from '@/models/resourceCollectPage';
 import FNoDataTip from '@/components/FNoDataTip';
 import FLoadingTip from '@/components/FLoadingTip';
@@ -24,6 +24,8 @@ import FMenu from '@/components/FMenu';
 import { Button, Space } from 'antd';
 import FInput from '@/components/FInput';
 import FResourceCard from '@/components/FResourceCard';
+import FListFooter from '@/components/FListFooter';
+// import { OnAwaited_KeywordsChange_Action } from '@/models/resourceListPage';
 
 interface ResourceCollectProps {
   dispatch: Dispatch;
@@ -56,14 +58,19 @@ function ResourceCollect({ dispatch, resourceCollectPage }: ResourceCollectProps
     });
   });
 
-  if (resourceCollectPage.totalNum === -1) {
+  AHooks.useDebounceEffect(() => {
+    dispatch<OnAwaited_KeywordsChange_Action>({
+      type: 'resourceCollectPage/onAwaited_KeywordsChange',
+    });
+  }, [resourceCollectPage.inputText], {
+    wait: 300,
+  });
+
+  if (resourceCollectPage.resource_ListState === 'loading') {
     return (<FLoadingTip height={'calc(100vh - 140px)'} />);
   }
 
-  if (resourceCollectPage.dataSource.length === 0
-    && !resourceCollectPage.inputText
-    && resourceCollectPage.resourceTypeCodes.values.length === 1 && resourceCollectPage.resourceTypeCodes.value === '#all'
-    && resourceCollectPage.resourceStatus === '#') {
+  if (resourceCollectPage.resource_ListState === 'noData') {
     return (<FNoDataTip
       height={'calc(100vh - 140px)'}
       tipText={'未收藏任何资源'}
@@ -129,39 +136,64 @@ function ResourceCollect({ dispatch, resourceCollectPage }: ResourceCollectProps
         </div>
       </div>
       <Space size={20}>
-        <FInput
-          value={resourceCollectPage.inputText}
-          debounce={300}
-          allowClear={true}
-          // onChange={(e) => onChangeInputText && onChangeInputText(e.target.value)}
-          onDebounceChange={(value) => {
-            // onChangeInputText && onChangeInputText(value);
-            dispatch<OnChangeKeywordsAction>({
-              type: 'resourceCollectPage/onChangeKeywords',
-              payload: {
-                value: value,
-              },
-            });
-          }}
-          theme='dark'
-          className={styles.FInput}
-          // placeholder={FI18n.i18nNext.t('search_resource')}
-          placeholder={FI18n.i18nNext.t('myresourses_search_hint')}
-        />
+        {/*<FInput*/}
+        {/*  value={resourceCollectPage.inputText}*/}
+        {/*  debounce={300}*/}
+        {/*  allowClear={true}*/}
+        {/*  // onChange={(e) => onChangeInputText && onChangeInputText(e.target.value)}*/}
+        {/*  onDebounceChange={(value) => {*/}
+        {/*    // onChangeInputText && onChangeInputText(value);*/}
+        {/*    dispatch<OnChangeKeywordsAction>({*/}
+        {/*      type: 'resourceCollectPage/onChangeKeywords',*/}
+        {/*      payload: {*/}
+        {/*        value: value,*/}
+        {/*      },*/}
+        {/*    });*/}
+        {/*  }}*/}
+        {/*  theme='dark'*/}
+        {/*  className={styles.FInput}*/}
+        {/*  // placeholder={FI18n.i18nNext.t('search_resource')}*/}
+        {/*  placeholder={FI18n.i18nNext.t('myresourses_search_hint')}*/}
+        {/*/>*/}
         {/* {showGotoCreateBtn && (
             <FComponentsLib.FRectBtn onClick={() => router.push(FUtil.LinkTo.resourceCreator())} type="primary">
               {FI18n.i18nNext.t('create_resource')}
             </FComponentsLib.FRectBtn>
           )} */}
+
+        <FComponentsLib.FInput.FSearch
+          value={resourceCollectPage.inputText}
+          style={{ width: 400 }}
+          placeholder={FI18n.i18nNext.t('myresourses_search_hint')}
+          onChange={(e) => {
+            dispatch<OnChangeKeywordsAction>({
+              type: 'resourceCollectPage/onChangeKeywords',
+              payload: {
+                value: e.target.value,
+              },
+            });
+          }}
+        />
       </Space>
     </div>
 
     {
-      resourceCollectPage.dataSource.length > 0 ? (<>
+      resourceCollectPage.resource_ListState === 'noSearchResult' && (<FNoDataTip
+        height={'calc(100vh - 220px)'}
+        tipText={'没有符合条件的资源'}
+        btnText={'创建资源'}
+        onClick={() => {
+          self.open(FUtil.LinkTo.resourceCreator());
+        }}
+      />)
+    }
+
+    {
+      resourceCollectPage.resource_ListState === 'loaded' && (<>
         <div style={{ height: 40 }} />
         <div className={styles.Content}>
           {
-            resourceCollectPage.dataSource.map((i, j) => {
+            resourceCollectPage.resource_List.map((i, j) => {
               return (<FResourceCard
                   key={i.id}
                   resource={i}
@@ -190,33 +222,37 @@ function ResourceCollect({ dispatch, resourceCollectPage }: ResourceCollectProps
           <div className={styles.bottomPadding} />
         </div>
         <div style={{ height: 100 }} />
-      </>) : (<FNoDataTip
-        height={'calc(100vh - 220px)'}
-        tipText={'没有符合条件的资源'}
-        btnText={'创建资源'}
-        onClick={() => {
-          self.open(FUtil.LinkTo.resourceCreator());
-        }}
-      />)
-    }
-
-    {
-      resourceCollectPage.totalNum > resourceCollectPage.dataSource.length && (<>
-        <div className={styles.bottom}>
-          <Button
-            className={styles.loadMore}
-            onClick={() => {
-              dispatch<OnClickLoadingMordAction>({
-                type: 'resourceCollectPage/onClickLoadingMord',
-              });
-            }}
-          >
-            加载更多
-          </Button>
-        </div>
-        <div style={{ height: 100 }} />
       </>)
     }
+
+
+    {/*{*/}
+    {/*  resourceCollectPage.totalNum > resourceCollectPage.dataSource.length && (<>*/}
+    {/*    <div className={styles.bottom}>*/}
+    {/*      <Button*/}
+    {/*        className={styles.loadMore}*/}
+    {/*        onClick={() => {*/}
+    {/*          dispatch<OnClickLoadingMordAction>({*/}
+    {/*            type: 'resourceCollectPage/onClickLoadingMord',*/}
+    {/*          });*/}
+    {/*        }}*/}
+    {/*      >*/}
+    {/*        加载更多*/}
+    {/*      </Button>*/}
+    {/*    </div>*/}
+    {/*    <div style={{ height: 100 }} />*/}
+    {/*  </>)*/}
+    {/*}*/}
+
+    <FListFooter
+      state={resourceCollectPage.resource_ListMore}
+      onClickLoadMore={async () => {
+        // await fetchResourceList(false);
+        dispatch<OnClickLoadingMordAction>({
+          type: 'resourceCollectPage/onClickLoadingMord',
+        });
+      }}
+    />
     <div style={{ height: 100 }} />
   </>);
 

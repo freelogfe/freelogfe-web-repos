@@ -264,7 +264,9 @@ const Model: ResourceListPageModelType = {
       const { state, more } = listStateAndListMore({
         list_Length: finalList.length,
         total_Length: data_resourceList.totalItem,
-        has_FilterCriteria: resourceListPage.inputText !== '' || resourceTypes.length !== 0 || resourceListPage.resourceStatus !== '#',
+        has_FilterCriteria: resourceListPage.inputText !== ''
+          || resourceTypes.length !== 0
+          || resourceListPage.resourceStatus !== '#',
       });
 
       yield put<ChangeAction>({
