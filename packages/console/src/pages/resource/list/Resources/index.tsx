@@ -25,6 +25,7 @@ import { Button, Space } from 'antd';
 import FInput from '@/components/FInput';
 import { history } from 'umi';
 import FResourceCard from '@/components/FResourceCard';
+import FListFooter from '@/components/FListFooter';
 
 interface ResourceProps {
   dispatch: Dispatch;
@@ -56,16 +57,17 @@ function Resources({ dispatch, resourceListPage }: ResourceProps) {
     });
   });
 
-  if (resourceListPage.totalNum === -1) {
+  if (resourceListPage.resource_ListState === 'loading') {
     return <FLoadingTip height={'calc(100vh - 140px)'} />;
   }
 
-  if (
-    resourceListPage.dataSource.length === 0 &&
-    resourceListPage.inputText === '' &&
-    resourceListPage.resourceTypeCodes.values.length === 1 && resourceListPage.resourceTypeCodes.value === '#all' &&
-    resourceListPage.resourceStatus === '#'
-  ) {
+  // if (
+  //   resourceListPage.dataSource.length === 0 &&
+  //   resourceListPage.inputText === '' &&
+  //   resourceListPage.resourceTypeCodes.values.length === 1 && resourceListPage.resourceTypeCodes.value === '#all' &&
+  //   resourceListPage.resourceStatus === '#'
+  // ) {
+  if (resourceListPage.resource_ListState === 'noData') {
     return (
       <FNoDataTip
         height={'calc(100vh - 140px)'}
@@ -121,7 +123,6 @@ function Resources({ dispatch, resourceListPage }: ResourceProps) {
               />
             }
           >
-
               <span style={{ cursor: 'pointer' }}>
 
                 {resourceStatusOptions.find((rs) => {
@@ -154,97 +155,103 @@ function Resources({ dispatch, resourceListPage }: ResourceProps) {
           // placeholder={FI18n.i18nNext.t('search_resource')}
           placeholder={FI18n.i18nNext.t('myresourses_search_hint')}
         />
-        {/* {showGotoCreateBtn && (
-            <FComponentsLib.FRectBtn onClick={() => router.push(FUtil.LinkTo.resourceCreator())} type="primary">
-              {FI18n.i18nNext.t('create_resource')}
-            </FComponentsLib.FRectBtn>
-          )} */}
       </Space>
     </div>
 
     {
-      resourceListPage.dataSource.length > 0 ? (<>
-          <div style={{ height: 40 }} />
-          <div className={styles.Content}>
-            <div
-              className={'flex-column-center mb-20 m-10 ' + styles.createCard}
-              onClick={() => history.push(FUtil.LinkTo.resourceCreator())}
-            >
-              <div className={'flex-column-center ' + styles.createButton}>
-                <i className={['freelog', 'fl-icon-tianjia'].join(' ')} />
-              </div>
-              <span className={'mt-20 ' + styles.createText}>创建资源</span>
-            </div>
-            {
-              resourceListPage.dataSource.map((i, j) => {
-                return (<FResourceCard
-                    key={i.id}
-                    resource={i}
-                    type={'resource'}
-                    className={styles.FResourceCard}
-                    // onBoomJuice={() => onBoomJuice && onBoomJuice(i.id, i, j)}
-                    onClickDetails={() => {
-                      window.open(
-                        FUtil.LinkTo.resourceDetails({
-                          resourceID: i.id,
-                        }),
-                      );
-                    }}
-                    onClickEditing={() => {
-                      window.open(
-                        FUtil.LinkTo.resourceInfo({
-                          resourceID: i.id,
-                        }),
-                      );
-                    }}
-                    onClickRevision={() => {
-                      window.open(
-                        FUtil.LinkTo.resourceCreateVersion({
-                          resourceID: i.id,
-                        }),
-                      );
-                    }}
-                    // onClickMore={() => onClickMore && onClickMore(i.id, i, j)}
-                  />
-                );
-              })
-            }
-            <div className={styles.bottomPadding} />
-            <div className={styles.bottomPadding} />
-            <div className={styles.bottomPadding} />
-            <div className={styles.bottomPadding} />
-          </div>
-          <div style={{ height: 100 }} />
-        </>
-      ) : (
-        <FNoDataTip
-          height={'calc(100vh - 220px)'}
-          tipText={'没有符合条件的资源'}
-          btnText={'创建资源'}
-          onClick={() => {
-            self.open(FUtil.LinkTo.resourceCreator());
-          }}
-        />
-      )
+      resourceListPage.resource_ListState === 'noSearchResult' && (<FNoDataTip
+        height={'calc(100vh - 220px)'}
+        tipText={'没有符合条件的资源'}
+        btnText={'创建资源'}
+        onClick={() => {
+          self.open(FUtil.LinkTo.resourceCreator());
+        }}
+      />)
     }
 
     {
-      resourceListPage.totalNum > resourceListPage.dataSource.length && (<>
-        <div className={styles.bottom}>
-          <Button
-            className={styles.loadMore}
-            onClick={() => {
-              dispatch<OnClickLoadingMordAction>({
-                type: 'resourceListPage/onClickLoadingMord',
-              });
-            }}
+      resourceListPage.resource_ListState === 'loaded' && (<>
+        <div style={{ height: 40 }} />
+        <div className={styles.Content}>
+          <div
+            className={'flex-column-center mb-20 m-10 ' + styles.createCard}
+            onClick={() => history.push(FUtil.LinkTo.resourceCreator())}
           >
-            加载更多
-          </Button>
+            <div className={'flex-column-center ' + styles.createButton}>
+              <i className={['freelog', 'fl-icon-tianjia'].join(' ')} />
+            </div>
+            <span className={'mt-20 ' + styles.createText}>创建资源</span>
+          </div>
+          {
+            resourceListPage.resource_List.map((i, j) => {
+              return (<FResourceCard
+                  key={i.id}
+                  resource={i}
+                  type={'resource'}
+                  className={styles.FResourceCard}
+                  // onBoomJuice={() => onBoomJuice && onBoomJuice(i.id, i, j)}
+                  onClickDetails={() => {
+                    window.open(
+                      FUtil.LinkTo.resourceDetails({
+                        resourceID: i.id,
+                      }),
+                    );
+                  }}
+                  onClickEditing={() => {
+                    window.open(
+                      FUtil.LinkTo.resourceInfo({
+                        resourceID: i.id,
+                      }),
+                    );
+                  }}
+                  onClickRevision={() => {
+                    window.open(
+                      FUtil.LinkTo.resourceCreateVersion({
+                        resourceID: i.id,
+                      }),
+                    );
+                  }}
+                  // onClickMore={() => onClickMore && onClickMore(i.id, i, j)}
+                />
+              );
+            })
+          }
+          <div className={styles.bottomPadding} />
+          <div className={styles.bottomPadding} />
+          <div className={styles.bottomPadding} />
+          <div className={styles.bottomPadding} />
         </div>
         <div style={{ height: 100 }} />
       </>)
     }
+
+    {/*{*/}
+    {/*  resourceListPage.totalNum > resourceListPage.resource_List.length && (<>*/}
+    {/*    <div className={styles.bottom}>*/}
+    {/*      <Button*/}
+    {/*        className={styles.loadMore}*/}
+    {/*        onClick={() => {*/}
+    {/*          dispatch<OnClickLoadingMordAction>({*/}
+    {/*            type: 'resourceListPage/onClickLoadingMord',*/}
+    {/*          });*/}
+    {/*        }}*/}
+    {/*      >*/}
+    {/*        加载更多*/}
+    {/*      </Button>*/}
+    {/*    </div>*/}
+    {/*    <div style={{ height: 100 }} />*/}
+    {/*  </>)*/}
+    {/*}*/}
+
+    <FListFooter
+      state={resourceListPage.resource_ListMore}
+      onClickLoadMore={async () => {
+        // await fetchResourceList(false);
+        dispatch<OnClickLoadingMordAction>({
+          type: 'resourceListPage/onClickLoadingMord',
+        });
+      }}
+    />
     <div style={{ height: 100 }} />
   </>);
 

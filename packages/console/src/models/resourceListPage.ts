@@ -3,6 +3,7 @@ import { EffectsCommandMap, Subscription, SubscriptionAPI } from 'dva';
 import { DvaReducer } from './shared';
 import { ConnectState } from '@/models/connect';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
+import { listStateAndListMore } from '@/components/FListFooter';
 
 export interface ResourceListPageModelState {
   resourceTypeCodes: {
@@ -14,8 +15,19 @@ export interface ResourceListPageModelState {
   resourceStatus: 0 | 1 | 2 | 4 | '#';
   inputText: string;
   // pageSize: number;
-  totalNum: number;
-  dataSource: {
+  // totalNum: number;
+  // dataSource: {
+  //   id: string;
+  //   cover: string;
+  //   title: string;
+  //   version: string;
+  //   policy: string[],
+  //   type: string[];
+  //   status: 0 | 1;
+  //   authProblem: boolean;
+  // }[];
+
+  resource_List: {
     id: string;
     cover: string;
     title: string;
@@ -25,6 +37,8 @@ export interface ResourceListPageModelState {
     status: 0 | 1;
     authProblem: boolean;
   }[];
+  resource_ListState: 'loading' | 'noData' | 'noSearchResult' | 'loaded';
+  resource_ListMore: 'loading' | 'andMore' | 'noMore';
 }
 
 export interface ChangeAction extends AnyAction {
@@ -112,9 +126,13 @@ const initStates: ResourceListPageModelState = {
   },
   resourceStatus: '#',
   inputText: '',
-  dataSource: [],
+  // dataSource: [],
   // pageSize: 20,
-  totalNum: -1,
+  // totalNum: -1,
+
+  resource_List: [],
+  resource_ListState: 'loading',
+  resource_ListMore: 'loading',
 };
 
 const Model: ResourceListPageModelType = {
@@ -144,20 +162,36 @@ const Model: ResourceListPageModelType = {
         resourceListPage,
       }));
 
-      let dataSource: ResourceListPageModelState['dataSource'] = [];
+      // let dataSource: ResourceListPageModelState['dataSource'] = [];
+      let resource_List: ResourceListPageModelState['resource_List'] = [];
 
       if (!payload.restart) {
-        dataSource = resourceListPage.dataSource;
+        // dataSource = resourceListPage.dataSource;
+        resource_List = resourceListPage.resource_List;
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            // resource_ListState: 'loading',
+            resource_ListMore: 'loading',
+          },
+        });
+      } else {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            resource_ListState: 'loading',
+            // resource_ListMore: 'loading',
+          },
+        });
       }
-
-      // console.log(dataSource, 'dataSourcedataSource92834uoi');
 
       const resourceTypes: Array<string | number> = resourceListPage.resourceTypeCodes.labels.filter((rt) => {
         return rt !== '全部';
       });
 
       const params: Parameters<typeof FServiceAPI.Resource.list>[0] = {
-        skip: dataSource.length,
+        // skip: dataSource.length,
+        skip: resource_List.length,
         limit: FUtil.Predefined.pageSize,
         keywords: resourceListPage.inputText,
         resourceType: resourceTypes.length === 0 ? undefined : String(resourceTypes[resourceTypes.length - 1]),
@@ -165,15 +199,39 @@ const Model: ResourceListPageModelType = {
         status: resourceListPage.resourceStatus === '#' ? undefined : (resourceListPage.resourceStatus as 0),
         isSelf: 1,
       };
-      const { data } = yield call(FServiceAPI.Resource.list, params);
+
+
+
+      const { ret, errCode, data: data_resourceList }: {
+        ret: number;
+        errCode: number;
+        data: {
+          limit: number;
+          skip: number;
+          totalItem: number;
+          dataList: {
+            resourceId: string;
+            resourceName: string;
+            resourceType: string[];
+            latestVersion: string;
+            coverImages: string[];
+            status: 0 | 1;
+            policies: {
+              policyId: string;
+              policyName: string;
+              status: 0 | 1;
+            }[];
+          }[];
+        };
+      } = yield call(FServiceAPI.Resource.list, params);
       // console.log(data, 'data')
 
       let auths: any[] = [];
-      const resourceIds: string = data.dataList
-        .filter((r: any) => {
+      const resourceIds: string = data_resourceList.dataList
+        .filter((r) => {
           return r.latestVersion !== '';
         })
-        .map((r: any) => {
+        .map((r) => {
           return r.resourceId;
         }).join(',');
       if (resourceIds !== '') {
@@ -184,32 +242,64 @@ const Model: ResourceListPageModelType = {
         auths = data1;
       }
 
+      const finalList = [
+        ...resource_List,
+        ...data_resourceList.dataList.map<ResourceListPageModelState['resource_List'][number]>((i) => {
+          const res = auths.find((dd: any) => {
+            return dd.resourceId === i.resourceId;
+          });
+          return {
+            id: i.resourceId,
+            cover: i.coverImages.length > 0 ? i.coverImages[0] : '',
+            title: i.resourceName,
+            version: i.latestVersion,
+            policy: i.policies
+              .filter((l) => {
+                return l.status === 1;
+              })
+              .map((l: any) => l.policyName),
+            type: i.resourceType,
+            status: i.status,
+            authProblem: !!res && !res.isAuth,
+          };
+        }),
+      ];
+
+      const { state, more } = listStateAndListMore({
+        list_Length: finalList.length,
+        total_Length: data_resourceList.totalItem,
+        has_FilterCriteria: resourceListPage.inputText !== '' || resourceTypes.length !== 0 || resourceListPage.resourceStatus !== '#',
+      });
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          dataSource: [
-            ...dataSource,
-            ...(data.dataList as any[]).map<ResourceListPageModelState['dataSource'][number]>((i: any) => {
-              const res = auths.find((dd: any) => {
-                return dd.resourceId === i.resourceId;
-              });
-              return {
-                id: i.resourceId,
-                cover: i.coverImages.length > 0 ? i.coverImages[0] : '',
-                title: i.resourceName,
-                version: i.latestVersion,
-                policy: i.policies
-                  .filter((l: any) => {
-                    return l.status === 1;
-                  })
-                  .map((l: any) => l.policyName),
-                type: i.resourceType,
-                status: i.status,
-                authProblem: !!res && !res.isAuth,
-              };
-            }),
-          ],
-          totalNum: data.totalItem,
+          // dataSource: [
+          //   ...dataSource,
+          //   ...(data.dataList as any[]).map<ResourceListPageModelState['dataSource'][number]>((i: any) => {
+          //     const res = auths.find((dd: any) => {
+          //       return dd.resourceId === i.resourceId;
+          //     });
+          //     return {
+          //       id: i.resourceId,
+          //       cover: i.coverImages.length > 0 ? i.coverImages[0] : '',
+          //       title: i.resourceName,
+          //       version: i.latestVersion,
+          //       policy: i.policies
+          //         .filter((l: any) => {
+          //           return l.status === 1;
+          //         })
+          //         .map((l: any) => l.policyName),
+          //       type: i.resourceType,
+          //       status: i.status,
+          //       authProblem: !!res && !res.isAuth,
+          //     };
+          //   }),
+          // ],
+          // totalNum: data.totalItem,
+          resource_List: finalList,
+          resource_ListState: state,
+          resource_ListMore: more,
         },
       });
     },

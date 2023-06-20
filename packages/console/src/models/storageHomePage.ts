@@ -312,21 +312,12 @@ const Model: StorageHomePageModelType = {
       }));
       let skip: number = 0;
       let limit: number = FUtil.Predefined.pageSize;
-      // let limit: number = 5;
-
       if (payload === 'append') {
         if (storageHomePage.object_List.length === storageHomePage.total) {
           return;
         }
         skip = storageHomePage.object_List.length;
       }
-      // else if (payload === 'insert') {
-      //   const allNames: string[] = [
-      //     ...storageHomePage.uploadTaskQueue.map<string>((utq) => utq.name),
-      //     ...storageHomePage.object_List.map<string>((ol) => ol.name),
-      //   ];
-      //   limit = new Set(allNames).size;
-      // }
       const params: Parameters<typeof FServiceAPI.Storage.objectList>[0] = {
         bucketName: storageHomePage.activatedBucket,
         limit,
