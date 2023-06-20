@@ -7,7 +7,7 @@ import { history } from 'umi';
 import FResourceCard, { FResourceCardProps } from '@/components/FResourceCard';
 import FNoDataTip from '@/components/FNoDataTip';
 import { FUtil, FI18n } from '@freelog/tools-lib';
-import categoryData from '@/utils/category';
+// import categoryData from '@/utils/category';
 import FComponentsLib from '@freelog/components-lib';
 import FResourceTypeFilter from '@/components/FResourceTypeFilter';
 
@@ -165,7 +165,7 @@ function FResourceCardsList({
                 onClickDetails={() => onClickDetails && onClickDetails(i.id, i, j)}
                 onClickEditing={() => onClickEditing && onClickEditing(i.id, i, j)}
                 onClickRevision={() => onClickRevision && onClickRevision(i.id, i, j)}
-                onClickMore={() => onClickMore && onClickMore(i.id, i, j)}
+                // onClickMore={() => onClickMore && onClickMore(i.id, i, j)}
               />
             ))}
             <div className={styles.bottomPadding} />

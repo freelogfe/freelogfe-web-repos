@@ -26,14 +26,14 @@ export interface FResourceCardProps {
   onClickDetails?: EventFunc;
   onClickEditing?: EventFunc;
   onClickRevision?: EventFunc;
-  onClickMore?: EventFunc;
+  // onClickMore?: EventFunc;
   onClick?: EventFunc;
 }
 
 function FResourceCard({
                          className = '', type = 'market',
                          resource,
-                         onBoomJuice, onClickDetails, onClickEditing, onClickRevision, onClickMore, onClick,
+                         onBoomJuice, onClickDetails, onClickEditing, onClickRevision, onClick,
                        }: FResourceCardProps) {
   return (
     <div
