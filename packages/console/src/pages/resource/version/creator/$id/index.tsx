@@ -58,6 +58,7 @@ function VersionCreator({
                         }: VersionCreatorProps) {
 
   const [isMarkdownEditorDirty, set_isMarkdownEditorDirty] = React.useState<boolean>(false);
+  const [isfComicToolDirty, set_isfComicToolDirty] = React.useState<boolean>(false);
 
   AHooks.useMount(() => {
     dispatch<OnMountPageAction>({
@@ -114,6 +115,7 @@ function VersionCreator({
         set_isMarkdownEditorDirty(!saved);
       },
     });
+    await set_isMarkdownEditorDirty(false);
     await dispatch<OnClose_MarkdownEditor_Action>({
       type: 'resourceVersionCreatorPage/onClose_MarkdownEditor',
     });
@@ -129,9 +131,10 @@ function VersionCreator({
     await fComicTool({
       resourceID: resourceVersionCreatorPage.resourceInfo?.resourceID || '',
       async onChange_Saved(saved: boolean) {
-        set_isMarkdownEditorDirty(!saved);
+        set_isfComicToolDirty(!saved);
       },
     });
+    await set_isfComicToolDirty(false);
     await dispatch<OnClose_MarkdownEditor_Action>({
       type: 'resourceVersionCreatorPage/onClose_MarkdownEditor',
     });
@@ -162,7 +165,7 @@ function VersionCreator({
       </Helmet>
 
       <FPrompt
-        watch={resourceVersionCreatorPage.dataIsDirty || isMarkdownEditorDirty}
+        watch={resourceVersionCreatorPage.dataIsDirty || isMarkdownEditorDirty || isfComicToolDirty}
         messageText={'还没有保存草稿或发行，现在离开会导致信息丢失'}
       />
       <FLeftSiderLayout
@@ -523,9 +526,9 @@ function VersionCreator({
                     },
                   });
                 }}
-                // style={{
-                //   height: 500,
-                // }}
+                style={{
+                  minHeight: 500,
+                }}
               />
             </FFormLayout.FBlock>
           </FFormLayout>
