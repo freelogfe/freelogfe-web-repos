@@ -357,6 +357,8 @@ function FPublishObjectFile($prop: FPublishObjectFileProps) {
           <FComponentsLib.FContentText
             type='highlight'
             text={$state.fInfo.name}
+            style={{maxWidth: 600}}
+            singleRow
           />
           <div style={{ height: 18 }} />
           <div className={styles.info}>
@@ -384,6 +386,8 @@ function FPublishObjectFile($prop: FPublishObjectFileProps) {
           <FComponentsLib.FContentText
             type='highlight'
             text={$prop.fileInfo.name}
+            style={{maxWidth: 600}}
+            singleRow
           />
           <div style={{ height: 18 }} />
           <div className={styles.info}>
@@ -457,6 +461,8 @@ function FPublishObjectFile($prop: FPublishObjectFileProps) {
           <FComponentsLib.FContentText
             type='highlight'
             text={$state.fInfo.name}
+            style={{maxWidth: 600}}
+            singleRow
           />
           <div style={{ height: 18 }} />
           <div className={styles.info}>
