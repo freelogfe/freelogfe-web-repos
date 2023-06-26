@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import { Col, Row, Space } from 'antd';
-import FInput from '../../../FInput';
+// import FInput from '../../../FInput';
 // import FSelect from '../../../FSelect';
 import { Data } from '../index';
 import { FUtil, FI18n } from '@freelog/tools-lib';
@@ -31,9 +31,10 @@ function Property({ data, hideTypeSelect = false, onChange }: PropertyProps) {
           <FComponentsLib.FTitleText type='h4' text={FI18n.i18nNext.t('resourceoptions_add_input_name')} />
         </Space>
         <div style={{ height: 5 }} />
-        <FInput
+        <FComponentsLib.FInput.FSingleLine
+          lengthLimit={-1}
           className={styles.input}
-          wrapClassName={styles.input}
+          // wrapClassName={styles.input}
           placeholder={FI18n.i18nNext.t('resourceoptions_add_input_name_hint')}
           value={data.name}
           onChange={(e) => {
@@ -68,9 +69,10 @@ function Property({ data, hideTypeSelect = false, onChange }: PropertyProps) {
           <FComponentsLib.FTitleText type='h4' text={FI18n.i18nNext.t('resourceoptions_add_input_key')} />
         </Space>
         <div style={{ height: 5 }} />
-        <FInput
+        <FComponentsLib.FInput.FSingleLine
+          lengthLimit={-1}
           className={styles.input}
-          wrapClassName={styles.input}
+          // wrapClassName={styles.input}
           placeholder={FI18n.i18nNext.t('resourceoptions_add_input_key_hint')}
           value={data.key}
           onChange={(e) => {
@@ -104,9 +106,10 @@ function Property({ data, hideTypeSelect = false, onChange }: PropertyProps) {
           <FComponentsLib.FTitleText type='h4' text={FI18n.i18nNext.t('resourceoptions_add_input_desc')} />
         </Space>
         <div style={{ height: 5 }} />
-        <FInput
+        <FComponentsLib.FInput.FSingleLine
+          lengthLimit={-1}
           className={styles.input}
-          wrapClassName={styles.input}
+          // wrapClassName={styles.input}
           placeholder={FI18n.i18nNext.t('resourceoptions_add_input_desc_hint')}
           value={data.description}
           onChange={(e) => {
@@ -167,9 +170,10 @@ function Property({ data, hideTypeSelect = false, onChange }: PropertyProps) {
               <FComponentsLib.FTitleText type='h4' text={FI18n.i18nNext.t('resourceoptions_add_input_default')} />
             </Space>
             <div style={{ height: 5 }} />
-            <FInput
+            <FComponentsLib.FInput.FSingleLine
+              lengthLimit={-1}
               className={styles.input}
-              wrapClassName={styles.input}
+              // wrapClassName={styles.input}
               placeholder={FI18n.i18nNext.t('resourceoptions_add_input_default_hint')}
               value={data.input}
               onChange={(e) => {
@@ -203,7 +207,8 @@ function Property({ data, hideTypeSelect = false, onChange }: PropertyProps) {
                 data.select.map((si, i) => {
                   return (<div key={i}>
                     <Space size={12}>
-                      <FInput
+                      <FComponentsLib.FInput.FSingleLine
+                        lengthLimit={-1}
                         value={si.value}
                         style={{ width: 480 }}
                         onChange={(e) => {
