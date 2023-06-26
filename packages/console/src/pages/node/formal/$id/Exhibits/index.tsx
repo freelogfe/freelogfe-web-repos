@@ -6,9 +6,9 @@ import FSwitch from '@/components/FSwitch';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import { ConnectState, NodeManagerModelState } from '@/models/connect';
-import FInput from '@/components/FInput';
+// import FInput from '@/components/FInput';
 import { history } from 'umi';
-import FMenu from '@/components/FMenu';
+// import FMenu from '@/components/FMenu';
 import { ColumnsType } from 'antd/lib/table/interface';
 import {
   FetchExhibitsAction,
@@ -34,7 +34,7 @@ import FCoverImage from '@/components/FCoverImage';
 import { Helmet } from 'react-helmet';
 import FComponentsLib from '@freelog/components-lib';
 import FResourceTypeFilter from '@/components/FResourceTypeFilter';
-import FInput_Search from '@/components/FInput_Search';
+// import FInput_Search from '@/components/FInput_Search';
 
 interface ExhibitsProps {
   dispatch: Dispatch;
@@ -276,7 +276,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                   </FDropdownMenu>
                 </div>
                 <div>
-                  <FInput_Search
+                  <FComponentsLib.FInput.FSearch
                     value={nodeManagerPage.exhibit_InputFilter}
                     onChange={(e) => {
                       dispatch<OnChange_Exhibit_InputFilter_Action>({
