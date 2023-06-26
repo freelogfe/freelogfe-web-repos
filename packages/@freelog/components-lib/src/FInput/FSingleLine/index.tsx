@@ -15,9 +15,11 @@ export interface FSingleLineInputProps {
     onChange?: ChangeEventHandler<HTMLInputElement>;
     onPressEnter?: KeyboardEventHandler<HTMLInputElement>;
     onKeyUp?: KeyboardEventHandler<HTMLInputElement>;
+    disabled?: boolean;
 }
 
 function FSingleLineInput({
+                              disabled = false,
                               value,
                               placeholder = '',
                               className = '',
@@ -28,12 +30,14 @@ function FSingleLineInput({
                               onChange,
                               onPressEnter,
                               onKeyUp,
+
                           }: FSingleLineInputProps, ref: React.Ref<InputRef> | undefined) {
     return (<Input
+        disabled={disabled}
         value={value}
         ref={ref}
         placeholder={placeholder}
-        className={[className, styles.light, styles.Input, hasError ? styles.InputError : ''].join(' ')}
+        className={[className, disabled ? styles.disabledInput : styles.Input, hasError ? styles.InputError : ''].join(' ')}
         style={{
             height: size === 'middle' ? 38 : 32,
             ...style,

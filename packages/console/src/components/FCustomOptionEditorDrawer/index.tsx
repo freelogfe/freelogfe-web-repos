@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import { Space, Row, Col } from 'antd';
 import FDrawer from '../FDrawer';
-import FInput from '../FInput';
+// import FInput from '../FInput';
 import FSelect from '../FSelect';
 import { FUtil, FI18n } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
@@ -128,9 +128,10 @@ function FCustomOptionEditorDrawer({
               <FComponentsLib.FTitleText type='h4' text={'key'} />
             </Space>
             <div style={{ height: 5 }} />
-            <FInput
+            <FComponentsLib.FInput.FSingleLine
+              lengthLimit={-1}
               className={styles.input}
-              wrapClassName={styles.input}
+              // wrapClassName={styles.input}
               placeholder={'输入key'}
               value={keyInput}
               disabled={disabledKeyInput}
@@ -163,9 +164,10 @@ function FCustomOptionEditorDrawer({
               <FComponentsLib.FTitleText type='h4' text={'属性说明'} />
             </Space>
             <div style={{ height: 5 }} />
-            <FInput
+            <FComponentsLib.FInput.FSingleLine
+              lengthLimit={-1}
               className={styles.input}
-              wrapClassName={styles.input}
+              // wrapClassName={styles.input}
               placeholder={'输入属性说明'}
               value={descriptionInput}
               onChange={(e) => {
@@ -224,9 +226,10 @@ function FCustomOptionEditorDrawer({
                   <FComponentsLib.FTitleText type='h4' text={'自定义选项'} />
                 </Space>
                 <div style={{ height: 5 }} />
-                <FInput
+                <FComponentsLib.FInput.FSingleLine
+                  lengthLimit={-1}
                   className={styles.input}
-                  wrapClassName={styles.input}
+                  // wrapClassName={styles.input}
                   placeholder={'输入自定义选项'}
                   value={valueInput}
                   onChange={(e) => {
@@ -255,9 +258,10 @@ function FCustomOptionEditorDrawer({
                   <FComponentsLib.FTitleText type='h4' text={'自定义选项(首个选项为默认值)'} />
                 </Space>
                 <div style={{ height: 5 }} />
-                <FInput
+                <FComponentsLib.FInput.FSingleLine
+                  lengthLimit={-1}
                   className={styles.input}
-                  wrapClassName={styles.input}
+                  // wrapClassName={styles.input}
                   // placeholder={'输入自定义选项'}
                   placeholder={FI18n.i18nNext.t('msg_customdropdownlist')}
                   value={valueInput}
