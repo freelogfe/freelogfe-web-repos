@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import FDrawer from '@/components/FDrawer';
 import FDropdownMenu from '@/components/FDropdownMenu';
-import FInput from '@/components/FInput';
+// import FInput from '@/components/FInput';
 import FComponentsLib from '@freelog/components-lib';
 import FResourceStatusBadge from '@/components/FResourceStatusBadge';
 import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
@@ -84,9 +84,15 @@ function FAddDependenciesDrawer({
     set_selectedResourceIDs(existingResourceIDs);
   });
 
-  React.useEffect(() => {
+  // React.useEffect(() => {
+  //   fetchResourceList(true);
+  // }, [resourceFrom, searchInput]);
+
+  AHooks.useDebounceEffect(() => {
     fetchResourceList(true);
-  }, [resourceFrom, searchInput]);
+  }, [resourceFrom, searchInput], {
+    wait: 300,
+  });
 
   async function fetchResourceList(restart: boolean = false) {
     let resourceListResult: FAddDependenciesDrawerStates['resourceList'] = [];
@@ -251,14 +257,17 @@ function FAddDependenciesDrawer({
             />
           </div>
 
-          <FInput
-            debounce={300}
-            onDebounceChange={(value) => {
-              set_searchInput(value);
+          <FComponentsLib.FInput.FSearch
+            // debounce={300}
+            // onDebounceChange={(value) => {
+            //   set_searchInput(value);
+            // }}
+            onChange={(e) => {
+              set_searchInput(e.target.value);
             }}
             value={searchInput}
             className={styles.filterInput}
-            theme='dark'
+            // theme='dark'
             size='small'
           />
         </div>
