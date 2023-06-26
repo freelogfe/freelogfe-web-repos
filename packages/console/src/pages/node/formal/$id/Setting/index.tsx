@@ -9,7 +9,7 @@ import FSiderContentLayout from '@/layouts/FSiderContentLayout';
 import FComponentsLib from '@freelog/components-lib';
 import { Radio, Space } from 'antd';
 import { FI18n } from '@freelog/tools-lib';
-import FInput from '@/components/FInput';
+// import FInput from '@/components/FInput';
 import * as AHooks from 'ahooks';
 import {
   OnChange_Setting_Cover_Action,
@@ -167,7 +167,7 @@ function Setting({ dispatch, nodeManagerPage }: SettingProps) {
 
               </div>)
               : (<div className={styles.nodeName1}>
-                <FInput
+                <FComponentsLib.FInput.FSingleLine
                   value={nodeManagerPage.setting_nodeTitle}
                   onChange={(e) => {
                     dispatch<OnChange_Setting_Title_Action>({
@@ -381,7 +381,7 @@ function Setting({ dispatch, nodeManagerPage }: SettingProps) {
                     </FComponentsLib.FTextBtn>
                   </div>
                   <div style={{ height: 15 }} />
-                  <FInput
+                  <FComponentsLib.FInput.FSingleLine
                     value={nodeManagerPage.setting_nodeLimitationMessage}
                     onChange={(e) => {
                       dispatch<OnChange_Setting_NodeLimitationMessage_Action>({
