@@ -4,7 +4,7 @@ import { Space } from 'antd';
 import FBraftEditor from '@/components/FBraftEditor';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
-import { ConnectState, ResourceInfoModelState, ResourceVersionEditorPageModelState } from '@/models/connect';
+import { ConnectState, ResourceVersionEditorPageModelState } from '@/models/connect';
 import {
   UpdateDataSourceAction,
   ChangeAction,
@@ -440,10 +440,10 @@ function VersionEditor({ dispatch, resourceVersionEditorPage, match }: VersionEd
   </>);
 }
 
-export default withRouter(connect(({ resourceVersionEditorPage, resourceInfo }: ConnectState) => ({
+export default withRouter(connect(({ resourceVersionEditorPage }: ConnectState) => ({
   // $version: resourceVersionEditorPage,
   resourceVersionEditorPage: resourceVersionEditorPage,
-  resourceInfo: resourceInfo,
+  // resourceInfo: resourceInfo,
 }))(VersionEditor));
 
 interface HeaderProps {
