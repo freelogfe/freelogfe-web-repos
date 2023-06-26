@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import { Col, Row, Space } from 'antd';
-import FInput from '../../../FInput';
+// import FInput from '../../../FInput';
 import FSelect from '../../../FSelect';
 import { Data } from '../index';
 import { FUtil, FI18n } from '@freelog/tools-lib';
@@ -30,9 +30,10 @@ function Property({ data, hideTypeSelect = false, onChange }: PropertyProps) {
           <FComponentsLib.FTitleText type='h4' text={FI18n.i18nNext.t('key')} />
         </Space>
         <div style={{ height: 5 }} />
-        <FInput
+        <FComponentsLib.FInput.FSingleLine
+          lengthLimit={-1}
           className={styles.input}
-          wrapClassName={styles.input}
+          // wrapClassName={styles.input}
           placeholder={'输入key'}
           value={data.key}
           onChange={(e) => {
@@ -66,9 +67,10 @@ function Property({ data, hideTypeSelect = false, onChange }: PropertyProps) {
           <FComponentsLib.FTitleText type='h4' text={FI18n.i18nNext.t('property_remark')} />
         </Space>
         <div style={{ height: 5 }} />
-        <FInput
+        <FComponentsLib.FInput.FSingleLine
+          lengthLimit={-1}
           className={styles.input}
-          wrapClassName={styles.input}
+          // wrapClassName={styles.input}
           placeholder={'输入属性说明'}
           value={data.description}
           onChange={(e) => {
@@ -132,9 +134,10 @@ function Property({ data, hideTypeSelect = false, onChange }: PropertyProps) {
               />
             </Space>
             <div style={{ height: 5 }} />
-            <FInput
+            <FComponentsLib.FInput.FSingleLine
+              lengthLimit={-1}
               className={styles.input}
-              wrapClassName={styles.input}
+              // wrapClassName={styles.input}
               placeholder={!hideTypeSelect ? FI18n.i18nNext.t('options_textfield_default_hint') : FI18n.i18nNext.t('options_textfield_value_hint')}
               value={data.defaultValue}
               onChange={(e) => {
@@ -165,9 +168,10 @@ function Property({ data, hideTypeSelect = false, onChange }: PropertyProps) {
               <FComponentsLib.FTitleText type='h4' text={'自定义选项(首个选项为默认值)'} />
             </Space>
             <div style={{ height: 5 }} />
-            <FInput
+            <FComponentsLib.FInput.FSingleLine
+              lengthLimit={-1}
               className={styles.input}
-              wrapClassName={styles.input}
+              // wrapClassName={styles.input}
               // placeholder={'输入属性说明'}
               placeholder={FI18n.i18nNext.t('msg_customdropdownlist')}
               value={data.customOption}
