@@ -147,6 +147,7 @@ const Model: ResourceAuthPageModelType = {
 
   state: {
     resourceID: '',
+    resourceName: '',
     pageState: 'loading',
     policies: [],
     policyPreviewVisible: false,
