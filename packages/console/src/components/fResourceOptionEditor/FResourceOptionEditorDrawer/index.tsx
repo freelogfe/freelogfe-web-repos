@@ -3,7 +3,7 @@ import styles from './index.less';
 import FDrawer from '@/components/FDrawer';
 import { Space } from 'antd';
 import FComponentsLib from '@freelog/components-lib';
-import FInput from '@/components/FInput';
+// import FInput from '@/components/FInput';
 import { FI18n, FUtil } from '@freelog/tools-lib';
 
 interface FResourceOptionEditorDrawerProps {
@@ -169,7 +169,8 @@ function FResourceOptionEditorDrawer({
           />
         </div>
         <div style={{ height: 5 }} />
-        <FInput
+        <FComponentsLib.FInput.FSingleLine
+          lengthLimit={-1}
           // disabled={true}
           disabled={noneEditableFields.includes('name')}
           // placeholder={'输入配置名称'}
@@ -212,7 +213,8 @@ function FResourceOptionEditorDrawer({
           />
         </div>
         <div style={{ height: 5 }} />
-        <FInput
+        <FComponentsLib.FInput.FSingleLine
+          lengthLimit={-1}
           disabled={noneEditableFields.includes('key')}
           // placeholder={'输入key'}
           placeholder={FI18n.i18nNext.t('resourceoptions_add_input_key_hint')}
@@ -255,7 +257,8 @@ function FResourceOptionEditorDrawer({
           />
         </div>
         <div style={{ height: 5 }} />
-        <FInput
+        <FComponentsLib.FInput.FSingleLine
+          lengthLimit={-1}
           disabled={noneEditableFields.includes('description')}
           value={descriptionInput}
           className={styles.input}
@@ -337,7 +340,8 @@ function FResourceOptionEditorDrawer({
             />
           </div>
           <div style={{ height: 5 }} />
-          <FInput
+          <FComponentsLib.FInput.FSingleLine
+            lengthLimit={-1}
             value={inputInput}
             className={styles.input}
             disabled={noneEditableFields.includes('input')}
@@ -379,7 +383,8 @@ function FResourceOptionEditorDrawer({
               selectInputs.map((si, i) => {
                 return (<div key={i}>
                   <Space size={12}>
-                    <FInput
+                    <FComponentsLib.FInput.FSingleLine
+                      lengthLimit={-1}
                       disabled={noneEditableFields.includes('select')}
                       value={si.value}
                       // className={styles.input}
