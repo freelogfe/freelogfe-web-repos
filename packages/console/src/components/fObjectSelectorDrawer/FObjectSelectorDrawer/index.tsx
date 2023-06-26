@@ -2,10 +2,11 @@ import * as React from 'react';
 import styles from './index.less';
 import FDrawer from '@/components/FDrawer';
 import FDropdownMenu from '@/components/FDropdownMenu';
-import FInput from '@/components/FInput';
+// import FInput from '@/components/FInput';
 import FComponentsLib from '@freelog/components-lib';
 import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
 import FListFooter, { listStateAndListMore } from '@/components/FListFooter';
+import * as AHooks from 'ahooks';
 
 interface FObjectSelectorDrawerProps {
   resourceTypeCode: string;
@@ -56,9 +57,15 @@ function FObjectSelectorDrawer({ resourceTypeCode, onSelect, onClose }: FObjectS
   const [objListState, set_objListState] = React.useState<FObjectSelectorDrawerStates['objListState']>(initStates['objListState']);
   const [objListMore, set_objListMore] = React.useState<FObjectSelectorDrawerStates['objListMore']>(initStates['objListMore']);
 
-  React.useEffect(() => {
+  // React.useEffect(() => {
+  //   loadData();
+  // }, [selected, inputValue]);
+
+  AHooks.useDebounceEffect(() => {
     loadData();
-  }, [selected, inputValue]);
+  }, [selected, inputValue], {
+    wait: 300,
+  });
 
   async function initData() {
     const params1: Parameters<typeof FServiceAPI.Storage.bucketList>[0] = {
@@ -143,12 +150,12 @@ function FObjectSelectorDrawer({ resourceTypeCode, onSelect, onClose }: FObjectS
         <a>{(selectOptions.find((rs) => rs.value === selected) as any).text}
           <FComponentsLib.FIcons.FDown style={{ marginLeft: 8, fontSize: 12 }} /></a>
       </FDropdownMenu>
-      <FInput
-        theme='dark'
-        debounce={300}
+      <FComponentsLib.FInput.FSearch
+        // theme='dark'
+        // debounce={300}
         value={inputValue}
-        onDebounceChange={(value) => {
-          set_inputValue(value);
+        onChange={(e) => {
+          set_inputValue(e.target.value);
         }}
       />
     </div>

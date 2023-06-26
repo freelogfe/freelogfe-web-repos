@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import FInput from '@/components/FInput';
+// import FInput from '@/components/FInput';
 import * as semver from 'semver';
 import * as AHooks from 'ahooks';
 import FComponentsLib from '@freelog/components-lib';
