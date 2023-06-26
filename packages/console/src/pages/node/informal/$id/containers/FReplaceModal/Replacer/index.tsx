@@ -169,6 +169,7 @@ function Replacer({ dispatch, informalNodeManagerPage }: ReplacerProps) {
               searchInput: e.target.value,
             });
           }}
+          size={'small'}
         />
       </div>
       <div style={{ height: 15 }} />
