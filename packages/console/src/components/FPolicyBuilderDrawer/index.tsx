@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import FInput from '../FInput';
+// import FInput from '../FInput';
 import { Space, Divider, DatePicker, Modal } from 'antd';
 import PolicyTemplates from './PolicyTemplates';
 import FDrawer from '../FDrawer';
@@ -813,10 +813,11 @@ function FPolicyBuilder({
           }
           <div className={styles.maskingContainer} ref={refMaskingContainer}>
             <div className={styles.policyHeader}>
-              <FInput
+              <FComponentsLib.FInput.FSingleLine
+                lengthLimit={-1}
                 ref={refPolicyTitleInput}
                 className={styles.policyTitle}
-                wrapClassName={styles.policyTitle}
+                // wrapClassName={styles.policyTitle}
                 value={titleInput}
                 onChange={(e) => {
                   onChange_TitleInput(e.target.value.trim());
@@ -931,7 +932,8 @@ function FPolicyBuilder({
                                     <div>
                                       <label className={styles.compositionStateIndex}>{stateIndex + 1}</label>
                                       <div style={{ width: 15 }} />
-                                      <FInput
+                                      <FComponentsLib.FInput.FSingleLine
+                                        lengthLimit={-1}
                                         placeholder='输入状态名称'
                                         autoFocus={true}
                                         style={{ width: 400 }}
@@ -1035,11 +1037,12 @@ function FPolicyBuilder({
                                         <div>
                                           <FComponentsLib.FContentText text={'支付'} type='normal' />
                                           <div style={{ width: 10 }} />
-                                          <FInput
+                                          <FComponentsLib.FInput.FSingleLine
+                                            lengthLimit={-1}
                                             // min={1}
                                             placeholder={FI18n.i18nNext.t('hint_transaction_amount')}
                                             style={{ width: 120 }}
-                                            value={et.payment_Amount}
+                                            value={et.payment_Amount || ''}
                                             onChange={(e) => {
                                               const value: string = e.target.value;
                                               if (Number.isNaN(Number(value))) {
@@ -1092,12 +1095,13 @@ function FPolicyBuilder({
                                     {
                                       et.type === 'relativeTime' && (<>
                                         <div>
-                                          <FInput
+                                          <FComponentsLib.FInput.FSingleLine
+                                            lengthLimit={-1}
                                             // min={1}
                                             // placeholder={'输入周期数目'}
                                             placeholder={FI18n.i18nNext.t('hint_relativetime_cyclecount')}
                                             style={{ width: 250 }}
-                                            value={et.relativeTime_Num}
+                                            value={et.relativeTime_Num || ''}
                                             onChange={(e) => {
                                               const value: string = e.target.value;
                                               let relativeTime_NumError: string = '';

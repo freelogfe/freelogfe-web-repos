@@ -17,9 +17,11 @@ export interface FSingleLineInputProps {
     onKeyUp?: KeyboardEventHandler<HTMLInputElement>;
     disabled?: boolean;
     onBlur?: FocusEventHandler<HTMLInputElement>;
+    autoFocus?: boolean;
 }
 
 function FSingleLineInput({
+                              autoFocus = false,
                               disabled = false,
                               value,
                               placeholder = '',
@@ -34,6 +36,7 @@ function FSingleLineInput({
                               onBlur
                           }: FSingleLineInputProps, ref: React.Ref<InputRef> | undefined) {
     return (<Input
+        autoFocus={autoFocus}
         disabled={disabled}
         value={value}
         ref={ref}
