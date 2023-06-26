@@ -13,13 +13,12 @@ import {
 } from '@/models/resourceVersionEditorPage';
 import BraftEditor, { EditorState } from 'braft-editor';
 import { withRouter } from 'umi';
-// import FInput from '@/components/FInput';
 import FTooltip from '@/components/FTooltip';
 import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
 import Sider from '@/pages/resource/containers/Sider';
 import FFormLayout from '@/components/FFormLayout';
 import FDrawer from '@/components/FDrawer';
-import { FServiceAPI, FI18n, FUtil } from '@freelog/tools-lib';
+import { FI18n, FUtil } from '@freelog/tools-lib';
 import FDivider from '@/components/FDivider';
 import { RouteComponentProps } from 'react-router';
 import { Helmet } from 'react-helmet';

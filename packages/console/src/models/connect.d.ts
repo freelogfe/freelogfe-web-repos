@@ -68,7 +68,6 @@ export interface ConnectState {
   resourceVersionCreatorPage: ResourceVersionCreatorPageModelState;
   resourceVersionEditorPage: ResourceVersionEditorPageModelState;
   resourceAuthPage: ResourceAuthPageModelState;
-  // resourceInfo: ResourceInfoModelState;
   user: UserModelState;
   global: GlobalModelState;
   storageHomePage: StorageHomePageModelState;
@@ -79,7 +78,6 @@ export interface ConnectState {
   nodeManagerPage: NodeManagerModelState;
   nodeManager_Contract_Page: NodeManager_Contract_Page_ModelState;
   exhibitInfoPage: ExhibitInfoPageModelState;
-  // resourceDepSelector: ResourceDepSelectorModelState;
   informalNodeManagerPage: InformalNodeManagerPageModelState;
   informExhibitInfoPage: InformExhibitInfoPageModelState;
   dashboardPage: DashboardPageModelState;
