@@ -4,7 +4,7 @@ import { AutoComplete, Dropdown, Popover, Space } from 'antd';
 import * as AHooks from 'ahooks';
 import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
-import FInput from '@/components/FInput';
+// import FInput from '@/components/FInput';
 
 interface Option {
   value: string;
@@ -363,7 +363,9 @@ function FResourceTypeInput(
           init();
         }}
       >
-        <FInput
+        <FComponentsLib.FInput.FSingleLine
+          lengthLimit={-1}
+          value={''}
           // value={'autoCompleteInput'}
           style={{ width: 360 }}
         />
