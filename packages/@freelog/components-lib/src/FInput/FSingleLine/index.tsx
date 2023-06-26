@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import {Input, InputRef} from 'antd';
-import {ChangeEventHandler, KeyboardEventHandler} from 'react';
+import {ChangeEventHandler, FocusEventHandler, KeyboardEventHandler} from 'react';
 
 export interface FSingleLineInputProps {
     value: string;
@@ -16,6 +16,7 @@ export interface FSingleLineInputProps {
     onPressEnter?: KeyboardEventHandler<HTMLInputElement>;
     onKeyUp?: KeyboardEventHandler<HTMLInputElement>;
     disabled?: boolean;
+    onBlur?: FocusEventHandler<HTMLInputElement>;
 }
 
 function FSingleLineInput({
@@ -30,7 +31,7 @@ function FSingleLineInput({
                               onChange,
                               onPressEnter,
                               onKeyUp,
-
+                              onBlur
                           }: FSingleLineInputProps, ref: React.Ref<InputRef> | undefined) {
     return (<Input
         disabled={disabled}
@@ -50,6 +51,7 @@ function FSingleLineInput({
                 className={[styles.FInputWordCount, lengthLimit - value.length < 0 ? styles.beyond : ''].join(' ')}
             >{lengthLimit - value.length}</span>)
             : undefined}
+        onBlur={onBlur}
     />);
 }
 
