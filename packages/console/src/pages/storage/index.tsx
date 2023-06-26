@@ -63,18 +63,18 @@ function Storage({ match, history, storageHomePage, storageObjectEditor, dispatc
   //
   // }
 
-  // React.useEffect(() => {
-  //   handleObject();
-  //
-  //   return () => {
-  //     dispatch<ChangeAction>({
-  //       type: 'storageObjectEditor/change',
-  //       payload: {
-  //         ...storageObjectEditorInitData,
-  //       },
-  //     });
-  //   };
-  // }, [state.objectID]);
+  React.useEffect(() => {
+    handleObject();
+
+    return () => {
+      dispatch<ChangeAction>({
+        type: 'storageObjectEditor/change',
+        payload: {
+          ...storageObjectEditorInitData,
+        },
+      });
+    };
+  }, [state.objectID]);
 
   async function handleObject() {
     await dispatch<ChangeAction>({

@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import styles from './index.less';
-import FInput from '@/components/FInput';
+// import FInput from '@/components/FInput';
 import FResourceList, { FResourceListProps } from '@/components/FResourceList';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
@@ -13,6 +13,7 @@ import {
 } from '@/models/storageObjectDepSelector';
 import FDropdownMenu from '@/components/FDropdownMenu';
 import FComponentsLib from '@freelog/components-lib';
+import * as AHooks from 'ahooks';
 
 interface FObjectSelectorProps {
   disabledIDsOrNames?: string[];
@@ -33,6 +34,14 @@ const defaultSelectOptions: { text?: string, value: string }[] = [
   { text: '全部Bucket', value: '_all' },
 ];
 
+interface FObjectSelectorStates {
+  searchInput: string;
+}
+
+const initStates: FObjectSelectorStates = {
+  searchInput: '',
+};
+
 function FObjectSelector({
                            disabledIDsOrNames,
                            showRemoveIDsOrNames,
@@ -44,10 +53,33 @@ function FObjectSelector({
                            selector,
                            storageHomePage,
                          }: FObjectSelectorProps) {
+
+  const [$state, $setState] = AHooks.useSetState<FObjectSelectorStates>(initStates);
+
   // console.log(visibleResourceType, 'visibleResourceType90weiofjsdlkfjdlkfjlk');
-  React.useEffect(() => {
+  // React.useEffect(() => {
+  //   init();
+  // }, []);
+
+  AHooks.useMount(() => {
     init();
-  }, []);
+  });
+
+  AHooks.useUnmount(() => {
+
+  });
+
+  AHooks.useDebounceEffect(() => {
+    // console.log($state.searchInput, 'sdioefjsldkjflk *****');
+    dispatch<OnChangeOConditionsAction>({
+      type: 'storageObjectDepSelector/onChangeOConditions',
+      payload: {
+        oInput: $state.searchInput,
+      },
+    });
+  }, [$state.searchInput], {
+    wait: 300,
+  });
 
   async function init() {
     await dispatch<ChangeAction>({
@@ -87,16 +119,19 @@ function FObjectSelector({
         <a>{(selectOptions.find((rs) => rs.value === selector.oSelect) as any).text}
           <FComponentsLib.FIcons.FDown style={{ marginLeft: 8, fontSize: 12 }} /></a>
       </FDropdownMenu>
-      <FInput
-        theme='dark'
-        debounce={300}
-        value={selector.oInput}
-        onDebounceChange={(value) => {
-          dispatch<OnChangeOConditionsAction>({
-            type: 'storageObjectDepSelector/onChangeOConditions',
-            payload: {
-              oInput: value,
-            },
+      <FComponentsLib.FInput.FSearch
+        // theme='dark'
+        // debounce={300}
+        value={$state.searchInput}
+        onChange={(e) => {
+          // dispatch<OnChangeOConditionsAction>({
+          //   type: 'storageObjectDepSelector/onChangeOConditions',
+          //   payload: {
+          //     oInput: e.target.value,
+          //   },
+          // });
+          $setState({
+            searchInput: e.target.value,
           });
         }}
       />
