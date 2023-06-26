@@ -1,7 +1,6 @@
 import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription, SubscriptionAPI } from 'dva';
 import { DvaReducer } from './shared';
-// import { FetchDataSourceAction } from '@/models/resourceInfo';
 import moment from 'moment';
 import { ConnectState } from '@/models/connect';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
@@ -13,6 +12,7 @@ import { OnUpdate_Data_Action } from '@/models/resourceSider';
 
 export interface ResourceAuthPageModelState {
   resourceID: string;
+  resourceName: string;
   pageState: 'loading' | 'loaded';
 
   policies: PolicyFullInfo_Type[];
@@ -177,8 +177,18 @@ const Model: ResourceAuthPageModelType = {
         isTranslate: 1,
       };
 
-      const { data: data_ResourceDetails, ret, errCode } = yield call(FServiceAPI.Resource.info, params);
-      // console.log(data, '@#$RFDSASDFSDFASDF');
+      const { data: data_ResourceDetails, ret, errCode }: {
+        ret: number;
+        errCode: number;
+        data: {
+          resourceId: string;
+          resourceName: string;
+          policies: any[];
+          baseUpcastResources: any[];
+          status: 0 | 1;
+        }
+      } = yield call(FServiceAPI.Resource.info, params);
+      // console.log(data_ResourceDetails, '@#$RFDSASDFSDFASDF');
 
       if (ret !== 0 || errCode !== 0) {
         return;
@@ -195,6 +205,7 @@ const Model: ResourceAuthPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
+          resourceName: data_ResourceDetails.resourceName,
           policies: policies,
           baseUastResources: data_ResourceDetails.baseUpcastResources || [],
           status: data_ResourceDetails.status,
