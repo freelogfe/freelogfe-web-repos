@@ -3,7 +3,7 @@ import styles from './index.less';
 import FDrawer from '@/components/FDrawer';
 import { Space } from 'antd';
 import FComponentsLib from '@freelog/components-lib';
-import FInput from '@/components/FInput';
+// import FInput from '@/components/FInput';
 import { FI18n, FUtil } from '@freelog/tools-lib';
 
 interface FAddFileBasePropsDrawerProps {
@@ -157,11 +157,12 @@ function FAddFileBasePropsDrawer({
                   <FComponentsLib.FTitleText type='h4'>{FI18n.i18nNext.t('resourceinfo_add_input_name')}</FComponentsLib.FTitleText>
                 </div>
                 <div style={{ height: 5 }} />
-                <FInput
+                <FComponentsLib.FInput.FSingleLine
+                  lengthLimit={-1}
                   value={ds.name}
-                  errorText={ds.nameError}
+                  // errorText={ds.nameError}
                   className={styles.input}
-                  wrapClassName={styles.input}
+                  // wrapClassName={styles.input}
                   onChange={(e) => {
                     const value: string = e.target.value;
                     let keyError: string = '';
@@ -180,6 +181,14 @@ function FAddFileBasePropsDrawer({
                   }}
                   placeholder={FI18n.i18nNext.t('resourceinfo_add_input_name_hint')}
                 />
+
+                {
+                  ds.nameError !== '' && (<>
+                    <div style={{ height: 5 }} />
+                    <div className={styles.error}>{ds.nameError}</div>
+                  </>)
+                }
+
               </div>
 
               <div>
@@ -188,11 +197,12 @@ function FAddFileBasePropsDrawer({
                   <FComponentsLib.FTitleText type='h4'>{FI18n.i18nNext.t('resourceinfo_add_input_key')}</FComponentsLib.FTitleText>
                 </div>
                 <div style={{ height: 5 }} />
-                <FInput
+                <FComponentsLib.FInput.FSingleLine
+                  lengthLimit={-1}
                   value={ds.key}
-                  errorText={ds.keyError}
+                  // errorText={ds.keyError}
                   className={styles.input}
-                  wrapClassName={styles.input}
+                  // wrapClassName={styles.input}
                   onChange={(e) => {
                     const value: string = e.target.value;
                     let keyError: string = '';
@@ -210,6 +220,13 @@ function FAddFileBasePropsDrawer({
                   }}
                   placeholder={FI18n.i18nNext.t('resourceinfo_add_input_key_hint')}
                 />
+
+                {
+                  ds.keyError !== '' && (<>
+                    <div style={{ height: 5 }} />
+                    <div className={styles.error}>{ds.keyError}</div>
+                  </>)
+                }
               </div>
               <div>
                 <div className={styles.title}>
@@ -217,11 +234,12 @@ function FAddFileBasePropsDrawer({
                   <FComponentsLib.FTitleText type='h4'>{FI18n.i18nNext.t('resourceinfo_add_input_value')}</FComponentsLib.FTitleText>
                 </div>
                 <div style={{ height: 5 }} />
-                <FInput
+                <FComponentsLib.FInput.FSingleLine
+                  lengthLimit={-1}
                   value={ds.value}
-                  errorText={ds.valueError}
+                  // errorText={ds.valueError}
                   className={styles.input}
-                  wrapClassName={styles.input}
+                  // wrapClassName={styles.input}
                   onChange={(e) => {
                     const value: string = e.target.value;
                     let valueError: string = '';
@@ -237,17 +255,24 @@ function FAddFileBasePropsDrawer({
                   }}
                   placeholder={FI18n.i18nNext.t('resourceinfo_add_input_value_hint')}
                 />
+                {
+                  ds.valueError !== '' && (<>
+                    <div style={{ height: 5 }} />
+                    <div className={styles.error}>{ds.valueError}</div>
+                  </>)
+                }
               </div>
               <div>
                 <div className={styles.title}>
                   <FComponentsLib.FTitleText type='h4'>{FI18n.i18nNext.t('resourceinfo_add_input_desc')}</FComponentsLib.FTitleText>
                 </div>
                 <div style={{ height: 5 }} />
-                <FInput
+                <FComponentsLib.FInput.FSingleLine
+                  lengthLimit={-1}
                   value={ds.description}
-                  errorText={ds.descriptionError}
+                  // errorText={ds.descriptionError}
                   className={styles.input}
-                  wrapClassName={styles.input}
+                  // wrapClassName={styles.input}
                   onChange={(e) => {
                     const value: string = e.target.value;
                     let descriptionError: string = '';
@@ -261,6 +286,13 @@ function FAddFileBasePropsDrawer({
                   }}
                   placeholder={FI18n.i18nNext.t('resourceinfo_add_input_desc_hint')}
                 />
+
+                {
+                  ds.descriptionError !== '' && (<>
+                    <div style={{ height: 5 }} />
+                    <div className={styles.error}>{ds.descriptionError}</div>
+                  </>)
+                }
               </div>
 
             </div>
