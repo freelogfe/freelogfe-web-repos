@@ -5,9 +5,6 @@ import { FI18n, FServiceAPI } from '@freelog/tools-lib';
 import FTooltip from '@/components/FTooltip';
 import * as AHooks from 'ahooks';
 import { InputRef } from 'antd';
-import { Ref } from 'react';
-
-// import { KeyboardEventHandler } from 'react';
 
 interface FResourceLabelEditorProps {
   value: string[];
@@ -54,6 +51,7 @@ function FResourceLabelEditor($prop: FResourceLabelEditorProps) {
         tagId: string;
         tagType: 1 | 2;
         tagName: string;
+        tagNote: string;
       }[];
     } = await FServiceAPI.Resource.availableTags({
       resourceType: $prop.resourceType,
@@ -68,7 +66,7 @@ function FResourceLabelEditor($prop: FResourceLabelEditorProps) {
           return {
             id: d.tagId,
             name: d.tagName,
-            description: '',
+            description: d.tagNote || '',
           };
         }),
       labels2: data_availableTags
@@ -79,7 +77,7 @@ function FResourceLabelEditor($prop: FResourceLabelEditorProps) {
           return {
             id: d.tagId,
             name: d.tagName,
-            description: '',
+            description: d.tagNote || '',
           };
         }),
     });

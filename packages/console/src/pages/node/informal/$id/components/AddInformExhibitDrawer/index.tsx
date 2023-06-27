@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Space } from 'antd';
 import styles from './index.less';
-import FInput from '@/components/FInput';
+// import FInput from '@/components/FInput';
 import FCheckbox from '@/components/FCheckbox';
 import FResourceStatusBadge from '@/components/FResourceStatusBadge';
 import FDrawer from '@/components/FDrawer';
@@ -12,6 +12,8 @@ import FNoDataTip from '@/components/FNoDataTip';
 import FLoadingTip from '@/components/FLoadingTip';
 import FDropdownMenu from '@/components/FDropdownMenu';
 import FComponentsLib from '@freelog/components-lib';
+// import { FetchExhibitsAction } from '@/models/nodeManagerPage';
+import * as AHooks from 'ahooks';
 
 interface FAddInformExhibitDrawerProps {
   visible: boolean;
@@ -78,6 +80,18 @@ function FAddInformExhibitDrawer({
   const [list, setList] = React.useState<FAddInformExhibitDrawerStates['list']>(initStates['list']);
   const [list_State, setList_State] = React.useState<FAddInformExhibitDrawerStates['list_State']>(initStates['list_State']);
   const [list_More, setList_More] = React.useState<FAddInformExhibitDrawerStates['list_More']>(initStates['list_More']);
+
+  AHooks.useDebounceEffect(() => {
+    // dispatch<FetchExhibitsAction>({
+    //   type: 'nodeManagerPage/fetchExhibits',
+    //   payload: {
+    //     restart: true,
+    //   },
+    // });
+    onChange_Input();
+  }, [inputValue], {
+    wait: 300,
+  });
 
   async function fetchList(payload: {
     origin?: FAddInformExhibitDrawerStates['activatedTab'],
@@ -184,11 +198,11 @@ function FAddInformExhibitDrawer({
 
   }
 
-  function onChange_Input(value: string) {
-    setInputValue(value);
+  function onChange_Input() {
+    // setInputValue(value);
     fetchList({
       loadMore: false,
-      keywords: value,
+      keywords: inputValue,
     });
   }
 
@@ -285,23 +299,30 @@ function FAddInformExhibitDrawer({
                       }}
                     />
                   </div>
-                  <FInput
+                  <FComponentsLib.FInput.FSearch
+                    lengthLimit={-1}
                     value={inputValue}
-                    debounce={300}
-                    onDebounceChange={onChange_Input}
-                    theme='dark'
+                    // debounce={300}
+                    // onDebounceChange={onChange_Input}
+                    // theme='dark'
                     className={styles.filterInput}
-                    wrapClassName={styles.filterInput}
+                    // wrapClassName={styles.filterInput}
+                    onChange={(e) => {
+                      setInputValue(e.target.value);
+                    }}
                   />
                 </div>)
                 : (<div className={styles.filter}>
-                  <FInput
+                  <FComponentsLib.FInput.FSearch
                     value={inputValue}
-                    debounce={300}
-                    onDebounceChange={onChange_Input}
-                    theme='dark'
+                    // debounce={300}
+                    // onDebounceChange={onChange_Input}
+                    // theme='dark'
                     className={styles.filterInput1}
-                    wrapClassName={styles.filterInput1}
+                    // wrapClassName={styles.filterInput1}
+                    onChange={(e) => {
+                      setInputValue(e.target.value);
+                    }}
                   />
                 </div>)
             }

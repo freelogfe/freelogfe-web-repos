@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import FInput from '@/components/FInput';
+// import FInput from '@/components/FInput';
 import { Radio, Space } from 'antd';
 import FVersionHandlerPopover from '@/components/FVersionHandlerPopover';
 import { connect } from 'dva';
@@ -28,7 +28,17 @@ interface ReplacerProps {
   informalNodeManagerPage: InformalNodeManagerPageModelState;
 }
 
+interface ReplacerStates {
+  searchInput: string;
+}
+
+const initStates: ReplacerStates = {
+  searchInput: '',
+};
+
 function Replacer({ dispatch, informalNodeManagerPage }: ReplacerProps) {
+
+  const [$state, $setState] = AHooks.useSetState<ReplacerStates>(initStates);
 
   // AHooks.useMount(() => {
   //   console.log('replacer**************');
@@ -51,6 +61,17 @@ function Replacer({ dispatch, informalNodeManagerPage }: ReplacerProps) {
     dispatch<OnReplacerUnmountAction>({
       type: 'informalNodeManagerPage/onReplacerUnmount',
     });
+  });
+
+  AHooks.useDebounceEffect(() => {
+    dispatch<OnReplacerKeywordsChangeAction>({
+      type: 'informalNodeManagerPage/onReplacerKeywordsChange',
+      payload: {
+        value: $state.searchInput,
+      },
+    });
+  }, [$state.searchInput], {
+    wait: 300,
   });
 
   async function onChange(value: Partial<InformalNodeManagerPageModelState>, loadData = false) {
@@ -135,21 +156,20 @@ function Replacer({ dispatch, informalNodeManagerPage }: ReplacerProps) {
 
     <div className={styles.replacerBody}>
       <div className={styles.replacerFilter}>
-        <FInput
-          theme='dark'
-          wrapClassName={styles.replacerFilterInput}
-          value={informalNodeManagerPage.replaceModal_Replacer_Keywords}
-          debounce={300}
-          onDebounceChange={(value) => {
+        <FComponentsLib.FInput.FSearch
+          // theme='dark'
+          className={styles.replacerFilterInput}
+          // value={informalNodeManagerPage.replaceModal_Replacer_Keywords}
+          value={$state.searchInput}
+          // debounce={300}
+          onChange={(e) => {
             // console.log(value, 'value!@#$');
             // onChange({replacerKeywords: value}, true);
-            dispatch<OnReplacerKeywordsChangeAction>({
-              type: 'informalNodeManagerPage/onReplacerKeywordsChange',
-              payload: {
-                value: value,
-              },
+            $setState({
+              searchInput: e.target.value,
             });
           }}
+          size={'small'}
         />
       </div>
       <div style={{ height: 15 }} />

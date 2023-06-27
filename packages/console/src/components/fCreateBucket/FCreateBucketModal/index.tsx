@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
-import FInput from '@/components/FInput';
+// import FInput from '@/components/FInput';
 import FModal from '@/components/FModal';
 import fMessage from '@/components/fMessage';
 
@@ -63,7 +63,8 @@ function FCreateBucketModal({ onOk, onClose }: FCreateBucketModalProps) {
         }
       </div>
       <div style={{ height: 10 }} />
-      <FInput
+      <FComponentsLib.FInput.FSingleLine
+        lengthLimit={-1}
         value={newBucketName}
         placeholder={FI18n.i18nNext.t('enter_bucket_name')}
         onChange={(e) => {
@@ -89,7 +90,7 @@ function FCreateBucketModal({ onOk, onClose }: FCreateBucketModalProps) {
 
           set_newBucketNameError('');
         }}
-        wrapClassName={styles.wrapClassName}
+        // wrapClassName={styles.wrapClassName}
         className={styles.FInput}
       />
       <div style={{ height: 10 }} />

@@ -3,7 +3,7 @@ import styles from './index.less';
 import FDrawer from '@/components/FDrawer';
 import { Space } from 'antd';
 import FComponentsLib from '@freelog/components-lib';
-import FInput from '@/components/FInput';
+// import FInput from '@/components/FInput';
 import { FI18n, FUtil } from '@freelog/tools-lib';
 
 interface FResourcePropertyEditorDrawerProps {
@@ -139,7 +139,8 @@ function FResourcePropertyEditorDrawer({
           />
         </div>
         <div style={{ height: 5 }} />
-        <FInput
+        <FComponentsLib.FInput.FSingleLine
+          lengthLimit={-1}
           // disabled={true}
           // placeholder={'输入属性名称'}
           placeholder={FI18n.i18nNext.t('resourceinfo_add_input_name_hint')}
@@ -182,7 +183,8 @@ function FResourcePropertyEditorDrawer({
           />
         </div>
         <div style={{ height: 5 }} />
-        <FInput
+        <FComponentsLib.FInput.FSingleLine
+          lengthLimit={-1}
           // disabled={true}
           // placeholder={'输入key'}
           placeholder={FI18n.i18nNext.t('resourceinfo_add_input_key_hint')}
@@ -230,7 +232,8 @@ function FResourcePropertyEditorDrawer({
           />
         </div>
         <div style={{ height: 5 }} />
-        <FInput
+        <FComponentsLib.FInput.FSingleLine
+          lengthLimit={-1}
           value={descriptionInput}
           // errorText={resourceVersionEditorPage.basePDescriptionInputError}
           className={styles.input}
@@ -270,7 +273,8 @@ function FResourcePropertyEditorDrawer({
           />
         </div>
         <div style={{ height: 5 }} />
-        <FInput
+        <FComponentsLib.FInput.FSingleLine
+          lengthLimit={-1}
           value={valueInput}
           className={styles.input}
           disabled={noneEditableFields.includes('value')}

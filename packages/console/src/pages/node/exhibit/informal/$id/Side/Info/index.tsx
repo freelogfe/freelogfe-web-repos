@@ -79,9 +79,12 @@ function Info({ dispatch, informExhibitInfoPage }: InfoProps) {
             }}><FComponentsLib.FIcons.FEdit /></a>
           </Space>)
           : (<>
-            <FInput
+            {/*<FInput*/}
+            <FComponentsLib.FInput.FSingleLine
+              lengthLimit={-1}
               className={styles.FInput}
               value={informExhibitInfoPage.side_Exhibit_InputTitle || ''}
+              // value={'33333444444'}
               onChange={(e) => {
                 dispatch<OnChangePTitleInputAction>({
                   type: 'informExhibitInfoPage/onChangePTitleInput',

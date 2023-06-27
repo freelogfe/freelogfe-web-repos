@@ -1,6 +1,5 @@
 import React from 'react';
 import styles from './index.less';
-// import { Layout } from 'antd';
 import { Link, withRouter } from 'umi';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
@@ -13,13 +12,8 @@ import {
 } from '@/models/connect';
 import { RouteComponentProps } from 'react-router';
 import { FServiceAPI, FUtil, FI18n } from '@freelog/tools-lib';
-// import FLoadingTip from '@/components/FLoadingTip';
-import { Input } from 'antd';
-import FInput from '@/components/FInput';
 import FComponentsLib from '@freelog/components-lib';
-import { history } from 'umi';
-
-// const { Search } = Input;
+import * as AHooks from 'ahooks';
 
 interface FLayoutProps extends RouteComponentProps {
   router: {
@@ -33,6 +27,16 @@ interface FLayoutProps extends RouteComponentProps {
   user: UserModelState;
 }
 
+interface FLayoutStates {
+  activeIDs: [string, string];
+  searchInput: string;
+}
+
+const initState: FLayoutStates = {
+  activeIDs: ['', ''],
+  searchInput: '',
+};
+
 function FLayout({
                    router: routerObj,
                    dispatch,
@@ -43,28 +47,33 @@ function FLayout({
                    user,
                  }: FLayoutProps) {
   // console.log(global, 'global09234jl23kl');
-  const [activeIDs, set_ActiveIDs] = React.useState<[string, string]>(['', '']);
+  // const [activeIDs, set_ActiveIDs] = React.useState<[string, string]>(['', '']);
+
+  const [$state, $setState] = AHooks.useSetState<FLayoutStates>(initState);
 
   React.useEffect(() => {
     const curRouter = global.routerHistories[global.routerHistories.length - 1];
+    let active: [string, string] = ['', ''];
     if (curRouter.pathname.startsWith('/dashboard')) {
-      set_ActiveIDs(['dashboard', '']);
+      active = (['dashboard', '']);
     } else if (curRouter.pathname.startsWith('/resource/list')) {
-      set_ActiveIDs(['resource', 'myResource']);
+      active = (['resource', 'myResource']);
     } else if (curRouter.pathname.startsWith('/resource/collect')) {
-      set_ActiveIDs(['resource', 'myCollection']);
+      active = (['resource', 'myCollection']);
     } else if (curRouter.pathname.startsWith('/node/formal/')) {
       const nodeID: string = curRouter.pathname.split('/')[3];
-      set_ActiveIDs(['node', nodeID]);
+      active = (['node', nodeID]);
     } else if (curRouter.pathname.startsWith('/storage')) {
-      set_ActiveIDs(['storage', curRouter.query.bucketName || '']);
+      active = (['storage', curRouter.query.bucketName || '']);
     } else if (curRouter.pathname.startsWith('/market')) {
-      set_ActiveIDs(['discover', 'market']);
+      active = (['discover', 'market']);
     } else if (curRouter.pathname.startsWith('/examples')) {
-      set_ActiveIDs(['discover', 'example']);
-    } else {
-      set_ActiveIDs(['', '']);
+      active = (['discover', 'example']);
     }
+
+    $setState({
+      activeIDs: active,
+    });
   }, [global.routerHistories]);
   // console.log(storageHomePage.bucketList, '’storageHomePage.bucketList390osd');
   const navs = user.info
@@ -215,7 +224,7 @@ function FLayout({
               items: [],
             },
           ]}
-          activeIDs={activeIDs}
+          activeIDs={$state.activeIDs}
           // showGlobalSearch={true}
           // showGotoConsole={true}
           extra={
@@ -227,19 +236,23 @@ function FLayout({
             //   style={{ width: 240 }}
             // />
 
-            <FInput
+            <FComponentsLib.FInput.FSearch
               size='small'
-              theme='dark'
+              // theme='dark'
               // placeholder='输入用户名或资源名称'
               placeholder={FI18n.i18nNext.t('general_search_hint')}
               style={{ width: 200 }}
-              onPressEnter={(e) => {
+              onPressEnter={() => {
                 // console.log(e);
                 // window.location.href = window.location.origin + `/search?search=${e.target.value}`;
                 // history.push(FUtil.LinkTo.globalSearch({ search: e.target.value }));
-                self.open(FUtil.LinkTo.globalSearch({ search: e.target.value }));
+                // self.open(FUtil.LinkTo.globalSearch({ search: e.target.value }));
+                self.open(FUtil.LinkTo.globalSearch({ search: $state.searchInput }));
               }}
-              // value={''}
+              value={$state.searchInput}
+              onChange={(e) => {
+                $setState({ searchInput: e.target.value });
+              }}
             />
           }
           createBtnMenu={[

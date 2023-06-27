@@ -8,7 +8,7 @@ import { Dispatch } from 'redux';
 import {
   ConnectState,
   ResourceAuthPageModelState,
-  ResourceInfoModelState,
+  // ResourceInfoModelState,
 } from '@/models/connect';
 import {
   ChangeAction,
@@ -35,10 +35,12 @@ import FSkeletonNode from '@/components/FSkeletonNode';
 interface AuthProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
   resourceAuthPage: ResourceAuthPageModelState;
-  resourceInfo: ResourceInfoModelState,
+  // resourceInfo: ResourceInfoModelState,
 }
 
-function Auth({ dispatch, resourceAuthPage, resourceInfo, match }: AuthProps) {
+function Auth({ dispatch, resourceAuthPage,
+                // resourceInfo,
+                match }: AuthProps) {
 
   AHooks.useMount(async () => {
     await dispatch<ChangeAction>({
@@ -161,7 +163,7 @@ function Auth({ dispatch, resourceAuthPage, resourceInfo, match }: AuthProps) {
 
   return (<>
     <Helmet>
-      <title>{`授权信息 · ${resourceInfo.info?.resourceName || ''}  - Freelog`}</title>
+      <title>{`授权信息 · ${resourceAuthPage.resourceName || ''}  - Freelog`}</title>
     </Helmet>
     <FLeftSiderLayout
       sider={<Sider />}
@@ -285,7 +287,7 @@ function Auth({ dispatch, resourceAuthPage, resourceInfo, match }: AuthProps) {
   </>);
 }
 
-export default withRouter(connect(({ resourceAuthPage, resourceInfo }: ConnectState) => ({
+export default withRouter(connect(({ resourceAuthPage }: ConnectState) => ({
   resourceAuthPage: resourceAuthPage,
-  resourceInfo: resourceInfo,
+  // resourceInfo: resourceInfo,
 }))(Auth));

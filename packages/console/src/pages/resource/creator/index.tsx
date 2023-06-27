@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import FInput from '@/components/FInput';
+// import FInput from '@/components/FInput';
 import FContentLayout from '@/layouts/FContentLayout';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
@@ -19,7 +19,7 @@ import * as AHooks from 'ahooks';
 import FResourceTypeInput from '@/components/FResourceTypeInput';
 import FComponentsLib from '@freelog/components-lib';
 import FPrompt from '@/components/FPrompt';
-import FSingleLineInput from '@/components/FInput_SingleLine';
+// import FSingleLineInput from '@/components/FInput_SingleLine';
 
 interface ResourceCreatorProps {
   dispatch: Dispatch;
@@ -132,7 +132,7 @@ function ResourceCreator({
               />
               &nbsp;
               <div>
-                <FSingleLineInput
+                <FComponentsLib.FInput.FSingleLine
                   value={resourceCreatorPage.name}
                   className={styles.FInput}
                   style={{ width: 610 }}

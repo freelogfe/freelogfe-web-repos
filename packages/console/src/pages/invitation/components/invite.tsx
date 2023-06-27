@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './invite.less';
 import * as AHooks from 'ahooks';
-import FInput from '@/components/FInput';
+// import FInput from '@/components/FInput';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import { history } from 'umi';
 import useUrlState from '@ahooksjs/use-url-state';
@@ -82,10 +82,11 @@ function Invite({ jump }: InviteProps) {
         <div className='flex-2' />
       </div>
       <div className='shrink-0 flex-column  w-360'>
-        <FInput
+        <FComponentsLib.FInput.FSingleLine
+          lengthLimit={-1}
           value={code}
           placeholder='请输入内测邀请码'
-          wrapClassName={styles.input}
+          className={styles.input}
           onChange={(e) => {
             // setError('');
             setCode(e.currentTarget.value.trim());

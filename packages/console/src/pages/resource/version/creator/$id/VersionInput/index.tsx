@@ -1,10 +1,9 @@
 import * as React from 'react';
 import styles from './index.less';
-// import { ChangeAction, VerifyVersionInputAction } from '@/models/resourceVersionCreatorPage';
-import FInput from '@/components/FInput';
+// import FInput from '@/components/FInput';
 import * as semver from 'semver';
-// import { useGetState } from '@/utils/hooks';
 import * as AHooks from 'ahooks';
+import FComponentsLib from '@freelog/components-lib';
 
 interface VersionInputProps {
   value: string;
@@ -40,28 +39,33 @@ function VersionInput({ value, resourceLatestVersion, onChange }: VersionInputPr
   }, [value]);
 
 
-  return (<FInput
-    value={input}
-    onChange={(e) => {
-      const inputValue: string = e.target.value;
-      // console.log(inputValue, resourceLatestVersion || '0.0.0', 'inputValue, resourceLatestVersioniusdfdll(((((((');
-      let inputValueError: string = '';
-      if (inputValue === '') {
-        inputValueError = '请输入版本号';
-      } else if (!semver.valid(inputValue)) {
-        inputValueError = '版本号不合法';
-      } else if (!semver.gt(inputValue, resourceLatestVersion || '0.0.0')) {
-        inputValueError = !resourceLatestVersion ? '必须大于 0.0.0' : `必须大于最新版本 ${resourceLatestVersion}`;
-      }
-      set_input(inputValue);
-      set_inputError(inputValueError);
-      if (inputValue === '' || inputValueError === '') {
-        onChange && onChange(inputValue);
-      }
-    }}
-    className={styles.versionInput}
-    errorText={inputError}
-  />);
+  return (<div>
+    <FComponentsLib.FInput.FSingleLine
+      lengthLimit={-1}
+      value={input}
+      onChange={(e) => {
+        const inputValue: string = e.target.value;
+        // console.log(inputValue, resourceLatestVersion || '0.0.0', 'inputValue, resourceLatestVersioniusdfdll(((((((');
+        let inputValueError: string = '';
+        if (inputValue === '') {
+          inputValueError = '请输入版本号';
+        } else if (!semver.valid(inputValue)) {
+          inputValueError = '版本号不合法';
+        } else if (!semver.gt(inputValue, resourceLatestVersion || '0.0.0')) {
+          inputValueError = !resourceLatestVersion ? '必须大于 0.0.0' : `必须大于最新版本 ${resourceLatestVersion}`;
+        }
+        set_input(inputValue);
+        set_inputError(inputValueError);
+        if (inputValue === '' || inputValueError === '') {
+          onChange && onChange(inputValue);
+        }
+      }}
+      className={styles.versionInput}
+      // errorText={inputError}
+    />
+    <div style={{ height: 5 }} />
+    <div className={styles.error}>{inputError}</div>
+  </div>);
 }
 
 export default VersionInput;

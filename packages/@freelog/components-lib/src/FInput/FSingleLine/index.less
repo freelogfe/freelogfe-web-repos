@@ -1,9 +1,20 @@
 @import '../../config.less';
 
+.disabledInput {
+  border-width: 1px;
+  border-style: solid;
+  width: 160px;
+  //background-color: white;
+  border-color: #E4E7EB;
+  //opacity: .4;
+}
+
 .Input {
   border-width: 1px;
   border-style: solid;
   width: 160px;
+  background-color: white;
+  border-color: #E4E7EB;
 
   &:hover {
     border-color: #CBCBCB;
@@ -19,22 +30,7 @@
       border-color: @f-error-color1;
     }
   }
-
-  //:global(.ant-input:focus) {
-  //
-  //}
-
-  //&.ant-input-affix-wrapper:focus, &.ant-input-affix-wrapper-focused {
-  //  border-color: @f-primary-color !important;
-  //}
-
 }
-
-.light {
-  background-color: white;
-  border-color: #E4E7EB;
-}
-
 
 .FInputWordCount {
   color: #C4C4C4;
@@ -42,6 +38,5 @@
   &.beyond {
     color: @f-error-color1;
   }
-
 }
 

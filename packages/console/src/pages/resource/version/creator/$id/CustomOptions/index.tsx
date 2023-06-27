@@ -175,7 +175,7 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                 </FTooltip>
 
                 {
-                  (resourceVersionCreatorPage.preVersion_additionalProperties.length > 0 || resourceVersionCreatorPage.preVersion_additionalProperties.length > 0) &&
+                  (resourceVersionCreatorPage.preVersion_additionalProperties.length > 0 || resourceVersionCreatorPage.preVersion_customProperties.length > 0) &&
                   (<FComponentsLib.FTextBtn
                     style={{ fontSize: 12, fontWeight: 600 }}
                     type='primary'
