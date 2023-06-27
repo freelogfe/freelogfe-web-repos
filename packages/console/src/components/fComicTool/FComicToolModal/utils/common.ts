@@ -77,7 +77,7 @@ export const formatCardName = (name: string) => {
   if (_div.clientWidth < 200) {
     return name;
   } else {
-    const [filename, suffix] = name.split('.');
+    const [filename, suffix] = separateFileName(name);
     const lastWords = '...' + filename.slice(-4) + '.' + suffix;
     for (let i = 0; i < filename.length; i++) {
       const newName = filename.slice(0, i + 1) + lastWords;
@@ -88,10 +88,14 @@ export const formatCardName = (name: string) => {
   document.body.removeChild(_div);
 };
 
-/** 根据 sha1 获取 url */
-export const getUrlBySha1 = (sha1: string) => {
-  const url = `${FUtil.Format.completeUrlByDomain(
-    'api',
-  )}/v2/storages/files/${sha1}/download`;
-  return url;
+/** 分离文件名称与后缀 */
+export const separateFileName = (name: string): string[] => {
+  const splitArr = name.split('.');
+  if (splitArr.length < 2) {
+    return [name, ''];
+  }
+
+  const suffix = splitArr.pop() || '';
+  const filename = splitArr.join('.');
+  return [filename, suffix];
 };

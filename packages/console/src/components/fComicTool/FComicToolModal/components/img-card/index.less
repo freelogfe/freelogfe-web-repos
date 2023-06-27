@@ -5,6 +5,18 @@
   margin-bottom: 20px;
   user-select: none;
 
+  &.dragging {
+    .card-main {
+      box-shadow: none !important;
+    }
+
+    .drag-tip,
+    .insert-btn,
+    .operate-btns {
+      display: none !important;
+    }
+  }
+
   .card-main {
     position: relative;
     width: 100%;
