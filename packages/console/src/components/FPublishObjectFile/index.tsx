@@ -357,7 +357,7 @@ function FPublishObjectFile($prop: FPublishObjectFileProps) {
           <FComponentsLib.FContentText
             type='highlight'
             text={$state.fInfo.name}
-            style={{maxWidth: 600}}
+            style={{ maxWidth: 600 }}
             singleRow
           />
           <div style={{ height: 18 }} />
@@ -386,7 +386,7 @@ function FPublishObjectFile($prop: FPublishObjectFileProps) {
           <FComponentsLib.FContentText
             type='highlight'
             text={$prop.fileInfo.name}
-            style={{maxWidth: 600}}
+            style={{ maxWidth: 600 }}
             singleRow
           />
           <div style={{ height: 18 }} />
@@ -461,7 +461,7 @@ function FPublishObjectFile($prop: FPublishObjectFileProps) {
           <FComponentsLib.FContentText
             type='highlight'
             text={$state.fInfo.name}
-            style={{maxWidth: 600}}
+            style={{ maxWidth: 600 }}
             singleRow
           />
           <div style={{ height: 18 }} />
@@ -503,7 +503,7 @@ function FPublishObjectFile($prop: FPublishObjectFileProps) {
             <div style={{ height: 20 }} />
             <FComponentsLib.FContentText text={'在线上传、排版、一键切图，快速发布漫画'} type={'additional2'} />
             <div style={{ height: 50 }} />
-            <img src={icons} style={{ width: 400 }} />
+            <img src={icons} style={{ width: 400 }} alt={''} />
           </div>)
           : (<>
             <div className={styles.selectObjectCard}>

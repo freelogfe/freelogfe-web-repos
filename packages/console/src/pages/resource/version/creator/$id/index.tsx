@@ -391,7 +391,10 @@ function VersionCreator({
                   showOpenCartoonEditor={resourceVersionCreatorPage.resourceInfo.resourceType[0] === '阅读' && resourceVersionCreatorPage.resourceInfo.resourceType[1] === '漫画'}
                   // showOpenCartoonEditor={false}
                   onClick_OpenMarkdownBtn={async () => {
+                    // console.log('OOOOOOOOOO ((((((((');
                     await onClick_EditMarkdownBtn();
+                    // console.log('CCCCCCCCC ))))))))');
+
                   }}
                   onClick_OpenCartoonBtn={async () => {
                     await onClick_EditCartoonBtn();
