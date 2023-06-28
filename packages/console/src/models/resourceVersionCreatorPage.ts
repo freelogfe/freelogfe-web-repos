@@ -5,10 +5,8 @@ import { ConnectState } from '@/models/connect';
 import { history } from 'umi';
 import BraftEditor, { EditorState } from 'braft-editor';
 import fMessage from '@/components/fMessage';
-// import { OnChange_DraftData_Action } from '@/models/resourceInfo';
 import * as semver from 'semver';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
-// import { fileAttrUnits } from '@/utils/format';
 import { getFilesSha1Info } from '@/utils/service';
 import { IResourceCreateVersionDraftType } from '@/type/resourceTypes';
 import { getProcessor } from '@/components/FResourceAuthorizationProcessor';
@@ -935,7 +933,7 @@ const Model: ResourceVersionCreatorModelType = {
       } = yield call(FServiceAPI.Resource.lookDraft, params);
       // console.log(data_draft, 'data_draftiosdjlfkjsdlkfjklsdjflk');
 
-      if (data_draft) {
+      if (!!data_draft) {
 
         const { draftData } = data_draft;
 
@@ -989,6 +987,7 @@ const Model: ResourceVersionCreatorModelType = {
           },
         });
 
+        console.log(draftData, 'draftDataoisdjflksdjflksdjflkj');
         const p: {
           addTargets(value: any): void;
           clear(): void;
@@ -1008,6 +1007,7 @@ const Model: ResourceVersionCreatorModelType = {
           });
         }
       }
+      console.log('DDDDEEEEEEE *(&(*&(*&');
       yield call(FUtil.Tool.promiseSleep, 1000);
       yield put<ChangeAction>({
         type: 'change',
@@ -1105,6 +1105,8 @@ const Model: ResourceVersionCreatorModelType = {
         result,
         error,
       }: Awaited<ReturnType<typeof getFilesSha1Info>> = yield call(getFilesSha1Info, params0);
+
+      console.log(result, 'resulte53452sdf', error, 'error asdfsdfsdfsdf');
 
       if (error !== '') {
         yield put<ChangeAction>({
