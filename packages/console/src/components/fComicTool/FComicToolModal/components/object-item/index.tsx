@@ -90,7 +90,10 @@ export const ObjectItem = (props: Props) => {
     <div className="object-item-wrapper" key={data.objectId}>
       {!data.uploadStatus || data.uploadStatus === 'success' ? (
         <div className="info-area">
-          <div className="object-name">{`${data.bucketName}/${data.objectName}`}</div>
+          <div
+            className="object-name"
+            title={`${data.bucketName}/${data.objectName}`}
+          >{`${data.bucketName}/${data.objectName}`}</div>
           <div className="other-info">{`${FI18n.i18nNext.t(
             'cbformatter_import_label_lastupdated',
           )} ${FUtil.Format.formatDateTime(data.updateDate, true)}`}</div>

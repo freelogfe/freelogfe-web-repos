@@ -131,7 +131,12 @@ const getImg = (entry: Entry, index: number) => {
       const nameSplit = name.split('.')[0].split('_');
       if (!json) {
         // 没有 json 配置文件，此包为外部压缩包，直接获取
-        imgList[index] = { name, size, base64 };
+        const image = new Image();
+        image.src = base64;
+        image.onload = () => {
+          const { width, height } = image;
+          imgList[index] = { name, size, base64, width, height };
+        };
       } else {
         // freelog 平台输出的漫画压缩包，需按 json 配置进行整理
         const parentIndex = Number(nameSplit[0]) - 1;
@@ -141,7 +146,14 @@ const getImg = (entry: Entry, index: number) => {
             ? name
             : json.custom.list[parentIndex].name;
           const sha1 = json.custom.list[parentIndex].sha1;
-          imgList[parentIndex] = { name: parentName, size, base64, sha1 };
+          imgList[parentIndex] = {
+            name: parentName,
+            size,
+            base64,
+            sha1,
+            width: json.custom.list[parentIndex].width,
+            height: json.custom.list[parentIndex].height,
+          };
         } else {
           // 切图
           const childIndex = Number(nameSplit[1]) - 1;
@@ -154,6 +166,8 @@ const getImg = (entry: Entry, index: number) => {
               base64: '',
               size: 0,
               children: [],
+              width: 0,
+              height: 0,
             };
           }
           if (childIndex === 0) imgList[parentIndex].base64 = base64;
@@ -166,6 +180,8 @@ const getImg = (entry: Entry, index: number) => {
             size,
             base64,
             sha1,
+            width: json.custom.list[parentIndex].children[childIndex].width,
+            height: json.custom.list[parentIndex].children[childIndex].height,
           };
         }
       }

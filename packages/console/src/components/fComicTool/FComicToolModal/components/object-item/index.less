@@ -8,12 +8,16 @@
 
   .info-area {
     flex: 1;
+    width: 0;
 
     .object-name {
       font-size: 14px;
       font-weight: 600;
       color: #222222;
       line-height: 20px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
     }
 
     .other-info {

@@ -17,7 +17,7 @@ interface Props {
 }
 
 export const ImgCard = (props: Props) => {
-  const { comicMode, setDeleteItem, setDeleteConfirmShow } =
+  const { comicMode, setDeleteItem, setDeleteConfirmShow, dragging } =
     useContext(comicToolContext);
   const { index, data, setInsertIndex, cutImage } = props;
 
@@ -36,7 +36,7 @@ export const ImgCard = (props: Props) => {
   };
 
   return (
-    <div className="img-card-wrapper">
+    <div className={`img-card-wrapper ${dragging && 'dragging'}`}>
       <div className="card-main">
         {/* 主体区域 */}
         <div

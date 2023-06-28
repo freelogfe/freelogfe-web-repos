@@ -332,32 +332,6 @@
         }
       }
     }
-
-    .object-item {
-      width: 100%;
-      height: 65px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-bottom: 1px solid #e5e7eb;
-
-      .info-area {
-        .object-name {
-          font-size: 14px;
-          font-weight: 600;
-          color: #222222;
-          line-height: 20px;
-        }
-
-        .other-info {
-          margin-top: 2px;
-          font-size: 12px;
-          font-weight: 400;
-          color: #999999;
-          line-height: 17px;
-        }
-      }
-    }
   }
 
   .history-area {
@@ -377,11 +351,16 @@
       border-bottom: 1px solid #e5e7eb;
 
       .info-area {
+        width: 370px;
+
         .version {
           font-size: 14px;
           font-weight: 600;
           color: #222222;
           line-height: 20px;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
         }
 
         .other-info {
@@ -390,9 +369,17 @@
           font-weight: 400;
           color: #999999;
           line-height: 17px;
+          display: flex;
 
-          span + span {
+          .update-time {
+            flex-shrink: 0;
+          }
+
+          .file-name {
             margin-left: 20px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
           }
         }
       }

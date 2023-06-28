@@ -61,6 +61,7 @@ export const ImportDrawer = (props: Props) => {
   useEffect(() => {
     if (!show) return;
 
+    setUploadStatus(1);
     const drawer = document.getElementsByClassName('import-drawer-wrapper')[0];
     body = drawer.getElementsByClassName('ant-drawer-body')[0];
     body.addEventListener('scroll', listScroll);
@@ -80,7 +81,6 @@ export const ImportDrawer = (props: Props) => {
         historyKey: '',
         historyList: [],
       };
-      setUploadStatus(1);
       setUploadBucket(null);
       body?.removeEventListener('scroll', listScroll);
     };
@@ -817,14 +817,18 @@ export const ImportDrawer = (props: Props) => {
           {historyList.map((item) => (
             <div className="history-item" key={item.versionId}>
               <div className="info-area">
-                <div className="version">{item.version}</div>
+                <div className="version" title={item.version}>
+                  {item.version}
+                </div>
                 <div className="other-info">
-                  <span>
+                  <div className="update-time">
                     {`${FI18n.i18nNext.t(
                       'label_last_updated',
                     )} ${FUtil.Format.formatDateTime(item.updateDate, true)}`}
-                  </span>
-                  <span>{item.filename}</span>
+                  </div>
+                  <div className="file-name" title={item.filename}>
+                    {item.filename}
+                  </div>
                 </div>
               </div>
 
