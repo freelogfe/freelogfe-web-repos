@@ -1,6 +1,12 @@
 /** 导入漫画相关方法 */
 
-import { getExt, getMIME } from '../utils/common';
+import {
+  getExt,
+  getFile,
+  getFileResult,
+  getImage,
+  getMIME,
+} from '../utils/common';
 import { ImgInComicTool } from '../utils/interface';
 
 interface Entry {
@@ -62,16 +68,20 @@ export const uncompressComicArchive = (
 };
 
 /** 获取压缩包内容 */
-const readContents = (entries: Entry[]) => {
+const readContents = async (entries: Entry[]) => {
   const jsonFile = entries.find((item) => isJson(item));
 
   if (jsonFile) {
     // 存在 json 文件，可解析 json
-    getJson(jsonFile);
+    json = await getJson(jsonFile);
+    setComicConfig(json.config);
   } else {
     // 不存在 json 文件，看看是否存在 xml 文件，如存在则解析 xml
     const xmlFile = entries.find((item) => isXml(item));
-    if (xmlFile) getXML(xmlFile);
+    if (xmlFile) {
+      const xmlConfig = await getXML(xmlFile);
+      setComicConfig(xmlConfig);
+    }
   }
 
   // 筛选出所有图片文件
@@ -85,16 +95,7 @@ const readContents = (entries: Entry[]) => {
     return;
   }
 
-  // 按名称排序
-  const list = entries.sort((a, b) => {
-    const indexA = Number(a.name.split('.')[0]);
-    const indexB = Number(b.name.split('.')[0]);
-    return indexA - indexB;
-  });
-
-  list.forEach((item, index) => {
-    getImg(item, index);
-  });
+  getImages(entries);
 };
 
 /** 是否为图片文件 */
@@ -118,110 +119,119 @@ const isJson = (entry: Entry) => {
   return ext === 'json' && name === 'index.json';
 };
 
-/** 获取图片 */
-const getImg = (entry: Entry, index: number) => {
-  const { name } = entry;
-  entry.readData((res: BlobPart) => {
-    const blob = new Blob([res], { type: getMIME(name) });
-    const reader = new FileReader();
-    reader.readAsDataURL(blob);
-    reader.onload = (e) => {
-      const size = e.total;
-      const base64 = String(e.target?.result);
-      const nameSplit = name.split('.')[0].split('_');
-      if (!json) {
-        // 没有 json 配置文件，此包为外部压缩包，直接获取
-        const image = new Image();
-        image.src = base64;
-        image.onload = () => {
-          const { width, height } = image;
-          imgList[index] = { name, size, base64, width, height };
+/** 获取图片文件 */
+const getImages = async (entries: Entry[]) => {
+  // 按名称排序
+  const list = entries.sort((a, b) => {
+    const indexA = Number(a.name.split('.')[0]);
+    const indexB = Number(b.name.split('.')[0]);
+    return indexA - indexB;
+  });
+
+  for (let i = 0; i < list.length; i++) {
+    const item = list[i];
+    const { name } = item;
+    const blob = await getImageBlob(item);
+    const res = await getFile(blob);
+    const size = res.total;
+    const base64 = String(res.target?.result);
+    const nameSplit = name.split('.')[0].split('_');
+    if (!json) {
+      // 没有 json 配置文件，此包为外部压缩包，直接获取
+      const image = await getImage(base64);
+      const { width, height } = image;
+      imgList[i] = { name, size, base64, width, height };
+    } else {
+      // freelog 平台输出的漫画压缩包，需按 json 配置进行整理
+      const parentIndex = Number(nameSplit[0]) - 1;
+      if (!nameSplit[1]) {
+        // 非切图
+        const parentName = fromImport
+          ? name
+          : json.custom.list[parentIndex].name;
+        const sha1 = json.custom.list[parentIndex].sha1;
+        imgList[parentIndex] = {
+          name: parentName,
+          size,
+          base64,
+          sha1,
+          width: json.custom.list[parentIndex].width,
+          height: json.custom.list[parentIndex].height,
         };
       } else {
-        // freelog 平台输出的漫画压缩包，需按 json 配置进行整理
-        const parentIndex = Number(nameSplit[0]) - 1;
-        if (!nameSplit[1]) {
-          // 非切图
+        // 切图
+        const childIndex = Number(nameSplit[1]) - 1;
+        if (!imgList[parentIndex]) {
           const parentName = fromImport
-            ? name
+            ? `${nameSplit[0]}.${getExt(name)}`
             : json.custom.list[parentIndex].name;
-          const sha1 = json.custom.list[parentIndex].sha1;
           imgList[parentIndex] = {
             name: parentName,
-            size,
-            base64,
-            sha1,
-            width: json.custom.list[parentIndex].width,
-            height: json.custom.list[parentIndex].height,
-          };
-        } else {
-          // 切图
-          const childIndex = Number(nameSplit[1]) - 1;
-          if (!imgList[parentIndex]) {
-            const parentName = fromImport
-              ? `${nameSplit[0]}.${getExt(name)}`
-              : json.custom.list[parentIndex].name;
-            imgList[parentIndex] = {
-              name: parentName,
-              base64: '',
-              size: 0,
-              children: [],
-              width: 0,
-              height: 0,
-            };
-          }
-          if (childIndex === 0) imgList[parentIndex].base64 = base64;
-          const childName = fromImport
-            ? name
-            : json.custom.list[parentIndex].children[childIndex].name;
-          const sha1 = json.custom.list[parentIndex].children[childIndex].sha1;
-          imgList[parentIndex].children![childIndex] = {
-            name: childName,
-            size,
-            base64,
-            sha1,
-            width: json.custom.list[parentIndex].children[childIndex].width,
-            height: json.custom.list[parentIndex].children[childIndex].height,
+            base64: '',
+            size: 0,
+            children: [],
+            width: 0,
+            height: 0,
           };
         }
+        if (childIndex === 0) imgList[parentIndex].base64 = base64;
+        const childName = fromImport
+          ? name
+          : json.custom.list[parentIndex].children[childIndex].name;
+        const sha1 = json.custom.list[parentIndex].children[childIndex].sha1;
+        imgList[parentIndex].children![childIndex] = {
+          name: childName,
+          size,
+          base64,
+          sha1,
+          width: json.custom.list[parentIndex].children[childIndex].width,
+          height: json.custom.list[parentIndex].children[childIndex].height,
+        };
       }
-      doneFileCount++;
-      if (doneFileCount === imageFileCount) {
-        setLoaderShow(false);
-        setImgList(imgList);
-        if (!fromImport) {
-          setTimeout(() => {
-            setEdited && setEdited(false);
-          }, 0);
-        }
+    }
+    setImgList([...imgList]);
+    if (i === list.length - 1) {
+      setLoaderShow(false);
+      if (!fromImport) {
+        setTimeout(() => {
+          setEdited && setEdited(false);
+        }, 0);
       }
-    };
+    }
+  }
+};
+
+/** 读取图片 blob */
+const getImageBlob = async (entry: Entry): Promise<Blob> => {
+  return new Promise((resolve) => {
+    entry.readData(async (blobParts: BlobPart) => {
+      const blob = new Blob([blobParts], { type: getMIME(entry.name) });
+      resolve(blob);
+    });
   });
 };
 
 /** 解析 json 文件 */
-const getJson = (entry: Entry) => {
-  entry.readData((res: BlobPart) => {
-    const blob = new Blob([res], { type: getMIME(entry.name) });
-    const reader = new FileReader();
-    reader.readAsText(blob);
-    reader.onload = (e: any) => {
-      json = JSON.parse(e.target.result);
-      setComicConfig(json.config);
-    };
+const getJson = (entry: Entry): Promise<any> => {
+  return new Promise((resolve) => {
+    entry.readData(async (blobParts: BlobPart) => {
+      const blob = new Blob([blobParts], { type: getMIME(entry.name) });
+      const res = await getFileResult(blob, 'readAsText');
+      const result = JSON.parse(res);
+      resolve(result);
+    });
   });
 };
 
 /** 解析 xml 文件 */
-const getXML = (entry: Entry) => {
-  entry.readData((res: BlobPart) => {
-    const blob = new Blob([res], { type: getMIME(entry.name) });
-    const reader = new FileReader();
-    reader.readAsText(blob);
-    reader.onload = (e: any) => {
+const getXML = (entry: Entry): Promise<any> => {
+  return new Promise((resolve) => {
+    entry.readData(async (blobParts: BlobPart) => {
+      const blob = new Blob([blobParts], { type: getMIME(entry.name) });
+      const result = await getFileResult(blob, 'readAsText');
       const xmlConfig: any = {};
-      const xmlHeader = e.target.result
-        .match(/<\?xml.*?\?>/)[0]
+      const xmlHeader = result
+        .match(/<\?xml.*?\?>/)![0]
         .replace(`<?xml `, '')
         .replace(`?>`, '');
       const attrsList = xmlHeader.split(' ');
@@ -233,14 +243,11 @@ const getXML = (entry: Entry) => {
       });
       xmlConfig.xml = { attrs };
 
-      const xmlDoc = new DOMParser().parseFromString(
-        e.target.result,
-        'text/xml',
-      );
+      const xmlDoc = new DOMParser().parseFromString(result, 'text/xml');
       const infos = xmlDoc.getElementsByTagName('ComicInfo');
       xmlConfig.children = getXmlNodes(infos);
-      setComicConfig(xmlConfig);
-    };
+      resolve(xmlConfig);
+    });
   });
 };
 

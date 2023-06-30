@@ -5,9 +5,17 @@ import React from 'react';
 import { useState, useEffect, useRef } from 'react';
 import { Timeout } from 'ahooks/lib/useRequest/src/types';
 import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
-import { formatDate, separateFileName } from './utils/common';
+import {
+  base64ToFile,
+  errorMessage,
+  formatDate,
+  getFileResult,
+  getImage,
+  getSizeByBase64,
+  json2Xml,
+  separateFileName,
+} from './utils/common';
 import { IResourceCreateVersionDraftType } from '@/type/resourceTypes';
-import fMessage from '@/components/fMessage';
 import { Modal } from 'antd';
 import FComponentsLib from '@freelog/components-lib';
 import { ImgInComicTool, ImgInOutput } from './utils/interface';
@@ -29,6 +37,7 @@ import BlueScissors from './images/blue-scissors.png';
 import BlackScissors from './images/black-scissors.png';
 import { Loading3QuartersOutlined } from '@ant-design/icons/lib/icons';
 import { uncompressComicArchive } from './core/import-comic';
+import { createBrowserHistory } from 'umi';
 
 interface ToolProps {
   // 资源 id
@@ -67,6 +76,7 @@ export const ComicTool = (props: ToolProps) => {
   const [imgList, setImgList] = useState<ImgInComicTool[]>([]);
   const [insertIndex, setInsertIndex] = useState(-1);
   const [dragging, setDragging] = useState(false);
+  const [autoScroll, setAutoScroll] = useState(false);
 
   const [importDrawer, setImportDrawer] = useState(false);
   const [previewShow, setPreviewShow] = useState(false);
@@ -75,6 +85,75 @@ export const ComicTool = (props: ToolProps) => {
   const [cuttingLoaderShow, setCuttingLoaderShow] = useState(false);
   const [saveLoaderShow, setSaveLoaderShow] = useState(false);
   const [saveFailTipShow, setSaveFailTipShow] = useState(false);
+
+  /** 监听路由变化，在未编辑状态下，路由变化时自动关闭工具弹窗 */
+  const history = createBrowserHistory();
+  const currentPath = history.location.pathname;
+  const timer = useRef<Timeout | null>(null);
+  history.listen(() => {
+    if (timer.current) {
+      clearTimeout(timer.current);
+      timer.current = null;
+    }
+    timer.current = setTimeout(() => {
+      const { pathname } = history.location;
+      if (currentPath !== pathname && !edited) exit();
+    }, 50);
+  });
+
+  // web worker 测试代码
+  // const scriptURL: string = '/js/testWebworker.js';
+  // const worker: Worker = new Worker(scriptURL);
+  // worker.postMessage({ files });
+  // worker.addEventListener('message', (e: any) => {
+  //   console.warn('e===>', e);
+  //   worker.terminate();
+  // });
+
+  /** 获取资源与草稿数据 */
+  const getData = async () => {
+    const resourceRes = await FServiceAPI.Resource.info({
+      resourceIdOrName: resourceId,
+    });
+    resource.current.resourceData = resourceRes.data;
+    const { resourceType } = resourceRes.data;
+    if (resourceType[2] === '条漫') {
+      setComicMode(1);
+    } else if (resourceType[2] === '页漫') {
+      setComicMode(2);
+    } else if (resourceType[2] === '日漫') {
+      setComicMode(3);
+    }
+    const draftRes = await FServiceAPI.Resource.lookDraft({ resourceId });
+    if (draftRes.errCode !== 0) return errorMessage(draftRes.msg, false);
+    resource.current.draftData = draftRes.data
+      .draftData as IResourceCreateVersionDraftType;
+    const { selectedFileInfo } = resource.current.draftData;
+    if (selectedFileInfo) {
+      setLoaderShow(true);
+      const { name, sha1 } = selectedFileInfo;
+      setComicName(name);
+      const res = await FUtil.Request({
+        method: 'GET',
+        url: `/v2/storages/files/${sha1}/download`,
+        responseType: 'blob',
+      });
+      const file = new File([res], name);
+      setAutoScroll(true);
+      uncompressComicArchive(
+        file,
+        {
+          setLoaderShow,
+          setImgList,
+          setComicConfig,
+          setEdited,
+        },
+        false,
+      );
+    } else {
+      setEdited(false);
+    }
+  };
 
   /** 退出 */
   const exit = async () => {
@@ -92,50 +171,345 @@ export const ComicTool = (props: ToolProps) => {
     }
   };
 
-  /** 获取资源与草稿数据 */
-  const getData = async () => {
-    const resourceRes = await FServiceAPI.Resource.info({
-      resourceIdOrName: resourceId,
+  /** 快捷键 */
+  const keyup = (e: KeyboardEvent) => {
+    if (e.key === 'Escape') setPreviewShow(false);
+  };
+
+  /** 修改资源数据 */
+  const setResource = (data: any) => {
+    resource.current = data;
+  };
+
+  /** 更改删除对象 */
+  const setDeleteItem = (item: any) => {
+    deleteItem.current = item;
+  };
+
+  /** 获取图片总数量 */
+  const getTotal = () => {
+    let total = 0;
+    imgList.forEach((item) => {
+      total += item.children ? item.children.length : 1;
     });
-    resource.current.resourceData = resourceRes.data;
-    const { resourceType } = resourceRes.data;
-    if (resourceType[2] === '条漫') {
-      setComicMode(1);
-    } else if (resourceType[2] === '页漫') {
-      setComicMode(2);
-    } else if (resourceType[2] === '日漫') {
-      setComicMode(3);
-    }
-    const draftRes = await FServiceAPI.Resource.lookDraft({ resourceId });
-    if (draftRes.errCode !== 0) {
-      fMessage(draftRes.msg, 'error');
-      return;
-    }
-    resource.current.draftData = draftRes.data
-      .draftData as IResourceCreateVersionDraftType;
-    const { selectedFileInfo } = resource.current.draftData;
-    if (selectedFileInfo) {
-      setLoaderShow(true);
-      const { name, sha1 } = selectedFileInfo;
-      setComicName(name);
-      const res = await FUtil.Request({
-        method: 'GET',
-        url: `/v2/storages/files/${sha1}/download`,
-        responseType: 'blob',
-      });
-      const file = new File([res], name);
-      uncompressComicArchive(
-        file,
-        {
-          setLoaderShow,
-          setImgList,
-          setComicConfig,
-          setEdited,
-        },
-        false,
-      );
+    return total;
+  };
+
+  /** 初始化拖动列表 */
+  const initSorter = () => {
+    if (sorter.current) return;
+
+    const sortableList = document.getElementById('sortableList');
+    if (!sortableList) return;
+
+    sorter.current = new Sortable(sortableList, {
+      animation: 150,
+      handle: '.drag-handle,.drag-tip',
+      forceFallback: true,
+      scrollSensitivity: 100,
+      scrollSpeed: 50,
+      onStart() {
+        setDragging(true);
+      },
+      onEnd(e) {
+        setAutoScroll(false);
+        setDragging(false);
+        setImgList((pre) => {
+          const { oldIndex, newIndex } = e;
+          const list = [...pre];
+          const items = list.splice(oldIndex!, 1);
+          list.splice(newIndex!, 0, ...items);
+          return [...list];
+        });
+      },
+    });
+  };
+
+  /** 删除图片 */
+  const deleteImg = () => {
+    if (deleteItem.current) {
+      const list = [...imgList];
+      list.splice(deleteItem.current.index, 1);
+      setImgList(list);
+      deleteItem.current = null;
     } else {
-      setEdited(false);
+      setImgList([]);
+    }
+    setDeleteConfirmShow(false);
+  };
+
+  /** 新增图片 */
+  const addImage = (newImage: ImgInComicTool) => {
+    if (newImage.children) {
+      // 切图
+      const { length } = newImage.children;
+      const currentTotal = getTotal();
+      const restCount = MAX_IMG_LENGTH - currentTotal;
+      if (length > restCount) {
+        newImage.children = newImage.children.slice(0, restCount);
+        errorMessage('cbformatter_add_error_qtylimitation');
+      }
+    }
+    setImgList((pre) => [...pre, newImage]);
+  };
+
+  /** 上传本地图片 */
+  const uploadLocalImg = async (files: FileList) => {
+    const list = [...files].filter((file) =>
+      ['image/png', 'image/jpeg', 'image/gif'].includes(file.type),
+    );
+
+    if (list.length !== files.length)
+      errorMessage('cbformatter_add_error_format');
+
+    const currentTotal = getTotal();
+    if (currentTotal + list.length > MAX_IMG_LENGTH) {
+      errorMessage('cbformatter_add_error_qtylimitation');
+      list.splice(MAX_IMG_LENGTH - currentTotal);
+    }
+
+    if (list.length === 0) return setInsertIndex(-1);
+
+    setLoaderShow(true);
+
+    const imgs: ImgInComicTool[] = [];
+    for (let i = 0; i < list.length; i++) {
+      const file = list[i];
+      const { name, size } = file;
+      if (size > MAX_IMG_SIZE) {
+        // 超过限定尺寸
+        const img = {
+          name,
+          size,
+          base64: require('./images/oversize.png'),
+          width: 0,
+          height: 0,
+        };
+        imgs.push(img);
+      } else {
+        // 正常情况
+        const base64 = await getFileResult(file);
+        const image = await getImage(base64);
+        const { width, height } = image;
+        const img = { name, size, base64, width, height };
+        imgs.push(img);
+      }
+
+      if (i === list.length - 1) {
+        // 全部整理完成
+        const insertPoint = insertIndex !== -1 ? insertIndex : imgList.length;
+        setAutoScroll(insertIndex === -1);
+        imgList.splice(insertPoint, 0, ...imgs.filter((item) => item));
+        setImgList([...imgList]);
+        setLoaderShow(false);
+        setInsertIndex(-1);
+      }
+    }
+  };
+
+  /** 批量切图 */
+  const cutImages = async (files: FileList) => {
+    if (files.length > MAX_CUT_IMG_LENGTH) {
+      // 切图数量超过最大同时切图数量
+      return errorMessage('cbformatter_slice_error_qtylimitation');
+    }
+
+    if (getTotal() === MAX_IMG_LENGTH) {
+      // 数量已达到最大图片总数量
+      return errorMessage('cbformatter_add_error_qtylimitation');
+    }
+
+    setCuttingLoaderShow(true);
+    setAutoScroll(true);
+    const list = [...files];
+    let typeTip = true; // 是否需要显示格式错误 tip
+    let heightTip = true; // 是否需要显示切图高度小于最小指定切图高度 tip
+    let canvas: HTMLCanvasElement | null = document.createElement('canvas');
+    let ctx = canvas.getContext('2d');
+
+    for (let i = 0; i < list.length; i++) {
+      const file = list[i];
+      const { type, name, size } = file;
+
+      if (!['image/png', 'image/jpeg'].includes(type)) {
+        // 切图类型非指定类型
+        if (typeTip) {
+          errorMessage('cbformatter_slice_error_format');
+          typeTip = false;
+        }
+        if (i === list.length - 1) {
+          canvas = null;
+          ctx = null;
+          setCuttingLoaderShow(false);
+        }
+        continue;
+      }
+
+      const base64 = await getFileResult(file);
+      const image = await getImage(base64);
+      const { width, height } = image;
+      if (height <= MAX_HEIGHT_PER_PIECE) {
+        // 原图高度小于规定最小高度，不予切图直接按普通上传图片处理
+        const noCutImage = { name, size, base64, width, height };
+        addImage(noCutImage);
+        if (heightTip) {
+          errorMessage('cbformatter_slice_error_height');
+          heightTip = false;
+        }
+        if (i === list.length - 1) {
+          canvas = null;
+          ctx = null;
+          setCuttingLoaderShow(false);
+        }
+        continue;
+      }
+
+      const imgItem: ImgInComicTool = {
+        name,
+        base64: '',
+        size: 0,
+        children: [],
+        width: 0,
+        height: 0,
+      };
+      const pieceNum = Math.ceil(height / MAX_HEIGHT_PER_PIECE);
+      const heightPerPiece = height / pieceNum;
+      canvas!.width = width;
+      canvas!.height = heightPerPiece;
+      for (let j = 0; j < pieceNum; j++) {
+        ctx!.clearRect(0, 0, canvas!.width, canvas!.height);
+        ctx!.drawImage(
+          image,
+          0,
+          heightPerPiece * j,
+          width,
+          heightPerPiece,
+          0,
+          0,
+          canvas!.width,
+          canvas!.height,
+        );
+
+        const base64 = canvas!.toDataURL(type);
+        const childSize = getSizeByBase64(base64);
+        if (childSize > MAX_IMG_SIZE) {
+          // 尺寸大于单张最大尺寸
+          imgItem.size = size;
+          imgItem.base64 = require('./images/oversize.png');
+          addImage(imgItem);
+          if (i === list.length - 1) {
+            canvas = null;
+            ctx = null;
+            setCuttingLoaderShow(false);
+          }
+          break;
+        }
+
+        // 列表显示第一张切图
+        if (j === 0) imgItem.base64 = base64;
+
+        const [filename, suffix] = separateFileName(name);
+        const childImg = {
+          name: `${filename}-${String(j + 1).padStart(2, '0')}.${suffix}`,
+          base64,
+          size: childSize,
+          width,
+          height: heightPerPiece,
+        };
+        imgItem.children!.push(childImg);
+
+        if (j === pieceNum - 1) {
+          addImage(imgItem);
+          if (i === list.length - 1) {
+            canvas = null;
+            ctx = null;
+            setCuttingLoaderShow(false);
+          }
+        }
+      }
+    }
+  };
+
+  /** 单张切图 */
+  const cutImage = async (item: ImgInComicTool) => {
+    const currentTotal = getTotal();
+    const restCount = MAX_IMG_LENGTH - currentTotal;
+    if (restCount === 0) {
+      // 数量已达到最大图片总数量
+      return errorMessage('cbformatter_add_error_qtylimitation');
+    }
+
+    const { name, base64, width, height } = item;
+    if (height <= MAX_HEIGHT_PER_PIECE) {
+      // 原图高度小于规定最小高度，不予切图
+      setCuttingLoaderShow(false);
+      return errorMessage('cbformatter_slice_error_height');
+    }
+
+    setCuttingLoaderShow(true);
+    setAutoScroll(false);
+    const image = await getImage(base64);
+    const pieceNum = Math.ceil(height / MAX_HEIGHT_PER_PIECE);
+    const heightPerPiece = height / pieceNum;
+    let canvas: HTMLCanvasElement | null = document.createElement('canvas');
+    let ctx = canvas.getContext('2d');
+    canvas.width = width;
+    canvas.height = heightPerPiece;
+    for (let i = 0; i < pieceNum; i++) {
+      ctx!.clearRect(0, 0, canvas!.width, canvas!.height);
+      ctx!.drawImage(
+        image,
+        0,
+        heightPerPiece * i,
+        width,
+        heightPerPiece,
+        0,
+        0,
+        canvas!.width,
+        canvas!.height,
+      );
+
+      const base64 = canvas!.toDataURL('image/jpeg');
+      const childSize = getSizeByBase64(base64);
+      if (childSize > MAX_IMG_SIZE) {
+        // 尺寸大于单张最大尺寸
+        item.base64 = require('./images/oversize.png');
+        item.children = [];
+        setImgList([...imgList]);
+        setCuttingLoaderShow(false);
+        setAutoScroll(false);
+        break;
+      }
+
+      // 列表显示第一张切图
+      if (i === 0) {
+        item.base64 = base64;
+        item.size = 0;
+      }
+
+      const [filename, suffix] = separateFileName(name);
+      const childImg = {
+        name: `${filename}-${String(i + 1).padStart(2, '0')}.${suffix}`,
+        base64,
+        size: childSize,
+        width,
+        height: heightPerPiece,
+      };
+      if (!item.children) item.children = [];
+      item.children.push(childImg);
+
+      if (i === pieceNum - 1) {
+        // 最后一张切图，处理完之后将图片加入队列
+        if (restCount < item.children.length) {
+          item.children = item.children.slice(0, restCount + 1);
+          errorMessage('cbformatter_add_error_qtylimitation');
+        }
+        setImgList([...imgList]);
+        setCuttingLoaderShow(false);
+        canvas = null;
+        ctx = null;
+        setAutoScroll(false);
+      }
     }
   };
 
@@ -225,10 +599,7 @@ export const ComicTool = (props: ToolProps) => {
     const err = imgResArr.findIndex((item) => item.errCode !== 0) !== -1;
     if (err) {
       if (!auto) {
-        fMessage(
-          FI18n.i18nNext.t('createversion_state_networkabnormal2'),
-          'error',
-        );
+        errorMessage('createversion_state_networkabnormal2');
         setSaveTipType(3);
         setSaveLoaderShow(false);
       }
@@ -334,10 +705,7 @@ export const ComicTool = (props: ToolProps) => {
     const res = await uploadFile(jsonFormData, 0, 25);
     if (res.errCode !== 0) {
       if (!auto) {
-        fMessage(
-          FI18n.i18nNext.t('createversion_state_networkabnormal2'),
-          'error',
-        );
+        errorMessage('createversion_state_networkabnormal2');
         setSaveTipType(3);
         setSaveLoaderShow(false);
       }
@@ -362,10 +730,7 @@ export const ComicTool = (props: ToolProps) => {
     const compressRes = await compressFiles(sha1Array);
     if (compressRes.errCode !== 0) {
       if (!auto) {
-        fMessage(
-          FI18n.i18nNext.t('createversion_state_networkabnormal2'),
-          'error',
-        );
+        errorMessage('createversion_state_networkabnormal2');
         setSaveTipType(3);
         setSaveLoaderShow(false);
       }
@@ -404,10 +769,7 @@ export const ComicTool = (props: ToolProps) => {
     });
     if (saveDraftRes.errCode !== 0) {
       if (!auto) {
-        fMessage(
-          FI18n.i18nNext.t('createversion_state_networkabnormal2'),
-          'error',
-        );
+        errorMessage('createversion_state_networkabnormal2');
         setSaveTipType(3);
         setSaveLoaderShow(false);
       }
@@ -422,54 +784,6 @@ export const ComicTool = (props: ToolProps) => {
     setSaveTipType(2);
     setLastSaveTime(saveTime);
     setEdited(false);
-  };
-
-  /** json 转 xml */
-  const json2Xml = (config: any) => {
-    let result = '';
-    let xmlHeader = `<?xml`;
-    const keys = Object.keys(config.xml.attrs);
-    if (keys.length === 0) {
-      xmlHeader += ` ?>\n`;
-    } else {
-      keys.forEach((key) => {
-        xmlHeader += ` ${key}="${config.xml.attrs[key]}"`;
-      });
-    }
-    xmlHeader += `?>\n`;
-    result += xmlHeader;
-
-    const childrenXml = getChildrenXml(config.children, 0);
-    result += childrenXml;
-
-    return result;
-  };
-
-  /** 转换 xml 子元素 */
-  const getChildrenXml = (childrenList: any[], level: number) => {
-    let result = '';
-    const prefix = new Array(level).fill('  ').join('');
-    childrenList.forEach((child: any) => {
-      const { key, value, attrs, children } = child;
-      let childResult = '';
-      let startTag = `${prefix}<${key}`;
-      const endTag = `</${key}>\n`;
-      for (const attrKey in attrs) {
-        startTag += ` ${attrKey}="${attrs[attrKey]}"`;
-      }
-      if (value) {
-        childResult += `${startTag}>${value}${endTag}`;
-      } else if (children.length !== 0) {
-        childResult += startTag + '>\n';
-        const childrenXml = getChildrenXml(children, level + 1);
-        childResult += childrenXml;
-        childResult += `${prefix}${endTag}`;
-      } else {
-        childResult += `${startTag} />\n`;
-      }
-      result += childResult;
-    });
-    return result;
   };
 
   /** 资源标准属性处理 */
@@ -549,440 +863,16 @@ export const ComicTool = (props: ToolProps) => {
     });
   };
 
-  /** base64 转 file */
-  const base64ToFile = (base64: string, name: string) => {
-    const arr = base64.split(',');
-    const mime = arr[0].match(/:(.*?);/)![1];
-    const bstr = atob(arr[1]);
-    let n = bstr.length;
-    const u8arr = new Uint8Array(n);
-    while (n--) {
-      u8arr[n] = bstr.charCodeAt(n);
-    }
-    return new File([u8arr], name, { type: mime });
-  };
-
-  /** 快捷键 */
-  const keyup = (e: KeyboardEvent) => {
-    if (e.key === 'Escape') closeAllPopup();
-  };
-
-  /** 关闭所有弹窗 */
-  const closeAllPopup = () => {
-    setPreviewShow(false);
-  };
-
-  /** 修改资源数据 */
-  const setResource = (data: any) => {
-    resource.current = data;
-  };
-
-  /** 更改删除对象 */
-  const setDeleteItem = (item: any) => {
-    deleteItem.current = item;
-  };
-
-  /** 删除图片 */
-  const deleteImg = () => {
-    if (deleteItem.current) {
-      const list = [...imgList];
-      list.splice(deleteItem.current.index, 1);
-      setImgList(list);
-      deleteItem.current = null;
-    } else {
-      setImgList([]);
-    }
-    setDeleteConfirmShow(false);
-  };
-
-  /** 上传本地图片 */
-  const uploadLocalImg = (files: FileList) => {
-    if (files.length === 0) return;
-
-    setLoaderShow(true);
-    const insertPoint = insertIndex !== -1 ? insertIndex : imgList.length;
-    const list = [...files];
-    let typeTip = true; // 是否需要显示格式错误 tip
-
-    if (imgList.length + list.length > MAX_IMG_LENGTH) {
-      fMessage(
-        FI18n.i18nNext.t('cbformatter_add_error_qtylimitation'),
-        'error',
-      );
-      list.splice(MAX_IMG_LENGTH - imgList.length);
-      if (list.length === 0) {
-        setLoaderShow(false);
-        setInsertIndex(-1);
-        return;
-      }
-    }
-
-    const imgs: ImgInComicTool[] = [];
-    let doneCount = 0;
-
-    list.forEach((file, index) => {
-      const { type, name, size } = file;
-
-      if (!['image/png', 'image/jpeg', 'image/gif'].includes(type)) {
-        if (typeTip) {
-          fMessage(FI18n.i18nNext.t('cbformatter_add_error_format'), 'error');
-          typeTip = false;
-        }
-        doneCount++;
-        if (doneCount === list.length) {
-          imgList.splice(insertPoint, 0, ...imgs.filter((item) => item));
-          setImgList([...imgList]);
-          setLoaderShow(false);
-          setInsertIndex(-1);
-        }
-        return;
-      }
-
-      if (size > MAX_IMG_SIZE) {
-        const img = {
-          name,
-          size,
-          base64: require('./images/oversize.png'),
-          width: 0,
-          height: 0,
-        };
-        imgs[index] = img;
-        doneCount++;
-        if (doneCount === list.length) {
-          imgList.splice(insertPoint, 0, ...imgs.filter((item) => item));
-          setImgList([...imgList]);
-          setLoaderShow(false);
-          setInsertIndex(-1);
-        }
-
-        return;
-      }
-
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = (evt) => {
-        const base64: string = evt!.target!.result as string;
-        const image = new Image();
-        image.src = base64;
-        image.onload = () => {
-          const { width, height } = image;
-          const img = { name, size, base64, width, height };
-          imgs[index] = img;
-          doneCount++;
-          if (doneCount === list.length) {
-            imgList.splice(insertPoint, 0, ...imgs.filter((item) => item));
-            setImgList([...imgList]);
-            setLoaderShow(false);
-            setInsertIndex(-1);
-          }
-        };
-      };
-    });
-  };
-
-  /** 新增切图图片 */
-  const addImages = (newImages: ImgInComicTool[]) => {
-    const result = [...imgList];
-    const currentTotal = getTotal();
-    let restCount = MAX_IMG_LENGTH - currentTotal;
-    for (let i = 0; i < newImages.length; i++) {
-      const cutImageGroup = newImages[i];
-      if (cutImageGroup) {
-        if (!cutImageGroup.children) {
-          // 未切图
-          result.push(cutImageGroup);
-          restCount--;
-        } else if (cutImageGroup.children) {
-          const length = cutImageGroup.children.length;
-          if (length <= restCount) {
-            restCount -= length;
-          } else {
-            cutImageGroup.children = cutImageGroup.children.slice(0, restCount);
-            restCount = 0;
-            fMessage(
-              FI18n.i18nNext.t('cbformatter_add_error_qtylimitation'),
-              'error',
-            );
-          }
-          result.push(cutImageGroup);
-          if (restCount === 0) {
-            setImgList(result);
-            setCuttingLoaderShow(false);
-            break;
-          }
-        }
-      }
-
-      if (i === newImages.length - 1) {
-        setImgList(result);
-        setCuttingLoaderShow(false);
-      }
-    }
-  };
-
-  /** 批量切图 */
-  const cutImages = (files: FileList) => {
-    if (files.length > MAX_CUT_IMG_LENGTH) {
-      // 切图数量超过最大同时切图数量
-      fMessage(
-        FI18n.i18nNext.t('cbformatter_slice_error_qtylimitation'),
-        'error',
-      );
-      return;
-    }
-
-    if (getTotal() === MAX_IMG_LENGTH) {
-      // 数量已达到最大图片总数量
-      fMessage(
-        FI18n.i18nNext.t('cbformatter_add_error_qtylimitation'),
-        'error',
-      );
-      return;
-    }
-
-    setCuttingLoaderShow(true);
-    const results: ImgInComicTool[] = [];
-    const list = [...files];
-    let doneCount = 0; // 已完成切图数量
-    let typeTip = true; // 是否需要显示格式错误 tip
-    let heightTip = true; // 是否需要显示切图高度小于最小指定切图高度 tip
-    for (let i = 0; i < list.length; i++) {
-      const file = list[i];
-      const { type, name, size } = file;
-
-      if (!['image/png', 'image/jpeg'].includes(type)) {
-        // 切图类型非指定类型
-        if (typeTip) {
-          fMessage(FI18n.i18nNext.t('cbformatter_slice_error_format'), 'error');
-          typeTip = false;
-        }
-
-        doneCount++;
-        if (doneCount === list.length) {
-          addImages(results);
-          break;
-        } else {
-          continue;
-        }
-      }
-
-      let imgItem: ImgInComicTool = {
-        name,
-        base64: '',
-        size: 0,
-        children: [],
-        width: 0,
-        height: 0,
-      };
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = (evt) => {
-        const replaceSrc: string = evt!.target!.result as string;
-        const image = new Image();
-        image.src = replaceSrc;
-        image.onload = () => {
-          const { width, height } = image;
-          if (height <= MAX_HEIGHT_PER_PIECE) {
-            // 原图高度小于规定最小高度，不予切图直接按普通上传图片处理
-            imgItem = { name, size, base64: replaceSrc, width, height };
-            results[i] = imgItem;
-            if (heightTip) {
-              fMessage(
-                FI18n.i18nNext.t('cbformatter_slice_error_height'),
-                'error',
-              );
-              heightTip = false;
-            }
-
-            doneCount++;
-            if (doneCount === list.length) addImages(results);
-            return;
-          }
-
-          const pieceNum = Math.ceil(height / MAX_HEIGHT_PER_PIECE);
-          const heightPerPiece = height / pieceNum;
-          const canvas = document.createElement('canvas');
-          canvas.width = width;
-          canvas.height = heightPerPiece;
-          const ctx = canvas.getContext('2d');
-          for (let j = 0; j < pieceNum; j++) {
-            ctx!.clearRect(0, 0, canvas.width, canvas.height);
-            ctx!.drawImage(
-              image,
-              0,
-              heightPerPiece * j,
-              width,
-              heightPerPiece,
-              0,
-              0,
-              canvas.width,
-              canvas.height,
-            );
-            const base64 = canvas.toDataURL(type);
-            const childSize = getSizeByBase64(base64);
-
-            if (childSize > MAX_IMG_SIZE) {
-              // 尺寸大于单张最大尺寸
-              imgItem = {
-                name,
-                size,
-                base64: require('./images/oversize.png'),
-                children: [],
-                width: 0,
-                height: 0,
-              };
-
-              results[i] = imgItem;
-              doneCount++;
-              if (doneCount === list.length) addImages(results);
-              break;
-            }
-
-            // 列表显示第一张切图
-            if (j === 0) imgItem.base64 = base64;
-
-            const [filename, suffix] = separateFileName(name);
-            const childImg = {
-              name: `${filename}-${String(j + 1).padStart(2, '0')}.${suffix}`,
-              base64,
-              size: childSize,
-              width,
-              height: heightPerPiece,
-            };
-            imgItem.children!.push(childImg);
-
-            if (j === pieceNum - 1) {
-              results[i] = imgItem;
-              doneCount++;
-              if (doneCount === list.length) addImages(results);
-            }
-          }
-        };
-      };
-    }
-  };
-
-  /** 单张切图 */
-  const cutImage = (item: ImgInComicTool) => {
-    const currentTotal = getTotal();
-    const restCount = MAX_IMG_LENGTH - currentTotal;
-    if (restCount === 0) {
-      // 数量已达到最大图片总数量
-      fMessage(
-        FI18n.i18nNext.t('cbformatter_add_error_qtylimitation'),
-        'error',
-      );
-      return;
-    }
-
-    setCuttingLoaderShow(true);
-    const { name, base64 } = item;
-    const image = new Image();
-    image.src = base64;
-    image.onload = () => {
-      const { width, height } = image;
-      if (height <= MAX_HEIGHT_PER_PIECE) {
-        // 原图高度小于规定最小高度，不予切图
-        fMessage(FI18n.i18nNext.t('cbformatter_slice_error_height'), 'error');
-        setCuttingLoaderShow(false);
-        return;
-      }
-
-      const pieceNum = Math.ceil(height / MAX_HEIGHT_PER_PIECE);
-      const heightPerPiece = height / pieceNum;
-      const canvas = document.createElement('canvas');
-      canvas.width = width;
-      canvas.height = heightPerPiece;
-      const ctx = canvas.getContext('2d');
-      for (let i = 0; i < pieceNum; i++) {
-        ctx!.clearRect(0, 0, canvas.width, canvas.height);
-        ctx!.drawImage(
-          image,
-          0,
-          heightPerPiece * i,
-          width,
-          heightPerPiece,
-          0,
-          0,
-          canvas.width,
-          canvas.height,
-        );
-        const base64 = canvas.toDataURL('image/jpeg');
-        const childSize = getSizeByBase64(base64);
-
-        if (childSize > MAX_IMG_SIZE) {
-          // 尺寸大于单张最大尺寸
-          item.base64 = require('./images/oversize.png');
-          item.children = [];
-          setImgList([...imgList]);
-          if (i === pieceNum - 1) setCuttingLoaderShow(false);
-          break;
-        }
-
-        // 列表显示第一张切图
-        if (i === 0) {
-          item.base64 = base64;
-          item.size = 0;
-        }
-
-        const [filename, suffix] = separateFileName(name);
-        const childImg = {
-          name: `${filename}-${String(i + 1).padStart(2, '0')}.${suffix}`,
-          base64,
-          size: childSize,
-          width,
-          height: heightPerPiece,
-        };
-        if (!item.children) item.children = [];
-        item.children.push(childImg);
-
-        if (i === pieceNum - 1) {
-          // 最后一张切图，处理完之后将图片加入队列
-          if (restCount < item.children.length) {
-            item.children = item.children.slice(0, restCount + 1);
-            fMessage(
-              FI18n.i18nNext.t('cbformatter_add_error_qtylimitation'),
-              'error',
-            );
-          }
-          setImgList([...imgList]);
-          setCuttingLoaderShow(false);
-        }
-      }
-    };
-  };
-
-  /** 根据 base64 获取大小 */
-  const getSizeByBase64 = (base64: string = '') => {
-    base64 = base64.split(',')[1];
-    const equalIndex = base64.indexOf('=');
-    const strLength =
-      equalIndex > 0 ? base64.substring(0, equalIndex).length : base64.length;
-    const fileLength = strLength - (strLength / 8) * 2;
-    return Math.floor(fileLength);
-  };
-
-  /** 获取图片总数量 */
-  const getTotal = () => {
-    let total = 0;
-    imgList.forEach((item) => {
-      total += item.children ? item.children.length : 1;
-    });
-    return total;
-  };
-
   useEffect(() => {
     if (show) {
       window.addEventListener('keyup', keyup);
       document.body.style.overflowY = 'hidden';
 
       getData();
-    }
-
-    return () => {
+    } else {
       window.removeEventListener('keyup', keyup);
       document.body.style.overflowY = 'auto';
-    };
+    }
   }, [show]);
 
   useEffect(() => {
@@ -998,32 +888,22 @@ export const ComicTool = (props: ToolProps) => {
       }, 15000);
     }
 
-    if (sorter.current) return;
+    if (imgList.length === 0) {
+      sorter.current = null;
+    } else if (autoScroll) {
+      const sortableList = document.getElementById('sortableList');
+      sortableList && sortableList.scrollTo({ top: sortableList.scrollHeight });
+    }
 
-    const sortableList = document.getElementById('sortableList');
-    if (!sortableList) return;
-
-    sorter.current = new Sortable(sortableList, {
-      animation: 150,
-      handle: '.drag-handle,.drag-tip',
-      forceFallback: true,
-      scrollSensitivity: 50,
-      scrollSpeed: 50,
-      onStart() {
-        setDragging(true);
-      },
-      onEnd(e) {
-        setDragging(false);
-        setImgList((pre) => {
-          const { oldIndex, newIndex } = e;
-          const list = [...pre];
-          const items = list.splice(oldIndex!, 1);
-          list.splice(newIndex!, 0, ...items);
-          return [...list];
-        });
-      },
-    });
+    initSorter();
   }, [imgList]);
+
+  useEffect(() => {
+    if ((loaderShow || cuttingLoaderShow) && stopTimer.current) {
+      clearTimeout(stopTimer.current);
+      stopTimer.current = null;
+    }
+  }, [loaderShow, cuttingLoaderShow]);
 
   useEffect(() => {
     setSaved && setSaved(!edited);
@@ -1044,6 +924,7 @@ export const ComicTool = (props: ToolProps) => {
         setComicConfig,
         setImgList,
         setLoaderShow,
+        setAutoScroll,
       }}
     >
       <input
@@ -1193,7 +1074,10 @@ export const ComicTool = (props: ToolProps) => {
                       </div>
                       <div
                         className="clear-btn"
-                        onClick={() => setDeleteConfirmShow(true)}
+                        onClick={() => {
+                          deleteItem.current = null;
+                          setDeleteConfirmShow(true);
+                        }}
                       >
                         <i className="freelog fl-icon-shanchu delete-icon" />
                         {FI18n.i18nNext.t('cbformatter_delete_btn_deleteall')}

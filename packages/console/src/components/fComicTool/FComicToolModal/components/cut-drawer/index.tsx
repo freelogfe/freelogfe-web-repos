@@ -16,12 +16,6 @@ interface Props {
 export const CutDrawer = (props: Props) => {
   const { show, close, data } = props;
 
-  useEffect(() => {
-    if (!show) return;
-
-    return () => {};
-  }, [show]);
-
   return (
     <Drawer
       className="cut-drawer-wrapper"

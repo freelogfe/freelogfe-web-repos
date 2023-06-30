@@ -23,6 +23,7 @@ import {
 import { Modal } from 'antd';
 import showdown from 'showdown';
 import { i18nChangeLanguage } from '@wangeditor/editor';
+import { createBrowserHistory } from 'umi';
 
 interface EditorProps {
   // 资源 id
@@ -67,6 +68,21 @@ export const MarkdownEditor = (props: EditorProps) => {
   const [edited, setEdited] = useState(false);
   const [saveType, setSaveType] = useState(0);
   const [lastSaveTime, setLastSaveTime] = useState(0);
+
+  /** 监听路由变化，在未编辑状态下，路由变化时自动关闭工具弹窗 */
+  const history = createBrowserHistory();
+  const currentPath = history.location.pathname;
+  const timer = useRef<Timeout | null>(null);
+  history.listen(() => {
+    if (timer.current) {
+      clearTimeout(timer.current);
+      timer.current = null;
+    }
+    timer.current = setTimeout(() => {
+      const { pathname } = history.location;
+      if (currentPath !== pathname && !edited) exit();
+    }, 50);
+  });
 
   /** 输出 markdown */
   const outputMarkdown = () => {

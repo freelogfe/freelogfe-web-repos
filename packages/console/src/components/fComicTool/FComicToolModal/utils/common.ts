@@ -1,6 +1,7 @@
 /** 公共方法 */
 
-import { FUtil } from '@freelog/tools-lib';
+import fMessage from '@/components/fMessage';
+import { FI18n } from '@freelog/tools-lib';
 
 /**
  * 格式化日期
@@ -98,4 +99,132 @@ export const separateFileName = (name: string): string[] => {
   const suffix = splitArr.pop() || '';
   const filename = splitArr.join('.');
   return [filename, suffix];
+};
+
+/** 错误提示 */
+export const errorMessage = (content: string, i18n = true) => {
+  const msg = i18n ? FI18n.i18nNext.t(content) : content;
+  fMessage(FI18n.i18nNext.t(msg), 'error');
+};
+
+/** 读取文件 */
+export const getFile = (
+  origin: File | Blob,
+  type: 'readAsDataURL' | 'readAsText' = 'readAsDataURL',
+): Promise<ProgressEvent<FileReader>> => {
+  return new Promise((resolve) => {
+    let reader: FileReader | null = new FileReader();
+    reader[type](origin);
+    reader.onload = (e) => {
+      const result = e;
+      reader = null;
+      resolve(result);
+    };
+  });
+};
+
+/** 读取文件内容 */
+export const getFileResult = (
+  origin: File | Blob,
+  type: 'readAsDataURL' | 'readAsText' = 'readAsDataURL',
+): Promise<string> => {
+  return new Promise((resolve) => {
+    let reader: FileReader | null = new FileReader();
+    reader[type](origin);
+    reader.onload = (e) => {
+      const result = e!.target!.result as string;
+      reader = null;
+      resolve(result);
+    };
+  });
+};
+
+/** 加载图片获取高宽 */
+export const getImage = (src: string): Promise<HTMLImageElement> => {
+  return new Promise((resolve, reject) => {
+    const image = new Image();
+    image.src = src;
+    image.onload = () => {
+      resolve(image);
+    };
+    image.onerror = () => {
+      resolve({ width: 0, height: 0 } as HTMLImageElement);
+    };
+  });
+};
+
+/** 根据 base64 获取大小 */
+export const getSizeByBase64 = (base64: string = '') => {
+  base64 = base64.split(',')[1];
+  const equalIndex = base64.indexOf('=');
+  const strLength =
+    equalIndex > 0 ? base64.substring(0, equalIndex).length : base64.length;
+  const fileLength = strLength - (strLength / 8) * 2;
+  return Math.floor(fileLength);
+};
+
+/** json 转 xml */
+export const json2Xml = (config: any) => {
+  let result = '';
+  let xmlHeader = `<?xml`;
+  const keys = Object.keys(config.xml.attrs);
+  if (keys.length === 0) {
+    xmlHeader += ` ?>\n`;
+  } else {
+    keys.forEach((key) => {
+      xmlHeader += ` ${key}="${config.xml.attrs[key]}"`;
+    });
+  }
+  xmlHeader += `?>\n`;
+  result += xmlHeader;
+
+  const childrenXml = getChildrenXml(config.children, 0);
+  result += childrenXml;
+
+  return result;
+};
+
+/** 转换 xml 子元素 */
+export const getChildrenXml = (childrenList: any[], level: number) => {
+  let result = '';
+  const prefix = new Array(level).fill('  ').join('');
+  childrenList.forEach((child: any) => {
+    const { key, value, attrs, children } = child;
+    let childResult = '';
+    let startTag = `${prefix}<${key}`;
+    const endTag = `</${key}>\n`;
+    for (const attrKey in attrs) {
+      startTag += ` ${attrKey}="${attrs[attrKey]}"`;
+    }
+    if (value) {
+      childResult += `${startTag}>${value}${endTag}`;
+    } else if (children.length !== 0) {
+      childResult += startTag + '>\n';
+      const childrenXml = getChildrenXml(children, level + 1);
+      childResult += childrenXml;
+      childResult += `${prefix}${endTag}`;
+    } else {
+      childResult += `${startTag} />\n`;
+    }
+    result += childResult;
+  });
+  return result;
+};
+
+/** base64 转 file */
+export const base64ToFile = (base64: string, name: string) => {
+  const arr = base64.split(',');
+  const mime = arr[0].match(/:(.*?);/)![1];
+  const bstr = atob(arr[1]);
+  let n = bstr.length;
+  const u8arr = new Uint8Array(n);
+  while (n--) {
+    u8arr[n] = bstr.charCodeAt(n);
+  }
+  return new File([u8arr], name, { type: mime });
+};
+
+/** 随机生成一个id */
+export const createId = () => {
+  return Math.random().toString(16).slice(2);
 };

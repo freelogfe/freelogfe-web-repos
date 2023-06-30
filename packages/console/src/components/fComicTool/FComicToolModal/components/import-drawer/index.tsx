@@ -3,7 +3,6 @@
 import './index.less';
 import ObjectIcon from '../../images/object.png';
 import { Drawer, Popconfirm, Popover, Select, Tabs } from 'antd';
-import fMessage from '@/components/fMessage';
 import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
 import { useContext, useEffect, useRef, useState } from 'react';
 import FInput from '@/components/FInput';
@@ -13,7 +12,7 @@ import { RcFile } from 'antd/lib/upload/interface';
 import FModal from '@/components/FModal';
 import FComponentsLib from '@freelog/components-lib';
 import { comicToolContext } from '../..';
-import { getExt } from '../../utils/common';
+import { errorMessage, getExt } from '../../utils/common';
 import { uncompressComicArchive } from '../../core/import-comic';
 
 const { Option } = Select;
@@ -31,6 +30,7 @@ export const ImportDrawer = (props: Props) => {
     setComicConfig,
     setImgList,
     setLoaderShow,
+    setAutoScroll,
   } = useContext(comicToolContext);
   const { show, close } = props;
   let body: Element | null = null;
@@ -59,16 +59,16 @@ export const ImportDrawer = (props: Props) => {
   const [historyList, setHistoryList] = useState<any[]>([]);
 
   useEffect(() => {
-    if (!show) return;
-
-    setUploadStatus(1);
-    const drawer = document.getElementsByClassName('import-drawer-wrapper')[0];
-    body = drawer.getElementsByClassName('ant-drawer-body')[0];
-    body.addEventListener('scroll', listScroll);
-    getBuckets();
-    getHistoryVersion();
-
-    return () => {
+    if (show) {
+      setUploadStatus(1);
+      const drawer = document.getElementsByClassName(
+        'import-drawer-wrapper',
+      )[0];
+      body = drawer.getElementsByClassName('ant-drawer-body')[0];
+      body.addEventListener('scroll', listScroll);
+      getBuckets();
+      getHistoryVersion();
+    } else {
       refs.current = {
         uploadFileData: null as any,
         pageIndex: 0,
@@ -83,7 +83,7 @@ export const ImportDrawer = (props: Props) => {
       };
       setUploadBucket(null);
       body?.removeEventListener('scroll', listScroll);
-    };
+    }
   }, [show]);
 
   /** 监听列表滚动 */
@@ -105,7 +105,7 @@ export const ImportDrawer = (props: Props) => {
   const sureImport = async (file: File) => {
     const suffix = getExt(file.name);
     if (!['zip', 'rar', 'tar', 'cbz', 'cbr', 'cbt'].includes(suffix)) {
-      fMessage(FI18n.i18nNext.t('cbformatter_import_error_format'), 'error');
+      errorMessage('cbformatter_import_error_format');
       setLoaderShow(false);
       return;
     }
@@ -115,6 +115,7 @@ export const ImportDrawer = (props: Props) => {
     setComicConfig(null);
     setImgList([]);
     setComicName(file.name);
+    setAutoScroll(true);
 
     uncompressComicArchive(file, { setLoaderShow, setImgList, setComicConfig });
 
@@ -263,7 +264,7 @@ export const ImportDrawer = (props: Props) => {
     const { errCode, msg } = result;
     setCreateBucketShow(false);
     if (errCode !== 0) {
-      fMessage(msg, 'error');
+      errorMessage(msg, false);
       return;
     }
     getBuckets();
@@ -275,10 +276,7 @@ export const ImportDrawer = (props: Props) => {
     const IS_EXSIT_BIG_FILE =
       fileList.filter((item) => item.size > 200 * 1024 * 1024).length > 0;
     if (IS_EXSIT_BIG_FILE) {
-      fMessage(
-        FI18n.i18nNext.t('mdeditor_import_error_lengthlimitation'),
-        'error',
-      );
+      errorMessage('mdeditor_import_error_lengthlimitation');
       return;
     }
 
@@ -289,7 +287,7 @@ export const ImportDrawer = (props: Props) => {
       .map((item) => item.size)
       .reduce((pre, cur) => pre + cur, 0);
     if (storageLimit - totalFileSize < totalSize) {
-      fMessage(FI18n.i18nNext.t('uploadobject_alarm_storage_full'), 'error');
+      errorMessage('uploadobject_alarm_storage_full');
       return;
     }
 
