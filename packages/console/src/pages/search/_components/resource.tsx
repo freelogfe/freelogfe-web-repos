@@ -65,6 +65,9 @@ export default function ResourceList({
               <CardContainer className='d-none' diabled key={item.resourceId + index} />
             );
         })}
+      <div style={{ width: 300 }} />
+      <div style={{ width: 300 }} />
+      <div style={{ width: 300 }} />
       {
         pageData.totalItem > resourcesListPure.length
           ? (

@@ -413,8 +413,8 @@ function Search({}: SearchProps) {
 
                   <div
                     className={
-                      'flex-row flex-wrap h-100x w-100x   ' +
-                      (resourcesListPure.length > 3 ? ' space-between' : '')
+                      'flex-row flex-wrap h-100x w-100x   '
+                      + (resourcesListPure.length > 3 ? ' space-between' : '')
                     }
                     ref={container}
                   >
