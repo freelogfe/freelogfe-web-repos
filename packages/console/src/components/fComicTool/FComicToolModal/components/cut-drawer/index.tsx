@@ -38,7 +38,7 @@ export const CutDrawer = (props: Props) => {
               <span>{item.name}</span>
               <span>{conversionSize(item.size)}</span>
             </div>
-            <img className="cut-img" src={item.base64} loading="lazy" />
+            <img className="cut-img" src={item.base64} />
           </div>
         ))}
       </>

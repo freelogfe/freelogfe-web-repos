@@ -64,6 +64,8 @@ export const ComicTool = (props: ToolProps) => {
   const sorter = useRef<Sortable | null>(null);
   const saveProgressList = useRef<number[]>([]);
   const saveTotalList = useRef<number[]>([]);
+  const visibleIndexRef = useRef<number[]>([0, 0]);
+  const sortableList = useRef<any>(null);
 
   const [edited, setEdited] = useState<boolean | null>(null);
   const [saveTipType, setSaveTipType] = useState(0);
@@ -77,6 +79,7 @@ export const ComicTool = (props: ToolProps) => {
   const [insertIndex, setInsertIndex] = useState(-1);
   const [dragging, setDragging] = useState(false);
   const [autoScroll, setAutoScroll] = useState(false);
+  const [visibleIndex, setVisibleIndex] = useState([0, 0]);
 
   const [importDrawer, setImportDrawer] = useState(false);
   const [previewShow, setPreviewShow] = useState(false);
@@ -102,7 +105,7 @@ export const ComicTool = (props: ToolProps) => {
   });
 
   // web worker 测试代码
-  // const scriptURL: string = '/js/testWebworker.js';
+  // const scriptURL: string = '/js/saveComic.js';
   // const worker: Worker = new Worker(scriptURL);
   // worker.postMessage({ files });
   // worker.addEventListener('message', (e: any) => {
@@ -195,14 +198,51 @@ export const ComicTool = (props: ToolProps) => {
     return total;
   };
 
+  /** 初始化图片区域 */
+  const initImageArea = () => {
+    sortableList.current = document.getElementById('sortableList');
+
+    if (sortableList.current) {
+      // 监听滚动，实时计算图片显示/隐藏
+      sortableList.current.addEventListener('scroll', () => {
+        const { clientWidth, scrollTop } = sortableList.current;
+        const lineNum = Math.floor(scrollTop / 318);
+        const countPerLine = clientWidth === 1128 ? 5 : 6;
+        const startIndex = countPerLine * (lineNum === 0 ? 0 : lineNum - 1);
+        const endIndex = countPerLine * (lineNum + 3);
+        if (
+          startIndex !== visibleIndexRef.current[0] ||
+          endIndex !== visibleIndexRef.current[1]
+        ) {
+          visibleIndexRef.current = [startIndex, endIndex];
+          setVisibleIndex([startIndex, endIndex]);
+        }
+      });
+
+      const { clientWidth, clientHeight, scrollHeight } = sortableList.current;
+      if (clientHeight === scrollHeight) {
+        // 没有滚动条时，显示前三行
+        const countPerLine = clientWidth === 1128 ? 5 : 6;
+        const startIndex = 0;
+        const endIndex = countPerLine * 3;
+        if (
+          startIndex !== visibleIndexRef.current[0] ||
+          endIndex !== visibleIndexRef.current[1]
+        ) {
+          visibleIndexRef.current = [startIndex, endIndex];
+          setVisibleIndex([startIndex, endIndex]);
+        }
+      }
+
+      initSorter();
+    }
+  };
+
   /** 初始化拖动列表 */
   const initSorter = () => {
-    if (sorter.current) return;
+    if (sorter.current || !sortableList.current) return;
 
-    const sortableList = document.getElementById('sortableList');
-    if (!sortableList) return;
-
-    sorter.current = new Sortable(sortableList, {
+    sorter.current = new Sortable(sortableList.current, {
       animation: 150,
       handle: '.drag-handle,.drag-tip',
       forceFallback: true,
@@ -889,13 +929,18 @@ export const ComicTool = (props: ToolProps) => {
     }
 
     if (imgList.length === 0) {
+      sortableList.current = null;
       sorter.current = null;
-    } else if (autoScroll) {
-      const sortableList = document.getElementById('sortableList');
-      sortableList && sortableList.scrollTo({ top: sortableList.scrollHeight });
-    }
+    } else {
+      if (!sortableList.current) initImageArea();
 
-    initSorter();
+      if (autoScroll) {
+        // 开启自动滚动时，自动滚动到尾部
+        sortableList.current.scrollTo({
+          top: sortableList.current.scrollHeight,
+        });
+      }
+    }
   }, [imgList]);
 
   useEffect(() => {
@@ -1091,6 +1136,10 @@ export const ComicTool = (props: ToolProps) => {
                           <ImgCard
                             index={index}
                             data={item}
+                            visible={
+                              index >= visibleIndex[0] &&
+                              index < visibleIndex[1]
+                            }
                             setInsertIndex={setInsertIndex}
                             cutImage={cutImage}
                             key={item.name + index}

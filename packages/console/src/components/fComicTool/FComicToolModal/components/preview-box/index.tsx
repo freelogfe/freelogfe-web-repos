@@ -169,7 +169,7 @@ export const PreviewBox = (props: { show: boolean; close: () => void }) => {
       jumpPageNum = previewList.length;
     }
     let page = jumpPageNum;
-    
+
     if (page === 1 && mode[0] === 'paging') {
       setCurrentPage(page);
       setJumpPage(page);
@@ -297,7 +297,6 @@ export const PreviewBox = (props: { show: boolean; close: () => void }) => {
                 <img
                   className="content-img"
                   src={previewList[currentPage].base64}
-                  loading="lazy"
                 />
               </div>
             )}
@@ -306,7 +305,6 @@ export const PreviewBox = (props: { show: boolean; close: () => void }) => {
             <img
               className="content-img"
               src={previewList[currentPage - 1].base64}
-              loading="lazy"
             />
           </div>
           {/* 条漫/页漫、双页模式、跨页匹配/非跨页匹配且当前不为首页、当前页不为尾页时，当前页右侧显示下一页 */}
@@ -318,7 +316,6 @@ export const PreviewBox = (props: { show: boolean; close: () => void }) => {
                 <img
                   className="content-img"
                   src={previewList[currentPage].base64}
-                  loading="lazy"
                 />
               </div>
             )}
@@ -380,7 +377,6 @@ export const PreviewBox = (props: { show: boolean; close: () => void }) => {
             <img
               className="scroll-img"
               src={img.base64}
-              loading="lazy"
               key={img.name + index}
             />
           ))}
