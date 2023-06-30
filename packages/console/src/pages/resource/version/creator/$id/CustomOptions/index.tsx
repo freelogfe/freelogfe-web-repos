@@ -108,7 +108,7 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
     });
   }
 
-  if (resourceVersionCreatorPage.rawPropertiesState === 'parsing') {
+  if (resourceVersionCreatorPage.rawPropertiesState === 'parsing' && !!resourceVersionCreatorPage.selectedFileInfo) {
     return (<>
       <div style={{ height: 20 }} />
       <FSkeletonNode width={860} height={38} />

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import * as ReactDOM from 'react-dom/client';
-import FResourcePropertyEditorDrawer from './FResourceOptionEditorDrawer';
+// import FResourcePropertyEditorDrawer from './FResourceOptionEditorDrawer';
 import FResourceOptionEditorDrawer from './FResourceOptionEditorDrawer';
 
 interface fResourceOptionEditorProps {
