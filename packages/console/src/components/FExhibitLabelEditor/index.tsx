@@ -120,7 +120,7 @@ function FExhibitLabelEditor($prop: FExhibitLabelEditorProps) {
             <FComponentsLib.FIcons.FClose
               style={{
                 fontSize: 12,
-                transform: 'scale(.6)',
+                transform: 'scale(.8)',
               }}
               onClick={() => {
                 // set_errorText('');
