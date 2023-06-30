@@ -12,6 +12,7 @@ import { conversionSize, formatCardName, getExt } from '../../utils/common';
 interface Props {
   index: number;
   data: ImgInComicTool;
+  visible: boolean;
   setInsertIndex: (index: number) => void;
   cutImage: (item: ImgInComicTool) => void;
 }
@@ -19,10 +20,9 @@ interface Props {
 export const ImgCard = (props: Props) => {
   const { comicMode, setDeleteItem, setDeleteConfirmShow, dragging } =
     useContext(comicToolContext);
-  const { index, data, setInsertIndex, cutImage } = props;
+  const { index, data, visible, setInsertIndex, cutImage } = props;
 
   const [cutDrawerShow, setCutDrawerShow] = useState(false);
-  const [visible, setVisible] = useState(true);
 
   /** 删除图片 */
   const deleteImg = () => {
@@ -70,22 +70,14 @@ export const ImgCard = (props: Props) => {
                       <div className="cut-img" />
                       <div className="cut-img" />
                       <div className="cut-img" />
-                      <img
-                        className="cut-img"
-                        src={data.base64}
-                        loading="lazy"
-                      />
+                      <img className="cut-img" src={data.base64} />
                     </>
                   ) : (
-                    <img className="img" src={data.base64} loading="lazy" />
+                    <img className="img" src={data.base64} />
                   )
                 ) : (
                   <div className="oversize-box">
-                    <img
-                      className="oversize-img"
-                      src={data.base64}
-                      loading="lazy"
-                    />
+                    <img className="oversize-img" src={data.base64} />
                     <div className="oversize-tip">
                       {FI18n.i18nNext.t(
                         data.children

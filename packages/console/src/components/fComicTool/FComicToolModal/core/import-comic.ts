@@ -189,8 +189,8 @@ const getImages = async (entries: Entry[]) => {
         };
       }
     }
-    setImgList([...imgList]);
     if (i === list.length - 1) {
+      setImgList([...imgList]);
       setLoaderShow(false);
       if (!fromImport) {
         setTimeout(() => {
