@@ -374,13 +374,15 @@ function VersionCreator({
                 }
 
                 <FPublishObjectFile
-                  showEditBtnAfterSucceed={true}
+                  showEditBtnAfterSucceed={resourceVersionCreatorPage.resourceInfo?.resourceType[0] === '阅读' && resourceVersionCreatorPage.resourceInfo?.resourceType[1] === '文章'
+                  || resourceVersionCreatorPage.resourceInfo?.resourceType.includes('漫画')}
                   // resourceID={resourceVersionCreatorPage.resourceInfo.resourceID}
                   resourceType={{
                     code: resourceVersionCreatorPage.resourceInfo.resourceTypeCode,
                     names: resourceVersionCreatorPage.resourceInfo.resourceType,
                   }}
                   fileInfo={resourceVersionCreatorPage.selectedFileInfo}
+                  disabledOperations={resourceVersionCreatorPage.rawPropertiesState === 'parsing' ? ['download', 'edit'] : []}
                   onSucceed_UploadFile={(file) => {
                     // console.log(file, 'onSucceed_UploadFile390oisjdf');
                     dispatch<OnSucceed_UploadFile_Action>({
