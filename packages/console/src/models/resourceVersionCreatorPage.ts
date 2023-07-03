@@ -987,7 +987,7 @@ const Model: ResourceVersionCreatorModelType = {
           },
         });
 
-        console.log(draftData, 'draftDataoisdjflksdjflksdjflkj');
+        // console.log(draftData, 'draftDataoisdjflksdjflksdjflkj');
         const p: {
           addTargets(value: any): void;
           clear(): void;
@@ -1007,7 +1007,7 @@ const Model: ResourceVersionCreatorModelType = {
           });
         }
       }
-      console.log('DDDDEEEEEEE *(&(*&(*&');
+      // console.log('DDDDEEEEEEE *(&(*&(*&');
       yield call(FUtil.Tool.promiseSleep, 1000);
       yield put<ChangeAction>({
         type: 'change',
@@ -1106,7 +1106,7 @@ const Model: ResourceVersionCreatorModelType = {
         error,
       }: Awaited<ReturnType<typeof getFilesSha1Info>> = yield call(getFilesSha1Info, params0);
 
-      console.log(result, 'resulte53452sdf', error, 'error asdfsdfsdfsdf');
+      // console.log(result, 'resulte53452sdf', error, 'error asdfsdfsdfsdf');
 
       if (error !== '') {
         yield put<ChangeAction>({
