@@ -44,6 +44,7 @@ import FTooltip from '@/components/FTooltip';
 import FSkeletonNode from '@/components/FSkeletonNode';
 import FTable from '@/components/FTable';
 import fComicTool from '@/components/fComicTool';
+// import { useLocation } from 'umi';
 
 interface VersionCreatorProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -59,6 +60,11 @@ function VersionCreator({
 
   const [isMarkdownEditorDirty, set_isMarkdownEditorDirty] = React.useState<boolean>(false);
   const [isfComicToolDirty, set_isfComicToolDirty] = React.useState<boolean>(false);
+
+  // const location = useLocation();
+  // React.useEffect(() => {
+  //   console.log(location, 'location 908weifjusdkjflsdjfljsdlfkjsdlfjlkj');
+  // }, [location.pathname]);
 
   AHooks.useMount(() => {
     dispatch<OnMountPageAction>({
