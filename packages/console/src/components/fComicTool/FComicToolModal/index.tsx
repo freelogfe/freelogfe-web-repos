@@ -37,7 +37,6 @@ import BlueScissors from './images/blue-scissors.png';
 import BlackScissors from './images/black-scissors.png';
 import { Loading3QuartersOutlined } from '@ant-design/icons/lib/icons';
 import { uncompressComicArchive } from './core/import-comic';
-import { createBrowserHistory } from 'umi';
 
 interface ToolProps {
   // 资源 id
@@ -89,21 +88,6 @@ export const ComicTool = (props: ToolProps) => {
   const [cuttingLoaderShow, setCuttingLoaderShow] = useState(false);
   const [saveLoaderShow, setSaveLoaderShow] = useState(false);
   const [saveFailTipShow, setSaveFailTipShow] = useState(false);
-
-  /** 监听路由变化，在未编辑状态下，路由变化时自动关闭工具弹窗 */
-  const history = createBrowserHistory();
-  const currentPath = history.location.pathname;
-  const timer = useRef<Timeout | null>(null);
-  history.listen(() => {
-    if (timer.current) {
-      clearTimeout(timer.current);
-      timer.current = null;
-    }
-    timer.current = setTimeout(() => {
-      const { pathname } = history.location;
-      if (currentPath !== pathname && !edited) exit();
-    }, 50);
-  });
 
   /** 获取资源与草稿数据 */
   const getData = async () => {
