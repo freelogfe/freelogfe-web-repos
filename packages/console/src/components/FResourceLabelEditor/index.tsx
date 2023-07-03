@@ -197,7 +197,7 @@ function FResourceLabelEditor($prop: FResourceLabelEditorProps) {
             <FComponentsLib.FIcons.FClose
               style={{
                 fontSize: 12,
-                transform: 'scale(.8)',
+                // transform: 'scale(.8)',
               }}
               onClick={() => {
                 // set_errorText('');
