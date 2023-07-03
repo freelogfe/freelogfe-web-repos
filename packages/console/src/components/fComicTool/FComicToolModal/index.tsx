@@ -66,6 +66,7 @@ export const ComicTool = (props: ToolProps) => {
   const saveTotalList = useRef<number[]>([]);
   const visibleIndexRef = useRef<number[]>([0, 0]);
   const sortableList = useRef<any>(null);
+  const currentTotal = useRef<number>(0);
 
   const [edited, setEdited] = useState<boolean | null>(null);
   const [saveTipType, setSaveTipType] = useState(0);
@@ -103,15 +104,6 @@ export const ComicTool = (props: ToolProps) => {
       if (currentPath !== pathname && !edited) exit();
     }, 50);
   });
-
-  // web worker 测试代码
-  // const scriptURL: string = '/js/saveComic.js';
-  // const worker: Worker = new Worker(scriptURL);
-  // worker.postMessage({ files });
-  // worker.addEventListener('message', (e: any) => {
-  //   console.warn('e===>', e);
-  //   worker.terminate();
-  // });
 
   /** 获取资源与草稿数据 */
   const getData = async () => {
@@ -278,21 +270,6 @@ export const ComicTool = (props: ToolProps) => {
     setDeleteConfirmShow(false);
   };
 
-  /** 新增图片 */
-  const addImage = (newImage: ImgInComicTool) => {
-    if (newImage.children) {
-      // 切图
-      const { length } = newImage.children;
-      const currentTotal = getTotal();
-      const restCount = MAX_IMG_LENGTH - currentTotal;
-      if (length > restCount) {
-        newImage.children = newImage.children.slice(0, restCount);
-        errorMessage('cbformatter_add_error_qtylimitation');
-      }
-    }
-    setImgList((pre) => [...pre, newImage]);
-  };
-
   /** 上传本地图片 */
   const uploadLocalImg = async (files: FileList) => {
     const list = [...files].filter((file) =>
@@ -347,6 +324,25 @@ export const ComicTool = (props: ToolProps) => {
     }
   };
 
+  /** 新增切图图片 */
+  const addCutImage = (newImage: ImgInComicTool) => {
+    if (newImage.children) {
+      // 切图
+      const { length } = newImage.children;
+      const restCount = MAX_IMG_LENGTH - currentTotal.current;
+      if (length > restCount) {
+        newImage.children = newImage.children.slice(0, restCount);
+        errorMessage('cbformatter_add_error_qtylimitation');
+        currentTotal.current = currentTotal.current + restCount;
+      } else {
+        currentTotal.current = currentTotal.current + length;
+      }
+    } else {
+      currentTotal.current = currentTotal.current + 1;
+    }
+    setImgList((pre) => [...pre, newImage]);
+  };
+
   /** 批量切图 */
   const cutImages = async (files: FileList) => {
     if (files.length > MAX_CUT_IMG_LENGTH) {
@@ -354,7 +350,9 @@ export const ComicTool = (props: ToolProps) => {
       return errorMessage('cbformatter_slice_error_qtylimitation');
     }
 
-    if (getTotal() === MAX_IMG_LENGTH) {
+    currentTotal.current = getTotal();
+
+    if (currentTotal.current === MAX_IMG_LENGTH) {
       // 数量已达到最大图片总数量
       return errorMessage('cbformatter_add_error_qtylimitation');
     }
@@ -368,6 +366,13 @@ export const ComicTool = (props: ToolProps) => {
     let ctx = canvas.getContext('2d');
 
     for (let i = 0; i < list.length; i++) {
+      if (currentTotal.current === MAX_IMG_LENGTH) {
+        canvas = null;
+        ctx = null;
+        setCuttingLoaderShow(false);
+        break;
+      }
+
       const file = list[i];
       const { type, name, size } = file;
 
@@ -391,7 +396,7 @@ export const ComicTool = (props: ToolProps) => {
       if (height <= MAX_HEIGHT_PER_PIECE) {
         // 原图高度小于规定最小高度，不予切图直接按普通上传图片处理
         const noCutImage = { name, size, base64, width, height };
-        addImage(noCutImage);
+        addCutImage(noCutImage);
         if (heightTip) {
           errorMessage('cbformatter_slice_error_height');
           heightTip = false;
@@ -436,7 +441,7 @@ export const ComicTool = (props: ToolProps) => {
           // 尺寸大于单张最大尺寸
           imgItem.size = size;
           imgItem.base64 = require('./images/oversize.png');
-          addImage(imgItem);
+          addCutImage(imgItem);
           if (i === list.length - 1) {
             canvas = null;
             ctx = null;
@@ -459,7 +464,7 @@ export const ComicTool = (props: ToolProps) => {
         imgItem.children!.push(childImg);
 
         if (j === pieceNum - 1) {
-          addImage(imgItem);
+          addCutImage(imgItem);
           if (i === list.length - 1) {
             canvas = null;
             ctx = null;
