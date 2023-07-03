@@ -30,6 +30,7 @@ interface FPublishObjectFileProps {
   showOpenCartoonEditor?: boolean;
 
   showEditBtnAfterSucceed?: boolean;
+  disabledOperations?: Array<'download' | 'edit' | 'remove'>;
 
   onClick_OpenMarkdownBtn?(): void;
 
@@ -402,6 +403,7 @@ function FPublishObjectFile($prop: FPublishObjectFileProps) {
       <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
         {
           $prop.showEditBtnAfterSucceed && (<FComponentsLib.FTextBtn
+            disabled={$prop.disabledOperations?.includes('edit')}
             type='primary'
             onClick={() => {
               $prop.onClick_EditBtn && $prop.onClick_EditBtn();
@@ -411,7 +413,7 @@ function FPublishObjectFile($prop: FPublishObjectFileProps) {
         }
 
         {
-          $prop.showOpenCartoonEditor
+          $prop.showOpenCartoonEditor && !$prop.disabledOperations?.includes('download')
             ? (<FDropdownMenu
               options={[{
                 text: 'ZIP格式文件',
@@ -432,6 +434,7 @@ function FPublishObjectFile($prop: FPublishObjectFileProps) {
             </FDropdownMenu>)
             : (<FComponentsLib.FTextBtn
               type='primary'
+              disabled={$prop.disabledOperations?.includes('download')}
               onClick={() => {
                 // self.location.href = FUtil.Format.completeUrlByDomain('qi')
                 //   + `/v2/storages/files/${$prop.fileInfo?.sha1}/download?attachmentName=${$prop.fileInfo?.name}`;
@@ -443,6 +446,7 @@ function FPublishObjectFile($prop: FPublishObjectFileProps) {
 
         <FComponentsLib.FTextBtn
           type='danger'
+          disabled={$prop.disabledOperations?.includes('remove')}
           onClick={() => {
             $prop.onClick_DeleteBtn && $prop.onClick_DeleteBtn();
           }}
