@@ -44,6 +44,8 @@ import FTooltip from '@/components/FTooltip';
 import FSkeletonNode from '@/components/FSkeletonNode';
 import FTable from '@/components/FTable';
 import fComicTool from '@/components/fComicTool';
+import { ComicTool } from '@/components/fComicTool/FComicToolModal';
+
 // import { useLocation } from 'umi';
 
 interface VersionCreatorProps extends RouteComponentProps<{ id: string }> {
@@ -59,6 +61,7 @@ function VersionCreator({
                         }: VersionCreatorProps) {
 
   const [isMarkdownEditorDirty, set_isMarkdownEditorDirty] = React.useState<boolean>(false);
+  const [isOpenCartoon, set_isOpenCartoon] = React.useState<boolean>(false);
   const [isfComicToolDirty, set_isfComicToolDirty] = React.useState<boolean>(false);
 
   // const location = useLocation();
@@ -403,7 +406,8 @@ function VersionCreator({
 
                   }}
                   onClick_OpenCartoonBtn={async () => {
-                    await onClick_EditCartoonBtn();
+                    // await onClick_EditCartoonBtn();
+                    set_isOpenCartoon(true);
                   }}
                   onClick_EditBtn={async () => {
                     if (resourceVersionCreatorPage.resourceInfo?.resourceType[0] === '阅读' && resourceVersionCreatorPage.resourceInfo?.resourceType[1] === '文章') {
@@ -548,6 +552,28 @@ function VersionCreator({
         visible={resourceVersionCreatorPage.releaseTipVisible}
       />
 
+
+      <ComicTool
+        resourceId={resourceVersionCreatorPage.resourceInfo.resourceID || ''}
+        show={isOpenCartoon}
+        setSaved={(saved) => {
+          // onChange_Saved && onChange_Saved(saved);
+
+          set_isfComicToolDirty(!saved);
+        }}
+        close={() => {
+          // set_visible(false);
+          // setTimeout(() => {
+          //   onClose && onClose();
+          // }, 300);
+          console.log('******** u98wueoirfuoisdjflsjdlfsdjl');
+          set_isOpenCartoon(false);
+          set_isfComicToolDirty(false);
+          dispatch<OnClose_MarkdownEditor_Action>({
+            type: 'resourceVersionCreatorPage/onClose_MarkdownEditor',
+          });
+        }}
+      />
     </>
   );
 }
