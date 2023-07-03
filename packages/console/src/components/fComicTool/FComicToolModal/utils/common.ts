@@ -223,8 +223,3 @@ export const base64ToFile = (base64: string, name: string) => {
   }
   return new File([u8arr], name, { type: mime });
 };
-
-/** 随机生成一个id */
-export const createId = () => {
-  return Math.random().toString(16).slice(2);
-};
