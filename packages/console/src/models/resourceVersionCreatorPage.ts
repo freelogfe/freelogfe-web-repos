@@ -112,6 +112,8 @@ export interface ResourceVersionCreatorPageModelState {
 
   // promptLeavePath: string;
   releaseTipVisible: boolean;
+
+  isOpenCartoon: boolean;
 }
 
 export interface ChangeAction extends AnyAction {
@@ -212,6 +214,13 @@ export interface OnChange_DescriptionEditorState_Action extends AnyAction {
   };
 }
 
+export interface OnChange_IsOpenCartoon_Action extends AnyAction {
+  type: 'resourceVersionCreatorPage/onChange_IsOpenCartoon';
+  payload: {
+    value: boolean;
+  };
+}
+
 export interface _FetchDraft_Action extends AnyAction {
   type: '_FetchDraft';
   payload: {
@@ -254,6 +263,7 @@ export interface ResourceVersionCreatorModelType {
     onChange_CustomConfigurations: (action: OnChange_CustomConfigurations_Action, effects: EffectsCommandMap) => void;
     onClick_ImportLastVersionDependents_Btn: (action: OnClick_ImportLastVersionDependents_Btn_Action, effects: EffectsCommandMap) => void;
     onChange_DescriptionEditorState: (action: OnChange_DescriptionEditorState_Action, effects: EffectsCommandMap) => void;
+    onChange_IsOpenCartoon: (action: OnChange_IsOpenCartoon_Action, effects: EffectsCommandMap) => void;
 
     _FetchDraft: (action: _FetchDraft_Action, effects: EffectsCommandMap) => void;
     _SaveDraft: (action: _SaveDraft_Action, effects: EffectsCommandMap) => void;
@@ -293,6 +303,8 @@ const initStates: ResourceVersionCreatorPageModelState = {
   preVersionDirectDependencies: [],
 
   releaseTipVisible: false,
+
+  isOpenCartoon: false,
 };
 
 const Model: ResourceVersionCreatorModelType = {
@@ -911,6 +923,15 @@ const Model: ResourceVersionCreatorModelType = {
           dataIsDirty: true,
         },
       });
+    },
+    * onChange_IsOpenCartoon({ payload }: OnChange_IsOpenCartoon_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          isOpenCartoon: payload.value,
+        },
+      });
+
     },
 
     * _FetchDraft({ payload }: _FetchDraft_Action, { call, put, select }: EffectsCommandMap) {
