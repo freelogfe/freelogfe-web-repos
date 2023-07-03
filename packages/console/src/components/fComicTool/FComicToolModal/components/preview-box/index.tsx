@@ -254,6 +254,7 @@ export const PreviewBox = (props: { show: boolean; close: () => void }) => {
       setCurrentPage(1);
       setJumpPage(1);
       setModeMenuShow(false);
+      setMode(['', 'double', 'normal']);
     }
   }, [show]);
 
@@ -272,7 +273,7 @@ export const PreviewBox = (props: { show: boolean; close: () => void }) => {
     setPreviewList(list);
   }, [imgList]);
 
-  return show ? (
+  return show && mode[0] ? (
     <div className="preview-box-wrapper">
       {mode[0] === 'paging' ? (
         <div className="content-paging-area">
@@ -281,7 +282,7 @@ export const PreviewBox = (props: { show: boolean; close: () => void }) => {
             mode[1] === 'double' &&
             !amend &&
             currentPage === 1 && <div className="blank-screen"></div>}
-          {/* 日漫、双页模式、页数不为1且当前为尾页/页数为1且跨页修正时，尾页左侧显示空屏 */}
+          {/* 日漫、双页模式、页数不为1且当前为尾页/页数为1且跨页匹配时，尾页左侧显示空屏 */}
           {comicMode === 3 &&
             mode[1] === 'double' &&
             ((previewList.length !== 1 && currentPage === previewList.length) ||
@@ -319,7 +320,7 @@ export const PreviewBox = (props: { show: boolean; close: () => void }) => {
                 />
               </div>
             )}
-          {/* 条漫/页漫、双页模式、页数不为1且当前为尾页/页数为1且跨页修正时，尾页右侧显示空屏 */}
+          {/* 条漫/页漫、双页模式、页数不为1且当前为尾页/页数为1且跨页匹配时，尾页右侧显示空屏 */}
           {[1, 2].includes(comicMode) &&
             mode[1] === 'double' &&
             ((previewList.length !== 1 && currentPage === previewList.length) ||
@@ -338,7 +339,7 @@ export const PreviewBox = (props: { show: boolean; close: () => void }) => {
            * 日漫模式下：
            *  - 单页：当前页不是最后一页
            *  - 双页：
-           *    - 非跨页修正、当前页为第一页、页数大于一页时
+           *    - 非跨页匹配、当前页为第一页、页数大于一页时
            *    - 当前页不为倒数第二页时
            */}
           {((mode[2] === 'normal' && currentPage !== 1) ||
@@ -355,7 +356,7 @@ export const PreviewBox = (props: { show: boolean; close: () => void }) => {
            * 普通模式下：
            *  - 单页：当前页不是最后一页
            *  - 双页：
-           *    - 非跨页修正、当前页为第一页、页数大于一页时
+           *    - 非跨页匹配、当前页为第一页、页数大于一页时
            *    - 当前页不为倒数第二页时
            */}
           {((mode[2] === 'manga' && currentPage !== 1) ||
