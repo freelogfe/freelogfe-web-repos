@@ -158,6 +158,7 @@ function VersionCreator({
         value: true,
       },
     });
+
     // await fComicTool({
     //   resourceID: resourceVersionCreatorPage.resourceInfo?.resourceID || '',
     //   async onChange_Saved(saved: boolean) {
