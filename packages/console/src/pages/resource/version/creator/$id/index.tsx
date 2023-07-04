@@ -150,16 +150,24 @@ function VersionCreator({
         showSuccessTip: false,
       },
     });
-    await fComicTool({
-      resourceID: resourceVersionCreatorPage.resourceInfo?.resourceID || '',
-      async onChange_Saved(saved: boolean) {
-        set_isfComicToolDirty(!saved);
+    await set_isfComicToolDirty(false);
+
+    await dispatch<OnChange_IsOpenCartoon_Action>({
+      type: 'resourceVersionCreatorPage/onChange_IsOpenCartoon',
+      payload: {
+        value: true,
       },
     });
-    await set_isfComicToolDirty(false);
-    await dispatch<OnClose_MarkdownEditor_Action>({
-      type: 'resourceVersionCreatorPage/onClose_MarkdownEditor',
-    });
+    // await fComicTool({
+    //   resourceID: resourceVersionCreatorPage.resourceInfo?.resourceID || '',
+    //   async onChange_Saved(saved: boolean) {
+    //     set_isfComicToolDirty(!saved);
+    //   },
+    // });
+
+    // await dispatch<OnClose_MarkdownEditor_Action>({
+    //   type: 'resourceVersionCreatorPage/onClose_MarkdownEditor',
+    // });
 
   }
 
@@ -435,15 +443,15 @@ function VersionCreator({
 
                   }}
                   onClick_OpenCartoonBtn={async () => {
-                    // await onClick_EditCartoonBtn();
+                    await onClick_EditCartoonBtn();
                     // set_isOpenCartoon(true);
                     // console.log('----------------- 9iewojfsdklfjlsdjfldsjljl');
-                    dispatch<OnChange_IsOpenCartoon_Action>({
-                      type: 'resourceVersionCreatorPage/onChange_IsOpenCartoon',
-                      payload: {
-                        value: true,
-                      },
-                    });
+                    // dispatch<OnChange_IsOpenCartoon_Action>({
+                    //   type: 'resourceVersionCreatorPage/onChange_IsOpenCartoon',
+                    //   payload: {
+                    //     value: true,
+                    //   },
+                    // });
                   }}
                   onClick_EditBtn={async () => {
                     if (resourceVersionCreatorPage.resourceInfo?.resourceType[0] === '阅读' && resourceVersionCreatorPage.resourceInfo?.resourceType[1] === '文章') {
