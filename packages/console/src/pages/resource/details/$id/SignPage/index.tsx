@@ -27,8 +27,19 @@ interface SignProps {
 
 function Sign({ dispatch, resourceDetailPage, nodes }: SignProps) {
 
+  const [signExhibitName, setSignExhibitName] = React.useState<string>('');
+
   AHooks.useUnmount(() => {
     window.history.forward();
+  });
+
+  AHooks.useDebounceEffect(() => {
+    dispatch<OnChangeAndVerifySignExhibitNameAction>({
+      type: 'resourceDetailPage/onChangeAndVerifySignExhibitName',
+      payload: signExhibitName,
+    });
+  }, [signExhibitName], {
+    wait: 300,
   });
 
   const selectedNode = nodes.list.find((n) => n.nodeId === resourceDetailPage.sign_SelectedNodeID);
@@ -97,16 +108,26 @@ function Sign({ dispatch, resourceDetailPage, nodes }: SignProps) {
             text={FI18n.i18nNext.t('addresourcetonode_exhibitname_info')}
           />}
         >
-          <FInput
-            value={resourceDetailPage.sign_SignExhibitName}
+          {/*<FInput*/}
+          {/*  value={resourceDetailPage.sign_SignExhibitName}*/}
+          {/*  className={styles.exhibitNameInput}*/}
+          {/*  debounce={300}*/}
+          {/*  onDebounceChange={(value) => {*/}
+          {/*    dispatch<OnChangeAndVerifySignExhibitNameAction>({*/}
+          {/*      type: 'resourceDetailPage/onChangeAndVerifySignExhibitName',*/}
+          {/*      payload: value,*/}
+          {/*    });*/}
+          {/*  }}*/}
+          {/*/>*/}
+          <FComponentsLib.FInput.FSingleLine
+            value={signExhibitName}
             className={styles.exhibitNameInput}
-            debounce={300}
-            onDebounceChange={(value) => {
-              dispatch<OnChangeAndVerifySignExhibitNameAction>({
-                type: 'resourceDetailPage/onChangeAndVerifySignExhibitName',
-                payload: value,
-              });
+            // debounce={300}
+            onChange={(e) => {
+              // console.log('#@#######');
+              setSignExhibitName(e.target.value);
             }}
+            lengthLimit={60}
           />
           {
             resourceDetailPage.sign_SignExhibitNameErrorTip && (<>
