@@ -43,6 +43,8 @@ interface ContractProps {
 
 function Contract({ dispatch, nodeManager_Contract_Page }: ContractProps) {
 
+  const [filterInput, setFilterInput] = React.useState<string>('');
+
   AHooks.useMount(() => {
     dispatch<OnMountPageAction>({
       type: 'nodeManager_Contract_Page/onMountPage',
@@ -53,6 +55,17 @@ function Contract({ dispatch, nodeManager_Contract_Page }: ContractProps) {
     // dispatch<OnMountPageAction>({
     //   type: 'nodeManager_Contract_Page/onMountPage',
     // });
+  });
+
+  AHooks.useDebounceEffect(() => {
+    dispatch<OnChange_Authorize_KeywordsInput_Action>({
+      type: 'nodeManager_Contract_Page/onChange_Authorize_KeywordsInput',
+      payload: {
+        value: filterInput,
+      },
+    });
+  }, [filterInput], {
+    wait: 300,
   });
 
   const columns1: ColumnsType<typeof nodeManager_Contract_Page.authorize_List[number]> = [
@@ -452,18 +465,31 @@ function Contract({ dispatch, nodeManager_Contract_Page }: ContractProps) {
                         />
                       </Space>
                     </Space>
-                    <FInput
+                    {/*<FInput*/}
+                    {/*  className={styles.filterInput}*/}
+                    {/*  wrapClassName={styles.filterInput}*/}
+                    {/*  theme='dark'*/}
+                    {/*  debounce={300}*/}
+                    {/*  onDebounceChange={(value) => {*/}
+                    {/*    dispatch<OnChange_Authorize_KeywordsInput_Action>({*/}
+                    {/*      type: 'nodeManager_Contract_Page/onChange_Authorize_KeywordsInput',*/}
+                    {/*      payload: {*/}
+                    {/*        value: value,*/}
+                    {/*      },*/}
+                    {/*    });*/}
+                    {/*  }}*/}
+                    {/*  placeholder={FI18n.i18nNext.t('nodemgmt_search_contracts_hint')}*/}
+                    {/*/>*/}
+                    <FComponentsLib.FInput.FSearch
+                      lengthLimit={-1}
                       className={styles.filterInput}
-                      wrapClassName={styles.filterInput}
-                      theme='dark'
-                      debounce={300}
-                      onDebounceChange={(value) => {
-                        dispatch<OnChange_Authorize_KeywordsInput_Action>({
-                          type: 'nodeManager_Contract_Page/onChange_Authorize_KeywordsInput',
-                          payload: {
-                            value: value,
-                          },
-                        });
+                      // wrapClassName={styles.filterInput}
+                      // theme='dark'
+                      // debounce={300}
+                      value={filterInput}
+                      onChange={(e) => {
+                        setFilterInput(e.target.value);
+
                       }}
                       placeholder={FI18n.i18nNext.t('nodemgmt_search_contracts_hint')}
                     />
