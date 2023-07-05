@@ -6,7 +6,6 @@ import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import {
   ConnectState,
-  // ResourceInfoModelState,
   ResourceVersionCreatorPageModelState,
 } from '@/models/connect';
 import {
@@ -44,11 +43,8 @@ import fConfirmModal from '@/components/fConfirmModal';
 import FTooltip from '@/components/FTooltip';
 import FSkeletonNode from '@/components/FSkeletonNode';
 import FTable from '@/components/FTable';
-import fComicTool from '@/components/fComicTool';
 import { ComicTool } from '@/components/fComicTool/FComicToolModal';
 import { history } from 'umi';
-
-// import { useLocation } from 'umi';
 
 interface VersionCreatorProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -57,19 +53,12 @@ interface VersionCreatorProps extends RouteComponentProps<{ id: string }> {
 
 function VersionCreator({
                           dispatch,
-                          // resourceInfo,
                           resourceVersionCreatorPage,
                           match,
                         }: VersionCreatorProps) {
 
   const [isMarkdownEditorDirty, set_isMarkdownEditorDirty] = React.useState<boolean>(false);
-  // const [isOpenCartoon, set_isOpenCartoon] = React.useState<boolean>(false);
   const [isfComicToolDirty, set_isfComicToolDirty] = React.useState<boolean>(false);
-
-  // const location = useLocation();
-  // React.useEffect(() => {
-  //   console.log(location, 'location 908weifjusdkjflsdjfljsdlfkjsdlfjlkj');
-  // }, [location.pathname]);
 
   AHooks.useMount(() => {
     dispatch<OnMountPageAction>({
@@ -158,17 +147,6 @@ function VersionCreator({
         value: true,
       },
     });
-
-    // await fComicTool({
-    //   resourceID: resourceVersionCreatorPage.resourceInfo?.resourceID || '',
-    //   async onChange_Saved(saved: boolean) {
-    //     set_isfComicToolDirty(!saved);
-    //   },
-    // });
-
-    // await dispatch<OnClose_MarkdownEditor_Action>({
-    //   type: 'resourceVersionCreatorPage/onClose_MarkdownEditor',
-    // });
 
   }
 
@@ -436,23 +414,11 @@ function VersionCreator({
                   }}
                   showOpenMarkdownEditor={resourceVersionCreatorPage.resourceInfo.resourceType[0] === '阅读' && resourceVersionCreatorPage.resourceInfo.resourceType[1] === '文章'}
                   showOpenCartoonEditor={resourceVersionCreatorPage.resourceInfo.resourceType[0] === '阅读' && resourceVersionCreatorPage.resourceInfo.resourceType[1] === '漫画'}
-                  // showOpenCartoonEditor={false}
                   onClick_OpenMarkdownBtn={async () => {
-                    // console.log('OOOOOOOOOO ((((((((');
                     await onClick_EditMarkdownBtn();
-                    // console.log('CCCCCCCCC ))))))))');
-
                   }}
                   onClick_OpenCartoonBtn={async () => {
                     await onClick_EditCartoonBtn();
-                    // set_isOpenCartoon(true);
-                    // console.log('----------------- 9iewojfsdklfjlsdjfldsjljl');
-                    // dispatch<OnChange_IsOpenCartoon_Action>({
-                    //   type: 'resourceVersionCreatorPage/onChange_IsOpenCartoon',
-                    //   payload: {
-                    //     value: true,
-                    //   },
-                    // });
                   }}
                   onClick_EditBtn={async () => {
                     if (resourceVersionCreatorPage.resourceInfo?.resourceType[0] === '阅读' && resourceVersionCreatorPage.resourceInfo?.resourceType[1] === '文章') {
@@ -603,23 +569,13 @@ function VersionCreator({
         visible={resourceVersionCreatorPage.releaseTipVisible}
       />
 
-      {/*{console.log(resourceVersionCreatorPage.isOpenCartoon, 'isOpenCartoon8098809238r09wueoifsjlfjsldjfljl')}*/}
       <ComicTool
         resourceId={resourceVersionCreatorPage.resourceInfo.resourceID || ''}
         show={resourceVersionCreatorPage.isOpenCartoon}
         setSaved={(saved) => {
-          // onChange_Saved && onChange_Saved(saved);
-
           set_isfComicToolDirty(!saved);
         }}
         close={() => {
-          // console.log('+++++++++++++++++++++++++++++++close ********(uwqe3joitrfjsdlkfjlskdjflksdjlkjl');
-          // set_visible(false);
-          // setTimeout(() => {
-          //   onClose && onClose();
-          // }, 300);
-          // console.log('******** u98wueoirfuoisdjflsjdlfsdjl');
-          // set_isOpenCartoon(false);
           dispatch<OnChange_IsOpenCartoon_Action>({
             type: 'resourceVersionCreatorPage/onChange_IsOpenCartoon',
             payload: {
