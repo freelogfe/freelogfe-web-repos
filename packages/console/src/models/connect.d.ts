@@ -11,7 +11,7 @@ import { UserModelState } from './user';
 import { GlobalModelState } from './global';
 import { StorageHomePageModelState } from './storageHomePage';
 import { StorageObjectEditorModelState } from './storageObjectEditor';
-import { StorageObjectDepSelectorModelState } from './storageObjectDepSelector';
+// import { StorageObjectDepSelectorModelState } from './storageObjectDepSelector';
 import { ResourceDetailPageModelState } from './resourceDetailPage';
 import { NodesModelState } from './nodes';
 import { NodeManagerModelState } from './nodeManagerPage';
@@ -40,7 +40,7 @@ export {
   GlobalModelState,
   StorageHomePageModelState,
   StorageObjectEditorModelState,
-  StorageObjectDepSelectorModelState,
+  // StorageObjectDepSelectorModelState,
   ResourceDetailPageModelState,
   NodesModelState,
   NodeManagerModelState,
@@ -72,7 +72,7 @@ export interface ConnectState {
   global: GlobalModelState;
   storageHomePage: StorageHomePageModelState;
   storageObjectEditor: StorageObjectEditorModelState;
-  storageObjectDepSelector: StorageObjectDepSelectorModelState;
+  // storageObjectDepSelector: StorageObjectDepSelectorModelState;
   resourceDetailPage: ResourceDetailPageModelState;
   nodes: NodesModelState;
   nodeManagerPage: NodeManagerModelState;
