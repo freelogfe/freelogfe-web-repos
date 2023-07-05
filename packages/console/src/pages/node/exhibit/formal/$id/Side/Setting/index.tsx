@@ -16,7 +16,7 @@ import {
   OnConfirm_CustomOptionDrawer_Action,
 } from '@/models/exhibitInfoPage';
 import FSelect from '@/components/FSelect';
-import FInput from '@/components/FInput';
+// import FInput from '@/components/FInput';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import { ConnectState } from '@/models/connect';
@@ -247,7 +247,32 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
                       }}
                     />)
                     : (<div>
-                      <FInput
+                      {/*<FInput*/}
+                      {/*  className={styles.FInput}*/}
+                      {/*  value={io.valueInput}*/}
+                      {/*  // errorText={io.valueInputError}*/}
+                      {/*  placeholder={'输入自定义选项'}*/}
+                      {/*  onChange={(e) => {*/}
+                      {/*    // onChangeCustomAttrs({ key: pc.key, value: e.target.value });*/}
+                      {/*    dispatch<OnChange_Side_InheritOptions_ValueInput_Action>({*/}
+                      {/*      type: 'exhibitInfoPage/onChange_Side_InheritOptions_ValueInput',*/}
+                      {/*      payload: {*/}
+                      {/*        index: index,*/}
+                      {/*        value: e.target.value,*/}
+                      {/*      },*/}
+                      {/*    });*/}
+                      {/*  }}*/}
+                      {/*  onBlur={() => {*/}
+                      {/*    dispatch<OnBlur_Side_InheritOptions_ValueInput_Action>({*/}
+                      {/*      type: 'exhibitInfoPage/onBlur_Side_InheritOptions_ValueInput',*/}
+                      {/*      payload: {*/}
+                      {/*        index: index,*/}
+                      {/*      },*/}
+                      {/*    });*/}
+                      {/*  }}*/}
+                      {/*/>*/}
+                      <FComponentsLib.FInput.FSingleLine
+                        lengthLimit={-1}
                         className={styles.FInput}
                         value={io.valueInput}
                         // errorText={io.valueInputError}
@@ -390,7 +415,32 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
                   </Space>
                 </div>
                 <div style={{ height: 5 }} />
-                <FInput
+                {/*<FInput*/}
+                {/*  placeholder={FI18n.i18nNext.t('hint_value_null')}*/}
+                {/*  className={styles.FInput}*/}
+                {/*  value={co.valueInput}*/}
+                {/*  // errorText={co.valueInputError}*/}
+                {/*  onChange={(e) => {*/}
+                {/*    // console.log(e, 'eEEEEeeeeeEEE');*/}
+                {/*    dispatch<OnChange_Side_CustomOptions_ValueInput_Action>({*/}
+                {/*      type: 'exhibitInfoPage/onChange_Side_CustomOptions_ValueInput',*/}
+                {/*      payload: {*/}
+                {/*        index: index,*/}
+                {/*        value: e.target.value,*/}
+                {/*      },*/}
+                {/*    });*/}
+                {/*  }}*/}
+                {/*  onBlur={() => {*/}
+                {/*    dispatch<OnBlur_Side_CustomOptions_ValueInput_Action>({*/}
+                {/*      type: 'exhibitInfoPage/onBlur_Side_CustomOptions_ValueInput',*/}
+                {/*      payload: {*/}
+                {/*        index: index,*/}
+                {/*      },*/}
+                {/*    });*/}
+                {/*  }}*/}
+                {/*/>*/}
+                <FComponentsLib.FInput.FSingleLine
+                  lengthLimit={-1}
                   placeholder={FI18n.i18nNext.t('hint_value_null')}
                   className={styles.FInput}
                   value={co.valueInput}
