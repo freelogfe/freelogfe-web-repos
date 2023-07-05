@@ -7,8 +7,8 @@ import {
   UpdateBaseInfoAction,
 } from '@/models/exhibitInfoPage';
 import { Space } from 'antd';
-import FInput from '@/components/FInput';
-import FLabelEditor from '@/components/FLabelEditor';
+// import FInput from '@/components/FInput';
+// import FLabelEditor from '@/components/FLabelEditor';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import { ConnectState } from '@/models/connect';
@@ -98,11 +98,20 @@ function Info({ dispatch, exhibitInfoPage }: InfoProps) {
           </FTooltip>
         </Space>)
         : (<>
-          <FInput
+          {/*<FInput*/}
+          {/*  className={styles.FInput}*/}
+          {/*  wrapClassName={styles.FInput}*/}
+          {/*  value={exhibitInfoPage.side_ExhibitInputTitle || ''}*/}
+          {/*  onChange={(e) => onChangePInputTitle(e.target.value)}*/}
+          {/*/>*/}
+          <FComponentsLib.FInput.FSingleLine
+            lengthLimit={-1}
             className={styles.FInput}
-            wrapClassName={styles.FInput}
+            // wrapClassName={styles.FInput}
             value={exhibitInfoPage.side_ExhibitInputTitle || ''}
-            onChange={(e) => onChangePInputTitle(e.target.value)}
+            onChange={(e) => {
+              onChangePInputTitle(e.target.value);
+            }}
           />
           {
             exhibitInfoPage.side_ExhibitInputTitle_Error !== '' && (<>
@@ -160,7 +169,7 @@ function Info({ dispatch, exhibitInfoPage }: InfoProps) {
             side_ExhibitTags: value,
           },
         });
-      }}/>
+      }} />
     <div style={{ height: 30 }} />
   </>);
 }
