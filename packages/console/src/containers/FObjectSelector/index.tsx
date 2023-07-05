@@ -4,12 +4,16 @@ import styles from './index.less';
 import FResourceList, { FResourceListProps } from '@/components/FResourceList';
 import { connect } from 'dva';
 // import { Dispatch } from 'redux';
-import { ConnectState, StorageHomePageModelState, StorageObjectDepSelectorModelState } from '@/models/connect';
 import {
-  ChangeAction,
-  // FetchObjectsAction,
-  // OnChangeOConditionsAction,
-} from '@/models/storageObjectDepSelector';
+  ConnectState,
+  // StorageHomePageModelState,
+  // StorageObjectDepSelectorModelState
+} from '@/models/connect';
+// import {
+//   ChangeAction,
+//   // FetchObjectsAction,
+//   // OnChangeOConditionsAction,
+// } from '@/models/storageObjectDepSelector';
 import FDropdownMenu from '@/components/FDropdownMenu';
 import FComponentsLib from '@freelog/components-lib';
 import * as AHooks from 'ahooks';
@@ -19,8 +23,8 @@ import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 interface FObjectSelectorProps {
   disabledIDsOrNames?: string[];
   showRemoveIDsOrNames?: string[];
-  visibleResourceType?: string;
-  isLoadingTypeless?: 0 | 1;
+  // visibleResourceType?: string;
+  // isLoadingTypeless?: 0 | 1;
 
   onSelect?({ id, name }: { id: string; name: string; }): void;
 
