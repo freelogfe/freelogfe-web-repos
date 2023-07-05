@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as AHooks from 'ahooks';
 import styles from './form.less';
 import { FServiceAPI } from '@freelog/tools-lib';
-import FInput from '@/components/FInput';
+// import FInput from '@/components/FInput';
 import FSelect from '@/components/FSelect';
 // import FIntroductionEditor from '@/pages/resource/components/FIntroductionEditor';
 import FComponentsLib from '@freelog/components-lib';

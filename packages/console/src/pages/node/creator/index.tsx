@@ -76,7 +76,26 @@ function NodeCreator({ nodeCreatorPage, dispatch }: NodeCreatorProps) {
               text={FI18n.i18nNext.t('createnode_input_nodeaddress_label')}
             />
             <div className={styles.inputWrap}>
-              <FInput
+              {/*<FInput*/}
+              {/*  value={nodeCreatorPage.nodeDomain}*/}
+              {/*  // debounce={300}*/}
+              {/*  className={styles.input}*/}
+              {/*  // placeholder={'输入节点地址'}*/}
+              {/*  placeholder={FI18n.i18nNext.t('createnode_input_nodeaddress_hint')}*/}
+              {/*  onChange={(e) => {*/}
+              {/*    dispatch<OnChange_DomainInput_Action>({*/}
+              {/*      type: 'nodeCreatorPage/onChange_DomainInput',*/}
+              {/*      payload: { value: e.target.value },*/}
+              {/*    });*/}
+              {/*  }}*/}
+              {/*  onBlur={() => {*/}
+              {/*    dispatch<OnBlur_DomainInput_Action>({*/}
+              {/*      type: 'nodeCreatorPage/onBlur_DomainInput',*/}
+              {/*    });*/}
+              {/*  }}*/}
+              {/*/> */}
+              <FComponentsLib.FInput.FSingleLine
+                lengthLimit={-1}
                 value={nodeCreatorPage.nodeDomain}
                 // debounce={300}
                 className={styles.input}
@@ -115,7 +134,26 @@ function NodeCreator({ nodeCreatorPage, dispatch }: NodeCreatorProps) {
               text={FI18n.i18nNext.t('createnode_input_nodeid_label')}
             />
             <div className={styles.inputWrap}>
-              <FInput
+              {/*<FInput*/}
+              {/*  value={nodeCreatorPage.nodeName}*/}
+              {/*  // debounce={300}*/}
+              {/*  onChange={(e) => {*/}
+              {/*    dispatch<OnChange_NameInput_Action>({*/}
+              {/*      type: 'nodeCreatorPage/onChange_NameInput',*/}
+              {/*      payload: { value: e.target.value },*/}
+              {/*    });*/}
+              {/*  }}*/}
+              {/*  onBlur={() => {*/}
+              {/*    dispatch<OnBlur_NameInput_Action>({*/}
+              {/*      type: 'nodeCreatorPage/onBlur_NameInput',*/}
+              {/*    });*/}
+              {/*  }}*/}
+              {/*  className={styles.input}*/}
+              {/*  // placeholder={'输入节点名称'}*/}
+              {/*  placeholder={FI18n.i18nNext.t('createnode_input_nodeid_hint')}*/}
+              {/*/>*/}
+              <FComponentsLib.FInput.FSingleLine
+                lengthLimit={-1}
                 value={nodeCreatorPage.nodeName}
                 // debounce={300}
                 onChange={(e) => {

@@ -14,7 +14,7 @@ import {
   OnMountThemePageAction,
   OnUnmountThemePageAction,
 } from '@/models/informalNodeManagerPage';
-import FInput from '@/components/FInput';
+// import FInput from '@/components/FInput';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import FIdentityTypeBadge from '@/components/FIdentityTypeBadge';
