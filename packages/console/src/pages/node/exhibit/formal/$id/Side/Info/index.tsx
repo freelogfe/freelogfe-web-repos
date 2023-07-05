@@ -169,7 +169,8 @@ function Info({ dispatch, exhibitInfoPage }: InfoProps) {
             side_ExhibitTags: value,
           },
         });
-      }} />
+      }}
+    />
     <div style={{ height: 30 }} />
   </>);
 }
