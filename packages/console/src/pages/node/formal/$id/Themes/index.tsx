@@ -41,6 +41,8 @@ function Themes({ match, dispatch, nodeManagerPage }: ThemesProps) {
   const [activeId, setActiveId] = React.useState<null | string>(null);
   const [emptyPopupShow, setEmptyPopupShow] = React.useState(false);
 
+  const [themeInputFilter, setThemeInputFilter] = React.useState<string>('');
+
   AHooks.useMount(async () => {
     dispatch<OnMount_ThemePage_Action>({
       type: 'nodeManagerPage/onMount_ThemePage',
@@ -58,6 +60,17 @@ function Themes({ match, dispatch, nodeManagerPage }: ThemesProps) {
     dispatch<OnUnmount_ThemePage_Action>({
       type: 'nodeManagerPage/onUnmount_ThemePage',
     });
+  });
+
+  AHooks.useDebounceEffect(() => {
+    dispatch<OnChangeThemeAction>({
+      type: 'nodeManagerPage/onChangeTheme',
+      payload: {
+        themeInputFilter: themeInputFilter,
+      },
+    });
+  }, [themeInputFilter], {
+    wait: 300,
   });
 
   /** 跳转资源详情页 */
@@ -234,17 +247,27 @@ function Themes({ match, dispatch, nodeManagerPage }: ThemesProps) {
             : (<>
               <div className={styles.header}>
                 <FComponentsLib.FTitleText type='h1' text={'主题管理'} />
-                <FInput
+                {/*<FInput*/}
+                {/*  className={styles.input}*/}
+                {/*  theme='dark'*/}
+                {/*  debounce={300}*/}
+                {/*  onDebounceChange={(value) => {*/}
+                {/*    dispatch<OnChangeThemeAction>({*/}
+                {/*      type: 'nodeManagerPage/onChangeTheme',*/}
+                {/*      payload: {*/}
+                {/*        themeInputFilter: value,*/}
+                {/*      },*/}
+                {/*    });*/}
+                {/*  }}*/}
+                {/*  placeholder={FI18n.i18nNext.t('nodemgmt_search_themes_hint')}*/}
+                {/*/>*/}
+                <FComponentsLib.FInput.FSearch
                   className={styles.input}
-                  theme='dark'
-                  debounce={300}
-                  onDebounceChange={(value) => {
-                    dispatch<OnChangeThemeAction>({
-                      type: 'nodeManagerPage/onChangeTheme',
-                      payload: {
-                        themeInputFilter: value,
-                      },
-                    });
+                  // theme='dark'
+                  // debounce={300}
+                  onChange={(e) => {
+                    setThemeInputFilter(e.target.value);
+
                   }}
                   placeholder={FI18n.i18nNext.t('nodemgmt_search_themes_hint')}
                 />
