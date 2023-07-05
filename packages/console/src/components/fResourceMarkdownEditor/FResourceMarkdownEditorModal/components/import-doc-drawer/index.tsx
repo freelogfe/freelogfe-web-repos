@@ -991,12 +991,9 @@ export const ImportDocDrawer = (props: Props) => {
               <div className="info-area">
                 <div className="version">{item.version}</div>
                 <div className="other-info">
-                  <span>
-                    {`${FI18n.i18nNext.t(
-                      'label_last_updated',
-                    )} ${FUtil.Format.formatDateTime(item.updateDate, true)}`}
-                  </span>
-                  <span>{item.filename}</span>
+                  {`${FI18n.i18nNext.t(
+                    'label_last_updated',
+                  )} ${FUtil.Format.formatDateTime(item.updateDate, true)}`}
                 </div>
               </div>
 

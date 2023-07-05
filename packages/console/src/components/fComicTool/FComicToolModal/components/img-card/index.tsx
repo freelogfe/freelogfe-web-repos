@@ -8,6 +8,8 @@ import { ImgInComicTool } from '../../utils/interface';
 import { MAX_IMG_SIZE } from '../../utils/assets';
 import { CutDrawer } from '../cut-drawer';
 import { conversionSize, formatCardName, getExt } from '../../utils/common';
+import OversizeImg from '../../images/oversize.png';
+import { Skeleton } from 'antd';
 
 interface Props {
   index: number;
@@ -65,19 +67,23 @@ export const ImgCard = (props: Props) => {
               {/* 卡片身体（图片区域） */}
               <div className="card-body">
                 {data.size <= MAX_IMG_SIZE ? (
-                  data.children ? (
-                    <>
-                      <div className="cut-img" />
-                      <div className="cut-img" />
-                      <div className="cut-img" />
-                      <img className="cut-img" src={data.base64} />
-                    </>
+                  data.base64 ? (
+                    data.children ? (
+                      <>
+                        <div className="cut-img" />
+                        <div className="cut-img" />
+                        <div className="cut-img" />
+                        <img className="cut-img" src={data.base64} />
+                      </>
+                    ) : (
+                      <img className="img" src={data.base64} />
+                    )
                   ) : (
-                    <img className="img" src={data.base64} />
+                    <Skeleton.Image className="skeleton-image" active={true} />
                   )
                 ) : (
                   <div className="oversize-box">
-                    <img className="oversize-img" src={data.base64} />
+                    <img className="oversize-img" src={OversizeImg} />
                     <div className="oversize-tip">
                       {FI18n.i18nNext.t(
                         data.children

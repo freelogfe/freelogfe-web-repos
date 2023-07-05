@@ -26,6 +26,7 @@ export const ImportDrawer = (props: Props) => {
   const {
     resourceId,
     resource,
+    loaderShow,
     setComicName,
     setComicConfig,
     setImgList,
@@ -102,7 +103,7 @@ export const ImportDrawer = (props: Props) => {
   };
 
   /** 确认导入 */
-  const sureImport = async (file: File) => {
+  const sureImport = async (file: File, importType: 2 | 3 | 4) => {
     const suffix = getExt(file.name);
     if (!['zip', 'rar', 'tar', 'cbz', 'cbr', 'cbt'].includes(suffix)) {
       errorMessage('cbformatter_import_error_format');
@@ -117,7 +118,11 @@ export const ImportDrawer = (props: Props) => {
     setComicName(file.name);
     setAutoScroll(true);
 
-    uncompressComicArchive(file, { setLoaderShow, setImgList, setComicConfig });
+    uncompressComicArchive(
+      file,
+      { setLoaderShow, setImgList, setComicConfig },
+      importType,
+    );
 
     setTimeout(() => {
       close();
@@ -197,7 +202,7 @@ export const ImportDrawer = (props: Props) => {
   /** 从本地上传导入 */
   const importFromUpload = async () => {
     setLoaderShow(true);
-    sureImport(refs.current.uploadFileData.files[0]);
+    sureImport(refs.current.uploadFileData.files[0], 2);
   };
 
   /** 从存储对象导入 */
@@ -213,7 +218,7 @@ export const ImportDrawer = (props: Props) => {
       responseType: 'blob',
     });
     const file = new File([res], objectName);
-    sureImport(file);
+    sureImport(file, 3);
   };
 
   /** 从版本导入 */
@@ -231,7 +236,7 @@ export const ImportDrawer = (props: Props) => {
     const file = new File([res], filename + '.zip', {
       type: 'application/zip',
     });
-    sureImport(file);
+    sureImport(file, 4);
   };
 
   /** 修改新的存储空间名称 */
@@ -819,14 +824,9 @@ export const ImportDrawer = (props: Props) => {
                   {item.version}
                 </div>
                 <div className="other-info">
-                  <div className="update-time">
-                    {`${FI18n.i18nNext.t(
-                      'label_last_updated',
-                    )} ${FUtil.Format.formatDateTime(item.updateDate, true)}`}
-                  </div>
-                  <div className="file-name" title={item.filename}>
-                    {item.filename}
-                  </div>
+                  {`${FI18n.i18nNext.t(
+                    'label_last_updated',
+                  )} ${FUtil.Format.formatDateTime(item.updateDate, true)}`}
                 </div>
               </div>
 
@@ -834,6 +834,8 @@ export const ImportDrawer = (props: Props) => {
                 placement="bottomRight"
                 title={FI18n.i18nNext.t('confirmation_import_post')}
                 onConfirm={() => importFromHistory(item)}
+                okButtonProps={{ loading: loaderShow }}
+                cancelButtonProps={{ disabled: loaderShow }}
                 okText={FI18n.i18nNext.t('btn_import_post')}
                 cancelText={FI18n.i18nNext.t('btn_cancel')}
               >

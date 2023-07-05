@@ -19,6 +19,7 @@ export const PreviewBox = (props: { show: boolean; close: () => void }) => {
   const tipTimer = useRef<Timeout | null>(null);
   const pagePointList = useRef<number[]>([]);
 
+  const [previewMode, setPreviewMode] = useState<1 | 2 | 3>();
   const [previewList, setPreviewList] = useState<ImgInComicTool[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [jumpPage, setJumpPage] = useState<string | number>(1);
@@ -227,6 +228,8 @@ export const PreviewBox = (props: { show: boolean; close: () => void }) => {
 
   useEffect(() => {
     if (show) {
+      setPreviewMode(comicMode || 2);
+      
       if (comicMode === 1) {
         // 条漫时，自动选择滚动模式
         getPointInScroll();
@@ -234,8 +237,8 @@ export const PreviewBox = (props: { show: boolean; close: () => void }) => {
           pre[0] = 'scroll';
           return [...pre];
         });
-      } else if ([2, 3].includes(comicMode)) {
-        // 页漫/日漫时，自动选择翻页模式（如本地有记录翻页模式的选择，优先取本地记录的模式）
+      } else {
+        // 页漫/日漫/自定义漫画类型时，自动选择翻页模式（如本地有记录翻页模式的选择，优先取本地记录的模式）
         const comicReadMode = localStorage.getItem('comicReadMode');
         if (comicReadMode) {
           setMode(JSON.parse(comicReadMode));
@@ -278,19 +281,19 @@ export const PreviewBox = (props: { show: boolean; close: () => void }) => {
       {mode[0] === 'paging' ? (
         <div className="content-paging-area">
           {/* 条漫/页漫、双页模式、非跨页匹配、当前为首页时，首页左侧显示空屏 */}
-          {[1, 2].includes(comicMode) &&
+          {[1, 2].includes(previewMode) &&
             mode[1] === 'double' &&
             !amend &&
             currentPage === 1 && <div className="blank-screen"></div>}
           {/* 日漫、双页模式、页数不为1且当前为尾页/页数为1且跨页匹配时，尾页左侧显示空屏 */}
-          {comicMode === 3 &&
+          {previewMode === 3 &&
             mode[1] === 'double' &&
             ((previewList.length !== 1 && currentPage === previewList.length) ||
               (previewList.length === 1 && amend)) && (
               <div className="blank-screen"></div>
             )}
           {/* 日漫、双页模式、跨页匹配/非跨页匹配且当前不为首页、当前页不为尾页时，当前页左侧显示下一页 */}
-          {comicMode === 3 &&
+          {previewMode === 3 &&
             mode[1] === 'double' &&
             (amend || (!amend && currentPage !== 1)) &&
             currentPage !== previewList.length && (
@@ -309,7 +312,7 @@ export const PreviewBox = (props: { show: boolean; close: () => void }) => {
             />
           </div>
           {/* 条漫/页漫、双页模式、跨页匹配/非跨页匹配且当前不为首页、当前页不为尾页时，当前页右侧显示下一页 */}
-          {[1, 2].includes(comicMode) &&
+          {[1, 2].includes(previewMode) &&
             mode[1] === 'double' &&
             (amend || (!amend && currentPage !== 1)) &&
             currentPage !== previewList.length && (
@@ -321,7 +324,7 @@ export const PreviewBox = (props: { show: boolean; close: () => void }) => {
               </div>
             )}
           {/* 条漫/页漫、双页模式、页数不为1且当前为尾页/页数为1且跨页匹配时，尾页右侧显示空屏 */}
-          {[1, 2].includes(comicMode) &&
+          {[1, 2].includes(previewMode) &&
             mode[1] === 'double' &&
             ((previewList.length !== 1 && currentPage === previewList.length) ||
               (previewList.length === 1 && amend)) && (
@@ -329,7 +332,7 @@ export const PreviewBox = (props: { show: boolean; close: () => void }) => {
             )}
           {/* 日漫、双页模式、非跨页匹配、当前为首页时，首页右侧显示空屏 */}
           {mode[1] === 'double' &&
-            comicMode === 3 &&
+            previewMode === 3 &&
             !amend &&
             currentPage === 1 && <div className="blank-screen"></div>}
 
@@ -388,19 +391,19 @@ export const PreviewBox = (props: { show: boolean; close: () => void }) => {
         <div className="pager">
           {FI18n.i18nNext.t('cbformatter_preview_currentpage')}
           {/* 条漫/页漫、翻页模式、双页模式、非跨页匹配、当前为首页时，左侧显示空屏页码 */}
-          {[1, 2].includes(comicMode) &&
+          {[1, 2].includes(previewMode) &&
             mode[0] === 'paging' &&
             mode[1] === 'double' &&
             !amend &&
             currentPage === 1 && <span className="page-number">-</span>}
           {/* 日漫、翻页模式、双页模式、当前为尾页且不为第一页时，左侧显示空屏页码 */}
-          {comicMode === 3 &&
+          {previewMode === 3 &&
             mode[0] === 'paging' &&
             mode[1] === 'double' &&
             currentPage === previewList.length &&
             currentPage !== 1 && <span className="page-number">-</span>}
           {/* 日漫、翻页模式、双页模式、跨页匹配或非跨页匹配且当前不为首页时，左侧显示下一页页码 */}
-          {comicMode === 3 &&
+          {previewMode === 3 &&
             mode[0] === 'paging' &&
             mode[1] === 'double' &&
             (amend || (!amend && currentPage !== 1)) &&
@@ -410,7 +413,7 @@ export const PreviewBox = (props: { show: boolean; close: () => void }) => {
           {/* 当前页页码 */}
           <span className="page-number">{currentPage}</span>
           {/* 条漫/页漫、翻页模式、双页模式、跨页匹配或非跨页匹配且当前不为首页时，右侧显示下一页页码 */}
-          {[1, 2].includes(comicMode) &&
+          {[1, 2].includes(previewMode) &&
             mode[0] === 'paging' &&
             mode[1] === 'double' &&
             (amend || (!amend && currentPage !== 1)) &&
@@ -418,13 +421,13 @@ export const PreviewBox = (props: { show: boolean; close: () => void }) => {
               <span className="page-number">{currentPage + 1}</span>
             )}
           {/* 条漫/页漫、翻页模式、双页模式、当前为尾页且不为第一页时，右侧显示空屏页码 */}
-          {[1, 2].includes(comicMode) &&
+          {[1, 2].includes(previewMode) &&
             mode[0] === 'paging' &&
             mode[1] === 'double' &&
             currentPage === previewList.length &&
             currentPage !== 1 && <span className="page-number">-</span>}
           {/* 日漫、翻页模式、双页模式、非跨页匹配、当前为首页时，右侧显示空屏页码 */}
-          {comicMode === 3 &&
+          {previewMode === 3 &&
             mode[0] === 'paging' &&
             mode[1] === 'double' &&
             !amend &&

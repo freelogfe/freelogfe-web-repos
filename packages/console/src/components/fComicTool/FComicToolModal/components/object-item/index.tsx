@@ -3,6 +3,8 @@
 import './index.less';
 import { FI18n, FUtil } from '@freelog/tools-lib';
 import { Popconfirm, Progress, Tooltip } from 'antd';
+import { useContext } from 'react';
+import { comicToolContext } from '../..';
 
 interface Props {
   data: any;
@@ -14,6 +16,7 @@ interface Props {
 }
 
 export const ObjectItem = (props: Props) => {
+  const { loaderShow } = useContext(comicToolContext);
   const { data, cancel, upload, update, importFile, insert } = props;
 
   const statusMapping: any = {
@@ -129,6 +132,8 @@ export const ObjectItem = (props: Props) => {
           title={FI18n.i18nNext.t('cbformatter_import_confirmation')}
           disabled={!importFile}
           onConfirm={() => importFile && importFile(data)}
+          okButtonProps={{ loading: loaderShow }}
+          cancelButtonProps={{ disabled: loaderShow }}
           okText={FI18n.i18nNext.t('btn_import_post')}
           cancelText={FI18n.i18nNext.t('btn_cancel')}
         >

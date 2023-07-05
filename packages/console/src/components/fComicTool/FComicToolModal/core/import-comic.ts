@@ -1,6 +1,8 @@
 /** 导入漫画相关方法 */
 
+import { MAX_IMG_LENGTH } from '../utils/assets';
 import {
+  errorMessage,
   getExt,
   getFile,
   getFileResult,
@@ -15,13 +17,11 @@ interface Entry {
 }
 
 let Uncompress: any = null;
-let fromImport = true;
+let importType = 1;
 let setLoaderShow: React.Dispatch<React.SetStateAction<boolean>>;
 let setImgList: React.Dispatch<React.SetStateAction<ImgInComicTool[]>>;
 let setComicConfig: React.Dispatch<React.SetStateAction<ImgInComicTool[]>>;
 let setEdited: React.Dispatch<React.SetStateAction<boolean | null>> | null;
-let imageFileCount = 0;
-let doneFileCount = 0;
 let json: any = null;
 let imgList: ImgInComicTool[] = [];
 
@@ -43,23 +43,21 @@ export const uncompressComicArchive = (
     setComicConfig: React.Dispatch<any>;
     setEdited?: React.Dispatch<React.SetStateAction<boolean | null>>;
   },
-  // 是否漫画压缩包导入
-  fromArchiveImport = true,
+  // 导入方式 1-草稿 2-本地 3-存储空间 4-历史版本
+  importFrom: 1 | 2 | 3 | 4,
 ) => {
-  fromImport = fromArchiveImport;
+  importType = importFrom;
   setLoaderShow = funcs.setLoaderShow;
   setImgList = funcs.setImgList;
   setComicConfig = funcs.setComicConfig;
   if (funcs.setEdited) setEdited = funcs.setEdited;
-  imageFileCount = 0;
-  doneFileCount = 0;
   json = null;
   imgList = [];
 
   Uncompress.archiveOpenFile(file, (archive: { entries: Entry[] }) => {
     if (!archive) {
       setLoaderShow(false);
-      if (!fromImport && setEdited) setEdited(false);
+      if (importType === 1 && setEdited) setEdited(false);
       return;
     }
 
@@ -74,6 +72,7 @@ const readContents = async (entries: Entry[]) => {
   if (jsonFile) {
     // 存在 json 文件，可解析 json
     json = await getJson(jsonFile);
+    setImgList([...json.custom.list]);
     setComicConfig(json.config);
   } else {
     // 不存在 json 文件，看看是否存在 xml 文件，如存在则解析 xml
@@ -86,12 +85,12 @@ const readContents = async (entries: Entry[]) => {
 
   // 筛选出所有图片文件
   entries = entries.filter((item) => isImage(item));
-  imageFileCount = entries.length;
+  const imageFileCount = entries.length;
 
   if (imageFileCount === 0) {
     // 没有图片文件，结束解析
     setLoaderShow(false);
-    if (!fromImport && setEdited) setEdited(false);
+    if (importType === 1 && setEdited) setEdited(false);
     return;
   }
 
@@ -128,71 +127,116 @@ const getImages = async (entries: Entry[]) => {
     return indexA - indexB;
   });
 
-  for (let i = 0; i < list.length; i++) {
+  const length = list.length > MAX_IMG_LENGTH ? MAX_IMG_LENGTH : list.length;
+  for (let i = 0; i < length; i++) {
     const item = list[i];
     const { name } = item;
     const blob = await getImageBlob(item);
     const res = await getFile(blob);
     const size = res.total;
     const base64 = String(res.target?.result);
-    const nameSplit = name.split('.')[0].split('_');
+    const image = await getImage(base64);
+    const { width, height } = image;
     if (!json) {
-      // 没有 json 配置文件，此包为外部压缩包，直接获取
-      const image = await getImage(base64);
-      const { width, height } = image;
+      // 没有 json 配置文件，此包为外部压缩包，直接获取图片
       imgList[i] = { name, size, base64, width, height };
     } else {
       // freelog 平台输出的漫画压缩包，需按 json 配置进行整理
-      const parentIndex = Number(nameSplit[0]) - 1;
-      if (!nameSplit[1]) {
-        // 非切图
-        const parentName = fromImport
-          ? name
-          : json.custom.list[parentIndex].name;
-        const sha1 = json.custom.list[parentIndex].sha1;
-        imgList[parentIndex] = {
-          name: parentName,
+      const nameRuleReg = /^\d{3}(_\d{2})?\.[a-zA-Z]+$/;
+      let nameInRule = nameRuleReg.test(name);
+      if (nameInRule) {
+        const [parentNumber, childNumber] = name.split('.')[0].split('_');
+        if (
+          !parentNumber ||
+          Number(parentNumber) < 1 ||
+          (childNumber && Number(childNumber) < 1)
+        ) {
+          nameInRule = false;
+        }
+      }
+      if (!nameInRule) {
+        // 图片名称不符合命名规则，加入队列最后
+        const newImage = {
+          name,
           size,
           base64,
-          sha1,
-          width: json.custom.list[parentIndex].width,
-          height: json.custom.list[parentIndex].height,
+          width,
+          height,
         };
+        imgList.push(newImage);
       } else {
-        // 切图
-        const childIndex = Number(nameSplit[1]) - 1;
-        if (!imgList[parentIndex]) {
-          const parentName = fromImport
-            ? `${nameSplit[0]}.${getExt(name)}`
-            : json.custom.list[parentIndex].name;
+        // 图片名称符合命名规则，以名称获取对应项，更新对应项数据
+        const [parentNumber, childNumber] = name.split('.')[0].split('_');
+        const parentIndex = Number(parentNumber) - 1;
+        const childIndex = childNumber ? Number(childNumber) - 1 : null;
+        if (childIndex === null) {
+          // 非切图
+          const parentName =
+            importType === 1 ? json.custom.list[parentIndex].name : name;
           imgList[parentIndex] = {
             name: parentName,
-            base64: '',
-            size: 0,
-            children: [],
-            width: 0,
-            height: 0,
+            size,
+            base64,
+            width,
+            height,
           };
+          if ([1, 4].includes(importType)) {
+            // 草稿、历史版本导入时，沿用记录的 sha1 值
+            const sha1 = json.custom.list[parentIndex].sha1;
+            imgList[parentIndex].sha1 = sha1;
+          }
+        } else {
+          // 切图
+          if (!imgList[parentIndex]) {
+            const parentName =
+              importType === 1
+                ? json.custom.list[parentIndex]?.name
+                : `${parentNumber}.${getExt(name)}`;
+            imgList[parentIndex] = {
+              name: parentName,
+              base64: '',
+              size: 0,
+              children: [],
+              width: 0,
+              height: 0,
+            };
+          }
+          if (childIndex === 0) imgList[parentIndex].base64 = base64;
+          const childName =
+            importType === 1
+              ? json.custom.list[parentIndex].children[childIndex]?.name
+              : name;
+          imgList[parentIndex].children![childIndex] = {
+            name: childName,
+            size,
+            base64,
+            width,
+            height,
+          };
+          if ([1, 4].includes(importType)) {
+            // 草稿、历史版本导入时，沿用记录的 sha1 值
+            const sha1 =
+              json.custom.list[parentIndex].children[childIndex].sha1;
+            imgList[parentIndex].children![childIndex].sha1 = sha1;
+          }
         }
-        if (childIndex === 0) imgList[parentIndex].base64 = base64;
-        const childName = fromImport
-          ? name
-          : json.custom.list[parentIndex].children[childIndex].name;
-        const sha1 = json.custom.list[parentIndex].children[childIndex].sha1;
-        imgList[parentIndex].children![childIndex] = {
-          name: childName,
-          size,
-          base64,
-          sha1,
-          width: json.custom.list[parentIndex].children[childIndex].width,
-          height: json.custom.list[parentIndex].children[childIndex].height,
-        };
       }
     }
-    if (i === list.length - 1) {
+    if (i === length - 1) {
+      // 处理完所有图片，进行整理
+      imgList = imgList.filter((item) => item);
+      imgList.forEach((item) => {
+        if (!item.children) return;
+
+        item.children = item.children.filter((child) => child);
+        item.base64 = item.children[0].base64;
+      });
       setImgList([...imgList]);
+      if (list.length > MAX_IMG_LENGTH) {
+        errorMessage('cbformatter_add_error_qtylimitation');
+      }
       setLoaderShow(false);
-      if (!fromImport) {
+      if (importType === 1) {
         setTimeout(() => {
           setEdited && setEdited(false);
         }, 0);

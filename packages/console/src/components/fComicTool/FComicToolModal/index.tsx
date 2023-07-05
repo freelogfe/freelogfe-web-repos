@@ -127,7 +127,7 @@ export const ComicTool = (props: ToolProps) => {
           setComicConfig,
           setEdited,
         },
-        false,
+        1,
       );
     } else {
       setEdited(false);
@@ -169,7 +169,10 @@ export const ComicTool = (props: ToolProps) => {
   const getTotal = () => {
     let total = 0;
     imgList.forEach((item) => {
-      total += item.children ? item.children.length : 1;
+      const { children, size } = item;
+      if (size > MAX_IMG_SIZE) return;
+
+      total += children ? children.length : 1;
     });
     return total;
   };
@@ -282,7 +285,7 @@ export const ComicTool = (props: ToolProps) => {
         const img = {
           name,
           size,
-          base64: require('./images/oversize.png'),
+          base64: '',
           width: 0,
           height: 0,
         };
@@ -424,7 +427,6 @@ export const ComicTool = (props: ToolProps) => {
         if (childSize > MAX_IMG_SIZE) {
           // 尺寸大于单张最大尺寸
           imgItem.size = size;
-          imgItem.base64 = require('./images/oversize.png');
           addCutImage(imgItem);
           if (i === list.length - 1) {
             canvas = null;
@@ -502,7 +504,7 @@ export const ComicTool = (props: ToolProps) => {
       const childSize = getSizeByBase64(base64);
       if (childSize > MAX_IMG_SIZE) {
         // 尺寸大于单张最大尺寸
-        item.base64 = require('./images/oversize.png');
+        item.base64 = '';
         item.children = [];
         setImgList([...imgList]);
         setCuttingLoaderShow(false);
@@ -638,65 +640,45 @@ export const ComicTool = (props: ToolProps) => {
     /** 上传图片完成，整理数据 */
     const resList = imgResArr.map((item) => item.data).flat();
     imgList.forEach((img, index) => {
-      const { name, size, children, sha1 = '', width, height } = img;
+      const { name, size, children, sha1, width, height } = img;
       const [, suffix] = separateFileName(name);
       const newImgName = `${String(index + 1).padStart(3, '0')}.${suffix}`;
-      const imgInTool: any = { name, sha1, size, width, height };
       if (children) {
         // 切图，处理子集
-        imgInTool.children = [];
+        const imgInTool: any = { name, children: [] };
         children.forEach((child, i) => {
+          const { name, size, sha1, width, height } = child;
           const newName = String(i + 1).padStart(2, '0');
           const newChildName = newImgName.replace(
             `.${suffix}`,
             `_${newName}.${suffix}`,
           );
-          const childItem = {
-            name: newChildName,
-            size: child.size,
-            width,
-            height,
-          };
-          const childInTool = {
-            name: child.name,
-            sha1: child.sha1,
-            size: child.size,
-            width,
-            height,
-          };
-          if (!child.sha1) {
+          let theSha1 = sha1;
+          if (!theSha1) {
             const res = resList.find((res) => res.filename === newChildName);
+            theSha1 = res.sha1;
             child.sha1 = res.sha1;
-            childInTool.sha1 = child.sha1;
           }
-          sha1Mapping[newChildName] = child.sha1;
+          const childItem = { name: newChildName, size, width, height };
+          const childInTool = { name, sha1: theSha1, size, width, height };
+          sha1Mapping[newChildName] = theSha1;
           list.push(childItem);
           imgInTool.children.push(childInTool);
         });
         listInTool.push(imgInTool);
       } else {
         // 非切图，处理自身
-        if (sha1) {
-          // 已上传过的图片，使用现有数据
-          const item = { name: newImgName, size, width, height, sha1 };
-          sha1Mapping[newImgName] = sha1;
-          list.push(item);
-          listInTool.push(imgInTool);
-        } else {
+        let theSha1 = sha1;
+        if (!theSha1) {
           // 未上传过的图片，结合上传后得到的数据进行整理
           const res = resList.find((res) => res.filename === newImgName);
-          const item = {
-            name: newImgName,
-            size,
-            width,
-            height,
-            sha1: res.sha1,
-          };
-          list.push(item);
-          imgInTool.sha1 = res.sha1;
-          sha1Mapping[newImgName] = res.sha1;
-          listInTool.push(imgInTool);
+          theSha1 = res.sha1;
         }
+        const imgInList = { name: newImgName, size, width, height };
+        const imgInTool = { name, size, width, height, sha1: theSha1 };
+        sha1Mapping[newImgName] = theSha1;
+        list.push(imgInList);
+        listInTool.push(imgInTool);
       }
     });
 
@@ -713,7 +695,6 @@ export const ComicTool = (props: ToolProps) => {
       formatDate(saveTime, 'YYYYMMDDhhmm').substring(2);
     const jsonFormData = new FormData();
     const json = {
-      name,
       mode: comicMode,
       list,
       config: comicConfig,
@@ -901,6 +882,11 @@ export const ComicTool = (props: ToolProps) => {
     } else {
       window.removeEventListener('keyup', keyup);
       document.body.style.overflowY = 'auto';
+
+      if (stopTimer.current) {
+        clearTimeout(stopTimer.current);
+        stopTimer.current = null;
+      }
     }
   }, [show]);
 
@@ -912,6 +898,7 @@ export const ComicTool = (props: ToolProps) => {
         stopTimer.current = null;
       }
       stopTimer.current = setTimeout(() => {
+        // 15 秒自动保存
         save(true);
         stopTimer.current = null;
       }, 15000);
@@ -951,6 +938,7 @@ export const ComicTool = (props: ToolProps) => {
         comicMode,
         imgList,
         dragging,
+        loaderShow,
         setResource,
         setDeleteItem,
         setDeleteConfirmShow,
