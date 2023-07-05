@@ -88,10 +88,21 @@ function Form({ finished }: FormProps) {
           <span className={styles.must}></span>
           <span className={styles.title4}>职业</span>
         </div>
-        <FInput
+        {/*<FInput*/}
+        {/*  placeholder='请输入您的职业'*/}
+        {/*  className='w-400'*/}
+        {/*  wrapClassName={styles.input}*/}
+        {/*  value={occupation}*/}
+        {/*  onChange={(e) => {*/}
+        {/*    setOccupation(e.currentTarget.value);*/}
+        {/*  }}*/}
+        {/*/>*/}
+        <FComponentsLib.FInput.FSingleLine
+          lengthLimit={-1}
           placeholder='请输入您的职业'
-          className='w-400'
-          wrapClassName={styles.input}
+          // className='w-400'
+          // wrapClassName={styles.input}
+          style={{width: 400}}
           value={occupation}
           onChange={(e) => {
             setOccupation(e.currentTarget.value);
