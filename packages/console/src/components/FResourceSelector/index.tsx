@@ -6,7 +6,7 @@ import FResourceList from '@/components/FResourceList';
 import FDropdownMenu from '@/components/FDropdownMenu';
 import FComponentsLib from '@freelog/components-lib';
 import * as AHooks from 'ahooks';
-import { FServiceAPI, FUtil } from '@freelog/tools-lib';
+import { FServiceAPI, FUtil } from '../@freelog/tools-lib';
 
 interface FResourceSelectorProps {
   disabledIDsOrNames?: string[];
