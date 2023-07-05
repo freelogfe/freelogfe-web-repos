@@ -604,37 +604,34 @@ function VersionCreator({
       />
 
       {/*{console.log(resourceVersionCreatorPage.isOpenCartoon, 'isOpenCartoon8098809238r09wueoifsjlfjsldjfljl')}*/}
-      {
-        resourceVersionCreatorPage.isOpenCartoon && (<ComicTool
-          resourceId={resourceVersionCreatorPage.resourceInfo.resourceID || ''}
-          show={true}
-          setSaved={(saved) => {
-            // onChange_Saved && onChange_Saved(saved);
+      <ComicTool
+        resourceId={resourceVersionCreatorPage.resourceInfo.resourceID || ''}
+        show={resourceVersionCreatorPage.isOpenCartoon}
+        setSaved={(saved) => {
+          // onChange_Saved && onChange_Saved(saved);
 
-            set_isfComicToolDirty(!saved);
-          }}
-          close={() => {
-            // console.log('+++++++++++++++++++++++++++++++close ********(uwqe3joitrfjsdlkfjlskdjflksdjlkjl');
-            // set_visible(false);
-            // setTimeout(() => {
-            //   onClose && onClose();
-            // }, 300);
-            // console.log('******** u98wueoirfuoisdjflsjdlfsdjl');
-            // set_isOpenCartoon(false);
-            dispatch<OnChange_IsOpenCartoon_Action>({
-              type: 'resourceVersionCreatorPage/onChange_IsOpenCartoon',
-              payload: {
-                value: false,
-              },
-            });
-            set_isfComicToolDirty(false);
-            dispatch<OnClose_MarkdownEditor_Action>({
-              type: 'resourceVersionCreatorPage/onClose_MarkdownEditor',
-            });
-          }}
-        />)
-      }
-
+          set_isfComicToolDirty(!saved);
+        }}
+        close={() => {
+          // console.log('+++++++++++++++++++++++++++++++close ********(uwqe3joitrfjsdlkfjlskdjflksdjlkjl');
+          // set_visible(false);
+          // setTimeout(() => {
+          //   onClose && onClose();
+          // }, 300);
+          // console.log('******** u98wueoirfuoisdjflsjdlfsdjl');
+          // set_isOpenCartoon(false);
+          dispatch<OnChange_IsOpenCartoon_Action>({
+            type: 'resourceVersionCreatorPage/onChange_IsOpenCartoon',
+            payload: {
+              value: false,
+            },
+          });
+          set_isfComicToolDirty(false);
+          dispatch<OnClose_MarkdownEditor_Action>({
+            type: 'resourceVersionCreatorPage/onClose_MarkdownEditor',
+          });
+        }}
+      />
     </>
   );
 }
