@@ -37,6 +37,8 @@ interface ThemeProps {
 
 function Theme({ dispatch, informalNodeManagerPage }: ThemeProps) {
 
+  const [filterKeywords, setFilterKeywords] = React.useState<string>('');
+
   AHooks.useMount(() => {
     dispatch<OnMountThemePageAction>({
       type: 'informalNodeManagerPage/onMountThemePage',
@@ -47,6 +49,17 @@ function Theme({ dispatch, informalNodeManagerPage }: ThemeProps) {
     dispatch<OnUnmountThemePageAction>({
       type: 'informalNodeManagerPage/onUnmountThemePage',
     });
+  });
+
+  AHooks.useDebounceEffect(() => {
+    dispatch<OnChangeThemeKeywordsAction>({
+      type: 'informalNodeManagerPage/onChangeThemeKeywords',
+      payload: {
+        value: filterKeywords,
+      },
+    });
+  }, [filterKeywords], {
+    wait: 300,
   });
 
   if (informalNodeManagerPage.theme_PageError) {
@@ -107,17 +120,28 @@ function Theme({ dispatch, informalNodeManagerPage }: ThemeProps) {
               </FComponentsLib.FTextBtn>
 
               <div>
-                <FInput
-                  theme={'dark'}
-                  value={informalNodeManagerPage.theme_FilterKeywords}
-                  debounce={300}
-                  onDebounceChange={(value) => {
-                    dispatch<OnChangeThemeKeywordsAction>({
-                      type: 'informalNodeManagerPage/onChangeThemeKeywords',
-                      payload: {
-                        value: value,
-                      },
-                    });
+                {/*<FInput*/}
+                {/*  theme={'dark'}*/}
+                {/*  value={informalNodeManagerPage.theme_FilterKeywords}*/}
+                {/*  debounce={300}*/}
+                {/*  onDebounceChange={(value) => {*/}
+                {/*    dispatch<OnChangeThemeKeywordsAction>({*/}
+                {/*      type: 'informalNodeManagerPage/onChangeThemeKeywords',*/}
+                {/*      payload: {*/}
+                {/*        value: value,*/}
+                {/*      },*/}
+                {/*    });*/}
+                {/*  }}*/}
+                {/*  placeholder={FI18n.i18nNext.t('nodemgmt_search_themes_hint')}*/}
+                {/*/>*/}
+                <FComponentsLib.FInput.FSearch
+                  // theme={'dark'}
+                  value={filterKeywords}
+                  // debounce={300}
+                  style={{width: 300}}
+                  onChange={(e) => {
+                    setFilterKeywords(e.target.value);
+
                   }}
                   placeholder={FI18n.i18nNext.t('nodemgmt_search_themes_hint')}
                 />
