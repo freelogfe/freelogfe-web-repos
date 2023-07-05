@@ -16,14 +16,6 @@ interface FPromptProps {
   onCancel?(locationHref: string): void;
 }
 
-// interface FPromptStates {
-//   promptLeavePath: string;
-// }
-//
-// const initStates: FPromptStates = {
-//   promptLeavePath: '',
-// };
-
 function FPrompt($prop: FPromptProps) {
 
   const prompting = React.useRef<boolean>(false);

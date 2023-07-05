@@ -4,7 +4,7 @@ import { Tabs } from 'antd';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import { ConnectState, StorageObjectEditorModelState } from '@/models/connect';
-import FResourceSelector from '@/containers/FResourceSelector';
+import FResourceSelector from '@/components/FResourceSelector';
 import FObjectSelector from '@/containers/FObjectSelector';
 import {
   AddObjectDepOAction, AddObjectDepRAction, DeleteObjectDepOAction, DeleteObjectDepRAction,
@@ -16,19 +16,6 @@ interface SelectDepsProps {
 }
 
 function SelectDeps({ storageObjectEditor, dispatch }: SelectDepsProps) {
-
-  // React.useEffect(() => {
-  //   // console.log('cra@#!$!@#$');
-  //   return () => {
-  //     // console.log('des#@#R#$@#$');
-  //     // dispatch<ChangeAction>({
-  //     //   type: 'storageObjectDepSelector/change',
-  //     //   payload: {
-  //     //     ...storageObjectDepSelectorInitData,
-  //     //   },
-  //     // })
-  //   };
-  // }, []);
 
   return (<div>
     <Tabs>

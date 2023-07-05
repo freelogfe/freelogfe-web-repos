@@ -22,6 +22,7 @@ import {
   OnClose_MarkdownEditor_Action,
   OnTrigger_SaveDraft_Action,
   OnChange_DataIsDirty_Action,
+  OnChange_IsOpenCartoon_Action,
 } from '@/models/resourceVersionCreatorPage';
 import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
 import Sider from '@/pages/resource/containers/Sider';
@@ -44,6 +45,9 @@ import FTooltip from '@/components/FTooltip';
 import FSkeletonNode from '@/components/FSkeletonNode';
 import FTable from '@/components/FTable';
 import fComicTool from '@/components/fComicTool';
+import { ComicTool } from '@/components/fComicTool/FComicToolModal';
+import { history } from 'umi';
+
 // import { useLocation } from 'umi';
 
 interface VersionCreatorProps extends RouteComponentProps<{ id: string }> {
@@ -59,6 +63,7 @@ function VersionCreator({
                         }: VersionCreatorProps) {
 
   const [isMarkdownEditorDirty, set_isMarkdownEditorDirty] = React.useState<boolean>(false);
+  // const [isOpenCartoon, set_isOpenCartoon] = React.useState<boolean>(false);
   const [isfComicToolDirty, set_isfComicToolDirty] = React.useState<boolean>(false);
 
   // const location = useLocation();
@@ -76,6 +81,17 @@ function VersionCreator({
   });
 
   AHooks.useUnmount(() => {
+    set_isMarkdownEditorDirty(false);
+    // set_isOpenCartoon(false);
+    // console.log('+++++++++++++++++++++++++++++++++++++++useUnmount sd9ifojsdlkfjlskdfjlksdjflkjsdl');
+    dispatch<OnChange_IsOpenCartoon_Action>({
+      type: 'resourceVersionCreatorPage/onChange_IsOpenCartoon',
+      payload: {
+        value: false,
+      },
+    });
+    set_isfComicToolDirty(false);
+    // console.log(isOpenCartoon, '***** 8888888888');
     dispatch<OnUnmountPageAction>({
       type: 'resourceVersionCreatorPage/onUnmountPage',
     });
@@ -134,16 +150,25 @@ function VersionCreator({
         showSuccessTip: false,
       },
     });
-    await fComicTool({
-      resourceID: resourceVersionCreatorPage.resourceInfo?.resourceID || '',
-      async onChange_Saved(saved: boolean) {
-        set_isfComicToolDirty(!saved);
+    await set_isfComicToolDirty(false);
+
+    await dispatch<OnChange_IsOpenCartoon_Action>({
+      type: 'resourceVersionCreatorPage/onChange_IsOpenCartoon',
+      payload: {
+        value: true,
       },
     });
-    await set_isfComicToolDirty(false);
-    await dispatch<OnClose_MarkdownEditor_Action>({
-      type: 'resourceVersionCreatorPage/onClose_MarkdownEditor',
-    });
+
+    // await fComicTool({
+    //   resourceID: resourceVersionCreatorPage.resourceInfo?.resourceID || '',
+    //   async onChange_Saved(saved: boolean) {
+    //     set_isfComicToolDirty(!saved);
+    //   },
+    // });
+
+    // await dispatch<OnClose_MarkdownEditor_Action>({
+    //   type: 'resourceVersionCreatorPage/onClose_MarkdownEditor',
+    // });
 
   }
 
@@ -163,6 +188,8 @@ function VersionCreator({
     });
   }
 
+  // console.log(resourceVersionCreatorPage.isOpenCartoon, 'resourceVersionCreatorPage.isOpenCartoon **(YU(*&(*&(*&*(&(*');
+
   return (
     <>
       <Helmet>
@@ -173,6 +200,18 @@ function VersionCreator({
       <FPrompt
         watch={resourceVersionCreatorPage.dataIsDirty || isMarkdownEditorDirty || isfComicToolDirty}
         messageText={'还没有保存草稿或发行，现在离开会导致信息丢失'}
+        onOk={(locationHref) => {
+          console.log('还没有保存草稿或发行 Ok');
+          history.push(locationHref);
+          // set_isOpenCartoon(false);
+          // console.log('+++++++++++++++++++++++++还没有保存草稿或发行 w9e0opfjsdlk;fjlk');
+          dispatch<OnChange_IsOpenCartoon_Action>({
+            type: 'resourceVersionCreatorPage/onChange_IsOpenCartoon',
+            payload: {
+              value: false,
+            },
+          });
+        }}
       />
       <FLeftSiderLayout
         // hasBottom={false}
@@ -344,13 +383,15 @@ function VersionCreator({
                 }
 
                 <FPublishObjectFile
-                  showEditBtnAfterSucceed={true}
+                  showEditBtnAfterSucceed={resourceVersionCreatorPage.resourceInfo?.resourceType[0] === '阅读' && resourceVersionCreatorPage.resourceInfo?.resourceType[1] === '文章'
+                  || resourceVersionCreatorPage.resourceInfo?.resourceType.includes('漫画')}
                   // resourceID={resourceVersionCreatorPage.resourceInfo.resourceID}
                   resourceType={{
                     code: resourceVersionCreatorPage.resourceInfo.resourceTypeCode,
                     names: resourceVersionCreatorPage.resourceInfo.resourceType,
                   }}
                   fileInfo={resourceVersionCreatorPage.selectedFileInfo}
+                  disabledOperations={resourceVersionCreatorPage.rawPropertiesState === 'parsing' ? ['download', 'edit'] : []}
                   onSucceed_UploadFile={(file) => {
                     // console.log(file, 'onSucceed_UploadFile390oisjdf');
                     dispatch<OnSucceed_UploadFile_Action>({
@@ -404,6 +445,14 @@ function VersionCreator({
                   }}
                   onClick_OpenCartoonBtn={async () => {
                     await onClick_EditCartoonBtn();
+                    // set_isOpenCartoon(true);
+                    // console.log('----------------- 9iewojfsdklfjlsdjfldsjljl');
+                    // dispatch<OnChange_IsOpenCartoon_Action>({
+                    //   type: 'resourceVersionCreatorPage/onChange_IsOpenCartoon',
+                    //   payload: {
+                    //     value: true,
+                    //   },
+                    // });
                   }}
                   onClick_EditBtn={async () => {
                     if (resourceVersionCreatorPage.resourceInfo?.resourceType[0] === '阅读' && resourceVersionCreatorPage.resourceInfo?.resourceType[1] === '文章') {
@@ -411,7 +460,13 @@ function VersionCreator({
                     }
 
                     if (resourceVersionCreatorPage.resourceInfo?.resourceType.includes('漫画')) {
-                      await onClick_EditCartoonBtn();
+                      // await onClick_EditCartoonBtn();
+                      dispatch<OnChange_IsOpenCartoon_Action>({
+                        type: 'resourceVersionCreatorPage/onChange_IsOpenCartoon',
+                        payload: {
+                          value: true,
+                        },
+                      });
                     }
 
                   }}
@@ -547,6 +602,38 @@ function VersionCreator({
       <ReleaseTip
         visible={resourceVersionCreatorPage.releaseTipVisible}
       />
+
+      {/*{console.log(resourceVersionCreatorPage.isOpenCartoon, 'isOpenCartoon8098809238r09wueoifsjlfjsldjfljl')}*/}
+      {
+        resourceVersionCreatorPage.isOpenCartoon && (<ComicTool
+          resourceId={resourceVersionCreatorPage.resourceInfo.resourceID || ''}
+          show={true}
+          setSaved={(saved) => {
+            // onChange_Saved && onChange_Saved(saved);
+
+            set_isfComicToolDirty(!saved);
+          }}
+          close={() => {
+            // console.log('+++++++++++++++++++++++++++++++close ********(uwqe3joitrfjsdlkfjlskdjflksdjlkjl');
+            // set_visible(false);
+            // setTimeout(() => {
+            //   onClose && onClose();
+            // }, 300);
+            // console.log('******** u98wueoirfuoisdjflsjdlfsdjl');
+            // set_isOpenCartoon(false);
+            dispatch<OnChange_IsOpenCartoon_Action>({
+              type: 'resourceVersionCreatorPage/onChange_IsOpenCartoon',
+              payload: {
+                value: false,
+              },
+            });
+            set_isfComicToolDirty(false);
+            dispatch<OnClose_MarkdownEditor_Action>({
+              type: 'resourceVersionCreatorPage/onClose_MarkdownEditor',
+            });
+          }}
+        />)
+      }
 
     </>
   );
