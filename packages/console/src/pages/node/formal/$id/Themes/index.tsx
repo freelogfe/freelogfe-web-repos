@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import FInput from '@/components/FInput';
+// import FInput from '@/components/FInput';
 import { Space } from 'antd';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
@@ -262,6 +262,7 @@ function Themes({ match, dispatch, nodeManagerPage }: ThemesProps) {
                 {/*  placeholder={FI18n.i18nNext.t('nodemgmt_search_themes_hint')}*/}
                 {/*/>*/}
                 <FComponentsLib.FInput.FSearch
+                  value={themeInputFilter}
                   className={styles.input}
                   // theme='dark'
                   // debounce={300}
