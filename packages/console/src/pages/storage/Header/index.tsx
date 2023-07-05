@@ -7,9 +7,10 @@ import { OnChange_FilterInput_Action, StorageHomePageModelState, UploadFilesActi
 import { ConnectState } from '@/models/connect';
 import { FI18n } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
-import FInput from '@/components/FInput';
+// import FInput from '@/components/FInput';
 import fReadLocalFiles from '@/components/fReadLocalFiles';
 import { getStorageUploadTasksPanel } from '@/components/FStorageUploadTasksPanel';
+import * as AHooks from 'ahooks';
 
 interface HeaderProps {
   dispatch: Dispatch;
@@ -17,6 +18,19 @@ interface HeaderProps {
 }
 
 function Header({ dispatch, storageHomePage }: HeaderProps) {
+
+  const [filterInput, setFilterInput] = React.useState<string>('');
+
+  AHooks.useDebounceEffect(() => {
+    dispatch<OnChange_FilterInput_Action>({
+      type: 'storageHomePage/onChange_FilterInput',
+      payload: {
+        value: filterInput,
+      },
+    });
+  }, [filterInput], {
+    wait: 300,
+  });
 
   const bucket = storageHomePage.bucketList?.find((b) => b.bucketName === storageHomePage.activatedBucket);
 
@@ -37,17 +51,29 @@ function Header({ dispatch, storageHomePage }: HeaderProps) {
     </div>
     {
       !isUserDataBucket && (storageHomePage.total > 0 || storageHomePage.filterInput !== '') && (<Space size={30}>
-        <FInput
-          value={''}
-          theme={'dark'}
-          debounce={300}
-          onDebounceChange={(value) => {
-            dispatch<OnChange_FilterInput_Action>({
-              type: 'storageHomePage/onChange_FilterInput',
-              payload: {
-                value: value,
-              },
-            });
+        {/*<FInput*/}
+        {/*  value={''}*/}
+        {/*  theme={'dark'}*/}
+        {/*  debounce={300}*/}
+        {/*  onDebounceChange={(value) => {*/}
+        {/*    dispatch<OnChange_FilterInput_Action>({*/}
+        {/*      type: 'storageHomePage/onChange_FilterInput',*/}
+        {/*      payload: {*/}
+        {/*        value: value,*/}
+        {/*      },*/}
+        {/*    });*/}
+        {/*  }}*/}
+        {/*  placeholder={FI18n.i18nNext.t('storage_search_objects_hint')}*/}
+        {/*/>*/}
+        <FComponentsLib.FInput.FSearch
+          lengthLimit={-1}
+          value={filterInput}
+          // theme={'dark'}
+          // debounce={300}
+          style={{ width: 300 }}
+          onChange={(e) => {
+            setFilterInput(e.target.value);
+
           }}
           placeholder={FI18n.i18nNext.t('storage_search_objects_hint')}
         />

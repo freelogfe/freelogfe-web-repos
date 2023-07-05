@@ -109,7 +109,7 @@ function Form({ finished }: FormProps) {
           }}
         />
         <div className='flex-row align-center mt-20 mb-5'>
-          <span className={styles.must}></span>
+          <span className={styles.must}/>
           <span className={styles.title4}>所在区域</span>
         </div>
         <div className='flex-row align-center'>
