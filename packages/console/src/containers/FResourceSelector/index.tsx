@@ -1,17 +1,8 @@
 import * as React from 'react';
 
 import styles from './index.less';
-// import FInput from '@/components/FInput';
 import FResourceList from '@/components/FResourceList';
-import { connect } from 'dva';
-import { Dispatch } from 'redux';
-import { ConnectState, StorageObjectDepSelectorModelState } from '@/models/connect';
-// import { DownOutlined } from '@ant-design/icons';
-// import {
-//   ChangeAction,
-//   FetchResourcesAction,
-//   OnChangeRConditionsAction,
-// } from '@/models/storageObjectDepSelector';
+// import { ConnectState, StorageObjectDepSelectorModelState } from '@/models/connect';
 import FDropdownMenu from '@/components/FDropdownMenu';
 import FComponentsLib from '@freelog/components-lib';
 import * as AHooks from 'ahooks';
@@ -89,7 +80,7 @@ function FResourceSelector($prop: FResourceSelectorProps) {
       totalItem = data.totalItem;
       resourceList = [
         ...resourceList,
-        ...(data.dataList as any[]).map<StorageObjectDepSelectorModelState['resourceList'][number]>((r: any) => ({
+        ...(data.dataList as any[]).map<FResourceSelectorStates['resourceList'][number]>((r: any) => ({
           resourceId: r.resourceId,
           resourceName: r.resourceName,
           resourceType: r.resourceType,
@@ -114,7 +105,7 @@ function FResourceSelector($prop: FResourceSelectorProps) {
       totalItem = data.totalItem;
       resourceList = [
         ...resourceList,
-        ...(data.dataList as any[]).map<StorageObjectDepSelectorModelState['resourceList'][number]>((r: any) => ({
+        ...(data.dataList as any[]).map<FResourceSelectorStates['resourceList'][number]>((r: any) => ({
           resourceId: r.resourceId,
           resourceName: r.resourceName,
           resourceType: r.resourceType,
