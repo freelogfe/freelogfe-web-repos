@@ -174,12 +174,25 @@ export interface OnSucceed_ImportObject_Action extends AnyAction {
   };
 }
 
+export interface OnClick_OpenMarkdownBtn_Action extends AnyAction {
+  type: 'resourceVersionCreatorPage/onClick_OpenMarkdownBtn';
+
+}
+
+export interface OnClick_OpenCartoonBtn_Action extends AnyAction {
+  type: 'resourceVersionCreatorPage/onClick_OpenCartoonBtn';
+}
+
 export interface OnDelete_ObjectFile_Action extends AnyAction {
   type: 'resourceVersionCreatorPage/onDelete_ObjectFile';
 }
 
 export interface OnClose_MarkdownEditor_Action extends AnyAction {
   type: 'resourceVersionCreatorPage/onClose_MarkdownEditor';
+}
+
+export interface OnClose_CartoonEditor_Action extends AnyAction {
+  type: 'resourceVersionCreatorPage/onClose_CartoonEditor';
 }
 
 export interface OnChange_AdditionalProperties_Action extends AnyAction {
@@ -256,8 +269,11 @@ export interface ResourceVersionCreatorModelType {
     onChange_VersionInput: (action: OnChange_VersionInput_Action, effects: EffectsCommandMap) => void;
     onSucceed_UploadFile: (action: OnSucceed_UploadFile_Action, effects: EffectsCommandMap) => void;
     onSucceed_ImportObject: (action: OnSucceed_ImportObject_Action, effects: EffectsCommandMap) => void;
+    onClick_OpenMarkdownBtn: (action: OnClick_OpenMarkdownBtn_Action, effects: EffectsCommandMap) => void;
+    onClick_OpenCartoonBtn: (action: OnClick_OpenCartoonBtn_Action, effects: EffectsCommandMap) => void;
     onDelete_ObjectFile: (action: OnDelete_ObjectFile_Action, effects: EffectsCommandMap) => void;
     onClose_MarkdownEditor: (action: OnClose_MarkdownEditor_Action, effects: EffectsCommandMap) => void;
+    onClose_CartoonEditor: (action: OnClose_CartoonEditor_Action, effects: EffectsCommandMap) => void;
     onChange_AdditionalProperties: (action: OnChange_AdditionalProperties_Action, effects: EffectsCommandMap) => void;
     onChange_CustomProperties: (action: OnChange_CustomProperties_Action, effects: EffectsCommandMap) => void;
     onChange_CustomConfigurations: (action: OnChange_CustomConfigurations_Action, effects: EffectsCommandMap) => void;
@@ -833,6 +849,31 @@ const Model: ResourceVersionCreatorModelType = {
         },
       });
     },
+    * onClick_OpenMarkdownBtn({}: OnClick_OpenMarkdownBtn_Action, {}: EffectsCommandMap) {
+
+    },
+    * onClick_OpenCartoonBtn({}: OnClick_OpenCartoonBtn_Action, { put }: EffectsCommandMap) {
+      // yield put<OnTrigger_SaveDraft_Action>({
+      //   type: 'resourceVersionCreatorPage/onTrigger_SaveDraft',
+      //   payload: {
+      //     showSuccessTip: false,
+      //   },
+      // });
+
+      yield put<_SaveDraft_Action>({
+        type: '_SaveDraft',
+        payload: {
+          showSuccessTip: false,
+        },
+      });
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          isOpenCartoon: true,
+        },
+      });
+    },
     * onDelete_ObjectFile({}: OnDelete_ObjectFile_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
@@ -856,6 +897,22 @@ const Model: ResourceVersionCreatorModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
+          dataIsDirty: false,
+        },
+      });
+
+      yield put<_FetchDraft_Action>({
+        type: '_FetchDraft',
+        payload: {
+          delay: true,
+        },
+      });
+    },
+    * onClose_CartoonEditor({}: OnClose_CartoonEditor_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          isOpenCartoon: false,
           dataIsDirty: false,
         },
       });
