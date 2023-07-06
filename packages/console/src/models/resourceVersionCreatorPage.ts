@@ -859,7 +859,11 @@ const Model: ResourceVersionCreatorModelType = {
     * onClick_OpenMarkdownBtn({}: OnClick_OpenMarkdownBtn_Action, {}: EffectsCommandMap) {
 
     },
-    * onClick_OpenCartoonBtn({}: OnClick_OpenCartoonBtn_Action, { put }: EffectsCommandMap) {
+    * onClick_OpenCartoonBtn({}: OnClick_OpenCartoonBtn_Action, { select, call, put }: EffectsCommandMap) {
+      const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
+        resourceVersionCreatorPage,
+      }));
+
       // yield put<OnTrigger_SaveDraft_Action>({
       //   type: 'resourceVersionCreatorPage/onTrigger_SaveDraft',
       //   payload: {
@@ -867,12 +871,28 @@ const Model: ResourceVersionCreatorModelType = {
       //   },
       // });
 
-      yield put<_SaveDraft_Action>({
-        type: '_SaveDraft',
-        payload: {
-          showSuccessTip: false,
-        },
-      });
+      // yield put<_SaveDraft_Action>({
+      //   type: '_SaveDraft',
+      //   payload: {
+      //     showSuccessTip: false,
+      //   },
+      // });
+      if (resourceVersionCreatorPage.draftSaveTime === '') {
+        const params: Parameters<typeof saveInitDraft>[0] = {
+          resourceID: resourceVersionCreatorPage.resourceInfo?.resourceID || '',
+          versionInput: resourceVersionCreatorPage.versionInput,
+        };
+
+        // console.time('打开编辑器');
+        const success: Awaited<typeof saveInitDraft> = yield call(saveInitDraft, params);
+        // console.timeEnd('打开编辑器');
+
+        if (!success) {
+          fMessage('保存草稿失败，无法打开编辑器');
+          return;
+        }
+      }
+
 
       yield put<ChangeAction>({
         type: 'change',
@@ -1013,6 +1033,8 @@ const Model: ResourceVersionCreatorModelType = {
       };
       const { data: data_draft }: {
         data: null | {
+          resourceId: string;
+          updateDate: string;
           draftData: IResourceCreateVersionDraftType;
         };
       } = yield call(FServiceAPI.Resource.lookDraft, params);
@@ -1069,6 +1091,8 @@ const Model: ResourceVersionCreatorModelType = {
             customProperties: draftData.customProperties || [],
             customConfigurations: draftData.customConfigurations || [],
             descriptionEditorState: BraftEditor.createEditorState(draftData.descriptionEditorInput),
+            draftSaveTime: moment(data_draft.updateDate).format('YYYY-MM-DD hh:mm:ss'),
+            // draftSaveTime: FUtil.Format.formatDateTime(data_draft.updateDate, true),
           },
         });
 
@@ -1098,6 +1122,7 @@ const Model: ResourceVersionCreatorModelType = {
         type: 'change',
         payload: {
           pageState: 'loaded',
+          // draftSaveTime: moment(data_draft.)
         },
       });
     },
@@ -1147,6 +1172,7 @@ const Model: ResourceVersionCreatorModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
+          // draftSaveTime: FUtil.Format.formatDateTime(Date(), true),
           draftSaveTime: moment(Date()).format('YYYY-MM-DD hh:mm:ss'),
           dataIsDirty: false,
         },
@@ -1285,3 +1311,30 @@ const Model: ResourceVersionCreatorModelType = {
 };
 
 export default Model;
+
+interface SaveInitDraftParamsType {
+  resourceID: string;
+  versionInput: string;
+}
+
+async function saveInitDraft({ resourceID, versionInput }: SaveInitDraftParamsType): Promise<boolean> {
+  const draftData: IResourceCreateVersionDraftType = {
+    versionInput: versionInput,
+    selectedFileInfo: null,
+    additionalProperties: [],
+    customProperties: [],
+    customConfigurations: [],
+    directDependencies: [],
+    descriptionEditorInput: '',
+    baseUpcastResources: [],
+  };
+
+  const params: Parameters<typeof FServiceAPI.Resource.saveVersionsDraft>[0] = {
+    resourceId: resourceID,
+    draftData: draftData,
+  };
+  // console.time('保存草稿');
+  const { ret, errCode } = await FServiceAPI.Resource.saveVersionsDraft(params);
+  // console.timeEnd('保存草稿')
+  return ret === 0 && errCode === 0;
+}
