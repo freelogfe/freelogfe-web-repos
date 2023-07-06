@@ -177,7 +177,7 @@ function VersionCreator({
       </Helmet>
 
       <FPrompt
-        watch={resourceVersionCreatorPage.dataIsDirty || isMarkdownEditorDirty}
+        watch={resourceVersionCreatorPage.dataIsDirty || isMarkdownEditorDirty || resourceVersionCreatorPage.isDirtyCartoonEditor}
         messageText={'还没有保存草稿或发行，现在离开会导致信息丢失'}
         onOk={(locationHref) => {
           console.log('还没有保存草稿或发行 Ok');
@@ -581,7 +581,7 @@ function VersionCreator({
           dispatch<ChangeAction>({
             type: 'resourceVersionCreatorPage/change',
             payload: {
-              dataIsDirty: saved,
+              isDirtyCartoonEditor: saved,
             },
           });
         }}

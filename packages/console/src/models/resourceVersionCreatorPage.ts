@@ -114,6 +114,8 @@ export interface ResourceVersionCreatorPageModelState {
   releaseTipVisible: boolean;
 
   isOpenCartoon: boolean;
+  isDirtyCartoonEditor: boolean;
+  isDirtyMarkdownEditor: boolean;
 }
 
 export interface ChangeAction extends AnyAction {
@@ -269,17 +271,20 @@ export interface ResourceVersionCreatorModelType {
     onChange_VersionInput: (action: OnChange_VersionInput_Action, effects: EffectsCommandMap) => void;
     onSucceed_UploadFile: (action: OnSucceed_UploadFile_Action, effects: EffectsCommandMap) => void;
     onSucceed_ImportObject: (action: OnSucceed_ImportObject_Action, effects: EffectsCommandMap) => void;
-    onClick_OpenMarkdownBtn: (action: OnClick_OpenMarkdownBtn_Action, effects: EffectsCommandMap) => void;
-    onClick_OpenCartoonBtn: (action: OnClick_OpenCartoonBtn_Action, effects: EffectsCommandMap) => void;
+
     onDelete_ObjectFile: (action: OnDelete_ObjectFile_Action, effects: EffectsCommandMap) => void;
-    onClose_MarkdownEditor: (action: OnClose_MarkdownEditor_Action, effects: EffectsCommandMap) => void;
-    onClose_CartoonEditor: (action: OnClose_CartoonEditor_Action, effects: EffectsCommandMap) => void;
+
     onChange_AdditionalProperties: (action: OnChange_AdditionalProperties_Action, effects: EffectsCommandMap) => void;
     onChange_CustomProperties: (action: OnChange_CustomProperties_Action, effects: EffectsCommandMap) => void;
     onChange_CustomConfigurations: (action: OnChange_CustomConfigurations_Action, effects: EffectsCommandMap) => void;
     onClick_ImportLastVersionDependents_Btn: (action: OnClick_ImportLastVersionDependents_Btn_Action, effects: EffectsCommandMap) => void;
     onChange_DescriptionEditorState: (action: OnChange_DescriptionEditorState_Action, effects: EffectsCommandMap) => void;
     onChange_IsOpenCartoon: (action: OnChange_IsOpenCartoon_Action, effects: EffectsCommandMap) => void;
+
+    onClick_OpenMarkdownBtn: (action: OnClick_OpenMarkdownBtn_Action, effects: EffectsCommandMap) => void;
+    onClick_OpenCartoonBtn: (action: OnClick_OpenCartoonBtn_Action, effects: EffectsCommandMap) => void;
+    onClose_MarkdownEditor: (action: OnClose_MarkdownEditor_Action, effects: EffectsCommandMap) => void;
+    onClose_CartoonEditor: (action: OnClose_CartoonEditor_Action, effects: EffectsCommandMap) => void;
 
     _FetchDraft: (action: _FetchDraft_Action, effects: EffectsCommandMap) => void;
     _SaveDraft: (action: _SaveDraft_Action, effects: EffectsCommandMap) => void;
@@ -321,6 +326,8 @@ const initStates: ResourceVersionCreatorPageModelState = {
   releaseTipVisible: false,
 
   isOpenCartoon: false,
+  isDirtyCartoonEditor: false,
+  isDirtyMarkdownEditor: false,
 };
 
 const Model: ResourceVersionCreatorModelType = {
@@ -913,7 +920,7 @@ const Model: ResourceVersionCreatorModelType = {
         type: 'change',
         payload: {
           isOpenCartoon: false,
-          dataIsDirty: false,
+          isDirtyCartoonEditor: false,
         },
       });
 
