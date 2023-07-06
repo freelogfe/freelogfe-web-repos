@@ -182,9 +182,12 @@ export const ImportDrawer = (props: Props) => {
     const res = await FUtil.Request({
       method: 'GET',
       url: `/v2/resources/${resourceId}/versions`,
-      params: { projection: 'versionId,version,updateDate,filename' },
+      params: {
+        projection: 'versionId,version,updateDate,filename',
+        sort: 'updateDate:-1',
+      },
     });
-    refs.current.historyList = res.data.reverse();
+    refs.current.historyList = res.data;
     searchHistoryList();
   };
 

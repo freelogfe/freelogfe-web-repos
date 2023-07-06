@@ -57,7 +57,7 @@ export const ImgCard = (props: Props) => {
               >
                 <div className="order">{index + 1}</div>
                 <div className="header-center">
-                  {data.children && data.size < MAX_IMG_SIZE
+                  {data.children && (!data.size || data.size < MAX_IMG_SIZE)
                     ? FI18n.i18nNext.t('cbformatter_slice_qty', {
                         imageQty: data.children.length,
                       })
@@ -66,7 +66,7 @@ export const ImgCard = (props: Props) => {
               </div>
               {/* 卡片身体（图片区域） */}
               <div className="card-body">
-                {data.size <= MAX_IMG_SIZE ? (
+                {!data.size || data.size <= MAX_IMG_SIZE ? (
                   data.base64 ? (
                     data.children ? (
                       <>

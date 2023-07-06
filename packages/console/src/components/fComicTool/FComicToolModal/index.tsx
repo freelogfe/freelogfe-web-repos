@@ -55,8 +55,6 @@ const { confirm } = Modal;
 
 /** 排版工具 */
 export const ComicTool = ({ resourceId, show, close, setSaved }: ToolProps) => {
-  // const  = props;
-  // console.log(show, 'showshowshowshowshowshowshowshow 893wirjhofsdklfsldjflsdjflsdjlfkjl');
   const resource = useRef<any>({});
   const deleteItem = useRef<any>(null);
   const stopTimer = useRef<Timeout | null>(null);
@@ -246,6 +244,7 @@ export const ComicTool = ({ resourceId, show, close, setSaved }: ToolProps) => {
 
   /** 删除图片 */
   const deleteImg = () => {
+    setAutoScroll(false);
     if (deleteItem.current) {
       const list = [...imgList];
       list.splice(deleteItem.current.index, 1);
@@ -689,10 +688,10 @@ export const ComicTool = ({ resourceId, show, close, setSaved }: ToolProps) => {
     }
 
     /** 整理上传 json 和 xml */
-      // 文件名称命名规则为{资源名称 最后保存时间}
+    // 文件名称命名规则为{资源名称 最后保存时间}
     let name =
-        resource.current.resourceData.resourceName.split('/')[1] +
-        formatDate(saveTime, 'YYYYMMDDhhmm').substring(2);
+      resource.current.resourceData.resourceName.split('/')[1] +
+      formatDate(saveTime, 'YYYYMMDDhhmm').substring(2);
     const jsonFormData = new FormData();
     const json = {
       mode: comicMode,
@@ -874,7 +873,6 @@ export const ComicTool = ({ resourceId, show, close, setSaved }: ToolProps) => {
   };
 
   useEffect(() => {
-    // console.log(show, '((((((((((********aoisdjf;lkjasdl;kfjlksdjflkjlkj')
     if (show) {
       window.addEventListener('keyup', keyup);
       document.body.style.overflowY = 'hidden';
@@ -888,6 +886,38 @@ export const ComicTool = ({ resourceId, show, close, setSaved }: ToolProps) => {
         clearTimeout(stopTimer.current);
         stopTimer.current = null;
       }
+
+      resource.current = {};
+      deleteItem.current = null;
+      stopTimer.current = null;
+      sorter.current = null;
+      saveProgressList.current = [];
+      saveTotalList.current = [];
+      visibleIndexRef.current = [0, 0];
+      sortableList.current = null;
+      currentTotal.current = 0;
+
+      setEdited(null);
+      setSaveTipType(0);
+      setSaveStep(0);
+      setSaveProgress(0);
+      setLastSaveTime(0);
+      setComicName('');
+      setComicMode(0);
+      setComicConfig(null);
+      setImgList([]);
+      setInsertIndex(-1);
+      setDragging(false);
+      setAutoScroll(false);
+      setVisibleIndex([0, 0]);
+
+      setImportDrawer(false);
+      setPreviewShow(false);
+      setDeleteConfirmShow(false);
+      setLoaderShow(false);
+      setCuttingLoaderShow(false);
+      setSaveLoaderShow(false);
+      setSaveFailTipShow(false);
     }
   }, [show]);
 
@@ -951,8 +981,8 @@ export const ComicTool = ({ resourceId, show, close, setSaved }: ToolProps) => {
       }}
     >
       <input
-        type='file'
-        id='uploadLocalImg'
+        type="file"
+        id="uploadLocalImg"
         multiple={true}
         accept={UPLOAD_LOCAL_ACCEPT}
         onChange={(e: any) => {
@@ -962,8 +992,8 @@ export const ComicTool = ({ resourceId, show, close, setSaved }: ToolProps) => {
         }}
       />
       <input
-        type='file'
-        id='cutImages'
+        type="file"
+        id="cutImages"
         multiple={true}
         accept={CUT_IMG_ACCEPT}
         onChange={(e: any) => {
@@ -974,11 +1004,11 @@ export const ComicTool = ({ resourceId, show, close, setSaved }: ToolProps) => {
       />
 
       <div className={`comic-tool-wrapper ${show ? 'show222' : 'show111111'}`}>
-        <div className='header'>
-          <div className='title'>{FI18n.i18nNext.t('cbformatter_title')}</div>
+        <div className="header">
+          <div className="title">{FI18n.i18nNext.t('cbformatter_title')}</div>
 
-          <div className='header-right'>
-            <div className='article-info'>
+          <div className="header-right">
+            <div className="article-info">
               {saveTipType === 1 && (
                 <span>{FI18n.i18nNext.t('posteditor_state_saving')}</span>
               )}
@@ -1005,18 +1035,18 @@ export const ComicTool = ({ resourceId, show, close, setSaved }: ToolProps) => {
             >
               {FI18n.i18nNext.t('btn_save_post')}
             </div>
-            <div className='exit-btn' onClick={exit}>
+            <div className="exit-btn" onClick={exit}>
               {FI18n.i18nNext.t('cbformatter_cancel_btn')}
             </div>
           </div>
         </div>
 
-        <div className='body'>
-          <div className='body-box'>
-            <div className='btns-bar'>
-              <div className='bar-left'>
+        <div className="body">
+          <div className="body-box">
+            <div className="btns-bar">
+              <div className="bar-left">
                 <div
-                  className='primary-btn btn'
+                  className="primary-btn btn"
                   onClick={() => {
                     document.getElementById('uploadLocalImg')?.click();
                   }}
@@ -1024,32 +1054,32 @@ export const ComicTool = ({ resourceId, show, close, setSaved }: ToolProps) => {
                   {FI18n.i18nNext.t('cbformatter_add_btn')}
                 </div>
                 <div
-                  className='text-btn btn'
+                  className="text-btn btn"
                   onClick={() => setImportDrawer(true)}
                 >
-                  <i className='freelog fl-icon-daoruwendang' />
+                  <i className="freelog fl-icon-daoruwendang" />
                   {FI18n.i18nNext.t('cbformatter_import_btn')}
                 </div>
                 {comicMode === 1 && (
                   <>
                     <div
-                      className='text-btn btn'
+                      className="text-btn btn"
                       onClick={() => {
                         document.getElementById('cutImages')?.click();
                       }}
                     >
-                      <i className='freelog fl-icon-jiandao' />
+                      <i className="freelog fl-icon-jiandao" />
                       {FI18n.i18nNext.t('cbformatter_batchslice_btn')}
                     </div>
-                    <div className='info-box'>
-                      <FComponentsLib.FIcons.FInfo className='info-icon' />
-                      <div className='info-popup'>
-                        <div className='img-box'>
-                          <img className='img' src={CutDescImg} />
-                          <div className='line'></div>
-                          <img className='scissors' src={BlueScissors} />
+                    <div className="info-box">
+                      <FComponentsLib.FIcons.FInfo className="info-icon" />
+                      <div className="info-popup">
+                        <div className="img-box">
+                          <img className="img" src={CutDescImg} />
+                          <div className="line"></div>
+                          <img className="scissors" src={BlueScissors} />
                         </div>
-                        <div className='desc'>
+                        <div className="desc">
                           {FI18n.i18nNext.t('cbformatter_slice_info')}
                         </div>
                       </div>
@@ -1060,7 +1090,7 @@ export const ComicTool = ({ resourceId, show, close, setSaved }: ToolProps) => {
               <div
                 className={`primary-btn ${
                   imgList.filter((item) => item.size <= MAX_IMG_SIZE).length ===
-                  0 && 'disabled'
+                    0 && 'disabled'
                 }`}
                 onClick={() => setPreviewShow(true)}
               >
@@ -1069,7 +1099,7 @@ export const ComicTool = ({ resourceId, show, close, setSaved }: ToolProps) => {
             </div>
 
             <div
-              className='img-area'
+              className="img-area"
               onDragOver={(e) => e.preventDefault()}
               onDrop={(e) => {
                 e.preventDefault();
@@ -1077,38 +1107,38 @@ export const ComicTool = ({ resourceId, show, close, setSaved }: ToolProps) => {
               }}
             >
               {imgList.length === 0 ? (
-                <div className='upload-box'>
-                  <i className='freelog fl-icon-shangchuanfengmian upload-icon'></i>
-                  <div className='upload-desc'>
+                <div className="upload-box">
+                  <i className="freelog fl-icon-shangchuanfengmian upload-icon"></i>
+                  <div className="upload-desc">
                     {FI18n.i18nNext.t('cbformatter_add_info')}
                   </div>
-                  <div className='upload-tip'>
+                  <div className="upload-tip">
                     {FI18n.i18nNext.t('cbformatter_add_info02')}
                   </div>
                 </div>
               ) : (
-                <div className='img-box'>
-                  <div className='img-header'>
-                    <div className='box-header'>
-                      <div className='total'>
+                <div className="img-box">
+                  <div className="img-header">
+                    <div className="box-header">
+                      <div className="total">
                         {FI18n.i18nNext.t('cbformatter_image_qty', {
                           imageQty: getTotal(),
                         })}
                       </div>
                       <div
-                        className='clear-btn'
+                        className="clear-btn"
                         onClick={() => {
                           deleteItem.current = null;
                           setDeleteConfirmShow(true);
                         }}
                       >
-                        <i className='freelog fl-icon-shanchu delete-icon' />
+                        <i className="freelog fl-icon-shanchu delete-icon" />
                         {FI18n.i18nNext.t('cbformatter_delete_btn_deleteall')}
                       </div>
                     </div>
                   </div>
-                  <div className='box-body'>
-                    <div id='sortableList' className='img-list'>
+                  <div className="box-body">
+                    <div id="sortableList" className="img-list">
                       {imgList.map((item, index) => {
                         return (
                           <ImgCard
@@ -1130,7 +1160,7 @@ export const ComicTool = ({ resourceId, show, close, setSaved }: ToolProps) => {
               )}
             </div>
 
-            <div className='desc-area'>
+            <div className="desc-area">
               <li>{FI18n.i18nNext.t('cbformatter_note01')}</li>
               <li>{FI18n.i18nNext.t('cbformatter_note02')}</li>
               <li>{FI18n.i18nNext.t(`cbformatter_note03`)}</li>
@@ -1146,14 +1176,14 @@ export const ComicTool = ({ resourceId, show, close, setSaved }: ToolProps) => {
         <PreviewBox show={previewShow} close={() => setPreviewShow(false)} />
 
         {deleteConfirmShow && (
-          <div className='delete-confirm-popup'>
+          <div className="delete-confirm-popup">
             <div
-              className='modal'
+              className="modal"
               onClick={() => setDeleteConfirmShow(false)}
             ></div>
-            <div className='confirm-popup'>
-              <div className='confirm-header'>
-                <div className='title'>
+            <div className="confirm-popup">
+              <div className="confirm-header">
+                <div className="title">
                   {FI18n.i18nNext.t(
                     deleteItem.current
                       ? 'cbformatter_delete_confirmation_title'
@@ -1161,27 +1191,27 @@ export const ComicTool = ({ resourceId, show, close, setSaved }: ToolProps) => {
                   )}
                 </div>
                 <i
-                  className='freelog fl-icon-guanbi'
+                  className="freelog fl-icon-guanbi"
                   onClick={() => setDeleteConfirmShow(false)}
                 ></i>
               </div>
-              <div className='desc'>
+              <div className="desc">
                 {deleteItem.current
                   ? FI18n.i18nNext.t('cbformatter_delete_confirmation_msg', {
-                    FileName: deleteItem.current.name,
-                  })
+                      FileName: deleteItem.current.name,
+                    })
                   : FI18n.i18nNext.t('cbformatter_deleteall_confirmation_msg')}
               </div>
-              <div className='btns-box'>
+              <div className="btns-box">
                 <div
-                  className='btn text-btn'
+                  className="btn text-btn"
                   onClick={() => setDeleteConfirmShow(false)}
                 >
                   {FI18n.i18nNext.t(
                     'cbformatter_delete_confirmation_btn_cancel',
                   )}
                 </div>
-                <div className='btn delete-btn' onClick={() => deleteImg()}>
+                <div className="btn delete-btn" onClick={() => deleteImg()}>
                   {FI18n.i18nNext.t(
                     deleteItem.current
                       ? 'cbformatter_delete_confirmation_btn_delete'
@@ -1194,24 +1224,24 @@ export const ComicTool = ({ resourceId, show, close, setSaved }: ToolProps) => {
         )}
 
         {loaderShow && (
-          <div className='loader-wrapper'>
-            <div className='loader-box'>
-              <Loading3QuartersOutlined className='loader-icon' />
+          <div className="loader-wrapper">
+            <div className="loader-box">
+              <Loading3QuartersOutlined className="loader-icon" />
             </div>
           </div>
         )}
 
         {cuttingLoaderShow && (
-          <div className='cutting-loader-wrapper'>
-            <div className='loader-box'>
-              <div className='title'>
+          <div className="cutting-loader-wrapper">
+            <div className="loader-box">
+              <div className="title">
                 {FI18n.i18nNext.t('cbformatter_slice_state_slicing')}
               </div>
-              <div className='line-box'>
-                <img className='scissors' src={BlackScissors} />
-                <div className='line'></div>
+              <div className="line-box">
+                <img className="scissors" src={BlackScissors} />
+                <div className="line"></div>
               </div>
-              <div className='desc'>
+              <div className="desc">
                 {FI18n.i18nNext.t('cbformatter_slice_state_slicing_msg')}
               </div>
             </div>
@@ -1219,36 +1249,36 @@ export const ComicTool = ({ resourceId, show, close, setSaved }: ToolProps) => {
         )}
 
         {saveLoaderShow && (
-          <div className='save-loader-wrapper'>
-            <div className='modal'></div>
-            <div className='save-loader-popup'>
-              <div className='title'>
+          <div className="save-loader-wrapper">
+            <div className="modal"></div>
+            <div className="save-loader-popup">
+              <div className="title">
                 {FI18n.i18nNext.t('cbformatter_submit_state_processing')}
               </div>
-              <div className='progress-box'>
+              <div className="progress-box">
                 <div
-                  className='progress-bar'
+                  className="progress-bar"
                   style={{ width: saveProgress + '%' }}
                 ></div>
               </div>
-              <div className='desc'>
+              <div className="desc">
                 <span>
                   {FI18n.i18nNext.t(
                     'cbformatter_submit_state_processing_msg' +
-                    ([2, 3, 4].includes(saveStep) ? '0' + saveStep : ''),
+                      ([2, 3, 4].includes(saveStep) ? '0' + saveStep : ''),
                   )}
                 </span>
-                <span className='desc-progress'>[{saveStep}/4]</span>
+                <span className="desc-progress">[{saveStep}/4]</span>
               </div>
             </div>
           </div>
         )}
 
         <div className={`save-fail-tip ${saveFailTipShow && 'show'}`}>
-          <div className='tip-title'>
+          <div className="tip-title">
             {FI18n.i18nNext.t('cbformatter_submit_err_removewrongpage')}
           </div>
-          <div className='tip-desc'>
+          <div className="tip-desc">
             {FI18n.i18nNext.t('cbformatter_submit_err_removewrongpage_msg')}
           </div>
         </div>
