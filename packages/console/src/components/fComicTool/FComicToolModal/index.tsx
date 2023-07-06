@@ -37,6 +37,7 @@ import BlueScissors from './images/blue-scissors.png';
 import BlackScissors from './images/black-scissors.png';
 import { Loading3QuartersOutlined } from '@ant-design/icons/lib/icons';
 import { uncompressComicArchive } from './core/import-comic';
+import * as AHooks from 'ahooks';
 
 interface ToolProps {
   // 资源 id
@@ -872,6 +873,50 @@ export const ComicTool = ({ resourceId, show, close, setSaved }: ToolProps) => {
     });
   };
 
+  /** 还原工具状态 */
+  const restoreToolState = () => {
+    // 清除自动保存定时器
+    if (stopTimer.current) {
+      clearTimeout(stopTimer.current);
+      stopTimer.current = null;
+    }
+
+    // 清除按键监听
+    window.removeEventListener('keyup', keyup);
+    document.body.style.overflowY = 'auto';
+
+    // 初始化状态
+    resource.current = {};
+    deleteItem.current = null;
+    stopTimer.current = null;
+    sorter.current = null;
+    saveProgressList.current = [];
+    saveTotalList.current = [];
+    visibleIndexRef.current = [0, 0];
+    sortableList.current = null;
+    currentTotal.current = 0;
+    setEdited(null);
+    setSaveTipType(0);
+    setSaveStep(0);
+    setSaveProgress(0);
+    setLastSaveTime(0);
+    setComicName('');
+    setComicMode(0);
+    setComicConfig(null);
+    setImgList([]);
+    setInsertIndex(-1);
+    setDragging(false);
+    setAutoScroll(false);
+    setVisibleIndex([0, 0]);
+    setImportDrawer(false);
+    setPreviewShow(false);
+    setDeleteConfirmShow(false);
+    setLoaderShow(false);
+    setCuttingLoaderShow(false);
+    setSaveLoaderShow(false);
+    setSaveFailTipShow(false);
+  };
+
   useEffect(() => {
     if (show) {
       window.addEventListener('keyup', keyup);
@@ -879,45 +924,7 @@ export const ComicTool = ({ resourceId, show, close, setSaved }: ToolProps) => {
 
       getData();
     } else {
-      window.removeEventListener('keyup', keyup);
-      document.body.style.overflowY = 'auto';
-
-      if (stopTimer.current) {
-        clearTimeout(stopTimer.current);
-        stopTimer.current = null;
-      }
-
-      resource.current = {};
-      deleteItem.current = null;
-      stopTimer.current = null;
-      sorter.current = null;
-      saveProgressList.current = [];
-      saveTotalList.current = [];
-      visibleIndexRef.current = [0, 0];
-      sortableList.current = null;
-      currentTotal.current = 0;
-
-      setEdited(null);
-      setSaveTipType(0);
-      setSaveStep(0);
-      setSaveProgress(0);
-      setLastSaveTime(0);
-      setComicName('');
-      setComicMode(0);
-      setComicConfig(null);
-      setImgList([]);
-      setInsertIndex(-1);
-      setDragging(false);
-      setAutoScroll(false);
-      setVisibleIndex([0, 0]);
-
-      setImportDrawer(false);
-      setPreviewShow(false);
-      setDeleteConfirmShow(false);
-      setLoaderShow(false);
-      setCuttingLoaderShow(false);
-      setSaveLoaderShow(false);
-      setSaveFailTipShow(false);
+      restoreToolState();
     }
   }, [show]);
 
@@ -960,6 +967,10 @@ export const ComicTool = ({ resourceId, show, close, setSaved }: ToolProps) => {
   useEffect(() => {
     setSaved && setSaved(!edited);
   }, [edited]);
+
+  AHooks.useUnmount(() => {
+    restoreToolState();
+  });
 
   return (
     <comicToolContext.Provider
