@@ -72,7 +72,8 @@ const readContents = async (entries: Entry[]) => {
   if (jsonFile) {
     // 存在 json 文件，可解析 json
     json = await getJson(jsonFile);
-    setImgList([...json.custom.list]);
+    const { list } = json.custom;
+    if (list.length) setImgList([...list]);
     setComicConfig(json.config);
   } else {
     // 不存在 json 文件，看看是否存在 xml 文件，如存在则解析 xml
