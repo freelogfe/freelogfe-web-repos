@@ -81,7 +81,7 @@ function Sign({ dispatch, resourceDetailPage, nodes }: SignProps) {
         onClick={() => dispatch<OnClick_ConfirmSignContract_Action>({
           type: 'resourceDetailPage/onClick_ConfirmSignContract',
         })}
-        disabled={!!resourceDetailPage.sign_SignExhibitNameErrorTip}
+        disabled={resourceDetailPage.sign_SignExhibitNameErrorTip !== ''}
         type='primary'
       >确认签约</FComponentsLib.FRectBtn>
     </div>
