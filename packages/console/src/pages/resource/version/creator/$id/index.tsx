@@ -581,7 +581,7 @@ function VersionCreator({
           dispatch<ChangeAction>({
             type: 'resourceVersionCreatorPage/change',
             payload: {
-              isDirtyCartoonEditor: saved,
+              isDirtyCartoonEditor: !saved,
             },
           });
         }}
