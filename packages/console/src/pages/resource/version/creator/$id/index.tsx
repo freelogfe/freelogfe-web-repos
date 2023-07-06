@@ -21,7 +21,7 @@ import {
   OnClose_MarkdownEditor_Action,
   OnTrigger_SaveDraft_Action,
   OnChange_DataIsDirty_Action,
-  OnChange_IsOpenCartoon_Action,
+  OnChange_IsOpenCartoon_Action, OnClick_OpenCartoonBtn_Action, ChangeAction, OnClose_CartoonEditor_Action,
 } from '@/models/resourceVersionCreatorPage';
 import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
 import Sider from '@/pages/resource/containers/Sider';
@@ -58,7 +58,7 @@ function VersionCreator({
                         }: VersionCreatorProps) {
 
   const [isMarkdownEditorDirty, set_isMarkdownEditorDirty] = React.useState<boolean>(false);
-  const [isfComicToolDirty, set_isfComicToolDirty] = React.useState<boolean>(false);
+  // const [isfComicToolDirty, set_isfComicToolDirty] = React.useState<boolean>(false);
 
   AHooks.useMount(() => {
     dispatch<OnMountPageAction>({
@@ -73,13 +73,13 @@ function VersionCreator({
     set_isMarkdownEditorDirty(false);
     // set_isOpenCartoon(false);
     // console.log('+++++++++++++++++++++++++++++++++++++++useUnmount sd9ifojsdlkfjlskdfjlksdjflkjsdl');
-    dispatch<OnChange_IsOpenCartoon_Action>({
-      type: 'resourceVersionCreatorPage/onChange_IsOpenCartoon',
-      payload: {
-        value: false,
-      },
-    });
-    set_isfComicToolDirty(false);
+    // dispatch<OnChange_IsOpenCartoon_Action>({
+    //   type: 'resourceVersionCreatorPage/onChange_IsOpenCartoon',
+    //   payload: {
+    //     value: false,
+    //   },
+    // });
+    // set_isfComicToolDirty(false);
     // console.log(isOpenCartoon, '***** 8888888888');
     dispatch<OnUnmountPageAction>({
       type: 'resourceVersionCreatorPage/onUnmountPage',
@@ -132,23 +132,24 @@ function VersionCreator({
     });
   }
 
-  async function onClick_EditCartoonBtn() {
-    await dispatch<OnTrigger_SaveDraft_Action>({
-      type: 'resourceVersionCreatorPage/onTrigger_SaveDraft',
-      payload: {
-        showSuccessTip: false,
-      },
-    });
-    await set_isfComicToolDirty(false);
-
-    await dispatch<OnChange_IsOpenCartoon_Action>({
-      type: 'resourceVersionCreatorPage/onChange_IsOpenCartoon',
-      payload: {
-        value: true,
-      },
-    });
-
-  }
+  //
+  // async function onClick_EditCartoonBtn() {
+  //   await dispatch<OnTrigger_SaveDraft_Action>({
+  //     type: 'resourceVersionCreatorPage/onTrigger_SaveDraft',
+  //     payload: {
+  //       showSuccessTip: false,
+  //     },
+  //   });
+  //   // await set_isfComicToolDirty(false);
+  //
+  //   await dispatch<OnChange_IsOpenCartoon_Action>({
+  //     type: 'resourceVersionCreatorPage/onChange_IsOpenCartoon',
+  //     payload: {
+  //       value: true,
+  //     },
+  //   });
+  //
+  // }
 
   if (!hasError) {
     FComponentsLib.fSetHotspotTooltipVisible('createResourceVersionPage.createBtn', {
@@ -176,7 +177,7 @@ function VersionCreator({
       </Helmet>
 
       <FPrompt
-        watch={resourceVersionCreatorPage.dataIsDirty || isMarkdownEditorDirty || isfComicToolDirty}
+        watch={resourceVersionCreatorPage.dataIsDirty || isMarkdownEditorDirty || resourceVersionCreatorPage.isDirtyCartoonEditor}
         messageText={'还没有保存草稿或发行，现在离开会导致信息丢失'}
         onOk={(locationHref) => {
           console.log('还没有保存草稿或发行 Ok');
@@ -418,7 +419,10 @@ function VersionCreator({
                     await onClick_EditMarkdownBtn();
                   }}
                   onClick_OpenCartoonBtn={async () => {
-                    await onClick_EditCartoonBtn();
+                    // await onClick_EditCartoonBtn();
+                    dispatch<OnClick_OpenCartoonBtn_Action>({
+                      type: 'resourceVersionCreatorPage/onClick_OpenCartoonBtn',
+                    });
                   }}
                   onClick_EditBtn={async () => {
                     if (resourceVersionCreatorPage.resourceInfo?.resourceType[0] === '阅读' && resourceVersionCreatorPage.resourceInfo?.resourceType[1] === '文章') {
@@ -573,18 +577,24 @@ function VersionCreator({
         resourceId={resourceVersionCreatorPage.resourceInfo.resourceID || ''}
         show={resourceVersionCreatorPage.isOpenCartoon}
         setSaved={(saved) => {
-          set_isfComicToolDirty(!saved);
-        }}
-        close={() => {
-          dispatch<OnChange_IsOpenCartoon_Action>({
-            type: 'resourceVersionCreatorPage/onChange_IsOpenCartoon',
+          // set_isfComicToolDirty(!saved);
+          dispatch<ChangeAction>({
+            type: 'resourceVersionCreatorPage/change',
             payload: {
-              value: false,
+              isDirtyCartoonEditor: !saved,
             },
           });
-          set_isfComicToolDirty(false);
-          dispatch<OnClose_MarkdownEditor_Action>({
-            type: 'resourceVersionCreatorPage/onClose_MarkdownEditor',
+        }}
+        close={() => {
+          // dispatch<OnChange_IsOpenCartoon_Action>({
+          //   type: 'resourceVersionCreatorPage/onChange_IsOpenCartoon',
+          //   payload: {
+          //     value: false,
+          //   },
+          // });
+          // set_isfComicToolDirty(false);
+          dispatch<OnClose_CartoonEditor_Action>({
+            type: 'resourceVersionCreatorPage/onClose_CartoonEditor',
           });
         }}
       />

@@ -27,7 +27,7 @@ interface SignProps {
 
 function Sign({ dispatch, resourceDetailPage, nodes }: SignProps) {
 
-  const [signExhibitName, setSignExhibitName] = React.useState<string>('');
+  const [signExhibitName, setSignExhibitName] = React.useState<string>(resourceDetailPage.sign_SignExhibitName);
 
   AHooks.useUnmount(() => {
     window.history.forward();
@@ -73,7 +73,7 @@ function Sign({ dispatch, resourceDetailPage, nodes }: SignProps) {
         }}
         type='default'
       >
-        <FComponentsLib.FIcons.FLeft />
+        <FComponentsLib.FIcons.FLeft style={{fontSize: 12}} />
         <>返回上一步</>
       </FComponentsLib.FTextBtn>
       <div style={{ width: 30 }} />
@@ -81,7 +81,7 @@ function Sign({ dispatch, resourceDetailPage, nodes }: SignProps) {
         onClick={() => dispatch<OnClick_ConfirmSignContract_Action>({
           type: 'resourceDetailPage/onClick_ConfirmSignContract',
         })}
-        disabled={!!resourceDetailPage.sign_SignExhibitNameErrorTip}
+        disabled={resourceDetailPage.sign_SignExhibitNameErrorTip !== ''}
         type='primary'
       >确认签约</FComponentsLib.FRectBtn>
     </div>
@@ -133,7 +133,7 @@ function Sign({ dispatch, resourceDetailPage, nodes }: SignProps) {
             resourceDetailPage.sign_SignExhibitNameErrorTip && (<>
               <div style={{ height: 5 }} />
               <div
-                className={styles.sign_SignExhibitNameErrorTip}>{resourceDetailPage.sign_SignExhibitNameErrorTip}</div>
+                className={styles.signExhibitNameErrorTip}>{resourceDetailPage.sign_SignExhibitNameErrorTip}</div>
             </>)
           }
 
