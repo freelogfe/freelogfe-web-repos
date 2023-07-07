@@ -1164,7 +1164,19 @@ const Model: ResourceVersionCreatorModelType = {
         resourceId: resourceVersionCreatorPage.resourceInfo.resourceID,
         draftData: draftData,
       };
-      yield call(FServiceAPI.Resource.saveVersionsDraft, params);
+      const { ret, errCode, data: data_draft }: {
+        ret: number;
+        errCode: number;
+        data: {
+          resourceId: string;
+          updateDate: string;
+          draftData: IResourceCreateVersionDraftType;
+        };
+      } = yield call(FServiceAPI.Resource.saveVersionsDraft, params);
+      if (ret !== 0 || errCode !== 0) {
+        fMessage('草稿保存失败', 'error');
+        return;
+      }
       if (payload.showSuccessTip) {
         fMessage('暂存草稿成功');
       }
@@ -1173,7 +1185,7 @@ const Model: ResourceVersionCreatorModelType = {
         type: 'change',
         payload: {
           // draftSaveTime: FUtil.Format.formatDateTime(Date(), true),
-          draftSaveTime: moment(Date()).format('YYYY-MM-DD hh:mm:ss'),
+          draftSaveTime: moment(data_draft.updateDate).format('YYYY-MM-DD hh:mm:ss'),
           dataIsDirty: false,
         },
       });
@@ -1334,7 +1346,15 @@ async function saveInitDraft({ resourceID, versionInput }: SaveInitDraftParamsTy
     draftData: draftData,
   };
   // console.time('保存草稿');
-  const { ret, errCode } = await FServiceAPI.Resource.saveVersionsDraft(params);
+  const { ret, errCode, data }: {
+    ret: number;
+    errCode: number;
+    data: {
+      resourceId: string;
+      updateDate: string;
+      draftData: IResourceCreateVersionDraftType;
+    };
+  } = await FServiceAPI.Resource.saveVersionsDraft(params);
   // console.timeEnd('保存草稿')
   return ret === 0 && errCode === 0;
 }
