@@ -992,6 +992,7 @@ export const ComicTool = ({ resourceId, show, close, setSaved }: ToolProps) => {
       }}
     >
       <input
+        className="comic-upload-btn"
         type="file"
         id="uploadLocalImg"
         multiple={true}
@@ -1003,6 +1004,7 @@ export const ComicTool = ({ resourceId, show, close, setSaved }: ToolProps) => {
         }}
       />
       <input
+        className="comic-upload-btn"
         type="file"
         id="cutImages"
         multiple={true}
@@ -1014,7 +1016,7 @@ export const ComicTool = ({ resourceId, show, close, setSaved }: ToolProps) => {
         }}
       />
 
-      <div className={`comic-tool-wrapper ${show ? 'show222' : 'show111111'}`}>
+      <div className={`comic-tool-wrapper ${show && 'show'}`}>
         <div className="header">
           <div className="title">{FI18n.i18nNext.t('cbformatter_title')}</div>
 
