@@ -246,6 +246,16 @@ function Resources({ dispatch, resourceListPage }: ResourceProps) {
           <div className={styles.bottomPadding} />
         </div>
         <div style={{ height: 100 }} />
+
+        <FListFooter
+          state={resourceListPage.resource_ListMore}
+          onClickLoadMore={async () => {
+            // await fetchResourceList(false);
+            dispatch<OnClickLoadingMordAction>({
+              type: 'resourceListPage/onClickLoadingMord',
+            });
+          }}
+        />
       </>)
     }
 
@@ -267,15 +277,7 @@ function Resources({ dispatch, resourceListPage }: ResourceProps) {
     {/*  </>)*/}
     {/*}*/}
 
-    <FListFooter
-      state={resourceListPage.resource_ListMore}
-      onClickLoadMore={async () => {
-        // await fetchResourceList(false);
-        dispatch<OnClickLoadingMordAction>({
-          type: 'resourceListPage/onClickLoadingMord',
-        });
-      }}
-    />
+
     <div style={{ height: 100 }} />
   </>);
 

@@ -222,6 +222,15 @@ function ResourceCollect({ dispatch, resourceCollectPage }: ResourceCollectProps
           <div className={styles.bottomPadding} />
         </div>
         <div style={{ height: 100 }} />
+        <FListFooter
+          state={resourceCollectPage.resource_ListMore}
+          onClickLoadMore={async () => {
+            // await fetchResourceList(false);
+            dispatch<OnClickLoadingMordAction>({
+              type: 'resourceCollectPage/onClickLoadingMord',
+            });
+          }}
+        />
       </>)
     }
 
@@ -244,15 +253,7 @@ function ResourceCollect({ dispatch, resourceCollectPage }: ResourceCollectProps
     {/*  </>)*/}
     {/*}*/}
 
-    <FListFooter
-      state={resourceCollectPage.resource_ListMore}
-      onClickLoadMore={async () => {
-        // await fetchResourceList(false);
-        dispatch<OnClickLoadingMordAction>({
-          type: 'resourceCollectPage/onClickLoadingMord',
-        });
-      }}
-    />
+
     <div style={{ height: 100 }} />
   </>);
 
