@@ -57,6 +57,7 @@ function VersionCreator({
                           match,
                         }: VersionCreatorProps) {
 
+  const [versionInputHasError, set_versionInputHasError] = React.useState<boolean>(false);
   const [isMarkdownEditorDirty, set_isMarkdownEditorDirty] = React.useState<boolean>(false);
   // const [isfComicToolDirty, set_isfComicToolDirty] = React.useState<boolean>(false);
 
@@ -104,7 +105,7 @@ function VersionCreator({
   );
 
   const hasError: boolean =
-    !resourceVersionCreatorPage.versionInput ||
+    resourceVersionCreatorPage.versionInput === '' || versionInputHasError ||
     !resourceVersionCreatorPage.selectedFileInfo ||
     resourceVersionCreatorPage.selectedFile_UsedResources.length > 0 ||
     resourceVersionCreatorPage.rawPropertiesState !== 'success';
@@ -295,6 +296,9 @@ function VersionCreator({
                       value: value,
                     },
                   });
+                }}
+                onChangeError={(hasError) => {
+                  set_versionInputHasError(hasError);
                 }}
               />
             </FFormLayout.FBlock>

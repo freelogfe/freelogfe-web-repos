@@ -10,6 +10,8 @@ interface VersionInputProps {
   resourceLatestVersion: string;
 
   onChange?(value: string): void;
+
+  onChangeError?(hasError: boolean): void;
 }
 
 interface VersionInputStates {
@@ -22,7 +24,7 @@ const initStates: VersionInputStates = {
   inputError: '',
 };
 
-function VersionInput({ value, resourceLatestVersion, onChange }: VersionInputProps) {
+function VersionInput({ value, resourceLatestVersion, onChange, onChangeError }: VersionInputProps) {
   const [input, set_input, get_input] = AHooks.useGetState<VersionInputStates['input']>(initStates['input']);
   const [inputError, set_inputError, get_inputError] = AHooks.useGetState<VersionInputStates['inputError']>(initStates['inputError']);
 
@@ -56,6 +58,7 @@ function VersionInput({ value, resourceLatestVersion, onChange }: VersionInputPr
         }
         set_input(inputValue);
         set_inputError(inputValueError);
+        onChangeError && onChangeError(inputValueError !== '');
         if (inputValue === '' || inputValueError === '') {
           onChange && onChange(inputValue);
         }
