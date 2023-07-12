@@ -30,6 +30,7 @@ interface FPublishObjectFileProps {
   showOpenCartoonEditor?: boolean;
 
   showEditBtnAfterSucceed?: boolean;
+  showDownloadBtnAfterSucceed?: boolean;
   disabledOperations?: Array<'download' | 'edit' | 'remove'>;
 
   onClick_OpenMarkdownBtn?(): void;
@@ -413,34 +414,15 @@ function FPublishObjectFile($prop: FPublishObjectFileProps) {
         }
 
         {
-          $prop.showOpenCartoonEditor && !$prop.disabledOperations?.includes('download')
-            ? (<FDropdownMenu
-              options={[{
-                text: 'ZIP格式文件',
-                value: 'zip',
-              }, {
-                text: 'CBZ格式文件',
-                value: 'cbz',
-              }]}
-              onChange={(value) => {
-                $prop.onClick_DownloadBtn && $prop.onClick_DownloadBtn('.' + value);
-              }}
-            >
-              <div>
-                <FComponentsLib.FTextBtn
-                  type='primary'
-                >下载</FComponentsLib.FTextBtn>
-              </div>
-            </FDropdownMenu>)
-            : (<FComponentsLib.FTextBtn
-              type='primary'
-              disabled={$prop.disabledOperations?.includes('download')}
-              onClick={() => {
-                // self.location.href = FUtil.Format.completeUrlByDomain('qi')
-                //   + `/v2/storages/files/${$prop.fileInfo?.sha1}/download?attachmentName=${$prop.fileInfo?.name}`;
-                $prop.onClick_DownloadBtn && $prop.onClick_DownloadBtn();
-              }}
-            >下载</FComponentsLib.FTextBtn>)
+          $prop.showDownloadBtnAfterSucceed && (<FComponentsLib.FTextBtn
+            type='primary'
+            disabled={$prop.disabledOperations?.includes('download')}
+            onClick={() => {
+              // self.location.href = FUtil.Format.completeUrlByDomain('qi')
+              //   + `/v2/storages/files/${$prop.fileInfo?.sha1}/download?attachmentName=${$prop.fileInfo?.name}`;
+              $prop.onClick_DownloadBtn && $prop.onClick_DownloadBtn();
+            }}
+          >下载</FComponentsLib.FTextBtn>)
         }
 
 

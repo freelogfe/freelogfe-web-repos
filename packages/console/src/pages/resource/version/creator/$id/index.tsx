@@ -366,9 +366,13 @@ function VersionCreator({
                 }
 
                 <FPublishObjectFile
-                  showEditBtnAfterSucceed={resourceVersionCreatorPage.resourceInfo?.resourceType[0] === '阅读' && resourceVersionCreatorPage.resourceInfo?.resourceType[1] === '文章'
-                  || resourceVersionCreatorPage.resourceInfo?.resourceType.includes('漫画')}
+                  showEditBtnAfterSucceed={resourceVersionCreatorPage.resourceInfo?.resourceType[0] === '阅读'
+                  && (resourceVersionCreatorPage.resourceInfo?.resourceType[1] === '文章'
+                    || resourceVersionCreatorPage.resourceInfo?.resourceType[1] === '漫画'
+                    && (resourceVersionCreatorPage.resourceInfo?.resourceType[2] === '条漫'
+                      || resourceVersionCreatorPage.resourceInfo?.resourceType[2] === '页漫'))}
                   // resourceID={resourceVersionCreatorPage.resourceInfo.resourceID}
+                  showDownloadBtnAfterSucceed={resourceVersionCreatorPage.resourceInfo?.resourceType[0] === '阅读' && resourceVersionCreatorPage.resourceInfo?.resourceType[1] === '文章'}
                   resourceType={{
                     code: resourceVersionCreatorPage.resourceInfo.resourceTypeCode,
                     names: resourceVersionCreatorPage.resourceInfo.resourceType,
@@ -417,8 +421,12 @@ function VersionCreator({
                     }
 
                   }}
-                  showOpenMarkdownEditor={resourceVersionCreatorPage.resourceInfo.resourceType[0] === '阅读' && resourceVersionCreatorPage.resourceInfo.resourceType[1] === '文章'}
-                  showOpenCartoonEditor={resourceVersionCreatorPage.resourceInfo.resourceType[0] === '阅读' && resourceVersionCreatorPage.resourceInfo.resourceType[1] === '漫画'}
+                  showOpenMarkdownEditor={resourceVersionCreatorPage.resourceInfo.resourceType[0] === '阅读'
+                  && resourceVersionCreatorPage.resourceInfo.resourceType[1] === '文章'}
+                  showOpenCartoonEditor={resourceVersionCreatorPage.resourceInfo.resourceType[0] === '阅读'
+                  && resourceVersionCreatorPage.resourceInfo.resourceType[1] === '漫画'
+                  && (resourceVersionCreatorPage.resourceInfo.resourceType[2] === '条漫'
+                    || resourceVersionCreatorPage.resourceInfo.resourceType[2] === '页漫')}
                   onClick_OpenMarkdownBtn={async () => {
                     await onClick_EditMarkdownBtn();
                   }}
