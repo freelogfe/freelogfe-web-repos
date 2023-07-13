@@ -151,10 +151,20 @@ function Security({ dispatch, settingPage }: SecurityProps) {
   }
 
   async function getBind() {
-    const data = await FServiceAPI.User.thirdPartyList();
+    const { data }: {
+      ret: number;
+      errCode: number;
+      data: {
+        name: string;
+        thirdPartyType: 'weChat' | 'weibo';
+        userId: number;
+      }[];
+    } = await FServiceAPI.User.thirdPartyList();
+
+    console.log(data, 'datasadfsdf sd9ifojsdilkfjsd;lkfjldskjlkj');
     // console.log(data);
     const map = new Map();
-    data.data.forEach((item: any) => {
+    data.forEach((item: any) => {
       map.set(item.thirdPartyType, { ...item });
     });
     setBindMap(map);
@@ -199,6 +209,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
       }
     }
   });
+
   AHooks.useInterval(
     () => {
       dispatch<OnChange_BindEmail_CaptchaWait_Action>({
