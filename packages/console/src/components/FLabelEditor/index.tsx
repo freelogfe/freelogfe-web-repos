@@ -82,7 +82,9 @@ function FLabelEditor({ values = [], resourceType = '', onChange }: FLabelEditor
     {
       values?.length < 20 && (<div className={styles.InputWrap}>
         <div className={styles.InputRow}>
-          <Input
+          {/*<Input*/}
+          <FComponentsLib.FInput.FSingleLine
+            lengthLimit={-1}
             className={[styles.Input, errorText ? styles.InputError : ''].join(' ')}
             placeholder={FI18n.i18nNext.t('hint_add_resource_tag')}
             ref={inputElementRef as any}

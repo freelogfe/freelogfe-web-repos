@@ -9,7 +9,7 @@ import {
   OnClickPTitleEditBtnAction,
 } from '@/models/informExhibitInfoPage';
 import { Space } from 'antd';
-import FInput from '@/components/FInput';
+// import FInput from '@/components/FInput';
 import FLabelEditor from '@/components/FLabelEditor';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
