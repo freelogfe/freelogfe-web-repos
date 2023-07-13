@@ -4,6 +4,7 @@ import Cropper from 'react-cropper';
 import 'cropperjs/dist/cropper.css';
 import { Modal, Space } from 'antd';
 import FComponentsLib from '@freelog/components-lib';
+import { FI18n } from '@freelog/tools-lib';
 
 interface FCropperModalProps {
   uploadRef: any;
@@ -28,7 +29,11 @@ function FCropperModal({ uploadRef, imgSrc, uploading, onOk, onCancel }: FCroppe
   return (<Modal
     visible={!!imgSrc}
     width={950}
-    title={<FComponentsLib.FTitleText text={'上传头像'} type='popup' />}
+    title={<FComponentsLib.FTitleText
+      // text={'上传头像'}
+      text={FI18n.i18nNext.t('nodemgnt_nodesetting_nodelogo_crop_title')}
+      type='popup'
+    />}
     destroyOnClose
     bodyStyle={{ padding: '20px 30px' }}
     onOk={() => {
@@ -133,7 +138,10 @@ function FCropperModal({ uploadRef, imgSrc, uploading, onOk, onCancel }: FCroppe
         </Space>
       </div>
       <div className={styles.contentRight}>
-        <FComponentsLib.FTitleText text={'头像预览'} type='h3' />
+        <FComponentsLib.FTitleText
+          text={FI18n.i18nNext.t('nodemgnt_nodesetting_nodelogo_crop_preview')}
+          type='h3'
+        />
         <div style={{ height: 10 }} />
 
         <div className={styles.previewCard}>
@@ -143,7 +151,11 @@ function FCropperModal({ uploadRef, imgSrc, uploading, onOk, onCancel }: FCroppe
         <div style={{ height: 20 }} />
         <FComponentsLib.FContentText text={'只支持JPG/PNG/GIF，GIF文件不能动画化，大小不超过5M；'} type='additional2' />
         <div style={{ height: 10 }} />
-        <FComponentsLib.FContentText text={'未上传头像时，使用系统默认头像。'} type='additional2' />
+        <FComponentsLib.FContentText
+          // text={'未上传头像时，使用系统默认头像。'}
+          text={FI18n.i18nNext.t('nodemgnt_nodesetting_nodelogo_crop_info')}
+          type='additional2'
+        />
 
       </div>
     </div>

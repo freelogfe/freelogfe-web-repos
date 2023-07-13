@@ -11,7 +11,7 @@ import img_upload from '@/assets/createVersion_upload.png';
 import img_markdown from '@/assets/createVersion_markdown.png';
 import fReadLocalFiles from '@/components/fReadLocalFiles';
 import icons from './icons.png';
-import FDropdownMenu from '@/components/FDropdownMenu';
+// import FDropdownMenu from '@/components/FDropdownMenu';
 import * as AHooks from 'ahooks';
 
 interface FPublishObjectFileProps {
