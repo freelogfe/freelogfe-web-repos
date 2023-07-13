@@ -164,19 +164,19 @@ function FCropperModal({ uploadRef, imgSrc, uploading, onOk, onCancel }: FCroppe
 
 export default FCropperModal;
 
-function getRoundedCanvas(sourceCanvas: HTMLCanvasElement): HTMLCanvasElement {
-  const canvas = document.createElement('canvas');
-  const context = canvas.getContext('2d');
-  const width = sourceCanvas.width;
-  const height = sourceCanvas.height;
-
-  canvas.width = width;
-  canvas.height = height;
-  context && (context.imageSmoothingEnabled = true);
-  context && context.drawImage(sourceCanvas, 0, 0, width, height);
-  context && (context.globalCompositeOperation = 'destination-in');
-  context && context.beginPath();
-  context && context.arc(width / 2, height / 2, Math.min(width, height) / 2, 0, 2 * Math.PI, true);
-  context && context.fill();
-  return canvas;
-}
+// function getRoundedCanvas(sourceCanvas: HTMLCanvasElement): HTMLCanvasElement {
+//   const canvas = document.createElement('canvas');
+//   const context = canvas.getContext('2d');
+//   const width = sourceCanvas.width;
+//   const height = sourceCanvas.height;
+//
+//   canvas.width = width;
+//   canvas.height = height;
+//   context && (context.imageSmoothingEnabled = true);
+//   context && context.drawImage(sourceCanvas, 0, 0, width, height);
+//   context && (context.globalCompositeOperation = 'destination-in');
+//   context && context.beginPath();
+//   context && context.arc(width / 2, height / 2, Math.min(width, height) / 2, 0, 2 * Math.PI, true);
+//   context && context.fill();
+//   return canvas;
+// }
