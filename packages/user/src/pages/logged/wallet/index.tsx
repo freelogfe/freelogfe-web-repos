@@ -59,7 +59,7 @@ import {
   OnClick_Table_Filter_ResetBtn_Action,
 } from '@/models/walletPage';
 import FLoadingTip from '@/components/FLoadingTip';
-import { FUtil, FI18n } from '@freelog/tools-lib';
+import { FUtil, FI18n, FServiceAPI } from '@freelog/tools-lib';
 import FDropdownMenu from '@/components/FDropdownMenu';
 import FListFooter from '@/components/FListFooter';
 import FNoDataTip from '@/components/FNoDataTip';
@@ -266,8 +266,16 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
             <FComponentsLib.FRectBtn
               type='primary'
               onClick={async () => {
-                const { email, mobile } = await userPermission.getUserInfo();
-                if (email === '' && mobile === '') {
+                // const { email, mobile } = await userPermission.getUserInfo();
+                const { data: data_userInfo }: {
+                  data: {
+                    mobile: string;
+                    email: string;
+                  };
+                } = await FServiceAPI.User.currentUserInfo();
+                // console.log(data_userInfo, 'data_userInfo 9wieojfsldkjflkasjdlfjsldk');
+                // return;
+                if (data_userInfo.mobile === '' && data_userInfo.email === '') {
                   fConfirmModal({
                     message: FI18n.i18nNext.t(
                       'activatefethaccount_err_connectwithmobileoremail',
@@ -666,7 +674,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
             type='popup'
           />
         }
-        visible={walletPage.activating_VisibleModal === 'captcha'}
+        open={walletPage.activating_VisibleModal === 'captcha'}
         onCancel={() => {
           dispatch<OnCancel_Activate_CaptchaModal_Action>({
             type: 'walletPage/onCancel_Activate_CaptchaModal',
@@ -779,7 +787,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
       <Modal
         destroyOnClose
         title={<FComponentsLib.FTitleText text={'设置支付密码'} type='popup' />}
-        visible={walletPage.activating_VisibleModal === 'password'}
+        open={walletPage.activating_VisibleModal === 'password'}
         onCancel={() => {
           dispatch<OnCancel_Activate_CaptchaModal_Action>({
             type: 'walletPage/onCancel_Activate_CaptchaModal',
@@ -861,7 +869,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
         title={
           <FComponentsLib.FTitleText text={'修改支付密码验证'} type='popup' />
         }
-        visible={walletPage.changingPassword_CaptchaModal_Visible}
+        open={walletPage.changingPassword_CaptchaModal_Visible}
         // onOk={handleOk}
         onCancel={() => {
           dispatch<OnCancel_ChangingPassword_CaptchaModal_Action>({
@@ -990,7 +998,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
         title={
           <FComponentsLib.FTitleText text={'验证原支付密码'} type='popup' />
         }
-        visible={walletPage.changingPassword_OldPasswordModal_Visible}
+        open={walletPage.changingPassword_OldPasswordModal_Visible}
         // onOk={handleOk}
         onCancel={() => {
           dispatch<OnCancel_ChangingPassword_OldPasswordModal_Action>({
@@ -1062,7 +1070,7 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
         title={
           <FComponentsLib.FTitleText text={'设置新支付密码'} type='popup' />
         }
-        visible={walletPage.changingPassword_NewPasswordModal_Visible}
+        open={walletPage.changingPassword_NewPasswordModal_Visible}
         // onOk={handleOk}
         onCancel={() => {
           dispatch<OnCancel_ChangingPassword_NewPasswordModal_Action>({
