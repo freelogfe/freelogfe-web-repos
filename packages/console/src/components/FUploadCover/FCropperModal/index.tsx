@@ -4,7 +4,7 @@ import Cropper from 'react-cropper';
 import 'cropperjs/dist/cropper.css';
 import { Modal, Space } from 'antd';
 import FComponentsLib from '@freelog/components-lib';
-import { FI18n } from '../../../../../@freelog/tools-lib';
+import { FI18n } from '@freelog/tools-lib';
 
 interface FCropperModalProps {
   uploadRef: any;
