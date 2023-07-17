@@ -53,7 +53,8 @@ class UserPermission {
     if (stateCode === 'ERR_NOT_LOGIN' && (
       !url.startsWith(FUtil.LinkTo.login()) ||
       !url.startsWith(FUtil.LinkTo.logon()) ||
-      !url.startsWith(FUtil.LinkTo.retrieveUserPassword())
+      !url.startsWith(FUtil.LinkTo.retrieveUserPassword()) ||
+      !url.startsWith('/bind')
     )) {
       return {
         code: stateCode,

@@ -14,21 +14,22 @@ interface FUploadResourceCoverProps {
 function FUploadResourceCover({ value, onChange }: FUploadResourceCoverProps) {
 
   return (<div className={styles.cover}>
-    {!value
-      ? (<FUploadCover
-        onUploadSuccess={(url) => onChange && onChange(url)}
-        onError={(err) => {
-          fMessage(err, 'error');
-        }}
-      >
-        <a className={styles.FUploadImageChildren}>
-          <FComponentsLib.FIcons.FCloudUpload />
-          <span>{FI18n.i18nNext.t('upload_image')}</span>
-        </a>
-      </FUploadCover>)
-      : (<div className={styles.FUploadImageChildren}>
-        <FCoverImage src={value} width={200}/>
-      </div>)
+    {
+      !value
+        ? (<FUploadCover
+          onUploadSuccess={(url) => onChange && onChange(url)}
+          onError={(err) => {
+            fMessage(err, 'error');
+          }}
+        >
+          <a className={styles.FUploadImageChildren}>
+            <FComponentsLib.FIcons.FCloudUpload />
+            <span>{FI18n.i18nNext.t('upload_image')}</span>
+          </a>
+        </FUploadCover>)
+        : (<div className={styles.FUploadImageChildren}>
+          <FCoverImage src={value} width={200} />
+        </div>)
     }
     <div className={styles.coverTip}>
       {value && <FUploadCover

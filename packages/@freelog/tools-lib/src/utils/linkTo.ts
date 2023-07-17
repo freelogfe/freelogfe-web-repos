@@ -329,6 +329,21 @@ export function logon({goTo, ...params}: LoginParamsType = {}) {
   })}`;
 }
 
+// 绑定账户
+interface LoginParamsType {
+  goTo?: string;
+  identityId?: string;
+  returnUrl?: string;
+}
+
+export function bind({goTo, returnUrl, ...params}: LoginParamsType = {}) {
+  return `/bind${handleQuery({
+    goTo: goTo ? encodeURIComponent(goTo) : undefined,
+    returnUrl: returnUrl ? encodeURIComponent(returnUrl) : undefined,
+    ...params,
+  })}`;
+}
+
 // 找回密码
 interface RetrieveUserPasswordParamsType {
   goTo?: string;
@@ -391,7 +406,7 @@ export function setting({}: SettingParamsType = {}) {
 }
 
 
-// 绑定成功
+// 绑定
 interface BindingParamsType {
 }
 

@@ -164,7 +164,9 @@ const Model: UserModelType = {
               && !document.hidden
               && !url.startsWith(FUtil.LinkTo.login())
               && !url.startsWith(FUtil.LinkTo.logon())
-              && !url.startsWith(FUtil.LinkTo.retrieveUserPassword())) {
+              && !url.startsWith(FUtil.LinkTo.retrieveUserPassword())
+              && !url.startsWith('/bind')
+            ) {
               co('用户已登出');
             }
           });
