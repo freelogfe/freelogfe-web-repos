@@ -4,6 +4,7 @@ import Cropper from 'react-cropper';
 import 'cropperjs/dist/cropper.css';
 import { Modal, Space } from 'antd';
 import FComponentsLib from '@freelog/components-lib';
+import { FI18n } from '../../../../../@freelog/tools-lib';
 
 interface FCropperModalProps {
   uploadRef: any;
@@ -43,6 +44,8 @@ function FCropperModal({ uploadRef, imgSrc, onOk, onCancel }: FCropperModalProps
     onCancel={() => {
       onCancel && onCancel();
     }}
+    okText={FI18n.i18nNext.t('btn_done')}
+    cancelText={FI18n.i18nNext.t('btn_cancel')}
   >
     <div className={styles.content}>
       <div className={styles.contentLeft}>
