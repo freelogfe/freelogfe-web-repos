@@ -74,6 +74,7 @@ import FComponentsLib from '@freelog/components-lib';
 import { getUrlOfBindingWechat } from '@/utils';
 // import FPasswordInput from '@/components/FPasswordInput';
 import FPhoneInput from '@/components/FPhoneInput';
+import fMessage from '@/components/fMessage';
 
 interface SecurityProps {
   dispatch: Dispatch;
@@ -83,7 +84,14 @@ interface SecurityProps {
 function Security({ dispatch, settingPage }: SecurityProps) {
   // console.log(settingPage, '9803ieosdkljflsdkfjsdlkfjs;ldfjj');
   const [verifyPassword, setVerifyPassword] = React.useState(false);
-  const [bindMap, setBindMap] = React.useState<Map<string, any>>(new Map());
+  // const [bindMap, setBindMap] = React.useState<Map<string, any>>(new Map());
+  const [wechatInfo, set_wechatInfo] = React.useState<{
+    state: 'loading' | 'bound' | 'notBound',
+    name: string;
+  }>({
+    state: 'loading',
+    name: '',
+  });
   // 1:绑定成功 2:绑定失败 3:此微信账号已经绑定了其他Freelog账号，请换一个账号绑定
   // 数据类型要严格分一下，现在太乱了，后面增加微博就更加了
   const [bindTip, setBindTip] = React.useState<{
@@ -151,7 +159,7 @@ function Security({ dispatch, settingPage }: SecurityProps) {
   }
 
   async function getBind() {
-    const { data }: {
+    const { ret, errCode, msg, data: data_thirdPartyList }: {
       ret: number;
       errCode: number;
       data: {
@@ -159,15 +167,36 @@ function Security({ dispatch, settingPage }: SecurityProps) {
         thirdPartyType: 'weChat' | 'weibo';
         userId: number;
       }[];
+      msg: string;
     } = await FServiceAPI.User.thirdPartyList();
+    if (ret !== 0 || errCode !== 0) {
+      fMessage(msg, 'error');
+      return;
+    }
 
-    console.log(data, 'datasadfsdf sd9ifojsdilkfjsd;lkfjldskjlkj');
-    // console.log(data);
-    const map = new Map();
-    data.forEach((item: any) => {
-      map.set(item.thirdPartyType, { ...item });
+    const wechat = data_thirdPartyList.find((d) => {
+      return d.thirdPartyType === 'weChat';
     });
-    setBindMap(map);
+// return
+    if (!!wechat) {
+      set_wechatInfo({
+        name: wechat.name,
+        state: 'bound',
+      });
+    } else {
+      set_wechatInfo({
+        name: '',
+        state: 'notBound',
+      });
+    }
+
+    // console.log(data, 'datasadfsdf sd9ifojsdilkfjsd;lkfjldskjlkj');
+    // console.log(data);
+    // const map = new Map();
+    // data.forEach((item: any) => {
+    //   map.set(item.thirdPartyType, { ...item });
+    // });
+    // setBindMap(map);
   }
 
   AHooks.useMount(() => {
@@ -304,84 +333,86 @@ function Security({ dispatch, settingPage }: SecurityProps) {
               <div className={styles.left}>
                 <FComponentsLib.FContentText text={'邮箱'} type='normal' />
               </div>
-              {settingPage.email === '' ? (
-                <div className={styles.right}>
-                  <FComponentsLib.FTipText text={'未绑定'} type='third' />
-                  <div style={{ width: 30 }} />
-                  <FComponentsLib.FTextBtn
-                    onClick={() => {
-                      // onClick_BindEmailBtn_Action
-                      dispatch<OnClick_BindEmailBtn_Action>({
-                        type: 'settingPage/onClick_BindEmailBtn',
-                      });
-                    }}
-                    type='primary'
-                  >
-                    立即绑定
-                  </FComponentsLib.FTextBtn>
-                </div>
-              ) : (
-                <div className={styles.right}>
-                  <FComponentsLib.FContentText
-                    text={settingPage.email}
-                    type='highlight'
-                  />
-                  <div style={{ width: 30 }} />
-                  <FComponentsLib.FTextBtn
-                    type='primary'
-                    onClick={() => {
-                      // onClick_BindEmailBtn_Action
-                      dispatch<OnClick_ReplaceEmailBtn_Action>({
-                        type: 'settingPage/onClick_ReplaceEmailBtn',
-                      });
-                    }}
-                  >
-                    更换邮箱
-                  </FComponentsLib.FTextBtn>
-                </div>
-              )}
+              {
+                settingPage.email === '' ? (
+                  <div className={styles.right}>
+                    <FComponentsLib.FTipText text={'未绑定'} type='third' />
+                    <div style={{ width: 30 }} />
+                    <FComponentsLib.FTextBtn
+                      onClick={() => {
+                        // onClick_BindEmailBtn_Action
+                        dispatch<OnClick_BindEmailBtn_Action>({
+                          type: 'settingPage/onClick_BindEmailBtn',
+                        });
+                      }}
+                      type='primary'
+                    >
+                      立即绑定
+                    </FComponentsLib.FTextBtn>
+                  </div>
+                ) : (
+                  <div className={styles.right}>
+                    <FComponentsLib.FContentText
+                      text={settingPage.email}
+                      type='highlight'
+                    />
+                    <div style={{ width: 30 }} />
+                    <FComponentsLib.FTextBtn
+                      type='primary'
+                      onClick={() => {
+                        // onClick_BindEmailBtn_Action
+                        dispatch<OnClick_ReplaceEmailBtn_Action>({
+                          type: 'settingPage/onClick_ReplaceEmailBtn',
+                        });
+                      }}
+                    >
+                      更换邮箱
+                    </FComponentsLib.FTextBtn>
+                  </div>
+                )}
             </div>
 
             <div className={styles.row}>
               <div className={styles.left}>
                 <FComponentsLib.FContentText text={'手机号'} type='normal' />
               </div>
-              {settingPage.phone === '' ? (
-                <div className={styles.right}>
-                  <FComponentsLib.FTipText text={'未绑定'} type='third' />
-                  <div style={{ width: 30 }} />
-                  <FComponentsLib.FTextBtn
-                    onClick={() => {
-                      // onClick_BindEmailBtn_Action
-                      dispatch<OnClick_BindPhoneBtn_Action>({
-                        type: 'settingPage/onClick_BindPhoneBtn',
-                      });
-                    }}
-                    type='primary'
-                  >
-                    立即绑定
-                  </FComponentsLib.FTextBtn>
-                </div>
-              ) : (
-                <div className={styles.right}>
-                  <FComponentsLib.FContentText
-                    text={settingPage.phone}
-                    type='highlight'
-                  />
-                  <div style={{ width: 30 }} />
-                  <FComponentsLib.FTextBtn
-                    type='primary'
-                    onClick={() => {
-                      // onClick_BindEmailBtn_Action
-                      dispatch<OnClick_ReplacePhoneBtn_Action>({
-                        type: 'settingPage/onClick_ReplacePhoneBtn',
-                      });
-                    }}
-                  >
-                    更换号码
-                  </FComponentsLib.FTextBtn>
-                </div>
-              )}
+              {
+                settingPage.phone === '' ? (
+                  <div className={styles.right}>
+                    <FComponentsLib.FTipText text={'未绑定'} type='third' />
+                    <div style={{ width: 30 }} />
+                    <FComponentsLib.FTextBtn
+                      onClick={() => {
+                        // onClick_BindEmailBtn_Action
+                        dispatch<OnClick_BindPhoneBtn_Action>({
+                          type: 'settingPage/onClick_BindPhoneBtn',
+                        });
+                      }}
+                      type='primary'
+                    >
+                      立即绑定
+                    </FComponentsLib.FTextBtn>
+                  </div>
+                ) : (
+                  <div className={styles.right}>
+                    <FComponentsLib.FContentText
+                      text={settingPage.phone}
+                      type='highlight'
+                    />
+                    <div style={{ width: 30 }} />
+                    <FComponentsLib.FTextBtn
+                      type='primary'
+                      onClick={() => {
+                        // onClick_BindEmailBtn_Action
+                        dispatch<OnClick_ReplacePhoneBtn_Action>({
+                          type: 'settingPage/onClick_ReplacePhoneBtn',
+                        });
+                      }}
+                    >
+                      更换号码
+                    </FComponentsLib.FTextBtn>
+                  </div>
+                )}
             </div>
 
             <div className={styles.row}>
@@ -414,8 +445,13 @@ function Security({ dispatch, settingPage }: SecurityProps) {
               <div className={styles.left}>
                 <FComponentsLib.FContentText text={'微信'} type='normal' />
               </div>
-              {!bindMap.get('weChat') ? (
-                <div className={styles.right}>
+
+              {
+                wechatInfo.state === 'loading' && (<FComponentsLib.FIcons.FLoading />)
+              }
+
+              {
+                wechatInfo.state === 'notBound' && (<div className={styles.right}>
                   <FComponentsLib.FTipText text={'未绑定'} type='third' />
                   <div style={{ width: 30 }} />
                   <FComponentsLib.FTextBtn
@@ -436,43 +472,106 @@ function Security({ dispatch, settingPage }: SecurityProps) {
                   >
                     立即绑定
                   </FComponentsLib.FTextBtn>
-                </div>
-              ) : (
-                <div className={styles.right}>
+                </div>)
+              }
+
+              {
+                wechatInfo.state === 'bound' && (<div className={styles.right}>
                   <FComponentsLib.FContentText
-                    text={bindMap.get('weChat').name}
+                    text={wechatInfo.name}
                     type='highlight'
                   />
                   <div style={{ width: 30 }} />
-                  {location.host.includes('testfreelog.com') ? <FComponentsLib.FTextBtn
-                    type='danger'
-                    onClick={() => {
-                      if (!settingPage.email && !settingPage.phone) {
+                  {
+                    location.host.includes('testfreelog.com') ? <FComponentsLib.FTextBtn
+                      type='danger'
+                      onClick={() => {
+                        if (!settingPage.email && !settingPage.phone) {
+                          setBindTip({
+                            type: 'warn',
+                            msg: '为了你的账号安全，请先绑定手机号或者邮箱再进行解绑微信操作',
+                            closable: true,
+                            className: 'h-357',
+                            icon: bindWarning,
+                            way: 'unbind',
+                          });
+                          return;
+                        }
                         setBindTip({
-                          type: 'warn',
-                          msg: '为了你的账号安全，请先绑定手机号或者邮箱再进行解绑微信操作',
-                          closable: true,
-                          className: 'h-357',
-                          icon: bindWarning,
+                          type: 'success',
+                          msg: '',
+                          closable: false,
+                          className: 'h-238',
+                          icon: bindSuccess,
                           way: 'unbind',
                         });
-                        return;
-                      }
-                      setBindTip({
-                        type: 'success',
-                        msg: '',
-                        closable: false,
-                        className: 'h-238',
-                        icon: bindSuccess,
-                        way: 'unbind',
-                      });
-                      setVerifyPassword(true);
-                    }}
-                  >
-                    解绑
-                  </FComponentsLib.FTextBtn> : null}
-                </div>
-              )}
+                        setVerifyPassword(true);
+                      }}
+                    >
+                      解绑
+                    </FComponentsLib.FTextBtn> : null}
+                </div>)
+              }
+              {/*{*/}
+              {/*  !bindMap.get('weChat') ? (*/}
+              {/*    <div className={styles.right}>*/}
+              {/*      <FComponentsLib.FTipText text={'未绑定'} type='third' />*/}
+              {/*      <div style={{ width: 30 }} />*/}
+              {/*      <FComponentsLib.FTextBtn*/}
+              {/*        onClick={() => {*/}
+              {/*          // self.open(FUtil.LinkTo.binding());*/}
+              {/*          setBindTip({*/}
+              {/*            type: 'success',*/}
+              {/*            msg: '',*/}
+              {/*            closable: false,*/}
+              {/*            className: 'h-238',*/}
+              {/*            icon: bindSuccess,*/}
+              {/*            way: 'bind',*/}
+              {/*          });*/}
+              {/*          setVerifyPassword(true);*/}
+              {/*          // self.open(FUtil.LinkTo.binding());*/}
+              {/*        }}*/}
+              {/*        type='primary'*/}
+              {/*      >*/}
+              {/*        立即绑定*/}
+              {/*      </FComponentsLib.FTextBtn>*/}
+              {/*    </div>*/}
+              {/*  ) : (*/}
+              {/*    <div className={styles.right}>*/}
+              {/*      <FComponentsLib.FContentText*/}
+              {/*        text={bindMap.get('weChat').name}*/}
+              {/*        type='highlight'*/}
+              {/*      />*/}
+              {/*      <div style={{ width: 30 }} />*/}
+              {/*      {location.host.includes('testfreelog.com') ? <FComponentsLib.FTextBtn*/}
+              {/*        type='danger'*/}
+              {/*        onClick={() => {*/}
+              {/*          if (!settingPage.email && !settingPage.phone) {*/}
+              {/*            setBindTip({*/}
+              {/*              type: 'warn',*/}
+              {/*              msg: '为了你的账号安全，请先绑定手机号或者邮箱再进行解绑微信操作',*/}
+              {/*              closable: true,*/}
+              {/*              className: 'h-357',*/}
+              {/*              icon: bindWarning,*/}
+              {/*              way: 'unbind',*/}
+              {/*            });*/}
+              {/*            return;*/}
+              {/*          }*/}
+              {/*          setBindTip({*/}
+              {/*            type: 'success',*/}
+              {/*            msg: '',*/}
+              {/*            closable: false,*/}
+              {/*            className: 'h-238',*/}
+              {/*            icon: bindSuccess,*/}
+              {/*            way: 'unbind',*/}
+              {/*          });*/}
+              {/*          setVerifyPassword(true);*/}
+              {/*        }}*/}
+              {/*      >*/}
+              {/*        解绑*/}
+              {/*      </FComponentsLib.FTextBtn> : null}*/}
+              {/*    </div>*/}
+              {/*  )}*/}
             </div>
           </Space>
           <FVerifyUserPasswordModal
