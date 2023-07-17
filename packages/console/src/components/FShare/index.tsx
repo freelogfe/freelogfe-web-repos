@@ -40,7 +40,7 @@ export const FShare = (props: {
     { id: 'qq', name: 'QQ', icon: 'fl-icon-QQ', bgColor: '#5382d3' },
     { id: 'weibo', name: '微博', icon: 'fl-icon-weibo', bgColor: '#ff6f68' },
     { id: 'wechat', name: '微信', icon: 'fl-icon-weixin', bgColor: '#1ec76f' },
-    // { id: 'douban', name: '豆瓣', icon: 'fl-icon-douban', bgColor: '#42a151' },
+    { id: 'douban', name: '豆瓣', icon: 'fl-icon-douban', bgColor: '#42a151' },
   ];
 
   /** 关闭弹窗 */
@@ -65,7 +65,13 @@ export const FShare = (props: {
     } else if (item.id === 'douban') {
       // 豆瓣
       // window.open(`https://www.douban.com/share/service?url=${url}&title=${title}&image=${cover}`);
-      window.open(`https://www.douban.com/share/service?url=${encodeURIComponent(url)}&title=${encodeURIComponent(title)}&image=${encodeURIComponent(cover || '')}`);
+      // window.open(`https://www.douban.com/share/service?url=${encodeURIComponent(url)}&title=${encodeURIComponent(title)}&image=${encodeURIComponent(cover || '')}`);
+      window.open(handleDoubanUrl({
+        href: url,
+        name: title,
+        text: shareText,
+        image: cover || '',
+      }));
     } else if (['qq', 'wechat'].includes(item.id)) {
       // qq、微信
       const qrcodeInfo = { name: item.name, url };
@@ -144,3 +150,27 @@ export const FShare = (props: {
     </>
   );
 };
+
+interface HandleDoubanUrlParams {
+  href: string;
+  name: string;
+  text: string;
+  image: string;
+}
+
+function handleDoubanUrl(params: HandleDoubanUrlParams): string {
+  // var _shareUrl = 'http://shuo.douban.com/!service/share?';
+  // _shareUrl += 'href=' + encodeURIComponent(url || location.href);//分享的链接
+  // _shareUrl += '&name=' + encodeURIComponent(title || document.title);//分享的标题
+  // _shareUrl += '&image=' + encodeURIComponent(pic || '');//分享的图片
+  // window.open(_shareUrl, '_blank');
+  // return `http://shuo.douban.com/!service/share?href=${encodeURIComponent(url)}&name=${encodeURIComponent(title)}&image=${encodeURIComponent(pic)}`;
+  // return `https://www.douban.com/share/service?url=${encodeURIComponent(url)}&title=${encodeURIComponent(title)}image=${encodeURIComponent(image)}`
+
+  const search: string = Object.entries(params)
+    .map((p) => {
+      return p[0] + '=' + encodeURIComponent(p[1]);
+    })
+    .join('&');
+  return `https://www.douban.com/share/service?${search}`;
+}
