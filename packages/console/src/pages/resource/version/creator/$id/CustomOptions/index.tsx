@@ -132,45 +132,48 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
               <Space size={20}>
                 <FTooltip title={FI18n.i18nNext.t('resourceinfo_add_btn_info')}>
                   <div>
-                    <FComponentsLib.FTextBtn
-                      style={{ fontSize: 12, fontWeight: 600 }}
-                      type='primary'
-                      onClick={async () => {
-                        const dataSource: {
-                          key: string;
-                          name: string;
-                          value: string;
-                          description: string;
-                        } | null = await fResourcePropertyEditor({
-                          disabledKeys: [
-                            ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
-                            ...resourceVersionCreatorPage.additionalProperties.map<string>((bp) => bp.key),
-                            ...resourceVersionCreatorPage.customProperties.map<string>((bp) => bp.key),
-                            ...resourceVersionCreatorPage.customConfigurations.map<string>((pp) => pp.key),
-                          ],
-                          disabledNames: [
-                            ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.name),
-                            ...resourceVersionCreatorPage.additionalProperties.map<string>((rp) => rp.name),
-                            ...resourceVersionCreatorPage.customProperties.map<string>((bp) => bp.name),
-                            ...resourceVersionCreatorPage.customConfigurations.map<string>((pp) => pp.name),
-                          ],
-                        });
-                        // console.log(dataSource, 'dataSource9iojskldjflksdjflk');
-                        if (!dataSource) {
-                          return;
-                        }
-
-                        await dispatch<OnChange_CustomProperties_Action>({
-                          type: 'resourceVersionCreatorPage/onChange_CustomProperties',
-                          payload: {
-                            value: [
-                              ...resourceVersionCreatorPage.customProperties,
-                              dataSource,
+                    {
+                      resourceVersionCreatorPage.customProperties.length < 30 && (<FComponentsLib.FTextBtn
+                        style={{ fontSize: 12, fontWeight: 600 }}
+                        type='primary'
+                        onClick={async () => {
+                          const dataSource: {
+                            key: string;
+                            name: string;
+                            value: string;
+                            description: string;
+                          } | null = await fResourcePropertyEditor({
+                            disabledKeys: [
+                              ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
+                              ...resourceVersionCreatorPage.additionalProperties.map<string>((bp) => bp.key),
+                              ...resourceVersionCreatorPage.customProperties.map<string>((bp) => bp.key),
+                              ...resourceVersionCreatorPage.customConfigurations.map<string>((pp) => pp.key),
                             ],
-                          },
-                        });
-                      }}
-                    >补充属性</FComponentsLib.FTextBtn>
+                            disabledNames: [
+                              ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.name),
+                              ...resourceVersionCreatorPage.additionalProperties.map<string>((rp) => rp.name),
+                              ...resourceVersionCreatorPage.customProperties.map<string>((bp) => bp.name),
+                              ...resourceVersionCreatorPage.customConfigurations.map<string>((pp) => pp.name),
+                            ],
+                          });
+                          // console.log(dataSource, 'dataSource9iojskldjflksdjflk');
+                          if (!dataSource) {
+                            return;
+                          }
+
+                          await dispatch<OnChange_CustomProperties_Action>({
+                            type: 'resourceVersionCreatorPage/onChange_CustomProperties',
+                            payload: {
+                              value: [
+                                ...resourceVersionCreatorPage.customProperties,
+                                dataSource,
+                              ],
+                            },
+                          });
+                        }}
+                      >补充属性</FComponentsLib.FTextBtn>)
+                    }
+
                   </div>
                 </FTooltip>
 
@@ -409,18 +412,24 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
             : (<div className={styles.options}>
               <div style={{ height: 20 }} />
               <div className={styles.optionsHeader}>
-                <FComponentsLib.FContentText text={'可选配置'} type={'highlight'} style={{ fontSize: 12 }} />
+                <FComponentsLib.FContentText
+                  text={'可选配置'}
+                  type={'highlight'}
+                  style={{ fontSize: 12 }}
+                />
 
                 <div>
                   <Space size={20}>
-                    <FComponentsLib.FTextBtn
-                      style={{ fontSize: 12, fontWeight: 600 }}
-                      type='primary'
-                      onClick={async () => {
-                        onClick_addOptionBtn();
-                      }}
-                    >添加配置</FComponentsLib.FTextBtn>
-
+                    {
+                      resourceVersionCreatorPage.customConfigurations.length < 30 && (<FComponentsLib.FTextBtn
+                        style={{ fontSize: 12, fontWeight: 600 }}
+                        type='primary'
+                        onClick={async () => {
+                          onClick_addOptionBtn();
+                        }}
+                      >添加配置</FComponentsLib.FTextBtn>)
+                    }
+                    
                     {
                       resourceVersionCreatorPage.preVersion_customConfigurations.length > 0 && (<FComponentsLib.FTextBtn
                         type='primary'
