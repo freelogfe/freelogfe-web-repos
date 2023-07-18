@@ -6,18 +6,16 @@ import FSwitch from '@/components/FSwitch';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import { ConnectState, NodeManagerModelState } from '@/models/connect';
-// import FInput from '@/components/FInput';
 import { history } from 'umi';
-// import FMenu from '@/components/FMenu';
 import { ColumnsType } from 'antd/lib/table/interface';
 import {
   FetchExhibitsAction,
-  // ChangeAction,
   OnChange_Exhibit_InputFilter_Action,
   OnChange_Exhibit_SelectedStatus_Action,
   OnChange_Exhibit_SelectedType_Action,
   OnLoadMore_ExhibitList_Action,
-  OnMount_ExhibitPage_Action, OnOnlineOrOfflineAction,
+  OnMount_ExhibitPage_Action,
+  OnOnlineOrOfflineAction,
   OnUnmount_ExhibitPage_Action,
 } from '@/models/nodeManagerPage';
 import { ChangeAction as DiscoverChangeAction } from '@/models/discoverPage';
@@ -34,7 +32,6 @@ import FCoverImage from '@/components/FCoverImage';
 import { Helmet } from 'react-helmet';
 import FComponentsLib from '@freelog/components-lib';
 import FResourceTypeFilter from '@/components/FResourceTypeFilter';
-// import FInput_Search from '@/components/FInput_Search';
 
 interface ExhibitsProps {
   dispatch: Dispatch;
@@ -233,7 +230,10 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
         {
           nodeManagerPage.exhibit_ListState !== 'noData' && (
             <div className={styles.header} style={{ padding: '0 20px', backgroundColor: '#fafbfc' }}>
-              <FComponentsLib.FTitleText type='h1' text={`展品管理 (${nodeManagerPage.exhibit_ListTotal})`} />
+              <FComponentsLib.FTitleText
+                type='h1'
+                text={`展品管理 ` + (nodeManagerPage.exhibit_ListTotal === -1 ? '' : `(${nodeManagerPage.exhibit_ListTotal})`)}
+              />
               <Space size={80}>
                 <div>
                   <span>{FI18n.i18nNext.t('resource_type')}：</span>
