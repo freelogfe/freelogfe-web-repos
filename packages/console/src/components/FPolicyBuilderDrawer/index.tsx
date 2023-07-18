@@ -1044,23 +1044,33 @@ function FPolicyBuilder({
                                             style={{ width: 120 }}
                                             value={et.payment_Amount || ''}
                                             onChange={(e) => {
-                                              const value: string = e.target.value;
-                                              if (Number.isNaN(Number(value))) {
-                                                return;
-                                              }
-                                              const valueNum: number = Number(value);
+                                              // const value: string = e.target.value;
+
+                                              //console.log(value, 'VVVVsid9ofjlaskdjfl;ksdjlfkjalsk');
+                                              onChangeCombinationEvent({
+                                                payment_Amount: e.target.value,
+                                              }, cd.randomID, et.randomID)
+
+
+                                            }}
+                                            onBlur={() => {
+                                              // if (Number.isNaN(Number(value))) {
+                                              //   return;
+                                              // }
+                                              const valueNum: number = Number.parseFloat(et.payment_Amount || '') || 0;
                                               let payment_AmountError: string = '';
-                                              if (value === '') {
+                                              if (et.payment_Amount === '') {
                                                 payment_AmountError = '请输入金额';
                                               } else if (valueNum <= 0) {
                                                 payment_AmountError = '必须大于0';
-                                              } else if (!new RegExp(/^\d+(\.\d{0,2})?$/).test(value)) {
+                                              // } else if (!new RegExp(/^\d+(\.\d{0,2})?$/).test(value)) {
+                                              } else if (!Number.isInteger(valueNum * 100)) {
                                                 payment_AmountError = '不超过2位小数';
                                               } else if (valueNum >= 1000000) {
                                                 payment_AmountError = FI18n.i18nNext.t('authplan_transactionevent_err_limitation');
                                               }
                                               onChangeCombinationEvent({
-                                                payment_Amount: e.target.value,
+                                                payment_Amount: String(valueNum),
                                                 payment_AmountError: payment_AmountError,
                                               }, cd.randomID, et.randomID);
                                             }}
