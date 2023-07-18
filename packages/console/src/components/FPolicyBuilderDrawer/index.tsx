@@ -681,7 +681,7 @@ function FPolicyBuilder({
         <FTooltip title={'点击查看帮助文档'}>
           <label
             onClick={() => {
-              window.open('https://www.yuque.com/taiyang-4rbf5/vctf9v/kl3f01');
+              self.open('https://www.yuque.com/taiyang-4rbf5/vctf9v/kl3f01');
             }}
             style={{
               cursor: 'pointer',
