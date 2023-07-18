@@ -11,14 +11,26 @@ interface EmptyAndCreateProps {
     target?: '_self' | '_blank';
 
     UmiLinkPatch?: any;
+
+    onSelect?(): void;
 }
 
-function EmptyAndCreate({tipText, btnText, btnHref, target = '_self', UmiLinkPatch}: EmptyAndCreateProps) {
+function EmptyAndCreate({tipText, btnText, btnHref, target = '_self', UmiLinkPatch, onSelect}: EmptyAndCreateProps) {
 
     return (<div className={styles.emptyDropdown}>
         <FComponentsLib.FContentText text={tipText}/>
         <div style={{height: 30}}/>
-        <AOrLink className={styles.Link} href={btnHref} target={target} UmiLinkPatch={UmiLinkPatch}>{btnText}</AOrLink>
+        <div onClick={() => {
+            // console.log('*******()(/sdlfjlsdfljjl')
+            onSelect && onSelect();
+        }}>
+            <AOrLink
+                className={styles.Link}
+                href={btnHref}
+                target={target}
+                UmiLinkPatch={UmiLinkPatch}
+            >{btnText}</AOrLink>
+        </div>
         {/*{*/}
         {/*    btnHref.startsWith('http')*/}
         {/*        ? (<a className={styles.Link} href={btnHref} target={target}>{btnText}</a>)*/}

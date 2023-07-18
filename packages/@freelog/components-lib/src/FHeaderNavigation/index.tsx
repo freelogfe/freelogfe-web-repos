@@ -105,41 +105,12 @@ function FHeaderNavigation({
                         {
                             menu.map((m) => {
                                 // console.log(m, 'm.emptyItemsTip3fsdfasdfsd');
-                                return (<FComponentsLib.FDropdown
-                                    key={m.id}
-                                    disabled={m.items.length === 0 && !m.emptyItemsTip}
-                                    overlay={m.items.length === 0 && m.emptyItemsTip
-                                        ? <EmptyAndCreate UmiLinkPatch={UmiLinkPatch} {...m.emptyItemsTip} />
-                                        : <NavList
-                                            items={m.items}
-                                            createBtn={m.createBtn}
-                                            activeID={activeIDs[1]}
-                                            UmiLinkPatch={UmiLinkPatch}
-                                        />}
-                                >
-                                    {
-                                        m.id === 'discover' && showHotspotTooltip
-                                            ? (<FHotspotTooltip
-                                                id={'header.discoverNav'}
-                                                style={{left: '50%', marginLeft: -16, bottom: -20}}
-                                                text={FI18n.i18nNext.t('hotpots_myresource_nav_explore')}
-                                            >
-                                                <AOrLink
-                                                    href={m.href}
-                                                    target={m.target}
-                                                    className={[styles.NavLink, activeIDs[0] === m.id ? styles.activated : ''].join(' ')}
-                                                    UmiLinkPatch={UmiLinkPatch}
-                                                ><span>{m.text}</span></AOrLink>
-                                            </FHotspotTooltip>)
-                                            : (<AOrLink
-                                                href={m.href}
-                                                target={m.target}
-                                                className={[styles.NavLink, activeIDs[0] === m.id ? styles.activated : ''].join(' ')}
-                                                UmiLinkPatch={UmiLinkPatch}
-                                            ><span>{m.text}</span></AOrLink>)
-                                    }
-
-                                </FComponentsLib.FDropdown>);
+                                return (<MenuDropdown
+                                    m={m}
+                                    activeIDs={activeIDs}
+                                    UmiLinkPatch={UmiLinkPatch}
+                                    showHotspotTooltip={showHotspotTooltip || false}
+                                />)
 
                             })
                         }
@@ -216,3 +187,64 @@ function FHeaderNavigation({
 }
 
 export default FHeaderNavigation;
+
+interface MenuDropdownProps {
+    m: NonNullable<FHeaderNavigationProps['menu']>[number];
+    UmiLinkPatch: any;
+    activeIDs: NonNullable<FHeaderNavigationProps['activeIDs']>;
+    showHotspotTooltip: NonNullable<FHeaderNavigationProps['showHotspotTooltip']>
+}
+
+function MenuDropdown({m, UmiLinkPatch, activeIDs, showHotspotTooltip}: MenuDropdownProps) {
+
+    const [visible, set_visible] = React.useState<boolean>(false);
+
+    return (<FComponentsLib.FDropdown
+        visible={visible}
+        onVisibleChange={(v) => {
+            set_visible(v);
+        }}
+        key={m.id}
+        disabled={m.items.length === 0 && !m.emptyItemsTip}
+        overlay={m.items.length === 0 && m.emptyItemsTip
+            ? <EmptyAndCreate
+                UmiLinkPatch={UmiLinkPatch}
+                {...m.emptyItemsTip}
+                onSelect={() => {
+                    set_visible(false);
+                }}
+            />
+            : <NavList
+                items={m.items}
+                createBtn={m.createBtn}
+                activeID={activeIDs[1]}
+                UmiLinkPatch={UmiLinkPatch}
+                onSelect={() => {
+                    set_visible(false);
+                }}
+            />}
+    >
+        {
+            m.id === 'discover' && showHotspotTooltip
+                ? (<FHotspotTooltip
+                    id={'header.discoverNav'}
+                    style={{left: '50%', marginLeft: -16, bottom: -20}}
+                    text={FI18n.i18nNext.t('hotpots_myresource_nav_explore')}
+                >
+                    <AOrLink
+                        href={m.href}
+                        target={m.target}
+                        className={[styles.NavLink, activeIDs[0] === m.id ? styles.activated : ''].join(' ')}
+                        UmiLinkPatch={UmiLinkPatch}
+                    ><span>{m.text}</span></AOrLink>
+                </FHotspotTooltip>)
+                : (<AOrLink
+                    href={m.href}
+                    target={m.target}
+                    className={[styles.NavLink, activeIDs[0] === m.id ? styles.activated : ''].join(' ')}
+                    UmiLinkPatch={UmiLinkPatch}
+                ><span>{m.text}</span></AOrLink>)
+        }
+
+    </FComponentsLib.FDropdown>);
+}
