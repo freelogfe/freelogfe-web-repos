@@ -83,7 +83,7 @@ function Sider({ storageHomePage, dispatch }: SiderProps) {
                       bucketName: b.bucketName,
                     })}
                   >
-                    <span>{b.bucketName}</span>
+                    <div style={{ maxWidth: 140, overflowWrap: 'break-word' }}>{b.bucketName}</div>
                     <FTooltip
                       title={FI18n.i18nNext.t('tip_delete')}
                       // arrowPointAtCenter={true}
