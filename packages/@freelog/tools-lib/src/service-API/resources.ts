@@ -605,11 +605,11 @@ export function getResourceTypeInfoByCode({...params}: GetResourceTypeInfoByCode
 }
 
 //
-interface GetResourceAttrListSimple {
+interface GetResourceAttrListSimpleParamsType {
 
 }
 
-export function getResourceAttrListSimple({...params}: GetResourceAttrListSimple) {
+export function getResourceAttrListSimple({...params}: GetResourceAttrListSimpleParamsType) {
   return FUtil.Request({
     method: 'GET',
     url: `/v2/resources/attrs/listSimple`,
@@ -617,14 +617,27 @@ export function getResourceAttrListSimple({...params}: GetResourceAttrListSimple
   });
 }
 
-interface ListSimple4RecentlySimple {
+interface ListSimple4RecentlyParamsType {
 
 }
 
-export function listSimple4Recently({...params}: ListSimple4RecentlySimple = {}) {
+export function listSimple4Recently({...params}: ListSimple4RecentlyParamsType = {}) {
   return FUtil.Request({
     method: 'GET',
     url: `/v2/resources/types/listSimple4Recently`,
+    params: params,
+  });
+}
+
+// 通过key取资源属性
+interface GetAttrsInfoByKeyParamsType {
+  key: string;
+}
+
+export function getAttrsInfoByKey({...params}: GetAttrsInfoByKeyParamsType) {
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/resources/attrs/getInfoByKey`,
     params: params,
   });
 }
