@@ -24,6 +24,8 @@ export interface UserModelState {
     username: string;
   };
   // cookiesUserID: number;
+  // switchedUserShow: boolean;
+  // notLoginShow: boolean;
 }
 
 export interface ChangeAction extends AnyAction {
@@ -60,11 +62,16 @@ export interface MarketModelType {
   };
 }
 
+let switchedUserShow: boolean = false;
+let notLoginShow: boolean = false;
+
 const Model: MarketModelType = {
   namespace: 'user',
   state: {
     info: null,
     // cookiesUserID: -1,
+    // switchedUserShow: false,
+    // notLoginShow: false,
   },
   effects: {
     * fetchUserInfo({}: FetchUserInfoAction, { call, put }: EffectsCommandMap) {
@@ -116,12 +123,14 @@ const Model: MarketModelType = {
         userPermission.check()
           .then((code) => {
             // console.log(code, '###3098usdoikfjsldkfjl lsjdflkjsdl');
-            if (code === 'ERR_SWITCHED_USER' && !document.hidden) {
-              co(FI18n.i18nNext.t('msg_account_switched'));
+            if (code === 'ERR_SWITCHED_USER' && !document.hidden && !switchedUserShow) {
+              switchedUserShow = true;
+              fConfirmModalFunc(FI18n.i18nNext.t('msg_account_switched'));
             }
 
-            if (code === 'ERR_NOT_LOGIN' && !document.hidden) {
-              co('用户已登出');
+            if (code === 'ERR_NOT_LOGIN' && !document.hidden && !notLoginShow) {
+              notLoginShow = true;
+              fConfirmModalFunc('用户已登出');
             }
           });
       });
@@ -150,10 +159,10 @@ const Model: MarketModelType = {
 
 export default Model;
 
-function co(message: string) {
+function fConfirmModalFunc(message: string) {
   fConfirmModal({
     afterClose() {
-      co(message);
+      fConfirmModalFunc(message);
     },
     onOk() {
       window.location.reload();
