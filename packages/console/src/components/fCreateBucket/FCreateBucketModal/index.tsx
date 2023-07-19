@@ -25,6 +25,8 @@ function FCreateBucketModal({ onOk, onClose }: FCreateBucketModalProps) {
     okButtonProps={{
       disabled: newBucketName === '' || newBucketNameError !== '',
     }}
+    okText={FI18n.i18nNext.t('btn_done')}
+    // cancelText={FI18n.i18nNext.t('btn_cancel')}
     cancelText={FI18n.i18nNext.t('btn_cancel')}
     onOk={async () => {
       const params: Parameters<typeof FServiceAPI.Storage.createBucket>[0] = {
