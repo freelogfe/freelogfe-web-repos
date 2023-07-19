@@ -354,9 +354,7 @@ function Contract({ dispatch, contractPage }: ContractProps) {
       },
     },
     {
-      title: (
-        <FComponentsLib.FTitleText type='table' text={'授权方 | 被授权方'} />
-      ),
+      title: (<FComponentsLib.FTitleText type='table' text={'授权方 | 被授权方'} />),
       dataIndex: 'signatory',
       key: 'signatory',
       render(_: any, record) {

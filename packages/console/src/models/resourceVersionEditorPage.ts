@@ -230,6 +230,7 @@ const Model: ResourceVersionEditorModelType = {
       const params: Parameters<typeof FServiceAPI.Resource.updateResourceVersionInfo>[0] = {
         ...baseInfo,
         ...action.payload,
+        inputAttrs: action.payload.inputAttrs || [],
       };
       yield call(FServiceAPI.Resource.updateResourceVersionInfo, params);
       yield put<FetchDataSourceAction>({

@@ -31,7 +31,7 @@ function Bind() {
     wait: 300,
   });
 
-  const loginNameChange = async () => {
+  async function loginNameChange() {
 
     let loginNameError: string = '';
     const val: string = bindData.loginName;
@@ -41,17 +41,17 @@ function Bind() {
       // loginNameError = '不能超过30字符';
       loginNameError = FI18n.i18nNext.t('signup_alarm_username_length');
     } else if (!FUtil.Regexp.USERNAME.test(val)) {
-      loginNameError =
-        '用户名只能使用小写字母、数字或短横线（-）；必须以小写字母或数字开头和结尾';
+      // loginNameError = '用户名只能使用小写字母、数字或短横线（-）；必须以小写字母或数字开头和结尾';
+      loginNameError = FI18n.i18nNext.t('naming_convention_user_name');
     } else if (FUtil.Regexp.MOBILE_PHONE_NUMBER.test(val)) {
       loginNameError = '用户名不能是手机号';
     }
 
     if (!loginNameError) {
-      const params: Parameters<typeof FServiceAPI.User.thirdPartyIsBind>[0] = {
-        username: val,
-        thirdPartyType: 'weChat',
-      };
+      // const params: Parameters<typeof FServiceAPI.User.thirdPartyIsBind>[0] = {
+      //   username: val,
+      //   thirdPartyType: 'weChat',
+      // };
       // const { data } = await FServiceAPI.User.thirdPartyIsBind(params);
       // console.log(data);
       // if (data.data) {
@@ -70,9 +70,9 @@ function Bind() {
       // loginName: val,
       loginNameError,
     });
-  };
+  }
 
-  const passwordChange = (val: string) => {
+  function passwordChange(val: string) {
     let passwordError: string = '';
     if (!val) {
       passwordError = '密码不能为空';
@@ -86,7 +86,7 @@ function Bind() {
       password: val,
       passwordError,
     });
-  };
+  }
 
   async function submit() {
     const data = await FServiceAPI.User.registerOrBind({
@@ -143,9 +143,9 @@ function Bind() {
                   });
                 }}
               />
-              {bindData.loginNameError && (
-                <div className={styles.errorTip}>{bindData.loginNameError}</div>
-              )}
+              {
+                bindData.loginNameError && (<div className={styles.errorTip}>{bindData.loginNameError}</div>)
+              }
 
               <div style={{ height: 20 }} />
               <div
