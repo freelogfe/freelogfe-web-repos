@@ -127,7 +127,11 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
           <div style={{ height: 20 }} />
           <div className={styles.attributesHeader}>
             {/*<span>基础属性</span>*/}
-            <FComponentsLib.FContentText text={'基础属性'} type={'highlight'} style={{ fontSize: 12 }} />
+            <FComponentsLib.FContentText
+              text={'基础属性'}
+              type={'highlight'}
+              style={{ fontSize: 12 }}
+            />
             <div>
               <Space size={20}>
                 <FTooltip title={FI18n.i18nNext.t('resourceinfo_add_btn_info')}>
@@ -173,12 +177,12 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                         }}
                       >补充属性</FComponentsLib.FTextBtn>)
                     }
-
                   </div>
                 </FTooltip>
 
                 {
-                  (resourceVersionCreatorPage.preVersion_additionalProperties.length > 0 || resourceVersionCreatorPage.preVersion_customProperties.length > 0) &&
+                  (resourceVersionCreatorPage.preVersion_additionalProperties.length > 0
+                    || resourceVersionCreatorPage.preVersion_customProperties.length > 0) &&
                   (<FComponentsLib.FTextBtn
                     style={{ fontSize: 12, fontWeight: 600 }}
                     type='primary'
@@ -286,6 +290,7 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
             onlyEditValueData={resourceVersionCreatorPage.additionalProperties}
             alterableData={resourceVersionCreatorPage.customProperties}
             onEdit_onlyEditValueData={async (value) => {
+              console.log(value, 'value sidjfoikjo sd value sdiofjlkj');
               const index: number = resourceVersionCreatorPage.additionalProperties.findIndex((p) => {
                 return p === value;
               });
@@ -429,7 +434,7 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                         }}
                       >添加配置</FComponentsLib.FTextBtn>)
                     }
-                    
+
                     {
                       resourceVersionCreatorPage.preVersion_customConfigurations.length > 0 && (<FComponentsLib.FTextBtn
                         type='primary'

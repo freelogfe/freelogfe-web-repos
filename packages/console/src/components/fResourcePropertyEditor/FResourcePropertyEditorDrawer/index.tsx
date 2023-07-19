@@ -3,7 +3,7 @@ import styles from './index.less';
 import FDrawer from '@/components/FDrawer';
 import { Space } from 'antd';
 import FComponentsLib from '@freelog/components-lib';
-// import FInput from '@/components/FInput';
+import * as AHooks from 'ahooks';
 import { FI18n, FUtil } from '@freelog/tools-lib';
 
 interface FResourcePropertyEditorDrawerProps {
@@ -62,21 +62,31 @@ function FResourcePropertyEditorDrawer({
                                          onClose,
                                        }: FResourcePropertyEditorDrawerProps) {
 
-  const [visible, set_visible] = React.useState<FResourcePropertyEditorDrawerStates['visible']>(initStates['visible']);
-  const [nameInput, set_nameInput] = React.useState<FResourcePropertyEditorDrawerStates['nameInput']>(initStates['nameInput']);
-  const [nameInputError, set_nameInputError] = React.useState<FResourcePropertyEditorDrawerStates['nameInputError']>(initStates['nameInputError']);
-  const [keyInput, set_keyInput] = React.useState<FResourcePropertyEditorDrawerStates['keyInput']>(initStates['keyInput']);
-  const [keyInputError, set_keyInputError] = React.useState<FResourcePropertyEditorDrawerStates['keyInputError']>(initStates['keyInputError']);
-  const [valueInput, set_valueInput] = React.useState<FResourcePropertyEditorDrawerStates['valueInput']>(initStates['valueInput']);
-  const [valueInputError, set_valueInputError] = React.useState<FResourcePropertyEditorDrawerStates['valueInputError']>(initStates['valueInputError']);
-  const [descriptionInput, set_descriptionInput] = React.useState<FResourcePropertyEditorDrawerStates['descriptionInput']>(initStates['descriptionInput']);
-  const [descriptionInputError, set_descriptionInputError] = React.useState<FResourcePropertyEditorDrawerStates['descriptionInputError']>(initStates['descriptionInputError']);
+  const [$state, $setState] = AHooks.useSetState<FResourcePropertyEditorDrawerStates>(initStates);
+  // const [visible, set_visible] = React.useState<FResourcePropertyEditorDrawerStates['visible']>(initStates['visible']);
+  // const [nameInput, set_nameInput] = React.useState<FResourcePropertyEditorDrawerStates['nameInput']>(initStates['nameInput']);
+  // const [nameInputError, set_nameInputError] = React.useState<FResourcePropertyEditorDrawerStates['nameInputError']>(initStates['nameInputError']);
+  // const [keyInput, set_keyInput] = React.useState<FResourcePropertyEditorDrawerStates['keyInput']>(initStates['keyInput']);
+  // const [keyInputError, set_keyInputError] = React.useState<FResourcePropertyEditorDrawerStates['keyInputError']>(initStates['keyInputError']);
+  // const [valueInput, set_valueInput] = React.useState<FResourcePropertyEditorDrawerStates['valueInput']>(initStates['valueInput']);
+  // const [valueInputError, set_valueInputError] = React.useState<FResourcePropertyEditorDrawerStates['valueInputError']>(initStates['valueInputError']);
+  // const [descriptionInput, set_descriptionInput] = React.useState<FResourcePropertyEditorDrawerStates['descriptionInput']>(initStates['descriptionInput']);
+  // const [descriptionInputError, set_descriptionInputError] = React.useState<FResourcePropertyEditorDrawerStates['descriptionInputError']>(initStates['descriptionInputError']);
 
   function initData() {
-    set_keyInput(defaultData?.key || '');
-    set_nameInput(defaultData?.name || '');
-    set_valueInput(defaultData?.value || '');
-    set_descriptionInput(defaultData?.description || '');
+    // set_keyInput(defaultData?.key || '');
+    // set_nameInput(defaultData?.name || '');
+    // set_valueInput(defaultData?.value || '');
+    // set_descriptionInput(defaultData?.description || '');
+    if (!defaultData) {
+      return;
+    }
+    $setState({
+      keyInput: defaultData?.key || '',
+      nameInput: defaultData?.name || '',
+      valueInput: defaultData?.value || '',
+      descriptionInput: defaultData?.description || '',
+    });
   }
 
   // console.log(valueAcceptNull, 'valueAcceptNullisdojfl asdiofjlk jlk')
@@ -85,12 +95,16 @@ function FResourcePropertyEditorDrawer({
     // title={defaultData ? '编辑基础属性' : '补充属性'}
     title={defaultData ? FI18n.i18nNext.t('resourceinfo_edit_title') : FI18n.i18nNext.t('resourceinfo_add_title')}
     onClose={() => {
-      set_visible(false);
+      // set_visible(false);
+      $setState({
+        visible: false,
+      });
     }}
-    open={visible}
+    open={$state.visible}
     width={580}
     afterOpenChange={(v) => {
       if (!v) {
+        // $setState(initStates);
         onClose && onClose();
       } else {
         initData();
@@ -100,24 +114,30 @@ function FResourcePropertyEditorDrawer({
       <FComponentsLib.FTextBtn
         type='default'
         onClick={() => {
-          set_visible(false);
+          // set_visible(false);
+          $setState({
+            visible: false,
+          });
         }}
       >{FI18n.i18nNext.t('btn_cancel')}</FComponentsLib.FTextBtn>
 
       <FComponentsLib.FRectBtn
         type='primary'
-        disabled={nameInput === '' || nameInputError !== ''
-        || keyInput === '' || keyInputError !== ''
-        || descriptionInputError !== ''
-        || (!valueAcceptNull && valueInput === '') || valueInputError !== ''}
+        disabled={$state.nameInput === '' || $state.nameInputError !== ''
+        || $state.keyInput === '' || $state.keyInputError !== ''
+        || $state.descriptionInputError !== ''
+        || (!valueAcceptNull && $state.valueInput === '') || $state.valueInputError !== ''}
         onClick={async () => {
           onOk && onOk({
-            key: keyInput,
-            name: nameInput,
-            value: valueInput,
-            description: descriptionInput,
+            key: $state.keyInput,
+            name: $state.nameInput,
+            value: $state.valueInput,
+            description: $state.descriptionInput,
           });
-          set_visible(false);
+          // set_visible(false);
+          $setState({
+            visible: false,
+          });
         }}
       >{FI18n.i18nNext.t('btn_save')}</FComponentsLib.FRectBtn>
     </Space>}
@@ -145,7 +165,7 @@ function FResourcePropertyEditorDrawer({
           // placeholder={'输入属性名称'}
           placeholder={FI18n.i18nNext.t('resourceinfo_add_input_name_hint')}
           disabled={noneEditableFields.includes('name')}
-          value={nameInput}
+          value={$state.nameInput}
           className={styles.input}
           onChange={(e) => {
             const value: string = e.target.value;
@@ -161,14 +181,20 @@ function FResourcePropertyEditorDrawer({
             // else if (!FUtil.Regexp.CUSTOM_KEY.test(value)) {
             //   errorText = `不符合${FUtil.Regexp.CUSTOM_KEY}`;
             // }
-            set_nameInput(value);
-            set_nameInputError(errorText);
+            // set_nameInput(value);
+            // set_nameInputError(errorText);
+            $setState({
+              nameInput: value,
+              nameInputError: errorText,
+            });
           }}
         />
-        {nameInputError && (<>
-          <div style={{ height: 5 }} />
-          <div className={styles.errorTip}>{nameInputError}</div>
-        </>)}
+        {
+          $state.nameInputError && (<>
+            <div style={{ height: 5 }} />
+            <div className={styles.errorTip}>{$state.nameInputError}</div>
+          </>)
+        }
       </div>
 
       <div className={styles.input}>
@@ -188,7 +214,7 @@ function FResourcePropertyEditorDrawer({
           // disabled={true}
           // placeholder={'输入key'}
           placeholder={FI18n.i18nNext.t('resourceinfo_add_input_key_hint')}
-          value={keyInput}
+          value={$state.keyInput}
           disabled={noneEditableFields.includes('key')}
           className={styles.input}
           onChange={(e) => {
@@ -207,14 +233,20 @@ function FResourcePropertyEditorDrawer({
               // errorText = `不符合${FUtil.Regexp.CUSTOM_KEY}`;
               errorText = FI18n.i18nNext.t('alert_naming_convention_key');
             }
-            set_keyInput(value);
-            set_keyInputError(errorText);
+            // set_keyInput(value);
+            // set_keyInputError(errorText);
+            $setState({
+              keyInput: value,
+              keyInputError: errorText,
+            });
           }}
         />
-        {keyInputError && (<>
-          <div style={{ height: 5 }} />
-          <div className={styles.errorTip}>{keyInputError}</div>
-        </>)}
+        {
+          $state.keyInputError && (<>
+            <div style={{ height: 5 }} />
+            <div className={styles.errorTip}>{$state.keyInputError}</div>
+          </>)
+        }
       </div>
 
       <div className={styles.input}>
@@ -234,7 +266,7 @@ function FResourcePropertyEditorDrawer({
         <div style={{ height: 5 }} />
         <FComponentsLib.FInput.FSingleLine
           lengthLimit={-1}
-          value={descriptionInput}
+          value={$state.descriptionInput}
           // errorText={resourceVersionEditorPage.basePDescriptionInputError}
           className={styles.input}
           disabled={noneEditableFields.includes('description')}
@@ -249,16 +281,22 @@ function FResourcePropertyEditorDrawer({
             //   value,
             //   errorText,
             // });
-            set_descriptionInput(value);
-            set_descriptionInputError(errorText);
+            // set_descriptionInput(value);
+            // set_descriptionInputError(errorText);
+            $setState({
+              descriptionInput: value,
+              descriptionInputError: errorText,
+            });
           }}
           // placeholder={'输入属性说明'}
           placeholder={FI18n.i18nNext.t('resourceinfo_add_input_desc_hint')}
         />
-        {descriptionInputError && (<>
-          <div style={{ height: 5 }} />
-          <div className={styles.errorTip}>{descriptionInputError}</div>
-        </>)}
+        {
+          $state.descriptionInputError && (<>
+            <div style={{ height: 5 }} />
+            <div className={styles.errorTip}>{$state.descriptionInputError}</div>
+          </>)
+        }
       </div>
 
       <div className={styles.input}>
@@ -275,7 +313,7 @@ function FResourcePropertyEditorDrawer({
         <div style={{ height: 5 }} />
         <FComponentsLib.FInput.FSingleLine
           lengthLimit={-1}
-          value={valueInput}
+          value={$state.valueInput}
           className={styles.input}
           disabled={noneEditableFields.includes('value')}
           onChange={(e) => {
@@ -291,16 +329,22 @@ function FResourcePropertyEditorDrawer({
             //   value,
             //   errorText,
             // });
-            set_valueInput(value);
-            set_valueInputError(errorText);
+            // set_valueInput(value);
+            // set_valueInputError(errorText);
+            $setState({
+              valueInput: value,
+              valueInputError: errorText,
+            });
           }}
           // placeholder={'输入value'}
           placeholder={FI18n.i18nNext.t('resourceinfo_add_input_value_hint')}
         />
-        {valueInputError && (<>
-          <div style={{ height: 5 }} />
-          <div className={styles.errorTip}>{valueInputError}</div>
-        </>)}
+        {
+          $state.valueInputError && (<>
+            <div style={{ height: 5 }} />
+            <div className={styles.errorTip}>{$state.valueInputError}</div>
+          </>)
+        }
       </div>
 
 
