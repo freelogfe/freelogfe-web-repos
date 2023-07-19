@@ -50,7 +50,8 @@ function Contract({ dispatch, contractPage }: ContractProps) {
     nodeName: string;
   }>();
 
-  const [keywordsInput, set_keywordsInput] = React.useState<string>('');
+  const [keywordsInput1, set_keywordsInput1] = React.useState<string>('');
+  const [keywordsInput2, set_keywordsInput2] = React.useState<string>('');
 
   AHooks.useMount(() => {
     if (urlParams.exhibitId) {
@@ -75,13 +76,24 @@ function Contract({ dispatch, contractPage }: ContractProps) {
   });
 
   AHooks.useDebounceEffect(() => {
+    dispatch<OnChange_Authorize_KeywordsInput_Action>({
+      type: 'contractPage/onChange_Authorize_KeywordsInput',
+      payload: {
+        value: keywordsInput1,
+      },
+    });
+  }, [keywordsInput1], {
+    wait: 300,
+  });
+
+  AHooks.useDebounceEffect(() => {
     dispatch<OnChange_Authorized_KeywordsInput_Action>({
       type: 'contractPage/onChange_Authorized_KeywordsInput',
       payload: {
-        value: keywordsInput,
+        value: keywordsInput2,
       },
     });
-  }, [keywordsInput], {
+  }, [keywordsInput2], {
     wait: 300,
   });
 
@@ -565,20 +577,19 @@ function Contract({ dispatch, contractPage }: ContractProps) {
                       />
                     </Space>
                   </Space>
-                  <FInput
+                  <FComponentsLib.FInput.FSearch
+                    lengthLimit={-1}
+                    value={keywordsInput1}
                     className={styles.filterInput}
-                    wrapClassName={styles.filterInput}
-                    theme='dark'
-                    debounce={300}
-                    onDebounceChange={(value) => {
-                      dispatch<OnChange_Authorize_KeywordsInput_Action>({
-                        type: 'contractPage/onChange_Authorize_KeywordsInput',
-                        payload: {
-                          value: value,
-                        },
-                      });
+                    // wrapClassName={styles.filterInput}
+                    // theme='dark'
+                    // debounce={300}
+                    onChange={(e) => {
+
+                      set_keywordsInput1(e.target.value);
                     }}
-                    placeholder={FI18n.i18nNext.t('mycontracts_search_contracts_hint')}
+                    // placeholder={FI18n.i18nNext.t('mycontracts_search_contracts_hint')}
+                    placeholder={FI18n.i18nNext.t('contractmngt_search_hint')}
                   />
                 </div>
                 {contractPage.authorize_ListState === 'loading' && (
@@ -705,14 +716,14 @@ function Contract({ dispatch, contractPage }: ContractProps) {
                     </Space>
                   </Space>
                   <FComponentsLib.FInput.FSearch
-                    value={keywordsInput}
+                    value={keywordsInput2}
                     lengthLimit={-1}
                     className={styles.filterInput}
                     // wrapClassName={styles.filterInput}
                     // theme='dark'
                     // debounce={300}
                     onChange={(e) => {
-                      set_keywordsInput(e.target.value);
+                      set_keywordsInput2(e.target.value);
                     }}
                     placeholder={FI18n.i18nNext.t('contractmngt_search_hint')}
                   />
