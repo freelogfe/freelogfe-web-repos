@@ -46,7 +46,8 @@ function Storage({ match, history, storageHomePage, storageObjectEditor, dispatc
       const bucketName: string | null = await fCreateBucket();
       if (!bucketName) {
         history.replace(FUtil.LinkTo.storageSpace({
-          bucketName: storageHomePage.activatedBucket,
+          // bucketName: storageHomePage.activatedBucket,
+          bucketName: (history.location as any).query.bucketName,
         }));
         return;
       }

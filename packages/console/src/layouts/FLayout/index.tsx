@@ -15,6 +15,8 @@ import { FServiceAPI, FUtil, FI18n } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 import * as AHooks from 'ahooks';
 
+// import useUrlState from '@ahooksjs/use-url-state';
+
 interface FLayoutProps extends RouteComponentProps {
   router: {
     location: Location;
@@ -48,7 +50,8 @@ function FLayout({
                  }: FLayoutProps) {
   // console.log(global, 'global09234jl23kl');
   // const [activeIDs, set_ActiveIDs] = React.useState<[string, string]>(['', '']);
-
+  // const [urlState] = useUrlState<any>();
+  // console.log(urlState, 'urlState09sodujfoksdjflksdjlkjl');
   const [$state, $setState] = AHooks.useSetState<FLayoutStates>(initState);
 
   React.useEffect(() => {
@@ -155,7 +158,7 @@ function FLayout({
               href: FUtil.LinkTo.storageSpace({
                 bucketName:
                   storageHomePage.bucketList && storageHomePage.bucketList.length > 0
-                    ? storageHomePage.bucketList[0].bucketName
+                    ? $state.activeIDs[0] === 'storage' ? $state.activeIDs[1] : storageHomePage.bucketList[0].bucketName
                     : '',
                 createBucket: true,
               }),
