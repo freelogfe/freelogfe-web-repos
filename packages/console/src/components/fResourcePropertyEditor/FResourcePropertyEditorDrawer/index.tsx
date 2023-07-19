@@ -4,7 +4,7 @@ import FDrawer from '@/components/FDrawer';
 import { Space } from 'antd';
 import FComponentsLib from '@freelog/components-lib';
 import * as AHooks from 'ahooks';
-import { FI18n, FUtil } from '@freelog/tools-lib';
+import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
 
 interface FResourcePropertyEditorDrawerProps {
   disabledKeys: string[];
@@ -73,7 +73,7 @@ function FResourcePropertyEditorDrawer({
   // const [descriptionInput, set_descriptionInput] = React.useState<FResourcePropertyEditorDrawerStates['descriptionInput']>(initStates['descriptionInput']);
   // const [descriptionInputError, set_descriptionInputError] = React.useState<FResourcePropertyEditorDrawerStates['descriptionInputError']>(initStates['descriptionInputError']);
 
-  function initData() {
+  async function initData() {
     // set_keyInput(defaultData?.key || '');
     // set_nameInput(defaultData?.name || '');
     // set_valueInput(defaultData?.value || '');
@@ -82,11 +82,18 @@ function FResourcePropertyEditorDrawer({
       return;
     }
     $setState({
-      keyInput: defaultData?.key || '',
-      nameInput: defaultData?.name || '',
-      valueInput: defaultData?.value || '',
-      descriptionInput: defaultData?.description || '',
+      keyInput: defaultData.key,
+      nameInput: defaultData.name,
+      valueInput: defaultData.value,
+      descriptionInput: defaultData.description,
     });
+
+    const params: Parameters<typeof FServiceAPI.Resource.getAttrsInfoByKey>[0] = {
+      key: defaultData.key,
+    };
+
+    const { ret, errCode, msg, data } = await FServiceAPI.Resource.getAttrsInfoByKey(params);
+    console.log(data, 'sd9iofjsdlifjljlkjl');
   }
 
   // console.log(valueAcceptNull, 'valueAcceptNullisdojfl asdiofjlk jlk')

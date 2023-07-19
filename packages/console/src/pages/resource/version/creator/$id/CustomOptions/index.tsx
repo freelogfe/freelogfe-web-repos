@@ -290,7 +290,7 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
             onlyEditValueData={resourceVersionCreatorPage.additionalProperties}
             alterableData={resourceVersionCreatorPage.customProperties}
             onEdit_onlyEditValueData={async (value) => {
-              console.log(value, 'value sidjfoikjo sd value sdiofjlkj');
+              // console.log(value, 'value sidjfoikjo sd value sdiofjlkj');
               const index: number = resourceVersionCreatorPage.additionalProperties.findIndex((p) => {
                 return p === value;
               });
