@@ -1,10 +1,11 @@
 import * as React from 'react';
 import styles from './index.less';
 import FDrawer from '@/components/FDrawer';
-import { Space } from 'antd';
+import { DatePicker, Space } from 'antd';
 import FComponentsLib from '@freelog/components-lib';
 import * as AHooks from 'ahooks';
 import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
+import moment from 'moment';
 
 interface FResourcePropertyEditorDrawerProps {
   disabledKeys: string[];
@@ -34,6 +35,18 @@ interface FResourcePropertyEditorDrawerStates {
   nameInputError: string;
   keyInput: string;
   keyInputError: string;
+  valueFormat: {
+    format: 'textInput' | 'textArea' | 'integer' | 'decimal' | 'date' | 'dataTime';
+    minLength?: number;
+    maxLength?: number;
+    startDate?: string;
+    limitDate?: string;
+    min?: number;
+    max?: number;
+    minDecimal?: number;
+    maxDecimal?: number;
+    precision?: number;
+  } | null;
   valueInput: string;
   valueInputError: string;
   descriptionInput: string;
@@ -46,11 +59,21 @@ const initStates: FResourcePropertyEditorDrawerStates = {
   nameInputError: '',
   keyInput: '',
   keyInputError: '',
+  valueFormat: null,
   valueInput: '',
   valueInputError: '',
   descriptionInput: '',
   descriptionInputError: '',
 };
+
+enum FormatEnum {
+  textInput = 1,
+  textArea = 7,
+  integer = 8,
+  decimal = 9,
+  date = 4,
+  dataTime = 5,
+}
 
 function FResourcePropertyEditorDrawer({
                                          disabledKeys,
@@ -92,8 +115,32 @@ function FResourcePropertyEditorDrawer({
       key: defaultData.key,
     };
 
-    const { ret, errCode, msg, data } = await FServiceAPI.Resource.getAttrsInfoByKey(params);
-    console.log(data, 'sd9iofjsdlifjljlkjl');
+    const { ret, errCode, msg, data }: {
+      ret: number;
+      errCode: number;
+      msg: string;
+      data: null | {
+        format: 1 | 2 | 3 | 4 | 5 | 7; //	值格式 1：文本 2：数值 3：时间 4：日期 5：日期和时间 7: 多行文本 8: 整数 9: 小数
+        contentRule?:
+          { minLength?: number; maxLength?: number; } // 1：文本  7: 多行文本
+          | { startDate?: string; limitDate?: string; } // 4：日期 5：日期和时间
+          | { min?: number; max?: number; } // 8: 整数
+          | { minDecimal?: number; maxDecimal?: number; precision?: number; }; // 9: 小数
+      }
+    } = await FServiceAPI.Resource.getAttrsInfoByKey(params);
+    // console.log(data, 'sd9iofjsdlifjljlkjl');
+
+    if (!data) {
+      return;
+    }
+
+    $setState({
+      valueFormat: {
+        format: FormatEnum[data.format] as 'textInput',
+        ...(data.contentRule || {}),
+      },
+    });
+    // console.log(FormatEnum, 'contentRulesiodjflkj dsaflsjdlkfj l ');
   }
 
   // console.log(valueAcceptNull, 'valueAcceptNullisdojfl asdiofjlk jlk')
@@ -318,34 +365,125 @@ function FResourcePropertyEditorDrawer({
           />
         </div>
         <div style={{ height: 5 }} />
-        <FComponentsLib.FInput.FSingleLine
-          lengthLimit={-1}
-          value={$state.valueInput}
-          className={styles.input}
-          disabled={noneEditableFields.includes('value')}
-          onChange={(e) => {
-            const value: string = e.target.value;
-            let errorText: string = '';
-            if (!valueAcceptNull && value === '') {
-              errorText = '输入value';
-            } else if (value.length > 140) {
-              // errorText = '不超过140个字符';
-              errorText = FI18n.i18nNext.t('alert_custom_option_field');
-            }
-            // onValueInputChange && onValueInputChange({
-            //   value,
-            //   errorText,
-            // });
-            // set_valueInput(value);
-            // set_valueInputError(errorText);
-            $setState({
-              valueInput: value,
-              valueInputError: errorText,
-            });
-          }}
-          // placeholder={'输入value'}
-          placeholder={FI18n.i18nNext.t('resourceinfo_add_input_value_hint')}
-        />
+
+        {
+          !$state.valueFormat && (<FComponentsLib.FInput.FSingleLine
+            lengthLimit={-1}
+            value={$state.valueInput}
+            className={styles.input}
+            disabled={noneEditableFields.includes('value')}
+            onChange={(e) => {
+              const value: string = e.target.value;
+              let errorText: string = '';
+              if (!valueAcceptNull && value === '') {
+                errorText = '输入value';
+              } else if (value.length > 140) {
+                // errorText = '不超过140个字符';
+                errorText = FI18n.i18nNext.t('alert_custom_option_field');
+              }
+              // onValueInputChange && onValueInputChange({
+              //   value,
+              //   errorText,
+              // });
+              // set_valueInput(value);
+              // set_valueInputError(errorText);
+              $setState({
+                valueInput: value,
+                valueInputError: errorText,
+              });
+            }}
+            // placeholder={'输入value'}
+            placeholder={FI18n.i18nNext.t('resourceinfo_add_input_value_hint')}
+          />)
+        }
+
+        {
+          $state.valueFormat?.format === 'textInput' && (<FComponentsLib.FInput.FSingleLine
+            lengthLimit={-1}
+            value={$state.valueInput}
+            className={styles.input}
+            disabled={noneEditableFields.includes('value')}
+            onChange={(e) => {
+              const value: string = e.target.value;
+              let errorText: string = '';
+              if (!valueAcceptNull && value === '') {
+                errorText = '输入value';
+              } else if (value.length > 140) {
+                // errorText = '不超过140个字符';
+                errorText = FI18n.i18nNext.t('alert_custom_option_field');
+              }
+              // onValueInputChange && onValueInputChange({
+              //   value,
+              //   errorText,
+              // });
+              // set_valueInput(value);
+              // set_valueInputError(errorText);
+              $setState({
+                valueInput: value,
+                valueInputError: errorText,
+              });
+            }}
+            // placeholder={'输入value'}
+            placeholder={FI18n.i18nNext.t('resourceinfo_add_input_value_hint')}
+          />)
+        }
+
+        {
+          $state.valueFormat?.format === 'textArea' && (<FComponentsLib.FInput.FMultiLine
+            lengthLimit={-1}
+            value={$state.valueInput}
+          />)
+        }
+
+        {/*'integer' | 'decimal' | 'date' | 'dataTime'*/}
+        {
+          $state.valueFormat?.format === 'integer' && (<FComponentsLib.FInput.FSingleLine
+            lengthLimit={-1}
+            value={$state.valueInput}
+            className={styles.input}
+            disabled={noneEditableFields.includes('value')}
+            onChange={() => {
+            }}
+          />)
+        }
+        {
+          $state.valueFormat?.format === 'decimal' && (<FComponentsLib.FInput.FSingleLine
+            lengthLimit={-1}
+            value={$state.valueInput}
+            className={styles.input}
+            disabled={noneEditableFields.includes('value')}
+            onChange={() => {
+            }}
+          />)
+        }
+        {
+          $state.valueFormat?.format === 'date' && (<DatePicker
+            value={$state.valueInput ? moment($state.valueInput, 'YYYY-MM-DD') : null}
+            disabled={noneEditableFields.includes('value')}
+            style={{ width: 280, height: 38 }}
+            onChange={(value, dateString: string) => {
+              // console.log(dateString, 'dDDDSdfopijsdlkfjsldfjlksdjflkjlk');
+              $setState({
+                valueInput: dateString,
+              });
+            }}
+          />)
+        }
+        {
+          $state.valueFormat?.format === 'dataTime' && (<DatePicker
+            value={$state.valueInput ? moment($state.valueInput, 'YYYY-MM-DD hh:mm:ss') : null}
+            showTime={true}
+            disabled={noneEditableFields.includes('value')}
+            style={{ width: 450, height: 38 }}
+            onChange={(value, dateString: string) => {
+              // console.log(dateString, 'dDDDSdfopijsdlkfjsldfjlksdjflkjlk222222222222');
+              $setState({
+                valueInput: dateString,
+              });
+            }}
+          />)
+        }
+
         {
           $state.valueInputError && (<>
             <div style={{ height: 5 }} />
