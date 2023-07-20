@@ -86,6 +86,8 @@ function FResourcePropertyEditorDrawer({
                                        }: FResourcePropertyEditorDrawerProps) {
 
   const [$state, $setState] = AHooks.useSetState<FResourcePropertyEditorDrawerStates>(initStates);
+
+  console.log($state, '$state sdiofjsdlkfjlksdjflksjdlkjl');
   // const [visible, set_visible] = React.useState<FResourcePropertyEditorDrawerStates['visible']>(initStates['visible']);
   // const [nameInput, set_nameInput] = React.useState<FResourcePropertyEditorDrawerStates['nameInput']>(initStates['nameInput']);
   // const [nameInputError, set_nameInputError] = React.useState<FResourcePropertyEditorDrawerStates['nameInputError']>(initStates['nameInputError']);
@@ -466,6 +468,19 @@ function FResourcePropertyEditorDrawer({
               $setState({
                 valueInput: dateString,
               });
+            }}
+            disabledDate={(currentDate) => {
+              let result: boolean = false;
+              if ($state.valueFormat?.startDate) {
+                const startDate = $state.valueFormat.startDate.split(' ')[0];
+                result = currentDate.isBefore(moment(startDate + ' 00:00:00', 'YYYY-MM-DD hh:mm:ss'));
+              }
+
+              if (!result && $state.valueFormat?.limitDate) {
+                const limitDate = $state.valueFormat.limitDate.split(' ')[0];
+                result = currentDate.isAfter(moment(limitDate + ' 23:59:59', 'YYYY-MM-DD hh:mm:ss'));
+              }
+              return result;
             }}
           />)
         }
