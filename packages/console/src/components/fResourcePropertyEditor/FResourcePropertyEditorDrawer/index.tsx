@@ -41,6 +41,8 @@ interface FResourcePropertyEditorDrawerStates {
     maxLength?: number;
     startDate?: string;
     limitDate?: string;
+    startDateTime?: string;
+    limitDateTime?: string;
     min?: number;
     max?: number;
     minDecimal?: number;
@@ -125,7 +127,8 @@ function FResourcePropertyEditorDrawer({
         format: 1 | 2 | 3 | 4 | 5 | 7; //	值格式 1：文本 2：数值 3：时间 4：日期 5：日期和时间 7: 多行文本 8: 整数 9: 小数
         contentRule?:
           { minLength?: number; maxLength?: number; } // 1：文本  7: 多行文本
-          | { startDate?: string; limitDate?: string; } // 4：日期 5：日期和时间
+          | { startDate?: string; limitDate?: string; } // 4：日期
+          | { startDateTime?: string; limitDateTime?: string; } // 5：日期和时间
           | { min?: number; max?: number; } // 8: 整数
           | { minDecimal?: number; maxDecimal?: number; precision?: number; }; // 9: 小数
       }
@@ -495,6 +498,18 @@ function FResourcePropertyEditorDrawer({
               $setState({
                 valueInput: dateString,
               });
+            }}
+            disabledDate={(currentDate) => {
+              let result: boolean = false;
+              if ($state.valueFormat?.startDateTime) {
+                result = currentDate.isBefore(moment($state.valueFormat.startDateTime, 'YYYY-MM-DD hh:mm:ss'));
+              }
+
+              if (!result && $state.valueFormat?.limitDateTime) {
+                result = currentDate.isAfter(moment($state.valueFormat.limitDateTime, 'YYYY-MM-DD hh:mm:ss'));
+              }
+              // console.log(result, 'result asd980fiujsodifujlskdjflkj');
+              return result;
             }}
           />)
         }
