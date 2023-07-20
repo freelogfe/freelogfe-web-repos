@@ -464,11 +464,12 @@ function FResourcePropertyEditorDrawer({
             onChange={(e) => {
               $setState({
                 valueInput: e.target.value,
+                valueInputError: '',
               });
             }}
             onBlur={() => {
               let errorText: string = '';
-              const num = Number.parseInt($state.valueInput);
+              let num = Number.parseInt($state.valueInput);
               if (!num) {
                 $setState({
                   valueInputError: '请输入正确的整数',
@@ -493,7 +494,34 @@ function FResourcePropertyEditorDrawer({
             value={$state.valueInput}
             className={styles.input}
             disabled={noneEditableFields.includes('value')}
-            onChange={() => {
+            onChange={(e) => {
+              $setState({
+                valueInput: e.target.value,
+                valueInputError: '',
+              });
+            }}
+            onBlur={() => {
+              let errorText: string = '';
+              let num = Number.parseFloat($state.valueInput);
+              if (!num) {
+                $setState({
+                  valueInputError: '请输入正确的小数',
+                });
+                return;
+              } else {
+                if ($state.valueFormat?.precision !== undefined) {
+                  num = Math.floor(num * 10 ** $state.valueFormat.precision) / 10 ** $state.valueFormat.precision;
+                }
+                if ($state.valueFormat?.minDecimal !== undefined && num < $state.valueFormat.minDecimal) {
+                  errorText = `不小于${$state.valueFormat.minDecimal}`;
+                } else if ($state.valueFormat?.maxDecimal !== undefined && num > $state.valueFormat.maxDecimal) {
+                  errorText = `不大于${$state.valueFormat.maxDecimal}`;
+                }
+              }
+              $setState({
+                valueInput: String(num),
+                valueInputError: errorText,
+              });
             }}
             placeholder={'请输入小数'}
           />)
