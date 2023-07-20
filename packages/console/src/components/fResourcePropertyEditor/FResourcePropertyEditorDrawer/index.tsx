@@ -69,12 +69,12 @@ const initStates: FResourcePropertyEditorDrawerStates = {
 };
 
 enum FormatEnum {
-  textInput = 1,
+  date = 4,
+  dataTime = 5,
+  textInput = 6,
   textArea = 7,
   integer = 8,
   decimal = 9,
-  date = 4,
-  dataTime = 5,
 }
 
 function FResourcePropertyEditorDrawer({
@@ -124,11 +124,11 @@ function FResourcePropertyEditorDrawer({
       errCode: number;
       msg: string;
       data: null | {
-        format: 1 | 2 | 3 | 4 | 5 | 7; //	值格式 1：文本 2：数值 3：时间 4：日期 5：日期和时间 7: 多行文本 8: 整数 9: 小数
+        format: 1 | 2 | 3 | 4 | 5 | 6 | 7; //	值格式 1：文本 2：数值 3：时间 4：日期 5：日期和时间 6: 单行文本 7: 多行文本 8: 整数 9: 小数
         contentRule?:
-          { minLength?: number; maxLength?: number; } // 1：文本  7: 多行文本
-          | { startDate?: string; limitDate?: string; } // 4：日期
+          { startDate?: string; limitDate?: string; } // 4：日期
           | { startDateTime?: string; limitDateTime?: string; } // 5：日期和时间
+          | { minLength?: number; maxLength?: number; } // 6：文本  7: 多行文本
           | { min?: number; max?: number; } // 8: 整数
           | { minDecimal?: number; maxDecimal?: number; precision?: number; }; // 9: 小数
       }
@@ -378,7 +378,14 @@ function FResourcePropertyEditorDrawer({
             className={styles.input}
             disabled={noneEditableFields.includes('value')}
             onChange={(e) => {
-              const value: string = e.target.value;
+              $setState({
+                valueInput: e.target.value,
+                valueInputError: '',
+              });
+
+            }}
+            onBlur={() => {
+              const value: string = $state.valueInput;
               let errorText: string = '';
               if (!valueAcceptNull && value === '') {
                 errorText = '输入value';
@@ -386,14 +393,7 @@ function FResourcePropertyEditorDrawer({
                 // errorText = '不超过140个字符';
                 errorText = FI18n.i18nNext.t('alert_custom_option_field');
               }
-              // onValueInputChange && onValueInputChange({
-              //   value,
-              //   errorText,
-              // });
-              // set_valueInput(value);
-              // set_valueInputError(errorText);
               $setState({
-                valueInput: value,
                 valueInputError: errorText,
               });
             }}
@@ -409,22 +409,18 @@ function FResourcePropertyEditorDrawer({
             className={styles.input}
             disabled={noneEditableFields.includes('value')}
             onChange={(e) => {
-              const value: string = e.target.value;
-              let errorText: string = '';
-              if (!valueAcceptNull && value === '') {
-                errorText = '输入value';
-              } else if (value.length > 140) {
-                // errorText = '不超过140个字符';
-                errorText = FI18n.i18nNext.t('alert_custom_option_field');
-              }
-              // onValueInputChange && onValueInputChange({
-              //   value,
-              //   errorText,
-              // });
-              // set_valueInput(value);
-              // set_valueInputError(errorText);
               $setState({
-                valueInput: value,
+                valueInput: e.target.value,
+              });
+            }}
+            onBlur={() => {
+              let errorText: string = '';
+              if ($state.valueFormat?.minLength && $state.valueInput.length < $state.valueFormat.minLength) {
+                errorText = `不少于${$state.valueFormat.minLength}个字符`;
+              } else if ($state.valueFormat?.maxLength && $state.valueInput.length > $state.valueFormat.maxLength) {
+                errorText = `不超过${$state.valueFormat.maxLength}个字符`;
+              }
+              $setState({
                 valueInputError: errorText,
               });
             }}
@@ -437,6 +433,22 @@ function FResourcePropertyEditorDrawer({
           $state.valueFormat?.format === 'textArea' && (<FComponentsLib.FInput.FMultiLine
             lengthLimit={-1}
             value={$state.valueInput}
+            onChange={(e) => {
+              $setState({
+                valueInput: e.target.value,
+              });
+            }}
+            onBlur={() => {
+              let errorText: string = '';
+              if ($state.valueFormat?.minLength && $state.valueInput.length < $state.valueFormat.minLength) {
+                errorText = `不少于${$state.valueFormat.minLength}个字符`;
+              } else if ($state.valueFormat?.maxLength && $state.valueInput.length > $state.valueFormat.maxLength) {
+                errorText = `不超过${$state.valueFormat.maxLength}个字符`;
+              }
+              $setState({
+                valueInputError: errorText,
+              });
+            }}
           />)
         }
 

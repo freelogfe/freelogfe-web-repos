@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import {Input} from 'antd';
-import {ChangeEventHandler, KeyboardEventHandler} from 'react';
+import {ChangeEventHandler, FocusEventHandler, KeyboardEventHandler} from 'react';
 import {TextAreaRef} from 'antd/lib/input/TextArea';
 
 export interface FMultiLineInputProps {
@@ -13,6 +13,7 @@ export interface FMultiLineInputProps {
     // FI18n.i18nNext.t('form_input_multiplelinetxt_error_length')
     lengthLimit?: number;
     onChange?: ChangeEventHandler<HTMLTextAreaElement>;
+    onBlur?:  FocusEventHandler<HTMLTextAreaElement>;
     onPressEnter?: KeyboardEventHandler<HTMLTextAreaElement>;
 }
 
@@ -24,6 +25,7 @@ function FMultiLineInput({
                              style = {},
                              lengthLimit = 600,
                              onChange,
+                             onBlur,
                              onPressEnter,
                          }: FMultiLineInputProps, ref: React.Ref<TextAreaRef> | undefined) {
     return (<div className={styles.introduction}>
@@ -34,6 +36,7 @@ function FMultiLineInput({
             className={[styles.TextArea, className].join(' ')}
             style={style}
             onChange={onChange}
+            onBlur={onBlur}
             onPressEnter={onPressEnter}
             autoSize={{minRows: 4, maxRows: 20}}
         />
