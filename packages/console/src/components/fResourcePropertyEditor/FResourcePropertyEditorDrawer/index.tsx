@@ -411,6 +411,7 @@ function FResourcePropertyEditorDrawer({
             onChange={(e) => {
               $setState({
                 valueInput: e.target.value,
+                valueInputError: '',
               });
             }}
             onBlur={() => {
@@ -436,6 +437,7 @@ function FResourcePropertyEditorDrawer({
             onChange={(e) => {
               $setState({
                 valueInput: e.target.value,
+                valueInputError: '',
               });
             }}
             onBlur={() => {
@@ -459,8 +461,30 @@ function FResourcePropertyEditorDrawer({
             value={$state.valueInput}
             className={styles.input}
             disabled={noneEditableFields.includes('value')}
-            onChange={() => {
+            onChange={(e) => {
+              $setState({
+                valueInput: e.target.value,
+              });
             }}
+            onBlur={() => {
+              let errorText: string = '';
+              const num = Number.parseInt($state.valueInput);
+              if (!num) {
+                $setState({
+                  valueInputError: '请输入正确的整数',
+                });
+                return;
+              } else if ($state.valueFormat?.min !== undefined && num < $state.valueFormat.min) {
+                errorText = `不小于${$state.valueFormat.min}`;
+              } else if ($state.valueFormat?.max && num > $state.valueFormat.max) {
+                errorText = `不大于${$state.valueFormat.max}`;
+              }
+              $setState({
+                valueInput: String(num),
+                valueInputError: errorText,
+              });
+            }}
+            placeholder={'请输入整数'}
           />)
         }
         {
@@ -471,6 +495,7 @@ function FResourcePropertyEditorDrawer({
             disabled={noneEditableFields.includes('value')}
             onChange={() => {
             }}
+            placeholder={'请输入小数'}
           />)
         }
         {
