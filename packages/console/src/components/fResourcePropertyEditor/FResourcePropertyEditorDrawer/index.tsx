@@ -89,7 +89,7 @@ function FResourcePropertyEditorDrawer({
 
   const [$state, $setState] = AHooks.useSetState<FResourcePropertyEditorDrawerStates>(initStates);
 
-  console.log($state, '$state sdiofjsdlkfjlksdjflksjdlkjl');
+  // console.log($state, '$state sdiofjsdlkfjlksdjflksjdlkjl');
   // const [visible, set_visible] = React.useState<FResourcePropertyEditorDrawerStates['visible']>(initStates['visible']);
   // const [nameInput, set_nameInput] = React.useState<FResourcePropertyEditorDrawerStates['nameInput']>(initStates['nameInput']);
   // const [nameInputError, set_nameInputError] = React.useState<FResourcePropertyEditorDrawerStates['nameInputError']>(initStates['nameInputError']);
