@@ -703,7 +703,7 @@ export const ImportDrawer = (props: Props) => {
             />
           </div>
           <div className="title">
-            {FI18n.i18nNext.t('posteditor_insert_label_objectlist_post')}
+            {FI18n.i18nNext.t('cbformatter_import_objectlists_comics')}
           </div>
           {objectList.length === 0 && refs.current.noMore && (
             <div className="no-data-box">
