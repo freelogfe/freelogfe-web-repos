@@ -116,7 +116,7 @@ function FResourceAuthorizationProcessor({
   const [baseUpcastResources, set_baseUpcastResources, get_baseUpcastResources] = AHooks.useGetState<FResourceAuthorizationProcessorStates['baseUpcastResources']>(initStates['baseUpcastResources']);
   const [targetInfos_CheckedPolicies, set_targetInfos_CheckedPolicies, get_targetInfos_CheckedPolicies] = AHooks.useGetState<FResourceAuthorizationProcessorStates['targetInfos_CheckedPolicies']>(initStates['targetInfos_CheckedPolicies']);
 
-  console.log(targetInfos_CheckedPolicies, 'targetInfos_SelectedPoliciesisdjflkjsdlfjlj');
+  // console.log(targetInfos_CheckedPolicies, 'targetInfos_SelectedPoliciesisdjflkjsdlfjlj');
 
   AHooks.useAsyncEffect(async () => {
     if (resourceID !== '') {
