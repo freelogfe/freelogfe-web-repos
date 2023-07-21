@@ -9,6 +9,7 @@ import { IActivatedTarget, IBaseUpcastResource, IRelation, ITargetInfo } from '.
 import FComponentsLib from '@freelog/components-lib';
 import FBasicUpcastCard from '@/components/FBasicUpcastCard';
 import fMessage from '@/components/fMessage';
+import { useGetState } from '@/utils/hooks';
 
 interface Target {
   id: string;
@@ -109,14 +110,14 @@ function FResourceAuthorizationProcessor({
 
   // const addingTargetsRef = React.useRef<Target[]>([]);
 
-  const [licenseeResource, set_licenseeResource, get_licenseeResource] = AHooks.useGetState<FResourceAuthorizationProcessorStates['licenseeResource']>(initStates['licenseeResource']);
-  const [relations, set_relations, get_relations] = AHooks.useGetState<FResourceAuthorizationProcessorStates['relations']>(initStates['relations']);
-  const [targetInfos, set_targetInfos, get_targetInfos] = AHooks.useGetState<FResourceAuthorizationProcessorStates['targetInfos']>(initStates['targetInfos']);
-  const [activatedTarget, set_activatedTarget, get_activatedTarget] = AHooks.useGetState<FResourceAuthorizationProcessorStates['activatedTarget']>(initStates['activatedTarget']);
-  const [baseUpcastResources, set_baseUpcastResources, get_baseUpcastResources] = AHooks.useGetState<FResourceAuthorizationProcessorStates['baseUpcastResources']>(initStates['baseUpcastResources']);
-  const [targetInfos_CheckedPolicies, set_targetInfos_CheckedPolicies, get_targetInfos_CheckedPolicies] = AHooks.useGetState<FResourceAuthorizationProcessorStates['targetInfos_CheckedPolicies']>(initStates['targetInfos_CheckedPolicies']);
+  const [licenseeResource, set_licenseeResource, get_licenseeResource] = useGetState<FResourceAuthorizationProcessorStates['licenseeResource']>(initStates['licenseeResource']);
+  const [relations, set_relations, get_relations] = useGetState<FResourceAuthorizationProcessorStates['relations']>(initStates['relations']);
+  const [targetInfos, set_targetInfos, get_targetInfos] = useGetState<FResourceAuthorizationProcessorStates['targetInfos']>(initStates['targetInfos']);
+  const [activatedTarget, set_activatedTarget, get_activatedTarget] = useGetState<FResourceAuthorizationProcessorStates['activatedTarget']>(initStates['activatedTarget']);
+  const [baseUpcastResources, set_baseUpcastResources, get_baseUpcastResources] = useGetState<FResourceAuthorizationProcessorStates['baseUpcastResources']>(initStates['baseUpcastResources']);
+  const [targetInfos_CheckedPolicies, set_targetInfos_CheckedPolicies, get_targetInfos_CheckedPolicies] = useGetState<FResourceAuthorizationProcessorStates['targetInfos_CheckedPolicies']>(initStates['targetInfos_CheckedPolicies']);
 
-  // console.log(targetInfos_CheckedPolicies, 'targetInfos_SelectedPoliciesisdjflkjsdlfjlj');
+  // console.log(relations, targetInfos, '###################### targetInfos_SelectedPoliciesisdjflkjsdlfjlj');
 
   AHooks.useAsyncEffect(async () => {
     if (resourceID !== '') {
@@ -433,16 +434,16 @@ function FResourceAuthorizationProcessor({
   }
 
   function _syncActivatedTarget() {
+    // console.log(get_relations(), '_syncActivatedTarget sdf _syncActivatedTarget sdifojsldkjl');
+    // console.log(get_targetInfos(), 'get_targetInfos sdf get_targetInfos sdifojsldkjl');
     if (get_relations().length === 0) {
       set_activatedTarget(null);
     } else {
       const at = get_activatedTarget();
+      // console.log(at, 'at sdfijsodkjflk at sdifojlkjlk');
       if (!at) {
         set_activatedTarget(get_relations()[0]);
-        return;
-      }
-
-      if (!get_targetInfos().some((t) => {
+      } else if (!get_targetInfos().some((t) => {
         return t.targetID === at.id && t.targetName === at.name && t.targetType === at.type;
       })) {
         set_activatedTarget(get_relations()[0]);
@@ -455,7 +456,9 @@ function FResourceAuthorizationProcessor({
       return !(r.id === target.id && r.name === target.name && r.type === target.type);
     });
     set_relations(result);
+    // console.log('@@@@@@@@@ 111111111 9023ujrfsdlkfjl');
     await _syncTargetInfo();
+    // console.log(get_relations(), get_targetInfos(), '@@@@@@@@@ 222222222 0923ulksdjlfjl');
     await _syncActivatedTarget();
     return { err: '' };
   }
@@ -588,6 +591,9 @@ function FResourceAuthorizationProcessor({
               }}
               onChange_ActivatedTarget={(v) => {
                 set_activatedTarget(v);
+              }}
+              onClick_Delete={(v) => {
+                removeTarget(v);
               }}
             />
           </div>

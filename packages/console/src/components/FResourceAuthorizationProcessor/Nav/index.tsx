@@ -22,6 +22,12 @@ interface NavProps {
   onChange_Relations?(value: IRelation[]): void;
 
   onChange_ActivatedTarget?(value: IActivatedTarget): void;
+
+  onClick_Delete?(value: {
+    id: string;
+    name: string;
+    type: 'resource' | 'object';
+  }): void;
 }
 
 function Nav({
@@ -32,6 +38,7 @@ function Nav({
                checkedPolicies,
                onChange_Relations,
                onChange_ActivatedTarget,
+               onClick_Delete,
              }: NavProps) {
 
   // console.log(targetInfos, 'targetInfos098iowjeaflksdjflksdjflkllllll');
@@ -199,9 +206,14 @@ function Nav({
               <FComponentsLib.FCircleBtn
                 onClick={(e) => {
                   e.stopPropagation();
-                  onChange_Relations && onChange_Relations(relations.filter((rl) => {
-                    return !(r.id === rl.id && r.name === rl.name && r.type === rl.type);
-                  }));
+                  // onChange_Relations && onChange_Relations(relations.filter((rl) => {
+                  //   return !(r.id === rl.id && r.name === rl.name && r.type === rl.type);
+                  // }));
+                  onClick_Delete && onClick_Delete({
+                    id: r.id,
+                    name: r.name,
+                    type: r.type,
+                  });
                 }}
                 type='danger'
               />
