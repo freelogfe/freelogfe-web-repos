@@ -2,7 +2,6 @@ import * as React from 'react';
 import styles from './index.less';
 import * as AHooks from 'ahooks';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
-// import { useGetState } from '@/utils/hooks';
 import Nav from './Nav';
 import Content from './Content';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
@@ -78,6 +77,12 @@ interface FResourceAuthorizationProcessorStates {
   targetInfos: ITargetInfo[];
   activatedTarget: IActivatedTarget | null;
   baseUpcastResources: IBaseUpcastResource[];
+  targetInfos_CheckedPolicies: {
+    [k: string]: {
+      policyID: string;
+      policyName: string;
+    }[];
+  };
 }
 
 const initStates: FResourceAuthorizationProcessorStates = {
@@ -86,6 +91,7 @@ const initStates: FResourceAuthorizationProcessorStates = {
   targetInfos: [],
   activatedTarget: null,
   baseUpcastResources: [],
+  targetInfos_CheckedPolicies: {},
 };
 
 let processors: {
@@ -108,6 +114,9 @@ function FResourceAuthorizationProcessor({
   const [targetInfos, set_targetInfos, get_targetInfos] = AHooks.useGetState<FResourceAuthorizationProcessorStates['targetInfos']>(initStates['targetInfos']);
   const [activatedTarget, set_activatedTarget, get_activatedTarget] = AHooks.useGetState<FResourceAuthorizationProcessorStates['activatedTarget']>(initStates['activatedTarget']);
   const [baseUpcastResources, set_baseUpcastResources, get_baseUpcastResources] = AHooks.useGetState<FResourceAuthorizationProcessorStates['baseUpcastResources']>(initStates['baseUpcastResources']);
+  const [targetInfos_CheckedPolicies, set_targetInfos_CheckedPolicies, get_targetInfos_CheckedPolicies] = AHooks.useGetState<FResourceAuthorizationProcessorStates['targetInfos_CheckedPolicies']>(initStates['targetInfos_CheckedPolicies']);
+
+  console.log(targetInfos_CheckedPolicies, 'targetInfos_SelectedPoliciesisdjflkjsdlfjlj');
 
   AHooks.useAsyncEffect(async () => {
     if (resourceID !== '') {
@@ -394,6 +403,24 @@ function FResourceAuthorizationProcessor({
     }
 
     set_targetInfos(targetInfos);
+
+    const selectedPolicies: {
+      [resourceID: string]: {
+        policyID: string;
+        policyName: string;
+      }[]
+    } = {};
+
+    for (const info of targetInfos) {
+      selectedPolicies[info.targetID] = (get_targetInfos_CheckedPolicies()[info.targetID] || []).filter((p) => {
+        return info.enabledPolicies.some((ep) => {
+          return ep.policyFullInfo.policyId === p.policyID;
+        });
+      });
+    }
+
+    set_targetInfos_CheckedPolicies(selectedPolicies);
+
     await setBaseUpcastResources(get_baseUpcastResources().filter((r) => {
       return targetInfos
         .filter((t) => {
@@ -549,6 +576,7 @@ function FResourceAuthorizationProcessor({
               targetInfos={targetInfos}
               activatedTarget={activatedTarget}
               baseUpcastResources={baseUpcastResources}
+              checkedPolicies={targetInfos_CheckedPolicies}
               onChange_Relations={async (v) => {
                 if (get_relations().length > v.length) {
                   onChanged && onChanged();
@@ -569,12 +597,16 @@ function FResourceAuthorizationProcessor({
               targetInfos={targetInfos}
               baseUpcastDisabled={licenseeResource.latestVersion !== ''}
               baseUpcastResources={baseUpcastResources}
+              checkedPolicies={targetInfos_CheckedPolicies}
               onChange_TargetInfos={(v) => {
                 set_targetInfos(v);
               }}
               onChange_baseUpcastResources={(v) => {
                 onChanged && onChanged();
                 set_baseUpcastResources(v);
+              }}
+              onChange_checkedPolicies={(value) => {
+                set_targetInfos_CheckedPolicies(value);
               }}
             />
           </div>
@@ -583,32 +615,47 @@ function FResourceAuthorizationProcessor({
         <div className={styles.boxFooter}>
           <FComponentsLib.FRectBtn
             style={{ width: 300 }}
-            disabled={!targetInfos.some((t) => {
-              return t.enabledPolicies.some((p) => {
-                return p.checked;
-              });
+            disabled={!Object.values(targetInfos_CheckedPolicies).some((ps) => {
+              // return t.enabledPolicies.some((p) => {
+              //   return p.checked;
+              // });
+              return ps.length !== 0;
             })}
             onClick={async () => {
               const subjects: {
                 subjectId: string;
                 policyId: string;
-              }[] = get_targetInfos()
-                // .filter((t) => {
-                //   return !t.upThrow;
-                // })
-                .map((t) => {
-                  return t.enabledPolicies
-                    .filter((p) => {
-                      return p.checked;
-                    })
+              }[] = Object.entries(get_targetInfos_CheckedPolicies())
+                .filter((p) => {
+                  return p[1].length !== 0;
+                })
+                .map<{ subjectId: string; policyId: string; }[]>(([resourceID, policies]) => {
+                  return policies
                     .map((p) => {
                       return {
-                        subjectId: t.targetID,
-                        policyId: p.policyFullInfo.policyId,
+                        subjectId: resourceID,
+                        policyId: p.policyID,
                       };
                     });
                 })
                 .flat();
+              // get_targetInfos()
+              //   // .filter((t) => {
+              //   //   return !t.upThrow;
+              //   // })
+              //   .map((t) => {
+              //     return t.enabledPolicies
+              //       .filter((p) => {
+              //         return p.checked;
+              //       })
+              //       .map((p) => {
+              //         return {
+              //           subjectId: t.targetID,
+              //           policyId: p.policyFullInfo.policyId,
+              //         };
+              //       });
+              //   })
+              //   .flat();
               // console.log(subjects, 'subjectso9iejflksdjflsdjflsdj');
               const { data, ret, errCode, msg } = await FServiceAPI.Contract.batchCreateContracts({
                 subjects: subjects,
@@ -620,6 +667,7 @@ function FResourceAuthorizationProcessor({
               if (ret !== 0 || errCode !== 0) {
                 return fMessage(msg, 'error');
               }
+              // set_targetInfos_CheckedPolicies({});
               await _syncTargetInfo();
               onChanged && onChanged();
             }}

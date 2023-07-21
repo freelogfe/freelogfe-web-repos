@@ -19,9 +19,13 @@ interface ContentProps {
   baseUpcastResources: IBaseUpcastResource[];
   baseUpcastDisabled: boolean;
 
+  checkedPolicies: { [resourceID: string]: { policyID: string; policyName: string }[] };
+
   onChange_TargetInfos?(value: ITargetInfo[]): void;
 
   onChange_baseUpcastResources?(value: IBaseUpcastResource[]): void;
+
+  onChange_checkedPolicies?(value: ContentProps['checkedPolicies']): void;
 }
 
 function Content({
@@ -29,8 +33,10 @@ function Content({
                    activatedTarget,
                    baseUpcastResources,
                    baseUpcastDisabled,
+                   checkedPolicies,
                    onChange_TargetInfos,
                    onChange_baseUpcastResources,
+                   onChange_checkedPolicies,
                  }: ContentProps) {
 
   if (!activatedTarget) {
@@ -272,18 +278,40 @@ function Content({
                   <div className={styles.PolicyName}>
                     <span>{i.policyFullInfo.policyName}</span>
                     <Checkbox
-                      checked={i.checked}
+                      checked={(checkedPolicies[activatedTarget.id] || []).some((p) => {
+                        return p.policyID === i.policyFullInfo.policyId;
+                      })}
                       onChange={(e) => {
-                        const enabledPolicies = info.enabledPolicies.map((p) => {
-                          if (i.policyFullInfo.policyId !== p.policyFullInfo.policyId) {
-                            return p;
-                          }
-                          return {
-                            ...p,
-                            checked: e.target.checked,
-                          };
-                        });
-                        onChange({ enabledPolicies: enabledPolicies });
+                        const policies: {
+                          [resourceID: string]: {
+                            policyID: string;
+                            policyName: string;
+                          }[];
+                        } = { ...checkedPolicies };
+                        if (e.target.checked) {
+                          policies[activatedTarget.id] = [
+                            ...(policies[activatedTarget.id] || []),
+                            {
+                              policyID: i.policyFullInfo.policyId,
+                              policyName: i.policyFullInfo.policyName,
+                            },
+                          ];
+                        } else {
+                          policies[activatedTarget.id] = (policies[activatedTarget.id] || []).filter((p) => {
+                            return p.policyID !== i.policyFullInfo.policyId;
+                          });
+                        }
+                        onChange_checkedPolicies && onChange_checkedPolicies(policies);
+                        // const enabledPolicies = info.enabledPolicies.map((p) => {
+                        //   if (i.policyFullInfo.policyId !== p.policyFullInfo.policyId) {
+                        //     return p;
+                        //   }
+                        //   return {
+                        //     ...p,
+                        //     checked: e.target.checked,
+                        //   };
+                        // });
+                        // onChange({ enabledPolicies: enabledPolicies });
                       }}
                     />
                   </div>

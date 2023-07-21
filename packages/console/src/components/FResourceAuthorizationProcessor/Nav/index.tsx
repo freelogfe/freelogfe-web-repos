@@ -17,6 +17,8 @@ interface NavProps {
 
   baseUpcastResources: IBaseUpcastResource[];
 
+  checkedPolicies: { [resourceID: string]: { policyID: string; policyName: string }[] };
+
   onChange_Relations?(value: IRelation[]): void;
 
   onChange_ActivatedTarget?(value: IActivatedTarget): void;
@@ -27,6 +29,7 @@ function Nav({
                targetInfos,
                activatedTarget,
                baseUpcastResources,
+               checkedPolicies,
                onChange_Relations,
                onChange_ActivatedTarget,
              }: NavProps) {
@@ -142,8 +145,11 @@ function Nav({
                     }) && (<>
 
                       {
-                        [...info.contracts, ...info.enabledPolicies.filter((k) => k.checked)]
-                          .length === 0
+                        [
+                          ...info.contracts,
+                          // ...info.enabledPolicies.filter((k) => k.checked)
+                          ...(checkedPolicies[info.targetID] || []),
+                        ].length === 0
                           ? (<div style={{
                             color: '#E9A923',
                             fontSize: 12,
@@ -159,16 +165,23 @@ function Nav({
                                     dot: '' as '',
                                   };
                                 }),
-                              ...info.enabledPolicies
-                                .filter((k) => {
-                                  return k.checked;
-                                })
-                                .map((j) => {
+                              ...(checkedPolicies[info.targetID] || [])
+                                .map((p) => {
                                   return {
-                                    text: j.policyFullInfo.policyName,
+                                    text: p.policyName,
                                     dot: '' as '',
                                   };
                                 }),
+                              // ...info.enabledPolicies
+                              //   .filter((k) => {
+                              //     return k.checked;
+                              //   })
+                              //   .map((j) => {
+                              //     return {
+                              //       text: j.policyFullInfo.policyName,
+                              //       dot: '' as '',
+                              //     };
+                              //   }),
                             ]}
                           />)
                       }
