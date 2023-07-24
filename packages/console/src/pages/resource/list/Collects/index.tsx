@@ -3,7 +3,6 @@ import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import { ConnectState, ResourceCollectPageModelState } from '@/models/connect';
 import { history } from 'umi';
-// import FResourceCardsList from '@/pages/resource/components/FResourceCardsList';
 import {
   OnMountAction,
   OnUnmountAction,
@@ -11,7 +10,8 @@ import {
   OnChangeStatusAction,
   OnChangeKeywordsAction,
   OnBoomJuiceAction,
-  OnClickLoadingMordAction, OnAwaited_KeywordsChange_Action,
+  OnClickLoadingMordAction,
+  OnAwaited_KeywordsChange_Action,
 } from '@/models/resourceCollectPage';
 import FNoDataTip from '@/components/FNoDataTip';
 import FLoadingTip from '@/components/FLoadingTip';
@@ -21,11 +21,9 @@ import styles from './index.less';
 import FResourceTypeFilter from '@/components/FResourceTypeFilter';
 import FComponentsLib from '@freelog/components-lib';
 import FMenu from '@/components/FMenu';
-import { Button, Space } from 'antd';
-import FInput from '@/components/FInput';
+import { Space } from 'antd';
 import FResourceCard from '@/components/FResourceCard';
 import FListFooter from '@/components/FListFooter';
-// import { OnAwaited_KeywordsChange_Action } from '@/models/resourceListPage';
 
 interface ResourceCollectProps {
   dispatch: Dispatch;
@@ -89,9 +87,9 @@ function ResourceCollect({ dispatch, resourceCollectPage }: ResourceCollectProps
           <FResourceTypeFilter
             value={resourceCollectPage.resourceTypeCodes}
             onChange={(value) => {
-              if (!value) {
-                return;
-              }
+              // if (!value) {
+              //   return;
+              // }
               // onChangeResourceTypeCodes && onChangeResourceTypeCodes(value);
               dispatch<OnChangeResourceTypeAction>({
                 type: 'resourceCollectPage/onChangeResourceType',
@@ -122,45 +120,16 @@ function ResourceCollect({ dispatch, resourceCollectPage }: ResourceCollectProps
               />
             }
           >
-
               <span style={{ cursor: 'pointer' }}>
-
                 {resourceStatusOptions.find((rs) => {
                   return rs.value === resourceCollectPage.resourceStatus;
                 })?.text}
-                {/*{statusText}*/}
-                {/*<DownOutlined style={{ marginLeft: 10 }} />*/}
                 <FComponentsLib.FIcons.FDown style={{ marginLeft: 8, fontSize: 12 }} />
               </span>
           </FComponentsLib.FDropdown>
         </div>
       </div>
       <Space size={20}>
-        {/*<FInput*/}
-        {/*  value={resourceCollectPage.inputText}*/}
-        {/*  debounce={300}*/}
-        {/*  allowClear={true}*/}
-        {/*  // onChange={(e) => onChangeInputText && onChangeInputText(e.target.value)}*/}
-        {/*  onDebounceChange={(value) => {*/}
-        {/*    // onChangeInputText && onChangeInputText(value);*/}
-        {/*    dispatch<OnChangeKeywordsAction>({*/}
-        {/*      type: 'resourceCollectPage/onChangeKeywords',*/}
-        {/*      payload: {*/}
-        {/*        value: value,*/}
-        {/*      },*/}
-        {/*    });*/}
-        {/*  }}*/}
-        {/*  theme='dark'*/}
-        {/*  className={styles.FInput}*/}
-        {/*  // placeholder={FI18n.i18nNext.t('search_resource')}*/}
-        {/*  placeholder={FI18n.i18nNext.t('myresourses_search_hint')}*/}
-        {/*/>*/}
-        {/* {showGotoCreateBtn && (
-            <FComponentsLib.FRectBtn onClick={() => router.push(FUtil.LinkTo.resourceCreator())} type="primary">
-              {FI18n.i18nNext.t('create_resource')}
-            </FComponentsLib.FRectBtn>
-          )} */}
-
         <FComponentsLib.FInput.FSearch
           value={resourceCollectPage.inputText}
           style={{ width: 400 }}

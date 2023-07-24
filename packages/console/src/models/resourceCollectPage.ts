@@ -165,15 +165,6 @@ const Model: ResourceCollectModelType = {
         payload: initStates,
       });
     },
-    // * changeStates({payload}: ChangeStatesAction, {put}: EffectsCommandMap) {
-    //   yield put<ChangeAction>({
-    //     type: 'change',
-    //     payload,
-    //   });
-    //   yield put<FetchDataSourceAction>({
-    //     type: 'fetchDataSource',
-    //   });
-    // },
     * fetchDataSource({ payload }: FetchDataSourceAction, { call, put, select }: EffectsCommandMap) {
       // console.log('FetchDataSourceAction23423434');
       const { resourceCollectPage }: ConnectState = yield select(({ resourceCollectPage }: ConnectState) => ({
@@ -192,17 +183,28 @@ const Model: ResourceCollectModelType = {
         });
       }
 
-      const resourceTypes: Array<string | number> = resourceCollectPage.resourceTypeCodes.labels.filter((rt) => {
-        return rt !== '全部';
-      });
+      // const resourceTypes: Array<string | number> = resourceCollectPage.resourceTypeCodes.labels.filter((rt) => {
+      //   return rt !== '全部';
+      // });
+
+      const resourceTypes: string[] = resourceCollectPage.resourceTypeCodes.value.split('#');
+      let resourceTypeCode: string = resourceTypes[0];
+      let resourceTypeCategory: 1 | 2 = 1;
+
+      if (resourceTypes.length > 1 && resourceTypes[resourceTypes.length - 1] === 'other') {
+        resourceTypeCode = resourceTypes[0];
+        resourceTypeCategory = 2;
+      }
 
       const params: Parameters<typeof FServiceAPI.Collection.collectionResources>[0] = {
         // skip: dataSource.length,
         skip: resource_List.length,
         limit: FUtil.Predefined.pageSize,
-        keywords: resourceCollectPage.inputText,
-        resourceType: resourceTypes.length === 0 ? undefined : String(resourceTypes[resourceTypes.length - 1]),
+        keywords: resourceCollectPage.inputText || undefined,
+        // resourceType: resourceTypes.length === 0 ? undefined : String(resourceTypes[resourceTypes.length - 1]),
         resourceStatus: resourceCollectPage.resourceStatus === '#' ? undefined : resourceCollectPage.resourceStatus as 0,
+        resourceTypeCode: resourceTypeCode || undefined,
+        resourceTypeCategory: resourceTypeCategory,
       };
 
       const { ret, errCode, data: data_collection }: {

@@ -278,29 +278,6 @@ const Model: ResourceListPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          // dataSource: [
-          //   ...dataSource,
-          //   ...(data.dataList as any[]).map<ResourceListPageModelState['dataSource'][number]>((i: any) => {
-          //     const res = auths.find((dd: any) => {
-          //       return dd.resourceId === i.resourceId;
-          //     });
-          //     return {
-          //       id: i.resourceId,
-          //       cover: i.coverImages.length > 0 ? i.coverImages[0] : '',
-          //       title: i.resourceName,
-          //       version: i.latestVersion,
-          //       policy: i.policies
-          //         .filter((l: any) => {
-          //           return l.status === 1;
-          //         })
-          //         .map((l: any) => l.policyName),
-          //       type: i.resourceType,
-          //       status: i.status,
-          //       authProblem: !!res && !res.isAuth,
-          //     };
-          //   }),
-          // ],
-          // totalNum: data.totalItem,
           resource_List: finalList,
           resource_ListState: state,
           resource_ListMore: more,

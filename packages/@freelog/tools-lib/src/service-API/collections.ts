@@ -21,14 +21,12 @@ interface CollectionResourcesParamsType {
   keywords?: string;
   resourceType?: string;
   resourceTypeCode?: string;
+  resourceTypeCategory?: 1 | 2;
   omitResourceType?: string;
   resourceStatus?: 0 | 1 | 2 | 4;
 }
 
 export function collectionResources(params: CollectionResourcesParamsType) {
-  // return FUtil.Axios.get('/v2/collections/resources', {
-  //   params
-  // });
   return FUtil.Request({
     method: 'GET',
     url: `/v2/collections/resources`,
