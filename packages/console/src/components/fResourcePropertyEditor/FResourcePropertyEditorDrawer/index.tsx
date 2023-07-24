@@ -566,12 +566,15 @@ function FResourcePropertyEditorDrawer({
               showTime={true}
               disabled={noneEditableFields.includes('value')}
               style={{ width: 450, height: 38 }}
-              onChange={(value, dateString: string) => {
-                // console.log(dateString, 'dDDDSdfopijsdlkfjsldfjlksdjflkjlk222222222222');
-                $setState({
-                  valueInput: dateString,
-                });
-              }}
+              // onChange={(value, dateString: string) => {
+              //   // console.log(dateString, 'dDDDSdfopijsdlkfjsldfjlksdjflkjlk222222222222');
+              //   $setState({
+              //     valueInput: dateString,
+              //   });
+              // }}
+              // onOk={(data, dateString) => {
+              //   console.log(data, dateString, 'data');
+              // }}
               disabledDate={(currentDate) => {
                 let result: boolean = false;
                 if ($state.valueFormat?.startDateTime) {
@@ -586,6 +589,25 @@ function FResourcePropertyEditorDrawer({
               }}
               // showNow={false}
               inputReadOnly={true}
+              // disabledTime={(data) => {
+              // console.log(data, partial, 'disabledTime dsf disabledTime dsfwefwes disabledTime 0932ujrilsfdujlfkjl');
+              // return {
+              //   disabledHours() {
+              //     return [15, 16, 17];
+              //   },
+              //   disabledMinutes(selectedHour: number) {
+              //
+              //     return Array(60).fill(null).map((m, i) => {
+              //       return i;
+              //     });
+              //   },
+              //   disabledSeconds(selectedHour: number, selectedMinute: number) {
+              //     return Array(60).fill(null).map((m, i) => {
+              //       return i;
+              //     });
+              //   },
+              // };
+              // }}
             />)
           }
 
