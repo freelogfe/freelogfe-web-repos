@@ -556,6 +556,8 @@ function FResourcePropertyEditorDrawer({
                 }
                 return result;
               }}
+              // showNow={false}
+              inputReadOnly={true}
             />)
           }
           {
@@ -582,6 +584,8 @@ function FResourcePropertyEditorDrawer({
                 // console.log(result, 'result asd980fiujsodifujlskdjflkj');
                 return result;
               }}
+              // showNow={false}
+              inputReadOnly={true}
             />)
           }
 
