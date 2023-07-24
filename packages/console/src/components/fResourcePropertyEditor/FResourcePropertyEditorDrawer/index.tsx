@@ -383,7 +383,9 @@ function FResourcePropertyEditorDrawer({
               onBlur={() => {
                 const value: string = $state.valueInput;
                 let errorText: string = '';
-                if (!valueAcceptNull && value === '') {
+                if (valueAcceptNull && value === '') {
+                  return;
+                } else if (value === '') {
                   errorText = '输入value';
                 } else if (value.length > 140) {
                   // errorText = '不超过140个字符';
@@ -412,7 +414,9 @@ function FResourcePropertyEditorDrawer({
               }}
               onBlur={() => {
                 let errorText: string = '';
-                if ($state.valueFormat?.minLength && $state.valueInput.length < $state.valueFormat.minLength) {
+                if (valueAcceptNull && $state.valueInput === '') {
+                  return;
+                } else if ($state.valueFormat?.minLength && $state.valueInput.length < $state.valueFormat.minLength) {
                   errorText = `不少于${$state.valueFormat.minLength}个字符`;
                 } else if ($state.valueFormat?.maxLength && $state.valueInput.length > $state.valueFormat.maxLength) {
                   errorText = `不超过${$state.valueFormat.maxLength}个字符`;
@@ -438,7 +442,9 @@ function FResourcePropertyEditorDrawer({
               }}
               onBlur={() => {
                 let errorText: string = '';
-                if ($state.valueFormat?.minLength && $state.valueInput.length < $state.valueFormat.minLength) {
+                if (valueAcceptNull && $state.valueInput === '') {
+                  return;
+                } else if ($state.valueFormat?.minLength && $state.valueInput.length < $state.valueFormat.minLength) {
                   errorText = `不少于${$state.valueFormat.minLength}个字符`;
                 } else if ($state.valueFormat?.maxLength && $state.valueInput.length > $state.valueFormat.maxLength) {
                   errorText = `不超过${$state.valueFormat.maxLength}个字符`;
@@ -466,7 +472,9 @@ function FResourcePropertyEditorDrawer({
               onBlur={() => {
                 let errorText: string = '';
                 let num = Number.parseInt($state.valueInput);
-                if (!num) {
+                if (valueAcceptNull && $state.valueInput === '') {
+                  return;
+                } else if (Number.isNaN(num)) {
                   $setState({
                     valueInputError: '请输入正确的整数',
                   });
@@ -499,7 +507,9 @@ function FResourcePropertyEditorDrawer({
               onBlur={() => {
                 let errorText: string = '';
                 let num = Number.parseFloat($state.valueInput);
-                if (!num) {
+                if (valueAcceptNull && $state.valueInput === '') {
+                  return;
+                } else if (Number.isNaN(num)) {
                   $setState({
                     valueInputError: '请输入正确的小数',
                   });
