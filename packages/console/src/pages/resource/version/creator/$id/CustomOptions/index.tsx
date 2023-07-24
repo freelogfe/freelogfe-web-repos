@@ -132,12 +132,12 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
               type={'highlight'}
               style={{ fontSize: 12 }}
             />
-            <div>
-              <Space size={20}>
-                <FTooltip title={FI18n.i18nNext.t('resourceinfo_add_btn_info')}>
-                  <div>
-                    {
-                      resourceVersionCreatorPage.customProperties.length < 30 && (<FComponentsLib.FTextBtn
+            {
+              resourceVersionCreatorPage.customProperties.length < 30 && (<div>
+                <Space size={20}>
+                  <FTooltip title={FI18n.i18nNext.t('resourceinfo_add_btn_info')}>
+                    <div>
+                      <FComponentsLib.FTextBtn
                         style={{ fontSize: 12, fontWeight: 600 }}
                         type='primary'
                         onClick={async () => {
@@ -175,111 +175,112 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                             },
                           });
                         }}
-                      >补充属性</FComponentsLib.FTextBtn>)
-                    }
-                  </div>
-                </FTooltip>
+                      >补充属性</FComponentsLib.FTextBtn>
+                    </div>
+                  </FTooltip>
 
-                {
-                  (resourceVersionCreatorPage.preVersion_additionalProperties.length > 0
-                    || resourceVersionCreatorPage.preVersion_customProperties.length > 0) &&
-                  (<FComponentsLib.FTextBtn
-                    style={{ fontSize: 12, fontWeight: 600 }}
-                    type='primary'
-                    onClick={async () => {
-                      if (resourceVersionCreatorPage.preVersion_additionalProperties.length > 0) {
-                        const dataSource_additionalProperties: {
-                          key: string;
-                          name: string;
-                          value: string;
-                          description: string;
-                        }[] = resourceVersionCreatorPage.additionalProperties.map((ap) => {
-                          const ap1 = resourceVersionCreatorPage.preVersion_additionalProperties.find((a) => {
-                            return a.key === ap.key;
+                  {
+                    (resourceVersionCreatorPage.preVersion_additionalProperties.length > 0
+                      || resourceVersionCreatorPage.preVersion_customProperties.length > 0) &&
+                    (<FComponentsLib.FTextBtn
+                      style={{ fontSize: 12, fontWeight: 600 }}
+                      type='primary'
+                      onClick={async () => {
+                        if (resourceVersionCreatorPage.preVersion_additionalProperties.length > 0) {
+                          const dataSource_additionalProperties: {
+                            key: string;
+                            name: string;
+                            value: string;
+                            description: string;
+                          }[] = resourceVersionCreatorPage.additionalProperties.map((ap) => {
+                            const ap1 = resourceVersionCreatorPage.preVersion_additionalProperties.find((a) => {
+                              return a.key === ap.key;
+                            });
+
+                            if (!ap1) {
+                              return ap;
+                            }
+
+                            return {
+                              ...ap,
+                              value: ap1.value,
+                            };
                           });
 
-                          if (!ap1) {
-                            return ap;
-                          }
-
-                          return {
-                            ...ap,
-                            value: ap1.value,
-                          };
-                        });
-
-                        await dispatch<OnChange_AdditionalProperties_Action>({
-                          type: 'resourceVersionCreatorPage/onChange_AdditionalProperties',
-                          payload: {
-                            value: dataSource_additionalProperties,
-                          },
-                        });
-                      }
-
-                      if (resourceVersionCreatorPage.preVersion_customProperties.length > 0) {
-                        const dataSource: {
-                          key: string;
-                          name: string;
-                          value: string;
-                          description: string;
-                        }[] | null = await fAddFileBaseProps({
-                          defaultData: resourceVersionCreatorPage.preVersion_customProperties,
-                          disabledKeys: [
-                            ...resourceVersionCreatorPage.rawProperties.map((rp) => {
-                              return rp.key;
-                            }),
-                            ...resourceVersionCreatorPage.additionalProperties.map((rp) => {
-                              return rp.key;
-                            }),
-                            ...resourceVersionCreatorPage.customProperties.map((pp) => {
-                              return pp.key;
-                            }),
-                            ...resourceVersionCreatorPage.customConfigurations.map((pp) => {
-                              return pp.key;
-                            }),
-                          ],
-                          disabledNames: [
-                            ...resourceVersionCreatorPage.rawProperties.map((rp) => {
-                              return rp.name;
-                            }),
-                            ...resourceVersionCreatorPage.additionalProperties.map((rp) => {
-                              return rp.name;
-                            }),
-                            ...resourceVersionCreatorPage.customProperties.map((pp) => {
-                              return pp.name;
-                            }),
-                            ...resourceVersionCreatorPage.customConfigurations.map((pp) => {
-                              return pp.name;
-                            }),
-                          ],
-                        });
-                        if (!dataSource) {
-                          return;
+                          await dispatch<OnChange_AdditionalProperties_Action>({
+                            type: 'resourceVersionCreatorPage/onChange_AdditionalProperties',
+                            payload: {
+                              value: dataSource_additionalProperties,
+                            },
+                          });
                         }
 
-                        await dispatch<OnChange_CustomProperties_Action>({
-                          type: 'resourceVersionCreatorPage/onChange_CustomProperties',
-                          payload: {
-                            value: [
-                              ...resourceVersionCreatorPage.customProperties,
-                              ...dataSource.map<ResourceVersionCreatorPageModelState['customProperties'][number]>((ds) => {
-                                return {
-                                  key: ds.key,
-                                  name: ds.name,
-                                  value: ds.value,
-                                  description: ds.description,
-                                };
+                        if (resourceVersionCreatorPage.preVersion_customProperties.length > 0) {
+                          const dataSource: {
+                            key: string;
+                            name: string;
+                            value: string;
+                            description: string;
+                          }[] | null = await fAddFileBaseProps({
+                            defaultData: resourceVersionCreatorPage.preVersion_customProperties,
+                            disabledKeys: [
+                              ...resourceVersionCreatorPage.rawProperties.map((rp) => {
+                                return rp.key;
+                              }),
+                              ...resourceVersionCreatorPage.additionalProperties.map((rp) => {
+                                return rp.key;
+                              }),
+                              ...resourceVersionCreatorPage.customProperties.map((pp) => {
+                                return pp.key;
+                              }),
+                              ...resourceVersionCreatorPage.customConfigurations.map((pp) => {
+                                return pp.key;
                               }),
                             ],
-                          },
-                        });
-                      }
+                            disabledNames: [
+                              ...resourceVersionCreatorPage.rawProperties.map((rp) => {
+                                return rp.name;
+                              }),
+                              ...resourceVersionCreatorPage.additionalProperties.map((rp) => {
+                                return rp.name;
+                              }),
+                              ...resourceVersionCreatorPage.customProperties.map((pp) => {
+                                return pp.name;
+                              }),
+                              ...resourceVersionCreatorPage.customConfigurations.map((pp) => {
+                                return pp.name;
+                              }),
+                            ],
+                          });
+                          if (!dataSource) {
+                            return;
+                          }
 
-                    }}
-                  >从上个版本导入</FComponentsLib.FTextBtn>)
-                }
-              </Space>
-            </div>
+                          await dispatch<OnChange_CustomProperties_Action>({
+                            type: 'resourceVersionCreatorPage/onChange_CustomProperties',
+                            payload: {
+                              value: [
+                                ...resourceVersionCreatorPage.customProperties,
+                                ...dataSource.map<ResourceVersionCreatorPageModelState['customProperties'][number]>((ds) => {
+                                  return {
+                                    key: ds.key,
+                                    name: ds.name,
+                                    value: ds.value,
+                                    description: ds.description,
+                                  };
+                                }),
+                              ],
+                            },
+                          });
+                        }
+
+                      }}
+                    >从上个版本导入</FComponentsLib.FTextBtn>)
+                  }
+                </Space>
+              </div>)
+            }
+
           </div>
 
           <div style={{ height: 20 }} />
@@ -423,29 +424,30 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                   style={{ fontSize: 12 }}
                 />
 
-                <div>
-                  <Space size={20}>
-                    {
-                      resourceVersionCreatorPage.customConfigurations.length < 30 && (<FComponentsLib.FTextBtn
+                {
+                  resourceVersionCreatorPage.customConfigurations.length < 30 && (<div>
+                    <Space size={20}>
+                      <FComponentsLib.FTextBtn
                         style={{ fontSize: 12, fontWeight: 600 }}
                         type='primary'
                         onClick={async () => {
                           onClick_addOptionBtn();
                         }}
-                      >添加配置</FComponentsLib.FTextBtn>)
-                    }
+                      >添加配置</FComponentsLib.FTextBtn>
 
-                    {
-                      resourceVersionCreatorPage.preVersion_customConfigurations.length > 0 && (<FComponentsLib.FTextBtn
-                        type='primary'
-                        style={{ fontSize: 12, fontWeight: 600 }}
-                        onClick={async () => {
-                          onClick_importPreVersionOptionBtn();
+                      {
+                        resourceVersionCreatorPage.preVersion_customConfigurations.length > 0 && (<FComponentsLib.FTextBtn
+                          type='primary'
+                          style={{ fontSize: 12, fontWeight: 600 }}
+                          onClick={async () => {
+                            onClick_importPreVersionOptionBtn();
 
-                        }}>从上个版本导入</FComponentsLib.FTextBtn>)
-                    }
-                  </Space>
-                </div>
+                          }}>从上个版本导入</FComponentsLib.FTextBtn>)
+                      }
+                    </Space>
+                  </div>)
+                }
+
               </div>
               <div style={{ height: 20 }} />
 
