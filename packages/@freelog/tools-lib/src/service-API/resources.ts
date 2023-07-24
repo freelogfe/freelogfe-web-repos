@@ -83,6 +83,7 @@ interface ListParamsType {
   keywords?: string;
   resourceType?: string;
   resourceTypeCode?: string;
+  resourceTypeCategory?: 1 | 2; // 资源类型分类，1：基础类型，2：自定义类型，其实只有2时生效，生效时，resourceTypeCode为父类类型
   omitResourceType?: string;
   isSelf?: 0 | 1;
   userId?: number;

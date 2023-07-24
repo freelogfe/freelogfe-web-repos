@@ -9,8 +9,6 @@ import {
   OnUnmountAction,
   ResourceListPageModelState,
 } from '@/models/resourceListPage';
-// import { history } from 'umi';
-// import FResourceCardsList from '@/pages/resource/components/FResourceCardsList';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import { ConnectState } from '@/models/connect';
@@ -22,8 +20,7 @@ import styles from './index.less';
 import FResourceTypeFilter from '@/components/FResourceTypeFilter';
 import FComponentsLib from '@freelog/components-lib';
 import FMenu from '@/components/FMenu';
-import { Button, Space } from 'antd';
-import FInput from '@/components/FInput';
+import { Space } from 'antd';
 import { history } from 'umi';
 import FResourceCard from '@/components/FResourceCard';
 import FListFooter from '@/components/FListFooter';
@@ -71,12 +68,6 @@ function Resources({ dispatch, resourceListPage }: ResourceProps) {
     return <FLoadingTip height={'calc(100vh - 140px)'} />;
   }
 
-  // if (
-  //   resourceListPage.dataSource.length === 0 &&
-  //   resourceListPage.inputText === '' &&
-  //   resourceListPage.resourceTypeCodes.values.length === 1 && resourceListPage.resourceTypeCodes.value === '#all' &&
-  //   resourceListPage.resourceStatus === '#'
-  // ) {
   if (resourceListPage.resource_ListState === 'noData') {
     return (
       <FNoDataTip
@@ -100,9 +91,10 @@ function Resources({ dispatch, resourceListPage }: ResourceProps) {
           <FResourceTypeFilter
             value={resourceListPage.resourceTypeCodes}
             onChange={(value) => {
-              if (!value) {
-                return;
-              }
+              // console.log(value, 'valuedsoiflksdjflsdjlkfjklj');
+              // if (!value) {
+              //   return;
+              // }
               // onChangeResourceTypeCodes && onChangeResourceTypeCodes(value);
               dispatch<OnChangeResourceTypeAction>({
                 type: 'resourceListPage/onChangeResourceType',
@@ -138,34 +130,12 @@ function Resources({ dispatch, resourceListPage }: ResourceProps) {
                 {resourceStatusOptions.find((rs) => {
                   return rs.value === resourceListPage.resourceStatus;
                 })?.text}
-                {/*{statusText}*/}
-                {/*<DownOutlined style={{ marginLeft: 10 }} />*/}
                 <FComponentsLib.FIcons.FDown style={{ marginLeft: 8, fontSize: 12 }} />
               </span>
           </FComponentsLib.FDropdown>
         </div>
       </div>
       <Space size={20}>
-        {/*<FInput*/}
-        {/*  value={resourceListPage.inputText}*/}
-        {/*  debounce={300}*/}
-        {/*  allowClear={true}*/}
-        {/*  // onChange={(e) => onChangeInputText && onChangeInputText(e.target.value)}*/}
-        {/*  onDebounceChange={(value) => {*/}
-        {/*    // onChangeInputText && onChangeInputText(value);*/}
-        {/*    dispatch<OnChangeKeywordsAction>({*/}
-        {/*      type: 'resourceListPage/onChangeKeywords',*/}
-        {/*      payload: {*/}
-        {/*        value: value,*/}
-        {/*      },*/}
-        {/*    });*/}
-        {/*  }}*/}
-        {/*  theme='dark'*/}
-        {/*  className={styles.FInput}*/}
-        {/*  // placeholder={FI18n.i18nNext.t('search_resource')}*/}
-        {/*  placeholder={FI18n.i18nNext.t('myresourses_search_hint')}*/}
-        {/*/>*/}
-
         <FComponentsLib.FInput.FSearch
           value={resourceListPage.inputText}
           style={{ width: 400 }}

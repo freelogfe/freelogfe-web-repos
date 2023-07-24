@@ -61,11 +61,6 @@ export interface FetchDataSourceAction extends AnyAction {
   };
 }
 
-// export interface ChangeStatesAction extends AnyAction {
-//   type: 'resourceListPage/changeStates',
-//   payload: Partial<Pick<ResourceListPageModelState, 'resourceType' | 'resourceStatus' | 'inputText'>>;
-// }
-
 export interface OnChangeResourceTypeAction extends AnyAction {
   type: 'resourceListPage/onChangeResourceType';
   payload: {
@@ -182,17 +177,28 @@ const Model: ResourceListPageModelType = {
         });
       }
 
-      const resourceTypes: Array<string | number> = resourceListPage.resourceTypeCodes.labels.filter((rt) => {
-        return rt !== '全部';
-      });
+      // const resourceTypes: Array<string | number> = resourceListPage.resourceTypeCodes.labels.filter((rt) => {
+      //   return rt !== '全部';
+      // });
+
+      const resourceTypes: string[] = resourceListPage.resourceTypeCodes.value.split('#');
+      let resourceTypeCode: string = resourceTypes[0];
+      let resourceTypeCategory: 1 | 2 = 1;
+
+      if (resourceTypes.length > 1 && resourceTypes[resourceTypes.length - 1] === 'other') {
+        resourceTypeCode = resourceTypes[0];
+        resourceTypeCategory = 2;
+      }
 
       const params: Parameters<typeof FServiceAPI.Resource.list>[0] = {
         // skip: dataSource.length,
         skip: resource_List.length,
         limit: FUtil.Predefined.pageSize,
-        keywords: resourceListPage.inputText,
-        resourceType: resourceTypes.length === 0 ? undefined : String(resourceTypes[resourceTypes.length - 1]),
+        keywords: resourceListPage.inputText || undefined,
+        // resourceType: resourceTypes.length === 0 ? undefined : String(resourceTypes[resourceTypes.length - 1]),
         // status: Number(resourceListPage.resourceStatus) as 0 | 1 | 2,
+        resourceTypeCode: resourceTypeCode || undefined,
+        resourceTypeCategory: resourceTypeCategory,
         status: resourceListPage.resourceStatus === '#' ? undefined : (resourceListPage.resourceStatus as 0),
         isSelf: 1,
       };
