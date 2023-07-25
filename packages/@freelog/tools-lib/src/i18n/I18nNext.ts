@@ -32,7 +32,7 @@ class I18nNext {
     this.getCurrentLanguage = this.getCurrentLanguage.bind(this);
   }
 
-  async ready(this: I18nNext) {
+  async ready(this: I18nNext): Promise<void> {
     const exc = () => {
       while (this._taskQueue.length > 0) {
         const task = this._taskQueue.shift();
@@ -56,18 +56,18 @@ class I18nNext {
       // console.log('######');
       exc();
     };
-    const promise = new Promise((resolve) => {
+    const promise = new Promise<void>((resolve) => {
       this._taskQueue.push(resolve);
     });
     handleTasks();
     return promise;
   }
 
-  t(this: I18nNext, key: string, options?: { [key: string]: any }) {
+  t(this: I18nNext, key: string, options?: { [key: string]: any }): string {
     return i18next.t(key.trim(), options);
   }
 
-  changeLanguage(this: I18nNext, lng: LanguageKeyType) {
+  changeLanguage(this: I18nNext, lng: LanguageKeyType): void {
     // return i18next.changeLanguage(lng);
     // window.localStorage.setItem(localStorage_i18nextLng_key, lng)
     Cookies.set(localStorage_i18nextLng_key, lng, {
@@ -84,7 +84,7 @@ class I18nNext {
     return this._currentLanguage;
   }
 
-  private async _handleData(this: I18nNext) {
+  private async _handleData(this: I18nNext): Promise<void> {
 
     const lng: string = this._currentLanguage;
     const resource: string | null = window.localStorage.getItem(localStorage_i18nextResources_key);
