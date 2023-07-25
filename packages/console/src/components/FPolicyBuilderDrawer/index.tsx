@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-// import FInput from '../FInput';
 import { Space, Divider, DatePicker, Modal } from 'antd';
 import PolicyTemplates from './PolicyTemplates';
 import FDrawer from '../FDrawer';
@@ -15,6 +14,7 @@ import * as AHooks from 'ahooks';
 import FAddingEventDrawer from '@/components/FPolicyBuilderDrawer/AddingEventDrawer';
 import FComponentsLib from '@freelog/components-lib';
 import { Base64 } from 'js-base64';
+import FI18nParser from '@/components/FI18nParser';
 
 const FDatePicker: any = DatePicker;
 
@@ -148,9 +148,6 @@ const initStates: FPolicyBuilderDrawerStates = {
 
   templateVisible: false,
 };
-
-// const resourceAuthColor: ResourceAuthColor = ['active', 'testActive'];
-// const exhibitAuthColor: ExhibitAuthColor = ['active'];
 
 const authMap = {
   active: '授权',
@@ -678,7 +675,7 @@ function FPolicyBuilder({
     <FDrawer
       title={<Space size={10}>
         <FComponentsLib.FTitleText type='h2' text={'添加授权策略'} />
-        <FTooltip title={'点击查看帮助文档'}>
+        <FTooltip open={true} title={<FI18nParser i18nKey={'---markdown---addauth_info'} />}>
           <label
             onClick={() => {
               self.open('https://www.yuque.com/taiyang-4rbf5/vctf9v/kl3f01');
@@ -1049,7 +1046,7 @@ function FPolicyBuilder({
                                               //console.log(value, 'VVVVsid9ofjlaskdjfl;ksdjlfkjalsk');
                                               onChangeCombinationEvent({
                                                 payment_Amount: e.target.value,
-                                              }, cd.randomID, et.randomID)
+                                              }, cd.randomID, et.randomID);
 
 
                                             }}
@@ -1063,7 +1060,7 @@ function FPolicyBuilder({
                                                 payment_AmountError = '请输入金额';
                                               } else if (valueNum <= 0) {
                                                 payment_AmountError = '必须大于0';
-                                              // } else if (!new RegExp(/^\d+(\.\d{0,2})?$/).test(value)) {
+                                                // } else if (!new RegExp(/^\d+(\.\d{0,2})?$/).test(value)) {
                                               } else if (!Number.isInteger(valueNum * 100)) {
                                                 payment_AmountError = '不超过2位小数';
                                               } else if (valueNum >= 1000000) {
