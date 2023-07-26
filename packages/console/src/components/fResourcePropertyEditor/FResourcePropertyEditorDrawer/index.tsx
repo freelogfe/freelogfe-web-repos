@@ -257,11 +257,14 @@ function FResourcePropertyEditorDrawer({
   }
 
   function onVerify_date() {
+    // 2018-11-30
+    const dateRegex: RegExp = new RegExp(/(([0-9]{3}[1-9]|[0-9]{2}[1-9][0-9]{1}|[0-9]{1}[1-9][0-9]{2}|[1-9][0-9]{3})-(((0[13578]|1[02])-(0[1-9]|[12][0-9]|3[01]))|((0[469]|11)-(0[1-9]|[12][0-9]|30))|(02-(0[1-9]|[1][0-9]|2[0-8]))))|((([0-9]{2})(0[48]|[2468][048]|[13579][26])|((0[48]|[2468][048]|[3579][26])00))-02-29)$/);
     const startDate = get$valueFormat()?.startDate?.split(' ')[0];
     const limitDate = get$valueFormat()?.limitDate?.split(' ')[0];
     const valueInput = get$valueInput();
     const formatString = 'YYYY-MM-DD';
-    if (valueInput === '' || !checkMomentFormat(valueInput, formatString)) {
+    // const valueFormat = get$valueFormat();
+    if (valueInput === '' || !dateRegex.test(valueInput)) {
       set$valueInput('');
       $setState({
         // valueInput: '',
@@ -286,23 +289,25 @@ function FResourcePropertyEditorDrawer({
   }
 
   function onVerify_dataTime() {
+    const timeRegex: RegExp = new RegExp(/^((([0-9]{3}[1-9]|[0-9]{2}[1-9][0-9]{1}|[0-9]{1}[1-9][0-9]{2}|[1-9][0-9]{3})-(((0[13578]|1[02])-(0[1-9]|[12][0-9]|3[01]))|((0[469]|11)-(0[1-9]|[12][0-9]|30))|(02-(0[1-9]|[1][0-9]|2[0-8]))))|((([0-9]{2})(0[48]|[2468][048]|[13579][26])|((0[48]|[2468][048]|[3579][26])00))-02-29))\\s+([0-1]?[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$/);
     const valueInput = get$valueInput();
     const formatString = 'YYYY-MM-DD hh:mm:ss';
-    if (valueInput === '' || !checkMomentFormat(valueInput, formatString)) {
+    const valueFormat = get$valueFormat();
+    if (valueInput === '' || !timeRegex.test(valueInput)) {
       set$valueInput('');
       $setState({
         // valueInput: '',
         valueInputError: '',
       });
-    } else if (get$valueFormat()?.startDateTime && moment(valueInput, formatString).isBefore(moment(get$valueFormat()?.startDateTime, formatString))) {
+    } else if (valueFormat?.startDateTime && moment(valueInput, formatString).isBefore(moment(valueFormat.startDateTime, formatString))) {
       $setState({
         // valueInput: valueInput,
-        valueInputError: `时间不能早于 ${get$valueFormat()?.startDateTime}`,
+        valueInputError: `时间不能早于 ${valueFormat.startDateTime}`,
       });
-    } else if (get$valueFormat()?.limitDateTime && moment(valueInput, formatString).isAfter(moment(get$valueFormat()?.limitDateTime, formatString))) {
+    } else if (valueFormat?.limitDateTime && moment(valueInput, formatString).isAfter(moment(valueFormat.limitDateTime, formatString))) {
       $setState({
         // valueInput: valueInput,
-        valueInputError: `时间不能晚于 ${get$valueFormat()?.limitDateTime}`,
+        valueInputError: `时间不能晚于 ${valueFormat.limitDateTime}`,
       });
     } else {
       $setState({
