@@ -106,6 +106,7 @@ function FHeaderNavigation({
                             menu.map((m) => {
                                 // console.log(m, 'm.emptyItemsTip3fsdfasdfsd');
                                 return (<MenuDropdown
+                                    key={m.id}
                                     m={m}
                                     activeIDs={activeIDs}
                                     UmiLinkPatch={UmiLinkPatch}
