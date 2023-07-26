@@ -14,18 +14,7 @@ export interface ResourceCollectPageModelState {
   };
   resourceStatus: 0 | 1 | 2 | 4 | '#';
   inputText: string;
-  // pageCurrent: number;
-  // pageSize: number;
   totalNum: number;
-  // dataSource: {
-  //   id: string;
-  //   cover: string;
-  //   title: string;
-  //   version: string;
-  //   policy: string[];
-  //   type: string[];
-  //   status: 0 | 1;
-  // }[];
 
   resource_List: {
     id: string;
