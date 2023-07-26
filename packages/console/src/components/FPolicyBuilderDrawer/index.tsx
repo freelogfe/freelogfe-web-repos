@@ -675,7 +675,7 @@ function FPolicyBuilder({
     <FDrawer
       title={<Space size={10}>
         <FComponentsLib.FTitleText type='h2' text={'添加授权策略'} />
-        <FTooltip open={true} title={<FI18nParser i18nKey={'---markdown---addauth_info'} />}>
+        <FTooltip title={<FI18nParser i18nKey={'---markdown---addauth_info'} />}>
           <label
             onClick={() => {
               self.open('https://www.yuque.com/taiyang-4rbf5/vctf9v/kl3f01');
