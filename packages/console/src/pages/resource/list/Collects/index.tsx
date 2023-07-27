@@ -149,11 +149,14 @@ function ResourceCollect({ dispatch, resourceCollectPage }: ResourceCollectProps
     {
       resourceCollectPage.resource_ListState === 'noSearchResult' && (<FNoDataTip
         height={'calc(100vh - 220px)'}
-        tipText={'没有符合条件的资源'}
-        btnText={'创建资源'}
-        onClick={() => {
-          self.open(FUtil.LinkTo.resourceCreator());
-        }}
+        // tipText={'没有符合条件的资源'}
+        // btnText={'创建资源'}
+        // onClick={() => {
+        //   self.open(FUtil.LinkTo.resourceCreator());
+        // }}
+        tipText={'未收藏任何资源'}
+        btnText={'前往资源市场'}
+        onClick={() => history.push(FUtil.LinkTo.market())}
       />)
     }
 
@@ -202,78 +205,8 @@ function ResourceCollect({ dispatch, resourceCollectPage }: ResourceCollectProps
         />
       </>)
     }
-
-
-    {/*{*/}
-    {/*  resourceCollectPage.totalNum > resourceCollectPage.dataSource.length && (<>*/}
-    {/*    <div className={styles.bottom}>*/}
-    {/*      <Button*/}
-    {/*        className={styles.loadMore}*/}
-    {/*        onClick={() => {*/}
-    {/*          dispatch<OnClickLoadingMordAction>({*/}
-    {/*            type: 'resourceCollectPage/onClickLoadingMord',*/}
-    {/*          });*/}
-    {/*        }}*/}
-    {/*      >*/}
-    {/*        加载更多*/}
-    {/*      </Button>*/}
-    {/*    </div>*/}
-    {/*    <div style={{ height: 100 }} />*/}
-    {/*  </>)*/}
-    {/*}*/}
-
-
     <div style={{ height: 100 }} />
   </>);
-
-  // return (<FResourceCardsList
-  //   resourceTypeCodes={resource.resourceTypeCodes}
-  //   resourceStatus={resource.resourceStatus}
-  //   inputText={resource.inputText}
-  //   dataSource={resource.dataSource}
-  //   totalNum={resource.totalNum}
-  //   onChangeResourceTypeCodes={(value) => {
-  //     dispatch<OnChangeResourceTypeAction>({
-  //       type: 'resourceCollectPage/onChangeResourceType',
-  //       payload: {
-  //         value: value,
-  //       },
-  //     });
-  //   }}
-  //   onChangeResourceStatus={(value) => {
-  //     dispatch<OnChangeStatusAction>({
-  //       type: 'resourceCollectPage/onChangeStatus',
-  //       payload: {
-  //         value: value,
-  //       },
-  //     });
-  //   }}
-  //   onChangeInputText={(value) => {
-  //     dispatch<OnChangeKeywordsAction>({
-  //       type: 'resourceCollectPage/onChangeKeywords',
-  //       payload: {
-  //         value: value,
-  //       },
-  //     });
-  //   }}
-  //   isCollect={true}
-  //   onBoomJuice={(id) => {
-  //     dispatch<OnBoomJuiceAction>({
-  //       type: 'resourceCollectPage/onBoomJuice',
-  //       payload: id.toString(),
-  //     });
-  //   }}
-  //   onClickDetails={(id) => {
-  //     window.open(FUtil.LinkTo.resourceDetails({
-  //       resourceID: String(id),
-  //     }));
-  //   }}
-  //   onClickMore={() => {
-  //     dispatch<OnClickLoadingMordAction>({
-  //       type: 'resourceCollectPage/onClickLoadingMord',
-  //     });
-  //   }}
-  // />);
 }
 
 export default connect(({ resourceCollectPage }: ConnectState) => ({
