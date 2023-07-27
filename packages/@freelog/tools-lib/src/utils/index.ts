@@ -4,7 +4,7 @@ import * as LinkTo from './linkTo';
 import * as Predefined from './predefined';
 import Axios, {request} from './axios';
 import * as Tool from './tools';
-// import * as Hooks from './hooks';
+import * as Hook from './hooks';
 // import I18n from '../i18n';
 
 const FUtil = {
@@ -15,7 +15,7 @@ const FUtil = {
   Axios,
   Request: request,
   Tool,
-  // Hooks,
+  Hook,
   // i18n: new I18n(),
 };
 
