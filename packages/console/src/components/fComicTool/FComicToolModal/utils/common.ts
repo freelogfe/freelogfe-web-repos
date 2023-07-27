@@ -70,10 +70,14 @@ export const getMIME = (filename: any) => {
 
 /** 格式化卡片图片名称（超长时中间部分省略，并保证尾部显示不含后缀名至少四位字符） */
 export const formatCardName = (name: string) => {
-  const _div = document.createElement('div');
+  let _div = document.getElementById(name);
+  if (!_div) _div = document.createElement('div');
+  _div.id = name;
   _div.innerText = name;
   _div.style.fontSize = '12px';
   _div.style.position = 'absolute';
+  _div.style.left = '-100%';
+  _div.style.top = '-100%';
   document.body.appendChild(_div);
   if (_div.clientWidth < 200) {
     return name;
