@@ -7,6 +7,7 @@ import { ConnectState, GlobalModelState } from '@/models/connect';
 import * as AHooks from 'ahooks';
 import FComponentsLib from '@freelog/components-lib';
 import { Link } from 'umi';
+import fConfirmModal from '@/components/fConfirmModal';
 
 interface FBaseLayoutProps {
   children: React.ReactNode;
@@ -41,16 +42,36 @@ const initStates: FBaseLayoutStates = {
 
 function FBaseLayout({ children, global }: FBaseLayoutProps) {
 
-  const [userInfo, set_UserInfo] = React.useState<FBaseLayoutStates['userInfo']>(initStates['userInfo']);
+  const [$userInfo, set$UserInfo, get$userInfo] = useGetState<FBaseLayoutStates['userInfo']>(initStates['userInfo']);
   const [activeIDs, set_ActiveIDs] = React.useState<FBaseLayoutStates['activeIDs']>(initStates['activeIDs']);
 
   AHooks.useMount(async () => {
     if (FUtil.Tool.getUserIDByCookies() === -1) {
-      set_UserInfo(initStates['userInfo']);
+      set$UserInfo(initStates['userInfo']);
       return;
     }
     const { data } = await FServiceAPI.User.currentUserInfo();
-    set_UserInfo(data);
+    set$UserInfo(data);
+  });
+
+  AHooks.useMount(() => {
+    window.document.addEventListener('visibilitychange', () => {
+      console.log(FUtil.Tool.getUserIDByCookies(), get$userInfo(), 'DDDDDDD visibilitychange 329r8iw09poijflksdajflksdjl');
+      if (!document.hidden && FUtil.Tool.getUserIDByCookies() === -1 && !!get$userInfo()) {
+        fConfirmModal({
+          onOk() {
+            window.location.reload();
+          },
+          cancelButtonProps: {
+            style: {
+              display: 'none',
+            },
+          },
+          message: '用户已登出',
+        });
+      }
+
+    });
   });
 
   AHooks.useUnmount(() => {
@@ -124,14 +145,14 @@ function FBaseLayout({ children, global }: FBaseLayoutProps) {
           },
         ]}
         activeIDs={activeIDs}
-        showGotoConsole={!!userInfo}
-        userPanel={userInfo ? {
+        showGotoConsole={!!$userInfo}
+        userPanel={$userInfo ? {
           info: {
             // avatar: userInfo.headImage,
             avatar: FUtil.Tool.getAvatarUrl(),
-            userName: userInfo.username,
-            email: userInfo.email,
-            phone: userInfo.mobile,
+            userName: $userInfo.username,
+            email: $userInfo.email,
+            phone: $userInfo.mobile,
           },
           menu: [
             {
@@ -144,7 +165,7 @@ function FBaseLayout({ children, global }: FBaseLayoutProps) {
               text: '登出',
               async onClick() {
                 await FServiceAPI.User.logout();
-                set_UserInfo(initStates['userInfo']);
+                set$UserInfo(initStates['userInfo']);
               },
             },
           ],
@@ -165,3 +186,19 @@ function FBaseLayout({ children, global }: FBaseLayoutProps) {
 export default connect(({ global }: ConnectState) => ({
   global,
 }))(FBaseLayout);
+
+export function useGetState<T>(initVal: T): [T, (newVal: T) => void, () => T] {
+  const [state, setState] = React.useState<T>(initVal);
+  const ref = React.useRef<T>(initVal);
+
+  function setStateCopy(newVal: T): void {
+    ref.current = newVal;
+    setState(newVal);
+  }
+
+  function getState(): T {
+    return ref.current;
+  }
+
+  return [state, setStateCopy, getState];
+}

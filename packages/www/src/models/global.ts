@@ -1,23 +1,9 @@
 import { DvaReducer } from '@/models/shared';
 import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription } from 'dva';
-// import {
-//   formatDate,
-//   formatTime,
-//   formatRelative,
-//   formatNumber,
-//   formatPlural,
-//   formatMessage,
-//   formatHTMLMessage,
-//   setLocale,
-//   getLocale,
-// } from 'umi-plugin-react/locale';
-// import { History } from 'history';
 import { ConnectState } from '@/models/connect';
 
 export interface GlobalModelState {
-  // locale: 'zh-CN' | 'en-US' | 'pt-BR';
-  // route: any;
   routerHistories: {
     hash: string;
     key: string;
@@ -125,6 +111,8 @@ const Model: GlobalModelType = {
       window.document.addEventListener('visibilitychange', function() {
         // console.log(document.hidden, 'document.hidden9032rweopfdslj.,');
         // Modify behavior...
+
+
 
       });
 
