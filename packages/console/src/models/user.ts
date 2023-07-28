@@ -64,6 +64,7 @@ export interface MarketModelType {
 
 let switchedUserShow: boolean = false;
 let notLoginShow: boolean = false;
+// let userInfo:
 
 const Model: MarketModelType = {
   namespace: 'user',
@@ -80,6 +81,8 @@ const Model: MarketModelType = {
       // const promise = () => userPermission.getUserInfo();
       const data: UserModelState['info'] = yield call(userPermission.getUserInfo);
       // console.log(data, '#######@@@@@data2q3e@@!!@@#!@#!@#@');
+
+      notLoginShow = !data;
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -128,7 +131,7 @@ const Model: MarketModelType = {
               fConfirmModalFunc(FI18n.i18nNext.t('msg_account_switched'));
             }
 
-            if (code === 'ERR_NOT_LOGIN' && !document.hidden && !notLoginShow) {
+            if (code === 'ERR_NOT_LOGIN' && !document.hidden && !notLoginShow ) {
               notLoginShow = true;
               fConfirmModalFunc('用户已登出');
             }
