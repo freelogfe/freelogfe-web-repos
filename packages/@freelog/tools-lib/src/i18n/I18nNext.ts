@@ -2,6 +2,8 @@ import i18next, {Resource} from 'i18next';
 import axios from "axios";
 import Cookies from 'js-cookie';
 import FUtil from '../utils';
+// import * as React from 'react';
+import htmlReactParser from 'html-react-parser';
 
 type LanguageKeyType = 'zh_CN' | 'en_US';
 
@@ -66,6 +68,11 @@ class I18nNext {
   t(this: I18nNext, key: string, options?: { [key: string]: any }): string {
     return i18next.t(key.trim(), options);
   }
+
+  tJSXElement(this: I18nNext, key: string, options?: { [key: string]: any }): string | JSX.Element | JSX.Element[] {
+    return htmlReactParser(i18next.t(key.trim(), options));
+  }
+
 
   changeLanguage(this: I18nNext, lng: LanguageKeyType): void {
     // return i18next.changeLanguage(lng);
