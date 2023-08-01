@@ -164,18 +164,18 @@ function InviteFriend({ activityDetailsPage }: InviteFriendProps) {
                 <span className='title'>
                   邀请好友一起参与内测，可领20元现金奖励！
                 </span>
-                <span className='tip'>(被邀请好友完成任务可领3元现金奖励)</span>
+                <span className='tip'>(被邀请好友参与内测可领3元现金奖励)</span>
               </div>
               <div className='flex-row mb-15'>
                 <span />
                 <span className='title'>
-                  同时抽取5位成功邀请好友的用户赠送价值400元的京东购物卡！
+                  同时抽取5位成功邀请好友的用户赠送价值100元的京东购物卡！
                 </span>
               </div>
               <div className='flex-row mb-70'>
                 <span />
                 <span className='title'>
-                  内测活动仅限800人，快快邀请好友参与吧！
+                  内测活动仅限200人，快快邀请好友参与吧！
                 </span>
               </div>
               <div className='flex-row align-end'>
@@ -217,7 +217,7 @@ function InviteFriend({ activityDetailsPage }: InviteFriendProps) {
             <span className='title mt-50'>奖励二</span>
             <div className='flex-row title2 align-end'>
               <span className=''>抽取5位成功邀请好友的用户，赠送价值</span>
-              <span className='cash '>400元</span>
+              <span className='cash '>100元</span>
               <span className=''>的京东购物卡（电子卡）！</span>
             </div>
             <div className='h-220 over-h '>
@@ -294,12 +294,12 @@ function InviteFriend({ activityDetailsPage }: InviteFriendProps) {
               <div className=' flex-column-center px-20 p-rel'>
                 <div className='step flex-column-center mt-12'>3</div>
                 <div className='flex-column-center look-task'>
-                  <a
-                    className=' mt-10  link'
-                    onClick={() => scrollToAnchor('inner-test')}
-                  >
-                    查看指定任务
-                  </a>
+                  {/*<a*/}
+                  {/*  className=' mt-10  link'*/}
+                  {/*  onClick={() => scrollToAnchor('inner-test')}*/}
+                  {/*>*/}
+                  {/*  查看指定任务*/}
+                  {/*</a>*/}
                 </div>
               </div>
               <div className='arrow' />
@@ -453,7 +453,7 @@ function InviteFriend({ activityDetailsPage }: InviteFriendProps) {
             {/*</span> */}
             <span className=''>
               2.&nbsp;
-              &nbsp;内测活动仅限800名用户参与，在Freelog内测用户满800人后，邀请好友活动将会暂停；
+              &nbsp;内测活动仅限200名用户参与，在Freelog内测用户满200人后，邀请好友活动将会暂停；
             </span>
             {/*<span className=''>*/}
             {/*  3.&nbsp;*/}
@@ -470,21 +470,21 @@ function InviteFriend({ activityDetailsPage }: InviteFriendProps) {
             {/*</span>*/}
             <span className=''>
               3.&nbsp;
-              &nbsp;将邀请链接及个人邀请码分享给好友，好友通过您分享的链接和邀请码注册Freelog平台账号，并在7天内完成新手任务中的「资源系列任务」或「节点系列任务」，您可领取3—20元现金奖励（累计奖励），同时好友可获得3元现金奖励；
+              &nbsp;将邀请链接及个人邀请码分享给好友，好友通过您分享的链接和邀请码注册Freelog平台账号，您可领取3—20元现金奖励（累计奖励），同时好友可获得3元现金奖励；内测期间成功邀请好友所获取的累计奖励可在【个人中心】—【活动奖励】提现至微信钱包；
             </span>
             <span className=''>
               4.&nbsp;
-              &nbsp;随机抽取4位成功邀请好友的用户赠送价值400元的京东购物卡（电子卡），中奖用户名单将于
+              &nbsp;随机抽取5位成功邀请好友的用户赠送价值100元的京东购物卡（电子卡），中奖用户名单将于
               {activityDetailsPage.announceTime?.format('YYYY年MM月DD日') ||
                 'YYYY年MM月DD日'}
               公布；
             </span>
+            {/*<span className=''>*/}
+            {/*  5.&nbsp;*/}
+            {/*  &nbsp;现金奖励发放方式及提现要求说明；*/}
+            {/*</span>*/}
             <span className=''>
               5.&nbsp;
-              &nbsp;现金奖励发放方式及提现要求说明；
-            </span>
-            <span className=''>
-              6.&nbsp;
               &nbsp;每位用户在内测活动期间可获得1个邀请码，邀请码的有效使用次数为5次，其中2次需完成特定新手任务解锁。好友填写邀请码注册成功后，即消耗1次使用次数；
             </span>
             {/*<div style={{ display: 'flex', flexWrap: 'wrap', gap: 5 }}>*/}
@@ -506,11 +506,11 @@ function InviteFriend({ activityDetailsPage }: InviteFriendProps) {
             {/*  <span>，将内测期间领取的现金奖励申请提现至微信钱宝。</span>*/}
             {/*</div>*/}
             <span className=''>
-              7.&nbsp;
+              6.&nbsp;
               &nbsp;对于存在非正常邀请行为的用户，平台将取消其活动参与资格，并扣除相应奖励不予结算；
             </span>
             <span className=''>
-              8.&nbsp; &nbsp;活动最终解释权归Freelog平台所有。
+              7.&nbsp; &nbsp;活动最终解释权归Freelog平台所有。
             </span>
           </div>
         </div>
