@@ -14,7 +14,7 @@ import * as AHooks from 'ahooks';
 import FAddingEventDrawer from '@/components/FPolicyBuilderDrawer/AddingEventDrawer';
 import FComponentsLib from '@freelog/components-lib';
 import { Base64 } from 'js-base64';
-import FI18nParser from '@/components/FI18nParser';
+// import FI18nParser from '@/components/FI18nParser';
 
 const FDatePicker: any = DatePicker;
 
