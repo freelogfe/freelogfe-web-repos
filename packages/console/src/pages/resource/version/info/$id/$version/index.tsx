@@ -302,7 +302,10 @@ function VersionEditor({ dispatch, resourceVersionEditorPage, match }: VersionEd
         </FFormLayout.FBlock>
 
         {
-          resourceVersionEditorPage.customConfigurations.length > 0 && (<FFormLayout.FBlock title={'自定义选项'}>
+          resourceVersionEditorPage.customConfigurations.length > 0 && (<FFormLayout.FBlock
+            // title={'自定义选项'}
+            title={FI18n.i18nNext.t('resourceoptions_title')}
+          >
             {/*<div style={{ padding: 15, backgroundColor: '#F7F8F9' }}>*/}
             <FResourceOptions
               theme={'dark'}
