@@ -12,7 +12,6 @@ import FRadio from '@/components/FRadio';
 import { Space } from 'antd';
 import FInput from '@/components/FInput';
 import { Cascader, DatePicker, message, Upload } from 'antd';
-// import { LoadingOutlined } from '@ant-design/icons';
 import {
   OnChange_Birthday_Action,
   OnChange_Career_Action,
@@ -29,7 +28,6 @@ import FComponentsLib from '@freelog/components-lib';
 import FUploadAvatar from '@/components/FUploadAvatar';
 import fMessage from '@/components/fMessage';
 import moment from 'moment';
-import * as AHooks from 'ahooks';
 
 interface ProfileProps {
   dispatch: Dispatch;
