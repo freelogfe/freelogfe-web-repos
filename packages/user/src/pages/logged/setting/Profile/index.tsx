@@ -54,7 +54,7 @@ function Profile({ dispatch, user, settingPage }: ProfileProps) {
           }}
           onUploadSuccess={(data) => {
             fMessage(FI18n.i18nNext.t('saved_successfully'), 'success');
-            const avatar: string = `${FUtil.Format.completeUrlByDomain('image')}/headImage/${FUtil.Tool.getUserIDByCookies()}` + '?t=' + Date.now();
+            const avatar: string = `${FUtil.Format.completeUrlByDomain('image')}/avatar/${FUtil.Tool.getUserIDByCookies()}` + '?t=' + Date.now();
             dispatch<SettingPageChangeAction>({
               type: 'settingPage/change',
               payload: {
