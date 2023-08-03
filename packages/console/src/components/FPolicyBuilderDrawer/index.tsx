@@ -14,7 +14,7 @@ import * as AHooks from 'ahooks';
 import FAddingEventDrawer from '@/components/FPolicyBuilderDrawer/AddingEventDrawer';
 import FComponentsLib from '@freelog/components-lib';
 import { Base64 } from 'js-base64';
-import FI18nParser from '@/components/FI18nParser';
+// import FI18nParser from '@/components/FI18nParser';
 
 const FDatePicker: any = DatePicker;
 
@@ -1041,14 +1041,9 @@ function FPolicyBuilder({
                                             style={{ width: 120 }}
                                             value={et.payment_Amount || ''}
                                             onChange={(e) => {
-                                              // const value: string = e.target.value;
-
-                                              //console.log(value, 'VVVVsid9ofjlaskdjfl;ksdjlfkjalsk');
                                               onChangeCombinationEvent({
                                                 payment_Amount: e.target.value,
                                               }, cd.randomID, et.randomID);
-
-
                                             }}
                                             onBlur={() => {
                                               // if (Number.isNaN(Number(value))) {
