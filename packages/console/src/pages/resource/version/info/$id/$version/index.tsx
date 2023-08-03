@@ -99,7 +99,6 @@ function VersionEditor({ dispatch, resourceVersionEditorPage, match }: VersionEd
         signingDate={resourceVersionEditorPage.resourceVersionInfo?.createData || ''}
         resourceID={resourceVersionEditorPage.resourceVersionInfo?.sha1 || ''}
         isCartoon={resourceVersionEditorPage.resourceInfo?.resourceType[0] === '阅读' && resourceVersionEditorPage.resourceInfo?.resourceType[1] === '漫画'}
-
         onClickDownload={(extension) => {
           if (!extension) {
             self.location.href = FUtil.Format.completeUrlByDomain('qi')

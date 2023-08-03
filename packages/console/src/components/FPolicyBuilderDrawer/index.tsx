@@ -1041,14 +1041,9 @@ function FPolicyBuilder({
                                             style={{ width: 120 }}
                                             value={et.payment_Amount || ''}
                                             onChange={(e) => {
-                                              // const value: string = e.target.value;
-
-                                              //console.log(value, 'VVVVsid9ofjlaskdjfl;ksdjlfkjalsk');
                                               onChangeCombinationEvent({
                                                 payment_Amount: e.target.value,
                                               }, cd.randomID, et.randomID);
-
-
                                             }}
                                             onBlur={() => {
                                               // if (Number.isNaN(Number(value))) {
