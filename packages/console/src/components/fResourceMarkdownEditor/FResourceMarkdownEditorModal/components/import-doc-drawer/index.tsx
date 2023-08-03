@@ -13,10 +13,7 @@ import { RcFile } from 'antd/lib/upload/interface';
 import FModal from '@/components/FModal';
 import FComponentsLib from '@freelog/components-lib';
 import { editorContext } from '../..';
-import {
-  // getDependencesByContent,
-  importDoc,
-} from '../../custom/dom/resource/utils';
+import { importDoc } from '../../custom/dom/resource/utils';
 
 const { Option } = Select;
 

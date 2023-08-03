@@ -1,7 +1,7 @@
 /** 编辑器自定义菜单按钮-插入文档资源 */
 
 import { FI18n } from '@freelog/tools-lib';
-import { IButtonMenu } from '@wangeditor/editor';
+import { IButtonMenu, IDomEditor } from '@wangeditor/editor';
 
 class DocumentBtnMenu implements IButtonMenu {
   title: string;
@@ -21,8 +21,13 @@ class DocumentBtnMenu implements IButtonMenu {
   isActive(): boolean {
     return false;
   }
-  isDisabled(): boolean {
-    return false;
+  isDisabled(editor: IDomEditor): boolean {
+    const fragments = editor.getFragment().map((item: any) => item.type);
+    const disabled =
+      fragments.length > 1 ||
+      fragments.includes('pre') ||
+      fragments.includes('table');
+    return disabled;
   }
   exec(editor: any) {
     editor.setDrawerType('text');

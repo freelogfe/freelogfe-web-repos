@@ -63,7 +63,3 @@ function BufferModal({ resourceID, onChange_Saved, onClose }: BufferModalProps) 
     }}
   />);
 }
-
-export async function getDependenciesBySha1(sha1: string): Promise<string[]> {
-  return await getDependences(sha1);
-}

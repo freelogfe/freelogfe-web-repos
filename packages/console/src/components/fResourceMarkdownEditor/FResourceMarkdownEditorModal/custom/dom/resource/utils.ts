@@ -53,7 +53,7 @@ export const insertResource = async (data: ResourceInEditor, editor: any) => {
     }
   }
   editor.insertNode(insertData);
-  editor.insertBreak();
+  // editor.insertBreak();
 };
 
 /** 插入 url 资源 */
@@ -69,7 +69,7 @@ export const insertUrlResource = async (
     const resourceRes = await FServiceAPI.Resource.info({
       resourceIdOrName: resourceName,
     });
-    const data = resourceRes.data;
+    const data = resourceRes.data as any;
     if (!data || data.resourceType[0] !== type) {
       // 不存在的资源 或 资源类型不符
       const insertData: CustomResource = {
@@ -81,7 +81,7 @@ export const insertUrlResource = async (
         children: [{ text: '' }],
       };
       editor.insertNode(insertData);
-      editor.insertBreak();
+      // editor.insertBreak();
     } else {
       insertResource(data, editor);
     }
@@ -95,7 +95,7 @@ export const insertUrlResource = async (
       children: [{ text: '' }],
     };
     editor.insertNode(insertData);
-    editor.insertBreak();
+    // editor.insertBreak();
   }
 };
 
@@ -138,12 +138,12 @@ const getRealContent = async (
       const regText = `{{freelog://${requestDeps[depResultIndex].resourceName}}}`;
       const reg = new RegExp(regText, 'g');
       const depResult = resArr[depResultIndex];
-      const replaceText = editor.converter.makeHtml(depResult);
+      const replaceText = md2Html(depResult, editor);
       html = html.replace(reg, replaceText);
     }
   });
 
-  html = editor.converter.makeHtml(html);
+  html = md2Html(html, editor);
 
   return html;
 };
@@ -300,50 +300,75 @@ export const importDoc = async (
 
   /** 循环处理 md 语法图片标记 */
   for (const item of mdImgContent) {
-    const url = item.match(/(?<=!\[[^\]]*?]\()[\s\S]*?(?=\))/i) || [];
-    const domHtml = await dealInternalResources(url[0], '图片', deps, editor);
+    const urlMatch = item.match(/!\[[^\]]*?]\(([\s\S]*)?\)/i) || [];
+    const domHtml = await dealInternalResources(
+      urlMatch[1],
+      '图片',
+      deps,
+      editor,
+    );
     // 将图片文本替换标记
     html = html.replace(/`#mdImgContent#`/i, domHtml);
   }
 
   /** 循环处理图片标记 */
   for (const item of imgContent) {
-    const url = item.match(/(?<=src=['"])[\s\S]*?(?=['"])/i) || [];
-    const domHtml = await dealInternalResources(url[0], '图片', deps, editor);
+    const urlMatch = item.match(/src=['"]([\s\S]*)?['"]/i) || [];
+    const domHtml = await dealInternalResources(
+      urlMatch[1],
+      '图片',
+      deps,
+      editor,
+    );
     // 将图片文本替换标记
     html = html.replace(/`#imgContent#`/i, domHtml);
   }
 
   /** 循环处理视频标记 */
   for (const item of videoContent) {
-    const url = item.match(/(?<=src=['"])[\s\S]*?(?=['"])/i) || [];
-    const domHtml = await dealInternalResources(url[0], '视频', deps, editor);
+    const urlMatch = item.match(/src=['"]([\s\S]*)?['"]/i) || [];
+    const domHtml = await dealInternalResources(
+      urlMatch[1],
+      '视频',
+      deps,
+      editor,
+    );
     // 将视频文本替换标记
     html = html.replace(/`#videoContent#`/i, domHtml);
   }
 
   /** 循环处理音频标记 */
   for (const item of audioContent) {
-    const url = item.match(/(?<=src=['"])[\s\S]*?(?=['"])/i) || [];
-    const domHtml = await dealInternalResources(url[0], '音频', deps, editor);
+    const urlMatch = item.match(/src=['"]([\s\S]*)?['"]/i) || [];
+    const domHtml = await dealInternalResources(
+      urlMatch[1],
+      '音频',
+      deps,
+      editor,
+    );
     // 将音频文本替换标记
     html = html.replace(/`#audioContent#`/i, domHtml);
   }
 
   /** 循环处理文档标记 */
   for (const item of docContent) {
-    const url = item.match(/(?<={{)[\s\S]*?(?=}})/i) || [];
-    const domHtml = await dealInternalResources(url[0], '阅读', deps, editor);
+    const urlMatch = item.match(/{{([\s\S]*)?}}/i) || [];
+    const domHtml = await dealInternalResources(
+      urlMatch[1],
+      '阅读',
+      deps,
+      editor,
+    );
     // 将文档文本替换标记
     html = html.replace(/`#docContent#`/i, domHtml);
   }
 
-  return `<p>${html}</p>`;
+  return html;
 };
 
 /** 识别文档内容内部的资源引入 */
 const getInternalResources = (content: string, editor: any) => {
-  let newContent = editor.converter.makeHtml(content);
+  let newContent = md2Html(content, editor);
   // 储存 md 语法的图片（![]()）
   const mdImgContent = newContent.match(/!\[[^\]]*?]\([^\)]*?\)/gi) || [];
   // 储存图片（<img）
@@ -397,38 +422,45 @@ export const getDependences = async (sha1: string): Promise<string[]> => {
  * @returns 依赖资源名称集合 string[]
  */
 export const getDependencesByContent = (content: string): string[] => {
+  const list: string[] = [];
   // 匹配 md 语法的图片依赖（![]()）
-  const mdImgContent =
-    content.match(/(?<=!\[[^\]]*?]\(freelog:\/\/)[\s\S]*?(?=\))/gi) || [];
+  const mdImgList = content.matchAll(/!\[[^\]]*?]\(freelog:\/\/(\S*)?\)/gi);
+  getMatchAllContent(mdImgList, list);
   // 匹配图片依赖（<img）
-  const imgContent =
-    content.match(
-      /(?<=<img[^>]*?src=['"]freelog:\/\/)[\s\S]*?(?=['"][^>]*?>)/gi,
-    ) || [];
+  const imgList = content.matchAll(
+    /<img[^>]*?src=['"]freelog:\/\/(\S*)?['"][^>]*?>/gi,
+  );
+  getMatchAllContent(imgList, list);
   // 匹配视频依赖（<video）
-  const videoContent =
-    content.match(
-      /(?<=<video[^>]*?src=['"]freelog:\/\/)[\s\S]*?(?=['"][^>]*?>)/gi,
-    ) || [];
+  const videoList = content.matchAll(
+    /<video[^>]*?src=['"]freelog:\/\/(\S*)?['"][^>]*?>/gi,
+  );
+  getMatchAllContent(videoList, list);
   // 匹配音频依赖（<video）
-  const audioContent =
-    content.match(
-      /(?<=<audio[^>]*?src=['"]freelog:\/\/)[\s\S]*?(?=['"][^>]*?>)/gi,
-    ) || [];
+  const audioList = content.matchAll(
+    /<audio[^>]*?src=['"]freelog:\/\/(\S*)?['"][^>]*?>/gi,
+  );
+  getMatchAllContent(audioList, list);
   // 匹配文档依赖（{{}}）
-  const docContent = content.match(/(?<={{freelog:\/\/)[\s\S]*?(?=}})/gi) || [];
+  const docList = content.matchAll(/{{freelog:\/\/(\S*)?}}/gi);
+  getMatchAllContent(docList, list);
 
   // 依赖列表（去重）
-  const dependencesList: string[] = [
-    ...new Set([
-      ...mdImgContent,
-      ...imgContent,
-      ...videoContent,
-      ...audioContent,
-      ...docContent,
-    ]),
-  ];
+  const dependencesList: string[] = [...new Set(list)];
   return dependencesList;
+};
+
+/** 获取匹配所有内容 */
+const getMatchAllContent = (
+  iterator: IterableIterator<RegExpMatchArray>,
+  arr: string[],
+) => {
+  const step = iterator.next();
+  if (step.done) return;
+
+  const content = step.value[1];
+  arr.push(content);
+  getMatchAllContent(iterator, arr);
 };
 
 /**
@@ -496,7 +528,7 @@ const dealInternalResources = async (
       } else if (type === '阅读') {
         /** 文档资源 */
         const docContent = await getDocContent(data.resourceId, data.version);
-        data.content = editor.converter.makeHtml(docContent);
+        data.content = md2Html(docContent, editor);
 
         const { allDeps, requestDeps } = await getDeps(
           data.resourceId,
@@ -543,7 +575,7 @@ const dealInternalResources = async (
             const regText = `{{freelog://${requestDeps[depResultIndex].resourceName}}}`;
             const reg = new RegExp(regText, 'g');
             const depResult = resArr[depResultIndex];
-            const replaceText = editor.converter.makeHtml(depResult);
+            const replaceText = md2Html(depResult, editor);
             if (replaceText) {
               data.content = data.content.replace(
                 reg,
@@ -605,4 +637,23 @@ const customResourceHtml = (data: CustomResource) => {
   </span>`;
 
   return html;
+};
+
+/** md 转 html */
+const md2Html = (markdown: string, editor: any) => {
+  // 保留空行
+  let result = editor.converter.makeHtml(markdown);
+
+  // 将删除线 <del> 改为 <s>
+  result = result.replace(/<del>/gi, '<s>').replace(/<\/del>/gi, '</s>');
+
+  // 将引用 <blockquote> 内容转换时自动添加的 <p> 去掉
+  result = result
+    .replace(/<blockquote>\s*<p>/gi, '<blockquote>')
+    .replace(/<\/p>\s*<\/blockquote>/gi, '</blockquote>');
+
+  // 将代码块最后自动添加的换行去掉
+  result = result.replace(/\s*<\/code>/gi, '</code>');
+  
+  return result;
 };

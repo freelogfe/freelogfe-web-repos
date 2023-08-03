@@ -42,6 +42,9 @@ showdown.setOption('simplifiedAutoLink', true);
 showdown.setOption('openLinksInNewWindow', true);
 showdown.setOption('backslashEscapesHTMLTags', true);
 showdown.setOption('emoji', true);
+showdown.setOption('splitAdjacentBlockquotes', true);
+showdown.setOption('strikethrough', true);
+showdown.setOption('simpleLineBreaks', true);
 
 export const editorContext = React.createContext<any>({});
 
@@ -57,6 +60,7 @@ export const MarkdownEditor = (props: EditorProps) => {
   const policyProcessor = useRef<any>(null);
   // const relyChanged = useRef(false);
   const statementRely = useRef<string[]>([]);
+  const init = useRef<boolean>(false);
 
   const [editor, setEditor] = useState<any>(null);
   const [html, setHtml] = useState('');
@@ -131,7 +135,8 @@ export const MarkdownEditor = (props: EditorProps) => {
       fMessage(draftRes.msg);
       return;
     }
-    editor.draftData = draftRes.data.draftData as IResourceCreateVersionDraftType;
+    editor.draftData = draftRes.data
+      .draftData as IResourceCreateVersionDraftType;
     const {
       selectedFileInfo,
       directDependencies = [],
@@ -140,6 +145,7 @@ export const MarkdownEditor = (props: EditorProps) => {
     const targets = [...directDependencies];
     let dependencesByIdentify: string[] = [];
     if (selectedFileInfo) {
+      init.current = false;
       const content = await FUtil.Request({
         method: 'GET',
         url: `/v2/storages/files/${selectedFileInfo.sha1}/download`,
@@ -157,28 +163,6 @@ export const MarkdownEditor = (props: EditorProps) => {
         statementRely.current.push(item.name);
       }
     });
-    // if (dependencesByIdentify.length) {
-    //   const depsData = await FServiceAPI.Resource.batchInfo({
-    //     resourceNames: dependencesByIdentify.join(),
-    //   });
-    //   depsData.data.forEach(async (dep: any) => {
-    //     if (!dep) return;
-
-    //     const index = targets.findIndex(
-    //       (item: { name: string }) => dep.resourceName === item.name,
-    //     );
-    //     if (index === -1) {
-    //       // 识别出的依赖不在依赖树中，需添加进依赖树
-    //       const { resourceId, resourceName, latestVersion } = dep;
-    //       targets.push({
-    //         id: resourceId,
-    //         name: resourceName,
-    //         type: 'resource',
-    //         versionRange: latestVersion,
-    //       });
-    //     }
-    //   });
-    // }
     editor.draftData.directDependencies = targets;
     policyProcessor.current.clear();
     policyProcessor.current.addTargets(targets);
@@ -394,29 +378,33 @@ export const MarkdownEditor = (props: EditorProps) => {
 
     const newMarkdown = html2md(html);
     if (markdown !== newMarkdown) {
-      setEdited(true);
-      markdownRef.current = newMarkdown;
-      setMarkdown(newMarkdown);
+      if (init.current) {
+        setEdited(true);
+        markdownRef.current = newMarkdown;
+        setMarkdown(newMarkdown);
 
-      if (!inputTimer.current) {
-        inputTimer.current = setTimeout(() => {
-          save();
-          inputTimer.current = null;
-        }, 15000);
-      }
-
-      if (stopTimer.current) {
-        clearTimeout(stopTimer.current);
-        stopTimer.current = null;
-      }
-      stopTimer.current = setTimeout(() => {
-        save();
-        stopTimer.current = null;
-        if (inputTimer.current) {
-          clearTimeout(inputTimer.current);
-          inputTimer.current = null;
+        if (!inputTimer.current) {
+          inputTimer.current = setTimeout(() => {
+            save();
+            inputTimer.current = null;
+          }, 15000);
         }
-      }, 3000);
+
+        if (stopTimer.current) {
+          clearTimeout(stopTimer.current);
+          stopTimer.current = null;
+        }
+        stopTimer.current = setTimeout(() => {
+          save();
+          stopTimer.current = null;
+          if (inputTimer.current) {
+            clearTimeout(inputTimer.current);
+            inputTimer.current = null;
+          }
+        }, 3000);
+      } else {
+        init.current = true;
+      }
     }
   }, [html]);
 
@@ -504,7 +492,10 @@ export const MarkdownEditor = (props: EditorProps) => {
             </div>
           </div>
 
-          <div className="authorization-processor-box" style={{height: !depTargets.length ? 'auto' : '80%'}}>
+          <div
+            className="authorization-processor-box"
+            style={{ height: !depTargets.length ? 'auto' : '80%' }}
+          >
             <FResourceAuthorizationProcessor
               resourceID={resourceId}
               // width={1100}
