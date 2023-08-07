@@ -51,7 +51,7 @@ export default function ResourceList({
                 />
                 <ResourceInfo
                   name={item.resourceName}
-                  type={item.resourceType}
+                  type={item.resourceType.join(' / ')}
                   version={item.latestVersion}
                 />
                 <div className='flex-row over-h'>
