@@ -43,6 +43,7 @@ function VersionEditor({ dispatch, resourceVersionEditorPage, match }: VersionEd
 
   const [isEditing, setIsEditing] = React.useState<boolean>(false);
   const [editor, setEditor] = React.useState<EditorState>(BraftEditor.createEditorState(resourceVersionEditorPage.description));
+  const [$customOptionsExpansion, set$customOptionsExpansion] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     init();
@@ -308,7 +309,9 @@ function VersionEditor({ dispatch, resourceVersionEditorPage, match }: VersionEd
             {/*<div style={{ padding: 15, backgroundColor: '#F7F8F9' }}>*/}
             <FResourceOptions
               theme={'dark'}
-              dataSource={resourceVersionEditorPage.customConfigurations}
+              dataSource={resourceVersionEditorPage.customConfigurations.filter((f1, f2) => {
+                return $customOptionsExpansion || f2 < 3;
+              })}
               onEdit={async (data) => {
                 const index: number = resourceVersionEditorPage.customConfigurations.findIndex((p) => {
                   return p === data;
@@ -357,6 +360,39 @@ function VersionEditor({ dispatch, resourceVersionEditorPage, match }: VersionEd
               }}
             />
             {/*</div>*/}
+
+            {
+              resourceVersionEditorPage.customConfigurations.length > 3 && (
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 5 }}>
+                  {
+                    $customOptionsExpansion
+                      ? (<FComponentsLib.FTextBtn
+                        onClick={() => {
+                          set$customOptionsExpansion(false);
+                        }}
+                        style={{ fontSize: 12 }}
+                        type={'primary'}>{FI18n.i18nNext.t('resourceoptions_btn_showless', {
+                        OptionsQty: resourceVersionEditorPage.customConfigurations.length,
+                      })}</FComponentsLib.FTextBtn>)
+                      : (<>
+                        <FComponentsLib.FContentText
+                          text={'可配置项目较多，已折叠显示'}
+                          type={'additional2'}
+                        />
+                        <FComponentsLib.FTextBtn
+                          onClick={() => {
+                            set$customOptionsExpansion(true);
+                          }}
+                          style={{ fontSize: 12 }}
+                          type={'primary'}>{FI18n.i18nNext.t('resourceoptions_btn_showall', {
+                          OptionsQty: resourceVersionEditorPage.customConfigurations.length,
+                        })}</FComponentsLib.FTextBtn>
+                      </>)
+                  }
+
+                </div>)
+            }
+
           </FFormLayout.FBlock>)
         }
 
@@ -466,12 +502,21 @@ function Header({
 
   return (
     <div className={styles.Header}>
-      <FComponentsLib.FTitleText text={version} type='h1' />
+      <FComponentsLib.FTitleText
+        text={version}
+        type='h1'
+      />
       <div style={{ height: 10 }} />
       <Space size={0}>
-        <FComponentsLib.FContentText type='additional2' text={FI18n.i18nNext.t('release_date') + '：' + signingDate} />
+        <FComponentsLib.FContentText
+          type='additional2'
+          text={FI18n.i18nNext.t('release_date') + '：' + signingDate}
+        />
         <div style={{ width: 40 }} />
-        <FComponentsLib.FContentText type='additional2' text={FI18n.i18nNext.t('object_id') + '：' + resourceID} />
+        <FComponentsLib.FContentText
+          type='additional2'
+          text={FI18n.i18nNext.t('object_id') + '：' + resourceID}
+        />
         <div style={{ width: 20 }} />
 
         {

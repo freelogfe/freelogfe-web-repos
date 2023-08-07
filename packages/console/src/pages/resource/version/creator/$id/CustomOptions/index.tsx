@@ -509,7 +509,6 @@ function CustomOptions({ dispatch, resourceVersionCreatorPage }: CustomOptionsPr
                   });
                 }}
               />
-
             </div>)
         }
 
