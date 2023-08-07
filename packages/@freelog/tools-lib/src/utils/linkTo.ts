@@ -143,7 +143,7 @@ export function nodeCreator({}: NodeCreatorParamsType = {}): TReturnType {
 // 节点管理
 interface NodeManagementParamsType {
   nodeID: number;
-  showPage?: 'exhibit' | 'theme' | 'mappingRule';
+  showPage?: 'exhibit' | 'theme' | 'contract' | 'setting';
 }
 
 export function nodeManagement({nodeID, showPage = 'exhibit', ...params}: NodeManagementParamsType): TReturnType {

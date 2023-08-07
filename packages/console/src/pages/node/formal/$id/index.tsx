@@ -42,7 +42,7 @@ function NodeManager({ dispatch, nodeManagerPage, match }: NodeManagerProps) {
 
   const [{ showPage }] = useUrlState<{ showPage: 'exhibit' | 'theme' | 'mappingRule' | 'setting' }>();
 
-  React.useEffect(() => {
+  AHooks.useMount(() => {
     dispatch<OnChange_ShowPage_Action>({
       type: 'nodeManagerPage/onChange_ShowPage',
       payload: {
@@ -55,12 +55,23 @@ function NodeManager({ dispatch, nodeManagerPage, match }: NodeManagerProps) {
         nodeID: Number(match.params.id),
       },
     });
-    return () => {
-      dispatch<OnUnmount_Page_Action>({
-        type: 'nodeManagerPage/onUnmount_Page',
-      });
-    };
-  }, [match.params.id]);
+  });
+
+  React.useEffect(() => {
+    dispatch<OnChange_ShowPage_Action>({
+      type: 'nodeManagerPage/onChange_ShowPage',
+      payload: {
+        value: showPage,
+      },
+    });
+  }, [showPage]);
+
+
+  AHooks.useUnmount(() => {
+    dispatch<OnUnmount_Page_Action>({
+      type: 'nodeManagerPage/onUnmount_Page',
+    });
+  });
 
   if (nodeManagerPage.nodeInfoState === 'loading' || !nodeManagerPage.listFirstLoaded) {
     return <FLoadingTip height={'calc(100vh - 70px)'} />;

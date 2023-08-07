@@ -13,6 +13,7 @@ import FTooltip from '@/components/FTooltip';
 import FComponentsLib from '@freelog/components-lib';
 import * as imgSrc from '@/assets/default-node-cover.png';
 import FNodeCoverImage from '@/components/FNodeCoverImage';
+import { history } from 'umi';
 
 interface SiderProps {
   dispatch: Dispatch;
@@ -106,12 +107,16 @@ function Sider({ dispatch, nodeManagerPage, match }: SiderProps) {
           <a
             className={nodeManagerPage.showPage === 'exhibit' ? styles.activated : ''}
             onClick={() => {
-              dispatch<OnChange_ShowPage_Action>({
-                type: 'nodeManagerPage/onChange_ShowPage',
-                payload: {
-                  value: 'exhibit',
-                },
-              });
+              // dispatch<OnChange_ShowPage_Action>({
+              //   type: 'nodeManagerPage/onChange_ShowPage',
+              //   payload: {
+              //     value: 'exhibit',
+              //   },
+              // });
+              history.push(FUtil.LinkTo.nodeManagement({
+                nodeID: nodeManagerPage.nodeId,
+                showPage: 'exhibit',
+              }));
             }}
           >
             {FI18n.i18nNext.t('tab_manage_nodes')}
@@ -119,12 +124,16 @@ function Sider({ dispatch, nodeManagerPage, match }: SiderProps) {
           <a
             className={nodeManagerPage.showPage === 'theme' ? styles.activated : ''}
             onClick={() => {
-              dispatch<OnChange_ShowPage_Action>({
-                type: 'nodeManagerPage/onChange_ShowPage',
-                payload: {
-                  value: 'theme',
-                },
-              });
+              // dispatch<OnChange_ShowPage_Action>({
+              //   type: 'nodeManagerPage/onChange_ShowPage',
+              //   payload: {
+              //     value: 'theme',
+              //   },
+              // });
+              history.push(FUtil.LinkTo.nodeManagement({
+                nodeID: nodeManagerPage.nodeId,
+                showPage: 'theme',
+              }));
             }}
           >
             {FI18n.i18nNext.t('manage_theme')}
@@ -132,23 +141,34 @@ function Sider({ dispatch, nodeManagerPage, match }: SiderProps) {
           <a
             className={nodeManagerPage.showPage === 'contract' ? styles.activated : ''}
             onClick={() => {
-              dispatch<OnChange_ShowPage_Action>({
-                type: 'nodeManagerPage/onChange_ShowPage',
-                payload: {
-                  value: 'contract',
-                },
-              });
+              // dispatch<OnChange_ShowPage_Action>({
+              //   type: 'nodeManagerPage/onChange_ShowPage',
+              //   payload: {
+              //     value: 'contract',
+              //   },
+              // });
+              history.push(FUtil.LinkTo.nodeManagement({
+                nodeID: nodeManagerPage.nodeId,
+                // @ts-ignore
+                showPage: 'contract',
+              }));
             }}
           >合约管理</a>
           <a
             className={nodeManagerPage.showPage === 'setting' ? styles.activated : ''}
             onClick={() => {
-              dispatch<OnChange_ShowPage_Action>({
-                type: 'nodeManagerPage/onChange_ShowPage',
-                payload: {
-                  value: 'setting',
-                },
-              });
+              // dispatch<OnChange_ShowPage_Action>({
+              //   type: 'nodeManagerPage/onChange_ShowPage',
+              //   payload: {
+              //     value: 'setting',
+              //   },
+              // });
+
+              history.push(FUtil.LinkTo.nodeManagement({
+                nodeID: nodeManagerPage.nodeId,
+                // @ts-ignore
+                showPage: 'setting',
+              }));
             }}
           >节点设置</a>
         </div>
