@@ -502,7 +502,8 @@ function Contract({ dispatch, nodeManager_Contract_Page }: ContractProps) {
                       onChange={(e) => {
                         setAuthorizeFilterInput(e.target.value);
                       }}
-                      placeholder={FI18n.i18nNext.t('nodemgmt_search_contracts_hint')}
+                      // placeholder={FI18n.i18nNext.t('nodemgmt_search_contracts_hint')}
+                      placeholder={FI18n.i18nNext.t('nodemngt_contract_search_hint')}
                     />
                   </div>
                   {

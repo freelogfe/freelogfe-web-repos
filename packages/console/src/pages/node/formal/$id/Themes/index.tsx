@@ -270,7 +270,8 @@ function Themes({ match, dispatch, nodeManagerPage }: ThemesProps) {
                     setThemeInputFilter(e.target.value);
 
                   }}
-                  placeholder={FI18n.i18nNext.t('nodemgmt_search_themes_hint')}
+                  // placeholder={FI18n.i18nNext.t('nodemgmt_search_themes_hint')}
+                  placeholder={FI18n.i18nNext.t('nodemngt_theme_search_hint')}
                 />
               </div>
               {nodeManagerPage.theme_ListState === 'loading' && (

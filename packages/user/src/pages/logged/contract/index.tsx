@@ -723,6 +723,7 @@ function Contract({ dispatch, contractPage }: ContractProps) {
                     onChange={(e) => {
                       set_keywordsInput2(e.target.value);
                     }}
+                    // placeholder={FI18n.i18nNext.t('contractmngt_search_hint')}
                     placeholder={FI18n.i18nNext.t('contractmngt_search_hint')}
                   />
                 </div>

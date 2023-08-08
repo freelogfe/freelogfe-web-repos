@@ -287,7 +287,8 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                       });
                     }}
                     className={styles.input}
-                    placeholder={FI18n.i18nNext.t('nodemgmt_search_exhibits_hint')}
+                    // placeholder={FI18n.i18nNext.t('nodemgmt_search_exhibits_hint')}
+                    placeholder={FI18n.i18nNext.t('nodemngt_exhibit_search_hint')}
                   />
                 </div>
               </Space>

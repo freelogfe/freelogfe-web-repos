@@ -133,7 +133,8 @@ function ResourceCollect({ dispatch, resourceCollectPage }: ResourceCollectProps
         <FComponentsLib.FInput.FSearch
           value={resourceCollectPage.inputText}
           style={{ width: 400 }}
-          placeholder={FI18n.i18nNext.t('myresourses_search_hint')}
+          // placeholder={FI18n.i18nNext.t('myresourses_search_hint')}
+          placeholder={FI18n.i18nNext.t('resourcemngt_search_hint')}
           onChange={(e) => {
             dispatch<OnChangeKeywordsAction>({
               type: 'resourceCollectPage/onChangeKeywords',

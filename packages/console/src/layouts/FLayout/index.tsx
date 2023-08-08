@@ -243,7 +243,8 @@ function FLayout({
               size='small'
               // theme='dark'
               // placeholder='输入用户名或资源名称'
-              placeholder={FI18n.i18nNext.t('general_search_hint')}
+              // placeholder={FI18n.i18nNext.t('general_search_hint')}
+              placeholder={FI18n.i18nNext.t('market_search_hint')}
               style={{ width: 200 }}
               onPressEnter={() => {
                 // console.log(e);
