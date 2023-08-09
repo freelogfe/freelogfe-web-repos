@@ -35,7 +35,7 @@ function ResourceCreator({
           {/*<span className={styles.title}>{FI18n.i18nNext.t('rqr_step1')}</span>*/}
         </a>
 
-        <a className={styles.step}>
+        <a className={[styles.step, styles.stepActivated].join(' ')}>
           <div style={{ width: 30 }}>
             <FComponentsLib.FIcons.FArrowRight className={styles.icon} />
           </div>
@@ -43,7 +43,7 @@ function ResourceCreator({
           {/*<span className={styles.title}>{FI18n.i18nNext.t('rqr_step2')}</span>*/}
         </a>
 
-        <a className={styles.step}>
+        <a className={[styles.step, styles.stepActivated].join(' ')}>
           <div style={{ width: 30 }}>
             <FComponentsLib.FIcons.FArrowRight className={styles.icon} />
           </div>
@@ -51,7 +51,7 @@ function ResourceCreator({
           {/*<span className={styles.title}>{FI18n.i18nNext.t('rqr_step3')}</span>*/}
         </a>
 
-        <a className={styles.step}>
+        <a className={[styles.step, styles.stepActivated].join(' ')}>
           <div style={{ width: 30 }}>
             <FComponentsLib.FIcons.FArrowRight className={styles.icon} />
           </div>
