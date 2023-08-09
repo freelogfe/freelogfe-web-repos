@@ -1,5 +1,5 @@
 import * as React from 'react';
-// import styles from './index.less';
+import styles from './index.less';
 
 interface FArrowRightProps {
     className?: string;
@@ -9,7 +9,7 @@ interface FArrowRightProps {
 }
 
 function FArrowRight({className, ...props}: FArrowRightProps) {
-    return (<i className={['freelog', 'fl-icon-qianjin', className].join(' ')} {...props} />);
+    return (<i className={['freelog', 'fl-icon-fangxiang', styles.icon, className].join(' ')} {...props} />);
 }
 
 export default FArrowRight;

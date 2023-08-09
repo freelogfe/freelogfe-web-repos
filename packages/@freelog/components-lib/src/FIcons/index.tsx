@@ -1,10 +1,12 @@
 import './index.less';
 
 import FAdd from './FAdd';
+import FArrowDown from './FArrowDown';
 import FArrowRight from './FArrowRight';
 import FBinding from './FBinding';
 import FCancelCollect from './FCancelCollect';
 import FCheck from './FCheck';
+import FCheckMark from './FCheckMark';
 import FCircleDelete from './FCircleDelete';
 import FCircleEdit from './FCircleEdit';
 import FClose from './FClose';
@@ -74,10 +76,12 @@ import FWeChat from './FWeChat';
 
 const FIcons = {
     FAdd,
+    FArrowDown,
     FArrowRight,
     FBinding,
     FCancelCollect,
     FCheck,
+    FCheckMark,
     FCircleDelete,
     FCircleEdit,
     FClose,

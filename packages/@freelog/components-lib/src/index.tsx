@@ -11,7 +11,7 @@ import FPaymentPasswordInput from './FPaymentPasswordInput';
 import FCopyToClipboard from './FCopyToClipboard';
 import FHotspotTooltip, {setHotspotTooltipVisible} from './FHotspotTooltip';
 import FInput from './FInput';
-
+console
 const FComponentsLib = {
     FIcons,
     F_Contract_And_Policy_Labels,

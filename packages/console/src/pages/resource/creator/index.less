@@ -22,10 +22,16 @@
         align-items: center;
         //gap: 16px;
 
-        .icon {
+        .iconFArrowRight {
           font-size: 14px;
-          visibility: hidden;
           color: #2784FF;
+          display: none;
+        }
+
+        .iconFCheckMark {
+          color: #666;
+          font-size: 12px;
+          display: none;
         }
 
         .title {
@@ -34,12 +40,31 @@
         }
 
         &.stepActivated {
-          .icon {
-            visibility: visible;
-          }
-
           .title {
             color: #2784FF;
+          }
+
+          .iconFArrowRight {
+            display: inline-block;
+          }
+        }
+
+        &.stepFinish {
+          color: #999;
+
+          .iconFCheckMark {
+            display: inline-block;
+          }
+        }
+
+        &.stepFinish1 {
+          .title{
+            color: #42C28C;
+          }
+
+          .iconFCheckMark {
+            display: inline-block;
+            color: #42C28C;
           }
         }
       }

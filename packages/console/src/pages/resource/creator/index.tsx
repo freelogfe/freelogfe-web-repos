@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import FContentLayout from '@/layouts/FContentLayout';
+// import FContentLayout from '@/layouts/FContentLayout';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import { ConnectState, ResourceCreatorPageModelState } from '@/models/connect';
@@ -27,37 +27,41 @@ function ResourceCreator({
       {/*<FComponentsLib.FTitleText text={'rqr_title'} type={'h1'} />*/}
       <div style={{ height: 40 }} />
       <div className={styles.steps}>
-        <a className={[styles.step, styles.stepActivated].join(' ')}>
+        <div className={[styles.step, styles.stepFinish].join(' ')}>
           <div style={{ width: 30 }}>
-            <FComponentsLib.FIcons.FArrowRight className={styles.icon} />
+            <FComponentsLib.FIcons.FArrowRight className={styles.iconFArrowRight} />
+            <FComponentsLib.FIcons.FCheckMark className={styles.iconFCheckMark} />
           </div>
           <span className={styles.title}>创建资源授权条目</span>
           {/*<span className={styles.title}>{FI18n.i18nNext.t('rqr_step1')}</span>*/}
-        </a>
+        </div>
 
-        <a className={[styles.step, styles.stepActivated].join(' ')}>
+        <div className={[styles.step, styles.stepActivated].join(' ')}>
           <div style={{ width: 30 }}>
-            <FComponentsLib.FIcons.FArrowRight className={styles.icon} />
+            <FComponentsLib.FIcons.FArrowRight className={styles.iconFArrowRight} />
+            <FComponentsLib.FIcons.FCheckMark className={styles.iconFCheckMark} />
           </div>
           <span className={styles.title}>上传资源文件</span>
           {/*<span className={styles.title}>{FI18n.i18nNext.t('rqr_step2')}</span>*/}
-        </a>
+        </div>
 
-        <a className={[styles.step, styles.stepActivated].join(' ')}>
+        <div className={[styles.step, styles.stepFinish1].join(' ')}>
           <div style={{ width: 30 }}>
-            <FComponentsLib.FIcons.FArrowRight className={styles.icon} />
+            <FComponentsLib.FIcons.FArrowRight className={styles.iconFArrowRight} />
+            <FComponentsLib.FIcons.FCheckMark className={styles.iconFCheckMark} />
           </div>
           <span className={styles.title}>添加授权策略</span>
           {/*<span className={styles.title}>{FI18n.i18nNext.t('rqr_step3')}</span>*/}
-        </a>
+        </div>
 
-        <a className={[styles.step, styles.stepActivated].join(' ')}>
+        <div className={[styles.step].join(' ')}>
           <div style={{ width: 30 }}>
-            <FComponentsLib.FIcons.FArrowRight className={styles.icon} />
+            <FComponentsLib.FIcons.FArrowRight className={styles.iconFArrowRight} />
+            <FComponentsLib.FIcons.FCheckMark className={styles.iconFCheckMark} />
           </div>
           <span className={styles.title}>完善资源信息</span>
           {/*<span className={styles.title}>{FI18n.i18nNext.t('rqr_step4')}</span>*/}
-        </a>
+        </div>
       </div>
     </div>
     <div className={styles.right}>
