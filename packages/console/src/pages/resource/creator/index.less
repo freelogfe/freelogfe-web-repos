@@ -9,6 +9,42 @@
 
   .left {
     width: 200px;
+
+    .steps {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      gap: 20px;
+
+      .step {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        //gap: 16px;
+
+        .icon {
+          font-size: 14px;
+          visibility: hidden;
+          color: #2784FF;
+        }
+
+        .title {
+          font-size: 14px;
+          color: #999;
+        }
+
+        &.stepActivated {
+          .icon {
+            visibility: visible;
+          }
+
+          .title {
+            color: #2784FF;
+          }
+        }
+      }
+    }
+
   }
 
   .right {

@@ -21,10 +21,44 @@ function ResourceCreator({
   return (<div className={styles.styles}>
     <div className={styles.left}>
       <div style={{ height: 40 }} />
-      <FComponentsLib.FTitleText text={'发行资源'} type={'h1'} />
+      <div style={{ paddingLeft: 30 }}>
+        <FComponentsLib.FTitleText text={'发行资源'} type={'h1'} />
+      </div>
       {/*<FComponentsLib.FTitleText text={'rqr_title'} type={'h1'} />*/}
       <div style={{ height: 40 }} />
+      <div className={styles.steps}>
+        <a className={[styles.step, styles.stepActivated].join(' ')}>
+          <div style={{ width: 30 }}>
+            <FComponentsLib.FIcons.FArrowRight className={styles.icon} />
+          </div>
+          <span className={styles.title}>创建资源授权条目</span>
+          {/*<span className={styles.title}>{FI18n.i18nNext.t('rqr_step1')}</span>*/}
+        </a>
 
+        <a className={styles.step}>
+          <div style={{ width: 30 }}>
+            <FComponentsLib.FIcons.FArrowRight className={styles.icon} />
+          </div>
+          <span className={styles.title}>上传资源文件</span>
+          {/*<span className={styles.title}>{FI18n.i18nNext.t('rqr_step2')}</span>*/}
+        </a>
+
+        <a className={styles.step}>
+          <div style={{ width: 30 }}>
+            <FComponentsLib.FIcons.FArrowRight className={styles.icon} />
+          </div>
+          <span className={styles.title}>添加授权策略</span>
+          {/*<span className={styles.title}>{FI18n.i18nNext.t('rqr_step3')}</span>*/}
+        </a>
+
+        <a className={styles.step}>
+          <div style={{ width: 30 }}>
+            <FComponentsLib.FIcons.FArrowRight className={styles.icon} />
+          </div>
+          <span className={styles.title}>完善资源信息</span>
+          {/*<span className={styles.title}>{FI18n.i18nNext.t('rqr_step4')}</span>*/}
+        </a>
+      </div>
     </div>
     <div className={styles.right}>
       <div style={{ height: 40 }} />
