@@ -1,6 +1,7 @@
 import './index.less';
 
 import FAdd from './FAdd';
+import FArrowRight from './FArrowRight';
 import FBinding from './FBinding';
 import FCancelCollect from './FCancelCollect';
 import FCheck from './FCheck';
@@ -73,6 +74,7 @@ import FWeChat from './FWeChat';
 
 const FIcons = {
     FAdd,
+    FArrowRight,
     FBinding,
     FCancelCollect,
     FCheck,

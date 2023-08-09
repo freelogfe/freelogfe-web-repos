@@ -1,28 +1,29 @@
 @import '../../../config.less';
 
-.Header {
+.styles {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-}
+  justify-content: center;
+  align-items: flex-start;
+  background-color: #FAFBFC;
+  min-height: calc(100vh - 70px);
 
-.workspace {
-  width: 100%;
+  .left {
+    width: 200px;
+  }
+
+  .right {
+    width: 920px;
+
+    .block {
+      padding: 20px;
+      background-color: white;
+      border-radius: 6px;
+    }
+  }
 }
 
 .resourceName {
   display: flex;
   align-items: flex-start;
+  gap: 8px;
 }
-
-.FInput {
-  width: 610px;
-  margin-left: 5px;
-}
-
-
-
-
-
-

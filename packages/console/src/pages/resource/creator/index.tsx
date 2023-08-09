@@ -1,248 +1,86 @@
 import * as React from 'react';
 import styles from './index.less';
-// import FInput from '@/components/FInput';
 import FContentLayout from '@/layouts/FContentLayout';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
-import { ConnectState, ResourceCreatorPageModelState, UserModelState } from '@/models/connect';
-import {
-  ChangeAction,
-  OnChange_NameInput_Action,
-  OnMount_Page_Action,
-  OnUnmount_Page_Action,
-  // OnChange_Resource_Type_Action,
-  OnClick_CreateBtn_Action, OnChange_ResourceTypeCodes_Action, OnVerify_NameInput_Action,
-} from '@/models/resourceCreatorPage';
-import FFormLayout from '@/components/FFormLayout';
-import { FUtil, FI18n } from '@freelog/tools-lib';
-import * as AHooks from 'ahooks';
-import FResourceTypeInput from '@/components/FResourceTypeInput';
+import { ConnectState, ResourceCreatorPageModelState } from '@/models/connect';
 import FComponentsLib from '@freelog/components-lib';
-import FPrompt from '@/components/FPrompt';
-// import FSingleLineInput from '@/components/FInput_SingleLine';
+import FResourceTypeInput from '@/components/FResourceTypeInput';
+import { FI18n } from '@freelog/tools-lib';
 
 interface ResourceCreatorProps {
   dispatch: Dispatch;
   resourceCreatorPage: ResourceCreatorPageModelState;
-  user: UserModelState;
 }
 
 function ResourceCreator({
                            dispatch,
                            resourceCreatorPage,
-                           // user,
                          }: ResourceCreatorProps) {
-  // console.log(JSON.stringify(resourceCreatorPage.name), '###########09isodjflksdjfl;kjl');
-  AHooks.useMount(() => {
-    self._czc?.push(['_trackPageview', self.location.pathname]);
-    dispatch<OnMount_Page_Action>({
-      type: 'resourceCreatorPage/onMount_Page',
-    });
-  });
 
-  AHooks.useUnmount(() => {
-    dispatch<OnUnmount_Page_Action>({
-      type: 'resourceCreatorPage/onUnmount_Page',
-    });
-  });
-+
-  AHooks.useDebounceEffect(() => {
-    console.log(resourceCreatorPage.name, '[[[[[[[[[[[[resourceCreatorPage.nameoisjdokfljsl;kdfjlksdjlfkj');
-    dispatch<OnVerify_NameInput_Action>({
-      type: 'resourceCreatorPage/onVerify_NameInput',
-    });
-  }, [resourceCreatorPage.name], {
-    wait: 300,
-  });
+  return (<div className={styles.styles}>
+    <div className={styles.left}>
+      <div style={{ height: 40 }} />
+      <FComponentsLib.FTitleText text={'发行资源'} type={'h1'} />
+      {/*<FComponentsLib.FTitleText text={'rqr_title'} type={'h1'} />*/}
+      <div style={{ height: 40 }} />
 
-  function onChange(payload: ChangeAction['payload']) {
-    dispatch<ChangeAction>({
-      type: 'resourceCreatorPage/change',
-      payload,
-    });
-  }
+    </div>
+    <div className={styles.right}>
+      <div style={{ height: 40 }} />
+      <div className={styles.block}>
+        <FComponentsLib.FContentText text={'资源类型'} type={'highlight'} />
+        {/*<FComponentsLib.FContentText text={'rqr_input_resourcetype'} type={'highlight'}/>*/}
+        <div style={{ height: 5 }} />
+        <FComponentsLib.FContentText text={'选择最贴切描述此资源的类型，其它用户会通过资源类型在资源市场中寻找他们想要的资源。'} type={'additional2'} />
+        {/*<FComponentsLib.FContentText text={'rqr_input_resourcetype_help'} type={'additional2'} />*/}
+        <div style={{ height: 20 }} />
+        <FResourceTypeInput
+          value={null}
+          onChange={(value) => {
 
-  // const resourceTypeError: boolean = resourceCreatorPage.resource_Type.some((rt) => {
-  //   return rt.value === '' || rt.valueError !== '';
-  // });
-
-  const createBtnDisabled: boolean = resourceCreatorPage.name === '' ||
-    resourceCreatorPage.nameVerify !== 'success' ||
-    // resourceCreatorPage.resourceTypeVerify !== 2 ||
-    resourceCreatorPage.nameErrorText !== '' ||
-    // !!resourceCreatorPage.resourceTypeErrorText ||
-    // resourceTypeError ||
-    resourceCreatorPage.resourceTypeCodes === null ||
-    !!resourceCreatorPage.introductionErrorText;
-
-  if (!createBtnDisabled) {
-    FComponentsLib.fSetHotspotTooltipVisible('createResourcePage.createBtn', {
-      value: true,
-      effectiveImmediately: true,
-      onlyNullish: true,
-    });
-
-    setTimeout(() => {
-      FComponentsLib.fSetHotspotTooltipVisible('createResourcePage.createBtn', {
-        value: false,
-        effectiveImmediately: false,
-        onlyNullish: false,
-      });
-    });
-  }
-
-  return (
-    <>
-      <FPrompt
-        watch={resourceCreatorPage.dataIsDirty}
-        messageText={'还没有创建资源，现在离开会导致信息丢失'}
-      />
-      <FContentLayout
-        header={<div className={styles.Header}>
-          <FComponentsLib.FTitleText
-            // text={FUtil.I18n.message('create_resource')}
-            text={'创建资源'}
-            type='h1'
+          }}
+        />
+      </div>
+      <div style={{ height: 5 }} />
+      <div className={styles.block}>
+        <FComponentsLib.FContentText text={'资源授权标识'} type={'highlight'} />
+        {/*<FComponentsLib.FContentText text={FI18n.i18nNext.t('rqr_input_resourceauthid')} type={'highlight'}/>*/}
+        <div style={{ height: 5 }} />
+        <FComponentsLib.FContentText text={'此资源在整个授权系统中的唯一标识符，一旦创建则不能更改。'} type={'additional2'} />
+        {/*<FComponentsLib.FContentText text={FI18n.i18nNext.t('rqr_input_resourceauthid_help')} type={'additional2'} />*/}
+        <div style={{ height: 20 }} />
+        <div className={styles.resourceName}>
+          <FComponentsLib.FContentText
+            text={`Liu /`}
+            style={{ lineHeight: '38px' }}
           />
+          <div>
+            <FComponentsLib.FInput.FSingleLine
+              value={''}
+              className={styles.FInput}
+              style={{ width: 610 }}
+              lengthLimit={60}
+              placeholder={FI18n.i18nNext.t('输入资源授权标识')}
+              // placeholder={FI18n.i18nNext.t('rqr_input_resourceauthid_hint')}
+              onChange={(e) => {
 
-          <FComponentsLib.FHotspotTooltip
-            id={'createResourcePage.createBtn'}
-            style={{ left: -52, top: 4 }}
-            text={FI18n.i18nNext.t('hotpots_createresource_btn_create')}
-          >
-            <FComponentsLib.FRectBtn
-              disabled={createBtnDisabled}
-              onClick={() => {
-                dispatch<OnClick_CreateBtn_Action>({
-                  type: 'resourceCreatorPage/onClick_CreateBtn',
-                });
               }}
-            >
-              {FI18n.i18nNext.t('create')}
-            </FComponentsLib.FRectBtn>
-          </FComponentsLib.FHotspotTooltip>
-        </div>}
-      >
-        <FFormLayout>
-          <FFormLayout.FBlock title={FI18n.i18nNext.t('resource_name')} asterisk={true}>
-            <div className={styles.resourceName}>
-              <FComponentsLib.FContentText
-                text={`${resourceCreatorPage.userName} /`}
-                style={{ lineHeight: '38px' }}
-              />
-              &nbsp;
-              <div>
-                <FComponentsLib.FInput.FSingleLine
-                  value={resourceCreatorPage.name}
-                  className={styles.FInput}
-                  style={{ width: 610 }}
-                  lengthLimit={60}
-                  placeholder={FI18n.i18nNext.t('hint_enter_resource_name')}
-                  onChange={(e) => {
-                    // console.log(e, '***********************eoisdjlkfjsldkfjlkjl');
-                    dispatch<OnChange_NameInput_Action>({
-                      type: 'resourceCreatorPage/onChange_NameInput',
-                      payload: {
-                        value: e.target.value,
-                      },
-                    });
-                  }}
-                />
-                {
-                  resourceCreatorPage.nameErrorText !== '' && (<>
-                    <div style={{ height: 5 }} />
-                    <div style={{ color: '#EE4040' }}>{resourceCreatorPage.nameErrorText}</div>
-                  </>)
-                }
+            />
+            {/*{*/}
+            {/*  resourceCreatorPage.nameErrorText !== '' && (<>*/}
+            {/*    <div style={{ height: 5 }} />*/}
+            {/*    <div style={{ color: '#EE4040' }}>{resourceCreatorPage.nameErrorText}</div>*/}
+            {/*  </>)*/}
+            {/*}*/}
 
-              </div>
-              <div style={{ width: 10 }} />
-              {resourceCreatorPage.nameVerify === 'validating' &&
-              (<FComponentsLib.FIcons.FLoading style={{ lineHeight: '38px' }} />)}
-              {resourceCreatorPage.nameVerify === 'success' &&
-              (<FComponentsLib.FIcons.FCheck style={{ lineHeight: '38px' }} />)}
-            </div>
-          </FFormLayout.FBlock>
-
-          <FFormLayout.FBlock title={FI18n.i18nNext.t('resource_type')} asterisk={true}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-              <FResourceTypeInput
-                value={resourceCreatorPage.resourceTypeCodes}
-                onChange={(value) => {
-                  // console.log(value, 'value9isodjflksdjflksdjflkjlkj');
-                  dispatch<OnChange_ResourceTypeCodes_Action>({
-                    type: 'resourceCreatorPage/onChange_ResourceTypeCodes',
-                    payload: {
-                      value,
-                    },
-                  });
-                }}
-              />
-
-            </div>
-          </FFormLayout.FBlock>
-
-          {/*  <FFormLayout.FBlock title={FI18n.i18nNext.t('resource_short_description')}>*/}
-          {/*    <FIntroductionEditor*/}
-          {/*      value={resourceCreatorPage.introduction}*/}
-          {/*      onChange={(e) => {*/}
-          {/*        // onChange({*/}
-          {/*        //   introductionErrorText: e.target.value.length > 1000 ? '不多于1000个字符' : '',*/}
-          {/*        //   introduction: e.target.value,*/}
-          {/*        // })*/}
-          {/*        dispatch<OnChange_IntroductionInput_Action>({*/}
-          {/*          type: 'resourceCreatorPage/onChange_IntroductionInput',*/}
-          {/*          payload: {*/}
-          {/*            value: e.target.value,*/}
-          {/*          },*/}
-          {/*        });*/}
-          {/*      }}*/}
-          {/*      placeholder={FI18n.i18nNext.t('hint_enter_resource_short_description')}*/}
-          {/*    />*/}
-          {/*  </FFormLayout.FBlock>*/}
-
-          {/*  <FFormLayout.FBlock title={FI18n.i18nNext.t('resource_image')}>*/}
-          {/*    <FUploadResourceCover*/}
-          {/*      value={resourceCreatorPage.cover}*/}
-          {/*      onChange={(value) => {*/}
-          {/*        // onChange({*/}
-          {/*        //   cover: value,*/}
-          {/*        // })*/}
-          {/*        dispatch<OnChange_Cover_Action>({*/}
-          {/*          type: 'resourceCreatorPage/onChange_Cover',*/}
-          {/*          payload: {*/}
-          {/*            value: value,*/}
-          {/*          },*/}
-          {/*        });*/}
-          {/*      }}*/}
-          {/*    />*/}
-          {/*  </FFormLayout.FBlock>*/}
-
-          {/*  <FFormLayout.FBlock title={FI18n.i18nNext.t('resource_tag')}>*/}
-          {/*    <FLabelEditor*/}
-          {/*      values={resourceCreatorPage.labels}*/}
-          {/*      onChange={(value) => {*/}
-          {/*        // onChange({*/}
-          {/*        //   labels: value,*/}
-          {/*        // })*/}
-          {/*        dispatch<OnChange_Labels_Action>({*/}
-          {/*          type: 'resourceCreatorPage/onChange_Labels',*/}
-          {/*          payload: {*/}
-          {/*            value: value,*/}
-          {/*          },*/}
-          {/*        });*/}
-          {/*      }}*/}
-          {/*    />*/}
-          {/*  </FFormLayout.FBlock>*/}
-        </FFormLayout>
-      </FContentLayout>
-
-      {/*<div style={{ height: 100 }} />*/}
-    </>
-  );
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>);
 }
 
-export default connect(({ resourceCreatorPage, user }: ConnectState) => ({
+export default connect(({ resourceCreatorPage }: ConnectState) => ({
   resourceCreatorPage: resourceCreatorPage,
-  user: user,
 }))(ResourceCreator);
