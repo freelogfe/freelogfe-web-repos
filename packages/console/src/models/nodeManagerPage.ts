@@ -25,7 +25,7 @@ export interface NodeManagerModelState {
   showPage: 'exhibit' | 'theme' | 'contract' | 'setting';
   goToTestNodePage: string;
   nodeInfoState: 'loading' | 'loaded';
-  listFirstLoaded: boolean;
+  // listFirstLoaded: boolean;
 
   exhibit_ResourceTypeCodes: {
     value: string;
@@ -157,7 +157,8 @@ export interface ChangeAction extends AnyAction {
 export interface OnMount_Page_Action extends AnyAction {
   type: 'nodeManagerPage/onMount_Page';
   payload: {
-    nodeID: number;
+    nodeID: number
+    showPage: NodeManagerModelState['showPage'],
   };
 }
 
@@ -510,7 +511,7 @@ const initStates: NodeManagerModelState = {
   showPage: 'exhibit',
   goToTestNodePage: '',
   nodeInfoState: 'loading',
-  listFirstLoaded: false,
+  // listFirstLoaded: false,
 
   ...exhibitInitStates,
 
@@ -539,7 +540,21 @@ const Model: NodeManagerModelType = {
         nodeId: payload.nodeID,
       };
 
-      const { data } = yield call(FServiceAPI.Node.details, params);
+      const { ret, errCode, msg, data }: {
+        ret: number;
+        errCode: number;
+        msg: number;
+        data: {
+          nodeId: number;
+          ownerUserId: number;
+          status: number;
+          nodeLogo: string;
+          nodeName: string;
+          nodeTitle: string;
+          nodeThemeId: string;
+          nodeDomain: string;
+        }
+      } = yield call(FServiceAPI.Node.details, params);
       // console.log(data, 'data12341234');
       if (!data || data.ownerUserId !== FUtil.Tool.getUserIDByCookies()) {
         history.replace(FUtil.LinkTo.exception403());
@@ -562,23 +577,25 @@ const Model: NodeManagerModelType = {
           testNodeUrl: FUtil.Format.completeUrlByDomain((data?.nodeDomain || '') + '.t'),
           nodeThemeId: data.nodeThemeId || '',
           nodeInfoState: 'loaded',
+          showPage: payload.showPage,
+          // listFirstLoaded: true,
         },
       });
 
-      if (nodeManagerPage.showPage === 'exhibit') {
-        yield put<FetchExhibitsAction>({
-          type: 'fetchExhibits',
-          payload: {
-            restart: true,
-          },
-        });
-      }
-
-      if (nodeManagerPage.showPage === 'theme') {
-        yield put<FetchThemesAction>({
-          type: 'fetchThemes',
-        });
-      }
+      // if (nodeManagerPage.showPage === 'exhibit') {
+      //   yield put<FetchExhibitsAction>({
+      //     type: 'fetchExhibits',
+      //     payload: {
+      //       restart: true,
+      //     },
+      //   });
+      // }
+      //
+      // if (nodeManagerPage.showPage === 'theme') {
+      //   yield put<FetchThemesAction>({
+      //     type: 'fetchThemes',
+      //   });
+      // }
     },
     * onUnmount_Page({}: OnUnmount_Page_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
@@ -613,6 +630,7 @@ const Model: NodeManagerModelType = {
       });
     },
     * onMount_ThemePage({}: OnMount_ThemePage_Action, { select, put }: EffectsCommandMap) {
+      console.log('onMount_ThemePage 3w2890iojhsdfjsdlfjsldjl');
       yield put<FetchThemesAction>({
         type: 'fetchThemes',
         payload: {
@@ -1034,7 +1052,7 @@ const Model: NodeManagerModelType = {
               exhibit_ListMore: 'noMore',
               exhibit_List: [],
               exhibit_ListTotal: data_Exhibits.totalItem,
-              listFirstLoaded: true,
+              // listFirstLoaded: true,
             },
           });
         } else {
@@ -1045,7 +1063,7 @@ const Model: NodeManagerModelType = {
               exhibit_ListMore: 'noMore',
               exhibit_List: [],
               exhibit_ListTotal: data_Exhibits.totalItem,
-              listFirstLoaded: true,
+              // listFirstLoaded: true,
             },
           });
         }
@@ -1099,7 +1117,7 @@ const Model: NodeManagerModelType = {
           exhibit_ListTotal: data_Exhibits.totalItem,
           exhibit_ListState: 'loaded',
           exhibit_ListMore: data_Exhibits.totalItem > exhibit_List.length ? 'andMore' : 'noMore',
-          listFirstLoaded: true,
+          // listFirstLoaded: true,
         },
       });
     },
@@ -1194,7 +1212,7 @@ const Model: NodeManagerModelType = {
           theme_ListState: 'loaded',
           theme_ListMore: data.totalItem > theme_List.length ? 'andMore' : 'noMore',
           theme_List: theme_List,
-          listFirstLoaded: true,
+          // listFirstLoaded: true,
         },
       });
     },

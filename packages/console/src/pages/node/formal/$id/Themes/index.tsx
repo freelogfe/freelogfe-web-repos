@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-// import FInput from '@/components/FInput';
 import { Space } from 'antd';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
@@ -8,7 +7,6 @@ import { ConnectState, NodeManagerModelState } from '@/models/connect';
 import {
   OnActiveAction,
   OnChangeThemeAction,
-  // OnChange_ShowPage_Action,
   OnMount_ThemePage_Action,
   OnUnmount_ThemePage_Action, FetchThemesAction,
 } from '@/models/nodeManagerPage';
@@ -18,7 +16,6 @@ import FLoadingTip from '@/components/FLoadingTip';
 import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
 import Sider from '../Sider';
 import FTooltip from '@/components/FTooltip';
-// import fConfirmModal from '@/components/fConfirmModal';
 import { FUtil, FI18n, FServiceAPI } from '@freelog/tools-lib';
 import * as AHooks from 'ahooks';
 import FCoverImage from '@/components/FCoverImage';

@@ -40,19 +40,20 @@ function NodeManager({ dispatch, nodeManagerPage, match }: NodeManagerProps) {
     // });
   });
 
-  const [{ showPage }] = useUrlState<{ showPage: 'exhibit' | 'theme' | 'mappingRule' | 'setting' }>();
+  const [{ showPage }] = useUrlState<{ showPage: 'exhibit' | 'theme' | 'contract' | 'setting' }>();
 
   AHooks.useMount(() => {
-    dispatch<OnChange_ShowPage_Action>({
-      type: 'nodeManagerPage/onChange_ShowPage',
-      payload: {
-        value: showPage,
-      },
-    });
+    // dispatch<OnChange_ShowPage_Action>({
+    //   type: 'nodeManagerPage/onChange_ShowPage',
+    //   payload: {
+    //     value: showPage,
+    //   },
+    // });
     dispatch<OnMount_Page_Action>({
       type: 'nodeManagerPage/onMount_Page',
       payload: {
         nodeID: Number(match.params.id),
+        showPage: showPage,
       },
     });
   });
@@ -73,7 +74,7 @@ function NodeManager({ dispatch, nodeManagerPage, match }: NodeManagerProps) {
     });
   });
 
-  if (nodeManagerPage.nodeInfoState === 'loading' || !nodeManagerPage.listFirstLoaded) {
+  if (nodeManagerPage.nodeInfoState === 'loading') {
     return <FLoadingTip height={'calc(100vh - 70px)'} />;
   }
 
