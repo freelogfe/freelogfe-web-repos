@@ -42,7 +42,7 @@ function Step1({}: Step1Props) {
           <FComponentsLib.FInput.FSingleLine
             value={''}
             className={styles.FInput}
-            style={{ width: 610 }}
+            style={{ width: 840 }}
             lengthLimit={60}
             placeholder={FI18n.i18nNext.t('输入资源授权标识')}
             // placeholder={FI18n.i18nNext.t('rqr_input_resourceauthid_hint')}
@@ -59,6 +59,19 @@ function Step1({}: Step1Props) {
 
         </div>
       </div>
+    </div>
+
+    <div style={{ height: 30 }} />
+
+    <div className={styles.btn}>
+      {/*{FI18n.i18nNext.t('rqr_step1_btn_createnow')}*/}
+      <FComponentsLib.FRectBtn
+        disabled={true}
+        type={'primary'}
+        onClick={() => {
+
+        }}
+      >立即创建</FComponentsLib.FRectBtn>
     </div>
   </>);
 }
