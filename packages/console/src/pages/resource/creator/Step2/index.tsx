@@ -14,7 +14,7 @@ function Step2({}: Step2Props) {
     <div style={{ height: 40 }} />
     <div className={styles.styles}>
       <div className={styles.localUpload}>
-        <FComponentsLib.FIcons.FLocalUpload style={{ fontSize: 64 }} />
+        <FComponentsLib.FIcons.FLocalUpload style={{ fontSize: 60 }} />
         <div style={{ height: 40 }} />
         <FComponentsLib.FContentText text={'选择本地文件作为发行对象'} type={'additional2'} />
         <div style={{ height: 40 }} />
@@ -22,7 +22,7 @@ function Step2({}: Step2Props) {
       </div>
 
       <div className={styles.storageSpace}>
-        <FComponentsLib.FIcons.FStorageSpace style={{ fontSize: 64 }} />
+        <FComponentsLib.FIcons.FStorageSpace style={{ fontSize: 60 }} />
         <div style={{ height: 40 }} />
         <FComponentsLib.FContentText text={'选择存储空间对象作为发行对象'} type={'additional2'} />
         <div style={{ height: 40 }} />
