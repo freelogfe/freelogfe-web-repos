@@ -90,6 +90,8 @@ function Sider({ dispatch, nodeManagerPage, match }: SiderProps) {
                 <FComponentsLib.FTextBtn onClick={async () => {
                   await FServiceAPI.Activity.pushMessageTask({
                     taskConfigCode: 'TS000034',
+                    // @ts-ignore
+                    meta: { nodeId: nodeManagerPage.nodeId },
                   });
                 }}>
                   <FTooltip title={FI18n.i18nNext.t('nodemgnt_btn_sharenode_tooltip')}>
