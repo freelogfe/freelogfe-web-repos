@@ -7,7 +7,8 @@ import { ConnectState, ResourceCreatorPageModelState } from '@/models/connect';
 import FComponentsLib from '@freelog/components-lib';
 import FResourceTypeInput from '@/components/FResourceTypeInput';
 import { FI18n } from '@freelog/tools-lib';
-import Step1 from '@/pages/resource/creator/Step1';
+import Step1 from './Step1';
+import Step2 from './Step2';
 
 interface ResourceCreatorProps {
   dispatch: Dispatch;
@@ -66,7 +67,8 @@ function ResourceCreator({
       </div>
     </div>
     <div className={styles.right}>
-      <Step1 />
+      {/*<Step1 />*/}
+      <Step2 />
     </div>
   </div>);
 }
