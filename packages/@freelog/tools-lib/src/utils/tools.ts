@@ -1,5 +1,4 @@
 import * as CryptoJS from 'crypto-js';
-import {completeUrlByDomain} from "./format";
 
 /**
  * 根据 File 获取 SHA1 Hash 字符串
