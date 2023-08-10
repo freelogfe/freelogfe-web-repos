@@ -1,4 +1,5 @@
 import * as CryptoJS from 'crypto-js';
+import {completeUrlByDomain} from "./format";
 
 /**
  * 根据 File 获取 SHA1 Hash 字符串
@@ -88,6 +89,6 @@ export function promiseSleep(ms: number = 300): Promise<void> {
  * @param userID
  */
 export function getAvatarUrl(userID: number = 0): string {
-  // return `${completeUrlByDomain('image')}/headImage/${userID || getUserIDByCookies()}?t=${Date.now()}`;
-  return `https://image.freelog.com/headImage/${userID || getUserIDByCookies()}?t=${Date.now()}`;
+  // return `${completeUrlByDomain('image')}/avatar/${userID || getUserIDByCookies()}?t=${Date.now()}`;
+  return `https://image.freelog.com/avatar/${userID || getUserIDByCookies()}?t=${Date.now()}`;
 }
