@@ -71,8 +71,8 @@ function ResourceCreator({
     <div className={styles.right}>
       {/*<Step1 />*/}
       {/*<Step2 />*/}
-      {/*<Step3 />*/}
-      <Step4 />
+      <Step3 />
+      {/*<Step4 />*/}
     </div>
   </div>);
 }

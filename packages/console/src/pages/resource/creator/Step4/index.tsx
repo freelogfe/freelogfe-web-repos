@@ -79,6 +79,24 @@ function Step4({}: Step4Props) {
         }}
       />
     </div>
+
+    <div style={{ height: 30 }} />
+
+    <div className={styles.btn}>
+
+      {/*{FI18n.i18nNext.t('rqr_step4_btn_back')}*/}
+      <FComponentsLib.FTextBtn type={'default'}>上一步</FComponentsLib.FTextBtn>
+
+      {/*{FI18n.i18nNext.t('rqr_step4_btn_release')}*/}
+      <FComponentsLib.FRectBtn
+        disabled={true}
+        type={'primary'}
+        onClick={() => {
+
+        }}
+      >现在上架</FComponentsLib.FRectBtn>
+    </div>
+    <div style={{ height: 100 }} />
   </>);
 }
 
