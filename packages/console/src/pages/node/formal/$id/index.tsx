@@ -25,20 +25,20 @@ interface NodeManagerProps extends RouteComponentProps<{ id: string }> {
 }
 
 function NodeManager({ dispatch, nodeManagerPage, match }: NodeManagerProps) {
-  AHooks.useMount(() => {
-    // dispatch<OnMount_Page_Action>({
-    //   type: 'nodeManagerPage/onMount_Page',
-    //   payload: {
-    //     nodeID: Number(match.params.id),
-    //   },
-    // });
-  });
-
-  AHooks.useUnmount(() => {
-    // dispatch<OnUnmount_Page_Action>({
-    //   type: 'nodeManagerPage/onUnmount_Page',
-    // });
-  });
+  // AHooks.useMount(() => {
+  //   // dispatch<OnMount_Page_Action>({
+  //   //   type: 'nodeManagerPage/onMount_Page',
+  //   //   payload: {
+  //   //     nodeID: Number(match.params.id),
+  //   //   },
+  //   // });
+  // });
+  //
+  // AHooks.useUnmount(() => {
+  //   // dispatch<OnUnmount_Page_Action>({
+  //   //   type: 'nodeManagerPage/onUnmount_Page',
+  //   // });
+  // });
 
   const [{ showPage }] = useUrlState<{ showPage: 'exhibit' | 'theme' | 'contract' | 'setting' }>();
 
@@ -67,6 +67,21 @@ function NodeManager({ dispatch, nodeManagerPage, match }: NodeManagerProps) {
     });
   }, [showPage]);
 
+  AHooks.useAsyncEffect(async () => {
+    await dispatch<OnChange_ShowPage_Action>({
+      type: 'nodeManagerPage/onChange_ShowPage',
+      payload: {
+        value: '',
+      },
+    });
+    await dispatch<OnMount_Page_Action>({
+      type: 'nodeManagerPage/onMount_Page',
+      payload: {
+        nodeID: Number(match.params.id),
+        showPage: showPage,
+      },
+    });
+  }, [match.params.id]);
 
   AHooks.useUnmount(() => {
     dispatch<OnUnmount_Page_Action>({

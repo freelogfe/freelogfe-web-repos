@@ -22,7 +22,7 @@ export interface NodeManagerModelState {
   nodeUrl: string;
   testNodeUrl: string;
   nodeThemeId: string;
-  showPage: 'exhibit' | 'theme' | 'contract' | 'setting';
+  showPage: '' | 'exhibit' | 'theme' | 'contract' | 'setting';
   goToTestNodePage: string;
   nodeInfoState: 'loading' | 'loaded';
   // listFirstLoaded: boolean;
@@ -169,7 +169,7 @@ export interface OnUnmount_Page_Action extends AnyAction {
 export interface OnChange_ShowPage_Action extends AnyAction {
   type: 'nodeManagerPage/onChange_ShowPage';
   payload: {
-    value: 'exhibit' | 'theme' | 'contract' | 'setting';
+    value: NodeManagerModelState['showPage'];
   };
 }
 
