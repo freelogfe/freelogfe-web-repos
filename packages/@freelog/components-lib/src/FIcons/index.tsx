@@ -41,6 +41,7 @@ import FLeft from './FLeft';
 import FLine from './FLine';
 import FLinkedin from './FLinkedin';
 import FLoading from './FLoading';
+import FLocalUpload from './FLocalUpload';
 import FLoudspeaker from './FLoudspeaker';
 import FMappingRuleActive from './FMappingRuleActive';
 import FMappingRuleAdd from './FMappingRuleAdd';
@@ -64,6 +65,7 @@ import FRight from './FRight';
 import FRotate from './FRotate';
 import FSafetyLock from './FSafetyLock';
 import FSina from './FSina';
+import FStorageSpace from './FStorageSpace';
 import FSwap from './FSwap';
 import FThickArrowRight from './FThickArrowRight';
 import FUnbinding from './FUnbinding';
@@ -116,6 +118,7 @@ const FIcons = {
     FLine,
     FLinkedin,
     FLoading,
+    FLocalUpload,
     FLoudspeaker,
     FMappingRuleActive,
     FMappingRuleAdd,
@@ -139,6 +142,7 @@ const FIcons = {
     FRotate,
     FSafetyLock,
     FSina,
+    FStorageSpace,
     FSwap,
     FThickArrowRight,
     FUnbinding,
