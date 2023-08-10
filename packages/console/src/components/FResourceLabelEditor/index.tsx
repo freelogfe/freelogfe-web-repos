@@ -188,90 +188,104 @@ function FResourceLabelEditor($prop: FResourceLabelEditorProps) {
       </>)
     }
 
-    <div style={{ height: 20 }} />
-    <div className={styles.selectedLabels}>
-      {
-        $prop.value.map((v, w) => {
-          return (<label key={v} className={styles.selectedLabel}>
-            <span>{v}</span>
-            <FComponentsLib.FIcons.FClose
-              style={{
-                fontSize: 12,
-                // transform: 'scale(.8)',
-              }}
-              onClick={() => {
-                // set_errorText('');
-                $prop.onChange && $prop.onChange($prop.value.filter((i, j) => j !== w));
-                $setState({
-                  inputError: $prop.value.includes($state.input) ? '不能有重复' : '',
-                });
-              }}
-            />
-          </label>);
-        })
-      }
+    {
+      $prop.value.length > 0 && (<>
+        <div style={{ height: 20 }} />
+        <div className={styles.selectedLabels}>
+          {
+            $prop.value.map((v, w) => {
+              return (<label key={v} className={styles.selectedLabel}>
+                <span>{v}</span>
+                <FComponentsLib.FIcons.FClose
+                  style={{
+                    fontSize: 12,
+                    // transform: 'scale(.8)',
+                  }}
+                  onClick={() => {
+                    // set_errorText('');
+                    $prop.onChange && $prop.onChange($prop.value.filter((i, j) => j !== w));
+                    $setState({
+                      inputError: $prop.value.includes($state.input) ? '不能有重复' : '',
+                    });
+                  }}
+                />
+              </label>);
+            })
+          }
 
-    </div>
+        </div>
+      </>)
+    }
 
-    <div style={{ height: 25 }} />
+    {
+      $state.labels1.length > 0 && (<>
+        <div style={{ height: 25 }} />
 
-    <FComponentsLib.FContentText text={'推荐标签:'} type={'additional2'} />
-    <div style={{ height: 10 }} />
-    <div className={styles.Labels}>
-      {
-        $state.labels1.map((l) => {
-          const selected: boolean = $prop.value.includes(l.name);
-          return (<FTooltip
-            title={l.description}
-            placement={'top'}
-            key={l.id}
-            open={l.description === '' ? false : undefined}
-          >
-            <label
-              onClick={() => {
-                if (selected) {
-                  $prop.onChange && $prop.onChange($prop.value.filter((v) => {
-                    return v !== l.name;
-                  }));
-                } else {
-                  $prop.onChange && $prop.onChange([...$prop.value, l.name]);
-                }
-              }}
-              className={[styles.Label, $prop.value.includes(l.name) ? styles.selected : ''].join(' ')}>{l.name}</label>
-          </FTooltip>);
-        })
-      }
-    </div>
+        <FComponentsLib.FContentText text={'推荐标签:'} type={'additional2'} />
+        <div style={{ height: 10 }} />
+        <div className={styles.Labels}>
+          {
+            $state.labels1.map((l) => {
+              const selected: boolean = $prop.value.includes(l.name);
+              return (<FTooltip
+                title={l.description}
+                placement={'top'}
+                key={l.id}
+                open={l.description === '' ? false : undefined}
+              >
+                <label
+                  onClick={() => {
+                    if (selected) {
+                      $prop.onChange && $prop.onChange($prop.value.filter((v) => {
+                        return v !== l.name;
+                      }));
+                    } else {
+                      $prop.onChange && $prop.onChange([...$prop.value, l.name]);
+                    }
+                  }}
+                  className={[styles.Label, $prop.value.includes(l.name) ? styles.selected : ''].join(' ')}>{l.name}</label>
+              </FTooltip>);
+            })
+          }
+        </div>
 
-    <div style={{ height: 25 }} />
+      </>)
+    }
 
-    <FComponentsLib.FContentText text={'推荐活动:'} type={'additional2'} />
-    <div style={{ height: 10 }} />
-    <div className={styles.Labels}>
-      {
-        $state.labels2.map((l) => {
-          const selected: boolean = $prop.value.includes(l.name);
-          return (<FTooltip
-            title={l.description}
-            placement={'top'}
-            key={l.id}
-            open={l.description === '' ? false : undefined}
-          >
-            <label
-              onClick={() => {
-                if (selected) {
-                  $prop.onChange && $prop.onChange($prop.value.filter((v) => {
-                    return v !== l.name;
-                  }));
-                } else {
-                  $prop.onChange && $prop.onChange([...$prop.value, l.name]);
-                }
-              }}
-              className={[styles.Label, $prop.value.includes(l.name) ? styles.selected : ''].join(' ')}>{l.name}</label>
-          </FTooltip>);
-        })
-      }
-    </div>
+    {
+      $state.labels2.length > 0 && (<>
+        <div style={{ height: 25 }} />
+
+        <FComponentsLib.FContentText text={'推荐活动:'} type={'additional2'} />
+        <div style={{ height: 10 }} />
+        <div className={styles.Labels}>
+          {
+            $state.labels2.map((l) => {
+              const selected: boolean = $prop.value.includes(l.name);
+              return (<FTooltip
+                title={l.description}
+                placement={'top'}
+                key={l.id}
+                open={l.description === '' ? false : undefined}
+              >
+                <label
+                  onClick={() => {
+                    if (selected) {
+                      $prop.onChange && $prop.onChange($prop.value.filter((v) => {
+                        return v !== l.name;
+                      }));
+                    } else {
+                      $prop.onChange && $prop.onChange([...$prop.value, l.name]);
+                    }
+                  }}
+                  className={[styles.Label, $prop.value.includes(l.name) ? styles.selected : ''].join(' ')}>{l.name}</label>
+              </FTooltip>);
+            })
+          }
+        </div>
+      </>)
+    }
+
   </div>);
 }
 

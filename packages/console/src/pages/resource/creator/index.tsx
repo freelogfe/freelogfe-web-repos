@@ -9,6 +9,8 @@ import FResourceTypeInput from '@/components/FResourceTypeInput';
 import { FI18n } from '@freelog/tools-lib';
 import Step1 from './Step1';
 import Step2 from './Step2';
+import Step3 from './Step3';
+import Step4 from './Step4';
 
 interface ResourceCreatorProps {
   dispatch: Dispatch;
@@ -68,7 +70,9 @@ function ResourceCreator({
     </div>
     <div className={styles.right}>
       {/*<Step1 />*/}
-      <Step2 />
+      {/*<Step2 />*/}
+      {/*<Step3 />*/}
+      <Step4 />
     </div>
   </div>);
 }
