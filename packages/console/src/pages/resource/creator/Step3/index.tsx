@@ -3,11 +3,11 @@ import styles from './index.less';
 import FComponentsLib from '../../../../../../@freelog/components-lib';
 import { FI18n } from '@freelog/tools-lib';
 
-interface Step1Props {
+interface Step3Props {
 
 }
 
-function Step1({}: Step1Props) {
+function Step3({}: Step3Props) {
   return (<>
     <div style={{ height: 40 }} />
     <div className={styles.block}>
@@ -28,8 +28,20 @@ function Step1({}: Step1Props) {
           }}
         >添加授权策略</FComponentsLib.FRectBtn>
       </div>
-      {/*<FComponentsLib.FContentText text={FI18n.i18nNext.t('authplanmgnt_list_empty_msg')} type={'additional2'} />*/}
+    </div>
 
+    <div style={{ height: 5 }} />
+
+    <div className={styles.block}>
+      <FComponentsLib.FContentText text={'策略模板'} type={'highlight'} />
+      {/*<FComponentsLib.FContentText text={FI18n.i18nNext.t('authplanmgnt_title_templates')} type={'highlight'}/>*/}
+      <div style={{ height: 5 }} />
+      <FComponentsLib.FContentText text={'点击下方推荐的策略模板，可以快速添加策略'} type={'additional2'} />
+      {/*<FComponentsLib.FContentText text={FI18n.i18nNext.t('authplanmgnt_title_templates_help')} type={'additional2'} />*/}
+      <div style={{ height: 20 }} />
+      <div className={styles.policyTemplates}>
+
+      </div>
     </div>
 
     <div style={{ height: 30 }} />
@@ -52,4 +64,4 @@ function Step1({}: Step1Props) {
   </>);
 }
 
-export default Step1;
+export default Step3;
