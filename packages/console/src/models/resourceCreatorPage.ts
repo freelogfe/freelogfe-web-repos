@@ -29,6 +29,11 @@ export interface ResourceCreatorPageModelState {
     resourceTypeCode: string;
     resourceType: string[];
   } | null;
+  step2_fileInfo: {
+    name: string;
+    sha1: string;
+    from: string;
+  } | null;
 }
 
 export interface ChangeAction extends AnyAction {
@@ -62,6 +67,13 @@ export interface OnClick_step1_createBtn_Action extends AnyAction {
   type: 'resourceCreatorPage/onClick_step1_createBtn';
 }
 
+export interface OnSucceed_step2_localUpload_Action extends AnyAction {
+  type: 'resourceCreatorPage/onSucceed_step2_localUpload';
+  payload: {
+    value: ResourceCreatorPageModelState['step2_fileInfo'];
+  };
+}
+
 export interface ResourceCreatorPageModelType {
   namespace: 'resourceCreatorPage';
   state: ResourceCreatorPageModelState;
@@ -71,6 +83,7 @@ export interface ResourceCreatorPageModelType {
     onChange_step1_resourceType: (action: OnChange_step1_resourceType_Action, effects: EffectsCommandMap) => void;
     onChange_step1_resourceName: (action: OnChange_step1_resourceName_Action, effects: EffectsCommandMap) => void;
     onClick_step1_createBtn: (action: OnClick_step1_createBtn_Action, effects: EffectsCommandMap) => void;
+    onSucceed_step2_localUpload: (action: OnSucceed_step2_localUpload_Action, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<ResourceCreatorPageModelState, ChangeAction>;
@@ -87,6 +100,11 @@ export const initStates: ResourceCreatorPageModelState = {
   step1_resourceName: 'newResource',
 
   step2_resourceInfo: null,
+  step2_fileInfo: {
+    name: '文件',
+    from: '本地上传',
+    sha1: '2q9w8iojlik',
+  },
 };
 
 const Model: ResourceCreatorPageModelType = {
@@ -171,6 +189,9 @@ const Model: ResourceCreatorPageModelType = {
           },
         },
       });
+    },
+    * onSucceed_step2_localUpload({ payload }: OnSucceed_step2_localUpload_Action, {}: EffectsCommandMap) {
+
     },
   },
 
