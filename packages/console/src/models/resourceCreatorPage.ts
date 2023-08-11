@@ -1,12 +1,18 @@
 import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription, SubscriptionAPI } from 'dva';
 import { DvaReducer } from './shared';
-import { ConnectState } from '@/models/connect';
+import { ConnectState, UserModelState } from '@/models/connect';
 import { history } from 'umi';
 import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 import fMessage from '@/components/fMessage';
+import userPermission from '@/permissions/UserPermission';
 
 export interface ResourceCreatorPageModelState {
+  userInfo: {
+    userID: number;
+    userName: string;
+  } | null;
+
   step: 1 | 2 | 3 | 4;
 
   step1_resourceType: {
@@ -67,6 +73,8 @@ export interface ResourceCreatorPageModelType {
 }
 
 export const initStates: ResourceCreatorPageModelState = {
+  userInfo: null,
+
   step: 1,
 
   step1_resourceType: null,
@@ -78,7 +86,20 @@ const Model: ResourceCreatorPageModelType = {
   state: initStates,
   effects: {
     * onMount_Page({}: OnMount_Page_Action, { call, put }: EffectsCommandMap) {
-
+      const data: UserModelState['info'] = yield call(userPermission.getUserInfo);
+      // console.log(data, 'dataisdjflksdjflkdsjlkj');
+      if (!data) {
+        return;
+      }
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          userInfo: {
+            userID: data.userId,
+            userName: data.username,
+          },
+        },
+      });
     },
     * onUnmount_Page({}: OnUnmount_Page_Action, { put }: EffectsCommandMap) {
 
@@ -99,8 +120,32 @@ const Model: ResourceCreatorPageModelType = {
         },
       });
     },
-    * onClick_step1_createBtn({}: OnClick_step1_createBtn_Action, {}: EffectsCommandMap) {
-
+    * onClick_step1_createBtn({}: OnClick_step1_createBtn_Action, { select, call, put }: EffectsCommandMap) {
+      const { resourceCreatorPage } = yield select(({ resourceCreatorPage }: ConnectState) => ({
+        resourceCreatorPage,
+      }));
+      if (resourceCreatorPage.resourceTypeCodes === null) {
+        return;
+      }
+      const params: Parameters<typeof FServiceAPI.Resource.create>[0] = {
+        name: resourceCreatorPage.step1_resourceName,
+        resourceTypeCode: resourceCreatorPage.step1_resourceType.value,
+        resourceTypeName: resourceCreatorPage.step1_resourceType.customInput || undefined,
+      };
+      const { ret, errCode, msg, data } = yield call(FServiceAPI.Resource.create, params);
+      if (ret !== 0 || errCode !== 0 || !data) {
+        self._czc?.push(['_trackEvent', '资源创建页', '创建资源', '', 0]);
+        // fMessage('资源创建失败', 'error');
+        fMessage(msg, 'error');
+        return;
+      }
+      self._czc?.push(['_trackEvent', '资源创建页', '创建资源', '', 1]);
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          step: 2,
+        },
+      });
     },
   },
 

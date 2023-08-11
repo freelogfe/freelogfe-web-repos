@@ -49,14 +49,14 @@ function Step1({ dispatch, resourceCreatorPage }: Step1Props) {
       <div style={{ height: 20 }} />
       <div className={styles.resourceName}>
         <FComponentsLib.FContentText
-          text={`Liu /`}
-          style={{ lineHeight: '38px' }}
+          text={`${resourceCreatorPage.userInfo?.userName} /`}
+          style={{ lineHeight: '38px', flexShrink: 0, display: 'inline-block' }}
         />
-        <div>
+        <div style={{ flexShrink: 1 }}>
           <FComponentsLib.FInput.FSingleLine
             value={resourceCreatorPage.step1_resourceName}
             className={styles.FInput}
-            style={{ width: 840 }}
+            style={{ width: 600 }}
             lengthLimit={60}
             placeholder={FI18n.i18nNext.t('输入资源授权标识')}
             // placeholder={FI18n.i18nNext.t('rqr_input_resourceauthid_hint')}
@@ -85,7 +85,7 @@ function Step1({ dispatch, resourceCreatorPage }: Step1Props) {
     <div className={styles.btn}>
       {/*{FI18n.i18nNext.t('rqr_step1_btn_createnow')}*/}
       <FComponentsLib.FRectBtn
-        disabled={true}
+        disabled={resourceCreatorPage.step1_resourceName === '' || resourceCreatorPage.step1_resourceType === null}
         type={'primary'}
         onClick={() => {
           dispatch<OnClick_step1_createBtn_Action>({
