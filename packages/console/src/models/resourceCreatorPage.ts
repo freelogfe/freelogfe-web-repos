@@ -34,6 +34,25 @@ export interface ResourceCreatorPageModelState {
     sha1: string;
     from: string;
   } | null;
+  step2_rawProperties: {
+    key: string;
+    name: string;
+    value: string;
+    description: string;
+  }[];
+  step2_rawPropertiesState: 'parsing' | 'success' | 'fail';
+  step2_additionalProperties: {
+    key: string;
+    name: string;
+    value: string;
+    description: string;
+  }[];
+  step2_customProperties: {
+    key: string;
+    name: string;
+    value: string;
+    description: string;
+  }[];
 }
 
 export interface ChangeAction extends AnyAction {
@@ -70,7 +89,7 @@ export interface OnClick_step1_createBtn_Action extends AnyAction {
 export interface OnSucceed_step2_localUpload_Action extends AnyAction {
   type: 'resourceCreatorPage/onSucceed_step2_localUpload';
   payload: {
-    value: ResourceCreatorPageModelState['step2_fileInfo'];
+    value: NonNullable<ResourceCreatorPageModelState['step2_fileInfo']>;
   };
 }
 
@@ -100,11 +119,11 @@ export const initStates: ResourceCreatorPageModelState = {
   step1_resourceName: 'newResource',
 
   step2_resourceInfo: null,
-  step2_fileInfo: {
-    name: '文件',
-    from: '本地上传',
-    sha1: '2q9w8iojlik',
-  },
+  step2_fileInfo: null,
+  step2_rawProperties: [],
+  step2_rawPropertiesState: 'parsing',
+  step2_additionalProperties: [],
+  step2_customProperties: [],
 };
 
 const Model: ResourceCreatorPageModelType = {
@@ -190,8 +209,13 @@ const Model: ResourceCreatorPageModelType = {
         },
       });
     },
-    * onSucceed_step2_localUpload({ payload }: OnSucceed_step2_localUpload_Action, {}: EffectsCommandMap) {
-
+    * onSucceed_step2_localUpload({ payload }: OnSucceed_step2_localUpload_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          step2_fileInfo: payload.value,
+        },
+      });
     },
   },
 

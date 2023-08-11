@@ -6,10 +6,13 @@ import FComponentsLib from '@freelog/components-lib';
 import { connect } from 'dva';
 import { ConnectState, ResourceCreatorPageModelState } from '@/models/connect';
 import { Dispatch } from 'redux';
-import { FI18n } from '@freelog/tools-lib';
+import { FI18n, FServiceAPI } from '@freelog/tools-lib';
 import fResourcePropertyEditor from '@/components/fResourcePropertyEditor';
 import { OnChange_CustomProperties_Action } from '@/models/resourceVersionCreatorPage';
 import FTooltip from '@/components/FTooltip';
+import fReadLocalFiles from '@/components/fReadLocalFiles';
+import { RcFile } from 'antd/lib/upload/interface';
+import { OnSucceed_step2_localUpload_Action } from '@/models/resourceCreatorPage';
 
 interface Step2Props {
   dispatch: Dispatch;
@@ -29,8 +32,46 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
           <div style={{ height: 40 }} />
           <FComponentsLib.FRectBtn
             type={'primary'}
-            onClick={() => {
+            onClick={async () => {
+              const files: RcFile[] | null = await fReadLocalFiles({
+                // accept: $state._uploadFileAccept,
+              });
 
+              if (!files || files.length === 0) {
+                return;
+              }
+
+              const [promise, cancel] = await FServiceAPI.Storage.uploadFile({
+                file: files[0],
+                // resourceType: resourceVersionCreatorPage.resourceType,
+              }, {
+                onUploadProgress(progressEvent: any) {
+                  // set_fUploadingProgress(Math.floor(progressEvent.loaded / progressEvent.total * 100));
+                  // $setState({
+                  //   fUploadingProgress: Math.floor(progressEvent.loaded / progressEvent.total * 100),
+                  // });
+                },
+              }, true);
+              const { ret, errCode, msg, data }: {
+                ret: number;
+                errCode: number;
+                msg: string;
+                data: {
+                  fileSize: number;
+                  sha1: string;
+                };
+              } = await promise;
+              console.log(data, 'dataoijsdlkfjlsdkjfkldsjflkjdslkfjl');
+              dispatch<OnSucceed_step2_localUpload_Action>({
+                type: 'resourceCreatorPage/onSucceed_step2_localUpload',
+                payload: {
+                  value: {
+                    name: files[0].name,
+                    sha1: data.sha1,
+                    from: '本地上传',
+                  },
+                },
+              });
             }}
           >本地上传</FComponentsLib.FRectBtn>
         </div>
@@ -111,8 +152,9 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
         <FComponentsLib.FTextBtn
           type='danger'
           // disabled={$prop.disabledOperations?.includes('remove')}
-          onClick={() => {
+          onClick={async () => {
             // $prop.onClick_DeleteBtn && $prop.onClick_DeleteBtn();
+
           }}
           // className={styles.delete}
         >{FI18n.i18nNext.t('remove')}</FComponentsLib.FTextBtn>
@@ -167,7 +209,7 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
                 });
               }}
             >
-              <FComponentsLib.FIcons.FProperty style={{fontSize: 14}} />
+              <FComponentsLib.FIcons.FProperty style={{ fontSize: 14 }} />
               <span>补充属性</span>
             </FComponentsLib.FTextBtn>
           </div>
