@@ -321,6 +321,25 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
         }}
       />
     </div>
+
+    <div style={{ height: 30 }} />
+
+    <div className={styles.btn}>
+
+      {/*{FI18n.i18nNext.t('rqr_step3_btn_later')}*/}
+      <FComponentsLib.FTextBtn type={'default'}>稍后处理</FComponentsLib.FTextBtn>
+
+      {/*{FI18n.i18nNext.t('rqr_step3_btn_next')}*/}
+      <FComponentsLib.FRectBtn
+        disabled={true}
+        type={'primary'}
+        onClick={() => {
+
+        }}
+      >提交</FComponentsLib.FRectBtn>
+    </div>
+
+    <div style={{ height: 100 }} />
   </>);
 }
 
