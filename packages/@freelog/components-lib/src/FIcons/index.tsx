@@ -14,6 +14,7 @@ import FCloudUpload from './FCloudUpload';
 import FCode from './FCode';
 import FCollect from './FCollect';
 import FComposition from './FComposition';
+import FConfiguration from './FConfiguration';
 import FContent from './FContent';
 import FCopy from './FCopy';
 import FDecrease from './FDecrease';
@@ -59,6 +60,7 @@ import FPaperPlane from './FPaperPlane';
 import FPentagram from './FPentagram';
 import FPlayer from './FPlayer';
 import FPlus from './FPlus';
+import FProperty from './FProperty';
 import FRedo from './FRedo';
 import FResource from './FResource';
 import FRight from './FRight';
@@ -91,6 +93,7 @@ const FIcons = {
     FCode,
     FCollect,
     FComposition,
+    FConfiguration,
     FContent,
     FCopy,
     FDecrease,
@@ -136,6 +139,7 @@ const FIcons = {
     FPentagram,
     FPlayer,
     FPlus,
+    FProperty,
     FRedo,
     FResource,
     FRight,

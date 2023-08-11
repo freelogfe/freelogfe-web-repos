@@ -7,6 +7,9 @@ import { connect } from 'dva';
 import { ConnectState, ResourceCreatorPageModelState } from '@/models/connect';
 import { Dispatch } from 'redux';
 import { FI18n } from '@freelog/tools-lib';
+import fResourcePropertyEditor from '@/components/fResourcePropertyEditor';
+import { OnChange_CustomProperties_Action } from '@/models/resourceVersionCreatorPage';
+import FTooltip from '@/components/FTooltip';
 
 interface Step2Props {
   dispatch: Dispatch;
@@ -114,6 +117,65 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
           // className={styles.delete}
         >{FI18n.i18nNext.t('remove')}</FComponentsLib.FTextBtn>
       </div>
+    </div>
+
+    <div style={{ height: 5 }} />
+
+    <div className={styles.block}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <FComponentsLib.FContentText text={'基础属性'} type={'highlight'} />
+        {/*<FComponentsLib.FContentText text={''} type={'highlight'}/>*/}
+
+        <FTooltip title={FI18n.i18nNext.t('resourceinfo_add_btn_info')}>
+          <div>
+            <FComponentsLib.FTextBtn
+              style={{ fontSize: 12, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 5 }}
+              type='primary'
+              onClick={async () => {
+                const dataSource: {
+                  key: string;
+                  name: string;
+                  value: string;
+                  description: string;
+                } | null = await fResourcePropertyEditor({
+                  disabledKeys: [
+                    // ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
+                    // ...resourceVersionCreatorPage.additionalProperties.map<string>((bp) => bp.key),
+                    // ...resourceVersionCreatorPage.customProperties.map<string>((bp) => bp.key),
+                    // ...resourceVersionCreatorPage.customConfigurations.map<string>((pp) => pp.key),
+                  ],
+                  disabledNames: [
+                    // ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.name),
+                    // ...resourceVersionCreatorPage.additionalProperties.map<string>((rp) => rp.name),
+                    // ...resourceVersionCreatorPage.customProperties.map<string>((bp) => bp.name),
+                    // ...resourceVersionCreatorPage.customConfigurations.map<string>((pp) => pp.name),
+                  ],
+                });
+                // console.log(dataSource, 'dataSource9iojskldjflksdjflk');
+                if (!dataSource) {
+                  return;
+                }
+
+                await dispatch<OnChange_CustomProperties_Action>({
+                  type: 'resourceVersionCreatorPage/onChange_CustomProperties',
+                  payload: {
+                    value: [
+                      // ...resourceVersionCreatorPage.customProperties,
+                      // dataSource,
+                    ],
+                  },
+                });
+              }}
+            >
+              <FComponentsLib.FIcons.FProperty style={{fontSize: 14}} />
+              <span>补充属性</span>
+            </FComponentsLib.FTextBtn>
+          </div>
+        </FTooltip>
+      </div>
+      <div style={{ height: 20 }} />
+
+
     </div>
   </>);
 }
