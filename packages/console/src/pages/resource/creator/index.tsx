@@ -31,7 +31,8 @@ function ResourceCreator({
       {/*<FComponentsLib.FTitleText text={'rqr_title'} type={'h1'} />*/}
       <div style={{ height: 40 }} />
       <div className={styles.steps}>
-        <div className={[styles.step, styles.stepFinish].join(' ')}>
+        <div
+          className={[styles.step, resourceCreatorPage.step === 1 ? styles.stepActivated : '', resourceCreatorPage.step > 1 ? styles.stepFinished : ''].join(' ')}>
           <div style={{ width: 30 }}>
             <FComponentsLib.FIcons.FArrowRight className={styles.iconFArrowRight} />
             <FComponentsLib.FIcons.FCheckMark className={styles.iconFCheckMark} />
@@ -40,7 +41,8 @@ function ResourceCreator({
           {/*<span className={styles.title}>{FI18n.i18nNext.t('rqr_step1')}</span>*/}
         </div>
 
-        <div className={[styles.step, styles.stepActivated].join(' ')}>
+        <div
+          className={[styles.step, resourceCreatorPage.step === 2 ? styles.stepActivated : '', resourceCreatorPage.step > 2 ? styles.stepFinished : ''].join(' ')}>
           <div style={{ width: 30 }}>
             <FComponentsLib.FIcons.FArrowRight className={styles.iconFArrowRight} />
             <FComponentsLib.FIcons.FCheckMark className={styles.iconFCheckMark} />
@@ -49,7 +51,8 @@ function ResourceCreator({
           {/*<span className={styles.title}>{FI18n.i18nNext.t('rqr_step2')}</span>*/}
         </div>
 
-        <div className={[styles.step, styles.stepFinish1].join(' ')}>
+        <div
+          className={[styles.step, resourceCreatorPage.step === 3 ? styles.stepActivated : '', resourceCreatorPage.step > 3 ? styles.stepFinished1 : ''].join(' ')}>
           <div style={{ width: 30 }}>
             <FComponentsLib.FIcons.FArrowRight className={styles.iconFArrowRight} />
             <FComponentsLib.FIcons.FCheckMark className={styles.iconFCheckMark} />
@@ -58,7 +61,7 @@ function ResourceCreator({
           {/*<span className={styles.title}>{FI18n.i18nNext.t('rqr_step3')}</span>*/}
         </div>
 
-        <div className={[styles.step].join(' ')}>
+        <div className={[styles.step, resourceCreatorPage.step === 4 ? styles.stepActivated : ''].join(' ')}>
           <div style={{ width: 30 }}>
             <FComponentsLib.FIcons.FArrowRight className={styles.iconFArrowRight} />
             <FComponentsLib.FIcons.FCheckMark className={styles.iconFCheckMark} />
@@ -69,10 +72,10 @@ function ResourceCreator({
       </div>
     </div>
     <div className={styles.right}>
-      {/*<Step1 />*/}
-      {/*<Step2 />*/}
-      <Step3 />
-      {/*<Step4 />*/}
+      {resourceCreatorPage.step === 1 && (<Step1 />)}
+      {resourceCreatorPage.step === 2 && (<Step2 />)}
+      {resourceCreatorPage.step === 3 && (<Step3 />)}
+      {resourceCreatorPage.step === 4 && (<Step4 />)}
     </div>
   </div>);
 }

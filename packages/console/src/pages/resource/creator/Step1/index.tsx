@@ -3,12 +3,21 @@ import styles from './index.less';
 import FComponentsLib from '@freelog/components-lib';
 import FResourceTypeInput from '@/components/FResourceTypeInput';
 import { FI18n } from '@freelog/tools-lib';
+import { connect } from 'dva';
+import { ConnectState, ResourceCreatorPageModelState } from '@/models/connect';
+import { Dispatch } from 'redux';
+import {
+  OnChange_step1_resourceName_Action,
+  OnChange_step1_resourceType_Action,
+  OnClick_step1_createBtn_Action,
+} from '@/models/resourceCreatorPage';
 
 interface Step1Props {
-
+  dispatch: Dispatch;
+  resourceCreatorPage: ResourceCreatorPageModelState;
 }
 
-function Step1({}: Step1Props) {
+function Step1({ dispatch, resourceCreatorPage }: Step1Props) {
   return (<>
     <div style={{ height: 40 }} />
     <div className={styles.block}>
@@ -19,9 +28,14 @@ function Step1({}: Step1Props) {
       {/*<FComponentsLib.FContentText text={'rqr_input_resourcetype_help'} type={'additional2'} />*/}
       <div style={{ height: 20 }} />
       <FResourceTypeInput
-        value={null}
+        value={resourceCreatorPage.step1_resourceType}
         onChange={(value) => {
-
+          dispatch<OnChange_step1_resourceType_Action>({
+            type: 'resourceCreatorPage/onChange_step1_resourceType',
+            payload: {
+              value: value,
+            },
+          });
         }}
       />
     </div>
@@ -40,14 +54,19 @@ function Step1({}: Step1Props) {
         />
         <div>
           <FComponentsLib.FInput.FSingleLine
-            value={''}
+            value={resourceCreatorPage.step1_resourceName}
             className={styles.FInput}
             style={{ width: 840 }}
             lengthLimit={60}
             placeholder={FI18n.i18nNext.t('输入资源授权标识')}
             // placeholder={FI18n.i18nNext.t('rqr_input_resourceauthid_hint')}
             onChange={(e) => {
-
+              dispatch<OnChange_step1_resourceName_Action>({
+                type: 'resourceCreatorPage/onChange_step1_resourceName',
+                payload: {
+                  value: e.target.value,
+                },
+              });
             }}
           />
           {/*{*/}
@@ -69,11 +88,15 @@ function Step1({}: Step1Props) {
         disabled={true}
         type={'primary'}
         onClick={() => {
-
+          dispatch<OnClick_step1_createBtn_Action>({
+            type: 'resourceCreatorPage/onClick_step1_createBtn',
+          });
         }}
       >立即创建</FComponentsLib.FRectBtn>
     </div>
   </>);
 }
 
-export default Step1;
+export default connect(({ resourceCreatorPage }: ConnectState) => ({
+  resourceCreatorPage: resourceCreatorPage,
+}))(Step1);
