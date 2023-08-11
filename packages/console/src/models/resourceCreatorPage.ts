@@ -1,11 +1,13 @@
 import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription, SubscriptionAPI } from 'dva';
 import { DvaReducer } from './shared';
-import { ConnectState, UserModelState } from '@/models/connect';
+import { ConnectState, ResourceVersionCreatorPageModelState, UserModelState } from '@/models/connect';
 // import { history } from 'umi';
 import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 import fMessage from '@/components/fMessage';
 import userPermission from '@/permissions/UserPermission';
+import { getFilesSha1Info } from '@/utils/service';
+import { IResourceCreateVersionDraftType } from '@/type/resourceTypes';
 
 export interface ResourceCreatorPageModelState {
   userInfo: {
@@ -209,13 +211,112 @@ const Model: ResourceCreatorPageModelType = {
         },
       });
     },
-    * onSucceed_step2_localUpload({ payload }: OnSucceed_step2_localUpload_Action, { put }: EffectsCommandMap) {
+    * onSucceed_step2_localUpload({ payload }: OnSucceed_step2_localUpload_Action, {
+      select,
+      call,
+      put,
+    }: EffectsCommandMap) {
+      const { resourceCreatorPage }: ConnectState = yield select(({ resourceCreatorPage }: ConnectState) => ({
+        resourceCreatorPage,
+      }));
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           step2_fileInfo: payload.value,
         },
       });
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          step2_rawPropertiesState: 'parsing',
+        },
+      });
+
+      const params0: Parameters<typeof getFilesSha1Info>[0] = {
+        sha1: [payload.value.sha1],
+        resourceTypeCode: resourceCreatorPage.step2_resourceInfo?.resourceTypeCode || '',
+      };
+      const {
+        result,
+        error,
+      }: Awaited<ReturnType<typeof getFilesSha1Info>> = yield call(getFilesSha1Info, params0);
+
+      // console.log(result, 'resulte53452sdf', error, 'error asdfsdfsdfsdf');
+
+      if (error !== '') {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            step2_rawProperties: [],
+            step2_additionalProperties: [],
+          },
+        });
+        return fMessage(error, 'error');
+      }
+
+      if (result[0].state === 'fail') {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            step2_rawProperties: [],
+            step2_additionalProperties: [],
+          },
+        });
+        return fMessage('文件解析失败', 'error');
+      }
+
+      // if (payload.delay) {
+      //   yield call(FUtil.Tool.promiseSleep, 1000);
+      // }
+
+      if (result[0].state === 'success') {
+
+        // const params: Parameters<typeof FServiceAPI.Resource.lookDraft>[0] = {
+        //   resourceId: resourceVersionCreatorPage.resourceInfo?.resourceID || '',
+        // };
+        // const { data: data_draft }: {
+        //   data: null | {
+        //     draftData: IResourceCreateVersionDraftType;
+        //   };
+        // } = yield call(FServiceAPI.Resource.lookDraft, params);
+
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            step2_rawProperties: result[0].info
+              .filter((i) => {
+                return i.insertMode === 1;
+              })
+              .map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((i) => {
+                return {
+                  key: i.key,
+                  name: i.name,
+                  value: i.valueDisplay,
+                  description: i.remark,
+                };
+              }),
+            step2_rawPropertiesState: 'success',
+            step2_additionalProperties: result[0].info
+              .filter((i) => {
+                return i.insertMode === 2;
+              })
+              .map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((i) => {
+                // const item = data_draft?.draftData.additionalProperties?.find((ap) => {
+                //   return ap.key === i.key;
+                // }) || {};
+                return {
+                  key: i.key,
+                  name: i.name,
+                  value: i.valueDisplay,
+                  description: i.remark,
+                  // ...item,
+                };
+              }),
+          },
+        });
+      }
     },
   },
 
