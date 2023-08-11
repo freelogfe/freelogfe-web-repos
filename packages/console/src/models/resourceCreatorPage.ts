@@ -2,7 +2,7 @@ import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription, SubscriptionAPI } from 'dva';
 import { DvaReducer } from './shared';
 import { ConnectState, UserModelState } from '@/models/connect';
-import { history } from 'umi';
+// import { history } from 'umi';
 import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 import fMessage from '@/components/fMessage';
 import userPermission from '@/permissions/UserPermission';
@@ -23,6 +23,12 @@ export interface ResourceCreatorPageModelState {
   step1_resourceName: string;
 
 
+  step2_resourceInfo: {
+    resourceID: string;
+    resourceName: string;
+    resourceTypeCode: string;
+    resourceType: string[];
+  } | null;
 }
 
 export interface ChangeAction extends AnyAction {
@@ -78,7 +84,9 @@ export const initStates: ResourceCreatorPageModelState = {
   step: 1,
 
   step1_resourceType: null,
-  step1_resourceName: '',
+  step1_resourceName: 'newResource',
+
+  step2_resourceInfo: null,
 };
 
 const Model: ResourceCreatorPageModelType = {
@@ -132,7 +140,18 @@ const Model: ResourceCreatorPageModelType = {
         resourceTypeCode: resourceCreatorPage.step1_resourceType.value,
         resourceTypeName: resourceCreatorPage.step1_resourceType.customInput || undefined,
       };
-      const { ret, errCode, msg, data } = yield call(FServiceAPI.Resource.create, params);
+      const { ret, errCode, msg, data }: {
+        ret: number;
+        errCode: number;
+        msg: string;
+        data: {
+          resourceId: string;
+          resourceName: string;
+          resourceType: string[]
+          resourceTypeCode: string;
+        };
+      } = yield call(FServiceAPI.Resource.create, params);
+      // console.log(data, 'dataiosdjflkjsdlkfjlksdjlk');
       if (ret !== 0 || errCode !== 0 || !data) {
         self._czc?.push(['_trackEvent', '资源创建页', '创建资源', '', 0]);
         // fMessage('资源创建失败', 'error');
@@ -144,6 +163,12 @@ const Model: ResourceCreatorPageModelType = {
         type: 'change',
         payload: {
           step: 2,
+          step2_resourceInfo: {
+            resourceID: data.resourceId,
+            resourceName: data.resourceName,
+            resourceType: data.resourceType,
+            resourceTypeCode: data.resourceTypeCode,
+          },
         },
       });
     },
