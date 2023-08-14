@@ -342,7 +342,7 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
 
       {/*{FI18n.i18nNext.t('rqr_step3_btn_next')}*/}
       <FComponentsLib.FRectBtn
-        disabled={true}
+        disabled={!resourceCreatorPage.step2_fileInfo}
         type={'primary'}
         onClick={() => {
           dispatch<OnClick_step2_submitBtn_Action>({

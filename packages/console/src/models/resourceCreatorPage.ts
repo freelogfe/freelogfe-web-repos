@@ -336,8 +336,86 @@ const Model: ResourceCreatorPageModelType = {
         },
       });
     },
-    * onClick_step2_submitBtn({}: OnClick_step2_submitBtn_Action, {}: EffectsCommandMap) {
+    * onClick_step2_submitBtn({}: OnClick_step2_submitBtn_Action, { select, call, put }: EffectsCommandMap) {
+      const { resourceCreatorPage }: ConnectState = yield select(({ resourceCreatorPage }: ConnectState) => ({
+        resourceCreatorPage,
+      }));
 
+      if (!resourceCreatorPage.step2_resourceInfo || !resourceCreatorPage.step2_fileInfo) {
+        return;
+      }
+
+      const params: Parameters<typeof FServiceAPI.Resource.createVersion>[0] = {
+        resourceId: resourceCreatorPage.step2_resourceInfo.resourceID,
+        version: '1.0.0',
+        fileSha1: resourceCreatorPage.step2_fileInfo.sha1,
+        filename: resourceCreatorPage.step2_fileInfo.name,
+        resolveResources: [],
+        inputAttrs: [],
+        // baseUpcastResources: baseUpcastResources.map((r) => {
+        //   return { resourceId: r.resourceID };
+        // }),
+        // dependencies: dependencies,
+        // resolveResources: resolveResources,
+        // @ts-ignore
+        // inputAttrs: resourceVersionCreatorPage.additionalProperties
+        //   .filter((ap) => {
+        //     return ap.value !== '';
+        //   })
+        //   .map((ap) => {
+        //     return {
+        //       key: ap.key,
+        //       value: ap.value,
+        //     };
+        //   }),
+        // customPropertyDescriptors: [
+        //   ...resourceVersionCreatorPage.customProperties
+        //     .map<NonNullable<Parameters<typeof FServiceAPI.Resource.createVersion>[0]['customPropertyDescriptors']>[number]>
+        //     ((i) => {
+        //       return {
+        //         type: 'readonlyText',
+        //         key: i.key,
+        //         name: i.name,
+        //         remark: i.description,
+        //         defaultValue: i.value,
+        //       };
+        //     }),
+        //   ...resourceVersionCreatorPage.customConfigurations
+        //     .map<NonNullable<Parameters<typeof FServiceAPI.Resource.createVersion>[0]['customPropertyDescriptors']>[number]>((i) => {
+        //       const isInput: boolean = i.type === 'input';
+        //       const options: string[] = i.select;
+        //       return {
+        //         type: isInput ? 'editableText' : 'select',
+        //         key: i.key,
+        //         name: i.name,
+        //         remark: i.description,
+        //         defaultValue: isInput ? i.input : options[0],
+        //         // defaultValue: isInput ? i.input : '',
+        //         candidateItems: isInput ? undefined : options,
+        //       };
+        //     }),
+        // ],
+        // description: resourceVersionCreatorPage.descriptionEditorState.toHTML() === '<p></p>'
+        //   ? ''
+        //   : resourceVersionCreatorPage.descriptionEditorState.toHTML(),
+      };
+
+      const { ret, errCode, data, msg } = yield call(FServiceAPI.Resource.createVersion, params);
+
+      if (ret !== 0 || errCode !== 0 || !data) {
+        self._czc?.push(['_trackEvent', '版本发行页', '发行', '', 0]);
+        // fMessage('创建失败', 'error');
+        fMessage(msg, 'error');
+        return;
+      }
+      self._czc?.push(['_trackEvent', '版本发行页', '发行', '', 1]);
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          step: 3,
+        },
+      });
     },
   },
 

@@ -216,7 +216,7 @@ interface CreateVersionParamsType {
       policyId: string;
     }[];
   }[];
-  inputAttrs: {
+  inputAttrs?: {
     key: string;
     value: string;
   }[];
