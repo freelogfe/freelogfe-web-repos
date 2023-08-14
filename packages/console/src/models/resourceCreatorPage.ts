@@ -95,6 +95,14 @@ export interface OnSucceed_step2_localUpload_Action extends AnyAction {
   };
 }
 
+export interface OnClick_step2_skipBtn_Action extends AnyAction {
+  type: 'resourceCreatorPage/onClick_step2_skipBtn';
+}
+
+export interface OnClick_step2_submitBtn_Action extends AnyAction {
+  type: 'resourceCreatorPage/onClick_step2_submitBtn';
+}
+
 export interface ResourceCreatorPageModelType {
   namespace: 'resourceCreatorPage';
   state: ResourceCreatorPageModelState;
@@ -105,6 +113,8 @@ export interface ResourceCreatorPageModelType {
     onChange_step1_resourceName: (action: OnChange_step1_resourceName_Action, effects: EffectsCommandMap) => void;
     onClick_step1_createBtn: (action: OnClick_step1_createBtn_Action, effects: EffectsCommandMap) => void;
     onSucceed_step2_localUpload: (action: OnSucceed_step2_localUpload_Action, effects: EffectsCommandMap) => void;
+    onClick_step2_skipBtn: (action: OnClick_step2_skipBtn_Action, effects: EffectsCommandMap) => void;
+    onClick_step2_submitBtn: (action: OnClick_step2_submitBtn_Action, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<ResourceCreatorPageModelState, ChangeAction>;
@@ -317,6 +327,17 @@ const Model: ResourceCreatorPageModelType = {
           },
         });
       }
+    },
+    * onClick_step2_skipBtn({}: OnClick_step2_skipBtn_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          step: 3,
+        },
+      });
+    },
+    * onClick_step2_submitBtn({}: OnClick_step2_submitBtn_Action, {}: EffectsCommandMap) {
+
     },
   },
 

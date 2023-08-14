@@ -15,7 +15,11 @@ import {
 import FTooltip from '@/components/FTooltip';
 import fReadLocalFiles from '@/components/fReadLocalFiles';
 import { RcFile } from 'antd/lib/upload/interface';
-import { OnSucceed_step2_localUpload_Action } from '@/models/resourceCreatorPage';
+import {
+  OnClick_step2_skipBtn_Action,
+  OnClick_step2_submitBtn_Action,
+  OnSucceed_step2_localUpload_Action,
+} from '@/models/resourceCreatorPage';
 import FResourceProperties from '@/components/FResourceProperties';
 
 interface Step2Props {
@@ -327,14 +331,23 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
     <div className={styles.btn}>
 
       {/*{FI18n.i18nNext.t('rqr_step3_btn_later')}*/}
-      <FComponentsLib.FTextBtn type={'default'}>稍后处理</FComponentsLib.FTextBtn>
+      <FComponentsLib.FTextBtn
+        type={'default'}
+        onClick={() => {
+          dispatch<OnClick_step2_skipBtn_Action>({
+            type: 'resourceCreatorPage/onClick_step2_skipBtn',
+          });
+        }}
+      >稍后处理</FComponentsLib.FTextBtn>
 
       {/*{FI18n.i18nNext.t('rqr_step3_btn_next')}*/}
       <FComponentsLib.FRectBtn
         disabled={true}
         type={'primary'}
         onClick={() => {
-
+          dispatch<OnClick_step2_submitBtn_Action>({
+            type: 'resourceCreatorPage/onClick_step2_submitBtn',
+          });
         }}
       >提交</FComponentsLib.FRectBtn>
     </div>

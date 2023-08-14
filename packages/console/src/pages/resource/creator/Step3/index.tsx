@@ -49,7 +49,12 @@ function Step3({}: Step3Props) {
     <div className={styles.btn}>
 
       {/*{FI18n.i18nNext.t('rqr_step3_btn_later')}*/}
-      <FComponentsLib.FTextBtn type={'default'}>稍后处理</FComponentsLib.FTextBtn>
+      <FComponentsLib.FTextBtn
+        type={'default'}
+        onClick={() => {
+
+        }}
+      >稍后处理</FComponentsLib.FTextBtn>
 
       {/*{FI18n.i18nNext.t('rqr_step3_btn_next')}*/}
       <FComponentsLib.FRectBtn
