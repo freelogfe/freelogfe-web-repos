@@ -3,11 +3,12 @@ import { EffectsCommandMap, Subscription, SubscriptionAPI } from 'dva';
 import { DvaReducer } from './shared';
 import { ConnectState, ResourceVersionCreatorPageModelState, UserModelState } from '@/models/connect';
 // import { history } from 'umi';
-import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
+import { FServiceAPI } from '@freelog/tools-lib';
 import fMessage from '@/components/fMessage';
 import userPermission from '@/permissions/UserPermission';
 import { getFilesSha1Info } from '@/utils/service';
-import { IResourceCreateVersionDraftType } from '@/type/resourceTypes';
+
+// import { IResourceCreateVersionDraftType } from '@/type/resourceTypes';
 
 export interface ResourceCreatorPageModelState {
   userInfo: {
@@ -23,14 +24,13 @@ export interface ResourceCreatorPageModelState {
     customInput?: string;
   } | null;
   step1_resourceName: string;
-
-
-  step2_resourceInfo: {
+  step1_createdResourceInfo: {
     resourceID: string;
     resourceName: string;
     resourceTypeCode: string;
     resourceType: string[];
   } | null;
+
   step2_fileInfo: {
     name: string;
     sha1: string;
@@ -103,6 +103,18 @@ export interface OnClick_step2_submitBtn_Action extends AnyAction {
   type: 'resourceCreatorPage/onClick_step2_submitBtn';
 }
 
+export interface OnClick_step3_addPolicyBtn_Action extends AnyAction {
+  type: 'resourceCreatorPage/onClick_step3_addPolicyBtn';
+}
+
+export interface OnClick_step3_skipBtn_Action extends AnyAction {
+  type: 'resourceCreatorPage/onClick_step3_skipBtn';
+}
+
+export interface OnClick_step3_submitBtn_Action extends AnyAction {
+  type: 'resourceCreatorPage/onClick_step3_submitBtn';
+}
+
 export interface ResourceCreatorPageModelType {
   namespace: 'resourceCreatorPage';
   state: ResourceCreatorPageModelState;
@@ -115,6 +127,9 @@ export interface ResourceCreatorPageModelType {
     onSucceed_step2_localUpload: (action: OnSucceed_step2_localUpload_Action, effects: EffectsCommandMap) => void;
     onClick_step2_skipBtn: (action: OnClick_step2_skipBtn_Action, effects: EffectsCommandMap) => void;
     onClick_step2_submitBtn: (action: OnClick_step2_submitBtn_Action, effects: EffectsCommandMap) => void;
+    onClick_step3_addPolicyBtn: (action: OnClick_step3_addPolicyBtn_Action, effects: EffectsCommandMap) => void;
+    onClick_step3_skipBtn: (action: OnClick_step3_skipBtn_Action, effects: EffectsCommandMap) => void;
+    onClick_step3_submitBtn: (action: OnClick_step3_submitBtn_Action, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<ResourceCreatorPageModelState, ChangeAction>;
@@ -129,8 +144,8 @@ export const initStates: ResourceCreatorPageModelState = {
 
   step1_resourceType: null,
   step1_resourceName: 'newResource',
+  step1_createdResourceInfo: null,
 
-  step2_resourceInfo: null,
   step2_fileInfo: null,
   step2_rawProperties: [],
   step2_rawPropertiesState: 'parsing',
@@ -212,7 +227,7 @@ const Model: ResourceCreatorPageModelType = {
         type: 'change',
         payload: {
           step: 2,
-          step2_resourceInfo: {
+          step1_createdResourceInfo: {
             resourceID: data.resourceId,
             resourceName: data.resourceName,
             resourceType: data.resourceType,
@@ -246,7 +261,7 @@ const Model: ResourceCreatorPageModelType = {
 
       const params0: Parameters<typeof getFilesSha1Info>[0] = {
         sha1: [payload.value.sha1],
-        resourceTypeCode: resourceCreatorPage.step2_resourceInfo?.resourceTypeCode || '',
+        resourceTypeCode: resourceCreatorPage.step1_createdResourceInfo?.resourceTypeCode || '',
       };
       const {
         result,
@@ -341,12 +356,12 @@ const Model: ResourceCreatorPageModelType = {
         resourceCreatorPage,
       }));
 
-      if (!resourceCreatorPage.step2_resourceInfo || !resourceCreatorPage.step2_fileInfo) {
+      if (!resourceCreatorPage.step1_createdResourceInfo || !resourceCreatorPage.step2_fileInfo) {
         return;
       }
 
       const params: Parameters<typeof FServiceAPI.Resource.createVersion>[0] = {
-        resourceId: resourceCreatorPage.step2_resourceInfo.resourceID,
+        resourceId: resourceCreatorPage.step1_createdResourceInfo.resourceID,
         version: '1.0.0',
         fileSha1: resourceCreatorPage.step2_fileInfo.sha1,
         filename: resourceCreatorPage.step2_fileInfo.name,
@@ -416,6 +431,20 @@ const Model: ResourceCreatorPageModelType = {
           step: 3,
         },
       });
+    },
+    * onClick_step3_addPolicyBtn({}: OnClick_step3_addPolicyBtn_Action, {}: EffectsCommandMap) {
+
+    },
+    * onClick_step3_skipBtn({}: OnClick_step3_skipBtn_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          step: 4,
+        },
+      });
+    },
+    * onClick_step3_submitBtn(action: OnClick_step3_submitBtn_Action, effects: EffectsCommandMap) {
+
     },
   },
 

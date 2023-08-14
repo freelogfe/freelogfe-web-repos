@@ -1,15 +1,17 @@
 import * as React from 'react';
 import styles from './index.less';
-import FComponentsLib from '../../../../../../@freelog/components-lib';
+import FComponentsLib from '@freelog/components-lib';
 import { FI18n } from '@freelog/tools-lib';
-import { OnChange_Cover_Action, OnChange_Labels_Action } from '@/models/resourceInfoPage';
-import FUploadResourceCover from '@/pages/resource/components/FUploadResourceCover';
 import fMessage from '@/components/fMessage';
 import FUploadCover from '@/components/FUploadCover';
 import FResourceLabelEditor from '@/components/FResourceLabelEditor';
+import { connect } from 'dva';
+import { ConnectState, ResourceCreatorPageModelState } from '@/models/connect';
+import { Dispatch } from 'redux';
 
 interface Step4Props {
-
+  dispatch: Dispatch;
+  resourceCreatorPage: ResourceCreatorPageModelState;
 }
 
 function Step4({}: Step4Props) {
@@ -100,4 +102,6 @@ function Step4({}: Step4Props) {
   </>);
 }
 
-export default Step4;
+export default connect(({ resourceCreatorPage }: ConnectState) => ({
+  resourceCreatorPage: resourceCreatorPage,
+}))(Step4);

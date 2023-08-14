@@ -1,13 +1,19 @@
 import * as React from 'react';
 import styles from './index.less';
-import FComponentsLib from '../../../../../../@freelog/components-lib';
-import { FI18n } from '@freelog/tools-lib';
+import FComponentsLib from '@freelog/components-lib';
+import { connect } from 'dva';
+import { ConnectState, ResourceCreatorPageModelState } from '@/models/connect';
+import { Dispatch } from 'redux';
+import { OnClick_step3_skipBtn_Action } from '@/models/resourceCreatorPage';
+
+// import { FI18n } from '@freelog/tools-lib';
 
 interface Step3Props {
-
+  dispatch: Dispatch;
+  resourceCreatorPage: ResourceCreatorPageModelState;
 }
 
-function Step3({}: Step3Props) {
+function Step3({ dispatch, resourceCreatorPage }: Step3Props) {
   return (<>
     <div style={{ height: 40 }} />
     <div className={styles.block}>
@@ -33,10 +39,15 @@ function Step3({}: Step3Props) {
     <div style={{ height: 5 }} />
 
     <div className={styles.block}>
-      <FComponentsLib.FContentText text={'策略模板'} type={'highlight'} />
+      <FComponentsLib.FContentText
+        text={'策略模板'}
+        type={'highlight'}
+      />
       {/*<FComponentsLib.FContentText text={FI18n.i18nNext.t('authplanmgnt_title_templates')} type={'highlight'}/>*/}
       <div style={{ height: 5 }} />
-      <FComponentsLib.FContentText text={'点击下方推荐的策略模板，可以快速添加策略'} type={'additional2'} />
+      <FComponentsLib.FContentText
+        text={'点击下方推荐的策略模板，可以快速添加策略'}
+        type={'additional2'} />
       {/*<FComponentsLib.FContentText text={FI18n.i18nNext.t('authplanmgnt_title_templates_help')} type={'additional2'} />*/}
       <div style={{ height: 20 }} />
       <div className={styles.policyTemplates}>
@@ -52,7 +63,9 @@ function Step3({}: Step3Props) {
       <FComponentsLib.FTextBtn
         type={'default'}
         onClick={() => {
-
+          dispatch<OnClick_step3_skipBtn_Action>({
+            type: 'resourceCreatorPage/onClick_step3_skipBtn',
+          });
         }}
       >稍后处理</FComponentsLib.FTextBtn>
 
@@ -69,4 +82,6 @@ function Step3({}: Step3Props) {
   </>);
 }
 
-export default Step3;
+export default connect(({ resourceCreatorPage }: ConnectState) => ({
+  resourceCreatorPage: resourceCreatorPage,
+}))(Step3);
