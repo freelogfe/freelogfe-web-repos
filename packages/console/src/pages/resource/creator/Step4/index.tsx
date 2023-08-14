@@ -8,13 +8,14 @@ import FResourceLabelEditor from '@/components/FResourceLabelEditor';
 import { connect } from 'dva';
 import { ConnectState, ResourceCreatorPageModelState } from '@/models/connect';
 import { Dispatch } from 'redux';
+import { OnClick_step4_preBtn_Action } from '@/models/resourceCreatorPage';
 
 interface Step4Props {
   dispatch: Dispatch;
   resourceCreatorPage: ResourceCreatorPageModelState;
 }
 
-function Step4({}: Step4Props) {
+function Step4({ dispatch, resourceCreatorPage }: Step4Props) {
   return (<>
     <div style={{ height: 40 }} />
     <div className={styles.block}>
@@ -87,7 +88,14 @@ function Step4({}: Step4Props) {
     <div className={styles.btn}>
 
       {/*{FI18n.i18nNext.t('rqr_step4_btn_back')}*/}
-      <FComponentsLib.FTextBtn type={'default'}>上一步</FComponentsLib.FTextBtn>
+      <FComponentsLib.FTextBtn
+        type={'default'}
+        onClick={() => {
+          dispatch<OnClick_step4_preBtn_Action>({
+            type: 'resourceCreatorPage/onClick_step4_preBtn',
+          });
+        }}
+      >上一步</FComponentsLib.FTextBtn>
 
       {/*{FI18n.i18nNext.t('rqr_step4_btn_release')}*/}
       <FComponentsLib.FRectBtn
