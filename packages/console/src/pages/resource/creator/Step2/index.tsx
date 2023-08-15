@@ -30,80 +30,108 @@ interface Step2Props {
 
 function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
 
+  const isCartoon = resourceCreatorPage.step1_createdResourceInfo?.resourceType[0] === '阅读'
+    && resourceCreatorPage.step1_createdResourceInfo?.resourceType[1] === '漫画'
+    && (resourceCreatorPage.step1_createdResourceInfo?.resourceType[2] === '条漫'
+      || resourceCreatorPage.step1_createdResourceInfo?.resourceType[2] === '页漫');
+
   if (!resourceCreatorPage.step2_fileInfo) {
     return (<>
       <div style={{ height: 40 }} />
       <div className={styles.styles}>
-        <div className={styles.localUpload}>
-          <FComponentsLib.FIcons.FLocalUpload style={{ fontSize: 60 }} />
-          <div style={{ height: 40 }} />
-          <FComponentsLib.FContentText text={'选择本地文件作为发行对象'} type={'additional2'} />
-          <div style={{ height: 40 }} />
-          <FComponentsLib.FRectBtn
-            type={'primary'}
-            onClick={async () => {
-              const files: RcFile[] | null = await fReadLocalFiles({
-                // accept: $state._uploadFileAccept,
-              });
+        {
+          !isCartoon && (<div className={styles.localUpload}>
+            <FComponentsLib.FIcons.FLocalUpload style={{ fontSize: 60 }} />
+            <div style={{ height: 40 }} />
+            <FComponentsLib.FContentText text={'选择本地文件作为发行对象'} type={'additional2'} />
+            <div style={{ height: 40 }} />
+            <FComponentsLib.FRectBtn
+              type={'primary'}
+              onClick={async () => {
+                const files: RcFile[] | null = await fReadLocalFiles({
+                  // accept: $state._uploadFileAccept,
+                });
 
-              if (!files || files.length === 0) {
-                return;
-              }
+                if (!files || files.length === 0) {
+                  return;
+                }
 
-              const [promise, cancel] = await FServiceAPI.Storage.uploadFile({
-                file: files[0],
-                // resourceType: resourceVersionCreatorPage.resourceType,
-              }, {
-                onUploadProgress(progressEvent: any) {
-                  // set_fUploadingProgress(Math.floor(progressEvent.loaded / progressEvent.total * 100));
-                  // $setState({
-                  //   fUploadingProgress: Math.floor(progressEvent.loaded / progressEvent.total * 100),
-                  // });
-                },
-              }, true);
-              const { ret, errCode, msg, data }: {
-                ret: number;
-                errCode: number;
-                msg: string;
-                data: {
-                  fileSize: number;
-                  sha1: string;
-                };
-              } = await promise;
-              console.log(data, 'dataoijsdlkfjlsdkjfkldsjflkjdslkfjl');
-              dispatch<OnSucceed_step2_localUpload_Action>({
-                type: 'resourceCreatorPage/onSucceed_step2_localUpload',
-                payload: {
-                  value: {
-                    name: files[0].name,
-                    sha1: data.sha1,
-                    from: '本地上传',
+                const [promise, cancel] = await FServiceAPI.Storage.uploadFile({
+                  file: files[0],
+                  // resourceType: resourceVersionCreatorPage.resourceType,
+                }, {
+                  onUploadProgress(progressEvent: any) {
+                    // set_fUploadingProgress(Math.floor(progressEvent.loaded / progressEvent.total * 100));
+                    // $setState({
+                    //   fUploadingProgress: Math.floor(progressEvent.loaded / progressEvent.total * 100),
+                    // });
                   },
-                },
-              });
-            }}
-          >本地上传</FComponentsLib.FRectBtn>
-        </div>
+                }, true);
+                const { ret, errCode, msg, data }: {
+                  ret: number;
+                  errCode: number;
+                  msg: string;
+                  data: {
+                    fileSize: number;
+                    sha1: string;
+                  };
+                } = await promise;
+                console.log(data, 'dataoijsdlkfjlsdkjfkldsjflkjdslkfjl');
+                dispatch<OnSucceed_step2_localUpload_Action>({
+                  type: 'resourceCreatorPage/onSucceed_step2_localUpload',
+                  payload: {
+                    value: {
+                      name: files[0].name,
+                      sha1: data.sha1,
+                      from: '本地上传',
+                    },
+                  },
+                });
+              }}
+            >本地上传</FComponentsLib.FRectBtn>
+          </div>)
+        }
 
-        <div className={styles.storageSpace}>
-          <FComponentsLib.FIcons.FStorageSpace style={{ fontSize: 60 }} />
-          <div style={{ height: 40 }} />
-          <FComponentsLib.FContentText text={'选择存储空间对象作为发行对象'} type={'additional2'} />
-          <div style={{ height: 40 }} />
-          <FComponentsLib.FRectBtn type={'primary'}>存储空间导入</FComponentsLib.FRectBtn>
-        </div>
+        {
+          !isCartoon && (<div className={styles.storageSpace}>
+            <FComponentsLib.FIcons.FStorageSpace style={{ fontSize: 60 }} />
+            <div style={{ height: 40 }} />
+            <FComponentsLib.FContentText text={'选择存储空间对象作为发行对象'} type={'additional2'} />
+            <div style={{ height: 40 }} />
+            <FComponentsLib.FRectBtn type={'primary'}>存储空间导入</FComponentsLib.FRectBtn>
+          </div>)
+        }
 
-        <div className={styles.markdownEditor}>
-          <img
-            src={img_markdown}
-            alt={''}
-            style={{ width: 56, height: 64 }}
-          />
-          <div style={{ height: 40 }} />
-          <FComponentsLib.FContentText text={'markdown编辑器'} type={'additional2'} />
-          <div style={{ height: 40 }} />
-          <FComponentsLib.FRectBtn type={'primary'}>立即体验</FComponentsLib.FRectBtn>
-        </div>
+
+        {
+          !isCartoon && resourceCreatorPage.step1_createdResourceInfo?.resourceType[0] === '阅读'
+          && resourceCreatorPage.step1_createdResourceInfo?.resourceType[1] === '文章'
+          && (<div className={styles.markdownEditor}>
+            <img
+              src={img_markdown}
+              alt={''}
+              style={{ width: 56, height: 64 }}
+            />
+            <div style={{ height: 40 }} />
+            <FComponentsLib.FContentText text={'markdown编辑器'} type={'additional2'} />
+            <div style={{ height: 40 }} />
+            <FComponentsLib.FRectBtn type={'primary'}>立即体验</FComponentsLib.FRectBtn>
+          </div>)
+        }
+
+        {
+          isCartoon && (<div className={styles.markdownEditor}>
+            <img
+              src={img_markdown}
+              alt={''}
+              style={{ width: 56, height: 64 }}
+            />
+            <div style={{ height: 40 }} />
+            <FComponentsLib.FContentText text={'漫画编辑器'} type={'additional2'} />
+            <div style={{ height: 40 }} />
+            <FComponentsLib.FRectBtn type={'primary'}>立即体验</FComponentsLib.FRectBtn>
+          </div>)
+        }
 
       </div>
 
