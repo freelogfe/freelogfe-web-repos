@@ -38,6 +38,7 @@ export interface ResourceCreatorPageModelState {
     sha1: string;
     from: string;
   } | null;
+  step2_fileInfo_errorTip: string;
   step2_rawProperties: {
     key: string;
     name: string;
@@ -166,6 +167,7 @@ export const initStates: ResourceCreatorPageModelState = {
   step1_createdResourceInfo: null,
 
   step2_fileInfo: null,
+  step2_fileInfo_errorTip: '不能超过200M',
   step2_rawProperties: [],
   step2_rawPropertiesState: 'parsing',
   step2_additionalProperties: [],

@@ -13,8 +13,8 @@ import {
   OnChange_CustomProperties_Action,
 } from '@/models/resourceVersionCreatorPage';
 import FTooltip from '@/components/FTooltip';
-import fReadLocalFiles from '@/components/fReadLocalFiles';
-import { RcFile } from 'antd/lib/upload/interface';
+// import fReadLocalFiles from '@/components/fReadLocalFiles';
+// import { RcFile } from 'antd/lib/upload/interface';
 import {
   // OnClick_step2_skipBtn_Action,
   OnClick_step2_submitBtn_Action,
@@ -22,6 +22,12 @@ import {
 } from '@/models/resourceCreatorPage';
 import FResourceProperties from '@/components/FResourceProperties';
 import { history } from 'umi';
+import * as AHooks from 'ahooks';
+// import { useGetState } from '@/utils/hooks';
+// import fMessage from '@/components/fMessage';
+// import FModal from '@/components/FModal';
+// import FTable from '@/components/FTable';
+import LocalUpload from './LocalUpload';
 
 interface Step2Props {
   dispatch: Dispatch;
@@ -40,56 +46,21 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
       <div style={{ height: 40 }} />
       <div className={styles.styles}>
         {
-          !isCartoon && (<div className={styles.localUpload}>
-            <FComponentsLib.FIcons.FLocalUpload style={{ fontSize: 60 }} />
-            <div style={{ height: 40 }} />
-            <FComponentsLib.FContentText text={'选择本地文件作为发行对象'} type={'additional2'} />
-            <div style={{ height: 40 }} />
-            <FComponentsLib.FRectBtn
-              type={'primary'}
-              onClick={async () => {
-                const files: RcFile[] | null = await fReadLocalFiles({
-                  // accept: $state._uploadFileAccept,
-                });
-
-                if (!files || files.length === 0) {
-                  return;
-                }
-
-                const [promise, cancel] = await FServiceAPI.Storage.uploadFile({
-                  file: files[0],
-                  // resourceType: resourceVersionCreatorPage.resourceType,
-                }, {
-                  onUploadProgress(progressEvent: any) {
-                    // set_fUploadingProgress(Math.floor(progressEvent.loaded / progressEvent.total * 100));
-                    // $setState({
-                    //   fUploadingProgress: Math.floor(progressEvent.loaded / progressEvent.total * 100),
-                    // });
+          !isCartoon && (<LocalUpload
+            resourceTypeCode={resourceCreatorPage.step1_createdResourceInfo?.resourceTypeCode || ''}
+            onSucceed={(value) => {
+              dispatch<OnSucceed_step2_localUpload_Action>({
+                type: 'resourceCreatorPage/onSucceed_step2_localUpload',
+                payload: {
+                  value: {
+                    name: value.fileName,
+                    sha1: value.sha1,
+                    from: '本地上传',
                   },
-                }, true);
-                const { ret, errCode, msg, data }: {
-                  ret: number;
-                  errCode: number;
-                  msg: string;
-                  data: {
-                    fileSize: number;
-                    sha1: string;
-                  };
-                } = await promise;
-                console.log(data, 'dataoijsdlkfjlsdkjfkldsjflkjdslkfjl');
-                dispatch<OnSucceed_step2_localUpload_Action>({
-                  type: 'resourceCreatorPage/onSucceed_step2_localUpload',
-                  payload: {
-                    value: {
-                      name: files[0].name,
-                      sha1: data.sha1,
-                      from: '本地上传',
-                    },
-                  },
-                });
-              }}
-            >本地上传</FComponentsLib.FRectBtn>
-          </div>)
+                },
+              });
+            }}
+          />)
         }
 
         {
@@ -134,6 +105,13 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
         }
 
       </div>
+
+      {/*{*/}
+      {/*  resourceCreatorPage.step2_fileInfo_errorTip !== '' && (<>*/}
+      {/*    <div style={{ height: 5 }} />*/}
+      {/*    <div style={{ color: '#EE4040' }}>{resourceCreatorPage.step2_fileInfo_errorTip}</div>*/}
+      {/*  </>)*/}
+      {/*}*/}
 
       <div style={{ height: 30 }} />
 
@@ -421,3 +399,5 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
 export default connect(({ resourceCreatorPage }: ConnectState) => ({
   resourceCreatorPage: resourceCreatorPage,
 }))(Step2);
+
+
