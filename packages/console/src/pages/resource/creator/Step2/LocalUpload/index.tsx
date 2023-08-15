@@ -9,6 +9,7 @@ import fMessage from '@/components/fMessage';
 import FModal from '@/components/FModal';
 import FTable from '@/components/FTable';
 import * as AHooks from 'ahooks';
+import { Progress } from 'antd';
 
 interface LocalUploadProps {
   resourceTypeCode: string;
@@ -214,6 +215,7 @@ function LocalUpload({ resourceTypeCode, onSucceed }: LocalUploadProps) {
             //     from: '本地上传',
             //   },
             // });
+            set$uploadingProgress(0);
             const [promise, cancel] = await FServiceAPI.Storage.uploadFile({
               file: files[0],
               // resourceType: resourceVersionCreatorPage.resourceType,
@@ -237,6 +239,7 @@ function LocalUpload({ resourceTypeCode, onSucceed }: LocalUploadProps) {
             //   sha1,
             //   fileName: file.name,
             // });
+            await FUtil.Tool.promiseSleep(1000);
             onSucceed && onSucceed({
               sha1: sha1,
               fileName: files[0].name,
@@ -420,8 +423,31 @@ function LocalUpload({ resourceTypeCode, onSucceed }: LocalUploadProps) {
       />
     </FModal>
 
-    <FModal title={null} footer={null}>
+    <FModal
+      closable={false}
+      open={$uploadingProgress !== null}
+      width={300}
+      title={null}
+      footer={null}
+    >
+      <div className={styles.progressBox}>
+        <Progress
+          type='circle'
+          strokeColor={{
+            '0%': '#108ee9',
+            '100%': '#87d068',
+          }}
+          percent={$uploadingProgress || 0}
+        />
+        <div style={{ height: 20 }} />
+        {
+          $uploadingProgress !== 100
+            ? (<FComponentsLib.FTextBtn type={'default'}>取消上传</FComponentsLib.FTextBtn>)
+            : (<FComponentsLib.FContentText text={'上传成功'} type={'highlight'} />)
+        }
 
+
+      </div>
     </FModal>
   </>);
 }
