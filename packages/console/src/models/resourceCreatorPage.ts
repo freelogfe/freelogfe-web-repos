@@ -95,9 +95,9 @@ export interface OnSucceed_step2_localUpload_Action extends AnyAction {
   };
 }
 
-export interface OnClick_step2_skipBtn_Action extends AnyAction {
-  type: 'resourceCreatorPage/onClick_step2_skipBtn';
-}
+// export interface OnClick_step2_skipBtn_Action extends AnyAction {
+//   type: 'resourceCreatorPage/onClick_step2_skipBtn';
+// }
 
 export interface OnClick_step2_submitBtn_Action extends AnyAction {
   type: 'resourceCreatorPage/onClick_step2_submitBtn';
@@ -107,9 +107,9 @@ export interface OnClick_step3_addPolicyBtn_Action extends AnyAction {
   type: 'resourceCreatorPage/onClick_step3_addPolicyBtn';
 }
 
-export interface OnClick_step3_skipBtn_Action extends AnyAction {
-  type: 'resourceCreatorPage/onClick_step3_skipBtn';
-}
+// export interface OnClick_step3_skipBtn_Action extends AnyAction {
+//   type: 'resourceCreatorPage/onClick_step3_skipBtn';
+// }
 
 export interface OnClick_step3_submitBtn_Action extends AnyAction {
   type: 'resourceCreatorPage/onClick_step3_submitBtn';
@@ -133,10 +133,10 @@ export interface ResourceCreatorPageModelType {
     onChange_step1_resourceName: (action: OnChange_step1_resourceName_Action, effects: EffectsCommandMap) => void;
     onClick_step1_createBtn: (action: OnClick_step1_createBtn_Action, effects: EffectsCommandMap) => void;
     onSucceed_step2_localUpload: (action: OnSucceed_step2_localUpload_Action, effects: EffectsCommandMap) => void;
-    onClick_step2_skipBtn: (action: OnClick_step2_skipBtn_Action, effects: EffectsCommandMap) => void;
+    // onClick_step2_skipBtn: (action: OnClick_step2_skipBtn_Action, effects: EffectsCommandMap) => void;
     onClick_step2_submitBtn: (action: OnClick_step2_submitBtn_Action, effects: EffectsCommandMap) => void;
     onClick_step3_addPolicyBtn: (action: OnClick_step3_addPolicyBtn_Action, effects: EffectsCommandMap) => void;
-    onClick_step3_skipBtn: (action: OnClick_step3_skipBtn_Action, effects: EffectsCommandMap) => void;
+    // onClick_step3_skipBtn: (action: OnClick_step3_skipBtn_Action, effects: EffectsCommandMap) => void;
     onClick_step3_submitBtn: (action: OnClick_step3_submitBtn_Action, effects: EffectsCommandMap) => void;
     onClick_step4_preBtn: (action: OnClick_step4_preBtn_Action, effects: EffectsCommandMap) => void;
     onClick_step4_submitBtn: (action: OnClick_step4_submitBtn_Action, effects: EffectsCommandMap) => void;
@@ -353,14 +353,14 @@ const Model: ResourceCreatorPageModelType = {
         });
       }
     },
-    * onClick_step2_skipBtn({}: OnClick_step2_skipBtn_Action, { put }: EffectsCommandMap) {
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          step: 3,
-        },
-      });
-    },
+    // * onClick_step2_skipBtn({}: OnClick_step2_skipBtn_Action, { put }: EffectsCommandMap) {
+    //   yield put<ChangeAction>({
+    //     type: 'change',
+    //     payload: {
+    //       step: 3,
+    //     },
+    //   });
+    // },
     * onClick_step2_submitBtn({}: OnClick_step2_submitBtn_Action, { select, call, put }: EffectsCommandMap) {
       const { resourceCreatorPage }: ConnectState = yield select(({ resourceCreatorPage }: ConnectState) => ({
         resourceCreatorPage,
@@ -375,8 +375,12 @@ const Model: ResourceCreatorPageModelType = {
         version: '1.0.0',
         fileSha1: resourceCreatorPage.step2_fileInfo.sha1,
         filename: resourceCreatorPage.step2_fileInfo.name,
+        baseUpcastResources: [],
+        dependencies: [],
         resolveResources: [],
         inputAttrs: [],
+        customPropertyDescriptors: [],
+        description: '',
         // baseUpcastResources: baseUpcastResources.map((r) => {
         //   return { resourceId: r.resourceID };
         // }),
@@ -445,18 +449,18 @@ const Model: ResourceCreatorPageModelType = {
     * onClick_step3_addPolicyBtn({}: OnClick_step3_addPolicyBtn_Action, {}: EffectsCommandMap) {
 
     },
-    * onClick_step3_skipBtn({}: OnClick_step3_skipBtn_Action, { put }: EffectsCommandMap) {
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          step: 4,
-        },
-      });
-    },
+    // * onClick_step3_skipBtn({}: OnClick_step3_skipBtn_Action, { put }: EffectsCommandMap) {
+    //   yield put<ChangeAction>({
+    //     type: 'change',
+    //     payload: {
+    //       step: 4,
+    //     },
+    //   });
+    // },
     * onClick_step3_submitBtn({}: OnClick_step3_submitBtn_Action, {}: EffectsCommandMap) {
 
     },
-    * onClick_step4_preBtn({}: OnClick_step4_preBtn_Action, {put}: EffectsCommandMap) {
+    * onClick_step4_preBtn({}: OnClick_step4_preBtn_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {

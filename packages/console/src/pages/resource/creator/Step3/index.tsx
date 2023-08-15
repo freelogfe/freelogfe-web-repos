@@ -4,7 +4,9 @@ import FComponentsLib from '@freelog/components-lib';
 import { connect } from 'dva';
 import { ConnectState, ResourceCreatorPageModelState } from '@/models/connect';
 import { Dispatch } from 'redux';
-import { OnClick_step3_skipBtn_Action } from '@/models/resourceCreatorPage';
+// import { OnClick_step3_skipBtn_Action } from '@/models/resourceCreatorPage';
+import { history } from '@@/core/history';
+import { FUtil } from '@freelog/tools-lib';
 
 // import { FI18n } from '@freelog/tools-lib';
 
@@ -63,9 +65,11 @@ function Step3({ dispatch, resourceCreatorPage }: Step3Props) {
       <FComponentsLib.FTextBtn
         type={'default'}
         onClick={() => {
-          dispatch<OnClick_step3_skipBtn_Action>({
-            type: 'resourceCreatorPage/onClick_step3_skipBtn',
-          });
+          // history.push(FUtil.LinkTo.resourceVersion({
+          //   resourceID: resourceCreatorPage.step1_createdResourceInfo?.resourceID || '',
+          //   version: '1.0.0',
+          // }));
+          history.push(FUtil.LinkTo.myResources());
         }}
       >稍后处理</FComponentsLib.FTextBtn>
 

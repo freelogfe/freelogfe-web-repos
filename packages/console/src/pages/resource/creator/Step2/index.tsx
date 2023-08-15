@@ -6,7 +6,7 @@ import FComponentsLib from '@freelog/components-lib';
 import { connect } from 'dva';
 import { ConnectState, ResourceCreatorPageModelState } from '@/models/connect';
 import { Dispatch } from 'redux';
-import { FI18n, FServiceAPI } from '@freelog/tools-lib';
+import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
 import fResourcePropertyEditor from '@/components/fResourcePropertyEditor';
 import {
   OnChange_AdditionalProperties_Action,
@@ -16,11 +16,12 @@ import FTooltip from '@/components/FTooltip';
 import fReadLocalFiles from '@/components/fReadLocalFiles';
 import { RcFile } from 'antd/lib/upload/interface';
 import {
-  OnClick_step2_skipBtn_Action,
+  // OnClick_step2_skipBtn_Action,
   OnClick_step2_submitBtn_Action,
   OnSucceed_step2_localUpload_Action,
 } from '@/models/resourceCreatorPage';
 import FResourceProperties from '@/components/FResourceProperties';
+import { history } from 'umi';
 
 interface Step2Props {
   dispatch: Dispatch;
@@ -114,9 +115,11 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
         <FComponentsLib.FTextBtn
           type={'default'}
           onClick={() => {
-            dispatch<OnClick_step2_skipBtn_Action>({
-              type: 'resourceCreatorPage/onClick_step2_skipBtn',
-            });
+            // history.push(FUtil.LinkTo.resourceVersion({
+            //   resourceID: resourceCreatorPage.step1_createdResourceInfo?.resourceID || '',
+            //   version: '1.0.0',
+            // }));
+            history.push(FUtil.LinkTo.myResources());
           }}
         >稍后处理</FComponentsLib.FTextBtn>
 
@@ -362,9 +365,12 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
       <FComponentsLib.FTextBtn
         type={'default'}
         onClick={() => {
-          dispatch<OnClick_step2_skipBtn_Action>({
-            type: 'resourceCreatorPage/onClick_step2_skipBtn',
-          });
+          // history.push(FUtil.LinkTo.resourceVersion({
+          //   resourceID: resourceCreatorPage.step1_createdResourceInfo?.resourceID || '',
+          //   version: '1.0.0',
+          // }));
+          history.push(FUtil.LinkTo.myResources());
+
         }}
       >稍后处理</FComponentsLib.FTextBtn>
 
