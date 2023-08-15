@@ -184,7 +184,12 @@ const Model: ResourceCreatorPageModelType = {
       });
     },
     * onUnmount_Page({}: OnUnmount_Page_Action, { put }: EffectsCommandMap) {
-
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          ...initStates,
+        },
+      });
     },
     * onChange_step1_resourceType({ payload }: OnChange_step1_resourceType_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({

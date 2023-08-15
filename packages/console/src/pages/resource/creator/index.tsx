@@ -12,7 +12,7 @@ import Step2 from './Step2';
 import Step3 from './Step3';
 import Step4 from './Step4';
 import * as AHooks from 'ahooks';
-import { OnMount_Page_Action } from '@/models/resourceCreatorPage';
+import { OnMount_Page_Action, OnUnmount_Page_Action } from '@/models/resourceCreatorPage';
 
 interface ResourceCreatorProps {
   dispatch: Dispatch;
@@ -32,7 +32,9 @@ function ResourceCreator({
   });
 
   AHooks.useUnmount(() => {
-
+    dispatch<OnUnmount_Page_Action>({
+      type: 'resourceCreatorPage/onUnmount_Page',
+    });
   });
 
 
