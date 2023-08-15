@@ -9,8 +9,9 @@ import { Dispatch } from 'redux';
 import {
   OnChange_step1_resourceName_Action,
   OnChange_step1_resourceType_Action,
-  OnClick_step1_createBtn_Action,
+  OnClick_step1_createBtn_Action, OnVerify_step1_resourceName_Action,
 } from '@/models/resourceCreatorPage';
+import * as AHooks from 'ahooks';
 
 interface Step1Props {
   dispatch: Dispatch;
@@ -18,6 +19,15 @@ interface Step1Props {
 }
 
 function Step1({ dispatch, resourceCreatorPage }: Step1Props) {
+
+  AHooks.useDebounceEffect(() => {
+    dispatch<OnVerify_step1_resourceName_Action>({
+      type: 'resourceCreatorPage/onVerify_step1_resourceName',
+    });
+  }, [resourceCreatorPage.step1_resourceName], {
+    wait: 300,
+  });
+
   return (<>
     <div style={{ height: 40 }} />
     <div className={styles.block}>
@@ -69,14 +79,24 @@ function Step1({ dispatch, resourceCreatorPage }: Step1Props) {
               });
             }}
           />
-          {/*{*/}
-          {/*  resourceCreatorPage.nameErrorText !== '' && (<>*/}
-          {/*    <div style={{ height: 5 }} />*/}
-          {/*    <div style={{ color: '#EE4040' }}>{resourceCreatorPage.nameErrorText}</div>*/}
-          {/*  </>)*/}
-          {/*}*/}
-
+          {
+            resourceCreatorPage.step1_resourceName_errorText !== '' && (<>
+              <div style={{ height: 5 }} />
+              <div style={{ color: '#EE4040' }}>{resourceCreatorPage.step1_resourceName_errorText}</div>
+            </>)
+          }
         </div>
+        {
+          resourceCreatorPage.step1_resourceName_isVerify && (
+            <FComponentsLib.FIcons.FLoading style={{ lineHeight: '38px', flexShrink: 0 }} />)
+        }
+
+        {
+          !resourceCreatorPage.step1_resourceName_isVerify
+          && resourceCreatorPage.step1_resourceName !== ''
+          && resourceCreatorPage.step1_resourceName_errorText === '' && (
+            <FComponentsLib.FIcons.FCheck style={{ lineHeight: '38px', flexShrink: 0 }} />)
+        }
       </div>
     </div>
 
@@ -85,7 +105,10 @@ function Step1({ dispatch, resourceCreatorPage }: Step1Props) {
     <div className={styles.btn}>
       {/*{FI18n.i18nNext.t('rqr_step1_btn_createnow')}*/}
       <FComponentsLib.FRectBtn
-        disabled={resourceCreatorPage.step1_resourceName === '' || resourceCreatorPage.step1_resourceType === null}
+        disabled={resourceCreatorPage.step1_resourceType === null
+        || resourceCreatorPage.step1_resourceName === ''
+        || resourceCreatorPage.step1_resourceName_errorText !== ''
+        || resourceCreatorPage.step1_resourceName_isVerify}
         type={'primary'}
         onClick={() => {
           dispatch<OnClick_step1_createBtn_Action>({

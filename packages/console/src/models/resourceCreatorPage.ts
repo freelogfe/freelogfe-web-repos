@@ -3,7 +3,7 @@ import { EffectsCommandMap, Subscription, SubscriptionAPI } from 'dva';
 import { DvaReducer } from './shared';
 import { ConnectState, ResourceVersionCreatorPageModelState, UserModelState } from '@/models/connect';
 // import { history } from 'umi';
-import { FServiceAPI } from '@freelog/tools-lib';
+import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
 import fMessage from '@/components/fMessage';
 import userPermission from '@/permissions/UserPermission';
 import { getFilesSha1Info } from '@/utils/service';
@@ -24,6 +24,8 @@ export interface ResourceCreatorPageModelState {
     customInput?: string;
   } | null;
   step1_resourceName: string;
+  step1_resourceName_isVerify: boolean;
+  step1_resourceName_errorText: string;
   step1_createdResourceInfo: {
     resourceID: string;
     resourceName: string;
@@ -84,6 +86,10 @@ export interface OnChange_step1_resourceName_Action extends AnyAction {
   };
 }
 
+export interface OnVerify_step1_resourceName_Action extends AnyAction {
+  type: 'resourceCreatorPage/onVerify_step1_resourceName';
+}
+
 export interface OnClick_step1_createBtn_Action extends AnyAction {
   type: 'resourceCreatorPage/onClick_step1_createBtn';
 }
@@ -131,6 +137,7 @@ export interface ResourceCreatorPageModelType {
     onUnmount_Page: (action: OnUnmount_Page_Action, effects: EffectsCommandMap) => void;
     onChange_step1_resourceType: (action: OnChange_step1_resourceType_Action, effects: EffectsCommandMap) => void;
     onChange_step1_resourceName: (action: OnChange_step1_resourceName_Action, effects: EffectsCommandMap) => void;
+    onVerify_step1_resourceName: (action: OnVerify_step1_resourceName_Action, effects: EffectsCommandMap) => void;
     onClick_step1_createBtn: (action: OnClick_step1_createBtn_Action, effects: EffectsCommandMap) => void;
     onSucceed_step2_localUpload: (action: OnSucceed_step2_localUpload_Action, effects: EffectsCommandMap) => void;
     // onClick_step2_skipBtn: (action: OnClick_step2_skipBtn_Action, effects: EffectsCommandMap) => void;
@@ -154,6 +161,8 @@ export const initStates: ResourceCreatorPageModelState = {
 
   step1_resourceType: null,
   step1_resourceName: 'newResource',
+  step1_resourceName_isVerify: false,
+  step1_resourceName_errorText: '',
   step1_createdResourceInfo: null,
 
   step2_fileInfo: null,
@@ -204,6 +213,38 @@ const Model: ResourceCreatorPageModelType = {
         type: 'change',
         payload: {
           step1_resourceName: payload.value,
+          step1_resourceName_errorText: '',
+          step1_resourceName_isVerify: true,
+        },
+      });
+    },
+    * onVerify_step1_resourceName({}: OnVerify_step1_resourceName_Action, { select, call, put }: EffectsCommandMap) {
+      const { resourceCreatorPage }: ConnectState = yield select(({ resourceCreatorPage }: ConnectState) => ({
+        resourceCreatorPage,
+      }));
+      let nameErrorText: string = '';
+      if (resourceCreatorPage.step1_resourceName === '') {
+        nameErrorText = '请输入资源名称';
+      } else if (resourceCreatorPage.step1_resourceName.length > 60) {
+        nameErrorText = '不多于60个字符';
+      } else if (!FUtil.Regexp.RESOURCE_NAME.test(resourceCreatorPage.step1_resourceName)) {
+        // nameErrorText = `不符合正则 ${FUtil.Regexp.RESOURCE_NAME}`;
+        nameErrorText = FI18n.i18nNext.t('naming_convention_resource_name');
+      } else {
+        const params1: Parameters<typeof FServiceAPI.Resource.info>[0] = {
+          resourceIdOrName: encodeURIComponent(`${resourceCreatorPage.userInfo?.userName}/${resourceCreatorPage.step1_resourceName}`),
+        };
+        const { data: data_info } = yield call(FServiceAPI.Resource.info, params1);
+        if (!!data_info) {
+          nameErrorText = '资源名已存在';
+        }
+      }
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          step1_resourceName_isVerify: false,
+          step1_resourceName_errorText: nameErrorText,
         },
       });
     },
