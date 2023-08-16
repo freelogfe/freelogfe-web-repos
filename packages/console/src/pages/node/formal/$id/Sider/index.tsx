@@ -93,6 +93,11 @@ function Sider({ dispatch, nodeManagerPage, match }: SiderProps) {
                     // @ts-ignore
                     meta: { nodeId: nodeManagerPage.nodeId },
                   });
+                  await FServiceAPI.Activity.pushMessageTask({
+                    taskConfigCode: 'TS000076',
+                    // @ts-ignore
+                    meta: { nodeId: nodeManagerPage.nodeId },
+                  });
                 }}>
                   <FTooltip title={FI18n.i18nNext.t('nodemgnt_btn_sharenode_tooltip')}>
                     <i className={`freelog fl-icon-fenxiang`} style={{ fontSize: '14px' }} />
