@@ -9,28 +9,25 @@ import { Dispatch } from 'redux';
 import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
 import fResourcePropertyEditor from '@/components/fResourcePropertyEditor';
 import {
-  OnChange_AdditionalProperties_Action,
+  OnChange_AdditionalProperties_Action, OnChange_CustomConfigurations_Action,
   OnChange_CustomProperties_Action,
 } from '@/models/resourceVersionCreatorPage';
 import FTooltip from '@/components/FTooltip';
-// import fReadLocalFiles from '@/components/fReadLocalFiles';
-// import { RcFile } from 'antd/lib/upload/interface';
 import {
-  // OnClick_step2_skipBtn_Action,
+  OnChange_step2_customConfigurations_Action,
   OnClick_step2_submitBtn_Action,
   OnSucceed_step2_localUpload_Action, OnSucceed_step2_storageSpace_Action,
 } from '@/models/resourceCreatorPage';
 import FResourceProperties from '@/components/FResourceProperties';
 import { history } from 'umi';
-// import * as AHooks from 'ahooks';
-// import { useGetState } from '@/utils/hooks';
-// import fMessage from '@/components/fMessage';
-// import FModal from '@/components/FModal';
-// import FTable from '@/components/FTable';
 import LocalUpload from './LocalUpload';
 import StorageSpace from './StorageSpace';
+import MarkdownEditor from './MarkdownEditor';
+import CartoonEditor from './CartoonEditor';
 import { Space } from 'antd';
 import { useGetState } from '@/utils/hooks';
+import fResourceOptionEditor from '@/components/fResourceOptionEditor';
+import FResourceOptions from '@/components/FResourceOptions';
 
 interface Step2Props {
   dispatch: Dispatch;
@@ -81,31 +78,11 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
         {
           !isCartoon && resourceCreatorPage.step1_createdResourceInfo?.resourceType[0] === '阅读'
           && resourceCreatorPage.step1_createdResourceInfo?.resourceType[1] === '文章'
-          && (<div className={styles.markdownEditor}>
-            <img
-              src={img_markdown}
-              alt={''}
-              style={{ width: 56, height: 64 }}
-            />
-            <div style={{ height: 40 }} />
-            <FComponentsLib.FContentText text={'markdown编辑器'} type={'additional2'} />
-            <div style={{ height: 40 }} />
-            <FComponentsLib.FRectBtn type={'primary'}>立即体验</FComponentsLib.FRectBtn>
-          </div>)
+          && (<MarkdownEditor />)
         }
 
         {
-          isCartoon && (<div className={styles.markdownEditor}>
-            <img
-              src={img_markdown}
-              alt={''}
-              style={{ width: 56, height: 64 }}
-            />
-            <div style={{ height: 40 }} />
-            <FComponentsLib.FContentText text={'漫画编辑器'} type={'additional2'} />
-            <div style={{ height: 40 }} />
-            <FComponentsLib.FRectBtn type={'primary'}>立即体验</FComponentsLib.FRectBtn>
-          </div>)
+          isCartoon && (<CartoonEditor />)
         }
 
       </div>
@@ -407,7 +384,41 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
                   style={{ fontSize: 12, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 5 }}
                   type='primary'
                   onClick={async () => {
+                    const dataSource: {
+                      key: string;
+                      name: string;
+                      type: 'input' | 'select';
+                      input: string;
+                      select: string[];
+                      description: string;
+                    } | null = await fResourceOptionEditor({
+                      disabledKeys: [
+                        ...resourceCreatorPage.step2_rawProperties.map<string>((rp) => rp.key),
+                        ...resourceCreatorPage.step2_additionalProperties.map<string>((rp) => rp.key),
+                        ...resourceCreatorPage.step2_customProperties.map<string>((bp) => bp.key),
+                        ...resourceCreatorPage.step2_customConfigurations.map<string>((pp) => pp.key),
+                      ],
+                      disabledNames: [
+                        ...resourceCreatorPage.step2_rawProperties.map<string>((rp) => rp.name),
+                        ...resourceCreatorPage.step2_additionalProperties.map<string>((rp) => rp.name),
+                        ...resourceCreatorPage.step2_customProperties.map<string>((bp) => bp.name),
+                        ...resourceCreatorPage.step2_customConfigurations.map<string>((pp) => pp.name),
+                      ],
+                    });
 
+                    if (!dataSource) {
+                      return;
+                    }
+
+                    await dispatch<OnChange_step2_customConfigurations_Action>({
+                      type: 'resourceCreatorPage/onChange_step2_customConfigurations',
+                      payload: {
+                        value: [
+                          ...resourceCreatorPage.step2_customConfigurations,
+                          dataSource,
+                        ],
+                      },
+                    });
                   }}
                 >
                   <FComponentsLib.FIcons.FConfiguration style={{ fontSize: 14 }} />
@@ -416,18 +427,86 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
               </div>
             </FTooltip>
           </div>
-          <>
-            <div style={{ height: 10 }} />
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              {/*<span>{FI18n.i18nNext.t('resourceoptions_list_empty')}</span>*/}
-              <FComponentsLib.FContentText text={'可选配置是资源在消费端展示时所需的配置信息，您可以根据需要添加。'} type={'additional2'} />
-            </div>
-            <div style={{ height: 20 }} />
-          </>
 
-          <>
-            {/*<div style={{ height: 20 }} />*/}
-          </>
+          {
+            resourceCreatorPage.step2_customConfigurations.length === 0 && (<>
+              <div style={{ height: 10 }} />
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                {/*<span>{FI18n.i18nNext.t('resourceoptions_list_empty')}</span>*/}
+                <FComponentsLib.FContentText
+                  text={'可选配置是资源在消费端展示时所需的配置信息，您可以根据需要添加。'}
+                  type={'additional2'}
+                />
+              </div>
+              <div style={{ height: 20 }} />
+            </>)
+          }
+
+          {
+            resourceCreatorPage.step2_customConfigurations.length > 0 && (<>
+              <div style={{ height: 20 }} />
+              <FResourceOptions
+                theme={'dark'}
+                // dataSource={resourceVersionCreatorPage.customOptionsData}
+                dataSource={resourceCreatorPage.step2_customConfigurations}
+                onEdit={async (value) => {
+                  const index: number = resourceCreatorPage.step2_customConfigurations.findIndex((p) => {
+                    return p === value;
+                  });
+
+                  const dataSource: {
+                    key: string;
+                    name: string;
+                    type: 'input' | 'select';
+                    input: string;
+                    select: string[];
+                    description: string;
+                  } | null = await fResourceOptionEditor({
+                    disabledKeys: [
+                      ...resourceCreatorPage.step2_rawProperties.map<string>((rp) => rp.key),
+                      ...resourceCreatorPage.step2_additionalProperties.map<string>((rp) => rp.key),
+                      ...resourceCreatorPage.step2_customProperties.map<string>((bp) => bp.key),
+                      ...resourceCreatorPage.step2_customConfigurations.map<string>((pp) => pp.key),
+                    ],
+                    disabledNames: [
+                      ...resourceCreatorPage.step2_rawProperties.map<string>((rp) => rp.name),
+                      ...resourceCreatorPage.step2_additionalProperties.map<string>((rp) => rp.name),
+                      ...resourceCreatorPage.step2_customProperties.map<string>((bp) => bp.name),
+                      ...resourceCreatorPage.step2_customConfigurations.map<string>((pp) => pp.name),
+                    ],
+                    defaultData: value,
+                  });
+
+                  if (!dataSource) {
+                    return;
+                  }
+
+                  await dispatch<OnChange_step2_customConfigurations_Action>({
+                    type: 'resourceCreatorPage/onChange_step2_customConfigurations',
+                    payload: {
+                      value: resourceCreatorPage.step2_customConfigurations.map((a, b) => {
+                        if (b !== index) {
+                          return a;
+                        }
+                        return dataSource;
+                      }),
+                    },
+                  });
+                }}
+                onDelete={async (value) => {
+                  await dispatch<OnChange_step2_customConfigurations_Action>({
+                    type: 'resourceCreatorPage/onChange_step2_customConfigurations',
+                    payload: {
+                      value: resourceCreatorPage.step2_customConfigurations.filter((a) => {
+                        return a.key !== value.key && a.name !== value.name;
+                      }),
+                    },
+                  });
+                }}
+              />
+            </>)
+          }
+
         </div>
 
         <div style={{ height: 5 }} />

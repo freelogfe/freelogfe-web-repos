@@ -7,6 +7,7 @@ import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
 import fMessage from '@/components/fMessage';
 import userPermission from '@/permissions/UserPermission';
 import { getFilesSha1Info } from '@/utils/service';
+import { OnChange_CustomConfigurations_Action } from '@/models/resourceVersionCreatorPage';
 
 // import { IResourceCreateVersionDraftType } from '@/type/resourceTypes';
 
@@ -57,6 +58,14 @@ export interface ResourceCreatorPageModelState {
     name: string;
     value: string;
     description: string;
+  }[];
+  step2_customConfigurations: {
+    key: string;
+    name: string;
+    description: string;
+    type: 'input' | 'select';
+    input: string;
+    select: string[];
   }[];
 }
 
@@ -114,9 +123,19 @@ export interface OnSucceed_step2_storageSpace_Action extends AnyAction {
   };
 }
 
-// export interface OnClick_step2_skipBtn_Action extends AnyAction {
-//   type: 'resourceCreatorPage/onClick_step2_skipBtn';
-// }
+export interface OnChange_step2_customProperties_Action extends AnyAction {
+  type: 'resourceCreatorPage/onChange_step2_customProperties';
+  payload: {
+    value: ResourceCreatorPageModelState['step2_customProperties']
+  };
+}
+
+export interface OnChange_step2_customConfigurations_Action extends AnyAction {
+  type: 'resourceCreatorPage/onChange_step2_customConfigurations';
+  payload: {
+    value: ResourceCreatorPageModelState['step2_customConfigurations']
+  };
+}
 
 export interface OnClick_step2_submitBtn_Action extends AnyAction {
   type: 'resourceCreatorPage/onClick_step2_submitBtn';
@@ -154,7 +173,8 @@ export interface ResourceCreatorPageModelType {
     onClick_step1_createBtn: (action: OnClick_step1_createBtn_Action, effects: EffectsCommandMap) => void;
     onSucceed_step2_localUpload: (action: OnSucceed_step2_localUpload_Action, effects: EffectsCommandMap) => void;
     onSucceed_step2_storageSpace: (action: OnSucceed_step2_storageSpace_Action, effects: EffectsCommandMap) => void;
-    // onClick_step2_skipBtn: (action: OnClick_step2_skipBtn_Action, effects: EffectsCommandMap) => void;
+    onChange_step2_customProperties: (action: OnChange_step2_customProperties_Action, effects: EffectsCommandMap) => void;
+    onChange_step2_customConfigurations: (action: OnChange_step2_customConfigurations_Action, effects: EffectsCommandMap) => void;
     onClick_step2_submitBtn: (action: OnClick_step2_submitBtn_Action, effects: EffectsCommandMap) => void;
     onClick_step3_addPolicyBtn: (action: OnClick_step3_addPolicyBtn_Action, effects: EffectsCommandMap) => void;
     // onClick_step3_skipBtn: (action: OnClick_step3_skipBtn_Action, effects: EffectsCommandMap) => void;
@@ -185,6 +205,7 @@ export const initStates: ResourceCreatorPageModelState = {
   step2_rawPropertiesState: 'parsing',
   step2_additionalProperties: [],
   step2_customProperties: [],
+  step2_customConfigurations: [],
 };
 
 const Model: ResourceCreatorPageModelType = {
@@ -529,14 +550,22 @@ const Model: ResourceCreatorPageModelType = {
         });
       }
     },
-    // * onClick_step2_skipBtn({}: OnClick_step2_skipBtn_Action, { put }: EffectsCommandMap) {
-    //   yield put<ChangeAction>({
-    //     type: 'change',
-    //     payload: {
-    //       step: 3,
-    //     },
-    //   });
-    // },
+    * onChange_step2_customProperties({ payload }: OnChange_step2_customProperties_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          step2_customProperties: payload.value,
+        },
+      });
+    },
+    * onChange_step2_customConfigurations({ payload }: OnChange_step2_customConfigurations_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          step2_customConfigurations: payload.value,
+        },
+      });
+    },
     * onClick_step2_submitBtn({}: OnClick_step2_submitBtn_Action, { select, call, put }: EffectsCommandMap) {
       const { resourceCreatorPage }: ConnectState = yield select(({ resourceCreatorPage }: ConnectState) => ({
         resourceCreatorPage,
