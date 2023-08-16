@@ -28,6 +28,7 @@ import * as AHooks from 'ahooks';
 // import FModal from '@/components/FModal';
 // import FTable from '@/components/FTable';
 import LocalUpload from './LocalUpload';
+import StorageSpace from './StorageSpace';
 
 interface Step2Props {
   dispatch: Dispatch;
@@ -64,13 +65,9 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
         }
 
         {
-          !isCartoon && (<div className={styles.storageSpace}>
-            <FComponentsLib.FIcons.FStorageSpace style={{ fontSize: 60 }} />
-            <div style={{ height: 40 }} />
-            <FComponentsLib.FContentText text={'选择存储空间对象作为发行对象'} type={'additional2'} />
-            <div style={{ height: 40 }} />
-            <FComponentsLib.FRectBtn type={'primary'}>存储空间导入</FComponentsLib.FRectBtn>
-          </div>)
+          !isCartoon && (<StorageSpace
+            resourceTypeCode={resourceCreatorPage.step1_createdResourceInfo?.resourceTypeCode || ''}
+          />)
         }
 
 

@@ -445,8 +445,6 @@ function LocalUpload({ resourceTypeCode, onSucceed }: LocalUploadProps) {
             ? (<FComponentsLib.FTextBtn type={'default'}>取消上传</FComponentsLib.FTextBtn>)
             : (<FComponentsLib.FContentText text={'上传成功'} type={'highlight'} />)
         }
-
-
       </div>
     </FModal>
   </>);
