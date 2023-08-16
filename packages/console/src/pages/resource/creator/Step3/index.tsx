@@ -9,7 +9,10 @@ import { history } from '@@/core/history';
 import { FI18n, FUtil } from '@freelog/tools-lib';
 import FPolicyList from '@/components/FPolicyList';
 import fResourceOptionEditor from '@/components/fResourceOptionEditor';
-import { OnChange_step2_customConfigurations_Action } from '@/models/resourceCreatorPage';
+import {
+  OnChange_step2_customConfigurations_Action,
+  OnClick_step3_submitBtn_Action,
+} from '@/models/resourceCreatorPage';
 
 // import { FI18n } from '@freelog/tools-lib';
 
@@ -82,30 +85,30 @@ function Step3({ dispatch, resourceCreatorPage }: Step3Props) {
         <a className={styles.policyTemplate}>
           <FComponentsLib.FTitleText text={'免费试用后订阅'} type={'h1'} />
           <div style={{ height: 15 }} />
-          <FComponentsLib.FContentText text={'公开（所有缔约方可签约）'}/>
-          <FComponentsLib.FContentText text={'免费试用1个星期，支付200羽币，可获得1个月授权。'}/>
-          <FComponentsLib.FContentText text={'免费试用1个星期，支付200羽币，可获得1个月授权。'}/>
+          <FComponentsLib.FContentText text={'公开（所有缔约方可签约）'} />
+          <FComponentsLib.FContentText text={'免费试用1个星期，支付200羽币，可获得1个月授权。'} />
+          <FComponentsLib.FContentText text={'免费试用1个星期，支付200羽币，可获得1个月授权。'} />
         </a>
         <a className={styles.policyTemplate}>
           <FComponentsLib.FTitleText text={'免费试用后订阅'} type={'h1'} />
           <div style={{ height: 15 }} />
-          <FComponentsLib.FContentText text={'公开（所有缔约方可签约）'}/>
-          <FComponentsLib.FContentText text={'免费试用1个星期，支付200羽币，可获得1个月授权。'}/>
+          <FComponentsLib.FContentText text={'公开（所有缔约方可签约）'} />
+          <FComponentsLib.FContentText text={'免费试用1个星期，支付200羽币，可获得1个月授权。'} />
           {/*<FComponentsLib.FContentText text={'免费试用1个星期，支付200羽币，可获得1个月授权。'}/>*/}
         </a>
         <a className={styles.policyTemplate}>
           <FComponentsLib.FTitleText text={'免费试用后订阅'} type={'h1'} />
           <div style={{ height: 15 }} />
-          <FComponentsLib.FContentText text={'公开（所有缔约方可签约）'}/>
-          <FComponentsLib.FContentText text={'免费试用1个星期，支付200羽币，可获得1个月授权。'}/>
+          <FComponentsLib.FContentText text={'公开（所有缔约方可签约）'} />
+          <FComponentsLib.FContentText text={'免费试用1个星期，支付200羽币，可获得1个月授权。'} />
           {/*<FComponentsLib.FContentText text={'免费试用1个星期，支付200羽币，可获得1个月授权。'}/>*/}
         </a>
         <a className={styles.policyTemplate}>
           <FComponentsLib.FTitleText text={'免费试用后订阅'} type={'h1'} />
           <div style={{ height: 15 }} />
-          <FComponentsLib.FContentText text={'公开（所有缔约方可签约）'}/>
-          <FComponentsLib.FContentText text={'免费试用1个星期，支付200羽币，可获得1个月授权。'}/>
-          <FComponentsLib.FContentText text={'免费试用1个星期，支付200羽币，可获得1个月授权。'}/>
+          <FComponentsLib.FContentText text={'公开（所有缔约方可签约）'} />
+          <FComponentsLib.FContentText text={'免费试用1个星期，支付200羽币，可获得1个月授权。'} />
+          <FComponentsLib.FContentText text={'免费试用1个星期，支付200羽币，可获得1个月授权。'} />
         </a>
       </div>
     </div>
@@ -131,7 +134,9 @@ function Step3({ dispatch, resourceCreatorPage }: Step3Props) {
         disabled={false}
         type={'primary'}
         onClick={() => {
-
+          dispatch<OnClick_step3_submitBtn_Action>({
+            type: 'resourceCreatorPage/onClick_step3_submitBtn',
+          });
         }}
       >下一步</FComponentsLib.FRectBtn>
     </div>

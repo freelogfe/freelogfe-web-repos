@@ -662,8 +662,13 @@ const Model: ResourceCreatorPageModelType = {
     //     },
     //   });
     // },
-    * onClick_step3_submitBtn({}: OnClick_step3_submitBtn_Action, {}: EffectsCommandMap) {
-
+    * onClick_step3_submitBtn({}: OnClick_step3_submitBtn_Action, {put}: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          step: 4,
+        },
+      });
     },
     * onClick_step4_preBtn({}: OnClick_step4_preBtn_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
