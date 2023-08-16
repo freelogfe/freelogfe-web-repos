@@ -433,7 +433,7 @@ const Model: ResourceCreatorPageModelType = {
           step2_fileInfo: {
             name: payload.objectName,
             sha1: payload.sha1,
-            from: '本地上传',
+            from: '存储空间',
           },
         },
       });
