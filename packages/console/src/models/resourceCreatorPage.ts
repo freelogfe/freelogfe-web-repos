@@ -98,7 +98,19 @@ export interface OnClick_step1_createBtn_Action extends AnyAction {
 export interface OnSucceed_step2_localUpload_Action extends AnyAction {
   type: 'resourceCreatorPage/onSucceed_step2_localUpload';
   payload: {
-    value: NonNullable<ResourceCreatorPageModelState['step2_fileInfo']>;
+    fileName: string;
+    sha1: string;
+  };
+}
+
+export interface OnSucceed_step2_storageSpace_Action extends AnyAction {
+  type: 'resourceCreatorPage/onSucceed_step2_storageSpace';
+  payload: {
+    bucketID: string;
+    bucketName: string;
+    sha1: string;
+    objectID: string;
+    objectName: string;
   };
 }
 
@@ -141,6 +153,7 @@ export interface ResourceCreatorPageModelType {
     onVerify_step1_resourceName: (action: OnVerify_step1_resourceName_Action, effects: EffectsCommandMap) => void;
     onClick_step1_createBtn: (action: OnClick_step1_createBtn_Action, effects: EffectsCommandMap) => void;
     onSucceed_step2_localUpload: (action: OnSucceed_step2_localUpload_Action, effects: EffectsCommandMap) => void;
+    onSucceed_step2_storageSpace: (action: OnSucceed_step2_storageSpace_Action, effects: EffectsCommandMap) => void;
     // onClick_step2_skipBtn: (action: OnClick_step2_skipBtn_Action, effects: EffectsCommandMap) => void;
     onClick_step2_submitBtn: (action: OnClick_step2_submitBtn_Action, effects: EffectsCommandMap) => void;
     onClick_step3_addPolicyBtn: (action: OnClick_step3_addPolicyBtn_Action, effects: EffectsCommandMap) => void;
@@ -306,7 +319,11 @@ const Model: ResourceCreatorPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          step2_fileInfo: payload.value,
+          step2_fileInfo: {
+            name: payload.fileName,
+            sha1: payload.sha1,
+            from: '本地上传',
+          },
         },
       });
 
@@ -318,7 +335,118 @@ const Model: ResourceCreatorPageModelType = {
       });
 
       const params0: Parameters<typeof getFilesSha1Info>[0] = {
-        sha1: [payload.value.sha1],
+        sha1: [payload.sha1],
+        resourceTypeCode: resourceCreatorPage.step1_createdResourceInfo?.resourceTypeCode || '',
+      };
+      const {
+        result,
+        error,
+      }: Awaited<ReturnType<typeof getFilesSha1Info>> = yield call(getFilesSha1Info, params0);
+
+      // console.log(result, 'resulte53452sdf', error, 'error asdfsdfsdfsdf');
+
+      if (error !== '') {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            step2_rawProperties: [],
+            step2_additionalProperties: [],
+          },
+        });
+        return fMessage(error, 'error');
+      }
+
+      if (result[0].state === 'fail') {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            step2_rawProperties: [],
+            step2_additionalProperties: [],
+          },
+        });
+        return fMessage('文件解析失败', 'error');
+      }
+
+      // if (payload.delay) {
+      //   yield call(FUtil.Tool.promiseSleep, 1000);
+      // }
+
+      if (result[0].state === 'success') {
+
+        // const params: Parameters<typeof FServiceAPI.Resource.lookDraft>[0] = {
+        //   resourceId: resourceVersionCreatorPage.resourceInfo?.resourceID || '',
+        // };
+        // const { data: data_draft }: {
+        //   data: null | {
+        //     draftData: IResourceCreateVersionDraftType;
+        //   };
+        // } = yield call(FServiceAPI.Resource.lookDraft, params);
+
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            step2_rawProperties: result[0].info
+              .filter((i) => {
+                return i.insertMode === 1;
+              })
+              .map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((i) => {
+                return {
+                  key: i.key,
+                  name: i.name,
+                  value: i.valueDisplay,
+                  description: i.remark,
+                };
+              }),
+            step2_rawPropertiesState: 'success',
+            step2_additionalProperties: result[0].info
+              .filter((i) => {
+                return i.insertMode === 2;
+              })
+              .map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((i) => {
+                // const item = data_draft?.draftData.additionalProperties?.find((ap) => {
+                //   return ap.key === i.key;
+                // }) || {};
+                return {
+                  key: i.key,
+                  name: i.name,
+                  value: i.valueDisplay,
+                  description: i.remark,
+                  // ...item,
+                };
+              }),
+          },
+        });
+      }
+    },
+    * onSucceed_step2_storageSpace({ payload }: OnSucceed_step2_storageSpace_Action, {
+      select,
+      call,
+      put,
+    }: EffectsCommandMap) {
+      const { resourceCreatorPage }: ConnectState = yield select(({ resourceCreatorPage }: ConnectState) => ({
+        resourceCreatorPage,
+      }));
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          step2_fileInfo: {
+            name: payload.objectName,
+            sha1: payload.sha1,
+            from: '本地上传',
+          },
+        },
+      });
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          step2_rawPropertiesState: 'parsing',
+        },
+      });
+
+      const params0: Parameters<typeof getFilesSha1Info>[0] = {
+        sha1: [payload.sha1],
         resourceTypeCode: resourceCreatorPage.step1_createdResourceInfo?.resourceTypeCode || '',
       };
       const {

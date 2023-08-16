@@ -18,7 +18,7 @@ import FTooltip from '@/components/FTooltip';
 import {
   // OnClick_step2_skipBtn_Action,
   OnClick_step2_submitBtn_Action,
-  OnSucceed_step2_localUpload_Action,
+  OnSucceed_step2_localUpload_Action, OnSucceed_step2_storageSpace_Action,
 } from '@/models/resourceCreatorPage';
 import FResourceProperties from '@/components/FResourceProperties';
 import { history } from 'umi';
@@ -53,11 +53,8 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
               dispatch<OnSucceed_step2_localUpload_Action>({
                 type: 'resourceCreatorPage/onSucceed_step2_localUpload',
                 payload: {
-                  value: {
-                    name: value.fileName,
-                    sha1: value.sha1,
-                    from: '本地上传',
-                  },
+                  fileName: value.fileName,
+                  sha1: value.sha1,
                 },
               });
             }}
@@ -67,6 +64,12 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
         {
           !isCartoon && (<StorageSpace
             resourceTypeCode={resourceCreatorPage.step1_createdResourceInfo?.resourceTypeCode || ''}
+            onSucceed={(value) => {
+              dispatch<OnSucceed_step2_storageSpace_Action>({
+                type: 'resourceCreatorPage/onSucceed_step2_storageSpace',
+                payload: value,
+              });
+            }}
           />)
         }
 
