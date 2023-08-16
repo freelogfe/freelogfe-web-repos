@@ -7,7 +7,7 @@ import { useGetState } from '@/utils/hooks';
 import fMessage from '@/components/fMessage';
 import FModal from '@/components/FModal';
 import FTable from '@/components/FTable';
-import { Progress } from 'antd';
+// import { Progress } from 'antd';
 
 interface StorageSpaceProps {
   resourceTypeCode: string;

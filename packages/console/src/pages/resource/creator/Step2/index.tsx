@@ -29,6 +29,7 @@ import * as AHooks from 'ahooks';
 // import FTable from '@/components/FTable';
 import LocalUpload from './LocalUpload';
 import StorageSpace from './StorageSpace';
+import { Space } from 'antd';
 
 interface Step2Props {
   dispatch: Dispatch;
@@ -361,6 +362,91 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
           // });
         }}
       />
+    </div>
+
+    <div style={{ height: 15 }} />
+
+    <Space size={10}>
+      {/*{FI18n.i18nNext.t('create_new_version_btn_moresetting')}*/}
+      <FComponentsLib.FTextBtn style={{ fontSize: 12 }} type={'primary'}>更多设置</FComponentsLib.FTextBtn>
+      {/*{FI18n.i18nNext.t('create_new_version_btn_moresetting_help')}*/}
+      <FComponentsLib.FContentText text={'可以为资源文件添加可选配置，或进行依赖资源的声明'} type={'additional2'} />
+    </Space>
+
+    {/*{FI18n.i18nNext.t('create_new_version_btn_showless')}*/}
+    <FComponentsLib.FTextBtn style={{ fontSize: 12 }} type={'primary'}>收起更多设置</FComponentsLib.FTextBtn>
+
+    <div style={{ height: 10 }} />
+
+    <div className={styles.block}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        {/*{FI18n.i18nNext.t('resourceoptions_title')}*/}
+        <FComponentsLib.FContentText text={'可选配置'} type={'highlight'} />
+
+        <FTooltip title={FI18n.i18nNext.t('resourceinfo_add_btn_info')}>
+          <div>
+            <FComponentsLib.FTextBtn
+              style={{ fontSize: 12, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 5 }}
+              type='primary'
+              onClick={async () => {
+
+              }}
+            >
+              <FComponentsLib.FIcons.FConfiguration style={{ fontSize: 14 }} />
+              <span>{FI18n.i18nNext.t('resourceoptions_add_btn')}</span>
+            </FComponentsLib.FTextBtn>
+          </div>
+        </FTooltip>
+      </div>
+      <>
+        <div style={{ height: 10 }} />
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          {/*<span>{FI18n.i18nNext.t('resourceoptions_list_empty')}</span>*/}
+          <FComponentsLib.FContentText text={'可选配置是资源在消费端展示时所需的配置信息，您可以根据需要添加。'} type={'additional2'} />
+        </div>
+        <div style={{ height: 20 }} />
+      </>
+
+      <>
+        {/*<div style={{ height: 20 }} />*/}
+      </>
+    </div>
+
+    <div style={{ height: 5 }} />
+
+    <div className={styles.block}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        {/*{FI18n.i18nNext.t('claim_rely_title')}*/}
+        <FComponentsLib.FContentText text={'依赖声明'} type={'highlight'} />
+
+        <FTooltip title={FI18n.i18nNext.t('resourceinfo_add_btn_info')}>
+          <div>
+            <FComponentsLib.FTextBtn
+              style={{ fontSize: 12, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 5 }}
+              type='primary'
+              onClick={async () => {
+
+              }}
+            >
+              <FComponentsLib.FIcons.FConfiguration style={{ fontSize: 14 }} />
+              <span>{FI18n.i18nNext.t('claim_rely_add_btn')}</span>
+            </FComponentsLib.FTextBtn>
+          </div>
+        </FTooltip>
+      </div>
+      <>
+        <div style={{ height: 10 }} />
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
+          {/*<span>{FI18n.i18nNext.t('resourceoptions_list_empty')}</span>*/}
+          <FComponentsLib.FContentText text={'依赖是当前作品创作过程中使用到的素材、引用或再创作的基础。'} type={'additional2'} />
+          <FComponentsLib.FContentText text={'如果这些内容在Freelog中发行并且开放授权，您可以在此模块进行申明，并获取授权。'} type={'additional2'} />
+        </div>
+        <div style={{ height: 20 }} />
+      </>
+
+      <>
+        {/*<div style={{ height: 20 }} />*/}
+      </>
     </div>
 
     <div style={{ height: 30 }} />
