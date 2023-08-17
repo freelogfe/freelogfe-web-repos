@@ -66,6 +66,11 @@ export interface ResourceCreatorPageModelState {
   }[];
 
   step3_policies: PolicyFullInfo_Type[];
+
+  step4_resourceTitle: string;
+  step4_resourceCover: string;
+  step4_resourceLabels: string[];
+
 }
 
 export interface ChangeAction extends AnyAction {
@@ -166,6 +171,27 @@ export interface OnClick_step3_submitBtn_Action extends AnyAction {
   type: 'resourceCreatorPage/onClick_step3_submitBtn';
 }
 
+export interface OnChange_step4_resourceTitle_Action extends AnyAction {
+  type: 'resourceCreatorPage/onChange_step4_resourceTitle';
+  payload: {
+    value: ResourceCreatorPageModelState['step4_resourceTitle']
+  };
+}
+
+export interface OnChange_step4_resourceCover_Action extends AnyAction {
+  type: 'resourceCreatorPage/onChange_step4_resourceCover';
+  payload: {
+    value: ResourceCreatorPageModelState['step4_resourceCover']
+  };
+}
+
+export interface OnChange_step4_resourceLabels_Action extends AnyAction {
+  type: 'resourceCreatorPage/onChange_step4_resourceLabels';
+  payload: {
+    value: ResourceCreatorPageModelState['step4_resourceLabels']
+  };
+}
+
 export interface OnClick_step4_preBtn_Action extends AnyAction {
   type: 'resourceCreatorPage/onClick_step4_preBtn';
 }
@@ -194,6 +220,9 @@ export interface ResourceCreatorPageModelType {
     onClick_step3_addPolicyBtn: (action: OnClick_step3_addPolicyBtn_Action, effects: EffectsCommandMap) => void;
     // onClick_step3_skipBtn: (action: OnClick_step3_skipBtn_Action, effects: EffectsCommandMap) => void;
     onClick_step3_submitBtn: (action: OnClick_step3_submitBtn_Action, effects: EffectsCommandMap) => void;
+    onChange_step4_resourceTitle: (action: OnChange_step4_resourceTitle_Action, effects: EffectsCommandMap) => void;
+    onChange_step4_resourceCover: (action: OnChange_step4_resourceCover_Action, effects: EffectsCommandMap) => void;
+    onChange_step4_resourceLabels: (action: OnChange_step4_resourceLabels_Action, effects: EffectsCommandMap) => void;
     onClick_step4_preBtn: (action: OnClick_step4_preBtn_Action, effects: EffectsCommandMap) => void;
     onClick_step4_submitBtn: (action: OnClick_step4_submitBtn_Action, effects: EffectsCommandMap) => void;
   };
@@ -223,6 +252,10 @@ export const initStates: ResourceCreatorPageModelState = {
   step2_customConfigurations: [],
 
   step3_policies: [],
+
+  step4_resourceTitle: '',
+  step4_resourceCover: '',
+  step4_resourceLabels: [],
 };
 
 const Model: ResourceCreatorPageModelType = {
@@ -778,6 +811,15 @@ const Model: ResourceCreatorPageModelType = {
           step: 4,
         },
       });
+    },
+    * onChange_step4_resourceTitle(action: OnChange_step4_resourceTitle_Action, effects: EffectsCommandMap) {
+
+    },
+    * onChange_step4_resourceCover(action: OnChange_step4_resourceCover_Action, effects: EffectsCommandMap) {
+
+    },
+    * onChange_step4_resourceLabels(action: OnChange_step4_resourceLabels_Action, effects: EffectsCommandMap) {
+
     },
     * onClick_step4_preBtn({}: OnClick_step4_preBtn_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
