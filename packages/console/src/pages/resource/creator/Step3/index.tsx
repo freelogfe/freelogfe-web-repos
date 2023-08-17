@@ -4,19 +4,14 @@ import FComponentsLib from '@freelog/components-lib';
 import { connect } from 'dva';
 import { ConnectState, ResourceCreatorPageModelState } from '@/models/connect';
 import { Dispatch } from 'redux';
-// import { OnClick_step3_skipBtn_Action } from '@/models/resourceCreatorPage';
 import { history } from '@@/core/history';
 import { FI18n, FUtil } from '@freelog/tools-lib';
 import FPolicyList from '@/components/FPolicyList';
-import fResourceOptionEditor from '@/components/fResourceOptionEditor';
 import {
-  OnChange_step2_customConfigurations_Action, OnClick_step3_addPolicyBtn_Action,
+  OnClick_step3_addPolicyBtn_Action,
   OnClick_step3_submitBtn_Action,
 } from '@/models/resourceCreatorPage';
 import PolicyTemplates from './PolicyTemplates';
-import fPolicyBuilder from '@/components/fPolicyBuilder';
-
-// import { FI18n } from '@freelog/tools-lib';
 
 interface Step3Props {
   dispatch: Dispatch;
@@ -63,7 +58,7 @@ function Step3({ dispatch, resourceCreatorPage }: Step3Props) {
                   payload: {},
                 });
               }}
-            >添加授权策略</FComponentsLib.FRectBtn>
+            >{FI18n.i18nNext.t('authplanmgnt_list_empty_btn')}</FComponentsLib.FRectBtn>
           </div>
         </>)
       }
