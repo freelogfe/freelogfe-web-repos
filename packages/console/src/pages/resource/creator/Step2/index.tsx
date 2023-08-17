@@ -14,7 +14,8 @@ import {
 } from '@/models/resourceVersionCreatorPage';
 import FTooltip from '@/components/FTooltip';
 import {
-  OnChange_step2_customConfigurations_Action,
+  OnChange_step2_additionalProperties_Action,
+  OnChange_step2_customConfigurations_Action, OnChange_step2_customProperties_Action,
   OnClick_step2_submitBtn_Action,
   OnSucceed_step2_localUpload_Action, OnSucceed_step2_storageSpace_Action,
 } from '@/models/resourceCreatorPage';
@@ -207,16 +208,16 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
                   description: string;
                 } | null = await fResourcePropertyEditor({
                   disabledKeys: [
-                    // ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
-                    // ...resourceVersionCreatorPage.additionalProperties.map<string>((bp) => bp.key),
-                    // ...resourceVersionCreatorPage.customProperties.map<string>((bp) => bp.key),
-                    // ...resourceVersionCreatorPage.customConfigurations.map<string>((pp) => pp.key),
+                    ...resourceCreatorPage.step2_rawProperties.map<string>((rp) => rp.key),
+                    ...resourceCreatorPage.step2_additionalProperties.map<string>((rp) => rp.key),
+                    ...resourceCreatorPage.step2_customProperties.map<string>((bp) => bp.key),
+                    ...resourceCreatorPage.step2_customConfigurations.map<string>((pp) => pp.key),
                   ],
                   disabledNames: [
-                    // ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.name),
-                    // ...resourceVersionCreatorPage.additionalProperties.map<string>((rp) => rp.name),
-                    // ...resourceVersionCreatorPage.customProperties.map<string>((bp) => bp.name),
-                    // ...resourceVersionCreatorPage.customConfigurations.map<string>((pp) => pp.name),
+                    ...resourceCreatorPage.step2_rawProperties.map<string>((rp) => rp.name),
+                    ...resourceCreatorPage.step2_additionalProperties.map<string>((rp) => rp.name),
+                    ...resourceCreatorPage.step2_customProperties.map<string>((bp) => bp.name),
+                    ...resourceCreatorPage.step2_customConfigurations.map<string>((pp) => pp.name),
                   ],
                 });
                 // console.log(dataSource, 'dataSource9iojskldjflksdjflk');
@@ -224,12 +225,12 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
                   return;
                 }
 
-                await dispatch<OnChange_CustomProperties_Action>({
-                  type: 'resourceVersionCreatorPage/onChange_CustomProperties',
+                await dispatch<OnChange_step2_customProperties_Action>({
+                  type: 'resourceCreatorPage/onChange_step2_customProperties',
                   payload: {
                     value: [
-                      // ...resourceVersionCreatorPage.customProperties,
-                      // dataSource,
+                      ...resourceCreatorPage.step2_customProperties,
+                      dataSource,
                     ],
                   },
                 });
@@ -249,97 +250,97 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
         alterableData={resourceCreatorPage.step2_customProperties}
         onEdit_onlyEditValueData={async (value) => {
           // console.log(value, 'value sidjfoikjo sd value sdiofjlkj');
-          // const index: number = resourceVersionCreatorPage.additionalProperties.findIndex((p) => {
-          //   return p === value;
-          // });
-          // const dataSource: {
-          //   key: string;
-          //   name: string;
-          //   value: string;
-          //   description: string;
-          // } | null = await fResourcePropertyEditor({
-          //   disabledKeys: [
-          //     ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
-          //     ...resourceVersionCreatorPage.additionalProperties.map<string>((rp) => rp.key),
-          //     ...resourceVersionCreatorPage.customProperties.map<string>((bp) => bp.key),
-          //     ...resourceVersionCreatorPage.customConfigurations.map<string>((pp) => pp.key),
-          //   ],
-          //   disabledNames: [
-          //     ...resourceVersionCreatorPage.rawProperties.map<string>((bp) => bp.name),
-          //     ...resourceVersionCreatorPage.additionalProperties.map<string>((bp) => bp.name),
-          //     ...resourceVersionCreatorPage.customProperties.map<string>((bp) => bp.name),
-          //     ...resourceVersionCreatorPage.customConfigurations.map<string>((pp) => pp.name),
-          //   ],
-          //   defaultData: value,
-          //   noneEditableFields: ['key', 'description', 'name'],
-          //   valueAcceptNull: true,
-          // });
-          // if (!dataSource) {
-          //   return;
-          // }
-          //
-          // await dispatch<OnChange_AdditionalProperties_Action>({
-          //   type: 'resourceVersionCreatorPage/onChange_AdditionalProperties',
-          //   payload: {
-          //     value: resourceVersionCreatorPage.additionalProperties.map((v, i) => {
-          //       if (i !== index) {
-          //         return v;
-          //       }
-          //       return dataSource;
-          //     }),
-          //   },
-          // });
+          const index: number = resourceCreatorPage.step2_additionalProperties.findIndex((p) => {
+            return p === value;
+          });
+          const dataSource: {
+            key: string;
+            name: string;
+            value: string;
+            description: string;
+          } | null = await fResourcePropertyEditor({
+            disabledKeys: [
+              ...resourceCreatorPage.step2_rawProperties.map<string>((rp) => rp.key),
+              ...resourceCreatorPage.step2_additionalProperties.map<string>((rp) => rp.key),
+              ...resourceCreatorPage.step2_customProperties.map<string>((bp) => bp.key),
+              ...resourceCreatorPage.step2_customConfigurations.map<string>((pp) => pp.key),
+            ],
+            disabledNames: [
+              ...resourceCreatorPage.step2_rawProperties.map<string>((rp) => rp.name),
+              ...resourceCreatorPage.step2_additionalProperties.map<string>((rp) => rp.name),
+              ...resourceCreatorPage.step2_customProperties.map<string>((bp) => bp.name),
+              ...resourceCreatorPage.step2_customConfigurations.map<string>((pp) => pp.name),
+            ],
+            defaultData: value,
+            noneEditableFields: ['key', 'description', 'name'],
+            valueAcceptNull: true,
+          });
+          if (!dataSource) {
+            return;
+          }
+
+          await dispatch<OnChange_step2_additionalProperties_Action>({
+            type: 'resourceCreatorPage/onChange_step2_additionalProperties',
+            payload: {
+              value: resourceCreatorPage.step2_additionalProperties.map((v, i) => {
+                if (i !== index) {
+                  return v;
+                }
+                return dataSource;
+              }),
+            },
+          });
         }}
         onEdit_alterableData={async (value) => {
-          // const index: number = resourceVersionCreatorPage.customProperties.findIndex((p) => {
-          //   return p === value;
-          // });
-          // const dataSource: {
-          //   key: string;
-          //   name: string;
-          //   value: string;
-          //   description: string;
-          // } | null = await fResourcePropertyEditor({
-          //   disabledKeys: [
-          //     ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
-          //     ...resourceVersionCreatorPage.additionalProperties.map<string>((rp) => rp.key),
-          //     ...resourceVersionCreatorPage.customProperties.map<string>((bp) => bp.key),
-          //     ...resourceVersionCreatorPage.customConfigurations.map<string>((pp) => pp.key),
-          //   ],
-          //   disabledNames: [
-          //     ...resourceVersionCreatorPage.rawProperties.map<string>((bp) => bp.name),
-          //     ...resourceVersionCreatorPage.additionalProperties.map<string>((bp) => bp.name),
-          //     ...resourceVersionCreatorPage.customProperties.map<string>((bp) => bp.name),
-          //     ...resourceVersionCreatorPage.customConfigurations.map<string>((pp) => pp.name),
-          //   ],
-          //   defaultData: value,
-          // });
-          // if (!dataSource) {
-          //   return;
-          // }
-          //
-          // await dispatch<OnChange_CustomProperties_Action>({
-          //   type: 'resourceVersionCreatorPage/onChange_CustomProperties',
-          //   payload: {
-          //     value: resourceVersionCreatorPage.customProperties.map((v, i) => {
-          //       if (i !== index) {
-          //         return v;
-          //       }
-          //       return dataSource;
-          //     }),
-          //   },
-          // });
+          const index: number = resourceCreatorPage.step2_customProperties.findIndex((p) => {
+            return p === value;
+          });
+          const dataSource: {
+            key: string;
+            name: string;
+            value: string;
+            description: string;
+          } | null = await fResourcePropertyEditor({
+            disabledKeys: [
+              ...resourceCreatorPage.step2_rawProperties.map<string>((rp) => rp.key),
+              ...resourceCreatorPage.step2_additionalProperties.map<string>((rp) => rp.key),
+              ...resourceCreatorPage.step2_customProperties.map<string>((bp) => bp.key),
+              ...resourceCreatorPage.step2_customConfigurations.map<string>((pp) => pp.key),
+            ],
+            disabledNames: [
+              ...resourceCreatorPage.step2_rawProperties.map<string>((rp) => rp.name),
+              ...resourceCreatorPage.step2_additionalProperties.map<string>((rp) => rp.name),
+              ...resourceCreatorPage.step2_customProperties.map<string>((bp) => bp.name),
+              ...resourceCreatorPage.step2_customConfigurations.map<string>((pp) => pp.name),
+            ],
+            defaultData: value,
+          });
+          if (!dataSource) {
+            return;
+          }
+
+          await dispatch<OnChange_step2_customProperties_Action>({
+            type: 'resourceCreatorPage/onChange_step2_customProperties',
+            payload: {
+              value: resourceCreatorPage.step2_customProperties.map((v, i) => {
+                if (i !== index) {
+                  return v;
+                }
+                return dataSource;
+              }),
+            },
+          });
         }}
         onDelete_alterableData={async (value) => {
           // console.log(value, 'AAAAAAsdofijsdflksdjfldsjlkj');
-          // await dispatch<OnChange_CustomProperties_Action>({
-          //   type: 'resourceVersionCreatorPage/onChange_CustomProperties',
-          //   payload: {
-          //     value: resourceVersionCreatorPage.customProperties.filter((v, i) => {
-          //       return v.key !== value.key && v.name !== value.name;
-          //     }),
-          //   },
-          // });
+          await dispatch<OnChange_step2_customProperties_Action>({
+            type: 'resourceCreatorPage/onChange_step2_customProperties',
+            payload: {
+              value: resourceCreatorPage.step2_customProperties.filter((v, i) => {
+                return v.key !== value.key && v.name !== value.name;
+              }),
+            },
+          });
         }}
       />
     </div>

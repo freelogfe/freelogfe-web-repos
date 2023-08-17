@@ -130,6 +130,13 @@ export interface OnChange_step2_customProperties_Action extends AnyAction {
   };
 }
 
+export interface OnChange_step2_additionalProperties_Action extends AnyAction {
+  type: 'resourceCreatorPage/onChange_step2_additionalProperties';
+  payload: {
+    value: ResourceCreatorPageModelState['step2_additionalProperties']
+  };
+}
+
 export interface OnChange_step2_customConfigurations_Action extends AnyAction {
   type: 'resourceCreatorPage/onChange_step2_customConfigurations';
   payload: {
@@ -173,6 +180,7 @@ export interface ResourceCreatorPageModelType {
     onClick_step1_createBtn: (action: OnClick_step1_createBtn_Action, effects: EffectsCommandMap) => void;
     onSucceed_step2_localUpload: (action: OnSucceed_step2_localUpload_Action, effects: EffectsCommandMap) => void;
     onSucceed_step2_storageSpace: (action: OnSucceed_step2_storageSpace_Action, effects: EffectsCommandMap) => void;
+    onChange_step2_additionalProperties: (action: OnChange_step2_additionalProperties_Action, effects: EffectsCommandMap) => void;
     onChange_step2_customProperties: (action: OnChange_step2_customProperties_Action, effects: EffectsCommandMap) => void;
     onChange_step2_customConfigurations: (action: OnChange_step2_customConfigurations_Action, effects: EffectsCommandMap) => void;
     onClick_step2_submitBtn: (action: OnClick_step2_submitBtn_Action, effects: EffectsCommandMap) => void;
@@ -550,6 +558,14 @@ const Model: ResourceCreatorPageModelType = {
         });
       }
     },
+    * onChange_step2_additionalProperties({ payload }: OnChange_step2_additionalProperties_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          step2_additionalProperties: payload.value,
+        },
+      });
+    },
     * onChange_step2_customProperties({ payload }: OnChange_step2_customProperties_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
@@ -583,52 +599,44 @@ const Model: ResourceCreatorPageModelType = {
         baseUpcastResources: [],
         dependencies: [],
         resolveResources: [],
-        inputAttrs: [],
-        customPropertyDescriptors: [],
+        inputAttrs: resourceCreatorPage.step2_additionalProperties
+          .filter((ap) => {
+            return ap.value !== '';
+          })
+          .map((ap) => {
+            return {
+              key: ap.key,
+              value: ap.value,
+            };
+          }),
+        customPropertyDescriptors: [
+          ...resourceCreatorPage.step2_customProperties
+            .map<NonNullable<Parameters<typeof FServiceAPI.Resource.createVersion>[0]['customPropertyDescriptors']>[number]>
+            ((i) => {
+              return {
+                type: 'readonlyText',
+                key: i.key,
+                name: i.name,
+                remark: i.description,
+                defaultValue: i.value,
+              };
+            }),
+          ...resourceCreatorPage.step2_customConfigurations
+            .map<NonNullable<Parameters<typeof FServiceAPI.Resource.createVersion>[0]['customPropertyDescriptors']>[number]>((i) => {
+              const isInput: boolean = i.type === 'input';
+              const options: string[] = i.select;
+              return {
+                type: isInput ? 'editableText' : 'select',
+                key: i.key,
+                name: i.name,
+                remark: i.description,
+                defaultValue: isInput ? i.input : options[0],
+                // defaultValue: isInput ? i.input : '',
+                candidateItems: isInput ? undefined : options,
+              };
+            }),
+        ],
         description: '',
-        // baseUpcastResources: baseUpcastResources.map((r) => {
-        //   return { resourceId: r.resourceID };
-        // }),
-        // dependencies: dependencies,
-        // resolveResources: resolveResources,
-        // @ts-ignore
-        // inputAttrs: resourceVersionCreatorPage.additionalProperties
-        //   .filter((ap) => {
-        //     return ap.value !== '';
-        //   })
-        //   .map((ap) => {
-        //     return {
-        //       key: ap.key,
-        //       value: ap.value,
-        //     };
-        //   }),
-        // customPropertyDescriptors: [
-        //   ...resourceVersionCreatorPage.customProperties
-        //     .map<NonNullable<Parameters<typeof FServiceAPI.Resource.createVersion>[0]['customPropertyDescriptors']>[number]>
-        //     ((i) => {
-        //       return {
-        //         type: 'readonlyText',
-        //         key: i.key,
-        //         name: i.name,
-        //         remark: i.description,
-        //         defaultValue: i.value,
-        //       };
-        //     }),
-        //   ...resourceVersionCreatorPage.customConfigurations
-        //     .map<NonNullable<Parameters<typeof FServiceAPI.Resource.createVersion>[0]['customPropertyDescriptors']>[number]>((i) => {
-        //       const isInput: boolean = i.type === 'input';
-        //       const options: string[] = i.select;
-        //       return {
-        //         type: isInput ? 'editableText' : 'select',
-        //         key: i.key,
-        //         name: i.name,
-        //         remark: i.description,
-        //         defaultValue: isInput ? i.input : options[0],
-        //         // defaultValue: isInput ? i.input : '',
-        //         candidateItems: isInput ? undefined : options,
-        //       };
-        //     }),
-        // ],
         // description: resourceVersionCreatorPage.descriptionEditorState.toHTML() === '<p></p>'
         //   ? ''
         //   : resourceVersionCreatorPage.descriptionEditorState.toHTML(),
@@ -662,7 +670,7 @@ const Model: ResourceCreatorPageModelType = {
     //     },
     //   });
     // },
-    * onClick_step3_submitBtn({}: OnClick_step3_submitBtn_Action, {put}: EffectsCommandMap) {
+    * onClick_step3_submitBtn({}: OnClick_step3_submitBtn_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
