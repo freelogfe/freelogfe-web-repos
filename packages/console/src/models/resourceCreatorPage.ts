@@ -812,14 +812,29 @@ const Model: ResourceCreatorPageModelType = {
         },
       });
     },
-    * onChange_step4_resourceTitle(action: OnChange_step4_resourceTitle_Action, effects: EffectsCommandMap) {
-
+    * onChange_step4_resourceTitle({ payload }: OnChange_step4_resourceTitle_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          step4_resourceTitle: payload.value,
+        },
+      });
     },
-    * onChange_step4_resourceCover(action: OnChange_step4_resourceCover_Action, effects: EffectsCommandMap) {
-
+    * onChange_step4_resourceCover({ payload }: OnChange_step4_resourceCover_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          step4_resourceCover: payload.value,
+        },
+      });
     },
-    * onChange_step4_resourceLabels(action: OnChange_step4_resourceLabels_Action, effects: EffectsCommandMap) {
-
+    * onChange_step4_resourceLabels({ payload }: OnChange_step4_resourceLabels_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          step4_resourceLabels: payload.value,
+        },
+      });
     },
     * onClick_step4_preBtn({}: OnClick_step4_preBtn_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
