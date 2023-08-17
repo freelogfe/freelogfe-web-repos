@@ -26,7 +26,7 @@ function PolicyTemplates({ onSelect }: PolicyTemplatesProps) {
         _id: string;
       }[]
     } = await FServiceAPI.Policy.policyTemplates();
-    console.log(data, ' 98ioskdjfksdjlfsjdflksjdlkj');
+    // console.log(data, ' 98ioskdjfksdjlfsjdflksjdlkj');
     const allP: Array<Promise<any>> = data.map((d, i) => {
       const t: string = d.template.replace(/(\t|\r)/g, ' ');
       const e: string = Base64.encode(t);
