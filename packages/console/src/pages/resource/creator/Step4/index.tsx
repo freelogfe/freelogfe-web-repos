@@ -11,7 +11,7 @@ import { Dispatch } from 'redux';
 import {
   OnChange_step4_resourceCover_Action, OnChange_step4_resourceLabels_Action,
   OnChange_step4_resourceTitle_Action,
-  OnClick_step4_preBtn_Action,
+  OnClick_step4_preBtn_Action, OnClick_step4_submitBtn_Action,
 } from '@/models/resourceCreatorPage';
 import FCoverImage from '@/components/FCoverImage';
 
@@ -136,10 +136,12 @@ function Step4({ dispatch, resourceCreatorPage }: Step4Props) {
 
       {/*{FI18n.i18nNext.t('rqr_step4_btn_release')}*/}
       <FComponentsLib.FRectBtn
-        disabled={true}
+        // disabled={true}
         type={'primary'}
         onClick={() => {
-
+          dispatch<OnClick_step4_submitBtn_Action>({
+            type: 'resourceCreatorPage/onClick_step4_submitBtn',
+          });
         }}
       >现在上架</FComponentsLib.FRectBtn>
     </div>

@@ -8,6 +8,7 @@ import userPermission from '@/permissions/UserPermission';
 import { getFilesSha1Info } from '@/utils/service';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
 import fPolicyBuilder from '@/components/fPolicyBuilder';
+import { history } from 'umi';
 
 export interface ResourceCreatorPageModelState {
   userInfo: {
@@ -844,8 +845,30 @@ const Model: ResourceCreatorPageModelType = {
         },
       });
     },
-    * onClick_step4_submitBtn({}: OnClick_step4_submitBtn_Action, {}: EffectsCommandMap) {
+    * onClick_step4_submitBtn({}: OnClick_step4_submitBtn_Action, { select, call, put }: EffectsCommandMap) {
+      const { resourceCreatorPage }: ConnectState = yield select(({ resourceCreatorPage }: ConnectState) => ({
+        resourceCreatorPage,
+      }));
 
+      const params: Parameters<typeof FServiceAPI.Resource.update>[0] = {
+        resourceId: resourceCreatorPage.step1_createdResourceInfo?.resourceID || '',
+        tags: resourceCreatorPage.step4_resourceLabels,
+        coverImages: resourceCreatorPage.step4_resourceCover !== '' ? [resourceCreatorPage.step4_resourceCover] : undefined,
+        // @ts-ignore
+        resourceTitle: resourceCreatorPage.step4_resourceTitle,
+        status: 1,
+      };
+      const { ret, errCode, msg }: {
+        ret: number;
+        errCode: number;
+        msg: string;
+        data: any;
+      } = yield call(FServiceAPI.Resource.update, params);
+      if (ret !== 0 || errCode !== 0) {
+        fMessage(msg, 'error');
+        return;
+      }
+      history.push(FUtil.LinkTo.myResources());
     },
   },
 
