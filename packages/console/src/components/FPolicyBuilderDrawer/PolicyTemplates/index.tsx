@@ -19,9 +19,15 @@ function PolicyTemplates({ onSelect }: PolicyTemplatesProps) {
     translation: string;
   }[]>([]);
   AHooks.useMount(async () => {
-    const { data }: { data: any[] } = await FServiceAPI.Policy.policyTemplates();
-    // console.log(data, ' 98ioskdjfksdjlfsjdflksjdlkj');
-    const allP: Array<Promise<any>> = data.map((d: any, i) => {
+    const { data }: {
+      data: {
+        template: string;
+        title: string;
+        _id: string;
+      }[]
+    } = await FServiceAPI.Policy.policyTemplates();
+    console.log(data, ' 98ioskdjfksdjlfsjdflksjdlkj');
+    const allP: Array<Promise<any>> = data.map((d, i) => {
       const t: string = d.template.replace(/(\t|\r)/g, ' ');
       const e: string = Base64.encode(t);
       return FServiceAPI.Policy.policyTranslation({ contract: e });

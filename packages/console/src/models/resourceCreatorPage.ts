@@ -734,7 +734,7 @@ const Model: ResourceCreatorPageModelType = {
           status: 0 | 1;
         }
       } = yield call(FServiceAPI.Resource.info, params1);
-      console.log(data_ResourceDetails, 'data_ResourceDetails @#$RFDSASDFSDFASDF');
+      // console.log(data_ResourceDetails, 'data_ResourceDetails @#$RFDSASDFSDFASDF');
 
       if (ret !== 0 || errCode !== 0) {
         return;
