@@ -2,14 +2,12 @@ import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription, SubscriptionAPI } from 'dva';
 import { DvaReducer } from './shared';
 import { ConnectState, ResourceVersionCreatorPageModelState, UserModelState } from '@/models/connect';
-// import { history } from 'umi';
 import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
 import fMessage from '@/components/fMessage';
 import userPermission from '@/permissions/UserPermission';
 import { getFilesSha1Info } from '@/utils/service';
-import { OnChange_CustomConfigurations_Action } from '@/models/resourceVersionCreatorPage';
-
-// import { IResourceCreateVersionDraftType } from '@/type/resourceTypes';
+import { PolicyFullInfo_Type } from '@/type/contractTypes';
+import fPolicyBuilder from '@/components/fPolicyBuilder';
 
 export interface ResourceCreatorPageModelState {
   userInfo: {
@@ -39,7 +37,6 @@ export interface ResourceCreatorPageModelState {
     sha1: string;
     from: string;
   } | null;
-  // step2_fileInfo_errorTip: string;
   step2_rawProperties: {
     key: string;
     name: string;
@@ -67,6 +64,8 @@ export interface ResourceCreatorPageModelState {
     input: string;
     select: string[];
   }[];
+
+  step3_policies: PolicyFullInfo_Type[];
 }
 
 export interface ChangeAction extends AnyAction {
@@ -219,6 +218,8 @@ export const initStates: ResourceCreatorPageModelState = {
   step2_additionalProperties: [],
   step2_customProperties: [],
   step2_customConfigurations: [],
+
+  step3_policies: [],
 };
 
 const Model: ResourceCreatorPageModelType = {
@@ -677,8 +678,82 @@ const Model: ResourceCreatorPageModelType = {
         },
       });
     },
-    * onClick_step3_addPolicyBtn({}: OnClick_step3_addPolicyBtn_Action, {}: EffectsCommandMap) {
+    * onClick_step3_addPolicyBtn({}: OnClick_step3_addPolicyBtn_Action, { select, call, put }: EffectsCommandMap) {
+      self._czc?.push(['_trackEvent', '授权信息页', '添加授权策略', '', 1]);
+      const { resourceCreatorPage }: ConnectState = yield select(({ resourceCreatorPage }: ConnectState) => ({
+        resourceCreatorPage,
+      }));
+      const parmas: Parameters<typeof fPolicyBuilder>[0] = {
+        targetType: 'resource',
+        alreadyUsedTexts: resourceCreatorPage.step3_policies.map<string>((ip) => {
+          return ip.policyText;
+        }),
+        alreadyUsedTitles: resourceCreatorPage.step3_policies.map((ip) => {
+          return ip.policyName;
+        }),
+      };
+      const result: null | { title: string; text: string; } = yield call(fPolicyBuilder, parmas);
+      if (!result) {
+        return;
+      }
+      const params: Parameters<typeof FServiceAPI.Resource.update>[0] = {
+        resourceId: resourceCreatorPage.step1_createdResourceInfo?.resourceID || '',
+        addPolicies: [{
+          policyName: result.title,
+          policyText: window.encodeURIComponent(result.text),
+        }],
+      };
+      const { ret, errCode, msg, data }: {
+        ret: number;
+        errCode: number;
+        msg: string;
+        data: any;
+      } = yield call(FServiceAPI.Resource.update, params);
 
+      // console.log(data, '9ieowjflksdjflksdjlfkjsdlkj');
+
+      if (ret !== 0 || errCode !== 0) {
+        fMessage(msg, 'error');
+        return;
+      }
+
+      const params1: Parameters<typeof FServiceAPI.Resource.info>[0] = {
+        resourceIdOrName: resourceCreatorPage.step1_createdResourceInfo?.resourceID || '',
+        isLoadPolicyInfo: 1,
+        isTranslate: 1,
+      };
+
+      const { data: data_ResourceDetails }: {
+        ret: number;
+        errCode: number;
+        data: {
+          resourceId: string;
+          resourceName: string;
+          policies: any[];
+          baseUpcastResources: any[];
+          status: 0 | 1;
+        }
+      } = yield call(FServiceAPI.Resource.info, params1);
+      console.log(data_ResourceDetails, 'data_ResourceDetails @#$RFDSASDFSDFASDF');
+
+      if (ret !== 0 || errCode !== 0) {
+        return;
+      }
+
+      const policies: PolicyFullInfo_Type[] = data_ResourceDetails.policies || [];
+
+      policies.reverse();
+
+      policies.sort((a, b) => {
+        return (a.status === 1 && b.status === 0) ? -1 : 0;
+      });
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          step3_policies: policies,
+        },
+      });
     },
     // * onClick_step3_skipBtn({}: OnClick_step3_skipBtn_Action, { put }: EffectsCommandMap) {
     //   yield put<ChangeAction>({

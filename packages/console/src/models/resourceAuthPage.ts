@@ -184,7 +184,7 @@ const Model: ResourceAuthPageModelType = {
         data: {
           resourceId: string;
           resourceName: string;
-          policies: any[];
+          policies: PolicyFullInfo_Type[];
           baseUpcastResources: any[];
           status: 0 | 1;
         }

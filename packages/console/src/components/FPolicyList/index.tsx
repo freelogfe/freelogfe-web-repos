@@ -13,11 +13,17 @@ interface FPolicyListProps {
   dataSource: PolicyFullInfo_Type[];
 
   atLeastOneUsing?: boolean;
+  allDisabledSwitch?: boolean;
 
   onCheckChange?(data: { id: string; using: boolean }): void;
 }
 
-function FPolicyList({ dataSource, atLeastOneUsing = false, onCheckChange }: FPolicyListProps) {
+function FPolicyList({
+                       dataSource,
+                       atLeastOneUsing = false,
+                       allDisabledSwitch = false,
+                       onCheckChange,
+                     }: FPolicyListProps) {
   // console.log(dataSource, 'dataSource#@@@@@#@##########');
   const disabledOnlyUsing: boolean = atLeastOneUsing
     ? dataSource.filter((ds) => {
@@ -33,7 +39,7 @@ function FPolicyList({ dataSource, atLeastOneUsing = false, onCheckChange }: FPo
           <PolicyCard
             key={ds.policyId}
             fullInfo={ds}
-            onlineDisable={disabledOnlyUsing && ds.status === 1}
+            onlineDisable={allDisabledSwitch || disabledOnlyUsing && ds.status === 1}
             onOnlineChange={(value) => {
               onCheckChange && onCheckChange({ id: ds.policyId, using: value });
             }}
