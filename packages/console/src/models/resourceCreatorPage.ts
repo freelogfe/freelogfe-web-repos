@@ -39,7 +39,7 @@ export interface ResourceCreatorPageModelState {
     sha1: string;
     from: string;
   } | null;
-  step2_fileInfo_errorTip: string;
+  // step2_fileInfo_errorTip: string;
   step2_rawProperties: {
     key: string;
     name: string;
@@ -123,6 +123,10 @@ export interface OnSucceed_step2_storageSpace_Action extends AnyAction {
   };
 }
 
+export interface OnRemove_step2_file_Action extends AnyAction {
+  type: 'resourceCreatorPage/onRemove_step2_file';
+}
+
 export interface OnChange_step2_customProperties_Action extends AnyAction {
   type: 'resourceCreatorPage/onChange_step2_customProperties';
   payload: {
@@ -180,6 +184,7 @@ export interface ResourceCreatorPageModelType {
     onClick_step1_createBtn: (action: OnClick_step1_createBtn_Action, effects: EffectsCommandMap) => void;
     onSucceed_step2_localUpload: (action: OnSucceed_step2_localUpload_Action, effects: EffectsCommandMap) => void;
     onSucceed_step2_storageSpace: (action: OnSucceed_step2_storageSpace_Action, effects: EffectsCommandMap) => void;
+    onRemove_step2_file: (action: OnRemove_step2_file_Action, effects: EffectsCommandMap) => void;
     onChange_step2_additionalProperties: (action: OnChange_step2_additionalProperties_Action, effects: EffectsCommandMap) => void;
     onChange_step2_customProperties: (action: OnChange_step2_customProperties_Action, effects: EffectsCommandMap) => void;
     onChange_step2_customConfigurations: (action: OnChange_step2_customConfigurations_Action, effects: EffectsCommandMap) => void;
@@ -208,7 +213,7 @@ export const initStates: ResourceCreatorPageModelState = {
   step1_createdResourceInfo: null,
 
   step2_fileInfo: null,
-  step2_fileInfo_errorTip: '不能超过200M',
+  // step2_fileInfo_errorTip: '不能超过200M',
   step2_rawProperties: [],
   step2_rawPropertiesState: 'parsing',
   step2_additionalProperties: [],
@@ -557,6 +562,19 @@ const Model: ResourceCreatorPageModelType = {
           },
         });
       }
+    },
+    * onRemove_step2_file({}: OnRemove_step2_file_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          step2_fileInfo: null,
+          step2_rawProperties: [],
+          step2_rawPropertiesState: 'parsing',
+          step2_additionalProperties: [],
+          step2_customProperties: [],
+          step2_customConfigurations: [],
+        },
+      });
     },
     * onChange_step2_additionalProperties({ payload }: OnChange_step2_additionalProperties_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({

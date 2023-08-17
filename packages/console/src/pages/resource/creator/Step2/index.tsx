@@ -16,7 +16,7 @@ import FTooltip from '@/components/FTooltip';
 import {
   OnChange_step2_additionalProperties_Action,
   OnChange_step2_customConfigurations_Action, OnChange_step2_customProperties_Action,
-  OnClick_step2_submitBtn_Action,
+  OnClick_step2_submitBtn_Action, OnRemove_step2_file_Action,
   OnSucceed_step2_localUpload_Action, OnSucceed_step2_storageSpace_Action,
 } from '@/models/resourceCreatorPage';
 import FResourceProperties from '@/components/FResourceProperties';
@@ -181,7 +181,9 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
           // disabled={$prop.disabledOperations?.includes('remove')}
           onClick={async () => {
             // $prop.onClick_DeleteBtn && $prop.onClick_DeleteBtn();
-
+            dispatch<OnRemove_step2_file_Action>({
+              type: 'resourceCreatorPage/onRemove_step2_file',
+            });
           }}
           // className={styles.delete}
         >{FI18n.i18nNext.t('remove')}</FComponentsLib.FTextBtn>
