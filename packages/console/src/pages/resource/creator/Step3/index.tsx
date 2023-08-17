@@ -14,6 +14,7 @@ import {
   OnClick_step3_submitBtn_Action,
 } from '@/models/resourceCreatorPage';
 import PolicyTemplates from './PolicyTemplates';
+import fPolicyBuilder from '@/components/fPolicyBuilder';
 
 // import { FI18n } from '@freelog/tools-lib';
 
@@ -36,6 +37,7 @@ function Step3({ dispatch, resourceCreatorPage }: Step3Props) {
             onClick={async () => {
               dispatch<OnClick_step3_addPolicyBtn_Action>({
                 type: 'resourceCreatorPage/onClick_step3_addPolicyBtn',
+                payload: {},
               });
             }}>
             <FComponentsLib.FIcons.FConfiguration style={{ fontSize: 14 }} />
@@ -58,6 +60,7 @@ function Step3({ dispatch, resourceCreatorPage }: Step3Props) {
               onClick={() => {
                 dispatch<OnClick_step3_addPolicyBtn_Action>({
                   type: 'resourceCreatorPage/onClick_step3_addPolicyBtn',
+                  payload: {},
                 });
               }}
             >添加授权策略</FComponentsLib.FRectBtn>
@@ -97,7 +100,17 @@ function Step3({ dispatch, resourceCreatorPage }: Step3Props) {
       {/*  type={'additional2'} />*/}
       <FComponentsLib.FContentText text={FI18n.i18nNext.t('authplanmgnt_title_templates_help')} type={'additional2'} />
       <div style={{ height: 20 }} />
-      <PolicyTemplates />
+      <PolicyTemplates
+        onSelect={(value) => {
+          // fPolicyBuilder({ targetType: 'resource', defaultValue: value });
+          dispatch<OnClick_step3_addPolicyBtn_Action>({
+            type: 'resourceCreatorPage/onClick_step3_addPolicyBtn',
+            payload: {
+              defaultValue: value,
+            },
+          });
+        }}
+      />
     </div>
 
     <div style={{ height: 30 }} />

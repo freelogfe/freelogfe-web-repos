@@ -153,6 +153,9 @@ export interface OnClick_step2_submitBtn_Action extends AnyAction {
 
 export interface OnClick_step3_addPolicyBtn_Action extends AnyAction {
   type: 'resourceCreatorPage/onClick_step3_addPolicyBtn';
+  payload: {
+    defaultValue?: { text: string; title: string; };
+  };
 }
 
 // export interface OnClick_step3_skipBtn_Action extends AnyAction {
@@ -678,7 +681,11 @@ const Model: ResourceCreatorPageModelType = {
         },
       });
     },
-    * onClick_step3_addPolicyBtn({}: OnClick_step3_addPolicyBtn_Action, { select, call, put }: EffectsCommandMap) {
+    * onClick_step3_addPolicyBtn({ payload }: OnClick_step3_addPolicyBtn_Action, {
+      select,
+      call,
+      put,
+    }: EffectsCommandMap) {
       self._czc?.push(['_trackEvent', '授权信息页', '添加授权策略', '', 1]);
       const { resourceCreatorPage }: ConnectState = yield select(({ resourceCreatorPage }: ConnectState) => ({
         resourceCreatorPage,
@@ -691,6 +698,7 @@ const Model: ResourceCreatorPageModelType = {
         alreadyUsedTitles: resourceCreatorPage.step3_policies.map((ip) => {
           return ip.policyName;
         }),
+        defaultValue: payload.defaultValue,
       };
       const result: null | { title: string; text: string; } = yield call(fPolicyBuilder, parmas);
       if (!result) {

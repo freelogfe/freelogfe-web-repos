@@ -27,6 +27,7 @@ interface FPolicyBuilderDrawerProps {
   alreadyUsedTexts?: string[];
 
   targetType: 'resource' | 'presentable';
+  defaultValue?: { title: string, text: string };
 
   onConfirm?({ title, text }: { title: string, text: string }): void;
 
@@ -162,6 +163,7 @@ function FPolicyBuilder({
                           alreadyUsedTitles = [],
                           alreadyUsedTexts = [],
                           afterVisibleChange,
+                          defaultValue,
                         }: FPolicyBuilderDrawerProps) {
   const refBottomDiv = React.useRef<any>(null);
   const refMaskingContainer = React.useRef<any>(null);
@@ -187,6 +189,12 @@ function FPolicyBuilder({
   const [successResult, setSuccessResult] = React.useState<FPolicyBuilderDrawerStates['successResult']>(initStates.successResult);
 
   const [templateVisible, setTemplateVisible] = React.useState<FPolicyBuilderDrawerStates['templateVisible']>(initStates.templateVisible);
+
+  AHooks.useMount(() => {
+    if (defaultValue) {
+      onClick_SelectTemplateBtn(defaultValue.title, defaultValue.text);
+    }
+  });
 
   AHooks.useDebounceEffect(
     () => {

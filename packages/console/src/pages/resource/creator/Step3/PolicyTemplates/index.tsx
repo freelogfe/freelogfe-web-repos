@@ -7,10 +7,10 @@ import { Base64 } from 'js-base64';
 import * as AHooks from 'ahooks';
 
 interface PolicyTemplatesProps {
-
+  onSelect?({ title, text }: { title: string, text: string }): void;
 }
 
-function PolicyTemplates() {
+function PolicyTemplates({ onSelect }: PolicyTemplatesProps) {
 
   const [$policyTemplates, set$policyTemplates, get$policyTemplates] = useGetState<{
     id: string;
@@ -50,19 +50,24 @@ function PolicyTemplates() {
 
   return (<div className={styles.policyTemplates}>
     {
-      $policyTemplates.map((pt) =>{
-        return (<a className={styles.policyTemplate}>
+      $policyTemplates.map((pt) => {
+        return (<a
+          className={styles.policyTemplate}
+          onClick={() => {
+            onSelect && onSelect({ text: pt.code, title: pt.title });
+          }}
+        >
           <FComponentsLib.FTitleText key={pt.id} text={pt.title} type={'h1'} />
           <div style={{ height: 15 }} />
           {/*<FComponentsLib.FContentText text={'公开（所有缔约方可签约）'} />*/}
           {
             pt.translation.split('\n').map((t) => {
-              return (<FComponentsLib.FContentText text={t} />)
+              return (<FComponentsLib.FContentText text={t} />);
             })
           }
 
           {/*<FComponentsLib.FContentText text={'免费试用1个星期，支付200羽币，可获得1个月授权。'} />*/}
-        </a>)
+        </a>);
       })
     }
 

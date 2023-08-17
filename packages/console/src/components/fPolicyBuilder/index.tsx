@@ -8,17 +8,24 @@ interface fPolicyBuilderProps {
   alreadyUsedTexts?: string[];
 
   targetType: 'resource' | 'presentable';
+  defaultValue?: { title: string, text: string };
 }
 
 type ReturnData = { title: string; text: string; } | null;
 
-function fPolicyBuilder({ alreadyUsedTitles, alreadyUsedTexts, targetType }: fPolicyBuilderProps): Promise<ReturnData> {
+function fPolicyBuilder({
+                          alreadyUsedTitles,
+                          alreadyUsedTexts,
+                          targetType,
+                          defaultValue,
+                        }: fPolicyBuilderProps): Promise<ReturnData> {
   return new Promise<ReturnData>((resolve) => {
     const root = ReactDOM.createRoot(document.getElementById('drawer-root') as HTMLDivElement);
     return root.render(<Temp
       alreadyUsedTitles={alreadyUsedTitles}
       alreadyUsedTexts={alreadyUsedTexts}
       targetType={targetType}
+      defaultValue={defaultValue}
       onClose={() => {
         resolve(null);
         setTimeout(() => {
@@ -40,12 +47,14 @@ interface TempProps {
 
   targetType: 'resource' | 'presentable';
 
+  defaultValue?: { title: string, text: string };
+
   onConfirm?({ title, text }: { title: string, text: string }): void;
 
   onClose?(): void;
 }
 
-function Temp({ alreadyUsedTitles, alreadyUsedTexts, targetType, onConfirm, onClose }: TempProps) {
+function Temp({ alreadyUsedTitles, alreadyUsedTexts, targetType, defaultValue, onConfirm, onClose }: TempProps) {
 
   const [visible, set_visible] = React.useState<boolean>(true);
 
@@ -54,6 +63,7 @@ function Temp({ alreadyUsedTitles, alreadyUsedTexts, targetType, onConfirm, onCl
     alreadyUsedTitles={alreadyUsedTitles}
     alreadyUsedTexts={alreadyUsedTexts}
     targetType={targetType}
+    defaultValue={defaultValue}
     onConfirm={(value) => {
       onConfirm && onConfirm(value);
       set_visible(false);
