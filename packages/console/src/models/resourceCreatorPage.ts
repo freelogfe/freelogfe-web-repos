@@ -740,8 +740,7 @@ const Model: ResourceCreatorPageModelType = {
           step2_customProperties: data_draft2.draftData.customProperties,
           step2_customConfigurations: data_draft2.draftData.customConfigurations,
         },
-      })
-      ;
+      });
     },
     * onRemove_step2_file({}: OnRemove_step2_file_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
