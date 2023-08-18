@@ -1,11 +1,9 @@
 import * as React from 'react';
 import styles from './index.less';
-// import FContentLayout from '@/layouts/FContentLayout';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import { ConnectState, ResourceCreatorPageModelState } from '@/models/connect';
 import FComponentsLib from '@freelog/components-lib';
-import FResourceTypeInput from '@/components/FResourceTypeInput';
 import { FI18n } from '@freelog/tools-lib';
 import Step1 from './Step1';
 import Step2 from './Step2';
@@ -42,9 +40,10 @@ function ResourceCreator({
     <div className={styles.left}>
       <div style={{ height: 40 }} />
       <div style={{ paddingLeft: 30 }}>
-        <FComponentsLib.FTitleText text={'发行资源'} type={'h1'} />
+        {/*<FComponentsLib.FTitleText text={'发行资源'} type={'h1'} />*/}
+        <FComponentsLib.FTitleText text={'rqr_title'} type={'h1'} />
       </div>
-      {/*<FComponentsLib.FTitleText text={'rqr_title'} type={'h1'} />*/}
+
       <div style={{ height: 40 }} />
       <div className={styles.steps}>
         <div
@@ -53,8 +52,8 @@ function ResourceCreator({
             <FComponentsLib.FIcons.FArrowRight className={styles.iconFArrowRight} />
             <FComponentsLib.FIcons.FCheckMark className={styles.iconFCheckMark} />
           </div>
-          <span className={styles.title}>创建资源授权条目</span>
-          {/*<span className={styles.title}>{FI18n.i18nNext.t('rqr_step1')}</span>*/}
+          {/*<span className={styles.title}>创建资源授权条目</span>*/}
+          <span className={styles.title}>{FI18n.i18nNext.t('rqr_step1')}</span>
         </div>
 
         <div
@@ -63,8 +62,8 @@ function ResourceCreator({
             <FComponentsLib.FIcons.FArrowRight className={styles.iconFArrowRight} />
             <FComponentsLib.FIcons.FCheckMark className={styles.iconFCheckMark} />
           </div>
-          <span className={styles.title}>上传资源文件</span>
-          {/*<span className={styles.title}>{FI18n.i18nNext.t('rqr_step2')}</span>*/}
+          {/*<span className={styles.title}>上传资源文件</span>*/}
+          <span className={styles.title}>{FI18n.i18nNext.t('rqr_step2')}</span>
         </div>
 
         <div
@@ -73,8 +72,8 @@ function ResourceCreator({
             <FComponentsLib.FIcons.FArrowRight className={styles.iconFArrowRight} />
             <FComponentsLib.FIcons.FCheckMark className={styles.iconFCheckMark} />
           </div>
-          <span className={styles.title}>添加授权策略</span>
-          {/*<span className={styles.title}>{FI18n.i18nNext.t('rqr_step3')}</span>*/}
+          {/*<span className={styles.title}>添加授权策略</span>*/}
+          <span className={styles.title}>{FI18n.i18nNext.t('rqr_step3')}</span>
         </div>
 
         <div className={[styles.step, resourceCreatorPage.step === 4 ? styles.stepActivated : ''].join(' ')}>
@@ -82,8 +81,8 @@ function ResourceCreator({
             <FComponentsLib.FIcons.FArrowRight className={styles.iconFArrowRight} />
             <FComponentsLib.FIcons.FCheckMark className={styles.iconFCheckMark} />
           </div>
-          <span className={styles.title}>完善资源信息</span>
-          {/*<span className={styles.title}>{FI18n.i18nNext.t('rqr_step4')}</span>*/}
+          {/*<span className={styles.title}>完善资源信息</span>*/}
+          <span className={styles.title}>{FI18n.i18nNext.t('rqr_step4')}</span>
         </div>
       </div>
     </div>

@@ -132,7 +132,7 @@ function Step4({ dispatch, resourceCreatorPage }: Step4Props) {
             type: 'resourceCreatorPage/onClick_step4_preBtn',
           });
         }}
-      >上一步</FComponentsLib.FTextBtn>
+      >{FI18n.i18nNext.t('rqr_step4_btn_back')}</FComponentsLib.FTextBtn>
 
       {/*{FI18n.i18nNext.t('rqr_step4_btn_release')}*/}
       <FComponentsLib.FRectBtn
@@ -143,7 +143,7 @@ function Step4({ dispatch, resourceCreatorPage }: Step4Props) {
             type: 'resourceCreatorPage/onClick_step4_submitBtn',
           });
         }}
-      >现在上架</FComponentsLib.FRectBtn>
+      >{FI18n.i18nNext.t('rqr_step4_btn_release')}</FComponentsLib.FRectBtn>
     </div>
     <div style={{ height: 100 }} />
   </>);

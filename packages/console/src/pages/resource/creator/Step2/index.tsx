@@ -7,11 +7,7 @@ import { connect } from 'dva';
 import { ConnectState, ResourceCreatorPageModelState } from '@/models/connect';
 import { Dispatch } from 'redux';
 import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
-import fResourcePropertyEditor from '@/components/fResourcePropertyEditor';
-import {
-  OnChange_AdditionalProperties_Action, OnChange_CustomConfigurations_Action,
-  OnChange_CustomProperties_Action,
-} from '@/models/resourceVersionCreatorPage';
+import fResourcePropertyEditor from '@/components/fResourcePropertyEditor';;
 import FTooltip from '@/components/FTooltip';
 import {
   OnChange_step2_additionalProperties_Action,
@@ -88,13 +84,6 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
 
       </div>
 
-      {/*{*/}
-      {/*  resourceCreatorPage.step2_fileInfo_errorTip !== '' && (<>*/}
-      {/*    <div style={{ height: 5 }} />*/}
-      {/*    <div style={{ color: '#EE4040' }}>{resourceCreatorPage.step2_fileInfo_errorTip}</div>*/}
-      {/*  </>)*/}
-      {/*}*/}
-
       <div style={{ height: 30 }} />
 
       <div className={styles.btn}>
@@ -109,7 +98,7 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
             // }));
             history.push(FUtil.LinkTo.myResources());
           }}
-        >稍后处理</FComponentsLib.FTextBtn>
+        >{FI18n.i18nNext.t('rqr_step3_btn_later')}</FComponentsLib.FTextBtn>
 
         {/*{FI18n.i18nNext.t('rqr_step3_btn_next')}*/}
         <FComponentsLib.FRectBtn
@@ -120,7 +109,7 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
               type: 'resourceCreatorPage/onClick_step2_submitBtn',
             });
           }}
-        >提交</FComponentsLib.FRectBtn>
+        >{FI18n.i18nNext.t('rqr_step3_btn_next')}</FComponentsLib.FRectBtn>
       </div>
 
       <div style={{ height: 100 }} />
@@ -367,8 +356,8 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
               set$ShowMore(true);
             }}
           >更多设置</FComponentsLib.FTextBtn>
-          {/*{FI18n.i18nNext.t('create_new_version_btn_moresetting_help')}*/}
-          <FComponentsLib.FContentText text={'可以为资源文件添加可选配置，或进行依赖资源的声明'} type={'additional2'} />
+          {FI18n.i18nNext.t('create_new_version_btn_moresetting_help')}
+          {/*<FComponentsLib.FContentText text={'可以为资源文件添加可选配置，或进行依赖资源的声明'} type={'additional2'} />*/}
         </Space>)
     }
 
@@ -378,8 +367,8 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
 
         <div className={styles.block}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            {/*{FI18n.i18nNext.t('resourceoptions_title')}*/}
-            <FComponentsLib.FContentText text={'可选配置'} type={'highlight'} />
+            {FI18n.i18nNext.t('resourceoptions_title')}
+            {/*<FComponentsLib.FContentText text={'可选配置'} type={'highlight'} />*/}
 
             <FTooltip title={FI18n.i18nNext.t('resourceinfo_add_btn_info')}>
               <div>
@@ -437,7 +426,7 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 {/*<span>{FI18n.i18nNext.t('resourceoptions_list_empty')}</span>*/}
                 <FComponentsLib.FContentText
-                  text={'可选配置是资源在消费端展示时所需的配置信息，您可以根据需要添加。'}
+                  text={FI18n.i18nNext.t('resourceoptions_list_empty')}
                   type={'additional2'}
                 />
               </div>
@@ -517,7 +506,7 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
         <div className={styles.block}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             {/*{FI18n.i18nNext.t('claim_rely_title')}*/}
-            <FComponentsLib.FContentText text={'依赖声明'} type={'highlight'} />
+            <FComponentsLib.FContentText text={FI18n.i18nNext.t('claim_rely_title')} type={'highlight'} />
 
             <FTooltip title={FI18n.i18nNext.t('resourceinfo_add_btn_info')}>
               <div>
@@ -538,8 +527,13 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
             <div style={{ height: 10 }} />
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
               {/*<span>{FI18n.i18nNext.t('resourceoptions_list_empty')}</span>*/}
-              <FComponentsLib.FContentText text={'依赖是当前作品创作过程中使用到的素材、引用或再创作的基础。'} type={'additional2'} />
-              <FComponentsLib.FContentText text={'如果这些内容在Freelog中发行并且开放授权，您可以在此模块进行申明，并获取授权。'} type={'additional2'} />
+              {
+                FI18n.i18nNext.t('resourceoptions_list_empty').split('\n').map((i,j) => {
+                  return (<FComponentsLib.FContentText key={j} text={i} type={'additional2'} />)
+                })
+              }
+
+              {/*<FComponentsLib.FContentText text={'如果这些内容在Freelog中发行并且开放授权，您可以在此模块进行申明，并获取授权。'} type={'additional2'} />*/}
             </div>
             <div style={{ height: 20 }} />
           </>
@@ -567,7 +561,7 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
           history.push(FUtil.LinkTo.myResources());
 
         }}
-      >稍后处理</FComponentsLib.FTextBtn>
+      >{FI18n.i18nNext.t('rqr_step3_btn_later')}</FComponentsLib.FTextBtn>
 
       {/*{FI18n.i18nNext.t('rqr_step3_btn_next')}*/}
       <FComponentsLib.FRectBtn
@@ -578,7 +572,7 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
             type: 'resourceCreatorPage/onClick_step2_submitBtn',
           });
         }}
-      >提交</FComponentsLib.FRectBtn>
+      >{FI18n.i18nNext.t('rqr_step3_btn_next')}</FComponentsLib.FRectBtn>
     </div>
 
     <div style={{ height: 100 }} />
