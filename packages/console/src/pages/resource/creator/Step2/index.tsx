@@ -14,7 +14,7 @@ import FTooltip from '@/components/FTooltip';
 import {
   OnChange_step2_additionalProperties_Action,
   OnChange_step2_customConfigurations_Action,
-  OnChange_step2_customProperties_Action,
+  OnChange_step2_customProperties_Action, OnClick_step2_editCartoonBtn_Action,
   OnClick_step2_editMarkdownBtn_Action,
   OnClick_step2_submitBtn_Action,
   OnRemove_step2_file_Action,
@@ -188,7 +188,13 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
         }
 
         {
-          isCartoon && (<CartoonEditor />)
+          isCartoon && (<CartoonEditor
+            onClickBtn={() => {
+              dispatch<OnClick_step2_editCartoonBtn_Action>({
+                type: 'resourceCreatorPage/onClick_step2_editCartoonBtn',
+              });
+            }}
+          />)
         }
 
       </div>

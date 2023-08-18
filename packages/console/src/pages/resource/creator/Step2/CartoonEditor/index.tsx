@@ -5,10 +5,10 @@ import img_markdown from '@/assets/cartoon-editor-icons.png';
 import FComponentsLib from '@freelog/components-lib';
 
 interface CartoonEditorProps {
-
+  onClickBtn?(): void;
 }
 
-function CartoonEditor({}: CartoonEditorProps) {
+function CartoonEditor({ onClickBtn }: CartoonEditorProps) {
   return (<div className={styles.cartoonEditor}>
     <img
       src={img_markdown}
@@ -20,7 +20,12 @@ function CartoonEditor({}: CartoonEditorProps) {
     <div style={{ height: 10 }} />
     <FComponentsLib.FContentText text={'在线上传、排版、一键切图，快速发布漫画'} type={'additional2'} />
     <div style={{ height: 40 }} />
-    <FComponentsLib.FRectBtn type={'primary'}>立即体验</FComponentsLib.FRectBtn>
+    <FComponentsLib.FRectBtn
+      type={'primary'}
+      onClick={() => {
+        onClickBtn && onClickBtn();
+      }}
+    >立即体验</FComponentsLib.FRectBtn>
   </div>);
 }
 
