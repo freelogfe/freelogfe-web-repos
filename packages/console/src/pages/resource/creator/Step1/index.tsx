@@ -20,7 +20,14 @@ interface Step1Props {
 
 function Step1({ dispatch, resourceCreatorPage }: Step1Props) {
 
+  const isFirstTime = React.useRef<boolean>(true);
+
   AHooks.useDebounceEffect(() => {
+    if (isFirstTime.current) {
+      isFirstTime.current = false;
+      return;
+    }
+    // console.log(resourceCreatorPage.step1_resourceName, 'resourceCreatorPage.step1_resourceNamesiodjflkdjl');
     dispatch<OnVerify_step1_resourceName_Action>({
       type: 'resourceCreatorPage/onVerify_step1_resourceName',
     });
@@ -32,7 +39,7 @@ function Step1({ dispatch, resourceCreatorPage }: Step1Props) {
     <div style={{ height: 40 }} />
     <div className={styles.block}>
       {/*<FComponentsLib.FContentText text={'资源类型'} type={'highlight'} />*/}
-      <FComponentsLib.FContentText text={'rqr_input_resourcetype'} type={'highlight'}/>
+      <FComponentsLib.FContentText text={'rqr_input_resourcetype'} type={'highlight'} />
       <div style={{ height: 5 }} />
       {/*<FComponentsLib.FContentText text={'选择最贴切描述此资源的类型，其它用户会通过资源类型在资源市场中寻找他们想要的资源。'} type={'additional2'} />*/}
       <FComponentsLib.FContentText text={'rqr_input_resourcetype_help'} type={'additional2'} />
@@ -52,7 +59,7 @@ function Step1({ dispatch, resourceCreatorPage }: Step1Props) {
     <div style={{ height: 5 }} />
     <div className={styles.block}>
       {/*<FComponentsLib.FContentText text={'资源授权标识'} type={'highlight'} />*/}
-      <FComponentsLib.FContentText text={FI18n.i18nNext.t('rqr_input_resourceauthid')} type={'highlight'}/>
+      <FComponentsLib.FContentText text={FI18n.i18nNext.t('rqr_input_resourceauthid')} type={'highlight'} />
       <div style={{ height: 5 }} />
       {/*<FComponentsLib.FContentText text={'此资源在整个授权系统中的唯一标识符，一旦创建则不能更改。'} type={'additional2'} />*/}
       <FComponentsLib.FContentText text={FI18n.i18nNext.t('rqr_input_resourceauthid_help')} type={'additional2'} />

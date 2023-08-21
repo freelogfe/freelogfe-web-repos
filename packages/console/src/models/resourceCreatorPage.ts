@@ -253,7 +253,7 @@ export const initStates: ResourceCreatorPageModelState = {
   step: 1,
 
   step1_resourceType: null,
-  step1_resourceName: 'newResource',
+  step1_resourceName: '',
   step1_resourceName_isVerify: false,
   step1_resourceName_errorText: '',
   step1_createdResourceInfo: null,
