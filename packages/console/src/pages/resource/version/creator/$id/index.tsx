@@ -490,7 +490,7 @@ function VersionCreator({
                         baseUpcastResources: resourceVersionCreatorPage.resourceInfo?.baseUpcastResources.map((r) => {
                           return {
                             resourceID: r.resourceID,
-                            resourceNme: r.resourceName,
+                            resourceName: r.resourceName,
                           };
                         }) || [],
                         async onSelect_Resource({ resourceID, resourceName }) {

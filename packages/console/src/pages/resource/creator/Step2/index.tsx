@@ -33,7 +33,9 @@ import fResourceOptionEditor from '@/components/fResourceOptionEditor';
 import FResourceOptions from '@/components/FResourceOptions';
 import fResourceMarkdownEditor from '@/components/fResourceMarkdownEditor';
 import { IResourceCreateVersionDraftType } from '@/type/resourceTypes';
-import { ChangeAction } from '@/models/resourceVersionCreatorPage';
+import { ChangeAction, OnChange_DataIsDirty_Action } from '@/models/resourceVersionCreatorPage';
+import FResourceAuthorizationProcessor, { getProcessor } from '@/components/FResourceAuthorizationProcessor';
+import fAddDependencies from '@/components/fAddDependencies';
 
 interface Step2Props {
   dispatch: Dispatch;
@@ -629,7 +631,48 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
                   style={{ fontSize: 12, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 5 }}
                   type='primary'
                   onClick={async () => {
-
+                    const p = await getProcessor('resourceCreatorStep2');
+                    const baseUpcastResources: Awaited<ReturnType<typeof p.getBaseUpcastResources>> = await p.getBaseUpcastResources();
+                    await fAddDependencies({
+                      // resourceTypeCode: resourceVersionCreatorPage.resourceInfo?.resourceTypeCode || '',
+                      existingResources: (await p.getAllTargets()).map((t) => {
+                        return {
+                          resourceID: t.id,
+                          resourceNme: t.name,
+                        };
+                      }),
+                      baseUpcastResources: baseUpcastResources,
+                      async onSelect_Resource({ resourceID, resourceName }) {
+                        // console.log('8***********8sdflksdjlkj');
+                        // const p = await getProcessor('resourceCreatorStep2');
+                        await p.addTargets([{
+                          id: resourceID,
+                          name: resourceName,
+                          type: 'resource',
+                          // versionRange: '^0.1.0',
+                        }]);
+                        // await dispatch<OnChange_DataIsDirty_Action>({
+                        //   type: 'resourceVersionCreatorPage/onChange_DataIsDirty',
+                        //   payload: {
+                        //     value: true,
+                        //   },
+                        // });
+                      },
+                      async onDeselect_Resource({ resourceID, resourceName }) {
+                        // const p = await getProcessor('resourceCreatorStep2');
+                        await p.removeTarget({
+                          id: resourceID,
+                          name: resourceName,
+                          type: 'resource',
+                        });
+                        // await dispatch<OnChange_DataIsDirty_Action>({
+                        //   type: 'resourceVersionCreatorPage/onChange_DataIsDirty',
+                        //   payload: {
+                        //     value: true,
+                        //   },
+                        // });
+                      },
+                    });
                   }}
                 >
                   <FComponentsLib.FIcons.FConfiguration style={{ fontSize: 14 }} />
@@ -638,23 +681,38 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
               </div>
             </FTooltip>
           </div>
-          <>
-            <div style={{ height: 10 }} />
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
-              {/*<span>{FI18n.i18nNext.t('resourceoptions_list_empty')}</span>*/}
-              {
-                FI18n.i18nNext.t('resourceoptions_list_empty').split('\n').map((i, j) => {
-                  return (<FComponentsLib.FContentText key={j} text={i} type={'additional2'} />);
-                })
-              }
+          {/*<>*/}
+          {/*  <div style={{ height: 10 }} />*/}
+          {/*  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>*/}
+          {/*    /!*<span>{FI18n.i18nNext.t('resourceoptions_list_empty')}</span>*!/*/}
+          {/*    {*/}
+          {/*      FI18n.i18nNext.t('resourceoptions_list_empty').split('\n').map((i, j) => {*/}
+          {/*        return (<FComponentsLib.FContentText key={j} text={i} type={'additional2'} />);*/}
+          {/*      })*/}
+          {/*    }*/}
 
-              {/*<FComponentsLib.FContentText text={'如果这些内容在Freelog中发行并且开放授权，您可以在此模块进行申明，并获取授权。'} type={'additional2'} />*/}
-            </div>
+          {/*    /!*<FComponentsLib.FContentText text={'如果这些内容在Freelog中发行并且开放授权，您可以在此模块进行申明，并获取授权。'} type={'additional2'} />*!/*/}
+          {/*  </div>*/}
+          {/*  <div style={{ height: 20 }} />*/}
+          {/*</>*/}
+
+          <>
             <div style={{ height: 20 }} />
-          </>
-
-          <>
-            {/*<div style={{ height: 20 }} />*/}
+            <FResourceAuthorizationProcessor
+              width={860}
+              height={600}
+              resourceID={resourceCreatorPage.step1_createdResourceInfo?.resourceID || ''}
+              processorIdentifier={'resourceCreatorStep2'}
+              onChanged={() => {
+                // dispatch<OnChange_DataIsDirty_Action>({
+                //   type: 'resourceVersionCreatorPage/onChange_DataIsDirty',
+                //   payload: {
+                //     value: true,
+                //   },
+                // });
+                // console.log('****** w0e98iofjsdlk ***((((((((');
+              }}
+            />
           </>
         </div>
       </>)

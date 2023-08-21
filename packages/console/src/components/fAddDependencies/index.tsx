@@ -11,7 +11,7 @@ interface fAddDependenciesProps {
   }[];
   baseUpcastResources: {
     resourceID: string;
-    resourceNme: string;
+    resourceName: string;
   }[];
 
   onSelect_Resource?(value: {
