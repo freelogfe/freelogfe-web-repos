@@ -36,6 +36,7 @@ import { IResourceCreateVersionDraftType } from '@/type/resourceTypes';
 import { ChangeAction, OnChange_DataIsDirty_Action } from '@/models/resourceVersionCreatorPage';
 import FResourceAuthorizationProcessor, { getProcessor } from '@/components/FResourceAuthorizationProcessor';
 import fAddDependencies from '@/components/fAddDependencies';
+import * as AHooks from 'ahooks';
 
 interface Step2Props {
   dispatch: Dispatch;
@@ -43,6 +44,10 @@ interface Step2Props {
 }
 
 function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
+
+  const ref = React.useRef(null);
+  const size = AHooks.useSize(ref);
+  console.log(size, 'size ws90eiofjsdlkfjldskjl');
 
   const [$showMore, set$ShowMore, get$ShowMore] = useGetState<boolean>(false);
 
@@ -624,7 +629,6 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             {/*{FI18n.i18nNext.t('claim_rely_title')}*/}
             <FComponentsLib.FContentText text={FI18n.i18nNext.t('claim_rely_title')} type={'highlight'} />
-
             <FTooltip title={FI18n.i18nNext.t('resourceinfo_add_btn_info')}>
               <div>
                 <FComponentsLib.FTextBtn
@@ -681,38 +685,42 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
               </div>
             </FTooltip>
           </div>
-          {/*<>*/}
-          {/*  <div style={{ height: 10 }} />*/}
-          {/*  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>*/}
-          {/*    /!*<span>{FI18n.i18nNext.t('resourceoptions_list_empty')}</span>*!/*/}
-          {/*    {*/}
-          {/*      FI18n.i18nNext.t('resourceoptions_list_empty').split('\n').map((i, j) => {*/}
-          {/*        return (<FComponentsLib.FContentText key={j} text={i} type={'additional2'} />);*/}
-          {/*      })*/}
-          {/*    }*/}
 
-          {/*    /!*<FComponentsLib.FContentText text={'如果这些内容在Freelog中发行并且开放授权，您可以在此模块进行申明，并获取授权。'} type={'additional2'} />*!/*/}
-          {/*  </div>*/}
-          {/*  <div style={{ height: 20 }} />*/}
-          {/*</>*/}
+          {
+            size && size.height === 0 && (<>
+              <div style={{ height: 10 }} />
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
+                {
+                  FI18n.i18nNext.t('claim_rely_list_empty').split('\n').map((i, j) => {
+                    return (<FComponentsLib.FContentText key={j} text={i} type={'additional2'} />);
+                  })
+                }
+              </div>
+              <div style={{ height: 20 }} />
+            </>)
+          }
 
           <>
-            <div style={{ height: 20 }} />
-            <FResourceAuthorizationProcessor
-              width={860}
-              height={600}
-              resourceID={resourceCreatorPage.step1_createdResourceInfo?.resourceID || ''}
-              processorIdentifier={'resourceCreatorStep2'}
-              onChanged={() => {
-                // dispatch<OnChange_DataIsDirty_Action>({
-                //   type: 'resourceVersionCreatorPage/onChange_DataIsDirty',
-                //   payload: {
-                //     value: true,
-                //   },
-                // });
-                // console.log('****** w0e98iofjsdlk ***((((((((');
-              }}
-            />
+            {
+              size && size.height > 0 && (<div style={{ height: 20 }} />)
+            }
+            <div ref={ref}>
+              <FResourceAuthorizationProcessor
+                width={860}
+                height={600}
+                resourceID={resourceCreatorPage.step1_createdResourceInfo?.resourceID || ''}
+                processorIdentifier={'resourceCreatorStep2'}
+                onChanged={() => {
+                  // dispatch<OnChange_DataIsDirty_Action>({
+                  //   type: 'resourceVersionCreatorPage/onChange_DataIsDirty',
+                  //   payload: {
+                  //     value: true,
+                  //   },
+                  // });
+                  // console.log('****** w0e98iofjsdlk ***((((((((');
+                }}
+              />
+            </div>
           </>
         </div>
       </>)
