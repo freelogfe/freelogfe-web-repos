@@ -58,7 +58,10 @@ export default [
           { exact: true, path: 'creator', component: '../pages/resource/creator', title: '创建资源 - Freelog' },
           { exact: true, path: 'details/:id', component: '../pages/resource/details/$id', title: '市场资源 - Freelog' },
           { exact: true, path: 'info/:id', component: '../pages/resource/info/$id', title: '资源信息 - Freelog' },
-          { exact: true, path: 'auth/:id', component: '../pages/resource/auth/$id', title: '授权信息 - Freelog' },
+          { exact: true, path: 'policy/:id', component: '../pages/resource/auth/$id', title: '授权策略 - Freelog' },
+          { exact: true, path: 'contract/:id', component: '../pages/resource/auth/$id', title: '授权策略 - Freelog' },
+          { exact: true, path: 'dependency/:id', component: '../pages/resource/auth/$id', title: '授权策略 - Freelog' },
+          { exact: true, path: 'version/:id', component: '../pages/resource/auth/$id', title: '授权策略 - Freelog' },
           {
             path: 'version',
             routes: [
