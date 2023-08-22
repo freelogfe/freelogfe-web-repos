@@ -3,7 +3,7 @@ import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription } from 'dva';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import moment, { Moment } from 'moment';
-import { NodesModelState } from '@/models/nodes';
+// import { NodesModelState } from '@/models/nodes';
 
 export interface DashboardPageModelState {
   resourceStatistic: {
@@ -94,7 +94,7 @@ const Model: DashboardPageModelType = {
   namespace: 'dashboardPage',
   state: initStates,
   effects: {
-    * onMount_Page({}: OnMount_Page_Action, { call, put }: EffectsCommandMap) {
+    * onMount_Page({ }: OnMount_Page_Action, { call, put }: EffectsCommandMap) {
       const params1: Parameters<typeof FServiceAPI.Statistic.transactionsCommon>[0] = {
         ownerId: FUtil.Tool.getUserIDByCookies(),
         ownerType: 1,
@@ -220,13 +220,13 @@ const Model: DashboardPageModelType = {
         },
       });
     },
-    * onUnmount_Page({}: OnUnmount_Page_Action, { put }: EffectsCommandMap) {
+    * onUnmount_Page({ }: OnUnmount_Page_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: initStates,
       });
     },
-    * fetchInfo({}: FetchInfoAction, {}: EffectsCommandMap) {
+    * fetchInfo({ }: FetchInfoAction, { }: EffectsCommandMap) {
 
     },
   },
@@ -239,7 +239,7 @@ const Model: DashboardPageModelType = {
     },
   },
   subscriptions: {
-    setup({}) {
+    setup({ }) {
 
     },
   },
