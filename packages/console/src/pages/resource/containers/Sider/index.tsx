@@ -218,6 +218,16 @@ function Sider({ resourceSider, match, dispatch }: SilderProps) {
       </div>
       <div style={{ height: 35 }} />
       <div className={styles.radios}>
+      <FLink
+          className={[
+            // resourceSider.showPage === 'info' ? styles.activatedRadio : '', 
+            styles.radio].join(' ')}
+          to={FUtil.LinkTo.resourceInfo({
+            resourceID: match.params.id,
+          })}
+        >
+          版本列表
+        </FLink>
         <FLink
           className={[resourceSider.showPage === 'info' ? styles.activatedRadio : '', styles.radio].join(' ')}
           to={FUtil.LinkTo.resourceInfo({
@@ -225,6 +235,14 @@ function Sider({ resourceSider, match, dispatch }: SilderProps) {
           })}
         >
           {FI18n.i18nNext.t('resource_information')}
+        </FLink>
+        <FLink
+          className={[resourceSider.showPage === 'info' ? styles.activatedRadio : '', styles.radio].join(' ')}
+          to={FUtil.LinkTo.resourceInfo({
+            resourceID: match.params.id,
+          })}
+        >
+          授权策略
         </FLink>
         <FLink
           className={[resourceSider.showPage === 'auth' ? styles.activatedRadio : '', styles.radio].join(
@@ -235,7 +253,7 @@ function Sider({ resourceSider, match, dispatch }: SilderProps) {
           })}
         >
           <Space size={10}>
-            <span>{FI18n.i18nNext.t('authorization_infomation')}</span>
+            <span>授权合约</span>
             {resourceSider.hasAuthProblem && (
               <FTooltip title={'存在授权问题'}>
                 <FComponentsLib.FIcons.FWarning style={{ fontSize: 16 }} />
@@ -244,6 +262,14 @@ function Sider({ resourceSider, match, dispatch }: SilderProps) {
           </Space>
           {resourceSider.policies.length === 0 && !$resourceAuthShownArray[match.params.id] && (
             <div className={styles.redDot} />)}
+        </FLink>
+        <FLink
+          className={[resourceSider.showPage === 'info' ? styles.activatedRadio : '', styles.radio].join(' ')}
+          to={FUtil.LinkTo.resourceInfo({
+            resourceID: match.params.id,
+          })}
+        >
+          依赖授权管理
         </FLink>
         <div className={styles.versionControl}>
           <div className={styles.versionControlTitle}>

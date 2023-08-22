@@ -8,8 +8,6 @@ import { ConnectState, ResourceCreatorPageModelState } from '@/models/connect';
 import { Dispatch } from 'redux';
 import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
 import fResourcePropertyEditor from '@/components/fResourcePropertyEditor';
-
-;
 import FTooltip from '@/components/FTooltip';
 import {
   OnChange_step2_additionalProperties_Action,
@@ -33,7 +31,7 @@ import fResourceOptionEditor from '@/components/fResourceOptionEditor';
 import FResourceOptions from '@/components/FResourceOptions';
 import fResourceMarkdownEditor from '@/components/fResourceMarkdownEditor';
 import { IResourceCreateVersionDraftType } from '@/type/resourceTypes';
-import { ChangeAction, OnChange_DataIsDirty_Action } from '@/models/resourceVersionCreatorPage';
+// import { ChangeAction, OnChange_DataIsDirty_Action } from '@/models/resourceVersionCreatorPage';
 import FResourceAuthorizationProcessor, { getProcessor } from '@/components/FResourceAuthorizationProcessor';
 import fAddDependencies from '@/components/fAddDependencies';
 import * as AHooks from 'ahooks';
@@ -47,7 +45,7 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
 
   const ref = React.useRef(null);
   const size = AHooks.useSize(ref);
-  console.log(size, 'size ws90eiofjsdlkfjldskjl');
+  // console.log(size, 'size ws90eiofjsdlkfjldskjl');
 
   const [$showMore, set$ShowMore, get$ShowMore] = useGetState<boolean>(false);
 
