@@ -37,6 +37,7 @@ interface SilderProps
 }
 
 function Sider({ resourceSider, match, dispatch }: SilderProps) {
+  // console.log(match, 'matchiosdjflkjsdlkfjlkj');
   const [$resourceAuthShownArray, set$resourceAuthShownArray] =
     AHooks.useLocalStorageState<{ [k: string]: string }>(
       'resourceAuthShownArray',
@@ -52,14 +53,14 @@ function Sider({ resourceSider, match, dispatch }: SilderProps) {
   const [loading, setLoading] = React.useState(false);
   const [noLonger, setNoLonger] = React.useState(false);
 
-  AHooks.useMount(() => {
-    dispatch<OnMount_Page_Action>({
-      type: 'resourceSider/onMount_Page',
-      payload: {
-        resourceID: match.params.id,
-      },
-    });
-  });
+  // AHooks.useMount(() => {
+  //   dispatch<OnMount_Page_Action>({
+  //     type: 'resourceSider/onMount_Page',
+  //     payload: {
+  //       resourceID: match.params.id,
+  //     },
+  //   });
+  // });
 
   AHooks.useUnmount(() => {
     dispatch<OnUnmount_Page_Action>({
@@ -88,7 +89,7 @@ function Sider({ resourceSider, match, dispatch }: SilderProps) {
       type: 'resourceSider/onChange_Page',
       payload: {
         page: page as 'info',
-        version: match.params.version || '',
+        // version: match.params.version || '',
       },
     });
   }, [match]);
@@ -274,9 +275,9 @@ function Sider({ resourceSider, match, dispatch }: SilderProps) {
             )}
           </Space>
           {resourceSider.policies.length === 0 &&
-            !$resourceAuthShownArray[match.params.id] && (
-              <div className={styles.redDot} />
-            )}
+          !$resourceAuthShownArray[match.params.id] && (
+            <div className={styles.redDot} />
+          )}
         </FLink>
         <FLink
           className={[
@@ -405,11 +406,11 @@ function Sider({ resourceSider, match, dispatch }: SilderProps) {
                   {/*正在{resultPopupType === 1 ? '上架' : '下架'}*/}
                   {resultPopupType === 1
                     ? FI18n.i18nNext.t(
-                        'set_resource_available_for_auth_msg_processing',
-                      )
+                      'set_resource_available_for_auth_msg_processing',
+                    )
                     : FI18n.i18nNext.t(
-                        'remove_resource_from_auth_msg_processing',
-                      )}
+                      'remove_resource_from_auth_msg_processing',
+                    )}
                 </div>
               </div>
             ) : (
@@ -422,8 +423,8 @@ function Sider({ resourceSider, match, dispatch }: SilderProps) {
                 <div className={styles['result-text']}>
                   {resultPopupType === 1
                     ? FI18n.i18nNext.t(
-                        'set_resource_available_for_auth_msg_done',
-                      )
+                      'set_resource_available_for_auth_msg_done',
+                    )
                     : FI18n.i18nNext.t('remove_resource_from_auth_msg_done')}
                 </div>
               </div>

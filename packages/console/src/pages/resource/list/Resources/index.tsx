@@ -201,7 +201,7 @@ function Resources({ dispatch, resourceListPage }: ResourceProps) {
                   }}
                   onClickRevision={() => {
                     window.open(
-                      FUtil.LinkTo.resourceCreateVersion({
+                      FUtil.LinkTo.resourceVersionCreator({
                         resourceID: i.id,
                       }),
                     );

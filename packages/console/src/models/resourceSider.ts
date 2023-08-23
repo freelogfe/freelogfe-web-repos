@@ -16,7 +16,7 @@ export type ResourceSiderModelState = {
   resourceType: string[];
   resourceVersions: string[];
 
-  showPage: '' | 'info' | 'policy'| 'contract' | 'dependency' | 'versionCreator' | 'versionInfo';
+  showPage: '' | 'info' | 'policy' | 'contract' | 'dependency' | 'versionCreator' | 'versionInfo';
   // showVersionPage: string;
 
   hasAuthProblem: boolean;
@@ -113,10 +113,14 @@ const Model: ResourceSiderModelType = {
       const { resourceSider }: ConnectState = yield select(({ resourceSider }: ConnectState) => ({
         resourceSider,
       }));
+      console.log(payload, 'payloadiosdjlkfjlsdkjflkj lkjsdl;kfjlksdj');
+      if (payload.resourceID === resourceSider.resourceID) {
+        return;
+      }
       // console.log(resourceSider.resourceID, 'resourceSider.resourceIDsdiofjlskdfjlkj');
-      // if (resourceSider.resourceID !== '') {
-      //   return;
-      // }
+      if (resourceSider.resourceID !== '') {
+        return;
+      }
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -162,12 +166,12 @@ const Model: ResourceSiderModelType = {
         isLoadPolicyInfo: 1,
         isTranslate: 1,
       };
-
+      console.log(params, 'params9iosdj;flkjlk lksdajf;lkjl');
       const { data: data_resourceInfo } = yield call(FServiceAPI.Resource.info, params);
-      // console.log(data_resourceInfo, 'data_resourceInfooisdjlfkdjlfkjsdlkj');
+      console.log(data_resourceInfo, 'data_resourceInfooisdjlfkdjlfkjsdlkj');
 
       if (!data_resourceInfo || data_resourceInfo.userId !== FUtil.Tool.getUserIDByCookies()) {
-        history.replace(FUtil.LinkTo.exception403());
+        // history.replace(FUtil.LinkTo.exception403());
         return;
       }
 

@@ -100,7 +100,7 @@ interface ResourceInfoParamsType {
 }
 
 export function resourceInfo({resourceID}: ResourceInfoParamsType): TReturnType {
-  return `/resource/info/${resourceID}`;
+  return `/resource/sidebar/info/${resourceID}`;
 }
 
 // 资源授权策略
@@ -109,7 +109,7 @@ interface ResourcePolicyParamsType {
 }
 
 export function resourcePolicy({resourceID}: ResourcePolicyParamsType): TReturnType {
-  return `/resource/policy/${resourceID}`;
+  return `/resource/sidebar/policy/${resourceID}`;
 }
 
 // 资源授权合约
@@ -118,7 +118,7 @@ interface ResourceContractParamsType {
 }
 
 export function resourceContract({resourceID}: ResourceContractParamsType): TReturnType {
-  return `/resource/contract/${resourceID}`;
+  return `/resource/sidebar/contract/${resourceID}`;
 }
 
 // 资源被授权管理
@@ -127,7 +127,7 @@ interface ResourceDependencyParamsType {
 }
 
 export function resourceDependency({resourceID}: ResourceDependencyParamsType): TReturnType {
-  return `/resource/dependency/${resourceID}`;
+  return `/resource/sidebar/dependency/${resourceID}`;
 }
 
 // 资源版本创建
