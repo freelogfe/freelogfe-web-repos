@@ -62,6 +62,7 @@ export default [
           { exact: true, path: 'contract/:id', component: '../pages/resource/contract/$id', title: '授权策略 - Freelog' },
           { exact: true, path: 'dependency/:id', component: '../pages/resource/dependency/$id', title: '授权策略 - Freelog' },
           { exact: true, path: 'versionInfo/:id', component: '../pages/resource/versionInfo/$id', title: '授权策略 - Freelog' },
+          { exact: true, path: 'versionCreator/:id', component: '../pages/resource/versionCreator/$id', title: '授权策略 - Freelog' },
           {
             path: 'version',
             routes: [
