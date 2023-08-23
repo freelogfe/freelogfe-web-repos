@@ -1,12 +1,12 @@
 import * as React from 'react';
 import styles from './index.less';
 
-interface __TemplateProps {
+interface DependencyProps {
 
 }
 
-function __Template({}: __TemplateProps) {
+function Dependency({}: DependencyProps) {
   return (<div>__Template</div>);
 }
 
-export default __Template;
+export default Dependency;

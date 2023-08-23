@@ -162,6 +162,7 @@ function Info({ dispatch, resourceInfoPage, match }: InfoProps) {
                       <div style={{ color: '#EE4040' }}>{resourceInfoPage.introduction_EditorText_Error}</div>
                     </>)
                   }
+                  
                 </div>)
                 : resourceInfoPage.resourceInfo.intro !== ''
                   ? (<div className={styles.aboutPanel}>
