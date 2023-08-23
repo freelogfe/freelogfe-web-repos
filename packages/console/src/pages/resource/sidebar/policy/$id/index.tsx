@@ -8,12 +8,10 @@ import * as AHooks from 'ahooks';
 import { withRouter } from 'umi';
 import { connect } from 'dva';
 import { ConnectState } from '@/models/connect';
-import FComponentsLib from '../../../../../../../@freelog/components-lib';
-import { FI18n, FUtil } from '../../../../../../../@freelog/tools-lib';
-import { OnClick_step3_addPolicyBtn_Action, OnClick_step3_submitBtn_Action } from '@/models/resourceCreatorPage';
+import FComponentsLib from '@freelog/components-lib';
+import { FI18n, FUtil } from '@freelog/tools-lib';
 import FPolicyList from '@/components/FPolicyList';
 import PolicyTemplates from '@/pages/resource/creator/Step3/PolicyTemplates';
-import { history } from '@@/core/history';
 
 interface PolicyProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -35,7 +33,6 @@ function Policy({ dispatch, resourceAuthPage, match }: PolicyProps) {
       <div style={{ height: 40 }} />
       <div className={styles.block}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          {/*<FComponentsLib.FContentText text={'授权策略'} type={'highlight'} />*/}
           <FComponentsLib.FContentText text={FI18n.i18nNext.t('authplanmgnt_title')} type={'highlight'} />
           {
             resourceAuthPage.policies.length > 0 && (<FComponentsLib.FTextBtn
@@ -100,11 +97,7 @@ function Policy({ dispatch, resourceAuthPage, match }: PolicyProps) {
           text={'策略模板'}
           type={'highlight'}
         />
-        {/*<FComponentsLib.FContentText text={FI18n.i18nNext.t('authplanmgnt_title_templates')} type={'highlight'}/>*/}
         <div style={{ height: 5 }} />
-        {/*<FComponentsLib.FContentText*/}
-        {/*  text={'点击下方推荐的策略模板，可以快速添加策略'}*/}
-        {/*  type={'additional2'} />*/}
         <FComponentsLib.FContentText text={FI18n.i18nNext.t('authplanmgnt_title_templates_help')} type={'additional2'} />
         <div style={{ height: 20 }} />
         <PolicyTemplates

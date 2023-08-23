@@ -79,13 +79,13 @@ export interface UpdatePoliciesAction {
   };
 }
 
-export interface FetchResourceInfoAction extends AnyAction {
-  type: 'resourceAuthPage/fetchResourceInfo' | 'fetchResourceInfo',
-}
-
 export interface ChangeAction extends AnyAction {
   type: 'change' | 'resourceAuthPage/change',
   payload: Partial<ResourceAuthPageModelState>;
+}
+
+export interface FetchResourceInfoAction extends AnyAction {
+  type: 'resourceAuthPage/fetchResourceInfo' | 'fetchResourceInfo',
 }
 
 export interface FetchAuthorizedAction extends AnyAction {
