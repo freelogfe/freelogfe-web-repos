@@ -243,7 +243,7 @@ function Sider({ resourceSider, dispatch }: SilderProps) {
         </FLink>
         <FLink
           className={[
-            // resourceSider.showPage === 'info' ? styles.activatedRadio : '',
+            resourceSider.showPage === 'policy' ? styles.activatedRadio : '',
             styles.radio,
           ].join(' ')}
           to={FUtil.LinkTo.resourcePolicy({
