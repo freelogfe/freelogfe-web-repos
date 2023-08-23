@@ -27,16 +27,12 @@ import {
   OnUpdate_Data_Action,
 } from '@/models/resourceSider';
 
-interface SilderProps
-  extends RouteComponentProps<{
-    id: string;
-    version: string;
-  }> {
+interface SilderProps {
   dispatch: Dispatch;
   resourceSider: ResourceSiderModelState;
 }
 
-function Sider({ resourceSider, match, dispatch }: SilderProps) {
+function Sider({ resourceSider, dispatch }: SilderProps) {
   // console.log(match, 'matchiosdjflkjsdlkfjlkj');
   const [$resourceAuthShownArray, set$resourceAuthShownArray] =
     AHooks.useLocalStorageState<{ [k: string]: string }>(
@@ -47,9 +43,7 @@ function Sider({ resourceSider, match, dispatch }: SilderProps) {
     );
 
   const [inactiveDialogShow, setInactiveDialogShow] = React.useState(false);
-  const [resultPopupType, setResultPopupType] = React.useState<null | 0 | 1>(
-    null,
-  );
+  const [resultPopupType, setResultPopupType] = React.useState<null | 0 | 1>(null);
   const [loading, setLoading] = React.useState(false);
   const [noLonger, setNoLonger] = React.useState(false);
 
@@ -107,7 +101,8 @@ function Sider({ resourceSider, match, dispatch }: SilderProps) {
   async function changeStatus(value: boolean) {
     if (value) {
       setLoading(true);
-      const onlineSuccess = await resourceOnline(match.params.id);
+      // const onlineSuccess = await resourceOnline(match.params.id);
+      const onlineSuccess = await resourceOnline(resourceSider.resourceID);
       if (onlineSuccess) {
         // setActiveDialogShow(true);
         setResultPopupType(1);
@@ -156,7 +151,7 @@ function Sider({ resourceSider, match, dispatch }: SilderProps) {
     setResultPopupType(data.status);
 
     const { ret, errCode, msg } = await FServiceAPI.Resource.update({
-      resourceId: match.params.id,
+      resourceId: resourceSider.resourceID,
       status: data.status,
     });
 
@@ -230,7 +225,7 @@ function Sider({ resourceSider, match, dispatch }: SilderProps) {
             styles.radio,
           ].join(' ')}
           to={FUtil.LinkTo.resourceVersionInfo({
-            resourceID: match.params.id,
+            resourceID: resourceSider.resourceID,
           })}
         >
           版本列表
@@ -241,7 +236,7 @@ function Sider({ resourceSider, match, dispatch }: SilderProps) {
             styles.radio,
           ].join(' ')}
           to={FUtil.LinkTo.resourceInfo({
-            resourceID: match.params.id,
+            resourceID: resourceSider.resourceID,
           })}
         >
           {FI18n.i18nNext.t('resource_information')}
@@ -252,7 +247,7 @@ function Sider({ resourceSider, match, dispatch }: SilderProps) {
             styles.radio,
           ].join(' ')}
           to={FUtil.LinkTo.resourcePolicy({
-            resourceID: match.params.id,
+            resourceID: resourceSider.resourceID,
           })}
         >
           授权策略
@@ -263,7 +258,7 @@ function Sider({ resourceSider, match, dispatch }: SilderProps) {
             styles.radio,
           ].join(' ')}
           to={FUtil.LinkTo.resourceContract({
-            resourceID: match.params.id,
+            resourceID: resourceSider.resourceID,
           })}
         >
           <Space size={10}>
@@ -275,7 +270,7 @@ function Sider({ resourceSider, match, dispatch }: SilderProps) {
             )}
           </Space>
           {resourceSider.policies.length === 0 &&
-          !$resourceAuthShownArray[match.params.id] && (
+          !$resourceAuthShownArray[resourceSider.resourceID] && (
             <div className={styles.redDot} />
           )}
         </FLink>
@@ -285,7 +280,7 @@ function Sider({ resourceSider, match, dispatch }: SilderProps) {
             styles.radio,
           ].join(' ')}
           to={FUtil.LinkTo.resourceDependency({
-            resourceID: match.params.id,
+            resourceID: resourceSider.resourceID,
           })}
         >
           依赖授权管理

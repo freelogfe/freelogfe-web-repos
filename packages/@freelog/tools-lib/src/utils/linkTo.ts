@@ -145,7 +145,7 @@ interface ResourceVersionInfoParamsType {
 }
 
 export function resourceVersionInfo({resourceID}: ResourceVersionInfoParamsType): TReturnType {
-  return `/resource/versionInfo/${resourceID}`;
+  return `/resource/sidebar/versionInfo/${resourceID}`;
 }
 
 // 节点创建
