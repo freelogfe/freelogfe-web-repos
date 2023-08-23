@@ -53,13 +53,8 @@ function Step4({ dispatch, resourceCreatorPage }: Step4Props) {
     <div style={{ height: 5 }} />
 
     <div className={styles.block}>
-      {/*<FComponentsLib.FContentText text={'资源封面'} type={'highlight'} />*/}
       <FComponentsLib.FContentText text={FI18n.i18nNext.t('rqr_input_resouce_image')} type={'highlight'} />
       <div style={{ height: 5 }} />
-      {/*<FComponentsLib.FContentText*/}
-      {/*  text={'只支持JPG/PNG/GIF，GIF文件不能动画化，大小不超过5M，建议尺寸为800X600；未上传封面时，默认使用系统封面。'}*/}
-      {/*  type={'additional2'}*/}
-      {/*/>*/}
       <FComponentsLib.FContentText
         text={FI18n.i18nNext.t('rqr_input_resouce_image_help')}
         type={'additional2'}
