@@ -16,8 +16,8 @@ export type ResourceSiderModelState = {
   resourceType: string[];
   resourceVersions: string[];
 
-  showPage: '' | 'info' | 'auth' | 'versionCreator' | 'versionInfo';
-  showVersionPage: string;
+  showPage: '' | 'info' | 'policy'| 'contract' | 'dependency' | 'versionCreator' | 'versionInfo';
+  // showVersionPage: string;
 
   hasAuthProblem: boolean;
   policies: PolicyFullInfo_Type[];
@@ -43,8 +43,8 @@ export interface OnUnmount_Page_Action extends AnyAction {
 export interface OnChange_Page_Action extends AnyAction {
   type: 'resourceSider/onChange_Page';
   payload: {
-    page: 'info' | 'auth' | 'versionCreator' | 'versionInfo';
-    version?: string;
+    page: ResourceSiderModelState['showPage'];
+    // version?: string;
   };
 }
 
@@ -97,7 +97,7 @@ const initStates: ResourceSiderModelState = {
   resourceVersions: [],
 
   showPage: '',
-  showVersionPage: '',
+  // showVersionPage: '',
 
   hasAuthProblem: false,
   policies: [],
@@ -144,7 +144,7 @@ const Model: ResourceSiderModelType = {
         type: 'change',
         payload: {
           showPage: payload.page,
-          showVersionPage: payload.version,
+          // showVersionPage: payload.version,
         },
       });
     },

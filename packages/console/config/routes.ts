@@ -59,10 +59,10 @@ export default [
           { exact: true, path: 'details/:id', component: '../pages/resource/details/$id', title: '市场资源 - Freelog' },
           { exact: true, path: 'info/:id', component: '../pages/resource/info/$id', title: '资源信息 - Freelog' },
           { exact: true, path: 'policy/:id', component: '../pages/resource/policy/$id', title: '授权策略 - Freelog' },
-          { exact: true, path: 'contract/:id', component: '../pages/resource/contract/$id', title: '授权策略 - Freelog' },
-          { exact: true, path: 'dependency/:id', component: '../pages/resource/dependency/$id', title: '授权策略 - Freelog' },
-          { exact: true, path: 'versionInfo/:id', component: '../pages/resource/versionInfo/$id', title: '授权策略 - Freelog' },
-          { exact: true, path: 'versionCreator/:id', component: '../pages/resource/versionCreator/$id', title: '授权策略 - Freelog' },
+          { exact: true, path: 'contract/:id', component: '../pages/resource/contract/$id', title: '授权合约 - Freelog' },
+          { exact: true, path: 'dependency/:id', component: '../pages/resource/dependency/$id', title: '被授权管理 - Freelog' },
+          { exact: true, path: 'versionInfo/:id', component: '../pages/resource/versionInfo/$id', title: '资源版本 - Freelog' },
+          { exact: true, path: 'versionCreator/:id', component: '../pages/resource/versionCreator/$id', title: '版本创建 - Freelog' },
           {
             path: 'version',
             routes: [

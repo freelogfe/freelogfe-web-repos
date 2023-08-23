@@ -93,14 +93,14 @@ function Sider({ resourceSider, match, dispatch }: SilderProps) {
     });
   }, [match]);
 
-  function gotoCreator() {
-    // router.push(`/resource/${match.params.id}/$version/creator`);
-    history.push(
-      FUtil.LinkTo.resourceCreateVersion({
-        resourceID: match.params.id,
-      }),
-    );
-  }
+  // function gotoCreator() {
+  //   // router.push(`/resource/${match.params.id}/$version/creator`);
+  //   history.push(
+  //     FUtil.LinkTo.resourceVersionCreator({
+  //       resourceID: match.params.id,
+  //     }),
+  //   );
+  // }
 
   /** 上下架 */
   async function changeStatus(value: boolean) {
@@ -225,10 +225,10 @@ function Sider({ resourceSider, match, dispatch }: SilderProps) {
       <div className={styles.radios}>
         <FLink
           className={[
-            // resourceSider.showPage === 'info' ? styles.activatedRadio : '',
+            resourceSider.showPage === 'versionInfo' ? styles.activatedRadio : '',
             styles.radio,
           ].join(' ')}
-          to={FUtil.LinkTo.resourceInfo({
+          to={FUtil.LinkTo.resourceVersionInfo({
             resourceID: match.params.id,
           })}
         >
@@ -250,7 +250,7 @@ function Sider({ resourceSider, match, dispatch }: SilderProps) {
             // resourceSider.showPage === 'info' ? styles.activatedRadio : '',
             styles.radio,
           ].join(' ')}
-          to={FUtil.LinkTo.resourceInfo({
+          to={FUtil.LinkTo.resourcePolicy({
             resourceID: match.params.id,
           })}
         >
@@ -258,10 +258,10 @@ function Sider({ resourceSider, match, dispatch }: SilderProps) {
         </FLink>
         <FLink
           className={[
-            resourceSider.showPage === 'auth' ? styles.activatedRadio : '',
+            resourceSider.showPage === 'contract' ? styles.activatedRadio : '',
             styles.radio,
           ].join(' ')}
-          to={FUtil.LinkTo.resourceAuth({
+          to={FUtil.LinkTo.resourceContract({
             resourceID: match.params.id,
           })}
         >
@@ -280,10 +280,10 @@ function Sider({ resourceSider, match, dispatch }: SilderProps) {
         </FLink>
         <FLink
           className={[
-            resourceSider.showPage === 'info' ? styles.activatedRadio : '',
+            resourceSider.showPage === 'dependency' ? styles.activatedRadio : '',
             styles.radio,
           ].join(' ')}
-          to={FUtil.LinkTo.resourceInfo({
+          to={FUtil.LinkTo.resourceDependency({
             resourceID: match.params.id,
           })}
         >

@@ -103,32 +103,49 @@ export function resourceInfo({resourceID}: ResourceInfoParamsType): TReturnType 
   return `/resource/info/${resourceID}`;
 }
 
-// 资源授权
-interface ResourceAuthParamsType {
+// 资源授权策略
+interface ResourcePolicyParamsType {
   resourceID: string;
 }
 
-export function resourceAuth({resourceID}: ResourceAuthParamsType): TReturnType {
-  return `/resource/auth/${resourceID}`;
+export function resourcePolicy({resourceID}: ResourcePolicyParamsType): TReturnType {
+  return `/resource/policy/${resourceID}`;
 }
 
-// 资源创建版本
-interface ResourceCreateVersionParamsType {
+// 资源授权合约
+interface ResourceContractParamsType {
   resourceID: string;
 }
 
-export function resourceCreateVersion({resourceID}: ResourceCreateVersionParamsType): TReturnType {
-  return `/resource/version/creator/${resourceID}`;
+export function resourceContract({resourceID}: ResourceContractParamsType): TReturnType {
+  return `/resource/contract/${resourceID}`;
+}
+
+// 资源被授权管理
+interface ResourceDependencyParamsType {
+  resourceID: string;
+}
+
+export function resourceDependency({resourceID}: ResourceDependencyParamsType): TReturnType {
+  return `/resource/dependency/${resourceID}`;
+}
+
+// 资源版本创建
+interface ResourceVersionCreatorParamsType {
+  resourceID: string;
+}
+
+export function resourceVersionCreator({resourceID}: ResourceVersionCreatorParamsType): TReturnType {
+  return `/resource/versionCreator/${resourceID}`;
 }
 
 // 资源版本信息
-interface ResourceVersionParamsType {
+interface ResourceVersionInfoParamsType {
   resourceID: string;
-  version: string;
 }
 
-export function resourceVersion({resourceID, version}: ResourceVersionParamsType): TReturnType {
-  return `/resource/version/info/${resourceID}/${version}`;
+export function resourceVersionInfo({resourceID}: ResourceVersionInfoParamsType): TReturnType {
+  return `/resource/versionInfo/${resourceID}`;
 }
 
 // 节点创建
