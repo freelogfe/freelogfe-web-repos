@@ -254,15 +254,26 @@ function Sider({ resourceSider, dispatch }: SilderProps) {
         </FLink>
         <FLink
           className={[
-            resourceSider.showPage === 'contract' ? styles.activatedRadio : '',
+            resourceSider.showPage === 'dependency' ? styles.activatedRadio : '',
             styles.radio,
           ].join(' ')}
           to={FUtil.LinkTo.resourceContract({
             resourceID: resourceSider.resourceID,
           })}
         >
+          授权合约
+        </FLink>
+        <FLink
+          className={[
+            resourceSider.showPage === 'contract' ? styles.activatedRadio : '',
+            styles.radio,
+          ].join(' ')}
+          to={FUtil.LinkTo.resourceDependency({
+            resourceID: resourceSider.resourceID,
+          })}
+        >
           <Space size={10}>
-            <span>授权合约</span>
+            <span>依赖授权管理</span>
             {resourceSider.hasAuthProblem && (
               <FTooltip title={'存在授权问题'}>
                 <FComponentsLib.FIcons.FWarning style={{ fontSize: 16 }} />
@@ -274,17 +285,7 @@ function Sider({ resourceSider, dispatch }: SilderProps) {
             <div className={styles.redDot} />
           )}
         </FLink>
-        <FLink
-          className={[
-            resourceSider.showPage === 'dependency' ? styles.activatedRadio : '',
-            styles.radio,
-          ].join(' ')}
-          to={FUtil.LinkTo.resourceDependency({
-            resourceID: resourceSider.resourceID,
-          })}
-        >
-          依赖授权管理
-        </FLink>
+
         {/* <div className={styles.versionControl}>
           <div className={styles.versionControlTitle}>
             <div style={{ cursor: 'default' }}>

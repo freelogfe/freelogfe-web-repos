@@ -38,9 +38,7 @@ interface AuthProps extends RouteComponentProps<{ id: string }> {
   // resourceInfo: ResourceInfoModelState,
 }
 
-function Auth({ dispatch, resourceAuthPage,
-                // resourceInfo,
-                match }: AuthProps) {
+function Auth({ dispatch, resourceAuthPage, match }: AuthProps) {
 
   AHooks.useMount(async () => {
     await dispatch<ChangeAction>({
