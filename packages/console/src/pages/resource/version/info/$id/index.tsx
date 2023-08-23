@@ -36,7 +36,6 @@ interface VersionEditorProps extends RouteComponentProps<{
 }> {
   dispatch: Dispatch;
   resourceVersionEditorPage: ResourceVersionEditorPageModelState;
-  // resourceInfo: ResourceInfoModelState,
 }
 
 function VersionEditor({ dispatch, resourceVersionEditorPage, match }: VersionEditorProps) {
@@ -478,9 +477,7 @@ function VersionEditor({ dispatch, resourceVersionEditorPage, match }: VersionEd
 }
 
 export default withRouter(connect(({ resourceVersionEditorPage }: ConnectState) => ({
-  // $version: resourceVersionEditorPage,
   resourceVersionEditorPage: resourceVersionEditorPage,
-  // resourceInfo: resourceInfo,
 }))(VersionEditor));
 
 interface HeaderProps {
