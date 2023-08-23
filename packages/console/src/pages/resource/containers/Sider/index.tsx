@@ -68,31 +68,31 @@ function Sider({ resourceSider, match, dispatch }: SilderProps) {
     });
   });
 
-  React.useEffect(() => {
-    let page: '' | 'info' | 'auth' | 'versionCreator' | 'versionInfo' = '';
-
-    if (match.path === '/resource/info/:id') {
-      page = 'info';
-    } else if (match.path === '/resource/auth/:id') {
-      page = 'auth';
-      set$resourceAuthShownArray({
-        ...$resourceAuthShownArray,
-        [match.params.id]: match.params.id,
-      });
-    } else if (match.path === '/resource/version/creator/:id') {
-      page = 'versionCreator';
-    } else if (match.path === '/resource/version/info/:id/:version') {
-      page = 'versionInfo';
-    }
-
-    dispatch<OnChange_Page_Action>({
-      type: 'resourceSider/onChange_Page',
-      payload: {
-        page: page as 'info',
-        // version: match.params.version || '',
-      },
-    });
-  }, [match]);
+  // React.useEffect(() => {
+  //   let page: '' | 'info' | 'auth' | 'versionCreator' | 'versionInfo' = '';
+  //
+  //   if (match.path === '/resource/info/:id') {
+  //     page = 'info';
+  //   } else if (match.path === '/resource/auth/:id') {
+  //     page = 'auth';
+  //     set$resourceAuthShownArray({
+  //       ...$resourceAuthShownArray,
+  //       [match.params.id]: match.params.id,
+  //     });
+  //   } else if (match.path === '/resource/version/creator/:id') {
+  //     page = 'versionCreator';
+  //   } else if (match.path === '/resource/version/info/:id/:version') {
+  //     page = 'versionInfo';
+  //   }
+  //
+  //   dispatch<OnChange_Page_Action>({
+  //     type: 'resourceSider/onChange_Page',
+  //     payload: {
+  //       page: page as 'info',
+  //       // version: match.params.version || '',
+  //     },
+  //   });
+  // }, [match]);
 
   // function gotoCreator() {
   //   // router.push(`/resource/${match.params.id}/$version/creator`);
