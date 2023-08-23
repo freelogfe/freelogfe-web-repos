@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import { OnMount_Page_Action as OnMount_Sidebar_Action } from '@/models/resourceSider';
+import { OnChange_Page_Action, OnMount_Page_Action as OnMount_Sidebar_Action } from '@/models/resourceSider';
 import * as AHooks from 'ahooks';
 import { withRouter } from 'umi';
 import { connect } from 'dva';
@@ -29,10 +29,16 @@ function Contract({ dispatch, resourceAuthPage, match }: ContractProps) {
         resourceID: match.params.id,
       },
     });
-
-    dispatch<FetchAuthorizeAction>({
-      type: 'resourceAuthPage/fetchAuthorize',
+    dispatch<OnChange_Page_Action>({
+      type: 'resourceSider/onChange_Page',
+      payload: {
+        page: 'contract',
+      },
     });
+
+    // dispatch<FetchAuthorizeAction>({
+    //   type: 'resourceAuthPage/fetchAuthorize',
+    // });
 
   });
 

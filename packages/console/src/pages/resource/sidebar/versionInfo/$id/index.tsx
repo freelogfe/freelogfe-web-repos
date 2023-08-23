@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import { OnMount_Page_Action as OnMount_Sidebar_Action } from '@/models/resourceSider';
+import { OnChange_Page_Action, OnMount_Page_Action as OnMount_Sidebar_Action } from '@/models/resourceSider';
 import { withRouter } from 'umi';
 import { connect } from 'dva';
 import { ConnectState, ResourceVersionEditorPageModelState } from '@/models/connect';
@@ -23,6 +23,12 @@ function VersionInfo({dispatch, resourceVersionEditorPage, match}: VersionInfoPr
       type: 'resourceSider/onMount_Page',
       payload: {
         resourceID: match.params.id,
+      },
+    });
+    dispatch<OnChange_Page_Action>({
+      type: 'resourceSider/onChange_Page',
+      payload: {
+        page: 'versionInfo',
       },
     });
   });

@@ -16,7 +16,7 @@ export type ResourceSiderModelState = {
   resourceType: string[];
   resourceVersions: string[];
 
-  showPage: '' | 'info' | 'policy' | 'contract' | 'dependency' | 'versionCreator' | 'versionInfo';
+  showPage: '' | 'info' | 'policy' | 'contract' | 'dependency' | 'versionInfo';
   // showVersionPage: string;
 
   hasAuthProblem: boolean;

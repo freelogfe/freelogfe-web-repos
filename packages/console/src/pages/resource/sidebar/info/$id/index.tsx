@@ -16,7 +16,7 @@ import {
   OnChange_Cover_Action,
   OnChange_IntroductionEditor_Action,
 } from '@/models/resourceInfoPage';
-import { OnMount_Page_Action as OnMount_Sidebar_Action } from '@/models/resourceSider';
+import { OnChange_Page_Action, OnMount_Page_Action as OnMount_Sidebar_Action } from '@/models/resourceSider';
 import FFormLayout from '@/components/FFormLayout';
 import { RouteComponentProps } from 'react-router';
 import { Helmet } from 'react-helmet';
@@ -27,10 +27,10 @@ import * as AHooks from 'ahooks';
 import FResourceLabelEditor from '@/components/FResourceLabelEditor';
 import {
   OnChange_step4_resourceCover_Action,
-  OnChange_step4_resourceLabels_Action,
+  // OnChange_step4_resourceLabels_Action,
 } from '@/models/resourceCreatorPage';
 import fMessage from '@/components/fMessage';
-import FCoverImage from '@/components/FCoverImage';
+// import FCoverImage from '@/components/FCoverImage';
 import FUploadCover from '@/components/FUploadCover';
 
 interface InfoProps extends RouteComponentProps<{ id: string; }> {
@@ -45,6 +45,12 @@ function Info({ dispatch, resourceInfoPage, match }: InfoProps) {
       type: 'resourceSider/onMount_Page',
       payload: {
         resourceID: match.params.id,
+      },
+    });
+    dispatch<OnChange_Page_Action>({
+      type: 'resourceSider/onChange_Page',
+      payload: {
+        page: 'info',
       },
     });
     dispatch<OnMount_Page_Action>({

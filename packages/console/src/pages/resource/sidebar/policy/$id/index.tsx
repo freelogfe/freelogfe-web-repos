@@ -3,7 +3,7 @@ import styles from './index.less';
 import { RouteComponentProps } from 'react-router/index';
 import { Dispatch } from 'redux';
 import { ResourceAuthPageModelState } from '@/models/resourceAuthPage';
-import { OnMount_Page_Action as OnMount_Sidebar_Action } from '@/models/resourceSider';
+import { OnChange_Page_Action, OnMount_Page_Action as OnMount_Sidebar_Action } from '@/models/resourceSider';
 import * as AHooks from 'ahooks';
 import { withRouter } from 'umi';
 import { connect } from 'dva';
@@ -24,6 +24,12 @@ function Policy({ dispatch, resourceAuthPage, match }: PolicyProps) {
       type: 'resourceSider/onMount_Page',
       payload: {
         resourceID: match.params.id,
+      },
+    });
+    dispatch<OnChange_Page_Action>({
+      type: 'resourceSider/onChange_Page',
+      payload: {
+        page: 'policy',
       },
     });
   });

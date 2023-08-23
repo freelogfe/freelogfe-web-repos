@@ -254,7 +254,7 @@ function Sider({ resourceSider, dispatch }: SilderProps) {
         </FLink>
         <FLink
           className={[
-            resourceSider.showPage === 'dependency' ? styles.activatedRadio : '',
+            resourceSider.showPage === 'contract' ? styles.activatedRadio : '',
             styles.radio,
           ].join(' ')}
           to={FUtil.LinkTo.resourceContract({
@@ -265,7 +265,7 @@ function Sider({ resourceSider, dispatch }: SilderProps) {
         </FLink>
         <FLink
           className={[
-            resourceSider.showPage === 'contract' ? styles.activatedRadio : '',
+            resourceSider.showPage === 'dependency' ? styles.activatedRadio : '',
             styles.radio,
           ].join(' ')}
           to={FUtil.LinkTo.resourceDependency({

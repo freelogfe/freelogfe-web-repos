@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import { OnMount_Page_Action as OnMount_Sidebar_Action } from '@/models/resourceSider';
+import { OnChange_Page_Action, OnMount_Page_Action as OnMount_Sidebar_Action } from '@/models/resourceSider';
 import { RouteComponentProps } from 'react-router/index';
 import { Dispatch } from 'redux';
 import { ResourceAuthPageModelState } from '@/models/resourceAuthPage';
@@ -21,6 +21,12 @@ function Dependency({dispatch, resourceAuthPage, match}: DependencyProps) {
       type: 'resourceSider/onMount_Page',
       payload: {
         resourceID: match.params.id,
+      },
+    });
+    dispatch<OnChange_Page_Action>({
+      type: 'resourceSider/onChange_Page',
+      payload: {
+        page: 'dependency',
       },
     });
   });
