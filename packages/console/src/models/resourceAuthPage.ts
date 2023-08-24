@@ -2,7 +2,7 @@ import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription, SubscriptionAPI } from 'dva';
 import { DvaReducer } from './shared';
 import moment from 'moment';
-import { ConnectState } from '@/models/connect';
+import { ConnectState, NodeManagerModelState } from '@/models/connect';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
 import fMessage from '@/components/fMessage';
@@ -84,6 +84,50 @@ export interface ChangeAction extends AnyAction {
   payload: Partial<ResourceAuthPageModelState>;
 }
 
+export interface OnMount_Page_Action extends AnyAction {
+  type: 'resourceAuthPage/onMount_Page';
+  payload: {
+    resourceID: string;
+  };
+}
+
+export interface OnUnmount_Page_Action extends AnyAction {
+  type: 'resourceAuthPage/onUnmount_Page';
+}
+
+export interface OnMount_PolicyPage_Action extends AnyAction {
+  type: 'resourceAuthPage/onMount_PolicyPage';
+  payload: {
+    resourceID: string;
+  };
+}
+
+export interface OnUnmount_PolicyPage_Action extends AnyAction {
+  type: 'resourceAuthPage/onUnmount_PolicyPage';
+}
+
+export interface OnMount_ContractPage_Action extends AnyAction {
+  type: 'resourceAuthPage/onMount_ContractPage';
+  payload: {
+    resourceID: string;
+  };
+}
+
+export interface OnUnmount_ContractPage_Action extends AnyAction {
+  type: 'resourceAuthPage/onUnmount_ContractPage';
+}
+
+export interface OnMount_DependencyPage_Action extends AnyAction {
+  type: 'resourceAuthPage/onMount_DependencyPage';
+  payload: {
+    resourceID: string;
+  };
+}
+
+export interface OnUnmount_DependencyPage_Action extends AnyAction {
+  type: 'resourceAuthPage/onUnmount_DependencyPage';
+}
+
 export interface FetchResourceInfoAction extends AnyAction {
   type: 'resourceAuthPage/fetchResourceInfo' | 'fetchResourceInfo',
 }
@@ -96,7 +140,7 @@ export interface FetchAuthorizedAction extends AnyAction {
 }
 
 export interface FetchAuthorizeAction extends AnyAction {
-  type: 'resourceAuthPage/fetchAuthorize',
+  type: 'resourceAuthPage/fetchAuthorize' | 'fetchAuthorize',
 }
 
 export interface UpdateAuthorizedAction extends AnyAction {
@@ -120,6 +164,15 @@ interface ResourceAuthPageModelType {
   namespace: 'resourceAuthPage';
   state: ResourceAuthPageModelState;
   effects: {
+    onMount_Page: (action: OnMount_Page_Action, effects: EffectsCommandMap) => void;
+    onUnmount_Page: (action: OnUnmount_Page_Action, effects: EffectsCommandMap) => void;
+    onMount_PolicyPage: (action: OnMount_PolicyPage_Action, effects: EffectsCommandMap) => void;
+    onUnmount_PolicyPage: (action: OnUnmount_PolicyPage_Action, effects: EffectsCommandMap) => void;
+    onMount_ContractPage: (action: OnMount_ContractPage_Action, effects: EffectsCommandMap) => void;
+    onUnmount_ContractPage: (action: OnUnmount_ContractPage_Action, effects: EffectsCommandMap) => void;
+    onMount_DependencyPage: (action: OnMount_DependencyPage_Action, effects: EffectsCommandMap) => void;
+    onUnmount_DependencyPage: (action: OnUnmount_DependencyPage_Action, effects: EffectsCommandMap) => void;
+
     updatePolicies: (action: UpdatePoliciesAction, effects: EffectsCommandMap) => void;
     fetchResourceInfo: (action: FetchResourceInfoAction, effects: EffectsCommandMap) => void;
     fetchAuthorized: (action: FetchAuthorizedAction, effects: EffectsCommandMap) => void;
@@ -163,6 +216,54 @@ const Model: ResourceAuthPageModelType = {
     status: 0,
   },
   effects: {
+    * onMount_Page(action: OnMount_Page_Action, effects: EffectsCommandMap) {
+    },
+    * onUnmount_Page(action: OnUnmount_Page_Action, effects: EffectsCommandMap) {
+    },
+    * onMount_PolicyPage({ payload }: OnMount_PolicyPage_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          resourceID: payload.resourceID,
+        },
+      });
+
+      yield put<FetchResourceInfoAction>({
+        type: 'fetchResourceInfo',
+      });
+    },
+    * onUnmount_PolicyPage(action: OnUnmount_PolicyPage_Action, effects: EffectsCommandMap) {
+    },
+    * onMount_ContractPage({ payload }: OnMount_ContractPage_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          resourceID: payload.resourceID,
+        },
+      });
+
+      yield put<FetchAuthorizeAction>({
+        type: 'fetchAuthorize',
+      });
+    },
+    * onUnmount_ContractPage({}: OnUnmount_ContractPage_Action, {}: EffectsCommandMap) {
+    },
+    * onMount_DependencyPage({ payload }: OnMount_DependencyPage_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          resourceID: payload.resourceID,
+        },
+      });
+
+      yield put<FetchAuthorizedAction>({
+        type: 'fetchAuthorized',
+        payload: {},
+      });
+    },
+    * onUnmount_DependencyPage(action: OnUnmount_DependencyPage_Action, effects: EffectsCommandMap) {
+    },
+
     * fetchResourceInfo({}: FetchResourceInfoAction, { select, call, put }: EffectsCommandMap) {
       const { resourceAuthPage }: ConnectState = yield select(({ resourceAuthPage }: ConnectState) => ({
         resourceAuthPage,
