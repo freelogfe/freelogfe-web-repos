@@ -1212,7 +1212,10 @@ const Model: ResourceCreatorPageModelType = {
         fMessage(msg, 'error');
         return;
       }
-      history.push(FUtil.LinkTo.myResources());
+      history.push(FUtil.LinkTo.resourceVersionInfo({
+        resourceID: resourceCreatorPage.step1_createdResourceInfo?.resourceID || '',
+        version: '1.0.0',
+      }));
     },
   },
 
