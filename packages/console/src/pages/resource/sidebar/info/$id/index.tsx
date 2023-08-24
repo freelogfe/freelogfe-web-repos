@@ -81,6 +81,7 @@ function Info({ dispatch, resourceInfoPage, match }: InfoProps) {
     {/*>*/}
     {
       resourceInfoPage.pageState === 'loading' && (<div>
+        <div style={{ height: 40 }} />
         <FSkeletonNode width={120} height={22} />
         <div style={{ height: 20 }} />
         <FSkeletonNode width={340} height={38} />
