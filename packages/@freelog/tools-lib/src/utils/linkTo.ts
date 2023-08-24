@@ -142,10 +142,11 @@ export function resourceVersionCreator({resourceID}: ResourceVersionCreatorParam
 // 资源版本信息
 interface ResourceVersionInfoParamsType {
   resourceID: string;
+  version?: string;
 }
 
-export function resourceVersionInfo({resourceID}: ResourceVersionInfoParamsType): TReturnType {
-  return `/resource/sidebar/versionInfo/${resourceID}`;
+export function resourceVersionInfo({resourceID, version = ''}: ResourceVersionInfoParamsType): TReturnType {
+  return `/resource/sidebar/versionInfo/${resourceID}${handleQuery({version})}`;
 }
 
 // 节点创建
