@@ -28,6 +28,8 @@ import FPolicyList from '@/components/FPolicyList';
 import FBraftEditor from '@/components/FBraftEditor';
 import BraftEditor, { EditorState } from 'braft-editor';
 import FDivider from '@/components/FDivider';
+import FMenu from '@/components/FMenu';
+import { OnChangeStatusAction } from '@/models/resourceListPage';
 
 
 interface VersionInfoProps extends RouteComponentProps<{
@@ -99,6 +101,7 @@ function VersionInfo({ dispatch, resourceVersionEditorPage, match }: VersionInfo
     <div>
       <div style={{ height: 40 }} />
       <Header
+        versions={resourceVersionEditorPage.versions}
         version={resourceVersionEditorPage.version}
         signingDate={resourceVersionEditorPage.resourceVersionInfo?.createData || ''}
         resourceID={resourceVersionEditorPage.resourceVersionInfo?.sha1 || ''}
@@ -112,6 +115,10 @@ function VersionInfo({ dispatch, resourceVersionEditorPage, match }: VersionInfo
 
           self.location.href = FUtil.Format.completeUrlByDomain('qi')
             + `/v2/resources/${resourceVersionEditorPage.resourceID}/versions/${resourceVersionEditorPage.version}/download?fileSuffix=${extension}`;
+        }}
+        onChangeVersion={(version) => {
+          // console.log(version, 'version 9ewiofjksdfjlsdkjflkdsjflkjl');
+          set$urlState({ version: version });
         }}
       />
 
@@ -389,28 +396,60 @@ export default withRouter(connect(({ resourceVersionEditorPage }: ConnectState) 
 }))(VersionInfo));
 
 interface HeaderProps {
+  versions: string[];
   version: string;
   resourceID: string;
   signingDate: string;
   isCartoon: boolean;
 
   onClickDownload?(type?: string): void;
+
+  onChangeVersion?(version: string): void;
 }
 
 function Header({
+                  versions,
                   version,
                   resourceID,
                   signingDate,
                   onClickDownload,
                   isCartoon,
+                  onChangeVersion,
                 }: HeaderProps) {
 
   return (
     <div className={styles.Header}>
-      <FComponentsLib.FTitleText
-        text={`当前版本 ${version}`}
-        type='h1'
-      />
+      <Space size={8}>
+        <FComponentsLib.FTitleText
+          text={`当前版本 ${version}`}
+          type='h1'
+        />
+
+        <FComponentsLib.FDropdown
+          overlay={
+            <FMenu
+              options={versions.map((v) => {
+                return {
+                  value: v,
+                  text: v,
+                };
+              })}
+              onClick={(value) => {
+                // onChangeResourceStatus && onChangeResourceStatus(value === '#' ? value : Number(value) as 0)
+                // dispatch<OnChangeStatusAction>({
+                //   type: 'resourceListPage/onChangeStatus',
+                //   payload: {
+                //     value: value === '#' ? value : Number(value) as 0,
+                //   },
+                // });
+                onChangeVersion && onChangeVersion(value);
+              }}
+            />
+          }
+        >
+          <FComponentsLib.FIcons.FDown style={{ fontSize: 12 }} />
+        </FComponentsLib.FDropdown>
+      </Space>
       <div style={{ height: 10 }} />
       <Space size={0}>
         <FComponentsLib.FContentText

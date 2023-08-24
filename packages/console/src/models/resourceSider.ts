@@ -113,7 +113,7 @@ const Model: ResourceSiderModelType = {
       const { resourceSider }: ConnectState = yield select(({ resourceSider }: ConnectState) => ({
         resourceSider,
       }));
-      console.log(payload, 'payloadiosdjlkfjlsdkjflkj lkjsdl;kfjlksdj');
+      // console.log(payload, 'payloadiosdjlkfjlsdkjflkj lkjsdl;kfjlksdj');
       if (payload.resourceID === resourceSider.resourceID) {
         return;
       }
@@ -166,9 +166,23 @@ const Model: ResourceSiderModelType = {
         isLoadPolicyInfo: 1,
         isTranslate: 1,
       };
-      console.log(params, 'params9iosdj;flkjlk lksdajf;lkjl');
-      const { data: data_resourceInfo } = yield call(FServiceAPI.Resource.info, params);
-      console.log(data_resourceInfo, 'data_resourceInfooisdjlfkdjlfkjsdlkj');
+      // console.log(params, 'params9iosdj;flkjlk lksdajf;lkjl');
+      const { data: data_resourceInfo }: {
+        data: {
+          userId: number;
+          status: number;
+          resourceId: string;
+          resourceName: string;
+          resourceVersions: {
+            version: string;
+          }[];
+          latestVersion: string;
+          coverImages: string[];
+          resourceType: string[];
+          policies: PolicyFullInfo_Type[];
+        };
+      } = yield call(FServiceAPI.Resource.info, params);
+      // console.log(data_resourceInfo, 'data_resourceInfooisdjlfkdjlfkjsdlkj');
 
       if (!data_resourceInfo || data_resourceInfo.userId !== FUtil.Tool.getUserIDByCookies()) {
         // history.replace(FUtil.LinkTo.exception403());
@@ -197,7 +211,7 @@ const Model: ResourceSiderModelType = {
           resourceState: data_resourceInfo.status === 0 ? 'unreleased' : data_resourceInfo.status === 4 ? 'offline' : 'online',
           resourceCover: data_resourceInfo.coverImages[0] || '',
           resourceType: data_resourceInfo.resourceType,
-          resourceVersions: data_resourceInfo.resourceVersions.map((v: any) => {
+          resourceVersions: data_resourceInfo.resourceVersions.map((v) => {
             return v.version;
           }),
           hasAuthProblem: authProblem,

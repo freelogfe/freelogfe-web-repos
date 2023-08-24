@@ -6,10 +6,12 @@ import { ConnectState } from '@/models/connect';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import { history } from 'umi';
 import fMessage from '@/components/fMessage';
+import { PolicyFullInfo_Type } from '@/type/contractTypes';
 
 export interface ResourceVersionEditorPageModelState {
   resourceID: string;
   version: string;
+  versions: string[];
   // signingDate: string;
 
   resourceInfo: {
@@ -97,6 +99,7 @@ const Model: ResourceVersionEditorModelType = {
   state: {
     resourceID: '',
     version: '',
+    versions: [],
     // signingDate: '',
     resourceInfo: null,
     resourceVersionInfo: null,
@@ -119,6 +122,28 @@ const Model: ResourceVersionEditorModelType = {
       const { resourceVersionEditorPage }: ConnectState = yield select(({ resourceVersionEditorPage }: ConnectState) => ({
         resourceVersionEditorPage,
       }));
+
+      const params1: Parameters<typeof FServiceAPI.Resource.info>[0] = {
+        resourceIdOrName: resourceVersionEditorPage.resourceID,
+        isLoadPolicyInfo: 1,
+        isTranslate: 1,
+      };
+      // console.log(params, 'params9iosdj;flkjlk lksdajf;lkjl');
+      const { data: data_resourceInfo }: {
+        data: {
+          userId: number;
+          status: number;
+          resourceId: string;
+          resourceName: string;
+          resourceVersions: {
+            version: string;
+          }[];
+          latestVersion: string;
+          coverImages: string[];
+          resourceType: string[];
+          policies: PolicyFullInfo_Type[];
+        };
+      } = yield call(FServiceAPI.Resource.info, params1);
       // console.log(resourceVersionEditorPage.resourceID, resourceVersionEditorPage.version, 'sdfsdfasefewrfw4eagtfrtef[09gijopredslkfj');
       const params: Parameters<typeof FServiceAPI.Resource.resourceVersionInfo1>[0] = {
         resourceId: resourceVersionEditorPage.resourceID,
@@ -165,6 +190,9 @@ const Model: ResourceVersionEditorModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
+          versions: data_resourceInfo.resourceVersions.map((v) => {
+            return v.version;
+          }).reverse(),
           resourceInfo: {
             resourceID: data_versionInfo.resourceId,
             resourceName: data_versionInfo.resourceName,
