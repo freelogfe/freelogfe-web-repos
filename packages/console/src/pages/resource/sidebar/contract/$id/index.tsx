@@ -8,12 +8,14 @@ import { ConnectState, ResourceAuthPageModelState } from '@/models/connect';
 import { RouteComponentProps } from 'react-router/index';
 import { Dispatch } from 'redux';
 import FComponentsLib from '@freelog/components-lib';
-// import { FI18n } from '../../../../../../../@freelog/tools-lib';
 import FTable from '@/components/FTable';
 import FContractDetailsDrawer from '@/components/FContractDetailsDrawer';
 import { ColumnsType } from 'antd/lib/table/interface';
 import { Space } from 'antd';
-import { ChangeAction, FetchAuthorizeAction, FetchResourceInfoAction } from '@/models/resourceAuthPage';
+import {
+  ChangeAction,
+  OnMount_ContractPage_Action,
+} from '@/models/resourceAuthPage';
 
 interface ContractProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -33,6 +35,12 @@ function Contract({ dispatch, resourceAuthPage, match }: ContractProps) {
       type: 'resourceSider/onChange_Page',
       payload: {
         page: 'contract',
+      },
+    });
+    dispatch<OnMount_ContractPage_Action>({
+      type: 'resourceAuthPage/onMount_ContractPage',
+      payload: {
+        resourceID: match.params.id,
       },
     });
 

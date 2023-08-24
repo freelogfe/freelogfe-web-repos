@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import { RouteComponentProps } from 'react-router/index';
 import { Dispatch } from 'redux';
-import { ResourceAuthPageModelState } from '@/models/resourceAuthPage';
+import { OnMount_PolicyPage_Action, ResourceAuthPageModelState } from '@/models/resourceAuthPage';
 import { OnChange_Page_Action, OnMount_Page_Action as OnMount_Sidebar_Action } from '@/models/resourceSider';
 import * as AHooks from 'ahooks';
 import { withRouter } from 'umi';
@@ -30,6 +30,12 @@ function Policy({ dispatch, resourceAuthPage, match }: PolicyProps) {
       type: 'resourceSider/onChange_Page',
       payload: {
         page: 'policy',
+      },
+    });
+    dispatch<OnMount_PolicyPage_Action>({
+      type: 'resourceAuthPage/onMount_PolicyPage',
+      payload: {
+        resourceID: match.params.id,
       },
     });
   });
@@ -104,7 +110,8 @@ function Policy({ dispatch, resourceAuthPage, match }: PolicyProps) {
           type={'highlight'}
         />
         <div style={{ height: 5 }} />
-        <FComponentsLib.FContentText text={FI18n.i18nNext.t('authplanmgnt_title_templates_help')} type={'additional2'} />
+        <FComponentsLib.FContentText text={FI18n.i18nNext.t('authplanmgnt_title_templates_help')}
+                                     type={'additional2'} />
         <div style={{ height: 20 }} />
         <PolicyTemplates
           onSelect={(value) => {
