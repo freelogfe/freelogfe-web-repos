@@ -32,7 +32,7 @@ function Success({ match, dispatch }: SuccessProps) {
     const c = countdown - 1;
     set_countdown(c);
     if (c === 0) {
-      history.replace(FUtil.LinkTo.resourceVersion({
+      history.replace(FUtil.LinkTo.resourceVersionInfo({
         resourceID: match.params.id,
         version: match.params.version,
       }));
@@ -155,7 +155,7 @@ function Success({ match, dispatch }: SuccessProps) {
           <FComponentsLib.FTextBtn
             onClick={() => {
               // gotoVersionInfo();
-              return history.replace(FUtil.LinkTo.resourceVersion({
+              return history.replace(FUtil.LinkTo.resourceVersionInfo({
                 resourceID: match.params.id,
                 version: match.params.version,
               }));
@@ -174,7 +174,7 @@ function Success({ match, dispatch }: SuccessProps) {
             // theme={'primary'}
             onClick={async () => {
               // gotoVersionInfo();
-              history.replace(FUtil.LinkTo.resourceVersion({
+              history.replace(FUtil.LinkTo.resourceVersionInfo({
                 resourceID: match.params.id,
                 version: match.params.version,
               }));

@@ -99,7 +99,7 @@ function StorageSpace({ resourceTypeCode, onSucceed }: StorageSpaceProps) {
                     resourceName: d.resourceName,
                     resourceType: d.resourceType,
                     resourceVersion: v.version,
-                    url: FUtil.LinkTo.resourceVersion({
+                    url: FUtil.LinkTo.resourceVersionInfo({
                       resourceID: d.resourceId,
                       version: v.version,
                     }),

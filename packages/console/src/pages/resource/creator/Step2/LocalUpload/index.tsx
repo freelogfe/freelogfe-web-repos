@@ -155,7 +155,7 @@ function LocalUpload({ resourceTypeCode, onSucceed }: LocalUploadProps) {
                       resourceName: d.resourceName,
                       resourceType: d.resourceType,
                       resourceVersion: v.version,
-                      url: FUtil.LinkTo.resourceVersion({
+                      url: FUtil.LinkTo.resourceVersionInfo({
                         resourceID: d.resourceId,
                         version: v.version,
                       }),

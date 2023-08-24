@@ -195,7 +195,7 @@ function FPublishObjectFile($prop: FPublishObjectFileProps) {
                 resourceName: d.resourceName,
                 resourceType: d.resourceType,
                 resourceVersion: v.version,
-                url: FUtil.LinkTo.resourceVersion({
+                url: FUtil.LinkTo.resourceVersionInfo({
                   resourceID: d.resourceId,
                   version: v.version,
                 }),
@@ -298,7 +298,7 @@ function FPublishObjectFile($prop: FPublishObjectFileProps) {
               resourceName: d.resourceName,
               resourceType: d.resourceType,
               resourceVersion: v.version,
-              url: FUtil.LinkTo.resourceVersion({
+              url: FUtil.LinkTo.resourceVersionInfo({
                 resourceID: d.resourceId,
                 version: v.version,
               }),
