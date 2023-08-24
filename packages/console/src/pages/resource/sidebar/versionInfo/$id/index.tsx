@@ -30,6 +30,7 @@ import BraftEditor, { EditorState } from 'braft-editor';
 import FDivider from '@/components/FDivider';
 import FMenu from '@/components/FMenu';
 import { OnChangeStatusAction } from '@/models/resourceListPage';
+import FViewportCards_Resource from '@/components/FAntvG6/FViewportCards_Resource';
 
 
 interface VersionInfoProps extends RouteComponentProps<{
@@ -385,6 +386,31 @@ function VersionInfo({ dispatch, resourceVersionEditorPage, match }: VersionInfo
               </>))
         }
       </div>
+
+      {
+        resourceVersionEditorPage.graphShow && (<>
+          <div style={{ height: 5 }} />
+          <div className={styles.block}>
+            <FComponentsLib.FContentText text={'基础属性'} type={'highlight'} />
+            <div style={{ height: 20 }} />
+
+            <FViewportCards_Resource
+              resourceID={resourceVersionEditorPage.resourceID}
+              version={resourceVersionEditorPage.version}
+              graphShow={['relationship', 'authorization', 'dependency']}
+              onMount={({ hasData }) => {
+                // console.log(hasData, 'hasDataiosdjflkjsdflkjlk');
+                dispatch<ChangeAction>({
+                  type: 'resourceVersionEditorPage/change',
+                  payload: {
+                    graphShow: hasData,
+                  },
+                });
+              }}
+            />
+          </div>
+        </>)
+      }
     </div>
   </>);
 }
