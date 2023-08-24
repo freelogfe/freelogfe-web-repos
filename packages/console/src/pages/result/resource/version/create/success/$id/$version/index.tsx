@@ -11,8 +11,6 @@ import FComponentsLib from '@freelog/components-lib';
 import fMessage from '@/components/fMessage';
 import fPolicyBuilder from '@/components/fPolicyBuilder';
 import fPolicyOperator from '@/components/fPolicyOperator';
-// import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
-// import { FetchDataSourceAction, FetchDraftDataAction } from '@/models/resourceInfo';
 
 interface SuccessProps extends RouteComponentProps<{
   id: string;
@@ -25,8 +23,6 @@ function Success({ match, dispatch }: SuccessProps) {
 
   const [countdown, set_countdown] = React.useState<number>(3);
   const [nextStep, set_nextStep] = React.useState<'loading' | 'goto' | 'tipOnline'>('loading');
-  // 0：初始 1：第一个版本且无策略 2：非第一个版本或有策略
-  // const [gotoState, setGotoState] = React.useState<0 | 1 | 2>(0);
 
   AHooks.useInterval(() => {
     const c = countdown - 1;
@@ -54,44 +50,8 @@ function Success({ match, dispatch }: SuccessProps) {
     if (data.status === 4) {
       set_nextStep('tipOnline');
     }
-
-    // if (data.resourceVersions.length === 1 && data.policies.length === 0) {
-    //   setGotoState(1);
-    // } else {
-    //   setGotoState(2);
-    // }
   });
-
-  // async function gotoVersionInfo() {
-  //
-  //   const { data: data_resourceInfo } = await FServiceAPI.Resource.info({
-  //     resourceIdOrName: match.params.id,
-  //     // isLoadPolicyInfo: 1,
-  //     // isLoadLatestVersionInfo: 1,
-  //     // isTranslate: 1,
-  //   });
-  //
-  //   // console.log(data_resourceInfo, 'data_resourceInfosoidfjsldkfjlkj');
-  //   if (data_resourceInfo.status === 0) {
-  //     const result = await fPromiseModalConfirm({
-  //       title: '资源待上架',
-  //       content: '将资源上架到资源市场开放授权，为你带来更多收益',
-  //       okText: '立即上架',
-  //       cancelText: '暂不上架',
-  //       icon: '',
-  //     });
-  //
-  //     // if (result) {
-  //     //   await resourceOnline(match.params.id);
-  //     //   await dispatch<FetchDataSourceAction>({
-  //     //     type: 'resourceInfo/fetchDataSource',
-  //     //     payload: match.params.id,
-  //     //   });
-  //     // }
-  //
-  //   }
-  // }
-
+  
   return (<FCenterLayout>
     <div style={{ height: 100 }} />
     <div className={styles.modal}>
