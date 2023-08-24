@@ -149,7 +149,7 @@ function Contract({ dispatch, resourceAuthPage, match }: ContractProps) {
         }
 
         {
-          resourceAuthPage.contractsAuthorized.length > 0 && (<>
+          resourceAuthPage.contractsAuthorize.length > 0 && (<>
             <div style={{ height: 20 }} />
             <FTable
               columns={columns}
