@@ -8,6 +8,10 @@ import * as AHooks from 'ahooks';
 import { withRouter } from 'umi';
 import { connect } from 'dva';
 import { ConnectState } from '@/models/connect';
+import FComponentsLib from '../../../../../../../@freelog/components-lib';
+import { FI18n } from '../../../../../../../@freelog/tools-lib';
+import FAuthPanel from '@/pages/resource/auth/$id/FAuthPanel';
+import FPolicyList from '@/components/FPolicyList';
 
 interface DependencyProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -37,7 +41,31 @@ function Dependency({ dispatch, resourceAuthPage, match }: DependencyProps) {
     });
   });
 
-  return (<div>__Template</div>);
+  return (<>
+    <div>
+      <div style={{ height: 40 }} />
+      <div className={styles.block}>
+        <FComponentsLib.FContentText text={FI18n.i18nNext.t('licencee_contract')} type={'highlight'} />
+
+        {
+          resourceAuthPage.contractsAuthorized.length === 0 && (<>
+            <div style={{ height: 10 }} />
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <FComponentsLib.FContentText text={'暂无合约'} type={'additional2'} />
+            </div>
+          </>)
+        }
+
+        {
+          resourceAuthPage.contractsAuthorized.length > 0 && (<>
+            <div style={{ height: 20 }} />
+            <FAuthPanel />
+          </>)
+        }
+      </div>
+      <div style={{ height: 100 }} />
+    </div>
+  </>);
 }
 
 export default withRouter(connect(({ resourceAuthPage }: ConnectState) => ({

@@ -16,6 +16,7 @@ import {
   ChangeAction,
   OnMount_ContractPage_Action,
 } from '@/models/resourceAuthPage';
+import FAuthPanel from '@/pages/resource/auth/$id/FAuthPanel';
 
 interface ContractProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -136,23 +137,29 @@ function Contract({ dispatch, resourceAuthPage, match }: ContractProps) {
     <div>
       <div style={{ height: 40 }} />
       <div className={styles.block}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <FComponentsLib.FContentText text={'授权合约'} type={'highlight'} />
-        </div>
+        <FComponentsLib.FContentText text={'授权合约'} type={'highlight'} />
 
         {
-          resourceAuthPage.contractsAuthorize?.length > 0
-            ? (<FTable
+          resourceAuthPage.contractsAuthorize.length === 0 && (<>
+            <div style={{ height: 10 }} />
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <FComponentsLib.FContentText text={'暂无合约'} type={'additional2'} />
+            </div>
+          </>)
+        }
+
+        {
+          resourceAuthPage.contractsAuthorized.length > 0 && (<>
+            <div style={{ height: 20 }} />
+            <FTable
               columns={columns}
               dataSource={resourceAuthPage.contractsAuthorize}
               pagination={false}
-            />)
-            : (<FComponentsLib.FContentText type='negative' text={'暂无合约'} />)
+            />
+          </>)
         }
       </div>
       <div style={{ height: 100 }} />
-
-
       <FContractDetailsDrawer
         contractID={resourceAuthPage.detailContractID}
         onClose={() => {
