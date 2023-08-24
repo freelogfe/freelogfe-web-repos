@@ -51,7 +51,7 @@ function Success({ match, dispatch }: SuccessProps) {
       set_nextStep('tipOnline');
     }
   });
-  
+
   return (<FCenterLayout>
     <div style={{ height: 100 }} />
     <div className={styles.modal}>
@@ -236,7 +236,3 @@ async function resourceOnline(resourceID: string): Promise<boolean> {
 
   return true;
 }
-
-// function online_afterSuccessCreateVersion(){
-//
-// }
