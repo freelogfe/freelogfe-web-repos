@@ -5,7 +5,6 @@ import moment from 'moment';
 import { ConnectState } from '@/models/connect';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import { history } from 'umi';
-// import { fileAttrUnits } from '@/utils/format';
 import fMessage from '@/components/fMessage';
 
 export interface ResourceVersionEditorPageModelState {
@@ -115,11 +114,12 @@ const Model: ResourceVersionEditorModelType = {
   },
 
   effects: {
-    * fetchDataSource(action: FetchDataSourceAction, { call, put, select }: EffectsCommandMap) {
+    * fetchDataSource({}: FetchDataSourceAction, { call, put, select }: EffectsCommandMap) {
       // const params: ResourceVersionInfoParamsType1 = action.payload;
       const { resourceVersionEditorPage }: ConnectState = yield select(({ resourceVersionEditorPage }: ConnectState) => ({
         resourceVersionEditorPage,
       }));
+      // console.log(resourceVersionEditorPage.resourceID, resourceVersionEditorPage.version, 'sdfsdfasefewrfw4eagtfrtef[09gijopredslkfj');
       const params: Parameters<typeof FServiceAPI.Resource.resourceVersionInfo1>[0] = {
         resourceId: resourceVersionEditorPage.resourceID,
         version: resourceVersionEditorPage.version,

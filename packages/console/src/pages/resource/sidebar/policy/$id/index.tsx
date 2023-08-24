@@ -70,7 +70,6 @@ function Policy({ dispatch, resourceAuthPage, match }: PolicyProps) {
               <FComponentsLib.FContentText text={'授权策略，即资源对外授权范围和条件的申明，如支付10元获得一个月使用授权。'} type={'additional2'} />
               <div style={{ height: 20 }} />
 
-              {/*{FI18n.i18nNext.t('authplanmgnt_list_empty_btn')}*/}
               <FComponentsLib.FRectBtn
                 type={'primary'}
                 onClick={() => {
@@ -110,8 +109,10 @@ function Policy({ dispatch, resourceAuthPage, match }: PolicyProps) {
           type={'highlight'}
         />
         <div style={{ height: 5 }} />
-        <FComponentsLib.FContentText text={FI18n.i18nNext.t('authplanmgnt_title_templates_help')}
-                                     type={'additional2'} />
+        <FComponentsLib.FContentText
+          text={FI18n.i18nNext.t('authplanmgnt_title_templates_help')}
+          type={'additional2'}
+        />
         <div style={{ height: 20 }} />
         <PolicyTemplates
           onSelect={(value) => {

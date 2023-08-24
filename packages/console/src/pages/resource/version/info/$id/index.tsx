@@ -158,7 +158,7 @@ function VersionEditor({ dispatch, resourceVersionEditorPage, match }: VersionEd
             !resourceVersionEditorPage.description && !isEditing
             && (<div className={styles.noDescription}>
               <FComponentsLib.FTipText
-                text={'动动手，让你的资源看起来更丰富多彩吧～'}
+                text={'动动手，让你的资源看起来更丰富～'}
                 type='second'
               />
               <div style={{ height: 20 }} />
