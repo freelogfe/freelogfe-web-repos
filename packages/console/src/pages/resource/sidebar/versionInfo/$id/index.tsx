@@ -445,12 +445,12 @@ function Header({
 
   return (
     <div className={styles.Header}>
-      <Space size={8}>
+      <div style={{ display: 'flex', alignItems: 'center' }}>
         <FComponentsLib.FTitleText
           text={`当前版本 ${version}`}
           type='h1'
         />
-
+        <div style={{ width: 8 }} />
         <FComponentsLib.FDropdown
           overlay={
             <FMenu
@@ -475,7 +475,11 @@ function Header({
         >
           <FComponentsLib.FIcons.FDown style={{ fontSize: 12 }} />
         </FComponentsLib.FDropdown>
-      </Space>
+        <div style={{ width: 30 }} />
+        <FComponentsLib.FTextBtn onClick={() => {
+
+        }}>新建版本</FComponentsLib.FTextBtn>
+      </div>
       <div style={{ height: 10 }} />
       <Space size={0}>
         <FComponentsLib.FContentText
