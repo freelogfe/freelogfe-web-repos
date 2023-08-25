@@ -105,7 +105,8 @@ function VersionInfo({ dispatch, resourceVersionEditorPage, match }: VersionInfo
         versions={resourceVersionEditorPage.versions}
         version={resourceVersionEditorPage.version}
         signingDate={resourceVersionEditorPage.resourceVersionInfo?.createData || ''}
-        resourceID={resourceVersionEditorPage.resourceVersionInfo?.sha1 || ''}
+        resourceID={resourceVersionEditorPage.resourceID}
+        sha1={resourceVersionEditorPage.resourceVersionInfo?.sha1 || ''}
         isCartoon={resourceVersionEditorPage.resourceInfo?.resourceType[0] === '阅读' && resourceVersionEditorPage.resourceInfo?.resourceType[1] === '漫画'}
         onClickDownload={(extension) => {
           if (!extension) {
@@ -425,6 +426,7 @@ interface HeaderProps {
   versions: string[];
   version: string;
   resourceID: string;
+  sha1: string;
   signingDate: string;
   isCartoon: boolean;
 
@@ -437,6 +439,7 @@ function Header({
                   versions,
                   version,
                   resourceID,
+                  sha1,
                   signingDate,
                   onClickDownload,
                   isCartoon,
@@ -489,7 +492,7 @@ function Header({
         <div style={{ width: 40 }} />
         <FComponentsLib.FContentText
           type='additional2'
-          text={FI18n.i18nNext.t('object_id') + '：' + resourceID}
+          text={FI18n.i18nNext.t('object_id') + '：' + sha1}
         />
         <div style={{ width: 20 }} />
 

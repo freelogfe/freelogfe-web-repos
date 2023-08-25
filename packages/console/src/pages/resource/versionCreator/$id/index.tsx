@@ -219,6 +219,29 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
   return (<div className={styles.selectedFileInfo}>
     <div style={{ width: 920 }}>
       <div style={{ height: 40 }} />
+      <div style={{ display: 'flex', alignItems: 'center', width: 920 }}>
+        <FCoverImage src={''} width={36} />
+        <div style={{ width: 10 }} />
+        <FComponentsLib.FContentText
+          text={resourceVersionCreatorPage.resourceInfo?.resourceName || ''}
+          type={'highlight'}
+        />
+        <div style={{ width: 5 }} />
+        <label style={{
+          backgroundColor: '#E4E7EB',
+          borderRadius: 4,
+          fontSize: 12,
+          color: '#666',
+          padding: 5,
+          lineHeight: '18px',
+          display: 'inline-block',
+        }}>{resourceVersionCreatorPage.resourceInfo?.resourceType.join('/')}</label>
+        <div style={{ width: 10 }} />
+        <FComponentsLib.FTitleText text={'/'} type={'h1'} />
+        <div style={{ width: 10 }} />
+        <FComponentsLib.FTitleText text={'新建版本'} type={'h1'} />
+      </div>
+      <div style={{ height: 40 }} />
 
       <div className={styles.fileInfo}>
         <div className={styles.card}>
@@ -575,7 +598,7 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
       }
 
       <div style={{ display: $showMore ? 'block' : 'none' }}>
-      {/*<div style={{ display: 'block' }}>*/}
+        {/*<div style={{ display: 'block' }}>*/}
         <div style={{ height: 10 }} />
 
         <div className={styles.block}>
@@ -635,7 +658,7 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
               {
                 resourceVersionCreatorPage.preVersion_customConfigurations.length > 0 && (<FComponentsLib.FTextBtn
                   type={'default'}
-                  style={{ fontSize: 12 }}
+                  style={{ fontSize: 12, fontWeight: 600 }}
                   onClick={async () => {
                     const data: {
                       key: string;
@@ -830,14 +853,15 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
 
               {
                 resourceVersionCreatorPage.preVersionDirectDependencies.length !== 0 &&
-                <FComponentsLib.FRectBtn
-                  type='default'
+                <FComponentsLib.FTextBtn
+                  style={{ fontSize: 12, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 5 }}
+                  type='primary'
                   onClick={async () => {
                     dispatch<OnClick_ImportLastVersionDependents_Btn_Action>({
                       type: 'resourceVersionCreatorPage/onClick_ImportLastVersionDependents_Btn',
                     });
                   }}
-                >{FI18n.i18nNext.t('import_from_previous_version')}</FComponentsLib.FRectBtn>
+                >{FI18n.i18nNext.t('import_from_previous_version')}</FComponentsLib.FTextBtn>
               }
             </Space>
           </div>
