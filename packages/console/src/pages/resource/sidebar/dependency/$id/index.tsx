@@ -8,10 +8,10 @@ import * as AHooks from 'ahooks';
 import { withRouter } from 'umi';
 import { connect } from 'dva';
 import { ConnectState } from '@/models/connect';
-import FComponentsLib from '../../../../../../../@freelog/components-lib';
-import { FI18n } from '../../../../../../../@freelog/tools-lib';
+import FComponentsLib from '@freelog/components-lib';
+import { FI18n, FUtil } from '@freelog/tools-lib';
 import FAuthPanel from '@/pages/resource/auth/$id/FAuthPanel';
-import FPolicyList from '@/components/FPolicyList';
+import FBasicUpcastCard from '@/components/FBasicUpcastCard';
 
 interface DependencyProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -48,11 +48,30 @@ function Dependency({ dispatch, resourceAuthPage, match }: DependencyProps) {
         <FComponentsLib.FContentText text={FI18n.i18nNext.t('licencee_contract')} type={'highlight'} />
 
         {
-          resourceAuthPage.contractsAuthorized.length === 0 && (<>
+          resourceAuthPage.contractsAuthorized.length === 0 && resourceAuthPage.baseUastResources.length === 0 && (<>
             <div style={{ height: 10 }} />
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
               <FComponentsLib.FContentText text={'暂无合约'} type={'additional2'} />
             </div>
+          </>)
+        }
+
+        {
+          resourceAuthPage.baseUastResources.length > 0 && (<>
+            <div style={{ height: 20 }} />
+            <FBasicUpcastCard
+              dataSource={resourceAuthPage.baseUastResources.map((bur) => {
+                return {
+                  resourceID: bur.resourceId,
+                  resourceName: bur.resourceName,
+                };
+              })}
+              onClick={(resourceID) => {
+                window.open(FUtil.LinkTo.resourceDetails({
+                  resourceID: resourceID,
+                }));
+              }}
+            />
           </>)
         }
 
