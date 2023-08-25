@@ -8,6 +8,13 @@
   min-height: calc(100vh - 70px);
 }
 
+.selectedFileInfo {
+  background-color: #FAFBFC;
+  display: flex;
+  justify-content: center;
+  min-height: calc(100vh - 70px);
+}
+
 .block {
   padding: 20px;
   background-color: white;
@@ -27,4 +34,50 @@
     flex-shrink: 0;
     flex-grow: 0;
   }
+}
+
+.fileInfo {
+  display: flex;
+  align-items: center;
+  background-color: white;
+  justify-content: space-between;
+  padding-right: 20px;
+
+  .card {
+    display: flex;
+    padding: 0 20px;
+    height: 88px;
+
+    border-radius: 6px;
+    align-items: center;
+    width: fit-content;
+
+    .img {
+      width: 56px;
+      height: 58px;
+    }
+
+    .info {
+      display: flex;
+      align-items: center;
+      width: max-content;
+      justify-content: space-between;
+
+      .infoSize {
+        flex-shrink: 0;
+      }
+
+      .Progress {
+        display: block;
+        width: 100px;
+      }
+    }
+  }
+
+}
+
+.btn {
+  display: flex;
+  justify-content: flex-end;
+  gap: 30px;
 }

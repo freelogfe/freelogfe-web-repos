@@ -622,7 +622,7 @@ interface ReleaseTipProps {
   visible: boolean;
 }
 
-function ReleaseTip({ visible }: ReleaseTipProps) {
+export function ReleaseTip({ visible }: ReleaseTipProps) {
 
   const [percent, set_percent] = React.useState(0);
 
