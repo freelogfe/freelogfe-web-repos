@@ -256,6 +256,10 @@ const Model: ResourceAuthPageModelType = {
         },
       });
 
+      yield put<FetchResourceInfoAction>({
+        type: 'fetchResourceInfo',
+      });
+
       yield put<FetchAuthorizedAction>({
         type: 'fetchAuthorized',
         payload: {},
