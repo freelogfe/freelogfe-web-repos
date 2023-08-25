@@ -93,7 +93,7 @@ function VersionInfo({ dispatch, resourceVersionEditorPage, match }: VersionInfo
       tipText={'上传资源，开启授权之旅'}
       btnText={'上传资源'}
       onClick={() => {
-
+        self.open(FUtil.LinkTo.resourceVersionCreator({ resourceID: match.params.id }));
       }}
     />);
   }
