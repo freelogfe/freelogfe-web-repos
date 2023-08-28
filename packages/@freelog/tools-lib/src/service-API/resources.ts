@@ -54,6 +54,7 @@ export function create(params: CreateParamsType) {
 interface UpdateParamsType {
   resourceId: string;
   status?: 0 | 1;
+  resourceTitle?: string;
   intro?: string;
   tags?: string[];
   coverImages?: string[];
