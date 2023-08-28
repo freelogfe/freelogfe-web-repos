@@ -27,7 +27,7 @@ import {
   ChangeAction,
   OnChange_AdditionalProperties_Action,
   OnChange_CustomConfigurations_Action,
-  OnChange_CustomProperties_Action, OnChange_DataIsDirty_Action,
+  OnChange_CustomProperties_Action, OnChange_DataIsDirty_Action, OnChange_VersionInput_Action,
   OnClick_CreateVersionBtn_Action, OnClick_ImportLastVersionDependents_Btn_Action,
   OnClick_OpenCartoonBtn_Action,
   OnClose_CartoonEditor_Action,
@@ -45,6 +45,7 @@ import { ReleaseTip } from '@/pages/resource/version/creator/$id';
 import fConfirmModal from '@/components/fConfirmModal';
 import fAddFileBaseProps from '@/components/fAddFileBaseProps';
 import fAddCustomOptions from '@/components/fAddCustomOptions';
+import VersionInput from '@/pages/resource/version/creator/$id/VersionInput';
 
 interface VersionCreatorProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -216,6 +217,12 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
     </div>);
   }
 
+  const hasError: boolean =
+    resourceVersionCreatorPage.versionInput === '' || versionInputHasError ||
+    !resourceVersionCreatorPage.selectedFileInfo ||
+    resourceVersionCreatorPage.selectedFile_UsedResources.length > 0 ||
+    resourceVersionCreatorPage.rawPropertiesState !== 'success';
+
   return (<div className={styles.selectedFileInfo}>
     <div style={{ width: 920 }}>
       <div style={{ height: 40 }} />
@@ -241,7 +248,24 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
         <div style={{ width: 10 }} />
         <FComponentsLib.FTitleText text={'新建版本'} type={'h1'} />
       </div>
-      <div style={{ height: 40 }} />
+      <div style={{ height: 30 }} />
+      <VersionInput
+        value={resourceVersionCreatorPage.versionInput}
+        resourceLatestVersion={resourceVersionCreatorPage.resourceInfo?.latestVersion || '1.0.0'}
+        onChange={(value) => {
+          dispatch<OnChange_VersionInput_Action>({
+            type: 'resourceVersionCreatorPage/onChange_VersionInput',
+            payload: {
+              value: value,
+            },
+          });
+        }}
+        onChangeError={(hasError) => {
+          set_versionInputHasError(hasError);
+        }}
+      />
+
+      <div style={{ height: 30 }} />
 
       <div className={styles.fileInfo}>
         <div className={styles.card}>
@@ -923,7 +947,7 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
         >{FI18n.i18nNext.t('save_as_draft')}</FComponentsLib.FTextBtn>
         {/*{FI18n.i18nNext.t('rqr_step3_btn_next')}*/}
         <FComponentsLib.FRectBtn
-          disabled={!resourceVersionCreatorPage.selectedFileInfo}
+          disabled={hasError}
           type={'primary'}
           onClick={() => {
             dispatch<OnClick_CreateVersionBtn_Action>({
