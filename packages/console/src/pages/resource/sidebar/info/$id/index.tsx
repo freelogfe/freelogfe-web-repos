@@ -15,6 +15,9 @@ import {
   OnChange_Labels_Action,
   OnChange_Cover_Action,
   OnChange_IntroductionEditor_Action,
+  OnClick_EditTitleBtn_Action,
+  OnClick_CancelEditTitleBtn_Action,
+  OnClick_SaveTitleBtn_Action, OnChange_TitleInput_Action,
 } from '@/models/resourceInfoPage';
 import { OnChange_Page_Action, OnMount_Page_Action as OnMount_Sidebar_Action } from '@/models/resourceSider';
 import FFormLayout from '@/components/FFormLayout';
@@ -26,7 +29,7 @@ import FSkeletonNode from '@/components/FSkeletonNode';
 import * as AHooks from 'ahooks';
 import FResourceLabelEditor from '@/components/FResourceLabelEditor';
 import {
-  OnChange_step4_resourceCover_Action,
+  OnChange_step4_resourceCover_Action, OnChange_step4_resourceTitle_Action,
   // OnChange_step4_resourceLabels_Action,
 } from '@/models/resourceCreatorPage';
 import fMessage from '@/components/fMessage';
@@ -111,26 +114,85 @@ function Info({ dispatch, resourceInfoPage, match }: InfoProps) {
       !!resourceInfoPage.resourceInfo && resourceInfoPage.pageState === 'loaded' && (<div>
         <div style={{ height: 40 }} />
         <div className={styles.block}>
-          <FComponentsLib.FContentText text={'资源标题'} type={'highlight'} />
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <FComponentsLib.FContentText text={'资源标题'} type={'highlight'} />
+
+            {
+              resourceInfoPage.title_IsEditing
+                ? (<Space size={10}>
+                  <FComponentsLib.FTextBtn
+                    style={{ fontSize: 12 }}
+                    type={'default'}
+                    onClick={() => {
+                      dispatch<OnClick_CancelEditTitleBtn_Action>({
+                        type: 'resourceInfoPage/onClick_CancelEditTitleBtn',
+                      });
+                    }}
+                  >取消</FComponentsLib.FTextBtn>
+                  <FComponentsLib.FTextBtn
+                    style={{ fontSize: 12 }}
+                    type={'primary'}
+                    onClick={() => {
+                      dispatch<OnClick_SaveTitleBtn_Action>({
+                        type: 'resourceInfoPage/onClick_SaveEditTitleBtn',
+                      });
+                    }}
+                  >保存</FComponentsLib.FTextBtn>
+                </Space>)
+                : (<FComponentsLib.FTextBtn
+                  style={{ fontSize: 12 }}
+                  type={'primary'}
+                  onClick={() => {
+                    dispatch<OnClick_EditTitleBtn_Action>({
+                      type: 'resourceInfoPage/onClick_EditTitleBtn',
+                    });
+                  }}
+                >编辑</FComponentsLib.FTextBtn>)
+            }
+
+          </div>
           <div style={{ height: 5 }} />
           <FComponentsLib.FContentText
             text={'标题直接影响商品的搜索曝光机会，建议在标题中加入品牌/内容主旨，例如，《大明风华：明朝人的城市生活》；标题长度不超过100个字符。'}
             type={'additional2'}
           />
           <div style={{ height: 20 }} />
-          <div className={styles.resourceName}>
-            {/*{*/}
-            {/*  nodeManagerPage.setting_nodeInfo.title*/}
-            {/*    ? (<FComponentsLib.FContentText*/}
-            {/*      text={nodeManagerPage.setting_nodeInfo.title}*/}
-            {/*      type={'normal'}*/}
-            {/*    />)*/}
-            {/*    : (<i style={{ color: '#999' }}>暂无无内容...</i>)*/}
-            {/*}*/}
+          {
+            resourceInfoPage.title_IsEditing ? (<FComponentsLib.FInput.FSingleLine
+                value={resourceInfoPage.title_Input || ''}
+                lengthLimit={100}
+                style={{ width: '100%' }}
+                // placeholder={FI18n.i18nNext.t('输入资源授权标识')}
+                // placeholder={FI18n.i18nNext.t('rqr_input_resourceauthid_hint')}
+                placeholder={resourceInfoPage.resourceInfo.resourceName || FI18n.i18nNext.t('rqr_input_resourceauthid_hint')}
+                onChange={(e) => {
+                  dispatch<OnChange_TitleInput_Action>({
+                    type: 'resourceInfoPage/onChange_TitleInput',
+                    payload: {
+                      value: e.target.value,
+                    },
+                  });
+                }}
+              />)
+              : (<div className={styles.resourceTitle}>
+                {/*{*/}
+                {/*  nodeManagerPage.setting_nodeInfo.title*/}
+                {/*    ? (<FComponentsLib.FContentText*/}
+                {/*      text={nodeManagerPage.setting_nodeInfo.title}*/}
+                {/*      type={'normal'}*/}
+                {/*    />)*/}
+                {/*    : (<i style={{ color: '#999' }}>暂无无内容...</i>)*/}
+                {/*}*/}
 
-            <i style={{ color: '#999' }}>暂无无内容...</i>
+                {/*<i style={{ color: '#999' }}>暂无无内容...</i>*/}
 
-          </div>
+                <FComponentsLib.FContentText
+                  text={resourceInfoPage.resourceInfo.resourceTitle || resourceInfoPage.resourceInfo.resourceName || ''}
+                  type={'normal'}
+                />
+              </div>)
+          }
+
         </div>
 
         <div style={{ height: 5 }} />
@@ -184,11 +246,6 @@ function Info({ dispatch, resourceInfoPage, match }: InfoProps) {
 
         <div className={styles.block}>
           <FComponentsLib.FContentText text={FI18n.i18nNext.t('resource_short_description')} type={'highlight'} />
-          {/*<div style={{ height: 5 }} />*/}
-          {/*<FComponentsLib.FContentText*/}
-          {/*  text={'只支持JPG/PNG/GIF，GIF文件不能动画化，大小不超过5M，建议尺寸为800X600；未上传封面时，默认使用系统封面。'}*/}
-          {/*  type={'additional2'}*/}
-          {/*/>*/}
           <div style={{ height: 20 }} />
           {
             resourceInfoPage.introduction_IsEditing

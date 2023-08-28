@@ -1,12 +1,9 @@
 import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription, SubscriptionAPI } from 'dva';
 import { DvaReducer } from './shared';
-// import { FetchDataSourceAction, ResourceInfoModelState } from '@/models/resourceInfo';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import { ConnectState } from '@/models/connect';
 import { OnUpdate_Data_Action } from '@/models/resourceSider';
-
-// import data from '@/utils/category';
 
 export interface ResourceInfoPageModelState {
   pageState: 'loading' | 'loaded';
@@ -14,10 +11,15 @@ export interface ResourceInfoPageModelState {
   resourceInfo: {
     coverImages: string[];
     resourceName: string;
+    resourceTitle: string;
     resourceType: string[];
     intro: string;
     tags: string[];
   } | null;
+
+  title_IsEditing: boolean;
+  title_Input: string;
+  title_Error: string;
 
   introduction_IsEditing: boolean;
   introduction_EditorText: string;
@@ -42,9 +44,24 @@ export interface OnUnmount_Page_Action extends AnyAction {
   type: 'resourceInfoPage/onUnmount_Page';
 }
 
-// export interface InitModelStatesAction extends AnyAction {
-//   type: 'resourceInfoPage/initModelStates';
-// }
+export interface OnClick_EditTitleBtn_Action extends AnyAction {
+  type: 'resourceInfoPage/onClick_EditTitleBtn';
+}
+
+export interface OnClick_CancelEditTitleBtn_Action extends AnyAction {
+  type: 'resourceInfoPage/onClick_CancelEditTitleBtn';
+}
+
+export interface OnClick_SaveTitleBtn_Action extends AnyAction {
+  type: 'resourceInfoPage/onClick_SaveEditTitleBtn';
+}
+
+export interface OnChange_TitleInput_Action extends AnyAction {
+  type: 'resourceInfoPage/onChange_TitleInput';
+  payload: {
+    value: string;
+  };
+}
 
 export interface OnClick_AddIntroductionBtn_Action extends AnyAction {
   type: 'resourceInfoPage/onClick_AddIntroductionBtn';
@@ -106,6 +123,11 @@ export interface ResourceInfoPageModelType {
     onMount_Page: (action: OnMount_Page_Action, effects: EffectsCommandMap) => void;
     onUnmount_Page: (action: OnUnmount_Page_Action, effects: EffectsCommandMap) => void;
 
+    onClick_EditTitleBtn: (action: OnClick_EditTitleBtn_Action, effects: EffectsCommandMap) => void;
+    onClick_CancelEditTitleBtn: (action: OnClick_CancelEditTitleBtn_Action, effects: EffectsCommandMap) => void;
+    onClick_SaveEditTitleBtn: (action: OnClick_SaveTitleBtn_Action, effects: EffectsCommandMap) => void;
+    onChange_TitleInput: (action: OnChange_TitleInput_Action, effects: EffectsCommandMap) => void;
+
     onClick_AddIntroductionBtn: (action: OnClick_AddIntroductionBtn_Action, effects: EffectsCommandMap) => void;
     onClick_EditIntroductionBtn: (action: OnClick_EditIntroductionBtn_Action, effects: EffectsCommandMap) => void;
     onClick_SaveIntroductionBtn: (action: OnClick_SaveIntroductionBtn_Action, effects: EffectsCommandMap) => void;
@@ -129,6 +151,10 @@ const initStates: ResourceInfoPageModelState = {
   pageState: 'loading',
   resourceID: '',
   resourceInfo: null,
+
+  title_IsEditing: false,
+  title_Input: '',
+  title_Error: '',
 
   introduction_IsEditing: false,
   introduction_EditorText: '',
@@ -157,7 +183,19 @@ const Model: ResourceInfoPageModelType = {
         isLoadPolicyInfo: 1,
         isTranslate: 1,
       };
-      const { data: data_resourceInfo } = yield call(FServiceAPI.Resource.info, params);
+      const { data: data_resourceInfo }: {
+        ret: number;
+        errCode: number;
+        msg: string;
+        data: {
+          coverImages: string[];
+          resourceName: string;
+          resourceTitle: string;
+          resourceType: string[];
+          intro: string;
+          tags: string[];
+        }
+      } = yield call(FServiceAPI.Resource.info, params);
       yield call(FUtil.Tool.promiseSleep, 1000);
       yield put<ChangeAction>({
         type: 'change',
@@ -166,6 +204,7 @@ const Model: ResourceInfoPageModelType = {
             coverImages: data_resourceInfo.coverImages,
             resourceName: data_resourceInfo.resourceName,
             resourceType: data_resourceInfo.resourceType,
+            resourceTitle: data_resourceInfo.resourceTitle,
             intro: data_resourceInfo.intro,
             tags: data_resourceInfo.tags,
           },
@@ -177,6 +216,39 @@ const Model: ResourceInfoPageModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: initStates,
+      });
+    },
+
+    * onClick_EditTitleBtn({}: OnClick_EditTitleBtn_Action, { select, put }: EffectsCommandMap) {
+      const { resourceInfoPage } = yield select(({ resourceInfoPage }: ConnectState) => ({
+        resourceInfoPage,
+      }));
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          title_IsEditing: true,
+          title_Input: resourceInfoPage.resourceInfo.resourceTitle,
+          title_Error: '',
+        },
+      });
+    },
+    * onClick_CancelEditTitleBtn({}: OnClick_CancelEditTitleBtn_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          title_IsEditing: false,
+        },
+      });
+    },
+    * onClick_SaveEditTitleBtn({}: OnClick_SaveTitleBtn_Action, {}: EffectsCommandMap) {
+
+    },
+    * onChange_TitleInput({ payload }: OnChange_TitleInput_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          title_Input: payload.value,
+        },
       });
     },
 

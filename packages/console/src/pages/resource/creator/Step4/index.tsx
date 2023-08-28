@@ -38,7 +38,8 @@ function Step4({ dispatch, resourceCreatorPage }: Step4Props) {
         lengthLimit={100}
         style={{ width: '100%' }}
         // placeholder={FI18n.i18nNext.t('输入资源授权标识')}
-        placeholder={FI18n.i18nNext.t('rqr_input_resourceauthid_hint')}
+        // placeholder={FI18n.i18nNext.t('rqr_input_resourceauthid_hint')}
+        placeholder={resourceCreatorPage.step1_createdResourceInfo?.resourceName || FI18n.i18nNext.t('rqr_input_resourceauthid_hint')}
         onChange={(e) => {
           dispatch<OnChange_step4_resourceTitle_Action>({
             type: 'resourceCreatorPage/onChange_step4_resourceTitle',
