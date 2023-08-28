@@ -240,8 +240,27 @@ const Model: ResourceInfoPageModelType = {
         },
       });
     },
-    * onClick_SaveEditTitleBtn({}: OnClick_SaveTitleBtn_Action, {}: EffectsCommandMap) {
+    * onClick_SaveEditTitleBtn({}: OnClick_SaveTitleBtn_Action, {select, call, put}: EffectsCommandMap) {
+      const { resourceInfoPage } = yield select(({ resourceInfoPage }: ConnectState) => ({
+        resourceInfoPage,
+      }));
 
+      const params: Parameters<typeof FServiceAPI.Resource.update>[0] = {
+        resourceId: resourceInfoPage.resourceID,
+        // @ts-ignore
+        resourceTitle: resourceInfoPage.title_Input,
+      };
+      yield call(FServiceAPI.Resource.update, params);
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          resourceInfo: {
+            ...resourceInfoPage.resourceInfo,
+            resourceTitle: resourceInfoPage.title_Input,
+          },
+          title_IsEditing: false,
+        },
+      });
     },
     * onChange_TitleInput({ payload }: OnChange_TitleInput_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
