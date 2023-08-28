@@ -28,13 +28,9 @@ import FComponentsLib from '@freelog/components-lib';
 import FSkeletonNode from '@/components/FSkeletonNode';
 import * as AHooks from 'ahooks';
 import FResourceLabelEditor from '@/components/FResourceLabelEditor';
-import {
-  OnChange_step4_resourceCover_Action, OnChange_step4_resourceTitle_Action,
-  // OnChange_step4_resourceLabels_Action,
-} from '@/models/resourceCreatorPage';
 import fMessage from '@/components/fMessage';
-// import FCoverImage from '@/components/FCoverImage';
 import FUploadCover from '@/components/FUploadCover';
+import FCoverImage from '@/components/FCoverImage';
 
 interface InfoProps extends RouteComponentProps<{ id: string; }> {
   dispatch: Dispatch;
@@ -121,7 +117,6 @@ function Info({ dispatch, resourceInfoPage, match }: InfoProps) {
               resourceInfoPage.title_IsEditing
                 ? (<Space size={10}>
                   <FComponentsLib.FTextBtn
-                    style={{ fontSize: 12 }}
                     type={'default'}
                     onClick={() => {
                       dispatch<OnClick_CancelEditTitleBtn_Action>({
@@ -130,7 +125,6 @@ function Info({ dispatch, resourceInfoPage, match }: InfoProps) {
                     }}
                   >取消</FComponentsLib.FTextBtn>
                   <FComponentsLib.FTextBtn
-                    style={{ fontSize: 12 }}
                     type={'primary'}
                     onClick={() => {
                       dispatch<OnClick_SaveTitleBtn_Action>({
@@ -140,7 +134,6 @@ function Info({ dispatch, resourceInfoPage, match }: InfoProps) {
                   >保存</FComponentsLib.FTextBtn>
                 </Space>)
                 : (<FComponentsLib.FTextBtn
-                  style={{ fontSize: 12 }}
                   type={'primary'}
                   onClick={() => {
                     dispatch<OnClick_EditTitleBtn_Action>({
@@ -207,8 +200,14 @@ function Info({ dispatch, resourceInfoPage, match }: InfoProps) {
           <div style={{ height: 20 }} />
           <FUploadCover
             onUploadSuccess={(url) => {
-              dispatch<OnChange_step4_resourceCover_Action>({
-                type: 'resourceCreatorPage/onChange_step4_resourceCover',
+              // dispatch<OnChange_step4_resourceCover_Action>({
+              //   type: 'resourceCreatorPage/onChange_step4_resourceCover',
+              //   payload: {
+              //     value: url,
+              //   },
+              // });
+              dispatch<OnChange_Cover_Action>({
+                type: 'resourceInfoPage/onChange_Cover',
                 payload: {
                   value: url,
                 },
@@ -218,34 +217,72 @@ function Info({ dispatch, resourceInfoPage, match }: InfoProps) {
               fMessage(err, 'error');
             }}
           >
-            <a className={styles.FUploadImageChildren}>
-              <FComponentsLib.FIcons.FCloudUpload />
-              <span>{FI18n.i18nNext.t('upload_image')}</span>
-            </a>
-            {/*{*/}
-            {/*  resourceInfoPage.step4_resourceCover === '' && (<a className={styles.FUploadImageChildren}>*/}
-            {/*    <FComponentsLib.FIcons.FCloudUpload />*/}
-            {/*    <span>{FI18n.i18nNext.t('upload_image')}</span>*/}
-            {/*  </a>)*/}
-            {/*}*/}
+            {/*<a className={styles.FUploadImageChildren}>*/}
+            {/*  <FComponentsLib.FIcons.FCloudUpload />*/}
+            {/*  <span>{FI18n.i18nNext.t('upload_image')}</span>*/}
+            {/*</a>*/}
+            {
+              resourceInfoPage.resourceInfo.coverImages.length === 0 && (<a className={styles.FUploadImageChildren}>
+                <FComponentsLib.FIcons.FCloudUpload />
+                <span>{FI18n.i18nNext.t('upload_image')}</span>
+              </a>)
+            }
 
-            {/*{*/}
-            {/*  resourceCreatorPage.step4_resourceCover !== '' && (<div className={styles.cover}>*/}
-            {/*    <FCoverImage src={resourceCreatorPage.step4_resourceCover} width={200} style={{ borderRadius: 4 }} />*/}
-            {/*    <div className={styles.coverEdit}>*/}
-            {/*      <FComponentsLib.FIcons.FEdit style={{ fontSize: 32 }} />*/}
-            {/*      <div style={{ height: 10 }} />*/}
-            {/*      <div>{FI18n.i18nNext.t('btn_edit_cover')}</div>*/}
-            {/*    </div>*/}
-            {/*  </div>)*/}
-            {/*}*/}
+            {
+              resourceInfoPage.resourceInfo.coverImages.length > 0 && (<div className={styles.cover}>
+                <FCoverImage src={resourceInfoPage.resourceInfo.coverImages[0]} width={200} style={{ borderRadius: 4 }} />
+                <div className={styles.coverEdit}>
+                  <FComponentsLib.FIcons.FEdit style={{ fontSize: 32 }} />
+                  <div style={{ height: 10 }} />
+                  <div>{FI18n.i18nNext.t('btn_edit_cover')}</div>
+                </div>
+              </div>)
+            }
           </FUploadCover>
         </div>
 
         <div style={{ height: 5 }} />
 
         <div className={styles.block}>
-          <FComponentsLib.FContentText text={FI18n.i18nNext.t('resource_short_description')} type={'highlight'} />
+          <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
+            <FComponentsLib.FContentText text={FI18n.i18nNext.t('resource_short_description')} type={'highlight'} />
+
+            <Space size={10}>
+              {
+                resourceInfoPage.resourceInfo.intro !== '' && !resourceInfoPage.introduction_IsEditing
+                && (<FComponentsLib.FTextBtn
+                  onClick={() => {
+                    // onChangeIsEditing(true);
+                    dispatch<OnClick_EditIntroductionBtn_Action>({
+                      type: 'resourceInfoPage/onClick_EditIntroductionBtn',
+                    });
+                  }}
+                >{FI18n.i18nNext.t('edit')}</FComponentsLib.FTextBtn>)
+              }
+              {
+                resourceInfoPage.introduction_IsEditing && (<>
+                  <FComponentsLib.FTextBtn
+                    type='default'
+                    onClick={() => {
+                      // onChangeIsEditing(false);
+                      dispatch<OnClick_CancelEditIntroductionBtn_Action>({
+                        type: 'resourceInfoPage/onClick_CancelEditIntroductionBtn',
+                      });
+                    }}
+                  >{FI18n.i18nNext.t('cancel')}</FComponentsLib.FTextBtn>
+                  <FComponentsLib.FTextBtn
+                    onClick={() => {
+                      dispatch<OnClick_SaveIntroductionBtn_Action>({
+                        type: 'resourceInfoPage/onClick_SaveIntroductionBtn',
+                      });
+                    }}
+                    disabled={resourceInfoPage.introduction_EditorText_Error !== ''}
+                  >{FI18n.i18nNext.t('save')}</FComponentsLib.FTextBtn>
+                </>)
+              }
+            </Space>
+          </div>
+
           <div style={{ height: 20 }} />
           {
             resourceInfoPage.introduction_IsEditing
