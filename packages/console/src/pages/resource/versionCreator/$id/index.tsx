@@ -61,8 +61,6 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
 
   const ref = React.useRef(null);
   const size = AHooks.useSize(ref);
-  // console.log(size, 'size ws90eiofjsdlkfjldskjl');
-
   const [$showMore, set$ShowMore, get$ShowMore] = useGetState<boolean>(false);
   const [versionInputHasError, set_versionInputHasError] = React.useState<boolean>(false);
   const [isMarkdownEditorDirty, set_isMarkdownEditorDirty] = React.useState<boolean>(false);
