@@ -154,6 +154,9 @@ export interface UpdateAuthorizedAction extends AnyAction {
 
 export interface OnAdd_Policy_Action extends AnyAction {
   type: 'resourceAuthPage/onAdd_Policy';
+  payload?: {
+    defaultValue: { text: string; title: string; };
+  };
 }
 
 export interface OnTrigger_AuthorizedContractEvent_Action extends AnyAction {
@@ -532,7 +535,7 @@ const Model: ResourceAuthPageModelType = {
       // });
     },
 
-    * onAdd_Policy({}: OnAdd_Policy_Action, { select, call, put }: EffectsCommandMap) {
+    * onAdd_Policy({payload}: OnAdd_Policy_Action, { select, call, put }: EffectsCommandMap) {
       self._czc?.push(['_trackEvent', '授权信息页', '添加授权策略', '', 1]);
       const { resourceAuthPage }: ConnectState = yield select(({ resourceAuthPage }: ConnectState) => ({
         resourceAuthPage,
@@ -545,6 +548,7 @@ const Model: ResourceAuthPageModelType = {
         alreadyUsedTitles: resourceAuthPage.policies.map((ip) => {
           return ip.policyName;
         }),
+        defaultValue: payload?.defaultValue,
       };
       const result: null | { title: string; text: string; } = yield call(fPolicyBuilder, parmas);
       if (!result) {

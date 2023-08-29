@@ -2,7 +2,12 @@ import * as React from 'react';
 import styles from './index.less';
 import { RouteComponentProps } from 'react-router/index';
 import { Dispatch } from 'redux';
-import { OnMount_PolicyPage_Action, ResourceAuthPageModelState } from '@/models/resourceAuthPage';
+import {
+  OnAdd_Policy_Action,
+  OnMount_PolicyPage_Action,
+  ResourceAuthPageModelState,
+  UpdatePoliciesAction,
+} from '@/models/resourceAuthPage';
 import { OnChange_Page_Action, OnMount_Page_Action as OnMount_Sidebar_Action } from '@/models/resourceSider';
 import * as AHooks from 'ahooks';
 import { withRouter } from 'umi';
@@ -55,6 +60,9 @@ function Policy({ dispatch, resourceAuthPage, match }: PolicyProps) {
                 //   type: 'resourceCreatorPage/onClick_step3_addPolicyBtn',
                 //   payload: {},
                 // });
+                dispatch<OnAdd_Policy_Action>({
+                  type: 'resourceAuthPage/onAdd_Policy',
+                });
               }}>
               <FComponentsLib.FIcons.FConfiguration style={{ fontSize: 14 }} />
               <span>添加策略</span>
@@ -77,6 +85,9 @@ function Policy({ dispatch, resourceAuthPage, match }: PolicyProps) {
                   //   type: 'resourceCreatorPage/onClick_step3_addPolicyBtn',
                   //   payload: {},
                   // });
+                  dispatch<OnAdd_Policy_Action>({
+                    type: 'resourceAuthPage/onAdd_Policy',
+                  });
                 }}
               >{FI18n.i18nNext.t('authplanmgnt_list_empty_btn')}</FComponentsLib.FRectBtn>
             </div>
@@ -87,7 +98,7 @@ function Policy({ dispatch, resourceAuthPage, match }: PolicyProps) {
           resourceAuthPage.policies.length > 0 && (<>
             <div style={{ height: 20 }} />
             <FPolicyList
-              allDisabledSwitch={true}
+              atLeastOneUsing={resourceAuthPage.status === 1}
               dataSource={resourceAuthPage.policies}
               // onCheckChange={(data) => {
               //   if (data.using) {
@@ -95,6 +106,21 @@ function Policy({ dispatch, resourceAuthPage, match }: PolicyProps) {
               //   }
               //   onPolicyStatusChange(data.id, data.using);
               // }}
+              onCheckChange={(data) => {
+                if (data.using) {
+                  self._czc?.push(['_trackEvent', '授权信息页', '上线', '', 1]);
+                }
+                // onPolicyStatusChange(data.id, data.using);
+                dispatch<UpdatePoliciesAction>({
+                  type: 'resourceAuthPage/updatePolicies',
+                  payload: {
+                    updatePolicies: [{
+                      policyId: data.id,
+                      status: data.using ? 1 : 0,
+                    }],
+                  },
+                });
+              }}
             />
           </>)
         }
@@ -123,6 +149,13 @@ function Policy({ dispatch, resourceAuthPage, match }: PolicyProps) {
             //     defaultValue: value,
             //   },
             // });
+
+            dispatch<OnAdd_Policy_Action>({
+              type: 'resourceAuthPage/onAdd_Policy',
+              payload: {
+                defaultValue: value,
+              },
+            });
           }}
         />
       </div>

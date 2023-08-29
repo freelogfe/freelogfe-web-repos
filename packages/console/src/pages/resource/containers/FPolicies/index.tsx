@@ -16,17 +16,17 @@ interface FPoliciesProps {
 
 function FPolicies({ dispatch, resourceAuthPage }: FPoliciesProps) {
 
-  function onPolicyStatusChange(id: string, status: boolean) {
-    dispatch<UpdatePoliciesAction>({
-      type: 'resourceAuthPage/updatePolicies',
-      payload: {
-        updatePolicies: [{
-          policyId: id,
-          status: status ? 1 : 0,
-        }],
-      },
-    });
-  }
+  // function onPolicyStatusChange(id: string, status: boolean) {
+  //   dispatch<UpdatePoliciesAction>({
+  //     type: 'resourceAuthPage/updatePolicies',
+  //     payload: {
+  //       updatePolicies: [{
+  //         policyId: id,
+  //         status: status ? 1 : 0,
+  //       }],
+  //     },
+  //   });
+  // }
 
   // function openNewVisible() {
   //   dispatch<ChangeAction>({
@@ -77,7 +77,16 @@ function FPolicies({ dispatch, resourceAuthPage }: FPoliciesProps) {
             if (data.using) {
               self._czc?.push(['_trackEvent', '授权信息页', '上线', '', 1]);
             }
-            onPolicyStatusChange(data.id, data.using);
+            // onPolicyStatusChange(data.id, data.using);
+            dispatch<UpdatePoliciesAction>({
+              type: 'resourceAuthPage/updatePolicies',
+              payload: {
+                updatePolicies: [{
+                  policyId: data.id,
+                  status: data.using ? 1 : 0,
+                }],
+              },
+            });
           }}
         />)
     }
