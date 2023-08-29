@@ -279,7 +279,7 @@ function FObjectSelector({
   </>);
 }
 
-export default connect(({ storageObjectDepSelector, storageHomePage }: ConnectState) => ({
-  selector: storageObjectDepSelector,
+export default connect(({ storageHomePage }: ConnectState) => ({
+  // selector: storageObjectDepSelector,
   storageHomePage: storageHomePage,
 }))(FObjectSelector);
