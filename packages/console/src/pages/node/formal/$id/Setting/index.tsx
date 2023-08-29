@@ -200,6 +200,7 @@ function Setting({ dispatch, nodeManagerPage }: SettingProps) {
                   nodeManagerPage.setting_nodeInfo.introduction
                     ? (<FComponentsLib.FContentText
                       text={nodeManagerPage.setting_nodeInfo.introduction}
+                      style={{ wordBreak: 'break-all' }}
                       type={'normal'}
                     />)
                     : (<i style={{ color: '#999' }}>暂无无内容...</i>)
