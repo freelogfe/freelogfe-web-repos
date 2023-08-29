@@ -41,7 +41,7 @@ function ResourceCreator({
       <div style={{ height: 40 }} />
       <div style={{ paddingLeft: 30 }}>
         {/*<FComponentsLib.FTitleText text={'发行资源'} type={'h1'} />*/}
-        <FComponentsLib.FTitleText text={'rqr_title'} type={'h1'} />
+        <FComponentsLib.FTitleText text={FI18n.i18nNext.t('rqr_title')} type={'h1'} />
       </div>
 
       <div style={{ height: 40 }} />
