@@ -4,7 +4,6 @@ import { AutoComplete, Dropdown, Popover, Space } from 'antd';
 import * as AHooks from 'ahooks';
 import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
-// import FInput from '@/components/FInput';
 
 interface Option {
   value: string;
@@ -318,7 +317,7 @@ function FResourceTypeInput(
         value={$state._autoCompleteInput}
         className={styles.AutoComplete}
         onChange={(value: string) => {
-          // console.log(value, 'value 908wieojfklsdfjasldkfjlkj');
+          console.log(value, 'value 908wieojfklsdfjasldkfjlkj');
           if (!value) {
             return;
           }
@@ -328,13 +327,17 @@ function FResourceTypeInput(
           }
 
           const custom: string = value.replace(startStr, '');
+          // console.log(custom, '1234567890 1234567890wsiedojflksdjl');
 
-          $setState({
-            _autoCompleteInputIsNew: value !== startStr && FUtil.Regexp.RESOURCE_TYPE.test(custom) && $state._autoCompleteOptions.every((aco) => {
-              return aco.labels.join('/') !== value;
-            }),
-            _autoCompleteInput: value,
-          });
+          if (value.length <= startStr.length + 40) {
+            $setState({
+              _autoCompleteInputIsNew: value !== startStr && FUtil.Regexp.RESOURCE_TYPE.test(custom) && $state._autoCompleteOptions.every((aco) => {
+                return aco.labels.join('/') !== value;
+              }),
+              _autoCompleteInput: value,
+            });
+          }
+
         }}
         onSelect={(value: any, op: any) => {
           const data: FResourceTypeInputStates['_autoCompleteOptions'][number] = op.data;
