@@ -493,14 +493,14 @@ function Contract({ dispatch, nodeManager_Contract_Page }: ContractProps) {
                     {/*  placeholder={FI18n.i18nNext.t('nodemgmt_search_contracts_hint')}*/}
                     {/*/>*/}
                     <FComponentsLib.FInput.FSearch
-                      lengthLimit={-1}
+                      // lengthLimit={-1}
                       className={styles.filterInput}
                       // wrapClassName={styles.filterInput}
                       // theme='dark'
                       // debounce={300}
                       value={authorizeFilterInput}
-                      onChange={(e) => {
-                        setAuthorizeFilterInput(e.target.value);
+                      onChange={(value) => {
+                        setAuthorizeFilterInput(value);
                       }}
                       // placeholder={FI18n.i18nNext.t('nodemgmt_search_contracts_hint')}
                       placeholder={FI18n.i18nNext.t('nodemngt_contract_search_hint')}
@@ -617,14 +617,14 @@ function Contract({ dispatch, nodeManager_Contract_Page }: ContractProps) {
                     {/*  }}*/}
                     {/*/>*/}
                     <FComponentsLib.FInput.FSearch
-                      lengthLimit={-1}
+                      // lengthLimit={-1}
                       value={authorizedFilterInput}
                       className={styles.filterInput}
                       // wrapClassName={styles.filterInput}
                       // theme='dark'
                       // debounce={300}
-                      onChange={(e) => {
-                        setAuthorizedFilterInput(e.target.value);
+                      onChange={(value) => {
+                        setAuthorizedFilterInput(value);
 
                       }}
                     />

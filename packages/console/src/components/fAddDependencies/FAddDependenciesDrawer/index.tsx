@@ -262,8 +262,8 @@ function FAddDependenciesDrawer({
             // onDebounceChange={(value) => {
             //   set_searchInput(value);
             // }}
-            onChange={(e) => {
-              set_searchInput(e.target.value);
+            onChange={(value) => {
+              set_searchInput(value);
             }}
             value={searchInput}
             className={styles.filterInput}

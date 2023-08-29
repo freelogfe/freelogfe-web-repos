@@ -137,9 +137,9 @@ function FResourceSelector($prop: FResourceSelectorProps) {
       </FDropdownMenu>
       <FComponentsLib.FInput.FSearch
         value={$state.rInput}
-        onChange={(e) => {
+        onChange={(value) => {
           $setState({
-            rInput: e.target.value,
+            rInput: value,
           });
         }}
       />

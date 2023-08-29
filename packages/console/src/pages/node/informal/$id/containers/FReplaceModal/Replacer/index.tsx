@@ -162,11 +162,11 @@ function Replacer({ dispatch, informalNodeManagerPage }: ReplacerProps) {
           // value={informalNodeManagerPage.replaceModal_Replacer_Keywords}
           value={$state.searchInput}
           // debounce={300}
-          onChange={(e) => {
+          onChange={(value) => {
             // console.log(value, 'value!@#$');
             // onChange({replacerKeywords: value}, true);
             $setState({
-              searchInput: e.target.value,
+              searchInput: value,
             });
           }}
           size={'small'}

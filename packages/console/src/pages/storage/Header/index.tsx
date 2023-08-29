@@ -66,13 +66,13 @@ function Header({ dispatch, storageHomePage }: HeaderProps) {
         {/*  placeholder={FI18n.i18nNext.t('storage_search_objects_hint')}*/}
         {/*/>*/}
         <FComponentsLib.FInput.FSearch
-          lengthLimit={-1}
+          // lengthLimit={-1}
           value={filterInput}
           // theme={'dark'}
           // debounce={300}
           style={{ width: 300 }}
-          onChange={(e) => {
-            setFilterInput(e.target.value);
+          onChange={(value) => {
+            setFilterInput(value);
 
           }}
           placeholder={FI18n.i18nNext.t('storage_search_objects_hint')}

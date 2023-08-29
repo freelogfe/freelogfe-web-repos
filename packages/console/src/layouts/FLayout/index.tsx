@@ -254,8 +254,8 @@ function FLayout({
                 self.open(FUtil.LinkTo.globalSearch({ search: $state.searchInput }));
               }}
               value={$state.searchInput}
-              onChange={(e) => {
-                $setState({ searchInput: e.target.value });
+              onChange={(value) => {
+                $setState({ searchInput: value });
               }}
             />
           }

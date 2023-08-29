@@ -263,8 +263,8 @@ function Themes({ match, dispatch, nodeManagerPage }: ThemesProps) {
                   className={styles.input}
                   // theme='dark'
                   // debounce={300}
-                  onChange={(e) => {
-                    setThemeInputFilter(e.target.value);
+                  onChange={(value) => {
+                    setThemeInputFilter(value);
 
                   }}
                   // placeholder={FI18n.i18nNext.t('nodemgmt_search_themes_hint')}

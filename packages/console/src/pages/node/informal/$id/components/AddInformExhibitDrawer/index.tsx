@@ -300,15 +300,15 @@ function FAddInformExhibitDrawer({
                     />
                   </div>
                   <FComponentsLib.FInput.FSearch
-                    lengthLimit={-1}
+                    // lengthLimit={-1}
                     value={inputValue}
                     // debounce={300}
                     // onDebounceChange={onChange_Input}
                     // theme='dark'
                     className={styles.filterInput}
                     // wrapClassName={styles.filterInput}
-                    onChange={(e) => {
-                      setInputValue(e.target.value);
+                    onChange={(value) => {
+                      setInputValue(value);
                     }}
                   />
                 </div>)
@@ -320,8 +320,8 @@ function FAddInformExhibitDrawer({
                     // theme='dark'
                     className={styles.filterInput1}
                     // wrapClassName={styles.filterInput1}
-                    onChange={(e) => {
-                      setInputValue(e.target.value);
+                    onChange={(value) => {
+                      setInputValue(value);
                     }}
                   />
                 </div>)

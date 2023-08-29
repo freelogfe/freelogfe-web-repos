@@ -236,7 +236,7 @@ function FObjectSelector({
         // theme='dark'
         // debounce={300}
         value={$state.oInput}
-        onChange={(e) => {
+        onChange={(value) => {
           // dispatch<OnChangeOConditionsAction>({
           //   type: 'storageObjectDepSelector/onChangeOConditions',
           //   payload: {
@@ -244,7 +244,7 @@ function FObjectSelector({
           //   },
           // });
           $setState({
-            oInput: e.target.value,
+            oInput: value,
           });
         }}
       />

@@ -154,8 +154,8 @@ function FObjectSelectorDrawer({ resourceTypeCode, onSelect, onClose }: FObjectS
         // theme='dark'
         // debounce={300}
         value={inputValue}
-        onChange={(e) => {
-          set_inputValue(e.target.value);
+        onChange={(value) => {
+          set_inputValue(value);
         }}
       />
     </div>

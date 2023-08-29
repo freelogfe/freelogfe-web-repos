@@ -139,8 +139,8 @@ function Theme({ dispatch, informalNodeManagerPage }: ThemeProps) {
                   value={filterKeywords}
                   // debounce={300}
                   style={{width: 300}}
-                  onChange={(e) => {
-                    setFilterKeywords(e.target.value);
+                  onChange={(value) => {
+                    setFilterKeywords(value);
 
                   }}
                   placeholder={FI18n.i18nNext.t('nodemgmt_search_themes_hint')}

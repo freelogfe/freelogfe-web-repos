@@ -278,11 +278,11 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                 <div>
                   <FComponentsLib.FInput.FSearch
                     value={nodeManagerPage.exhibit_InputFilter}
-                    onChange={(e) => {
+                    onChange={(value) => {
                       dispatch<OnChange_Exhibit_InputFilter_Action>({
                         type: 'nodeManagerPage/onChange_Exhibit_InputFilter',
                         payload: {
-                          value: e.target.value,
+                          value: value,
                         },
                       });
                     }}
