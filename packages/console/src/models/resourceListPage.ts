@@ -181,13 +181,20 @@ const Model: ResourceListPageModelType = {
       //   return rt !== '全部';
       // });
 
+      console.log(resourceListPage.resourceTypeCodes, 'resourceListPage.resourceTypeCodes 98wiedosfjsdlkfjlsdjfljl');
+
       const resourceTypes: string[] = resourceListPage.resourceTypeCodes.value.split('#');
       let resourceTypeCode: string = resourceTypes[0];
       let resourceTypeCategory: 1 | 2 = 1;
+      let resourceType: string = '';
 
       if (resourceTypes.length > 1 && resourceTypes[resourceTypes.length - 1] === 'other') {
         resourceTypeCode = resourceTypes[0];
         resourceTypeCategory = 2;
+      }
+
+      if (resourceTypes.length > 1 && resourceTypes[resourceTypes.length - 1] === 'all') {
+        resourceType = resourceListPage.resourceTypeCodes.labels[resourceListPage.resourceTypeCodes.labels.length - 2];
       }
 
       const params: Parameters<typeof FServiceAPI.Resource.list>[0] = {
@@ -195,10 +202,10 @@ const Model: ResourceListPageModelType = {
         skip: resource_List.length,
         limit: FUtil.Predefined.pageSize,
         keywords: resourceListPage.inputText || undefined,
-        // resourceType: resourceTypes.length === 0 ? undefined : String(resourceTypes[resourceTypes.length - 1]),
+        resourceType: resourceType || undefined,
         // status: Number(resourceListPage.resourceStatus) as 0 | 1 | 2,
-        resourceTypeCode: resourceTypeCode || undefined,
-        resourceTypeCategory: resourceTypeCategory,
+        resourceTypeCode: resourceType === '' ? (resourceTypeCode || undefined) : undefined,
+        resourceTypeCategory: resourceType === '' ? resourceTypeCategory : undefined,
         status: resourceListPage.resourceStatus === '#' ? undefined : (resourceListPage.resourceStatus as 0),
         isSelf: 1,
       };
