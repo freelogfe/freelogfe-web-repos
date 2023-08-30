@@ -210,7 +210,7 @@ function Sider({ resourceSider, dispatch }: SilderProps) {
           target={'_blank'}
           className={styles.resourceName}
         >
-          {resourceSider.resourceName}
+          {resourceSider.resourceTitle || resourceSider.resourceName}
         </FLink>
         <div style={{ height: 10 }} />
         <label className={styles.label}>

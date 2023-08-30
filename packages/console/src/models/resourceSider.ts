@@ -11,6 +11,7 @@ export type ResourceSiderModelState = {
   state: 'loading' | 'loaded';
   resourceID: string;
   resourceName: string;
+  resourceTitle: string;
   resourceState: '' | 'unreleased' | 'offline' | 'online';
   resourceCover: string;
   resourceType: string[];
@@ -91,6 +92,7 @@ const initStates: ResourceSiderModelState = {
   state: 'loading',
   resourceID: '',
   resourceName: '',
+  resourceTitle: '',
   resourceState: '',
   resourceCover: '',
   resourceType: [],
@@ -173,6 +175,7 @@ const Model: ResourceSiderModelType = {
           status: number;
           resourceId: string;
           resourceName: string;
+          resourceTitle: string;
           resourceVersions: {
             version: string;
           }[];
@@ -208,6 +211,7 @@ const Model: ResourceSiderModelType = {
         payload: {
           state: 'loaded',
           resourceName: data_resourceInfo.resourceName,
+          resourceTitle: data_resourceInfo.resourceTitle,
           resourceState: data_resourceInfo.status === 0 ? 'unreleased' : data_resourceInfo.status === 4 ? 'offline' : 'online',
           resourceCover: data_resourceInfo.coverImages[0] || '',
           resourceType: data_resourceInfo.resourceType,
