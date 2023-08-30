@@ -973,6 +973,13 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
 
         <div className={styles.btn}>
 
+          {
+            resourceVersionCreatorPage.draftSaveTime && (<FComponentsLib.FContentText
+              text={`已保存 ${resourceVersionCreatorPage.draftSaveTime}`}
+              type={'additional2'}
+            />)
+          }
+
           {/*{FI18n.i18nNext.t('rqr_step3_btn_later')}*/}
           <FComponentsLib.FTextBtn
             type={'default'}
