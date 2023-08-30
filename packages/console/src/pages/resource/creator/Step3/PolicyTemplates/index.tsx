@@ -52,6 +52,7 @@ function PolicyTemplates({ onSelect }: PolicyTemplatesProps) {
     {
       $policyTemplates.map((pt) => {
         return (<a
+          key={pt.id}
           className={styles.policyTemplate}
           onClick={() => {
             onSelect && onSelect({ text: pt.code, title: pt.title });
