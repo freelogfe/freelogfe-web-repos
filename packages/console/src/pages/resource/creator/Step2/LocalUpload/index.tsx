@@ -353,13 +353,14 @@ function LocalUpload({ resourceTypeCode, onSucceed }: LocalUploadProps) {
         })}
       />
     </FModal>
-
     <FModal
       title={null}
       width={920}
       open={$otherUsedResource.length > 0}
-
       onCancel={() => {
+        set$otherUsedResource([]);
+      }}
+      onOk={() => {
         set$otherUsedResource([]);
       }}
       okText={'关闭'}

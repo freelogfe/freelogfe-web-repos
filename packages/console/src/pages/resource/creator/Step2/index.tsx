@@ -504,91 +504,20 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
         </Space>)
     }
 
-    {
-      $showMore && (<>
-        <div style={{ height: 10 }} />
+    <div style={{ display: $showMore ? 'block' : 'none' }}>
+      <div style={{ height: 10 }} />
 
-        <div className={styles.block}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            {FI18n.i18nNext.t('resourceoptions_title')}
-            {/*<FComponentsLib.FContentText text={'可选配置'} type={'highlight'} />*/}
+      <div className={styles.block}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          {FI18n.i18nNext.t('resourceoptions_title')}
+          {/*<FComponentsLib.FContentText text={'可选配置'} type={'highlight'} />*/}
 
-            <FTooltip title={FI18n.i18nNext.t('resourceinfo_add_btn_info')}>
-              <div>
-                <FComponentsLib.FTextBtn
-                  style={{ fontSize: 12, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 5 }}
-                  type='primary'
-                  onClick={async () => {
-                    const dataSource: {
-                      key: string;
-                      name: string;
-                      type: 'input' | 'select';
-                      input: string;
-                      select: string[];
-                      description: string;
-                    } | null = await fResourceOptionEditor({
-                      disabledKeys: [
-                        ...resourceCreatorPage.step2_rawProperties.map<string>((rp) => rp.key),
-                        ...resourceCreatorPage.step2_additionalProperties.map<string>((rp) => rp.key),
-                        ...resourceCreatorPage.step2_customProperties.map<string>((bp) => bp.key),
-                        ...resourceCreatorPage.step2_customConfigurations.map<string>((pp) => pp.key),
-                      ],
-                      disabledNames: [
-                        ...resourceCreatorPage.step2_rawProperties.map<string>((rp) => rp.name),
-                        ...resourceCreatorPage.step2_additionalProperties.map<string>((rp) => rp.name),
-                        ...resourceCreatorPage.step2_customProperties.map<string>((bp) => bp.name),
-                        ...resourceCreatorPage.step2_customConfigurations.map<string>((pp) => pp.name),
-                      ],
-                    });
-
-                    if (!dataSource) {
-                      return;
-                    }
-
-                    await dispatch<OnChange_step2_customConfigurations_Action>({
-                      type: 'resourceCreatorPage/onChange_step2_customConfigurations',
-                      payload: {
-                        value: [
-                          ...resourceCreatorPage.step2_customConfigurations,
-                          dataSource,
-                        ],
-                      },
-                    });
-                  }}
-                >
-                  <FComponentsLib.FIcons.FConfiguration style={{ fontSize: 14 }} />
-                  <span>{FI18n.i18nNext.t('resourceoptions_add_btn')}</span>
-                </FComponentsLib.FTextBtn>
-              </div>
-            </FTooltip>
-          </div>
-
-          {
-            resourceCreatorPage.step2_customConfigurations.length === 0 && (<>
-              <div style={{ height: 10 }} />
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                {/*<span>{FI18n.i18nNext.t('resourceoptions_list_empty')}</span>*/}
-                <FComponentsLib.FContentText
-                  text={FI18n.i18nNext.t('resourceoptions_list_empty')}
-                  type={'additional2'}
-                />
-              </div>
-              <div style={{ height: 20 }} />
-            </>)
-          }
-
-          {
-            resourceCreatorPage.step2_customConfigurations.length > 0 && (<>
-              <div style={{ height: 20 }} />
-              <FResourceOptions
-                theme={'dark'}
-                // dataSource={resourceVersionCreatorPage.customOptionsData}
-                dataSource={resourceCreatorPage.step2_customConfigurations}
-                onEdit={async (value) => {
-                  const index: number = resourceCreatorPage.step2_customConfigurations.findIndex((p) => {
-                    return p === value;
-                  });
-
+          <FTooltip title={FI18n.i18nNext.t('resourceinfo_add_btn_info')}>
+            <div>
+              <FComponentsLib.FTextBtn
+                style={{ fontSize: 12, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 5 }}
+                type='primary'
+                onClick={async () => {
                   const dataSource: {
                     key: string;
                     name: string;
@@ -609,7 +538,6 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
                       ...resourceCreatorPage.step2_customProperties.map<string>((bp) => bp.name),
                       ...resourceCreatorPage.step2_customConfigurations.map<string>((pp) => pp.name),
                     ],
-                    defaultData: value,
                   });
 
                   if (!dataSource) {
@@ -619,133 +547,203 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
                   await dispatch<OnChange_step2_customConfigurations_Action>({
                     type: 'resourceCreatorPage/onChange_step2_customConfigurations',
                     payload: {
-                      value: resourceCreatorPage.step2_customConfigurations.map((a, b) => {
-                        if (b !== index) {
-                          return a;
-                        }
-                        return dataSource;
-                      }),
+                      value: [
+                        ...resourceCreatorPage.step2_customConfigurations,
+                        dataSource,
+                      ],
                     },
                   });
                 }}
-                onDelete={async (value) => {
-                  await dispatch<OnChange_step2_customConfigurations_Action>({
-                    type: 'resourceCreatorPage/onChange_step2_customConfigurations',
-                    payload: {
-                      value: resourceCreatorPage.step2_customConfigurations.filter((a) => {
-                        return a.key !== value.key && a.name !== value.name;
-                      }),
-                    },
-                  });
-                }}
-              />
-            </>)
-          }
-
+              >
+                <FComponentsLib.FIcons.FConfiguration style={{ fontSize: 14 }} />
+                <span>{FI18n.i18nNext.t('resourceoptions_add_btn')}</span>
+              </FComponentsLib.FTextBtn>
+            </div>
+          </FTooltip>
         </div>
 
-        <div style={{ height: 5 }} />
-
-        <div className={styles.block}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            {/*{FI18n.i18nNext.t('claim_rely_title')}*/}
-            <FComponentsLib.FContentText text={FI18n.i18nNext.t('claim_rely_title')} type={'highlight'} />
-            <FTooltip title={FI18n.i18nNext.t('resourceinfo_add_btn_info')}>
-              <div>
-                <FComponentsLib.FTextBtn
-                  style={{ fontSize: 12, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 5 }}
-                  type='primary'
-                  onClick={async () => {
-                    const p = await getProcessor('resourceCreatorStep2');
-                    const baseUpcastResources: Awaited<ReturnType<typeof p.getBaseUpcastResources>> = await p.getBaseUpcastResources();
-                    await fAddDependencies({
-                      // resourceTypeCode: resourceVersionCreatorPage.resourceInfo?.resourceTypeCode || '',
-                      existingResources: (await p.getAllTargets()).map((t) => {
-                        return {
-                          resourceID: t.id,
-                          resourceNme: t.name,
-                        };
-                      }),
-                      baseUpcastResources: baseUpcastResources,
-                      async onSelect_Resource({ resourceID, resourceName }) {
-                        // console.log('8***********8sdflksdjlkj');
-                        // const p = await getProcessor('resourceCreatorStep2');
-                        await p.addTargets([{
-                          id: resourceID,
-                          name: resourceName,
-                          type: 'resource',
-                          // versionRange: '^0.1.0',
-                        }]);
-                        // await dispatch<OnChange_DataIsDirty_Action>({
-                        //   type: 'resourceVersionCreatorPage/onChange_DataIsDirty',
-                        //   payload: {
-                        //     value: true,
-                        //   },
-                        // });
-                      },
-                      async onDeselect_Resource({ resourceID, resourceName }) {
-                        // const p = await getProcessor('resourceCreatorStep2');
-                        await p.removeTarget({
-                          id: resourceID,
-                          name: resourceName,
-                          type: 'resource',
-                        });
-                        // await dispatch<OnChange_DataIsDirty_Action>({
-                        //   type: 'resourceVersionCreatorPage/onChange_DataIsDirty',
-                        //   payload: {
-                        //     value: true,
-                        //   },
-                        // });
-                      },
-                    });
-                  }}
-                >
-                  <FComponentsLib.FIcons.FConfiguration style={{ fontSize: 14 }} />
-                  <span>{FI18n.i18nNext.t('claim_rely_add_btn')}</span>
-                </FComponentsLib.FTextBtn>
-              </div>
-            </FTooltip>
-          </div>
-
-          {
-            size && size.height === 0 && (<>
-              <div style={{ height: 10 }} />
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
-                {
-                  FI18n.i18nNext.t('claim_rely_list_empty').split('\n').map((i, j) => {
-                    return (<FComponentsLib.FContentText key={j} text={i} type={'additional2'} />);
-                  })
-                }
-              </div>
-              <div style={{ height: 20 }} />
-            </>)
-          }
-
-          <>
-            {
-              size && size.height > 0 && (<div style={{ height: 20 }} />)
-            }
-            <div ref={ref}>
-              <FResourceAuthorizationProcessor
-                width={860}
-                height={600}
-                resourceID={resourceCreatorPage.step1_createdResourceInfo?.resourceID || ''}
-                processorIdentifier={'resourceCreatorStep2'}
-                onChanged={() => {
-                  // dispatch<OnChange_DataIsDirty_Action>({
-                  //   type: 'resourceVersionCreatorPage/onChange_DataIsDirty',
-                  //   payload: {
-                  //     value: true,
-                  //   },
-                  // });
-                  // console.log('****** w0e98iofjsdlk ***((((((((');
-                }}
+        {
+          resourceCreatorPage.step2_customConfigurations.length === 0 && (<>
+            <div style={{ height: 10 }} />
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              {/*<span>{FI18n.i18nNext.t('resourceoptions_list_empty')}</span>*/}
+              <FComponentsLib.FContentText
+                text={FI18n.i18nNext.t('resourceoptions_list_empty')}
+                type={'additional2'}
               />
             </div>
-          </>
+            <div style={{ height: 20 }} />
+          </>)
+        }
+
+        {
+          resourceCreatorPage.step2_customConfigurations.length > 0 && (<>
+            <div style={{ height: 20 }} />
+            <FResourceOptions
+              theme={'dark'}
+              // dataSource={resourceVersionCreatorPage.customOptionsData}
+              dataSource={resourceCreatorPage.step2_customConfigurations}
+              onEdit={async (value) => {
+                const index: number = resourceCreatorPage.step2_customConfigurations.findIndex((p) => {
+                  return p === value;
+                });
+
+                const dataSource: {
+                  key: string;
+                  name: string;
+                  type: 'input' | 'select';
+                  input: string;
+                  select: string[];
+                  description: string;
+                } | null = await fResourceOptionEditor({
+                  disabledKeys: [
+                    ...resourceCreatorPage.step2_rawProperties.map<string>((rp) => rp.key),
+                    ...resourceCreatorPage.step2_additionalProperties.map<string>((rp) => rp.key),
+                    ...resourceCreatorPage.step2_customProperties.map<string>((bp) => bp.key),
+                    ...resourceCreatorPage.step2_customConfigurations.map<string>((pp) => pp.key),
+                  ],
+                  disabledNames: [
+                    ...resourceCreatorPage.step2_rawProperties.map<string>((rp) => rp.name),
+                    ...resourceCreatorPage.step2_additionalProperties.map<string>((rp) => rp.name),
+                    ...resourceCreatorPage.step2_customProperties.map<string>((bp) => bp.name),
+                    ...resourceCreatorPage.step2_customConfigurations.map<string>((pp) => pp.name),
+                  ],
+                  defaultData: value,
+                });
+
+                if (!dataSource) {
+                  return;
+                }
+
+                await dispatch<OnChange_step2_customConfigurations_Action>({
+                  type: 'resourceCreatorPage/onChange_step2_customConfigurations',
+                  payload: {
+                    value: resourceCreatorPage.step2_customConfigurations.map((a, b) => {
+                      if (b !== index) {
+                        return a;
+                      }
+                      return dataSource;
+                    }),
+                  },
+                });
+              }}
+              onDelete={async (value) => {
+                await dispatch<OnChange_step2_customConfigurations_Action>({
+                  type: 'resourceCreatorPage/onChange_step2_customConfigurations',
+                  payload: {
+                    value: resourceCreatorPage.step2_customConfigurations.filter((a) => {
+                      return a.key !== value.key && a.name !== value.name;
+                    }),
+                  },
+                });
+              }}
+            />
+          </>)
+        }
+
+      </div>
+
+      <div style={{ height: 5 }} />
+
+      <div className={styles.block}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          {/*{FI18n.i18nNext.t('claim_rely_title')}*/}
+          <FComponentsLib.FContentText text={FI18n.i18nNext.t('claim_rely_title')} type={'highlight'} />
+          <FTooltip title={FI18n.i18nNext.t('resourceinfo_add_btn_info')}>
+            <div>
+              <FComponentsLib.FTextBtn
+                style={{ fontSize: 12, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 5 }}
+                type='primary'
+                onClick={async () => {
+                  const p = await getProcessor('resourceCreatorStep2');
+                  const baseUpcastResources: Awaited<ReturnType<typeof p.getBaseUpcastResources>> = await p.getBaseUpcastResources();
+                  await fAddDependencies({
+                    // resourceTypeCode: resourceVersionCreatorPage.resourceInfo?.resourceTypeCode || '',
+                    existingResources: (await p.getAllTargets()).map((t) => {
+                      return {
+                        resourceID: t.id,
+                        resourceNme: t.name,
+                      };
+                    }),
+                    baseUpcastResources: baseUpcastResources,
+                    async onSelect_Resource({ resourceID, resourceName }) {
+                      // console.log('8***********8sdflksdjlkj');
+                      // const p = await getProcessor('resourceCreatorStep2');
+                      await p.addTargets([{
+                        id: resourceID,
+                        name: resourceName,
+                        type: 'resource',
+                        // versionRange: '^0.1.0',
+                      }]);
+                      // await dispatch<OnChange_DataIsDirty_Action>({
+                      //   type: 'resourceVersionCreatorPage/onChange_DataIsDirty',
+                      //   payload: {
+                      //     value: true,
+                      //   },
+                      // });
+                    },
+                    async onDeselect_Resource({ resourceID, resourceName }) {
+                      // const p = await getProcessor('resourceCreatorStep2');
+                      await p.removeTarget({
+                        id: resourceID,
+                        name: resourceName,
+                        type: 'resource',
+                      });
+                      // await dispatch<OnChange_DataIsDirty_Action>({
+                      //   type: 'resourceVersionCreatorPage/onChange_DataIsDirty',
+                      //   payload: {
+                      //     value: true,
+                      //   },
+                      // });
+                    },
+                  });
+                }}
+              >
+                <FComponentsLib.FIcons.FConfiguration style={{ fontSize: 14 }} />
+                <span>{FI18n.i18nNext.t('claim_rely_add_btn')}</span>
+              </FComponentsLib.FTextBtn>
+            </div>
+          </FTooltip>
         </div>
-      </>)
-    }
+
+        {
+          size && size.height === 0 && (<>
+            <div style={{ height: 10 }} />
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
+              {
+                FI18n.i18nNext.t('claim_rely_list_empty').split('\n').map((i, j) => {
+                  return (<FComponentsLib.FContentText key={j} text={i} type={'additional2'} />);
+                })
+              }
+            </div>
+            <div style={{ height: 20 }} />
+          </>)
+        }
+
+        <>
+          {
+            size && size.height > 0 && (<div style={{ height: 20 }} />)
+          }
+          <div ref={ref}>
+            <FResourceAuthorizationProcessor
+              width={860}
+              height={600}
+              resourceID={resourceCreatorPage.step1_createdResourceInfo?.resourceID || ''}
+              processorIdentifier={'resourceCreatorStep2'}
+              onChanged={() => {
+                // dispatch<OnChange_DataIsDirty_Action>({
+                //   type: 'resourceVersionCreatorPage/onChange_DataIsDirty',
+                //   payload: {
+                //     value: true,
+                //   },
+                // });
+                // console.log('****** w0e98iofjsdlk ***((((((((');
+              }}
+            />
+          </div>
+        </>
+      </div>
+    </div>
 
 
     <div style={{ height: 30 }} />
