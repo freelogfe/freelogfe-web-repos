@@ -132,7 +132,7 @@ function Step4({ dispatch, resourceCreatorPage }: Step4Props) {
 
       {/*{FI18n.i18nNext.t('rqr_step4_btn_release')}*/}
       <FComponentsLib.FRectBtn
-        // disabled={true}
+        disabled={resourceCreatorPage.step4_resourceTitle.length > 100}
         type={'primary'}
         onClick={() => {
           dispatch<OnClick_step4_submitBtn_Action>({

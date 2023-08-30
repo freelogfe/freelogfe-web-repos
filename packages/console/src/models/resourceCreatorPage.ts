@@ -75,7 +75,6 @@ export interface ResourceCreatorPageModelState {
   step4_resourceTitle: string;
   step4_resourceCover: string;
   step4_resourceLabels: string[];
-
 }
 
 export interface ChangeAction extends AnyAction {
