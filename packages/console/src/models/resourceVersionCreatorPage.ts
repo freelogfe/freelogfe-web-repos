@@ -1131,26 +1131,32 @@ const Model: ResourceVersionCreatorModelType = {
         resourceVersionCreatorPage,
       }));
 
+      // console.log(resourceVersionCreatorPage.resourceInfo, 'resourceVersionCreatorPage.resourceInfo sdifjlsdkfjlksdjflkjsdlkfj');
+
       if (!resourceVersionCreatorPage.resourceInfo) {
         return;
       }
 
-      const p: { getAllTargets(): void; getBaseUpcastResources(): { resourceID: string; resourceName: string; }[] } = yield call(getProcessor, 'resourceVersionCreator');
-      const directDependencies: any[] = yield call(p.getAllTargets);
-      const baseUpcastResources: {
+      let directDependencies: any[] = [];
+      let baseUpcastResources: {
         resourceID: string;
         resourceName: string;
-      }[] = yield call(p.getBaseUpcastResources);
+      }[] = [];
 
+      if (resourceVersionCreatorPage.selectedFileInfo) {
+        const p: { getAllTargets(): void; getBaseUpcastResources(): { resourceID: string; resourceName: string; }[] } = yield call(getProcessor, 'resourceVersionCreator');
+        directDependencies = yield call(p.getAllTargets);
+        baseUpcastResources = yield call(p.getBaseUpcastResources);
+      }
       // console.log(baseUpcastResources, 'baseUpcastResourcesoisjdlkfjlsdkjflsdjfljsl');
 
       const draftData: IResourceCreateVersionDraftType = {
         versionInput: resourceVersionCreatorPage.versionInput,
         selectedFileInfo: resourceVersionCreatorPage.selectedFileInfo,
-        additionalProperties: resourceVersionCreatorPage.additionalProperties.map((p) => {
+        additionalProperties: resourceVersionCreatorPage.additionalProperties.map((ap) => {
           return {
-            key: p.key,
-            value: p.value,
+            key: ap.key,
+            value: ap.value,
           };
         }),
         customProperties: resourceVersionCreatorPage.customProperties,

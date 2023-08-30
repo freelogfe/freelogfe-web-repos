@@ -2,11 +2,8 @@ import * as React from 'react';
 import styles from './index.less';
 import {Input, InputRef} from 'antd';
 import {
-    // ChangeEventHandler,
     KeyboardEventHandler
 } from 'react';
-
-// import {FSearchInput} from "../index";
 
 export interface FSearchInputProps {
     value: string;
@@ -15,10 +12,8 @@ export interface FSearchInputProps {
     hasError?: boolean;
     size?: 'small' | 'middle';
     style?: React.CSSProperties;
-    // FI18n.i18nNext.t('form_input_search_error_length')
     lengthLimit?: number;
 
-    // onChange?: ChangeEventHandler<HTMLInputElement>;
     onChange?(value: string): void;
 
     onPressEnter?: KeyboardEventHandler<HTMLInputElement>;
@@ -28,7 +23,6 @@ function FSearchInput({
                           value,
                           placeholder = '',
                           className = '',
-                          // hasError = false,
                           size = 'middle',
                           style = {},
                           lengthLimit = 100,
