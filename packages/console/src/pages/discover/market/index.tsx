@@ -189,7 +189,7 @@ function Market({ dispatch, discoverPage }: MarketProps) {
         <>
           <div style={{ height: 30 }} />
           <div className={styles.Content}>
-            {discoverPage.dataSource.map((resource: any) => (
+            {discoverPage.dataSource.map((resource) => (
               <FResourceCard
                 key={resource.id}
                 resource={resource}

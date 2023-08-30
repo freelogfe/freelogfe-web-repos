@@ -169,6 +169,7 @@ function FAddDependenciesDrawer({
           dataList: {
             resourceId: string;
             resourceName: string;
+            resourceTitle: string;
             resourceType: string[];
             updateDate: string;
             status: 0 | 1 | 2 | 4;

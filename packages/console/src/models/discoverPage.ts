@@ -3,6 +3,7 @@ import { EffectsCommandMap, Subscription, SubscriptionAPI } from 'dva';
 import { DvaReducer } from './shared';
 import { ConnectState } from '@/models/connect';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
+import { PolicyFullInfo_Type } from '@/type/contractTypes';
 
 type HandledOperationCategories = {
   id: string;
@@ -28,10 +29,13 @@ export interface DiscoverPageModelState {
   dataSource: {
     id: string;
     cover: string;
+    name: string;
     title: string;
     version: string;
     policy: string[];
     type: string[];
+    status: 0 | 1 | 2 | 4;
+    authProblem?: boolean;
   }[];
   tags: string;
   totalItem: number;
@@ -248,30 +252,47 @@ const Model: DiscoverPageModelType = {
         operationCategoryCode: selectedOperationCategoryIDs[selectedOperationCategoryIDs.length - 1],
       };
 
-      const { data } = yield call(FServiceAPI.Resource.list, params);
+      const { data }: {
+        data: {
+          dataList: {
+            resourceId: string;
+            coverImages: string[];
+            resourceName: string;
+            resourceTitle: string;
+            resourceType: string[];
+            updateDate: string;
+            status: 0 | 1 | 2 | 4;
+            latestVersion: string;
+            policies: PolicyFullInfo_Type[];
+          }[];
+          totalItem: number;
+        };
+      } = yield call(FServiceAPI.Resource.list, params);
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           totalItem: data.totalItem,
           dataSource: [
             ...dataSource,
-            ...(data.dataList as any[])
+            ...data.dataList
               .filter((i) => {
                 return !existentResourceIDs.includes(i.resourceId);
               })
-              .map<DiscoverPageModelState['dataSource'][number]>((i: any) => {
+              .map<DiscoverPageModelState['dataSource'][number]>((i) => {
                 // console.log(i, 'i#@@#$@#$@#$@#$@#4234098ijosfdlksd');
                 return {
                   id: i.resourceId,
                   cover: i.coverImages.length > 0 ? i.coverImages[0] : '',
-                  title: i.resourceName,
+                  name: i.resourceName,
+                  title: i.resourceTitle,
                   version: i.latestVersion,
                   policy: i.policies
-                    .filter((l: any) => {
+                    .filter((l) => {
                       return l.status === 1;
                     })
-                    .map((l: any) => l.policyName),
+                    .map((l) => l.policyName),
                   type: i.resourceType,
+                  status: 1,
                 };
               }),
           ],

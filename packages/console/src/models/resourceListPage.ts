@@ -30,6 +30,7 @@ export interface ResourceListPageModelState {
   resource_List: {
     id: string;
     cover: string;
+    name: string;
     title: string;
     version: string;
     policy: string[],
@@ -181,7 +182,7 @@ const Model: ResourceListPageModelType = {
       //   return rt !== '全部';
       // });
 
-      console.log(resourceListPage.resourceTypeCodes, 'resourceListPage.resourceTypeCodes 98wiedosfjsdlkfjlsdjfljl');
+      // console.log(resourceListPage.resourceTypeCodes, 'resourceListPage.resourceTypeCodes 98wiedosfjsdlkfjlsdjfljl');
 
       const resourceTypes: string[] = resourceListPage.resourceTypeCodes.value.split('#');
       let resourceTypeCode: string = resourceTypes[0];
@@ -221,6 +222,7 @@ const Model: ResourceListPageModelType = {
           dataList: {
             resourceId: string;
             resourceName: string;
+            resourceTitle: string;
             resourceType: string[];
             latestVersion: string;
             coverImages: string[];
@@ -260,7 +262,8 @@ const Model: ResourceListPageModelType = {
           return {
             id: i.resourceId,
             cover: i.coverImages.length > 0 ? i.coverImages[0] : '',
-            title: i.resourceName,
+            name: i.resourceName,
+            title: i.resourceTitle,
             version: i.latestVersion,
             policy: i.policies
               .filter((l) => {

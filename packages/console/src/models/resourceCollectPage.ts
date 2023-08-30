@@ -19,6 +19,7 @@ export interface ResourceCollectPageModelState {
   resource_List: {
     id: string;
     cover: string;
+    name: string;
     title: string;
     version: string;
     policy: string[];
@@ -242,6 +243,7 @@ const Model: ResourceCollectModelType = {
         data: {
           resourceId: string;
           resourceName: string;
+          resourceTitle: string;
           resourceType: string[];
           latestVersion: string;
           coverImages: string[];
@@ -261,7 +263,8 @@ const Model: ResourceCollectModelType = {
           return {
             id: i.resourceId,
             cover: i.coverImages.length > 0 ? i.coverImages[0] : '',
-            title: i.resourceName,
+            name: i.resourceName,
+            title: i.resourceTitle,
             version: i.latestVersion,
             policy: i.policies
               .filter((l: any) => {

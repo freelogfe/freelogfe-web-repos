@@ -15,6 +15,7 @@ export interface FResourceCardProps {
   resource: {
     id: string;
     cover: string;
+    name: string;
     title: string;
     version: string;
     policy: string[];
@@ -31,8 +32,7 @@ export interface FResourceCardProps {
 }
 
 function FResourceCard({
-                         className = '', type = 'market',
-                         resource,
+                         className = '', type = 'market', resource,
                          onBoomJuice, onClickDetails, onClickEditing, onClickRevision, onClick,
                        }: FResourceCardProps) {
   return (
@@ -106,7 +106,7 @@ function FResourceCard({
         <div style={{ height: '12px' }} />
         <FComponentsLib.FContentText
           singleRow={true}
-          text={resource.title}
+          text={resource.title || resource.name}
         />
         <div style={{ height: '6px' }} />
         <div className={styles.MetaInfo}>
