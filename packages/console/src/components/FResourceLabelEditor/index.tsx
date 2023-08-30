@@ -88,7 +88,7 @@ function FResourceLabelEditor($prop: FResourceLabelEditorProps) {
       return;
     }
     $setState({
-      inputError: $prop.value.includes($state.input) ? '不能有重复' : '',
+      inputError: $prop.value.includes($state.input) ? '不能有重复' : $state.inputError,
     });
   }, [$prop.value]);
 
@@ -149,12 +149,6 @@ function FResourceLabelEditor($prop: FResourceLabelEditorProps) {
         if ($state.inputError !== '') {
           return;
         }
-        // if ($state.input === '') {
-        //   // onChangeInput('');
-        //   // onChangeErrorText('');
-        //   inputElementRef.current?.blur();
-        //   return;
-        // }
         if ($state.input === '') {
           $setState({
             inputError: '不能为空',
@@ -205,7 +199,7 @@ function FResourceLabelEditor($prop: FResourceLabelEditorProps) {
                     // set_errorText('');
                     $prop.onChange && $prop.onChange($prop.value.filter((i, j) => j !== w));
                     $setState({
-                      inputError: $prop.value.includes($state.input) ? '不能有重复' : '',
+                      inputError: $prop.value.includes($state.input) ? '不能有重复' : $state.inputError,
                     });
                   }}
                 />
