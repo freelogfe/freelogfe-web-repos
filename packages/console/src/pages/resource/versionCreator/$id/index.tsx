@@ -585,6 +585,7 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
               });
             }}
             onEdit_alterableData={async (value) => {
+              // console.log(value, 'valuesdijflksdjflk jlkjl');
               const index: number = resourceVersionCreatorPage.customProperties.findIndex((p) => {
                 return p === value;
               });
@@ -727,48 +728,49 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
                       </FTooltip>
 
                       {
-                        resourceVersionCreatorPage.preVersion_customConfigurations.length > 0 && (<FComponentsLib.FTextBtn
-                          type={'default'}
-                          style={{ fontSize: 12, fontWeight: 600 }}
-                          onClick={async () => {
-                            const data: {
-                              key: string;
-                              name: string;
-                              description: string;
-                              type: 'input' | 'select';
-                              input: string;
-                              select: string[];
-                            }[] | null = await fAddCustomOptions({
-                              disabledKeys: [
-                                ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
-                                ...resourceVersionCreatorPage.additionalProperties.map<string>((pp) => pp.key),
-                                ...resourceVersionCreatorPage.customProperties.map<string>((pp) => pp.key),
-                                ...resourceVersionCreatorPage.customConfigurations.map<string>((cod) => cod.key),
-                              ],
-                              disabledNames: [
-                                ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.name),
-                                ...resourceVersionCreatorPage.additionalProperties.map<string>((rp) => rp.name),
-                                ...resourceVersionCreatorPage.customProperties.map<string>((pp) => pp.name),
-                                ...resourceVersionCreatorPage.customConfigurations.map<string>((cod) => cod.name),
-                              ],
-                              defaultData: resourceVersionCreatorPage.preVersion_customConfigurations,
-                            });
-                            // console.log(data, 'data09weeisojfsdlkfjsldkjflk');
-                            if (!data) {
-                              return;
-                            }
-
-                            await dispatch<OnChange_CustomConfigurations_Action>({
-                              type: 'resourceVersionCreatorPage/onChange_CustomConfigurations',
-                              payload: {
-                                value: [
-                                  ...resourceVersionCreatorPage.customConfigurations,
-                                  ...data,
+                        resourceVersionCreatorPage.preVersion_customConfigurations.length > 0 && (
+                          <FComponentsLib.FTextBtn
+                            type={'default'}
+                            style={{ fontSize: 12, fontWeight: 600 }}
+                            onClick={async () => {
+                              const data: {
+                                key: string;
+                                name: string;
+                                description: string;
+                                type: 'input' | 'select';
+                                input: string;
+                                select: string[];
+                              }[] | null = await fAddCustomOptions({
+                                disabledKeys: [
+                                  ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
+                                  ...resourceVersionCreatorPage.additionalProperties.map<string>((pp) => pp.key),
+                                  ...resourceVersionCreatorPage.customProperties.map<string>((pp) => pp.key),
+                                  ...resourceVersionCreatorPage.customConfigurations.map<string>((cod) => cod.key),
                                 ],
-                              },
-                            });
-                          }}
-                        >从上个版本导入</FComponentsLib.FTextBtn>)
+                                disabledNames: [
+                                  ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.name),
+                                  ...resourceVersionCreatorPage.additionalProperties.map<string>((rp) => rp.name),
+                                  ...resourceVersionCreatorPage.customProperties.map<string>((pp) => pp.name),
+                                  ...resourceVersionCreatorPage.customConfigurations.map<string>((cod) => cod.name),
+                                ],
+                                defaultData: resourceVersionCreatorPage.preVersion_customConfigurations,
+                              });
+                              // console.log(data, 'data09weeisojfsdlkfjsldkjflk');
+                              if (!data) {
+                                return;
+                              }
+
+                              await dispatch<OnChange_CustomConfigurations_Action>({
+                                type: 'resourceVersionCreatorPage/onChange_CustomConfigurations',
+                                payload: {
+                                  value: [
+                                    ...resourceVersionCreatorPage.customConfigurations,
+                                    ...data,
+                                  ],
+                                },
+                              });
+                            }}
+                          >从上个版本导入</FComponentsLib.FTextBtn>)
                       }
                     </Space>)
                   }

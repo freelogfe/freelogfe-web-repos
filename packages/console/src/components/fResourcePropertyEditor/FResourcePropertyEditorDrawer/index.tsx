@@ -133,40 +133,49 @@ function FResourcePropertyEditorDrawer({
     $setState({
       pageState: 'loaded',
     });
-    if (!data) {
-      return;
+    // console.log(data, 'data data903opwjerkf;ldjlk');
+    if (!!data) {
+      // let valueInput: string = '';
+      const valueFormat: FResourcePropertyEditorDrawerStates1['valueFormat'] = {
+        // 'textInput' | 'textArea' | 'integer' | 'decimal' | 'date' | 'dataTime'
+        format: FormatEnum[data.format] as NonNullable<FResourcePropertyEditorDrawerStates1['valueFormat']>['format'],
+        ...(data.contentRule || {}),
+      };
+
+      $setState({
+        keyInput: defaultData.key,
+        nameInput: defaultData.name,
+        // valueInput: defaultData.value,
+        descriptionInput: defaultData.description,
+        // valueFormat,
+      });
+      set$valueFormat(valueFormat);
+      set$valueInput(defaultData.value);
+
+      if (valueFormat.format === 'textInput') {
+        onVerify_textInput();
+      } else if (valueFormat.format === 'textArea') {
+        onVerify_textArea();
+      } else if (valueFormat.format === 'integer') {
+        onVerify_integer();
+      } else if (valueFormat.format === 'decimal') {
+        onVerify_decimal();
+      } else if (valueFormat.format === 'date') {
+        onVerify_date();
+      } else if (valueFormat.format === 'dataTime') {
+        onVerify_dataTime();
+      }
+    } else {
+      $setState({
+        keyInput: defaultData.key,
+        nameInput: defaultData.name,
+        // valueInput: defaultData.value,
+        descriptionInput: defaultData.description,
+        // valueFormat,
+      });
+      set$valueInput(defaultData.value);
     }
 
-    // let valueInput: string = '';
-    const valueFormat: FResourcePropertyEditorDrawerStates1['valueFormat'] = {
-      // 'textInput' | 'textArea' | 'integer' | 'decimal' | 'date' | 'dataTime'
-      format: FormatEnum[data.format] as NonNullable<FResourcePropertyEditorDrawerStates1['valueFormat']>['format'],
-      ...(data.contentRule || {}),
-    };
-
-    $setState({
-      keyInput: defaultData.key,
-      nameInput: defaultData.name,
-      // valueInput: defaultData.value,
-      descriptionInput: defaultData.description,
-      // valueFormat,
-    });
-    set$valueFormat(valueFormat);
-    set$valueInput(defaultData.value);
-
-    if (valueFormat.format === 'textInput') {
-      onVerify_textInput();
-    } else if (valueFormat.format === 'textArea') {
-      onVerify_textArea();
-    } else if (valueFormat.format === 'integer') {
-      onVerify_integer();
-    } else if (valueFormat.format === 'decimal') {
-      onVerify_decimal();
-    } else if (valueFormat.format === 'date') {
-      onVerify_date();
-    } else if (valueFormat.format === 'dataTime') {
-      onVerify_dataTime();
-    }
   }
 
   function onVerify_textInput() {
