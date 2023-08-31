@@ -194,8 +194,12 @@ function Resources({ dispatch, resourceListPage }: ResourceProps) {
                   }}
                   onClickEditing={() => {
                     window.open(
-                      FUtil.LinkTo.resourceInfo({
+                      // FUtil.LinkTo.resourceInfo({
+                      //   resourceID: i.id,
+                      // }),
+                      FUtil.LinkTo.resourceVersionInfo({
                         resourceID: i.id,
+                        version: i.version || undefined,
                       }),
                     );
                   }}
