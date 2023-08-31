@@ -224,7 +224,6 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
           onClick={() => {
             history.push(FUtil.LinkTo.resourceVersionInfo({
               resourceID: resourceCreatorPage.step1_createdResourceInfo?.resourceID || '',
-              version: '1.0.0',
             }));
             // history.push(FUtil.LinkTo.myResources());
           }}
@@ -239,7 +238,7 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
               type: 'resourceCreatorPage/onClick_step2_submitBtn',
             });
           }}
-        >{FI18n.i18nNext.t('rqr_step3_btn_next')}</FComponentsLib.FRectBtn>
+        >{FI18n.i18nNext.t('rqr_step2_btn_next')}</FComponentsLib.FRectBtn>
       </div>
 
       <div style={{ height: 100 }} />
@@ -783,10 +782,11 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
           //   resourceID: resourceCreatorPage.step1_createdResourceInfo?.resourceID || '',
           //   version: '1.0.0',
           // }));
-          history.push(FUtil.LinkTo.myResources());
-
+          history.push(FUtil.LinkTo.resourceVersionInfo({
+            resourceID: resourceCreatorPage.step1_createdResourceInfo?.resourceID || '',
+          }));
         }}
-      >{FI18n.i18nNext.t('rqr_step3_btn_later')}</FComponentsLib.FTextBtn>
+      >{FI18n.i18nNext.t('rqr_step2_btn_later')}</FComponentsLib.FTextBtn>
 
       {/*{FI18n.i18nNext.t('rqr_step3_btn_next')}*/}
       <FComponentsLib.FRectBtn
@@ -797,7 +797,7 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
             type: 'resourceCreatorPage/onClick_step2_submitBtn',
           });
         }}
-      >{FI18n.i18nNext.t('rqr_step3_btn_next')}</FComponentsLib.FRectBtn>
+      >{FI18n.i18nNext.t('rqr_step2_btn_next')}</FComponentsLib.FRectBtn>
     </div>
 
     <div style={{ height: 100 }} />
