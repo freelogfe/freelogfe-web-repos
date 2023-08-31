@@ -11,6 +11,9 @@ import Step3 from './Step3';
 import Step4 from './Step4';
 import * as AHooks from 'ahooks';
 import { OnMount_Page_Action, OnUnmount_Page_Action } from '@/models/resourceCreatorPage';
+import { history } from '@@/core/history';
+import { OnChange_IsOpenCartoon_Action } from '@/models/resourceVersionCreatorPage';
+import FPrompt from '@/components/FPrompt';
 
 interface ResourceCreatorProps {
   dispatch: Dispatch;
@@ -37,6 +40,24 @@ function ResourceCreator({
 
 
   return (<div className={styles.styles}>
+
+    <FPrompt
+      watch={resourceCreatorPage.step1_dataIsDirty || resourceCreatorPage.step2_dataIsDirty || resourceCreatorPage.step4_dataIsDirty}
+      messageText={'还没有保存，现在离开会导致信息丢失'}
+      onOk={(locationHref) => {
+        // console.log('还没有保存草稿或发行 Ok');
+        history.push(locationHref);
+        // set_isOpenCartoon(false);
+        // console.log('+++++++++++++++++++++++++还没有保存草稿或发行 w9e0opfjsdlk;fjlk');
+        dispatch<OnChange_IsOpenCartoon_Action>({
+          type: 'resourceVersionCreatorPage/onChange_IsOpenCartoon',
+          payload: {
+            value: false,
+          },
+        });
+      }}
+    />
+
     <div className={styles.left}>
       <div style={{ height: 40 }} />
       <div style={{ paddingLeft: 30 }}>
