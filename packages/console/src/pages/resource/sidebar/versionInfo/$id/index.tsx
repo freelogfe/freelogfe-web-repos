@@ -24,12 +24,9 @@ import fResourcePropertyEditor from '@/components/fResourcePropertyEditor';
 import FResourceProperties from '@/components/FResourceProperties';
 import fResourceOptionEditor from '@/components/fResourceOptionEditor';
 import FResourceOptions from '@/components/FResourceOptions';
-import FPolicyList from '@/components/FPolicyList';
 import FBraftEditor from '@/components/FBraftEditor';
 import BraftEditor, { EditorState } from 'braft-editor';
-import FDivider from '@/components/FDivider';
 import FMenu from '@/components/FMenu';
-import { OnChangeStatusAction } from '@/models/resourceListPage';
 import FViewportCards_Resource from '@/components/FAntvG6/FViewportCards_Resource';
 
 
@@ -45,8 +42,6 @@ function VersionInfo({ dispatch, resourceVersionEditorPage, match }: VersionInfo
   const [$urlState, set$urlState] = useUrlState<{ version: string }>({ version: '' });
   const [isEditing, setIsEditing] = React.useState<boolean>(false);
   const [editor, setEditor] = React.useState<EditorState>(BraftEditor.createEditorState(resourceVersionEditorPage.description));
-
-  // console.log(editor.toHTML(), 'editor wsei8dfjsd;olkfjl;skdfjl;dsjfldskjfl');
 
   AHooks.useMount(async () => {
     dispatch<OnMount_Sidebar_Action>({
