@@ -8,7 +8,6 @@ import { withRouter, history } from 'umi';
 import FLink from '@/components/FLink';
 import { FUtil, FI18n, FServiceAPI } from '@freelog/tools-lib';
 import fMessage from '@/components/fMessage';
-// import { RouteComponentProps } from 'react-router';
 import { Checkbox, Popconfirm, Space } from 'antd';
 import FTooltip from '@/components/FTooltip';
 import FSwitch from '@/components/FSwitch';
@@ -21,8 +20,6 @@ import fPolicyBuilder from '@/components/fPolicyBuilder';
 import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
 import fPolicyOperator from '@/components/fPolicyOperator';
 import {
-  // OnChange_Page_Action,
-  // OnMount_Page_Action,
   OnUnmount_Page_Action,
   OnUpdate_Data_Action,
 } from '@/models/resourceSider';
@@ -47,55 +44,11 @@ function Sider({ resourceSider, dispatch }: SilderProps) {
   const [loading, setLoading] = React.useState(false);
   const [noLonger, setNoLonger] = React.useState(false);
 
-  // AHooks.useMount(() => {
-  //   dispatch<OnMount_Page_Action>({
-  //     type: 'resourceSider/onMount_Page',
-  //     payload: {
-  //       resourceID: match.params.id,
-  //     },
-  //   });
-  // });
-
   AHooks.useUnmount(() => {
     dispatch<OnUnmount_Page_Action>({
       type: 'resourceSider/onUnmount_Page',
     });
   });
-
-  // React.useEffect(() => {
-  //   let page: '' | 'info' | 'auth' | 'versionCreator' | 'versionInfo' = '';
-  //
-  //   if (match.path === '/resource/info/:id') {
-  //     page = 'info';
-  //   } else if (match.path === '/resource/auth/:id') {
-  //     page = 'auth';
-  //     set$resourceAuthShownArray({
-  //       ...$resourceAuthShownArray,
-  //       [match.params.id]: match.params.id,
-  //     });
-  //   } else if (match.path === '/resource/version/creator/:id') {
-  //     page = 'versionCreator';
-  //   } else if (match.path === '/resource/version/info/:id/:version') {
-  //     page = 'versionInfo';
-  //   }
-  //
-  //   dispatch<OnChange_Page_Action>({
-  //     type: 'resourceSider/onChange_Page',
-  //     payload: {
-  //       page: page as 'info',
-  //       // version: match.params.version || '',
-  //     },
-  //   });
-  // }, [match]);
-
-  // function gotoCreator() {
-  //   // router.push(`/resource/${match.params.id}/$version/creator`);
-  //   history.push(
-  //     FUtil.LinkTo.resourceVersionCreator({
-  //       resourceID: match.params.id,
-  //     }),
-  //   );
-  // }
 
   /** 上下架 */
   async function changeStatus(value: boolean) {
@@ -286,89 +239,6 @@ function Sider({ resourceSider, dispatch }: SilderProps) {
             <div className={styles.redDot} />
           )}
         </FLink>
-
-        {/* <div className={styles.versionControl}>
-          <div className={styles.versionControlTitle}>
-            <div style={{ cursor: 'default' }}>
-              {FI18n.i18nNext.t('verions')}
-            </div>
-            {resourceSider.showPage === 'versionCreator' ? (
-              <FComponentsLib.FCircleBtn
-                type="transparent"
-                onClick={() => {
-                  fMessage('正在创建版本', 'warning');
-                }}
-              />
-            ) : resourceSider.draft ? (
-              <Popconfirm
-                title={FI18n.i18nNext.t('error_unreleasedverionexisted')}
-                // icon={<FInfo/>}
-                onConfirm={() => {
-                  gotoCreator();
-                }}
-                cancelButtonProps={{
-                  style: {
-                    display: 'none',
-                  },
-                }}
-                okText={FI18n.i18nNext.t('btn_check')}
-              >
-                <FComponentsLib.FCircleBtn type="transparent" />
-              </Popconfirm>
-            ) : (
-              <FComponentsLib.FCircleBtn
-                onClick={gotoCreator}
-                type="transparent"
-              />
-            )}
-          </div>
-
-          <div className={styles.versions}>
-            {resourceSider.draft ? (
-              <FLink
-                className={[
-                  styles.version,
-                  resourceSider.showPage === 'versionCreator'
-                    ? styles.activatedVersion
-                    : '',
-                ].join(' ')}
-                to={FUtil.LinkTo.resourceCreateVersion({
-                  resourceID: match.params.id,
-                })}
-              >
-                {resourceSider.draft?.versionInput || '未输入版本号'}（草稿）
-              </FLink>
-            ) : resourceSider.showPage === 'versionCreator' ? (
-              <FLink
-                className={[styles.version, styles.activatedVersion].join(' ')}
-                to={FUtil.LinkTo.resourceCreateVersion({
-                  resourceID: match.params.id,
-                })}
-              >
-                {FI18n.i18nNext.t('unnamed_version')}
-              </FLink>
-            ) : null}
-
-            {[...resourceSider.resourceVersions].reverse().map((i) => (
-              <FLink
-                key={i}
-                to={FUtil.LinkTo.resourceVersion({
-                  resourceID: resourceSider.resourceID,
-                  version: i,
-                })}
-                className={[
-                  styles.version,
-                  resourceSider.showPage === 'versionInfo' &&
-                  match.params.version === i
-                    ? styles.activatedVersion
-                    : '',
-                ].join(' ')}
-              >
-                {i}
-              </FLink>
-            ))}
-          </div>
-        </div> */}
       </div>
       <div style={{ height: 40 }} />
 
