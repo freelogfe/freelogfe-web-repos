@@ -46,6 +46,8 @@ function VersionInfo({ dispatch, resourceVersionEditorPage, match }: VersionInfo
   const [isEditing, setIsEditing] = React.useState<boolean>(false);
   const [editor, setEditor] = React.useState<EditorState>(BraftEditor.createEditorState(resourceVersionEditorPage.description));
 
+  // console.log(editor.toHTML(), 'editor wsei8dfjsd;olkfjl;skdfjl;dsjfldskjfl');
+
   AHooks.useMount(async () => {
     dispatch<OnMount_Sidebar_Action>({
       type: 'resourceSider/onMount_Page',
@@ -67,6 +69,10 @@ function VersionInfo({ dispatch, resourceVersionEditorPage, match }: VersionInfo
   }, [$urlState.version, match.params.id], {
     wait: 100,
   });
+
+  React.useEffect(() => {
+    setEditor(BraftEditor.createEditorState(resourceVersionEditorPage.description));
+  }, [resourceVersionEditorPage.description]);
 
   async function init() {
     await onChange({
@@ -332,10 +338,12 @@ function VersionInfo({ dispatch, resourceVersionEditorPage, match }: VersionInfo
                     {/*    // s.document.write(buildPreviewHtml(resourceVersionEditorPage.description))*/}
                     {/*  }}*/}
                     {/*>全屏查看</FComponentsLib.FTextBtn>*/}
-                    <FDivider />
+                    {/*<FDivider />*/}
                     <FComponentsLib.FTextBtn
                       type='primary'
-                      onClick={() => setIsEditing(true)}
+                      onClick={() => {
+                        setIsEditing(true);
+                      }}
                     >编辑</FComponentsLib.FTextBtn>
                   </>)
                   : undefined
@@ -392,7 +400,7 @@ function VersionInfo({ dispatch, resourceVersionEditorPage, match }: VersionInfo
         resourceVersionEditorPage.graphShow && (<>
           <div style={{ height: 5 }} />
           <div className={styles.block}>
-            <FComponentsLib.FContentText text={'基础属性'} type={'highlight'} />
+            <FComponentsLib.FContentText text={'相关视图'} type={'highlight'} />
             <div style={{ height: 20 }} />
 
             <FViewportCards_Resource

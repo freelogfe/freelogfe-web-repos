@@ -44,6 +44,8 @@ function VersionEditor({ dispatch, resourceVersionEditorPage, match }: VersionEd
   const [editor, setEditor] = React.useState<EditorState>(BraftEditor.createEditorState(resourceVersionEditorPage.description));
   const [$customOptionsExpansion, set$customOptionsExpansion] = React.useState<boolean>(false);
 
+  // console.log(editor, 'editorsdifsdjlkfj; lskdjlfk jlkjsdlfjlksj');
+
   React.useEffect(() => {
     init();
   }, [match.params.id, match.params.version]);
@@ -146,7 +148,9 @@ function VersionEditor({ dispatch, resourceVersionEditorPage, match }: VersionEd
                     <FDivider />
                     <FComponentsLib.FTextBtn
                       type='primary'
-                      onClick={() => setIsEditing(true)}
+                      onClick={() => {
+                        setIsEditing(true);
+                      }}
                     >编辑</FComponentsLib.FTextBtn>
                   </>)
                   : undefined
