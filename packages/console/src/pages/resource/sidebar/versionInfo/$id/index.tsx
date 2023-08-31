@@ -29,10 +29,7 @@ import BraftEditor, { EditorState } from 'braft-editor';
 import FMenu from '@/components/FMenu';
 import FViewportCards_Resource from '@/components/FAntvG6/FViewportCards_Resource';
 
-
-interface VersionInfoProps extends RouteComponentProps<{
-  id: string;
-}> {
+interface VersionInfoProps extends RouteComponentProps<{ id: string; }> {
   dispatch: Dispatch;
   resourceVersionEditorPage: ResourceVersionEditorPageModelState;
 }
