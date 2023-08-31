@@ -226,7 +226,7 @@ function Sider({ resourceSider, dispatch }: SilderProps) {
           ].join(' ')}
           to={FUtil.LinkTo.resourceVersionInfo({
             resourceID: resourceSider.resourceID,
-            version: resourceSider.resourceVersions[0] || '',
+            version: resourceSider.resourceVersions[resourceSider.resourceVersions.length - 1] || '',
           })}
         >
           版本列表

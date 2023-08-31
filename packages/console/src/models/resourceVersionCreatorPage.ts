@@ -464,7 +464,7 @@ const Model: ResourceVersionCreatorModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          versionInput: (semver.inc(data_resourceInfo.latestVersion, 'patch') || '0.1.0'),
+          versionInput: (semver.inc(data_resourceInfo.latestVersion, 'patch') || '1.0.0'),
           preVersion_additionalProperties,
           preVersion_customProperties,
           preVersion_customConfigurations,
