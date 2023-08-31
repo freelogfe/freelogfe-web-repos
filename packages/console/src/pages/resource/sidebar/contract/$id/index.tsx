@@ -17,6 +17,7 @@ import {
   OnMount_ContractPage_Action,
 } from '@/models/resourceAuthPage';
 import FAuthPanel from '@/pages/resource/auth/$id/FAuthPanel';
+import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 
 interface ContractProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -71,10 +72,25 @@ function Contract({ dispatch, resourceAuthPage, match }: ContractProps) {
           {
             record.licenseeIdentityType === 'user' && (<FComponentsLib.FIcons.FUser />)
           }
-          <FComponentsLib.FContentText
-            type='highlight'
-            text={record.authorizedParty}
-          />
+          <a onClick={async () => {
+            if (record.licenseeIdentityType === 'resource') {
+              self.open(FUtil.LinkTo.resourceDetails({ resourceID: record.licenseeID }));
+            } else if (record.licenseeIdentityType === 'node') {
+
+              const { data }: {
+                data: {
+                  nodeDomain: string;
+                };
+              } = await FServiceAPI.Node.details({ nodeId: Number(record.licenseeID) });
+              // console.log(data, 'datapoisdjfl;ksdjfljsdlfjsdlkfjsldkjlkj');
+              self.open(FUtil.Format.completeUrlByDomain(data.nodeDomain));
+            }
+          }}>
+            <FComponentsLib.FContentText
+              type='highlight'
+              text={record.authorizedParty}
+            />
+          </a>
         </Space>);
       },
     },

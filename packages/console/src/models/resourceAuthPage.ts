@@ -55,6 +55,7 @@ export interface ResourceAuthPageModelState {
     contractName: string,
     contractID: string,
     authorizedParty: string,
+    licenseeID: string;
     licenseeIdentityType: 'resource' | 'node' | 'user';
     createDate: string,
     status: 'active' | 'testActive' | 'inactive' | 'terminal';
@@ -193,8 +194,8 @@ interface ResourceAuthPageModelType {
 
 enum LicenseeIdentityType {
   resource = 1,
-  node,
-  user
+  node = 2,
+  user = 3
 }
 
 const Model: ResourceAuthPageModelType = {
@@ -486,20 +487,36 @@ const Model: ResourceAuthPageModelType = {
         limit: FUtil.Predefined.pageSize,
       };
       // console.log('@#RWEQFRSDF');
-      const { data } = yield call(FServiceAPI.Contract.contracts, params);
+      const { data }: {
+        data: {
+          dataList: {
+            contractId: string;
+            contractName: string;
+            licenseeId: string;
+            licenseeName: string;
+            licenseeIdentityType: 1 | 2 | 3;
+            createDate: string;
+            status: 0 | 1;
+            authStatus: number;
+          }[]
+        }
+      } = yield call(FServiceAPI.Contract.contracts, params);
       // console.log(data, '12342139(((((()))()())(134');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          contractsAuthorize: data.dataList.map((i: any) => ({
-            key: i.contractId,
-            contractName: i.contractName,
-            contractID: i.contractId,
-            authorizedParty: i.licenseeName,
-            licenseeIdentityType: LicenseeIdentityType[i.licenseeIdentityType],
-            createDate: moment(i.createDate).format('YYYY-MM-DD HH:mm'),
-            status: i.status === 1 ? 'terminal' : (i.authStatus === 1 || i.authStatus === 3) ? 'active' : i.authStatus === 2 ? 'testActive' : 'inactive',
-          })),
+          contractsAuthorize: data.dataList.map<ResourceAuthPageModelState['contractsAuthorize'][number]>((i) => {
+            return {
+              key: i.contractId,
+              contractName: i.contractName,
+              contractID: i.contractId,
+              authorizedParty: i.licenseeName,
+              licenseeID: i.licenseeId,
+              licenseeIdentityType: LicenseeIdentityType[i.licenseeIdentityType] as 'resource',
+              createDate: moment(i.createDate).format('YYYY-MM-DD HH:mm'),
+              status: i.status === 1 ? 'terminal' : (i.authStatus === 1 || i.authStatus === 3) ? 'active' : i.authStatus === 2 ? 'testActive' : 'inactive',
+            };
+          }),
         },
       });
     },
@@ -535,7 +552,7 @@ const Model: ResourceAuthPageModelType = {
       // });
     },
 
-    * onAdd_Policy({payload}: OnAdd_Policy_Action, { select, call, put }: EffectsCommandMap) {
+    * onAdd_Policy({ payload }: OnAdd_Policy_Action, { select, call, put }: EffectsCommandMap) {
       self._czc?.push(['_trackEvent', '授权信息页', '添加授权策略', '', 1]);
       const { resourceAuthPage }: ConnectState = yield select(({ resourceAuthPage }: ConnectState) => ({
         resourceAuthPage,
