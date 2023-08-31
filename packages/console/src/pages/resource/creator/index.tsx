@@ -42,7 +42,7 @@ function ResourceCreator({
   return (<div className={styles.styles}>
 
     <FPrompt
-      watch={resourceCreatorPage.step1_dataIsDirty || resourceCreatorPage.step2_dataIsDirty || resourceCreatorPage.step4_dataIsDirty}
+      watch={resourceCreatorPage.step1_dataIsDirty_count !== 0 || resourceCreatorPage.step2_dataIsDirty_count !== 0 || resourceCreatorPage.step4_dataIsDirty_count !== 0}
       messageText={'还没有保存，现在离开会导致信息丢失'}
       onOk={(locationHref) => {
         // console.log('还没有保存草稿或发行 Ok');

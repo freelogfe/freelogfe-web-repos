@@ -13,6 +13,7 @@ import { IResourceCreateVersionDraftType } from '@/type/resourceTypes';
 import fResourceMarkdownEditor from '@/components/fResourceMarkdownEditor';
 import fComicTool from '@/components/fComicTool';
 import { getProcessor } from '@/components/FResourceAuthorizationProcessor';
+import moment from 'moment';
 
 export interface ResourceCreatorPageModelState {
   userInfo: {
@@ -36,7 +37,7 @@ export interface ResourceCreatorPageModelState {
     resourceTypeCode: string;
     resourceType: string[];
   } | null;
-  step1_dataIsDirty: boolean;
+  step1_dataIsDirty_count: number;
 
   step2_fileInfo: {
     name: string;
@@ -70,14 +71,14 @@ export interface ResourceCreatorPageModelState {
     input: string;
     select: string[];
   }[];
-  step2_dataIsDirty: boolean;
+  step2_dataIsDirty_count: number;
 
   step3_policies: PolicyFullInfo_Type[];
 
   step4_resourceTitle: string;
   step4_resourceCover: string;
   step4_resourceLabels: string[];
-  step4_dataIsDirty: boolean;
+  step4_dataIsDirty_count: number;
 }
 
 export interface ChangeAction extends AnyAction {
@@ -171,6 +172,10 @@ export interface OnClick_step2_submitBtn_Action extends AnyAction {
   type: 'resourceCreatorPage/onClick_step2_submitBtn';
 }
 
+export interface OnTrigger_step2_SaveDraft_Action extends AnyAction {
+  type: 'resourceCreatorPage/onTrigger_step2_SaveDraft';
+}
+
 export interface OnClick_step3_addPolicyBtn_Action extends AnyAction {
   type: 'resourceCreatorPage/onClick_step3_addPolicyBtn';
   payload: {
@@ -230,6 +235,7 @@ export interface ResourceCreatorPageModelType {
     onChange_step2_customProperties: (action: OnChange_step2_customProperties_Action, effects: EffectsCommandMap) => void;
     onChange_step2_customConfigurations: (action: OnChange_step2_customConfigurations_Action, effects: EffectsCommandMap) => void;
     onClick_step2_submitBtn: (action: OnClick_step2_submitBtn_Action, effects: EffectsCommandMap) => void;
+    onTrigger_step2_SaveDraft: (action: OnTrigger_step2_SaveDraft_Action, effects: EffectsCommandMap) => void;
     onClick_step3_addPolicyBtn: (action: OnClick_step3_addPolicyBtn_Action, effects: EffectsCommandMap) => void;
     onClick_step3_submitBtn: (action: OnClick_step3_submitBtn_Action, effects: EffectsCommandMap) => void;
     onChange_step4_resourceTitle: (action: OnChange_step4_resourceTitle_Action, effects: EffectsCommandMap) => void;
@@ -254,7 +260,7 @@ export const initStates: ResourceCreatorPageModelState = {
   step1_resourceName_isVerify: false,
   step1_resourceName_errorText: '',
   step1_createdResourceInfo: null,
-  step1_dataIsDirty: false,
+  step1_dataIsDirty_count: 0,
 
   step2_fileInfo: null,
   // step2_fileInfo_errorTip: '不能超过200M',
@@ -263,14 +269,14 @@ export const initStates: ResourceCreatorPageModelState = {
   step2_additionalProperties: [],
   step2_customProperties: [],
   step2_customConfigurations: [],
-  step2_dataIsDirty: false,
+  step2_dataIsDirty_count: 0,
 
   step3_policies: [],
 
   step4_resourceTitle: '',
   step4_resourceCover: '',
   step4_resourceLabels: [],
-  step4_dataIsDirty: false,
+  step4_dataIsDirty_count: 0,
 };
 
 const Model: ResourceCreatorPageModelType = {
@@ -301,23 +307,29 @@ const Model: ResourceCreatorPageModelType = {
         },
       });
     },
-    * onChange_step1_resourceType({ payload }: OnChange_step1_resourceType_Action, { put }: EffectsCommandMap) {
+    * onChange_step1_resourceType({ payload }: OnChange_step1_resourceType_Action, { select, put }: EffectsCommandMap) {
+      const { resourceCreatorPage }: ConnectState = yield select(({ resourceCreatorPage }: ConnectState) => ({
+        resourceCreatorPage,
+      }));
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           step1_resourceType: payload.value,
-          step1_dataIsDirty: true,
+          step1_dataIsDirty_count: resourceCreatorPage.step1_dataIsDirty_count + 1,
         },
       });
     },
-    * onChange_step1_resourceName({ payload }: OnChange_step1_resourceName_Action, { put }: EffectsCommandMap) {
+    * onChange_step1_resourceName({ payload }: OnChange_step1_resourceName_Action, { select, put }: EffectsCommandMap) {
+      const { resourceCreatorPage }: ConnectState = yield select(({ resourceCreatorPage }: ConnectState) => ({
+        resourceCreatorPage,
+      }));
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           step1_resourceName: payload.value,
           step1_resourceName_errorText: '',
           step1_resourceName_isVerify: true,
-          step1_dataIsDirty: true,
+          step1_dataIsDirty_count: resourceCreatorPage.step1_dataIsDirty_count + 1,
         },
       });
     },
@@ -392,7 +404,7 @@ const Model: ResourceCreatorPageModelType = {
             resourceType: data.resourceType,
             resourceTypeCode: data.resourceTypeCode,
           },
-          step1_dataIsDirty: false,
+          step1_dataIsDirty_count: 0,
         },
       });
     },
@@ -413,15 +425,17 @@ const Model: ResourceCreatorPageModelType = {
             sha1: payload.sha1,
             from: '本地上传',
           },
-        },
-      });
-
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
           step2_rawPropertiesState: 'parsing',
+          step2_dataIsDirty_count: resourceCreatorPage.step2_dataIsDirty_count + 1,
         },
       });
+      //
+      // yield put<ChangeAction>({
+      //   type: 'change',
+      //   payload: {
+      //
+      //   },
+      // });
 
       const params0: Parameters<typeof getFilesSha1Info>[0] = {
         sha1: [payload.sha1],
@@ -524,15 +538,16 @@ const Model: ResourceCreatorPageModelType = {
             sha1: payload.sha1,
             from: '存储空间',
           },
-        },
-      });
-
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
           step2_rawPropertiesState: 'parsing',
         },
       });
+
+      // yield put<ChangeAction>({
+      //   type: 'change',
+      //   payload: {
+      //
+      //   },
+      // });
 
       const params0: Parameters<typeof getFilesSha1Info>[0] = {
         sha1: [payload.sha1],
@@ -680,6 +695,7 @@ const Model: ResourceCreatorPageModelType = {
         type: 'change',
         payload: {
           step2_rawPropertiesState: 'parsing',
+          step2_dataIsDirty_count: resourceCreatorPage.step2_dataIsDirty_count + 1,
         },
       });
 
@@ -810,6 +826,7 @@ const Model: ResourceCreatorPageModelType = {
         type: 'change',
         payload: {
           step2_rawPropertiesState: 'parsing',
+          step2_dataIsDirty_count: resourceCreatorPage.step2_dataIsDirty_count + 1,
         },
       });
 
@@ -882,7 +899,11 @@ const Model: ResourceCreatorPageModelType = {
         },
       });
     },
-    * onRemove_step2_file({}: OnRemove_step2_file_Action, { put }: EffectsCommandMap) {
+    * onRemove_step2_file({}: OnRemove_step2_file_Action, { select, put }: EffectsCommandMap) {
+      const { resourceCreatorPage }: ConnectState = yield select(({ resourceCreatorPage }: ConnectState) => ({
+        resourceCreatorPage,
+      }));
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -892,30 +913,55 @@ const Model: ResourceCreatorPageModelType = {
           step2_additionalProperties: [],
           step2_customProperties: [],
           step2_customConfigurations: [],
+          step2_dataIsDirty_count: resourceCreatorPage.step2_dataIsDirty_count + 1,
         },
       });
     },
-    * onChange_step2_additionalProperties({ payload }: OnChange_step2_additionalProperties_Action, { put }: EffectsCommandMap) {
+    * onChange_step2_additionalProperties({ payload }: OnChange_step2_additionalProperties_Action, {
+      select,
+      put,
+    }: EffectsCommandMap) {
+      const { resourceCreatorPage }: ConnectState = yield select(({ resourceCreatorPage }: ConnectState) => ({
+        resourceCreatorPage,
+      }));
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           step2_additionalProperties: payload.value,
+          step2_dataIsDirty_count: resourceCreatorPage.step2_dataIsDirty_count + 1,
         },
       });
     },
-    * onChange_step2_customProperties({ payload }: OnChange_step2_customProperties_Action, { put }: EffectsCommandMap) {
+    * onChange_step2_customProperties({ payload }: OnChange_step2_customProperties_Action, {
+      select,
+      put,
+    }: EffectsCommandMap) {
+      const { resourceCreatorPage }: ConnectState = yield select(({ resourceCreatorPage }: ConnectState) => ({
+        resourceCreatorPage,
+      }));
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           step2_customProperties: payload.value,
+          step2_dataIsDirty_count: resourceCreatorPage.step2_dataIsDirty_count + 1,
         },
       });
     },
-    * onChange_step2_customConfigurations({ payload }: OnChange_step2_customConfigurations_Action, { put }: EffectsCommandMap) {
+    * onChange_step2_customConfigurations({ payload }: OnChange_step2_customConfigurations_Action, {
+      select,
+      put,
+    }: EffectsCommandMap) {
+      const { resourceCreatorPage }: ConnectState = yield select(({ resourceCreatorPage }: ConnectState) => ({
+        resourceCreatorPage,
+      }));
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           step2_customConfigurations: payload.value,
+          step2_dataIsDirty_count: resourceCreatorPage.step2_dataIsDirty_count + 1,
         },
       });
     },
@@ -1059,6 +1105,76 @@ const Model: ResourceCreatorPageModelType = {
         type: 'change',
         payload: {
           step: 3,
+          step2_dataIsDirty_count: 0,
+        },
+      });
+    },
+    * onTrigger_step2_SaveDraft({}: OnTrigger_step2_SaveDraft_Action, { select, call, put }: EffectsCommandMap) {
+      // console.log('onTrigger_step2_SaveDraft sdfijsdlfkj kljsdlkfjlksdjlk');
+      const { resourceCreatorPage }: ConnectState = yield select(({ resourceCreatorPage }: ConnectState) => ({
+        resourceCreatorPage,
+      }));
+
+      if (!resourceCreatorPage.step1_createdResourceInfo) {
+        return;
+      }
+
+      // console.log(resourceCreatorPage.step1_createdResourceInfo, 'resourceCreatorPage.step1_createdResourceInfosiodjflksdjfl sdflksdjlk');
+      let directDependencies: any[] = [];
+      let baseUpcastResources: {
+        resourceID: string;
+        resourceName: string;
+      }[] = [];
+      // console.log(resourceCreatorPage.step2_fileInfo, 'resourceCreatorPage.step2_fileInfoisdjf;lksdjlfkjl');
+      if (resourceCreatorPage.step2_fileInfo) {
+        const p: { getAllTargets(): void; getBaseUpcastResources(): { resourceID: string; resourceName: string; }[] } = yield call(getProcessor, 'resourceCreatorStep2');
+        // console.log(p, 'poisdjflksdjflkjdsklfjlksdjlk');
+        directDependencies = yield call(p.getAllTargets);
+        baseUpcastResources = yield call(p.getBaseUpcastResources);
+      }
+      // console.log(baseUpcastResources, 'baseUpcastResources oisjdlkfjlsdkjflsdjfljsl');
+      // console.log(directDependencies, 'directDependencies urcesoisjdlkfjlsdkjflsdjfljsl');
+
+      const draftData: IResourceCreateVersionDraftType = {
+        versionInput: '1.0.0',
+        selectedFileInfo: resourceCreatorPage.step2_fileInfo,
+        additionalProperties: resourceCreatorPage.step2_additionalProperties.map((ap) => {
+          return {
+            key: ap.key,
+            value: ap.value,
+          };
+        }),
+        customProperties: resourceCreatorPage.step2_customProperties,
+        customConfigurations: resourceCreatorPage.step2_customConfigurations,
+        directDependencies: directDependencies,
+        descriptionEditorInput: '',
+        baseUpcastResources: baseUpcastResources,
+      };
+
+      const params: Parameters<typeof FServiceAPI.Resource.saveVersionsDraft>[0] = {
+        resourceId: resourceCreatorPage.step1_createdResourceInfo.resourceID,
+        draftData: draftData,
+      };
+      const { ret, errCode, data: data_draft }: {
+        ret: number;
+        errCode: number;
+        data: {
+          resourceId: string;
+          updateDate: string;
+          draftData: IResourceCreateVersionDraftType;
+        };
+      } = yield call(FServiceAPI.Resource.saveVersionsDraft, params);
+      if (ret !== 0 || errCode !== 0) {
+        fMessage('草稿保存失败', 'error');
+        return;
+      }
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          // draftSaveTime: FUtil.Format.formatDateTime(Date(), true),
+          // step2: moment(data_draft.updateDate).format('YYYY-MM-DD hh:mm:ss'),
+          step2_dataIsDirty_count: 0,
         },
       });
     },
@@ -1160,27 +1276,49 @@ const Model: ResourceCreatorPageModelType = {
         },
       });
     },
-    * onChange_step4_resourceTitle({ payload }: OnChange_step4_resourceTitle_Action, { put }: EffectsCommandMap) {
+    * onChange_step4_resourceTitle({ payload }: OnChange_step4_resourceTitle_Action, {
+      select,
+      put,
+    }: EffectsCommandMap) {
+      const { resourceCreatorPage }: ConnectState = yield select(({ resourceCreatorPage }: ConnectState) => ({
+        resourceCreatorPage,
+      }));
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           step4_resourceTitle: payload.value,
+          step4_dataIsDirty_count: resourceCreatorPage.step4_dataIsDirty_count + 1,
         },
       });
     },
-    * onChange_step4_resourceCover({ payload }: OnChange_step4_resourceCover_Action, { put }: EffectsCommandMap) {
+    * onChange_step4_resourceCover({ payload }: OnChange_step4_resourceCover_Action, {
+      select,
+      put,
+    }: EffectsCommandMap) {
+      const { resourceCreatorPage }: ConnectState = yield select(({ resourceCreatorPage }: ConnectState) => ({
+        resourceCreatorPage,
+      }));
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           step4_resourceCover: payload.value,
+          step4_dataIsDirty_count: resourceCreatorPage.step4_dataIsDirty_count + 1,
         },
       });
     },
-    * onChange_step4_resourceLabels({ payload }: OnChange_step4_resourceLabels_Action, { put }: EffectsCommandMap) {
+    * onChange_step4_resourceLabels({ payload }: OnChange_step4_resourceLabels_Action, {
+      select,
+      put,
+    }: EffectsCommandMap) {
+      const { resourceCreatorPage }: ConnectState = yield select(({ resourceCreatorPage }: ConnectState) => ({
+        resourceCreatorPage,
+      }));
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           step4_resourceLabels: payload.value,
+          step4_dataIsDirty_count: resourceCreatorPage.step4_dataIsDirty_count + 1,
         },
       });
     },
@@ -1201,7 +1339,6 @@ const Model: ResourceCreatorPageModelType = {
         resourceId: resourceCreatorPage.step1_createdResourceInfo?.resourceID || '',
         tags: resourceCreatorPage.step4_resourceLabels,
         coverImages: resourceCreatorPage.step4_resourceCover !== '' ? [resourceCreatorPage.step4_resourceCover] : undefined,
-        // @ts-ignore
         resourceTitle: resourceCreatorPage.step4_resourceTitle,
         status: 1,
       };
@@ -1215,6 +1352,12 @@ const Model: ResourceCreatorPageModelType = {
         fMessage(msg, 'error');
         return;
       }
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          step4_dataIsDirty_count: 0,
+        },
+      });
       history.push(FUtil.LinkTo.resourceVersionInfo({
         resourceID: resourceCreatorPage.step1_createdResourceInfo?.resourceID || '',
         version: '1.0.0',
