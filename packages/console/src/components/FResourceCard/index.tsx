@@ -115,6 +115,8 @@ function FResourceCard({
             text={FUtil.Format.resourceTypeKeyArrToResourceType(resource.type)}
           />
           <FComponentsLib.FContentText
+            singleRow
+            style={{maxWidth: 120}}
             type='additional1'
             text={resource.version ? (FI18n.i18nNext.t('latest_version') + ' ' + resource.version) : '暂无版本'}
           />
