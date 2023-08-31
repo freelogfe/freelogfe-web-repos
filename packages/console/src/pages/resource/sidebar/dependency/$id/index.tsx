@@ -45,7 +45,7 @@ function Dependency({ dispatch, resourceAuthPage, match }: DependencyProps) {
     <div>
       <div style={{ height: 40 }} />
       <div className={styles.block}>
-        <FComponentsLib.FContentText text={FI18n.i18nNext.t('licencee_contract')} type={'highlight'} />
+        <FComponentsLib.FContentText text={'依赖授权管理'} type={'highlight'} />
 
         {
           resourceAuthPage.contractsAuthorized.length === 0 && resourceAuthPage.baseUastResources.length === 0 && (<>

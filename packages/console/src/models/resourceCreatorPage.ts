@@ -1358,10 +1358,13 @@ const Model: ResourceCreatorPageModelType = {
           step4_dataIsDirty_count: 0,
         },
       });
-      history.push(FUtil.LinkTo.resourceVersionInfo({
-        resourceID: resourceCreatorPage.step1_createdResourceInfo?.resourceID || '',
-        version: '1.0.0',
-      }));
+      setTimeout(() => {
+        history.push(FUtil.LinkTo.resourceVersionInfo({
+          resourceID: resourceCreatorPage.step1_createdResourceInfo?.resourceID || '',
+          version: '1.0.0',
+        }));
+      }, 100);
+
     },
   },
 

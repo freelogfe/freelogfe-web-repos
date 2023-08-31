@@ -125,6 +125,7 @@ function Info({ dispatch, resourceInfoPage, match }: InfoProps) {
                     }}
                   >取消</FComponentsLib.FTextBtn>
                   <FComponentsLib.FTextBtn
+                    disabled={resourceInfoPage.title_Input.length > 100}
                     type={'primary'}
                     onClick={() => {
                       dispatch<OnClick_SaveTitleBtn_Action>({
@@ -230,7 +231,8 @@ function Info({ dispatch, resourceInfoPage, match }: InfoProps) {
 
             {
               resourceInfoPage.resourceInfo.coverImages.length > 0 && (<div className={styles.cover}>
-                <FCoverImage src={resourceInfoPage.resourceInfo.coverImages[0]} width={200} style={{ borderRadius: 4 }} />
+                <FCoverImage src={resourceInfoPage.resourceInfo.coverImages[0]} width={200}
+                             style={{ borderRadius: 4 }} />
                 <div className={styles.coverEdit}>
                   <FComponentsLib.FIcons.FEdit style={{ fontSize: 32 }} />
                   <div style={{ height: 10 }} />
@@ -244,7 +246,7 @@ function Info({ dispatch, resourceInfoPage, match }: InfoProps) {
         <div style={{ height: 5 }} />
 
         <div className={styles.block}>
-          <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <FComponentsLib.FContentText text={FI18n.i18nNext.t('resource_short_description')} type={'highlight'} />
 
             <Space size={10}>
