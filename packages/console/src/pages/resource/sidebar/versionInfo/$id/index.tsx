@@ -481,7 +481,7 @@ function Header({
         <div style={{ width: 30 }} />
         <FComponentsLib.FTextBtn onClick={() => {
           self.open(FUtil.LinkTo.resourceVersionCreator({ resourceID: resourceID }));
-        }}>新建版本</FComponentsLib.FTextBtn>
+        }}>更新版本</FComponentsLib.FTextBtn>
       </div>
       <div style={{ height: 10 }} />
       <Space size={0}>
