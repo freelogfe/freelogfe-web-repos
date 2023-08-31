@@ -31,13 +31,12 @@ interface SilderProps {
 
 function Sider({ resourceSider, dispatch }: SilderProps) {
   // console.log(match, 'matchiosdjflkjsdlkfjlkj');
-  const [$resourceAuthShownArray, set$resourceAuthShownArray] =
-    AHooks.useLocalStorageState<{ [k: string]: string }>(
-      'resourceAuthShownArray',
-      {
-        defaultValue: {},
-      },
-    );
+  const [$resourceAuthShownArray, set$resourceAuthShownArray] = AHooks.useLocalStorageState<{ [k: string]: string }>(
+    'resourceAuthShownArray',
+    {
+      defaultValue: {},
+    },
+  );
 
   const [inactiveDialogShow, setInactiveDialogShow] = React.useState(false);
   const [resultPopupType, setResultPopupType] = React.useState<null | 0 | 1>(null);
@@ -204,7 +203,11 @@ function Sider({ resourceSider, dispatch }: SilderProps) {
             resourceID: resourceSider.resourceID,
           })}
         >
-          授权策略
+          <span>授权策略</span>
+          {resourceSider.policies.length === 0 &&
+          !$resourceAuthShownArray[resourceSider.resourceID] && (
+            <div className={styles.redDot} />
+          )}
         </FLink>
         <FLink
           className={[
@@ -234,10 +237,6 @@ function Sider({ resourceSider, dispatch }: SilderProps) {
               </FTooltip>
             )}
           </Space>
-          {resourceSider.policies.length === 0 &&
-          !$resourceAuthShownArray[resourceSider.resourceID] && (
-            <div className={styles.redDot} />
-          )}
         </FLink>
       </div>
       <div style={{ height: 40 }} />
