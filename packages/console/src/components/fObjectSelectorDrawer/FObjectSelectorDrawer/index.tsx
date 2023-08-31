@@ -2,7 +2,6 @@ import * as React from 'react';
 import styles from './index.less';
 import FDrawer from '@/components/FDrawer';
 import FDropdownMenu from '@/components/FDropdownMenu';
-// import FInput from '@/components/FInput';
 import FComponentsLib from '@freelog/components-lib';
 import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
 import FListFooter, { listStateAndListMore } from '@/components/FListFooter';
@@ -57,12 +56,8 @@ function FObjectSelectorDrawer({ resourceTypeCode, onSelect, onClose }: FObjectS
   const [objListState, set_objListState] = React.useState<FObjectSelectorDrawerStates['objListState']>(initStates['objListState']);
   const [objListMore, set_objListMore] = React.useState<FObjectSelectorDrawerStates['objListMore']>(initStates['objListMore']);
 
-  // React.useEffect(() => {
-  //   loadData();
-  // }, [selected, inputValue]);
-
   AHooks.useDebounceEffect(() => {
-    loadData();
+    loadData(true);
   }, [selected, inputValue], {
     wait: 300,
   });
@@ -91,36 +86,61 @@ function FObjectSelectorDrawer({ resourceTypeCode, onSelect, onClose }: FObjectS
     // loadData();
   }
 
-  async function loadData() {
+  async function loadData(restart: boolean = false) {
+    let objectList: FObjectSelectorDrawerStates['objList'] = [];
+    if (!restart) {
+      objectList = [...objList];
+      set_objListMore('loading');
+    } else {
+      set_objListState('loading');
+    }
+
     const params: Parameters<typeof FServiceAPI.Storage.objectList>[0] = {
       bucketName: selected,
       // resourceType: resourceType[resourceType.length - 1],
       resourceTypeCode: resourceTypeCode,
       isLoadingTypeless: 1,
       keywords: inputValue,
-      skip: 0,
+      skip: objectList.length,
       limit: FUtil.Predefined.pageSize,
     };
-    const { data } = await FServiceAPI.Storage.objectList(params);
+    const { data }: {
+      data: {
+        dataList: {
+          bucketId: string;
+          bucketName: string;
+          objectId: string;
+          objectName: string;
+          sha1: string;
+          resourceType: string[];
+        }[];
+        totalItem: number;
+      }
+    } = await FServiceAPI.Storage.objectList(params);
+
+    const newObjList: FObjectSelectorDrawerStates['objList'] = [
+      ...objectList,
+      ...data.dataList.map((d) => {
+        return {
+          bucketID: d.bucketId,
+          bucketName: d.bucketName,
+          objID: d.objectId,
+          objName: d.objectName,
+          sha1: d.sha1,
+          resourceType: d.resourceType,
+          updateTime: '',
+        };
+      }),
+    ];
     // console.log(data, 'data09woi3e4jfsldkfsdjlfksdjflkj');
     const { state, more } = listStateAndListMore({
-      list_Length: objList.length,
+      list_Length: newObjList.length,
       total_Length: data.totalItem,
       has_FilterCriteria: selected !== '_all' || inputValue !== '',
     });
     set_objListState(state);
     set_objListMore(more);
-    set_objList(data.dataList.map((d: any) => {
-      return {
-        bucketID: d.bucketId,
-        bucketName: d.bucketName,
-        objID: d.objectId,
-        objName: d.objectName,
-        sha1: d.sha1,
-        resourceType: d.resourceType,
-        updateTime: '',
-      };
-    }));
+    set_objList(newObjList);
   }
 
   return (<FDrawer
@@ -198,6 +218,7 @@ function FObjectSelectorDrawer({ resourceTypeCode, onSelect, onClose }: FObjectS
         //     isRestart: false,
         //   },
         // });
+        loadData(false);
       }}
     />
   </FDrawer>);

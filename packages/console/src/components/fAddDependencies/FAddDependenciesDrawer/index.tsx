@@ -98,10 +98,10 @@ function FAddDependenciesDrawer({
     let resourceListResult: FAddDependenciesDrawerStates['resourceList'] = [];
     if (!restart) {
       resourceListResult = [...resourceList];
+      set_resourceListMore('loading');
     } else {
       set_resourceListState('loading');
     }
-    set_resourceListMore('loading');
     // let dataSource: any;
     if (resourceFrom === 'favorite') {
       const params: Parameters<typeof FServiceAPI.Collection.collectionResources>[0] = {
