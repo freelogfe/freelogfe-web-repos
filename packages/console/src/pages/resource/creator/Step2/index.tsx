@@ -329,52 +329,55 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
         <FComponentsLib.FContentText text={'基础属性'} type={'highlight'} />
         {/*<FComponentsLib.FContentText text={''} type={'highlight'}/>*/}
 
-        <FTooltip title={FI18n.i18nNext.t('resourceinfo_add_btn_info')}>
-          <div>
-            <FComponentsLib.FTextBtn
-              style={{ fontSize: 12, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 5 }}
-              type='primary'
-              onClick={async () => {
-                const dataSource: {
-                  key: string;
-                  name: string;
-                  value: string;
-                  description: string;
-                } | null = await fResourcePropertyEditor({
-                  disabledKeys: [
-                    ...resourceCreatorPage.step2_rawProperties.map<string>((rp) => rp.key),
-                    ...resourceCreatorPage.step2_additionalProperties.map<string>((rp) => rp.key),
-                    ...resourceCreatorPage.step2_customProperties.map<string>((bp) => bp.key),
-                    ...resourceCreatorPage.step2_customConfigurations.map<string>((pp) => pp.key),
-                  ],
-                  disabledNames: [
-                    ...resourceCreatorPage.step2_rawProperties.map<string>((rp) => rp.name),
-                    ...resourceCreatorPage.step2_additionalProperties.map<string>((rp) => rp.name),
-                    ...resourceCreatorPage.step2_customProperties.map<string>((bp) => bp.name),
-                    ...resourceCreatorPage.step2_customConfigurations.map<string>((pp) => pp.name),
-                  ],
-                });
-                // console.log(dataSource, 'dataSource9iojskldjflksdjflk');
-                if (!dataSource) {
-                  return;
-                }
-
-                await dispatch<OnChange_step2_customProperties_Action>({
-                  type: 'resourceCreatorPage/onChange_step2_customProperties',
-                  payload: {
-                    value: [
-                      ...resourceCreatorPage.step2_customProperties,
-                      dataSource,
+        {
+          resourceCreatorPage.step2_customProperties.length < 30 && (<FTooltip title={FI18n.i18nNext.t('resourceinfo_add_btn_info')}>
+            <div>
+              <FComponentsLib.FTextBtn
+                style={{ fontSize: 12, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 5 }}
+                type='primary'
+                onClick={async () => {
+                  const dataSource: {
+                    key: string;
+                    name: string;
+                    value: string;
+                    description: string;
+                  } | null = await fResourcePropertyEditor({
+                    disabledKeys: [
+                      ...resourceCreatorPage.step2_rawProperties.map<string>((rp) => rp.key),
+                      ...resourceCreatorPage.step2_additionalProperties.map<string>((rp) => rp.key),
+                      ...resourceCreatorPage.step2_customProperties.map<string>((bp) => bp.key),
+                      ...resourceCreatorPage.step2_customConfigurations.map<string>((pp) => pp.key),
                     ],
-                  },
-                });
-              }}
-            >
-              <FComponentsLib.FIcons.FProperty style={{ fontSize: 14 }} />
-              <span>补充属性</span>
-            </FComponentsLib.FTextBtn>
-          </div>
-        </FTooltip>
+                    disabledNames: [
+                      ...resourceCreatorPage.step2_rawProperties.map<string>((rp) => rp.name),
+                      ...resourceCreatorPage.step2_additionalProperties.map<string>((rp) => rp.name),
+                      ...resourceCreatorPage.step2_customProperties.map<string>((bp) => bp.name),
+                      ...resourceCreatorPage.step2_customConfigurations.map<string>((pp) => pp.name),
+                    ],
+                  });
+                  // console.log(dataSource, 'dataSource9iojskldjflksdjflk');
+                  if (!dataSource) {
+                    return;
+                  }
+
+                  await dispatch<OnChange_step2_customProperties_Action>({
+                    type: 'resourceCreatorPage/onChange_step2_customProperties',
+                    payload: {
+                      value: [
+                        ...resourceCreatorPage.step2_customProperties,
+                        dataSource,
+                      ],
+                    },
+                  });
+                }}
+              >
+                <FComponentsLib.FIcons.FProperty style={{ fontSize: 14 }} />
+                <span>补充属性</span>
+              </FComponentsLib.FTextBtn>
+            </div>
+          </FTooltip>)
+        }
+
       </div>
       <div style={{ height: 20 }} />
 
@@ -515,55 +518,57 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               {FI18n.i18nNext.t('resourceoptions_title')}
               {/*<FComponentsLib.FContentText text={'可选配置'} type={'highlight'} />*/}
-
-              <FTooltip title={FI18n.i18nNext.t('resourceinfo_add_btn_info')}>
-                <div>
-                  <FComponentsLib.FTextBtn
-                    style={{ fontSize: 12, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 5 }}
-                    type='primary'
-                    onClick={async () => {
-                      const dataSource: {
-                        key: string;
-                        name: string;
-                        type: 'input' | 'select';
-                        input: string;
-                        select: string[];
-                        description: string;
-                      } | null = await fResourceOptionEditor({
-                        disabledKeys: [
-                          ...resourceCreatorPage.step2_rawProperties.map<string>((rp) => rp.key),
-                          ...resourceCreatorPage.step2_additionalProperties.map<string>((rp) => rp.key),
-                          ...resourceCreatorPage.step2_customProperties.map<string>((bp) => bp.key),
-                          ...resourceCreatorPage.step2_customConfigurations.map<string>((pp) => pp.key),
-                        ],
-                        disabledNames: [
-                          ...resourceCreatorPage.step2_rawProperties.map<string>((rp) => rp.name),
-                          ...resourceCreatorPage.step2_additionalProperties.map<string>((rp) => rp.name),
-                          ...resourceCreatorPage.step2_customProperties.map<string>((bp) => bp.name),
-                          ...resourceCreatorPage.step2_customConfigurations.map<string>((pp) => pp.name),
-                        ],
-                      });
-
-                      if (!dataSource) {
-                        return;
-                      }
-
-                      await dispatch<OnChange_step2_customConfigurations_Action>({
-                        type: 'resourceCreatorPage/onChange_step2_customConfigurations',
-                        payload: {
-                          value: [
-                            ...resourceCreatorPage.step2_customConfigurations,
-                            dataSource,
+              {
+                resourceCreatorPage.step2_customConfigurations.length < 30 && (<FTooltip title={FI18n.i18nNext.t('resourceinfo_add_btn_info')}>
+                  <div>
+                    <FComponentsLib.FTextBtn
+                      style={{ fontSize: 12, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 5 }}
+                      type='primary'
+                      onClick={async () => {
+                        const dataSource: {
+                          key: string;
+                          name: string;
+                          type: 'input' | 'select';
+                          input: string;
+                          select: string[];
+                          description: string;
+                        } | null = await fResourceOptionEditor({
+                          disabledKeys: [
+                            ...resourceCreatorPage.step2_rawProperties.map<string>((rp) => rp.key),
+                            ...resourceCreatorPage.step2_additionalProperties.map<string>((rp) => rp.key),
+                            ...resourceCreatorPage.step2_customProperties.map<string>((bp) => bp.key),
+                            ...resourceCreatorPage.step2_customConfigurations.map<string>((pp) => pp.key),
                           ],
-                        },
-                      });
-                    }}
-                  >
-                    <FComponentsLib.FIcons.FConfiguration style={{ fontSize: 14 }} />
-                    <span>{FI18n.i18nNext.t('resourceoptions_add_btn')}</span>
-                  </FComponentsLib.FTextBtn>
-                </div>
-              </FTooltip>
+                          disabledNames: [
+                            ...resourceCreatorPage.step2_rawProperties.map<string>((rp) => rp.name),
+                            ...resourceCreatorPage.step2_additionalProperties.map<string>((rp) => rp.name),
+                            ...resourceCreatorPage.step2_customProperties.map<string>((bp) => bp.name),
+                            ...resourceCreatorPage.step2_customConfigurations.map<string>((pp) => pp.name),
+                          ],
+                        });
+
+                        if (!dataSource) {
+                          return;
+                        }
+
+                        await dispatch<OnChange_step2_customConfigurations_Action>({
+                          type: 'resourceCreatorPage/onChange_step2_customConfigurations',
+                          payload: {
+                            value: [
+                              ...resourceCreatorPage.step2_customConfigurations,
+                              dataSource,
+                            ],
+                          },
+                        });
+                      }}
+                    >
+                      <FComponentsLib.FIcons.FConfiguration style={{ fontSize: 14 }} />
+                      <span>{FI18n.i18nNext.t('resourceoptions_add_btn')}</span>
+                    </FComponentsLib.FTextBtn>
+                  </div>
+                </FTooltip>)
+              }
+
             </div>
 
             {
