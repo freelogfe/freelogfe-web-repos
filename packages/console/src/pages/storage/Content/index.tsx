@@ -39,7 +39,7 @@ function Content({ storageHomePage, dispatch }: ContentProps) {
       key: 'name',
       render(text, record) {
         return (<Space size={10}>
-          <FComponentsLib.FContentText type='normal' text={text} />
+          <FComponentsLib.FContentText type='normal' text={text} singleRow style={{ maxWidth: 700 }} />
           <div className={styles.hoverVisible}>
             <FComponentsLib.FCopyToClipboard
               text={`${storageHomePage.activatedBucket}/${text}`}
