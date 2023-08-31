@@ -534,7 +534,6 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
                 }
               </Space>)
             }
-
           </div>
           <div style={{ height: 20 }} />
 
