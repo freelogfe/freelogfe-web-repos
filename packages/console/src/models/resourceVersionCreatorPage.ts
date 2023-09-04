@@ -1211,6 +1211,7 @@ const Model: ResourceVersionCreatorModelType = {
       // });
     },
     * _FetchRawProps({ payload }: _FetchRawPropsAction, { select, put, call }: EffectsCommandMap) {
+      // console.log('_FetchRawProps, sdiofjldksfjlksdjflkdsjlkjl');
       const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
         resourceVersionCreatorPage,
       }));
@@ -1225,6 +1226,8 @@ const Model: ResourceVersionCreatorModelType = {
           rawPropertiesState: 'parsing',
         },
       });
+      // console.log('_FetchRawProps, sdiofjldksfjlksdjflkdsjlkjl');
+
 
       const params0: Parameters<typeof getFilesSha1Info>[0] = {
         sha1: [resourceVersionCreatorPage.selectedFileInfo.sha1],

@@ -98,12 +98,6 @@ function Info({ dispatch, exhibitInfoPage }: InfoProps) {
           </FTooltip>
         </Space>)
         : (<>
-          {/*<FInput*/}
-          {/*  className={styles.FInput}*/}
-          {/*  wrapClassName={styles.FInput}*/}
-          {/*  value={exhibitInfoPage.side_ExhibitInputTitle || ''}*/}
-          {/*  onChange={(e) => onChangePInputTitle(e.target.value)}*/}
-          {/*/>*/}
           <FComponentsLib.FInput.FSingleLine
             lengthLimit={-1}
             className={styles.FInput}
@@ -145,21 +139,21 @@ function Info({ dispatch, exhibitInfoPage }: InfoProps) {
 
         </>)
     }
+
+    <div style={{ height: 20 }} />
+
+    <FComponentsLib.FTitleText text={'展品简介'} type='h4' />
+    <div style={{ height: 15 }} />
+
+    <FComponentsLib.FInput.FMultiLine
+      lengthLimit={200}
+      value={'1234'}
+    />
+
     <div style={{ height: 30 }} />
 
     <FComponentsLib.FTitleText text={FI18n.i18nNext.t('exhibit_tag')} type='h4' />
     <div style={{ height: 15 }} />
-    {/*<FLabelEditor*/}
-    {/*  values={exhibitInfoPage.side_ExhibitTags}*/}
-    {/*  onChange={(value) => {*/}
-    {/*    dispatch<UpdateBaseInfoAction>({*/}
-    {/*      type: 'exhibitInfoPage/updateBaseInfo',*/}
-    {/*      payload: {*/}
-    {/*        side_ExhibitTags: value,*/}
-    {/*      },*/}
-    {/*    });*/}
-    {/*  }}*/}
-    {/*/>*/}
     <FExhibitLabelEditor
       value={exhibitInfoPage.side_ExhibitTags}
       onChange={(value) => {

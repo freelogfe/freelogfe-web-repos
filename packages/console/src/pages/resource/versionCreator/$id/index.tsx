@@ -51,6 +51,7 @@ import fAddFileBaseProps from '@/components/fAddFileBaseProps';
 import fAddCustomOptions from '@/components/fAddCustomOptions';
 import VersionInput from '@/pages/resource/version/creator/$id/VersionInput';
 import FPrompt from '@/components/FPrompt';
+import FSkeletonNode from '@/components/FSkeletonNode';
 
 interface VersionCreatorProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -301,6 +302,7 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
             });
           }}
           onChangeError={(hasError) => {
+            // console.log(hasError, 'hasErroriosdjflkjsdlkfjlk sdlkfjlkj');
             set_versionInputHasError(hasError);
           }}
         />
@@ -381,288 +383,303 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
 
         <div style={{ height: 5 }} />
 
-        <div className={styles.block}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <FComponentsLib.FContentText text={'基础属性'} type={'highlight'} />
-            {/*<FComponentsLib.FContentText text={''} type={'highlight'}/>*/}
-            {
-              resourceVersionCreatorPage.customProperties.length < 30 && (<Space size={10}>
-                <FTooltip title={FI18n.i18nNext.t('resourceinfo_add_btn_info')}>
-                  <div>
-                    <FComponentsLib.FTextBtn
-                      style={{ fontSize: 12, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 5 }}
-                      type='primary'
-                      onClick={async () => {
-                        const dataSource: {
-                          key: string;
-                          name: string;
-                          value: string;
-                          description: string;
-                        } | null = await fResourcePropertyEditor({
-                          disabledKeys: [
-                            ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
-                            ...resourceVersionCreatorPage.additionalProperties.map<string>((bp) => bp.key),
-                            ...resourceVersionCreatorPage.customProperties.map<string>((bp) => bp.key),
-                            ...resourceVersionCreatorPage.customConfigurations.map<string>((pp) => pp.key),
-                          ],
-                          disabledNames: [
-                            ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.name),
-                            ...resourceVersionCreatorPage.additionalProperties.map<string>((rp) => rp.name),
-                            ...resourceVersionCreatorPage.customProperties.map<string>((bp) => bp.name),
-                            ...resourceVersionCreatorPage.customConfigurations.map<string>((pp) => pp.name),
-                          ],
-                        });
-                        // console.log(dataSource, 'dataSource9iojskldjflksdjflk');
-                        if (!dataSource) {
-                          return;
-                        }
-
-                        await dispatch<OnChange_CustomProperties_Action>({
-                          type: 'resourceVersionCreatorPage/onChange_CustomProperties',
-                          payload: {
-                            value: [
-                              ...resourceVersionCreatorPage.customProperties,
-                              dataSource,
-                            ],
-                          },
-                        });
-                      }}
-                    >
-                      <FComponentsLib.FIcons.FProperty style={{ fontSize: 14 }} />
-                      <span>补充属性</span>
-                    </FComponentsLib.FTextBtn>
-                  </div>
-                </FTooltip>
-
-                {
-                  (resourceVersionCreatorPage.preVersion_additionalProperties.length > 0
-                    || resourceVersionCreatorPage.preVersion_customProperties.length > 0) &&
-                  (<FComponentsLib.FTextBtn
-                    style={{ fontSize: 12, fontWeight: 600 }}
-                    type='primary'
-                    onClick={async () => {
-                      if (resourceVersionCreatorPage.preVersion_additionalProperties.length > 0) {
-                        const dataSource_additionalProperties: {
-                          key: string;
-                          name: string;
-                          value: string;
-                          description: string;
-                        }[] = resourceVersionCreatorPage.additionalProperties.map((ap) => {
-                          const ap1 = resourceVersionCreatorPage.preVersion_additionalProperties.find((a) => {
-                            return a.key === ap.key;
-                          });
-
-                          if (!ap1) {
-                            return ap;
-                          }
-
-                          return {
-                            ...ap,
-                            value: ap1.value,
-                          };
-                        });
-
-                        await dispatch<OnChange_AdditionalProperties_Action>({
-                          type: 'resourceVersionCreatorPage/onChange_AdditionalProperties',
-                          payload: {
-                            value: dataSource_additionalProperties,
-                          },
-                        });
-                      }
-
-                      if (resourceVersionCreatorPage.preVersion_customProperties.length > 0) {
-                        const dataSource: {
-                          key: string;
-                          name: string;
-                          value: string;
-                          description: string;
-                        }[] | null = await fAddFileBaseProps({
-                          defaultData: resourceVersionCreatorPage.preVersion_customProperties,
-                          disabledKeys: [
-                            ...resourceVersionCreatorPage.rawProperties.map((rp) => {
-                              return rp.key;
-                            }),
-                            ...resourceVersionCreatorPage.additionalProperties.map((rp) => {
-                              return rp.key;
-                            }),
-                            ...resourceVersionCreatorPage.customProperties.map((pp) => {
-                              return pp.key;
-                            }),
-                            ...resourceVersionCreatorPage.customConfigurations.map((pp) => {
-                              return pp.key;
-                            }),
-                          ],
-                          disabledNames: [
-                            ...resourceVersionCreatorPage.rawProperties.map((rp) => {
-                              return rp.name;
-                            }),
-                            ...resourceVersionCreatorPage.additionalProperties.map((rp) => {
-                              return rp.name;
-                            }),
-                            ...resourceVersionCreatorPage.customProperties.map((pp) => {
-                              return pp.name;
-                            }),
-                            ...resourceVersionCreatorPage.customConfigurations.map((pp) => {
-                              return pp.name;
-                            }),
-                          ],
-                        });
-                        if (!dataSource) {
-                          return;
-                        }
-
-                        await dispatch<OnChange_CustomProperties_Action>({
-                          type: 'resourceVersionCreatorPage/onChange_CustomProperties',
-                          payload: {
-                            value: [
-                              ...resourceVersionCreatorPage.customProperties,
-                              ...dataSource.map<ResourceVersionCreatorPageModelState['customProperties'][number]>((ds) => {
-                                return {
-                                  key: ds.key,
-                                  name: ds.name,
-                                  value: ds.value,
-                                  description: ds.description,
-                                };
-                              }),
-                            ],
-                          },
-                        });
-                      }
-
-                    }}
-                  >从上个版本导入</FComponentsLib.FTextBtn>)
-                }
-              </Space>)
-            }
-          </div>
-          <div style={{ height: 20 }} />
-
-          <FResourceProperties
-            immutableData={resourceVersionCreatorPage.rawProperties}
-            onlyEditValueData={resourceVersionCreatorPage.additionalProperties}
-            alterableData={resourceVersionCreatorPage.customProperties}
-            onEdit_onlyEditValueData={async (value) => {
-              // console.log(value, 'value sidjfoikjo sd value sdiofjlkj');
-              const index: number = resourceVersionCreatorPage.additionalProperties.findIndex((p) => {
-                return p === value;
-              });
-              const dataSource: {
-                key: string;
-                name: string;
-                value: string;
-                description: string;
-              } | null = await fResourcePropertyEditor({
-                disabledKeys: [
-                  ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
-                  ...resourceVersionCreatorPage.additionalProperties.map<string>((rp) => rp.key),
-                  ...resourceVersionCreatorPage.customProperties.map<string>((bp) => bp.key),
-                  ...resourceVersionCreatorPage.customConfigurations.map<string>((pp) => pp.key),
-                ],
-                disabledNames: [
-                  ...resourceVersionCreatorPage.rawProperties.map<string>((bp) => bp.name),
-                  ...resourceVersionCreatorPage.additionalProperties.map<string>((bp) => bp.name),
-                  ...resourceVersionCreatorPage.customProperties.map<string>((bp) => bp.name),
-                  ...resourceVersionCreatorPage.customConfigurations.map<string>((pp) => pp.name),
-                ],
-                defaultData: value,
-                noneEditableFields: ['key', 'description', 'name'],
-                valueAcceptNull: true,
-              });
-              if (!dataSource) {
-                return;
-              }
-
-              await dispatch<OnChange_AdditionalProperties_Action>({
-                type: 'resourceVersionCreatorPage/onChange_AdditionalProperties',
-                payload: {
-                  value: resourceVersionCreatorPage.additionalProperties.map((v, i) => {
-                    if (i !== index) {
-                      return v;
-                    }
-                    return dataSource;
-                  }),
-                },
-              });
-            }}
-            onEdit_alterableData={async (value) => {
-              // console.log(value, 'valuesdijflksdjflk jlkjl');
-              const index: number = resourceVersionCreatorPage.customProperties.findIndex((p) => {
-                return p === value;
-              });
-              const dataSource: {
-                key: string;
-                name: string;
-                value: string;
-                description: string;
-              } | null = await fResourcePropertyEditor({
-                disabledKeys: [
-                  ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
-                  ...resourceVersionCreatorPage.additionalProperties.map<string>((rp) => rp.key),
-                  ...resourceVersionCreatorPage.customProperties.map<string>((bp) => bp.key),
-                  ...resourceVersionCreatorPage.customConfigurations.map<string>((pp) => pp.key),
-                ],
-                disabledNames: [
-                  ...resourceVersionCreatorPage.rawProperties.map<string>((bp) => bp.name),
-                  ...resourceVersionCreatorPage.additionalProperties.map<string>((bp) => bp.name),
-                  ...resourceVersionCreatorPage.customProperties.map<string>((bp) => bp.name),
-                  ...resourceVersionCreatorPage.customConfigurations.map<string>((pp) => pp.name),
-                ],
-                defaultData: value,
-              });
-              if (!dataSource) {
-                return;
-              }
-
-              await dispatch<OnChange_CustomProperties_Action>({
-                type: 'resourceVersionCreatorPage/onChange_CustomProperties',
-                payload: {
-                  value: resourceVersionCreatorPage.customProperties.map((v, i) => {
-                    if (i !== index) {
-                      return v;
-                    }
-                    return dataSource;
-                  }),
-                },
-              });
-            }}
-            onDelete_alterableData={async (value) => {
-              // console.log(value, 'AAAAAAsdofijsdflksdjfldsjlkj');
-              await dispatch<OnChange_CustomProperties_Action>({
-                type: 'resourceVersionCreatorPage/onChange_CustomProperties',
-                payload: {
-                  value: resourceVersionCreatorPage.customProperties.filter((v, i) => {
-                    return v.key !== value.key && v.name !== value.name;
-                  }),
-                },
-              });
-            }}
-          />
-        </div>
-
-        <div style={{ height: 15 }} />
+        {
+          resourceVersionCreatorPage.rawPropertiesState === 'parsing' && (<>
+            <div style={{ height: 20 }} />
+            <FSkeletonNode width={920} height={38} />
+            <div style={{ height: 20 }} />
+            <FSkeletonNode width={340} height={38} />
+          </>)
+        }
 
         {
-          $showMore
-            ? (<FComponentsLib.FTextBtn
-              style={{ fontSize: 12 }}
-              type={'primary'}
-              onClick={() => {
-                set$ShowMore(false);
-              }}
-            >{FI18n.i18nNext.t('create_new_version_btn_showless')}</FComponentsLib.FTextBtn>)
-            : (<Space size={10}>
-              {/*{FI18n.i18nNext.t('create_new_version_btn_moresetting')}*/}
-              <FComponentsLib.FTextBtn
-                style={{ fontSize: 12 }}
-                type={'primary'}
-                onClick={() => {
-                  set$ShowMore(true);
+          resourceVersionCreatorPage.rawPropertiesState === 'success' && (<>
+            <div className={styles.block}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <FComponentsLib.FContentText text={'基础属性'} type={'highlight'} />
+                {/*<FComponentsLib.FContentText text={''} type={'highlight'}/>*/}
+                {
+                  resourceVersionCreatorPage.customProperties.length < 30 && (<Space size={10}>
+                    <FTooltip title={FI18n.i18nNext.t('resourceinfo_add_btn_info')}>
+                      <div>
+                        <FComponentsLib.FTextBtn
+                          style={{ fontSize: 12, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 5 }}
+                          type='primary'
+                          onClick={async () => {
+                            const dataSource: {
+                              key: string;
+                              name: string;
+                              value: string;
+                              description: string;
+                            } | null = await fResourcePropertyEditor({
+                              disabledKeys: [
+                                ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
+                                ...resourceVersionCreatorPage.additionalProperties.map<string>((bp) => bp.key),
+                                ...resourceVersionCreatorPage.customProperties.map<string>((bp) => bp.key),
+                                ...resourceVersionCreatorPage.customConfigurations.map<string>((pp) => pp.key),
+                              ],
+                              disabledNames: [
+                                ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.name),
+                                ...resourceVersionCreatorPage.additionalProperties.map<string>((rp) => rp.name),
+                                ...resourceVersionCreatorPage.customProperties.map<string>((bp) => bp.name),
+                                ...resourceVersionCreatorPage.customConfigurations.map<string>((pp) => pp.name),
+                              ],
+                            });
+                            // console.log(dataSource, 'dataSource9iojskldjflksdjflk');
+                            if (!dataSource) {
+                              return;
+                            }
+
+                            await dispatch<OnChange_CustomProperties_Action>({
+                              type: 'resourceVersionCreatorPage/onChange_CustomProperties',
+                              payload: {
+                                value: [
+                                  ...resourceVersionCreatorPage.customProperties,
+                                  dataSource,
+                                ],
+                              },
+                            });
+                          }}
+                        >
+                          <FComponentsLib.FIcons.FProperty style={{ fontSize: 14 }} />
+                          <span>补充属性</span>
+                        </FComponentsLib.FTextBtn>
+                      </div>
+                    </FTooltip>
+
+                    {
+                      (resourceVersionCreatorPage.preVersion_additionalProperties.length > 0
+                        || resourceVersionCreatorPage.preVersion_customProperties.length > 0) &&
+                      (<FComponentsLib.FTextBtn
+                        style={{ fontSize: 12, fontWeight: 600 }}
+                        type='primary'
+                        onClick={async () => {
+                          if (resourceVersionCreatorPage.preVersion_additionalProperties.length > 0) {
+                            const dataSource_additionalProperties: {
+                              key: string;
+                              name: string;
+                              value: string;
+                              description: string;
+                            }[] = resourceVersionCreatorPage.additionalProperties.map((ap) => {
+                              const ap1 = resourceVersionCreatorPage.preVersion_additionalProperties.find((a) => {
+                                return a.key === ap.key;
+                              });
+
+                              if (!ap1) {
+                                return ap;
+                              }
+
+                              return {
+                                ...ap,
+                                value: ap1.value,
+                              };
+                            });
+
+                            await dispatch<OnChange_AdditionalProperties_Action>({
+                              type: 'resourceVersionCreatorPage/onChange_AdditionalProperties',
+                              payload: {
+                                value: dataSource_additionalProperties,
+                              },
+                            });
+                          }
+
+                          if (resourceVersionCreatorPage.preVersion_customProperties.length > 0) {
+                            const dataSource: {
+                              key: string;
+                              name: string;
+                              value: string;
+                              description: string;
+                            }[] | null = await fAddFileBaseProps({
+                              defaultData: resourceVersionCreatorPage.preVersion_customProperties,
+                              disabledKeys: [
+                                ...resourceVersionCreatorPage.rawProperties.map((rp) => {
+                                  return rp.key;
+                                }),
+                                ...resourceVersionCreatorPage.additionalProperties.map((rp) => {
+                                  return rp.key;
+                                }),
+                                ...resourceVersionCreatorPage.customProperties.map((pp) => {
+                                  return pp.key;
+                                }),
+                                ...resourceVersionCreatorPage.customConfigurations.map((pp) => {
+                                  return pp.key;
+                                }),
+                              ],
+                              disabledNames: [
+                                ...resourceVersionCreatorPage.rawProperties.map((rp) => {
+                                  return rp.name;
+                                }),
+                                ...resourceVersionCreatorPage.additionalProperties.map((rp) => {
+                                  return rp.name;
+                                }),
+                                ...resourceVersionCreatorPage.customProperties.map((pp) => {
+                                  return pp.name;
+                                }),
+                                ...resourceVersionCreatorPage.customConfigurations.map((pp) => {
+                                  return pp.name;
+                                }),
+                              ],
+                            });
+                            if (!dataSource) {
+                              return;
+                            }
+
+                            await dispatch<OnChange_CustomProperties_Action>({
+                              type: 'resourceVersionCreatorPage/onChange_CustomProperties',
+                              payload: {
+                                value: [
+                                  ...resourceVersionCreatorPage.customProperties,
+                                  ...dataSource.map<ResourceVersionCreatorPageModelState['customProperties'][number]>((ds) => {
+                                    return {
+                                      key: ds.key,
+                                      name: ds.name,
+                                      value: ds.value,
+                                      description: ds.description,
+                                    };
+                                  }),
+                                ],
+                              },
+                            });
+                          }
+
+                        }}
+                      >从上个版本导入</FComponentsLib.FTextBtn>)
+                    }
+                  </Space>)
+                }
+              </div>
+              <div style={{ height: 20 }} />
+
+              <FResourceProperties
+                immutableData={resourceVersionCreatorPage.rawProperties}
+                onlyEditValueData={resourceVersionCreatorPage.additionalProperties}
+                alterableData={resourceVersionCreatorPage.customProperties}
+                onEdit_onlyEditValueData={async (value) => {
+                  // console.log(value, 'value sidjfoikjo sd value sdiofjlkj');
+                  const index: number = resourceVersionCreatorPage.additionalProperties.findIndex((p) => {
+                    return p === value;
+                  });
+                  const dataSource: {
+                    key: string;
+                    name: string;
+                    value: string;
+                    description: string;
+                  } | null = await fResourcePropertyEditor({
+                    disabledKeys: [
+                      ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
+                      ...resourceVersionCreatorPage.additionalProperties.map<string>((rp) => rp.key),
+                      ...resourceVersionCreatorPage.customProperties.map<string>((bp) => bp.key),
+                      ...resourceVersionCreatorPage.customConfigurations.map<string>((pp) => pp.key),
+                    ],
+                    disabledNames: [
+                      ...resourceVersionCreatorPage.rawProperties.map<string>((bp) => bp.name),
+                      ...resourceVersionCreatorPage.additionalProperties.map<string>((bp) => bp.name),
+                      ...resourceVersionCreatorPage.customProperties.map<string>((bp) => bp.name),
+                      ...resourceVersionCreatorPage.customConfigurations.map<string>((pp) => pp.name),
+                    ],
+                    defaultData: value,
+                    noneEditableFields: ['key', 'description', 'name'],
+                    valueAcceptNull: true,
+                  });
+                  if (!dataSource) {
+                    return;
+                  }
+
+                  await dispatch<OnChange_AdditionalProperties_Action>({
+                    type: 'resourceVersionCreatorPage/onChange_AdditionalProperties',
+                    payload: {
+                      value: resourceVersionCreatorPage.additionalProperties.map((v, i) => {
+                        if (i !== index) {
+                          return v;
+                        }
+                        return dataSource;
+                      }),
+                    },
+                  });
                 }}
-              >更多设置</FComponentsLib.FTextBtn>
-              {FI18n.i18nNext.t('create_new_version_btn_moresetting_help')}
-              {/*<FComponentsLib.FContentText text={'可以为资源文件添加可选配置，或进行依赖资源的声明'} type={'additional2'} />*/}
-            </Space>)
+                onEdit_alterableData={async (value) => {
+                  // console.log(value, 'valuesdijflksdjflk jlkjl');
+                  const index: number = resourceVersionCreatorPage.customProperties.findIndex((p) => {
+                    return p === value;
+                  });
+                  const dataSource: {
+                    key: string;
+                    name: string;
+                    value: string;
+                    description: string;
+                  } | null = await fResourcePropertyEditor({
+                    disabledKeys: [
+                      ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
+                      ...resourceVersionCreatorPage.additionalProperties.map<string>((rp) => rp.key),
+                      ...resourceVersionCreatorPage.customProperties.map<string>((bp) => bp.key),
+                      ...resourceVersionCreatorPage.customConfigurations.map<string>((pp) => pp.key),
+                    ],
+                    disabledNames: [
+                      ...resourceVersionCreatorPage.rawProperties.map<string>((bp) => bp.name),
+                      ...resourceVersionCreatorPage.additionalProperties.map<string>((bp) => bp.name),
+                      ...resourceVersionCreatorPage.customProperties.map<string>((bp) => bp.name),
+                      ...resourceVersionCreatorPage.customConfigurations.map<string>((pp) => pp.name),
+                    ],
+                    defaultData: value,
+                  });
+                  if (!dataSource) {
+                    return;
+                  }
+
+                  await dispatch<OnChange_CustomProperties_Action>({
+                    type: 'resourceVersionCreatorPage/onChange_CustomProperties',
+                    payload: {
+                      value: resourceVersionCreatorPage.customProperties.map((v, i) => {
+                        if (i !== index) {
+                          return v;
+                        }
+                        return dataSource;
+                      }),
+                    },
+                  });
+                }}
+                onDelete_alterableData={async (value) => {
+                  // console.log(value, 'AAAAAAsdofijsdflksdjfldsjlkj');
+                  await dispatch<OnChange_CustomProperties_Action>({
+                    type: 'resourceVersionCreatorPage/onChange_CustomProperties',
+                    payload: {
+                      value: resourceVersionCreatorPage.customProperties.filter((v, i) => {
+                        return v.key !== value.key && v.name !== value.name;
+                      }),
+                    },
+                  });
+                }}
+              />
+            </div>
+
+            <div style={{ height: 15 }} />
+
+            {
+              $showMore
+                ? (<FComponentsLib.FTextBtn
+                  style={{ fontSize: 12 }}
+                  type={'primary'}
+                  onClick={() => {
+                    set$ShowMore(false);
+                  }}
+                >{FI18n.i18nNext.t('create_new_version_btn_showless')}</FComponentsLib.FTextBtn>)
+                : (<Space size={10}>
+                  {/*{FI18n.i18nNext.t('create_new_version_btn_moresetting')}*/}
+                  <FComponentsLib.FTextBtn
+                    style={{ fontSize: 12 }}
+                    type={'primary'}
+                    onClick={() => {
+                      set$ShowMore(true);
+                    }}
+                  >更多设置</FComponentsLib.FTextBtn>
+                  {FI18n.i18nNext.t('create_new_version_btn_moresetting_help')}
+                  {/*<FComponentsLib.FContentText text={'可以为资源文件添加可选配置，或进行依赖资源的声明'} type={'additional2'} />*/}
+                </Space>)
+            }
+          </>)
         }
+
+
 
         <div style={{ display: $showMore ? 'block' : 'none' }}>
           {/*<div style={{ display: 'block' }}>*/}
