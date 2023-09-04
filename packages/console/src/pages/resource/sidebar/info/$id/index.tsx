@@ -201,12 +201,6 @@ function Info({ dispatch, resourceInfoPage, match }: InfoProps) {
           <div style={{ height: 20 }} />
           <FUploadCover
             onUploadSuccess={(url) => {
-              // dispatch<OnChange_step4_resourceCover_Action>({
-              //   type: 'resourceCreatorPage/onChange_step4_resourceCover',
-              //   payload: {
-              //     value: url,
-              //   },
-              // });
               dispatch<OnChange_Cover_Action>({
                 type: 'resourceInfoPage/onChange_Cover',
                 payload: {
@@ -218,10 +212,6 @@ function Info({ dispatch, resourceInfoPage, match }: InfoProps) {
               fMessage(err, 'error');
             }}
           >
-            {/*<a className={styles.FUploadImageChildren}>*/}
-            {/*  <FComponentsLib.FIcons.FCloudUpload />*/}
-            {/*  <span>{FI18n.i18nNext.t('upload_image')}</span>*/}
-            {/*</a>*/}
             {
               resourceInfoPage.resourceInfo.coverImages.length === 0 && (<a className={styles.FUploadImageChildren}>
                 <FComponentsLib.FIcons.FCloudUpload />
@@ -231,8 +221,11 @@ function Info({ dispatch, resourceInfoPage, match }: InfoProps) {
 
             {
               resourceInfoPage.resourceInfo.coverImages.length > 0 && (<div className={styles.cover}>
-                <FCoverImage src={resourceInfoPage.resourceInfo.coverImages[0]} width={200}
-                             style={{ borderRadius: 4 }} />
+                <FCoverImage
+                  src={resourceInfoPage.resourceInfo.coverImages[0]}
+                  width={200}
+                  style={{ borderRadius: 4 }}
+                />
                 <div className={styles.coverEdit}>
                   <FComponentsLib.FIcons.FEdit style={{ fontSize: 32 }} />
                   <div style={{ height: 10 }} />

@@ -261,6 +261,9 @@ const Model: ResourceInfoPageModelType = {
           title_IsEditing: false,
         },
       });
+      yield put<OnUpdate_Data_Action>({
+        type: 'resourceSider/onUpdate_Data',
+      });
     },
     * onChange_TitleInput({ payload }: OnChange_TitleInput_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
@@ -361,7 +364,6 @@ const Model: ResourceInfoPageModelType = {
 
       yield put<OnUpdate_Data_Action>({
         type: 'resourceSider/onUpdate_Data',
-        // payload: resourceInfoPage.resourceID,
       });
     },
     * onChange_Labels({ payload }: OnChange_Labels_Action, { select, call, put }: EffectsCommandMap) {
