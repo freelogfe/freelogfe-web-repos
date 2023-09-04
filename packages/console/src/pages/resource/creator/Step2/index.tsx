@@ -293,8 +293,8 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
             type='primary'
             onClick={() => {
               // $prop.onClick_EditBtn && $prop.onClick_EditBtn();
-              dispatch<OnClick_step2_submitBtn_Action>({
-                type: 'resourceCreatorPage/onClick_step2_submitBtn',
+              dispatch<OnClick_step2_editCartoonBtn_Action>({
+                type: 'resourceCreatorPage/onClick_step2_editCartoonBtn',
               });
             }}
           >编辑</FComponentsLib.FTextBtn>)
