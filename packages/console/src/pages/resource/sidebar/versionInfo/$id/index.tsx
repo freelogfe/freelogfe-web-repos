@@ -39,6 +39,7 @@ function VersionInfo({ dispatch, resourceVersionEditorPage, match }: VersionInfo
   const [$urlState, set$urlState] = useUrlState<{ version: string }>({ version: '' });
   const [isEditing, setIsEditing] = React.useState<boolean>(false);
   const [editor, setEditor] = React.useState<EditorState>(BraftEditor.createEditorState(resourceVersionEditorPage.description));
+  const [$customOptionsExpansion, set$customOptionsExpansion] = React.useState<boolean>(false);
 
   AHooks.useMount(async () => {
     dispatch<OnMount_Sidebar_Action>({
@@ -225,8 +226,8 @@ function VersionInfo({ dispatch, resourceVersionEditorPage, match }: VersionInfo
             <FResourceOptions
               theme={'dark'}
               dataSource={resourceVersionEditorPage.customConfigurations.filter((f1, f2) => {
-                // return $customOptionsExpansion || f2 < 3;
-                return true;
+                return $customOptionsExpansion || f2 < 3;
+                // return true;
               })}
               onEdit={async (data) => {
                 const index: number = resourceVersionEditorPage.customConfigurations.findIndex((p) => {
@@ -275,6 +276,37 @@ function VersionInfo({ dispatch, resourceVersionEditorPage, match }: VersionInfo
 
               }}
             />
+            {
+              resourceVersionEditorPage.customConfigurations.length > 3 && (
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 5 }}>
+                  {
+                    $customOptionsExpansion
+                      ? (<FComponentsLib.FTextBtn
+                        onClick={() => {
+                          set$customOptionsExpansion(false);
+                        }}
+                        style={{ fontSize: 12 }}
+                        type={'primary'}>{FI18n.i18nNext.t('resourceoptions_btn_showless', {
+                        OptionsQty: resourceVersionEditorPage.customConfigurations.length,
+                      })}</FComponentsLib.FTextBtn>)
+                      : (<>
+                        <FComponentsLib.FContentText
+                          text={'可配置项目较多，已折叠显示'}
+                          type={'additional2'}
+                        />
+                        <FComponentsLib.FTextBtn
+                          onClick={() => {
+                            set$customOptionsExpansion(true);
+                          }}
+                          style={{ fontSize: 12 }}
+                          type={'primary'}>{FI18n.i18nNext.t('resourceoptions_btn_showall', {
+                          OptionsQty: resourceVersionEditorPage.customConfigurations.length,
+                        })}</FComponentsLib.FTextBtn>
+                      </>)
+                  }
+
+                </div>)
+            }
           </div>
         </>)
       }
