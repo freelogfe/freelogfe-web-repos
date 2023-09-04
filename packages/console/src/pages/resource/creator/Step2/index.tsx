@@ -673,7 +673,8 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           {/*{FI18n.i18nNext.t('claim_rely_title')}*/}
           <FComponentsLib.FContentText text={FI18n.i18nNext.t('claim_rely_title')} type={'highlight'} />
-          <FTooltip title={FI18n.i18nNext.t('resourceinfo_add_btn_info')}>
+          {/*<FTooltip title={FI18n.i18nNext.t('resourceinfo_add_btn_info')}>*/}
+          <FTooltip title={FI18n.i18nNext.t('info_versionrely')}>
             <div>
               <FComponentsLib.FTextBtn
                 style={{ fontSize: 12, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 5 }}
