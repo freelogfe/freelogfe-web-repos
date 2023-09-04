@@ -26,6 +26,7 @@ export default function ResourceList({
                                        pageData,
                                        setPageData,
                                      }: ResourceListProps) {
+  // console.log(resourcesList, 'sdoifjsdl;kfjl;ksdjflksdjflkjl');
   return (
     <>
       {
@@ -50,7 +51,7 @@ export default function ResourceList({
                   }
                 />
                 <ResourceInfo
-                  name={item.resourceName}
+                  name={item.resourceTitle || item.resourceName}
                   type={item.resourceType.join(' / ')}
                   version={item.latestVersion}
                 />
