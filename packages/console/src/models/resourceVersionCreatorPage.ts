@@ -360,9 +360,16 @@ const Model: ResourceVersionCreatorModelType = {
             resourceId: string;
             resourceName: string;
           }[];
+          userId: number;
         };
       } = yield call(FServiceAPI.Resource.info, params1);
       // console.log(data, '2093jdsl;kfasdf');
+
+      if (!data_resourceInfo || data_resourceInfo.userId !== FUtil.Tool.getUserIDByCookies()) {
+        history.replace(FUtil.LinkTo.exception403());
+        return;
+      }
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
