@@ -452,6 +452,8 @@ function Header({
         <FComponentsLib.FTitleText
           text={`当前版本 ${version}`}
           type='h1'
+          singleRow
+          style={{ maxWidth: 750 }}
         />
         <div style={{ width: 8 }} />
         <FComponentsLib.FDropdown
