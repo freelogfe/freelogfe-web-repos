@@ -204,7 +204,6 @@ const Model: ResourceListPageModelType = {
         limit: FUtil.Predefined.pageSize,
         keywords: resourceListPage.inputText || undefined,
         resourceType: resourceType || undefined,
-        // status: Number(resourceListPage.resourceStatus) as 0 | 1 | 2,
         resourceTypeCode: resourceType === '' ? (resourceTypeCode || undefined) : undefined,
         resourceTypeCategory: resourceType === '' ? resourceTypeCategory : undefined,
         status: resourceListPage.resourceStatus === '#' ? undefined : (resourceListPage.resourceStatus as 0),

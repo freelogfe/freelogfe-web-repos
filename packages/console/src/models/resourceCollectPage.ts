@@ -177,13 +177,27 @@ const Model: ResourceCollectModelType = {
       //   return rt !== '全部';
       // });
 
+      // const resourceTypes: string[] = resourceCollectPage.resourceTypeCodes.value.split('#');
+      // let resourceTypeCode: string = resourceTypes[0];
+      // let resourceTypeCategory: 1 | 2 = 1;
+      //
+      // if (resourceTypes.length > 1 && resourceTypes[resourceTypes.length - 1] === 'other') {
+      //   resourceTypeCode = resourceTypes[0];
+      //   resourceTypeCategory = 2;
+      // }
+
       const resourceTypes: string[] = resourceCollectPage.resourceTypeCodes.value.split('#');
       let resourceTypeCode: string = resourceTypes[0];
       let resourceTypeCategory: 1 | 2 = 1;
+      let resourceType: string = '';
 
       if (resourceTypes.length > 1 && resourceTypes[resourceTypes.length - 1] === 'other') {
         resourceTypeCode = resourceTypes[0];
         resourceTypeCategory = 2;
+      }
+
+      if (resourceTypes.length > 1 && resourceTypes[resourceTypes.length - 1] === 'all') {
+        resourceType = resourceCollectPage.resourceTypeCodes.labels[resourceCollectPage.resourceTypeCodes.labels.length - 2];
       }
 
       const params: Parameters<typeof FServiceAPI.Collection.collectionResources>[0] = {
@@ -192,9 +206,12 @@ const Model: ResourceCollectModelType = {
         limit: FUtil.Predefined.pageSize,
         keywords: resourceCollectPage.inputText || undefined,
         // resourceType: resourceTypes.length === 0 ? undefined : String(resourceTypes[resourceTypes.length - 1]),
+        // resourceTypeCode: resourceTypeCode || undefined,
+        // resourceTypeCategory: resourceTypeCategory,
+        resourceType: resourceType || undefined,
+        resourceTypeCode: resourceType === '' ? (resourceTypeCode || undefined) : undefined,
+        resourceTypeCategory: resourceType === '' ? resourceTypeCategory : undefined,
         resourceStatus: resourceCollectPage.resourceStatus === '#' ? undefined : resourceCollectPage.resourceStatus as 0,
-        resourceTypeCode: resourceTypeCode || undefined,
-        resourceTypeCategory: resourceTypeCategory,
       };
 
       const { ret, errCode, data: data_collection }: {
