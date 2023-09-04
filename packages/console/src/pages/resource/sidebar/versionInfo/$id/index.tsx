@@ -10,7 +10,7 @@ import * as AHooks from 'ahooks';
 import useUrlState from '@ahooksjs/use-url-state';
 import FNoDataTip from '@/components/FNoDataTip';
 import FComponentsLib from '@freelog/components-lib';
-import { Space } from 'antd';
+import { Space, Badge } from 'antd';
 import { FI18n, FUtil } from '@freelog/tools-lib';
 import FDropdownMenu from '@/components/FDropdownMenu';
 import FTooltip from '@/components/FTooltip';
@@ -84,7 +84,6 @@ function VersionInfo({ dispatch, resourceVersionEditorPage, match }: VersionInfo
     });
   }
 
-
   if (resourceVersionEditorPage.version === '') {
     return (<FNoDataTip
       height={'calc(100vh - 70px)'}
@@ -106,6 +105,7 @@ function VersionInfo({ dispatch, resourceVersionEditorPage, match }: VersionInfo
         resourceID={resourceVersionEditorPage.resourceID}
         sha1={resourceVersionEditorPage.resourceVersionInfo?.sha1 || ''}
         isCartoon={resourceVersionEditorPage.resourceInfo?.resourceType[0] === '阅读' && resourceVersionEditorPage.resourceInfo?.resourceType[1] === '漫画'}
+        hasDraft={!!resourceVersionEditorPage.draft}
         onClickDownload={(extension) => {
           if (!extension) {
             self.location.href = FUtil.Format.completeUrlByDomain('qi')
@@ -429,6 +429,7 @@ interface HeaderProps {
   sha1: string;
   signingDate: string;
   isCartoon: boolean;
+  hasDraft: boolean;
 
   onClickDownload?(type?: string): void;
 
@@ -441,6 +442,7 @@ function Header({
                   resourceID,
                   sha1,
                   signingDate,
+                  hasDraft,
                   onClickDownload,
                   isCartoon,
                   onChangeVersion,
@@ -481,9 +483,11 @@ function Header({
           <FComponentsLib.FIcons.FDown style={{ fontSize: 12 }} />
         </FComponentsLib.FDropdown>
         <div style={{ width: 30 }} />
-        <FComponentsLib.FTextBtn onClick={() => {
-          self.open(FUtil.LinkTo.resourceVersionCreator({ resourceID: resourceID }));
-        }}>更新版本</FComponentsLib.FTextBtn>
+        <Badge count={hasDraft ? '草稿' : 0} size={'small'}>
+          <FComponentsLib.FTextBtn onClick={() => {
+            self.open(FUtil.LinkTo.resourceVersionCreator({ resourceID: resourceID }));
+          }}>更新版本</FComponentsLib.FTextBtn>
+        </Badge>
       </div>
       <div style={{ height: 10 }} />
       <Space size={0}>

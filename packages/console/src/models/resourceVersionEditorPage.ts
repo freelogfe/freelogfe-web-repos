@@ -7,6 +7,7 @@ import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import { history } from 'umi';
 import fMessage from '@/components/fMessage';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
+import { IResourceCreateVersionDraftType } from '@/type/resourceTypes';
 
 export interface ResourceVersionEditorPageModelState {
   resourceID: string;
@@ -19,6 +20,7 @@ export interface ResourceVersionEditorPageModelState {
     resourceName: string;
     resourceType: string[];
   } | null;
+  draft: null | IResourceCreateVersionDraftType;
   resourceVersionInfo: {
     version: string;
     sha1: string;
@@ -102,6 +104,7 @@ const Model: ResourceVersionEditorModelType = {
     versions: [],
     // signingDate: '',
     resourceInfo: null,
+    draft: null,
     resourceVersionInfo: null,
 
     descriptionFullScreen: false,
@@ -145,6 +148,13 @@ const Model: ResourceVersionEditorModelType = {
         };
       } = yield call(FServiceAPI.Resource.info, params1);
       // console.log(resourceVersionEditorPage.resourceID, resourceVersionEditorPage.version, 'sdfsdfasefewrfw4eagtfrtef[09gijopredslkfj');
+
+      const params3: Parameters<typeof FServiceAPI.Resource.lookDraft>[0] = {
+        resourceId: resourceVersionEditorPage.resourceID,
+      };
+      // console.log(params, 'params9iosdjflksjdflkjlk');
+      const { data: data_draft } = yield call(FServiceAPI.Resource.lookDraft, params3);
+
       const params: Parameters<typeof FServiceAPI.Resource.resourceVersionInfo1>[0] = {
         resourceId: resourceVersionEditorPage.resourceID,
         version: resourceVersionEditorPage.version,
@@ -198,6 +208,7 @@ const Model: ResourceVersionEditorModelType = {
             resourceName: data_versionInfo.resourceName,
             resourceType: data_versionInfo.resourceType,
           },
+          draft: data_draft ? data_draft.draftData : null,
           resourceVersionInfo: {
             version: data_versionInfo.version,
             sha1: data_versionInfo.fileSha1,
