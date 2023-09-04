@@ -128,7 +128,7 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
     return (<div className={styles.noSelectedFileInfo}>
       <div style={{ height: 40 }} />
       <div style={{ display: 'flex', alignItems: 'center', width: 920 }}>
-        <FCoverImage src={''} width={36} />
+        <FCoverImage src={resourceVersionCreatorPage.resourceInfo?.cover || ''} width={36} />
         <div style={{ width: 10 }} />
         <FComponentsLib.FContentText
           text={resourceVersionCreatorPage.resourceInfo?.resourceName || ''}
@@ -268,7 +268,7 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
       <div style={{ width: 920 }}>
         <div style={{ height: 40 }} />
         <div style={{ display: 'flex', alignItems: 'center', width: 920 }}>
-          <FCoverImage src={''} width={36} />
+          <FCoverImage src={resourceVersionCreatorPage.resourceInfo?.cover || ''} width={36} />
           <div style={{ width: 10 }} />
           <FComponentsLib.FContentText
             text={resourceVersionCreatorPage.resourceInfo?.resourceName || ''}

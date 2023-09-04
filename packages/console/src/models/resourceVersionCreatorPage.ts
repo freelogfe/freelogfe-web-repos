@@ -26,6 +26,7 @@ export interface ResourceVersionCreatorPageModelState {
       resourceID: string;
       resourceName: string;
     }[];
+    cover: string;
   } | null;
 
   draftSaveTime: string;
@@ -361,9 +362,10 @@ const Model: ResourceVersionCreatorModelType = {
             resourceName: string;
           }[];
           userId: number;
+          coverImages: string[];
         };
       } = yield call(FServiceAPI.Resource.info, params1);
-      // console.log(data, '2093jdsl;kfasdf');
+      // console.log(data_resourceInfo, '2093jdsl;kfasdf');
 
       if (!data_resourceInfo || data_resourceInfo.userId !== FUtil.Tool.getUserIDByCookies()) {
         history.replace(FUtil.LinkTo.exception403());
@@ -385,6 +387,7 @@ const Model: ResourceVersionCreatorModelType = {
                 resourceName: bur.resourceName,
               };
             }),
+            cover: data_resourceInfo.coverImages[0] || '',
           },
         },
       });
