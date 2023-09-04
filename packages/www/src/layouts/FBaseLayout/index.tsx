@@ -56,7 +56,7 @@ function FBaseLayout({ children, global }: FBaseLayoutProps) {
 
   AHooks.useMount(() => {
     window.document.addEventListener('visibilitychange', () => {
-      console.log(FUtil.Tool.getUserIDByCookies(), get$userInfo(), 'DDDDDDD visibilitychange 329r8iw09poijflksdajflksdjl');
+      // console.log(FUtil.Tool.getUserIDByCookies(), get$userInfo(), 'DDDDDDD visibilitychange 329r8iw09poijflksdajflksdjl');
       if (!document.hidden && FUtil.Tool.getUserIDByCookies() === -1 && !!get$userInfo()) {
         fConfirmModal({
           onOk() {
