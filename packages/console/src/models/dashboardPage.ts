@@ -141,13 +141,13 @@ const Model: DashboardPageModelType = {
         sort: 'createDate:-1',
       };
       const { data: data_ResourceList } = yield call(FServiceAPI.Resource.list, params5);
-      console.log(data_ResourceList, 'data_ResourceList 0392iojklsdf');
+      // console.log(data_ResourceList, 'data_ResourceList 0392iojklsdf');
 
       const params6: Parameters<typeof FServiceAPI.Node.nodes>[0] = {
         limit: FUtil.Predefined.pageSize,
       };
       const { data: data_AllNodes } = yield call(FServiceAPI.Node.nodes, params6);
-      console.log(data_AllNodes, 'data_AllNodes09ioj;lksdf');
+      // console.log(data_AllNodes, 'data_AllNodes09ioj;lksdf');
 
       const params7: Parameters<typeof FServiceAPI.Contract.contractsSignCount>[0] = {
         objectIds: FUtil.Tool.getUserIDByCookies(),
