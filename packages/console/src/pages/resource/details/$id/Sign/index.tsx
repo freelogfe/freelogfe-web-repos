@@ -21,8 +21,8 @@ interface SignProps {
 }
 
 function Sign({ dispatch, resourceDetailPage }: SignProps) {
-  const babelsRef = React.useRef(null);
-  const babelsSize = AHooks.useSize(babelsRef);
+  // const babelsRef = React.useRef(null);
+  // const babelsSize = AHooks.useSize(babelsRef);
 
   // const resourceInfoLength: number = resourceDetailPage.resource_Info?.about.length || 0;
 
@@ -37,13 +37,10 @@ function Sign({ dispatch, resourceDetailPage }: SignProps) {
           width={260}
           style={{ borderRadius: 10, display: 'block' }}
         />
-        <div style={{ height: 20 }} />
-        <div className={styles.babels} ref={babelsRef}>
+        <div style={{ height: 15 }} />
+        <div className={styles.babels}>
           {
             (resourceDetailPage.resource_Info?.tags || [])
-              // .filter((t, i) => {
-              //   return i < 5;
-              // })
               .map((t) => (
                 <label
                   key={t}
@@ -53,49 +50,11 @@ function Sign({ dispatch, resourceDetailPage }: SignProps) {
                 >{t}</label>))
           }
         </div>
-        {/*<div>{JSON.stringify(babelsSize)}</div>*/}
-        {
-          (babelsSize?.height || 0) >= 228 && (<>
-            <div style={{ height: 5 }} />
-            <FPopover
-              style={{ width: 560 }}
-              title={null}
-              placement={'topLeft'}
-              content={<div className={styles.babels} style={{ width: 500, maxHeight: 'max-content' }}>
-                {
-                  (resourceDetailPage.resource_Info?.tags || [])
-                    .map((t) => (
-                      <label
-                        key={t}
-                        onClick={() => {
-                          self.open(FUtil.LinkTo.globalSearch({ search: t }));
-                        }}
-                      >{t}</label>))
-                }
-              </div>}
-            >
-              <span>
-                <FComponentsLib.FTextBtn style={{ fontSize: 12 }}>显示全部</FComponentsLib.FTextBtn>
-              </span>
-            </FPopover>
-          </>)
-        }
-
-        {/*<div style={{ height: 20 }} />*/}
-
-        {/*<Tooltip*/}
-        {/*  title={resourceDetailPage.resource_Info?.about}*/}
-        {/*  mouseEnterDelay={3}*/}
-        {/*  overlayClassName={styles.TooltipOverlay}*/}
-        {/*  color={'rgba(0, 0, 0, 0.5)'}*/}
-        {/*  // visible={true}*/}
-        {/*  placement='right'*/}
-        {/*>*/}
-        {/*  <div>*/}
-        {/*    <FComponentsLib.FContentText*/}
-        {/*      text={resourceInfoLength < 205 ? (resourceDetailPage.resource_Info?.about || '') : (resourceDetailPage.resource_Info?.about.substr(0, 205) + '...')} />*/}
-        {/*  </div>*/}
-        {/*</Tooltip>*/}
+        <div style={{ height: 15 }} />
+        <FComponentsLib.FContentText
+          text={resourceDetailPage.resource_Info?.about} type={'normal'}
+          style={{ fontSize: 12, wordBreak: 'break-all' }}
+        />
       </div>
     </div>
     <div className={styles.cell} />

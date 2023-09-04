@@ -227,7 +227,7 @@ const Model: ResourceInfoPageModelType = {
         type: 'change',
         payload: {
           title_IsEditing: true,
-          title_Input: resourceInfoPage.resourceInfo.resourceTitle,
+          title_Input: resourceInfoPage.resourceInfo.resourceTitle || '',
           title_Error: '',
         },
       });
@@ -335,7 +335,7 @@ const Model: ResourceInfoPageModelType = {
         type: 'change',
         payload: {
           introduction_EditorText: payload.value,
-          introduction_EditorText_Error: payload.value.length > 1000 ? '不多于1000个字符' : '',
+          introduction_EditorText_Error: payload.value.length > 200 ? '不多于200个字符' : '',
         },
       });
     },

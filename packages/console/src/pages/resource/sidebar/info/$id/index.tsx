@@ -291,7 +291,7 @@ function Info({ dispatch, resourceInfoPage, match }: InfoProps) {
               ? (<div>
                 <FComponentsLib.FInput.FMultiLine
                   value={resourceInfoPage.introduction_EditorText}
-                  lengthLimit={1000}
+                  lengthLimit={200}
                   onChange={(e) => {
                     dispatch<OnChange_IntroductionEditor_Action>({
                       type: 'resourceInfoPage/onChange_IntroductionEditor',
