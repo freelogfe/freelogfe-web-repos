@@ -19,6 +19,8 @@ function PolicyTemplates({ onSelect }: PolicyTemplatesProps) {
     translation: string;
   }[]>([]);
 
+  const [$open, set$open, get$open] = useGetState<boolean>(false);
+
   AHooks.useMount(async () => {
     const { data }: {
       data: {
@@ -48,51 +50,63 @@ function PolicyTemplates({ onSelect }: PolicyTemplatesProps) {
     }));
   });
 
-  return (<div className={styles.policyTemplates}>
-    {
-      $policyTemplates.map((pt) => {
-        return (<a
-          key={pt.id}
-          className={styles.policyTemplate}
+  return (<div>
+    <div className={styles.policyTemplates}>
+      {
+        $policyTemplates
+          .filter((pt, pti) => {
+            return $open || pti < 4;
+          })
+          .map((pt) => {
+            return (<a
+              key={pt.id}
+              className={styles.policyTemplate}
+              onClick={() => {
+                onSelect && onSelect({ text: pt.code, title: pt.title });
+              }}
+            >
+              <FComponentsLib.FTitleText key={pt.id} text={pt.title} type={'h1'} />
+              <div style={{ height: 15 }} />
+              {/*<FComponentsLib.FContentText text={'公开（所有缔约方可签约）'} />*/}
+              {
+                pt.translation.split('\n').map((t) => {
+                  return (<FComponentsLib.FContentText text={t} />);
+                })
+              }
+
+              {/*<FComponentsLib.FContentText text={'免费试用1个星期，支付200羽币，可获得1个月授权。'} />*/}
+            </a>);
+          })
+      }
+
+    </div>
+    <div style={{ height: 20 }} />
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      {
+        !$open && (<FComponentsLib.FTextBtn
+          style={{ display: 'flex', alignItems: 'center', gap: 5 }}
           onClick={() => {
-            onSelect && onSelect({ text: pt.code, title: pt.title });
+            set$open(true);
           }}
         >
-          <FComponentsLib.FTitleText key={pt.id} text={pt.title} type={'h1'} />
-          <div style={{ height: 15 }} />
-          {/*<FComponentsLib.FContentText text={'公开（所有缔约方可签约）'} />*/}
-          {
-            pt.translation.split('\n').map((t) => {
-              return (<FComponentsLib.FContentText text={t} />);
-            })
-          }
+          <span>更多策略模板</span>
+          <FComponentsLib.FIcons.FDown style={{ fontSize: 14 }} />
+        </FComponentsLib.FTextBtn>)
+      }
 
-          {/*<FComponentsLib.FContentText text={'免费试用1个星期，支付200羽币，可获得1个月授权。'} />*/}
-        </a>);
-      })
-    }
+      {
+        $open && (<FComponentsLib.FTextBtn
+          style={{ display: 'flex', alignItems: 'center', gap: 5 }}
+          onClick={() => {
+            set$open(false);
+          }}
+        >
+          <span>收起</span>
+          <FComponentsLib.FIcons.FUp />
+        </FComponentsLib.FTextBtn>)
+      }
 
-    {/*<a className={styles.policyTemplate}>*/}
-    {/*  <FComponentsLib.FTitleText text={'免费试用后订阅'} type={'h1'} />*/}
-    {/*  <div style={{ height: 15 }} />*/}
-    {/*  <FComponentsLib.FContentText text={'公开（所有缔约方可签约）'} />*/}
-    {/*  <FComponentsLib.FContentText text={'免费试用1个星期，支付200羽币，可获得1个月授权。'} />*/}
-    {/*  /!*<FComponentsLib.FContentText text={'免费试用1个星期，支付200羽币，可获得1个月授权。'}/>*!/*/}
-    {/*</a>*/}
-    {/*<a className={styles.policyTemplate}>*/}
-    {/*  <FComponentsLib.FTitleText text={'免费试用后订阅'} type={'h1'} />*/}
-    {/*  <div style={{ height: 15 }} />*/}
-    {/*  <FComponentsLib.FContentText text={'公开（所有缔约方可签约）'} />*/}
-    {/*  <FComponentsLib.FContentText text={'免费试用1个星期，支付200羽币，可获得1个月授权。'} />*/}
-    {/*  /!*<FComponentsLib.FContentText text={'免费试用1个星期，支付200羽币，可获得1个月授权。'}/>*!/*/}
-    {/*</a>*/}
-    {/*<a className={styles.policyTemplate}>*/}
-    {/*  <FComponentsLib.FTitleText text={'免费试用后订阅'} type={'h1'} />*/}
-    {/*  <div style={{ height: 15 }} />*/}
-    {/*  <FComponentsLib.FContentText text={'公开（所有缔约方可签约）'} />*/}
-    {/*  <FComponentsLib.FContentText text={'免费试用1个星期，支付200羽币，可获得1个月授权。'} />*/}
-    {/*  <FComponentsLib.FContentText text={'免费试用1个星期，支付200羽币，可获得1个月授权。'} />*/}
-    {/*</a>*/}
+    </div>
   </div>);
 }
 
