@@ -155,7 +155,7 @@ function FResourceTypeInput(
         } = await FServiceAPI.Resource.ListSimpleByParentCode({
           // parentCode: String(value),
           parentCode: $state._selectedCache?.value || '',
-          category: 1,
+          // category: 1,
           name: search[search.length - 1],
           isTerminate: true,
         });
