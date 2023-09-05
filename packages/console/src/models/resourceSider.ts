@@ -188,7 +188,7 @@ const Model: ResourceSiderModelType = {
       // console.log(data_resourceInfo, 'data_resourceInfooisdjlfkdjlfkjsdlkj');
 
       if (!data_resourceInfo || data_resourceInfo.userId !== FUtil.Tool.getUserIDByCookies()) {
-        // history.replace(FUtil.LinkTo.exception403());
+        history.replace(FUtil.LinkTo.exception403());
         return;
       }
 
