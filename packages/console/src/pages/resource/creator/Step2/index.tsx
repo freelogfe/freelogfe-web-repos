@@ -33,6 +33,7 @@ import { IResourceCreateVersionDraftType } from '@/type/resourceTypes';
 import FResourceAuthorizationProcessor, { getProcessor } from '@/components/FResourceAuthorizationProcessor';
 import fAddDependencies from '@/components/fAddDependencies';
 import * as AHooks from 'ahooks';
+import FSkeletonNode from '@/components/FSkeletonNode';
 
 interface Step2Props {
   dispatch: Dispatch;
@@ -335,189 +336,203 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
 
     <div style={{ height: 5 }} />
 
-    <div className={styles.block}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <FComponentsLib.FContentText text={'基础属性'} type={'highlight'} />
-        {/*<FComponentsLib.FContentText text={''} type={'highlight'}/>*/}
-
-        {
-          resourceCreatorPage.step2_customProperties.length < 30 && (
-            <FTooltip title={FI18n.i18nNext.t('resourceinfo_add_btn_info')}>
-              <div>
-                <FComponentsLib.FTextBtn
-                  style={{ fontSize: 12, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 5 }}
-                  type='primary'
-                  onClick={async () => {
-                    const dataSource: {
-                      key: string;
-                      name: string;
-                      value: string;
-                      description: string;
-                    } | null = await fResourcePropertyEditor({
-                      disabledKeys: [
-                        ...resourceCreatorPage.step2_rawProperties.map<string>((rp) => rp.key),
-                        ...resourceCreatorPage.step2_additionalProperties.map<string>((rp) => rp.key),
-                        ...resourceCreatorPage.step2_customProperties.map<string>((bp) => bp.key),
-                        ...resourceCreatorPage.step2_customConfigurations.map<string>((pp) => pp.key),
-                      ],
-                      disabledNames: [
-                        ...resourceCreatorPage.step2_rawProperties.map<string>((rp) => rp.name),
-                        ...resourceCreatorPage.step2_additionalProperties.map<string>((rp) => rp.name),
-                        ...resourceCreatorPage.step2_customProperties.map<string>((bp) => bp.name),
-                        ...resourceCreatorPage.step2_customConfigurations.map<string>((pp) => pp.name),
-                      ],
-                    });
-                    // console.log(dataSource, 'dataSource9iojskldjflksdjflk');
-                    if (!dataSource) {
-                      return;
-                    }
-
-                    await dispatch<OnChange_step2_customProperties_Action>({
-                      type: 'resourceCreatorPage/onChange_step2_customProperties',
-                      payload: {
-                        value: [
-                          ...resourceCreatorPage.step2_customProperties,
-                          dataSource,
-                        ],
-                      },
-                    });
-                  }}
-                >
-                  <FComponentsLib.FIcons.FProperty style={{ fontSize: 14 }} />
-                  <span>补充属性</span>
-                </FComponentsLib.FTextBtn>
-              </div>
-            </FTooltip>)
-        }
-
-      </div>
-      <div style={{ height: 20 }} />
-
-      <FResourceProperties
-        immutableData={resourceCreatorPage.step2_rawProperties}
-        onlyEditValueData={resourceCreatorPage.step2_additionalProperties}
-        alterableData={resourceCreatorPage.step2_customProperties}
-        onEdit_onlyEditValueData={async (value) => {
-          // console.log(value, 'value sidjfoikjo sd value sdiofjlkj');
-          const index: number = resourceCreatorPage.step2_additionalProperties.findIndex((p) => {
-            return p === value;
-          });
-          const dataSource: {
-            key: string;
-            name: string;
-            value: string;
-            description: string;
-          } | null = await fResourcePropertyEditor({
-            disabledKeys: [
-              ...resourceCreatorPage.step2_rawProperties.map<string>((rp) => rp.key),
-              ...resourceCreatorPage.step2_additionalProperties.map<string>((rp) => rp.key),
-              ...resourceCreatorPage.step2_customProperties.map<string>((bp) => bp.key),
-              ...resourceCreatorPage.step2_customConfigurations.map<string>((pp) => pp.key),
-            ],
-            disabledNames: [
-              ...resourceCreatorPage.step2_rawProperties.map<string>((rp) => rp.name),
-              ...resourceCreatorPage.step2_additionalProperties.map<string>((rp) => rp.name),
-              ...resourceCreatorPage.step2_customProperties.map<string>((bp) => bp.name),
-              ...resourceCreatorPage.step2_customConfigurations.map<string>((pp) => pp.name),
-            ],
-            defaultData: value,
-            noneEditableFields: ['key', 'description', 'name'],
-            valueAcceptNull: true,
-          });
-          if (!dataSource) {
-            return;
-          }
-
-          await dispatch<OnChange_step2_additionalProperties_Action>({
-            type: 'resourceCreatorPage/onChange_step2_additionalProperties',
-            payload: {
-              value: resourceCreatorPage.step2_additionalProperties.map((v, i) => {
-                if (i !== index) {
-                  return v;
-                }
-                return dataSource;
-              }),
-            },
-          });
-        }}
-        onEdit_alterableData={async (value) => {
-          const index: number = resourceCreatorPage.step2_customProperties.findIndex((p) => {
-            return p === value;
-          });
-          const dataSource: {
-            key: string;
-            name: string;
-            value: string;
-            description: string;
-          } | null = await fResourcePropertyEditor({
-            disabledKeys: [
-              ...resourceCreatorPage.step2_rawProperties.map<string>((rp) => rp.key),
-              ...resourceCreatorPage.step2_additionalProperties.map<string>((rp) => rp.key),
-              ...resourceCreatorPage.step2_customProperties.map<string>((bp) => bp.key),
-              ...resourceCreatorPage.step2_customConfigurations.map<string>((pp) => pp.key),
-            ],
-            disabledNames: [
-              ...resourceCreatorPage.step2_rawProperties.map<string>((rp) => rp.name),
-              ...resourceCreatorPage.step2_additionalProperties.map<string>((rp) => rp.name),
-              ...resourceCreatorPage.step2_customProperties.map<string>((bp) => bp.name),
-              ...resourceCreatorPage.step2_customConfigurations.map<string>((pp) => pp.name),
-            ],
-            defaultData: value,
-          });
-          if (!dataSource) {
-            return;
-          }
-
-          await dispatch<OnChange_step2_customProperties_Action>({
-            type: 'resourceCreatorPage/onChange_step2_customProperties',
-            payload: {
-              value: resourceCreatorPage.step2_customProperties.map((v, i) => {
-                if (i !== index) {
-                  return v;
-                }
-                return dataSource;
-              }),
-            },
-          });
-        }}
-        onDelete_alterableData={async (value) => {
-          // console.log(value, 'AAAAAAsdofijsdflksdjfldsjlkj');
-          await dispatch<OnChange_step2_customProperties_Action>({
-            type: 'resourceCreatorPage/onChange_step2_customProperties',
-            payload: {
-              value: resourceCreatorPage.step2_customProperties.filter((v, i) => {
-                return v.key !== value.key && v.name !== value.name;
-              }),
-            },
-          });
-        }}
-      />
-    </div>
-
-    <div style={{ height: 15 }} />
+    {
+      resourceCreatorPage.step2_rawPropertiesState === 'parsing' && (<>
+        <div style={{ height: 20 }} />
+        <FSkeletonNode width={920} height={38} />
+        <div style={{ height: 20 }} />
+        <FSkeletonNode width={340} height={38} />
+      </>)
+    }
 
     {
-      $showMore
-        ? (<FComponentsLib.FTextBtn
-          style={{ fontSize: 12 }}
-          type={'primary'}
-          onClick={() => {
-            set$ShowMore(false);
-          }}
-        >{FI18n.i18nNext.t('create_new_version_btn_showless')}</FComponentsLib.FTextBtn>)
-        : (<Space size={10}>
-          {/*{FI18n.i18nNext.t('create_new_version_btn_moresetting')}*/}
-          <FComponentsLib.FTextBtn
-            style={{ fontSize: 12 }}
-            type={'primary'}
-            onClick={() => {
-              set$ShowMore(true);
+      resourceCreatorPage.step2_rawPropertiesState === 'success' && (<>
+        <div className={styles.block}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <FComponentsLib.FContentText text={'基础属性'} type={'highlight'} />
+            {/*<FComponentsLib.FContentText text={''} type={'highlight'}/>*/}
+
+            {
+              resourceCreatorPage.step2_customProperties.length < 30 && (
+                <FTooltip title={FI18n.i18nNext.t('resourceinfo_add_btn_info')}>
+                  <div>
+                    <FComponentsLib.FTextBtn
+                      style={{ fontSize: 12, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 5 }}
+                      type='primary'
+                      onClick={async () => {
+                        const dataSource: {
+                          key: string;
+                          name: string;
+                          value: string;
+                          description: string;
+                        } | null = await fResourcePropertyEditor({
+                          disabledKeys: [
+                            ...resourceCreatorPage.step2_rawProperties.map<string>((rp) => rp.key),
+                            ...resourceCreatorPage.step2_additionalProperties.map<string>((rp) => rp.key),
+                            ...resourceCreatorPage.step2_customProperties.map<string>((bp) => bp.key),
+                            ...resourceCreatorPage.step2_customConfigurations.map<string>((pp) => pp.key),
+                          ],
+                          disabledNames: [
+                            ...resourceCreatorPage.step2_rawProperties.map<string>((rp) => rp.name),
+                            ...resourceCreatorPage.step2_additionalProperties.map<string>((rp) => rp.name),
+                            ...resourceCreatorPage.step2_customProperties.map<string>((bp) => bp.name),
+                            ...resourceCreatorPage.step2_customConfigurations.map<string>((pp) => pp.name),
+                          ],
+                        });
+                        // console.log(dataSource, 'dataSource9iojskldjflksdjflk');
+                        if (!dataSource) {
+                          return;
+                        }
+
+                        await dispatch<OnChange_step2_customProperties_Action>({
+                          type: 'resourceCreatorPage/onChange_step2_customProperties',
+                          payload: {
+                            value: [
+                              ...resourceCreatorPage.step2_customProperties,
+                              dataSource,
+                            ],
+                          },
+                        });
+                      }}
+                    >
+                      <FComponentsLib.FIcons.FProperty style={{ fontSize: 14 }} />
+                      <span>补充属性</span>
+                    </FComponentsLib.FTextBtn>
+                  </div>
+                </FTooltip>)
+            }
+
+          </div>
+          <div style={{ height: 20 }} />
+
+          <FResourceProperties
+            immutableData={resourceCreatorPage.step2_rawProperties}
+            onlyEditValueData={resourceCreatorPage.step2_additionalProperties}
+            alterableData={resourceCreatorPage.step2_customProperties}
+            onEdit_onlyEditValueData={async (value) => {
+              // console.log(value, 'value sidjfoikjo sd value sdiofjlkj');
+              const index: number = resourceCreatorPage.step2_additionalProperties.findIndex((p) => {
+                return p === value;
+              });
+              const dataSource: {
+                key: string;
+                name: string;
+                value: string;
+                description: string;
+              } | null = await fResourcePropertyEditor({
+                disabledKeys: [
+                  ...resourceCreatorPage.step2_rawProperties.map<string>((rp) => rp.key),
+                  ...resourceCreatorPage.step2_additionalProperties.map<string>((rp) => rp.key),
+                  ...resourceCreatorPage.step2_customProperties.map<string>((bp) => bp.key),
+                  ...resourceCreatorPage.step2_customConfigurations.map<string>((pp) => pp.key),
+                ],
+                disabledNames: [
+                  ...resourceCreatorPage.step2_rawProperties.map<string>((rp) => rp.name),
+                  ...resourceCreatorPage.step2_additionalProperties.map<string>((rp) => rp.name),
+                  ...resourceCreatorPage.step2_customProperties.map<string>((bp) => bp.name),
+                  ...resourceCreatorPage.step2_customConfigurations.map<string>((pp) => pp.name),
+                ],
+                defaultData: value,
+                noneEditableFields: ['key', 'description', 'name'],
+                valueAcceptNull: true,
+              });
+              if (!dataSource) {
+                return;
+              }
+
+              await dispatch<OnChange_step2_additionalProperties_Action>({
+                type: 'resourceCreatorPage/onChange_step2_additionalProperties',
+                payload: {
+                  value: resourceCreatorPage.step2_additionalProperties.map((v, i) => {
+                    if (i !== index) {
+                      return v;
+                    }
+                    return dataSource;
+                  }),
+                },
+              });
             }}
-          >更多设置</FComponentsLib.FTextBtn>
-          {FI18n.i18nNext.t('create_new_version_btn_moresetting_help')}
-          {/*<FComponentsLib.FContentText text={'可以为资源文件添加可选配置，或进行依赖资源的声明'} type={'additional2'} />*/}
-        </Space>)
+            onEdit_alterableData={async (value) => {
+              const index: number = resourceCreatorPage.step2_customProperties.findIndex((p) => {
+                return p === value;
+              });
+              const dataSource: {
+                key: string;
+                name: string;
+                value: string;
+                description: string;
+              } | null = await fResourcePropertyEditor({
+                disabledKeys: [
+                  ...resourceCreatorPage.step2_rawProperties.map<string>((rp) => rp.key),
+                  ...resourceCreatorPage.step2_additionalProperties.map<string>((rp) => rp.key),
+                  ...resourceCreatorPage.step2_customProperties.map<string>((bp) => bp.key),
+                  ...resourceCreatorPage.step2_customConfigurations.map<string>((pp) => pp.key),
+                ],
+                disabledNames: [
+                  ...resourceCreatorPage.step2_rawProperties.map<string>((rp) => rp.name),
+                  ...resourceCreatorPage.step2_additionalProperties.map<string>((rp) => rp.name),
+                  ...resourceCreatorPage.step2_customProperties.map<string>((bp) => bp.name),
+                  ...resourceCreatorPage.step2_customConfigurations.map<string>((pp) => pp.name),
+                ],
+                defaultData: value,
+              });
+              if (!dataSource) {
+                return;
+              }
+
+              await dispatch<OnChange_step2_customProperties_Action>({
+                type: 'resourceCreatorPage/onChange_step2_customProperties',
+                payload: {
+                  value: resourceCreatorPage.step2_customProperties.map((v, i) => {
+                    if (i !== index) {
+                      return v;
+                    }
+                    return dataSource;
+                  }),
+                },
+              });
+            }}
+            onDelete_alterableData={async (value) => {
+              // console.log(value, 'AAAAAAsdofijsdflksdjfldsjlkj');
+              await dispatch<OnChange_step2_customProperties_Action>({
+                type: 'resourceCreatorPage/onChange_step2_customProperties',
+                payload: {
+                  value: resourceCreatorPage.step2_customProperties.filter((v, i) => {
+                    return v.key !== value.key && v.name !== value.name;
+                  }),
+                },
+              });
+            }}
+          />
+        </div>
+
+        <div style={{ height: 15 }} />
+
+        {
+          $showMore
+            ? (<FComponentsLib.FTextBtn
+              style={{ fontSize: 12 }}
+              type={'primary'}
+              onClick={() => {
+                set$ShowMore(false);
+              }}
+            >{FI18n.i18nNext.t('create_new_version_btn_showless')}</FComponentsLib.FTextBtn>)
+            : (<Space size={10}>
+              {/*{FI18n.i18nNext.t('create_new_version_btn_moresetting')}*/}
+              <FComponentsLib.FTextBtn
+                style={{ fontSize: 12 }}
+                type={'primary'}
+                onClick={() => {
+                  set$ShowMore(true);
+                }}
+              >更多设置</FComponentsLib.FTextBtn>
+              {FI18n.i18nNext.t('create_new_version_btn_moresetting_help')}
+              {/*<FComponentsLib.FContentText text={'可以为资源文件添加可选配置，或进行依赖资源的声明'} type={'additional2'} />*/}
+            </Space>)
+        }
+      </>)
     }
+
 
     <div style={{ display: $showMore ? 'block' : 'none' }}>
       <div style={{ height: 10 }} />

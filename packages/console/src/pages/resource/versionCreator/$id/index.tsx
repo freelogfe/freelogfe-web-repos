@@ -33,7 +33,7 @@ import {
   OnChange_VersionInput_Action,
   OnClick_CreateVersionBtn_Action,
   OnClick_ImportLastVersionDependents_Btn_Action,
-  OnClick_OpenCartoonBtn_Action,
+  OnClick_OpenCartoonBtn_Action, OnClick_OpenMarkdownBtn_Action,
   OnClose_CartoonEditor_Action,
   OnClose_MarkdownEditor_Action,
   OnDelete_ObjectFile_Action,
@@ -52,6 +52,10 @@ import fAddCustomOptions from '@/components/fAddCustomOptions';
 import VersionInput from '@/pages/resource/version/creator/$id/VersionInput';
 import FPrompt from '@/components/FPrompt';
 import FSkeletonNode from '@/components/FSkeletonNode';
+import {
+  OnClick_step2_editCartoonBtn_Action,
+  OnClick_step2_editMarkdownBtn_Action,
+} from '@/models/resourceCreatorPage';
 
 interface VersionCreatorProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -353,6 +357,54 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
             {/*    }}*/}
             {/*  >下载</FComponentsLib.FTextBtn>)*/}
             {/*}*/}
+
+            {
+              resourceVersionCreatorPage.resourceInfo?.resourceType[0] === '阅读'
+              && resourceVersionCreatorPage.resourceInfo?.resourceType[1] === '文章' && (<FComponentsLib.FTextBtn
+                disabled={resourceVersionCreatorPage.rawPropertiesState === 'parsing'}
+                type='primary'
+                onClick={async () => {
+                  // dispatch<OnClick_OpenMarkdownBtn_Action>({
+                  //   type: 'resourceVersionCreatorPage/onClick_OpenMarkdownBtn',
+                  // });
+
+                  await dispatch<OnTrigger_SaveDraft_Action>({
+                    type: 'resourceVersionCreatorPage/onTrigger_SaveDraft',
+                    payload: {
+                      showSuccessTip: false,
+                    },
+                  });
+                  await fResourceMarkdownEditor({
+                    resourceID: resourceVersionCreatorPage.resourceInfo?.resourceID || '',
+                    async onChange_Saved(saved: boolean) {
+                      set_isMarkdownEditorDirty(!saved);
+                    },
+                  });
+                  await set_isMarkdownEditorDirty(false);
+                  await dispatch<OnClose_MarkdownEditor_Action>({
+                    type: 'resourceVersionCreatorPage/onClose_MarkdownEditor',
+                  });
+
+                }}
+              >编辑</FComponentsLib.FTextBtn>)
+            }
+
+            {
+              resourceVersionCreatorPage.resourceInfo?.resourceType[1] === '漫画'
+              && (resourceVersionCreatorPage.resourceInfo?.resourceType[2] === '条漫'
+                || resourceVersionCreatorPage.resourceInfo?.resourceType[2] === '页漫') && (<FComponentsLib.FTextBtn
+                disabled={resourceVersionCreatorPage.rawPropertiesState === 'parsing'}
+                type='primary'
+                onClick={() => {
+                  // dispatch<OnClick_OpenCartoonBtn_Action>({
+                  //   type: 'resourceVersionCreatorPage/onClick_OpenCartoonBtn',
+                  // });
+                  dispatch<OnClick_OpenCartoonBtn_Action>({
+                    type: 'resourceVersionCreatorPage/onClick_OpenCartoonBtn',
+                  });
+                }}
+              >编辑</FComponentsLib.FTextBtn>)
+            }
 
 
             <FComponentsLib.FTextBtn
@@ -678,7 +730,6 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
             }
           </>)
         }
-
 
 
         <div style={{ display: $showMore ? 'block' : 'none' }}>
@@ -1037,6 +1088,32 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
         <div style={{ height: 100 }} />
       </div>
     </div>
+
+    <ComicTool
+      resourceId={resourceVersionCreatorPage.resourceInfo?.resourceID || ''}
+      show={resourceVersionCreatorPage.isOpenCartoon}
+      setSaved={(saved) => {
+        // set_isfComicToolDirty(!saved);
+        dispatch<ChangeAction>({
+          type: 'resourceVersionCreatorPage/change',
+          payload: {
+            isDirtyCartoonEditor: !saved,
+          },
+        });
+      }}
+      close={() => {
+        // dispatch<OnChange_IsOpenCartoon_Action>({
+        //   type: 'resourceVersionCreatorPage/onChange_IsOpenCartoon',
+        //   payload: {
+        //     value: false,
+        //   },
+        // });
+        // set_isfComicToolDirty(false);
+        dispatch<OnClose_CartoonEditor_Action>({
+          type: 'resourceVersionCreatorPage/onClose_CartoonEditor',
+        });
+      }}
+    />
   </>);
 }
 
