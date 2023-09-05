@@ -38,18 +38,42 @@ function Sign({ dispatch, resourceDetailPage }: SignProps) {
           style={{ borderRadius: 10, display: 'block' }}
         />
         <div style={{ height: 15 }} />
-        <div className={styles.babels}>
-          {
-            (resourceDetailPage.resource_Info?.tags || [])
-              .map((t) => (
-                <label
-                  key={t}
-                  onClick={() => {
-                    self.open(FUtil.LinkTo.globalSearch({ search: t }));
-                  }}
-                >{t}</label>))
-          }
-        </div>
+        <Tooltip
+          // open={true}
+          title={<div className={styles.babels}
+                      style={{ padding: '14px 12px', overflow: 'visible', maxHeight: 'fit-content' }}>
+            {
+              (resourceDetailPage.resource_Info?.tags || [])
+                .map((t) => (
+                  <label
+                    key={t}
+                    onClick={() => {
+                      self.open(FUtil.LinkTo.globalSearch({ search: t }));
+                    }}
+                  >{t}</label>))
+            }
+          </div>}
+          // mouseEnterDelay={3}
+          overlayClassName={styles.TooltipOverlay}
+          // color={'rgba(0, 0, 0, 0.5)'}
+          color={'#fff'}
+          // visible={true}
+          placement='top'
+        >
+          <div className={styles.babels}>
+            {
+              (resourceDetailPage.resource_Info?.tags || [])
+                .map((t) => (
+                  <label
+                    key={t}
+                    onClick={() => {
+                      self.open(FUtil.LinkTo.globalSearch({ search: t }));
+                    }}
+                  >{t}</label>))
+            }
+          </div>
+        </Tooltip>
+
         <div style={{ height: 15 }} />
         <FComponentsLib.FContentText
           text={resourceDetailPage.resource_Info?.about} type={'normal'}
