@@ -531,7 +531,8 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
               <FComponentsLib.FContentText text={FI18n.i18nNext.t('resourceoptions_title')} type={'highlight'} />
               {
                 resourceCreatorPage.step2_customConfigurations.length < 30 && (
-                  <FTooltip title={FI18n.i18nNext.t('resourceinfo_add_btn_info')}>
+                  // <FTooltip title={FI18n.i18nNext.t('resourceinfo_add_btn_info')}>
+                  <FTooltip title={FI18n.i18nNext.t('info_versionoptions')}>
                     <div>
                       <FComponentsLib.FTextBtn
                         style={{ fontSize: 12, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 5 }}

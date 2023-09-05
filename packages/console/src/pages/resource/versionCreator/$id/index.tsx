@@ -695,7 +695,7 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
 
                   {
                     resourceVersionCreatorPage.customConfigurations.length < 30 && (<Space size={10}>
-                      <FTooltip title={FI18n.i18nNext.t('resourceinfo_add_btn_info')}>
+                      <FTooltip title={FI18n.i18nNext.t('info_versionoptions')}>
                         <div>
                           <FComponentsLib.FTextBtn
                             style={{ fontSize: 12, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 5 }}
