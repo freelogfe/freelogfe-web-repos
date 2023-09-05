@@ -25,6 +25,7 @@ import FComponentsLib from '@freelog/components-lib';
 import useUrlState from '@ahooksjs/use-url-state';
 import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
 import { onlineExhibit } from '@/pages/node/utils/tools';
+import { fOnOffFeedback } from '@/components/FOnOffFeedback';
 
 interface PresentableProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -194,10 +195,11 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
                           onlineStatus: 0,
                         };
                         await FServiceAPI.Exhibit.presentablesOnlineStatus(params2);
-                        message.success({
-                          content: FI18n.i18nNext.t('remove_resource_from_auth_msg_done'),
-                          duration: 2,
-                        });
+                        // message.success({
+                        //   content: FI18n.i18nNext.t('remove_resource_from_auth_msg_done'),
+                        //   duration: 2,
+                        // });
+                        fOnOffFeedback({state: 'off', message: FI18n.i18nNext.t('remove_resource_from_auth_msg_done')})
                       }
                       FComponentsLib.fSetHotspotTooltipVisible('exhibitDetailPage.onlineSwitch', {
                         value: false,

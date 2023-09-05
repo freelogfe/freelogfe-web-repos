@@ -32,6 +32,7 @@ import FCoverImage from '@/components/FCoverImage';
 import { Helmet } from 'react-helmet';
 import FComponentsLib from '@freelog/components-lib';
 import FResourceTypeFilter from '@/components/FResourceTypeFilter';
+import { fOnOffFeedback } from '@/components/FOnOffFeedback';
 
 interface ExhibitsProps {
   dispatch: Dispatch;
@@ -176,6 +177,8 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
               // loading={loading && operateExhibit.id === record.id}
               // onClick={(checked) => changeStatus(checked, record)}
               onChange={async (value) => {
+                // console.log('9e8wijofijdslkfjldskjflksdjlkjlkjl');
+
                 dispatch<OnOnlineOrOfflineAction>({
                   type: 'nodeManagerPage/onOnlineOrOffline',
                   payload: {

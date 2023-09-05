@@ -8,6 +8,7 @@ import moment, { Moment } from 'moment';
 import { onlineExhibit } from '@/pages/node/utils/tools';
 import { message } from 'antd';
 import fMessage from '@/components/fMessage';
+import { fOnOffFeedback } from '@/components/FOnOffFeedback';
 
 type Authorize_Status = 'terminated' | 'exception' | 'authorized' | 'testAuthorized' | 'unauthorized';
 
@@ -776,10 +777,11 @@ const Model: NodeManagerModelType = {
           onlineStatus: 0,
         };
         yield call(FServiceAPI.Exhibit.presentablesOnlineStatus, params2);
-        message.success({
-          content: FI18n.i18nNext.t('remove_resource_from_auth_msg_done'),
-          duration: 2,
-        });
+        // message.success({
+        //   content: FI18n.i18nNext.t('remove_resource_from_auth_msg_done'),
+        //   duration: 2,
+        // });
+        fOnOffFeedback({ state: 'off', message: FI18n.i18nNext.t('remove_resource_from_auth_msg_done') });
       }
 
       const params: Parameters<typeof FServiceAPI.Exhibit.presentableDetails>[0] = {

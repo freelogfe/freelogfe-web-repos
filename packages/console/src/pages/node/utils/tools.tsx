@@ -4,6 +4,7 @@ import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
 import fPolicyBuilder from '@/components/fPolicyBuilder';
 import fPolicyOperator from '@/components/fPolicyOperator';
 import { message } from 'antd';
+import { fOnOffFeedback } from '@/components/FOnOffFeedback';
 
 
 export async function onlineExhibit(exhibit_ID: string): Promise<boolean> {
@@ -17,7 +18,7 @@ export async function onlineExhibit(exhibit_ID: string): Promise<boolean> {
 
   const { ret, errCode, msg, data: data_exhibit } = await FServiceAPI.Exhibit.presentableDetails(params);
   const isTheme: boolean = data_exhibit.resourceInfo.resourceType.includes('主题');
-  console.log(data_exhibit, 'data_exhibit 90ewofujsdlkjflksdjflksdjfkl');
+  // console.log(data_exhibit, 'data_exhibit 90ewofujsdlkjflksdjflksdjfkl');
 
   // console.log(data_exhibit.resourceInfo.resourceType, 'dataiojsdlkfjlsdkjflkj');
 
@@ -108,12 +109,12 @@ export async function onlineExhibit(exhibit_ID: string): Promise<boolean> {
   }
 
   const messageKey: number = Math.random();
-  message.loading({
-    content: isTheme
-      ? FI18n.i18nNext.t('set_resource_available_for_auth_msg_processing')
-      : FI18n.i18nNext.t('remove_resource_from_auth_msg_processing'),
-    key: messageKey,
-  });
+  // message.loading({
+  //   content: isTheme
+  //     ? FI18n.i18nNext.t('set_resource_available_for_auth_msg_processing')
+  //     : FI18n.i18nNext.t('remove_resource_from_auth_msg_processing'),
+  //   key: messageKey,
+  // });
 
 
   const params2: Parameters<typeof FServiceAPI.Exhibit.presentablesOnlineStatus>[0] = {
@@ -122,12 +123,18 @@ export async function onlineExhibit(exhibit_ID: string): Promise<boolean> {
   };
   await FServiceAPI.Exhibit.presentablesOnlineStatus(params2);
 
-  message.success({
-    content: isTheme
-      ? FI18n.i18nNext.t('msg_done')
-      : FI18n.i18nNext.t('set_resource_available_for_auth_msg_done'),
-    key: messageKey,
-    duration: 2,
-  });
+  // message.success({
+  content: isTheme
+    ? FI18n.i18nNext.t('msg_done')
+    : FI18n.i18nNext.t('set_resource_available_for_auth_msg_done'),
+    //   key: messageKey,
+    //   duration: 2,
+    // });
+    fOnOffFeedback({
+      state: 'on',
+      message: isTheme
+        ? FI18n.i18nNext.t('msg_done')
+        : FI18n.i18nNext.t('set_resource_available_for_auth_msg_done'),
+    });
   return true;
 }
