@@ -113,10 +113,12 @@ function FObjectSelectorDrawer({ resourceTypeCode, onSelect, onClose }: FObjectS
           objectName: string;
           sha1: string;
           resourceType: string[];
+          updateDate: string;
         }[];
         totalItem: number;
       }
     } = await FServiceAPI.Storage.objectList(params);
+    // console.log(data, 'data sdiofj;sldkfjlsdjflksdjflkjlk');
 
     const newObjList: FObjectSelectorDrawerStates['objList'] = [
       ...objectList,
@@ -128,7 +130,7 @@ function FObjectSelectorDrawer({ resourceTypeCode, onSelect, onClose }: FObjectS
           objName: d.objectName,
           sha1: d.sha1,
           resourceType: d.resourceType,
-          updateTime: '',
+          updateTime: FUtil.Format.formatDateTime(d.updateDate, true),
         };
       }),
     ];
