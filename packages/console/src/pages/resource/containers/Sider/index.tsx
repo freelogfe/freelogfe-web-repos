@@ -302,11 +302,9 @@ function Sider({ resourceSider, dispatch }: SilderProps) {
   );
 }
 
-export default withRouter(
-  connect(({ resourceSider }: ConnectState) => ({
-    resourceSider: resourceSider,
-  }))(Sider),
-);
+export default connect(({ resourceSider }: ConnectState) => ({
+  resourceSider: resourceSider,
+}))(Sider);
 
 export async function resourceOnline(resourceID: string): Promise<boolean> {
   const { data: data_resourceInfo } = await FServiceAPI.Resource.info({

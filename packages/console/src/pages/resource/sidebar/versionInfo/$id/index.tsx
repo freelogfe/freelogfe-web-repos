@@ -28,6 +28,7 @@ import FBraftEditor from '@/components/FBraftEditor';
 import BraftEditor, { EditorState } from 'braft-editor';
 import FMenu from '@/components/FMenu';
 import FViewportCards_Resource from '@/components/FAntvG6/FViewportCards_Resource';
+import { OnMount_PolicyPage_Action } from '@/models/resourceAuthPage';
 
 interface VersionInfoProps extends RouteComponentProps<{ id: string; }> {
   dispatch: Dispatch;
@@ -44,6 +45,12 @@ function VersionInfo({ dispatch, resourceVersionEditorPage, match }: VersionInfo
   AHooks.useMount(async () => {
     dispatch<OnMount_Sidebar_Action>({
       type: 'resourceSider/onMount_Page',
+      payload: {
+        resourceID: match.params.id,
+      },
+    });
+    dispatch<OnMount_PolicyPage_Action>({
+      type: 'resourceAuthPage/onMount_PolicyPage',
       payload: {
         resourceID: match.params.id,
       },

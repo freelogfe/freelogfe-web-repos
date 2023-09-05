@@ -25,8 +25,15 @@ interface PolicyProps extends RouteComponentProps<{ id: string }> {
 
 function Policy({ dispatch, resourceAuthPage, match }: PolicyProps) {
   AHooks.useMount(async () => {
+    // console.log(match.params.id, 'match.params.id we8rfijohsdlkfjsdlfkjsdl');
     dispatch<OnMount_Sidebar_Action>({
       type: 'resourceSider/onMount_Page',
+      payload: {
+        resourceID: match.params.id,
+      },
+    });
+    dispatch<OnMount_PolicyPage_Action>({
+      type: 'resourceAuthPage/onMount_PolicyPage',
       payload: {
         resourceID: match.params.id,
       },
@@ -37,12 +44,7 @@ function Policy({ dispatch, resourceAuthPage, match }: PolicyProps) {
         page: 'policy',
       },
     });
-    dispatch<OnMount_PolicyPage_Action>({
-      type: 'resourceAuthPage/onMount_PolicyPage',
-      payload: {
-        resourceID: match.params.id,
-      },
-    });
+
   });
 
   return (<>
