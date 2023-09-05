@@ -307,13 +307,13 @@ const Model: ContractPageModelType = {
   effects: {
     * onMountPage({}: OnMountPageAction, { call, put }: EffectsCommandMap) {
       // console.log('#@#$@#$!!!!!!!');
-      yield put<Fetch_Authorize_List_Action>({
-        type: 'fetch_Authorize_List',
-      });
-
-      yield put<Fetch_Authorized_List_Action>({
-        type: 'fetch_Authorized_List',
-      });
+      // yield put<Fetch_Authorize_List_Action>({
+      //   type: 'fetch_Authorize_List',
+      // });
+      //
+      // yield put<Fetch_Authorized_List_Action>({
+      //   type: 'fetch_Authorized_List',
+      // });
 
     },
     * onUnmountPage({}: OnUnmountPageAction, { put }: EffectsCommandMap) {

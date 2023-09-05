@@ -317,7 +317,7 @@ function FResourceTypeInput(
         value={$state._autoCompleteInput}
         className={styles.AutoComplete}
         onChange={(value: string) => {
-          console.log(value, 'value 908wieojfklsdfjasldkfjlkj');
+          // console.log(value, 'value 908wieojfklsdfjasldkfjlkj');
           if (!value) {
             return;
           }

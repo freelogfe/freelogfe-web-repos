@@ -23,7 +23,7 @@ import {
   OnClick_Authorized_LoadMoreBtn_Action,
   OnClickViewDetailsBtnAction,
   OnCloseContractDetailsDrawerAction,
-  OnMountPageAction,
+  OnMountPageAction, OnUnmountPageAction,
 } from '@/models/contractPage';
 import FContractDetailsDrawer from '@/components/FContractDetailsDrawer';
 import FInput from '@/components/FInput';
@@ -72,6 +72,12 @@ function Contract({ dispatch, contractPage }: ContractProps) {
     }
     dispatch<OnMountPageAction>({
       type: 'contractPage/onMountPage',
+    });
+  });
+
+  AHooks.useUnmount(() => {
+    dispatch<OnUnmountPageAction>({
+      type: 'contractPage/onUnmountPage',
     });
   });
 
