@@ -17,6 +17,7 @@ import { IRouteComponentProps, withRouter } from 'umi';
 import FResultTip from '@/components/FResultTip';
 import { FUtil, FI18n } from '@freelog/tools-lib';
 import { Helmet } from 'react-helmet';
+import ExperienceOfficer from '@/pages/activity/$id/ExperienceOfficer';
 
 // interface ActivityProps extends IRouteComponentProps {
 interface ActivityProps extends IRouteComponentProps {
@@ -35,7 +36,8 @@ function Activity({
     'ResourceCompetition': (<ResourceCompetition />),
     'play-newer': (<PlayNewer />),
     'invite-friend': (<InviteFriend/>),
-    'Questionnaire': (<Questionnaire/>)
+    'Questionnaire': (<Questionnaire/>),
+    'ExperienceOfficer': (<ExperienceOfficer/>)
   };
 
   AHooks.useMount(() => {
