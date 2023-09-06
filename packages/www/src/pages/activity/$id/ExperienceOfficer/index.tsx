@@ -22,7 +22,15 @@ function ExperienceOfficer({}: ExperienceOfficerProps) {
     <img className={styles.banner} src={img_banner} />
     <Affix offsetTop={70}>
       <div className={styles.AffixContent}>
-
+        <div className={styles.links}>
+          <a className={[styles.link, styles.activated].join(' ')}>
+            活动日程
+          </a>
+          <a className={styles.link}>活动奖励</a>
+          <a className={styles.link}>活动玩法</a>
+          <a className={styles.link}>如何参与</a>
+          <a className={styles.link}>活动规则</a>
+        </div>
       </div>
     </Affix>
     <div className={styles.content}>
