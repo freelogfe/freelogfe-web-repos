@@ -5,7 +5,7 @@ import * as AHooks from 'ahooks';
 import { connect } from 'dva';
 import { ConnectState } from '@/models/connect';
 import img_banner from '@/assets/activity/ExperienceOfficer/banner@2x.png';
-import { Affix, Popover } from 'antd';
+import { Affix, Popover, Space } from 'antd';
 import FComponentsLib from '@freelog/components-lib';
 import FPropaganda from '@/components/FPropaganda';
 
@@ -36,9 +36,30 @@ function ExperienceOfficer({}: ExperienceOfficerProps) {
     <div className={styles.content}>
       <div style={{ height: 40 }} />
       <div className={styles.activityTime}>
-        <div className={styles.activityTimeCard}></div>
-        <div className={styles.activityTimeCard}></div>
-        <div className={styles.activityTimeCard}></div>
+        <div className={styles.activityTimeCard}>
+          <Space size={10}>
+            <div className={styles.dot} style={{ backgroundColor: '#42C28C' }} />
+            <div className={styles.text}>活动开启</div>
+          </Space>
+          <div style={{ height: 20 }} />
+          <div className={styles.text}>2023/mm/dd</div>
+        </div>
+        <div className={styles.activityTimeCard}>
+          <Space size={10}>
+            <div className={styles.dot} style={{ backgroundColor: '#EE4040' }} />
+            <div className={styles.text}>活动结束</div>
+          </Space>
+          <div style={{ height: 20 }} />
+          <div className={styles.text}>2023/mm/dd</div>
+        </div>
+        <div className={styles.activityTimeCard}>
+          <Space size={10}>
+            <div className={styles.dot} style={{ backgroundColor: '#2784FF' }} />
+            <div className={styles.text}>结果公示</div>
+          </Space>
+          <div style={{ height: 20 }} />
+          <div className={styles.text}>2023/mm/dd</div>
+        </div>
       </div>
       <div style={{ height: 50 }} />
       <div className={styles.award}>
