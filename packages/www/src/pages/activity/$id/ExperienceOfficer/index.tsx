@@ -164,7 +164,7 @@ function ExperienceOfficer({}: ExperienceOfficerProps) {
         <img style={{ width: 334 }} src={img_point2} alt={''} />
         <div style={{ height: 40 }} />
         <Table
-          style={{width: '100%'}}
+          style={{ width: '100%' }}
           columns={[
             {
               title: '任务详情',
@@ -196,7 +196,120 @@ function ExperienceOfficer({}: ExperienceOfficerProps) {
         <div style={{ height: 60 }} />
         <div className={styles.h1}>内测体验官积分玩法详情</div>
         <div style={{ height: 60 }} />
-
+        <Space size={20} direction={'vertical'} style={{ width: 820 }}>
+          <div className={styles.regulationTitle}>一、体验官积分活动相关时间和奖励发放规则说明</div>
+          <div className={styles.regulationContent}>
+            <label>1</label>
+            <div>体验官积分活动期为{'活动开始时间'}至{'活动结束时间'}；</div>
+          </div>
+          <div className={styles.regulationContent}>
+            <label>2</label>
+            <div>活动公示时间为{'活动结束后一周'}，优秀体验官和幸运体验官获奖者将在此页奖励模块中公示，所有中奖者会有Freelog官方工作人员与您取得联系，7个工作日内发放相应奖励；</div>
+          </div>
+          <div className={styles.regulationContent}>
+            <label>3</label>
+            <div>幸运体验官获奖者入选条件为：除金银铜牌体验官以外的所有体验官；最低要求完成新手任务+提交至少一条有效建议+提交活动问卷。</div>
+          </div>
+        </Space>
+        <div style={{ height: 40 }} />
+        <Space size={20} direction={'vertical'} style={{ width: 820 }}>
+          <div className={styles.regulationTitle}>二、成功发行1个合规资源，即可获得对应积分奖励，活动期内可获积分无上限，不同资源类型可获积分规则如下：</div>
+          <div className={styles.regulationContent}>
+            <label>1</label>
+            <div>成功发行一个游戏/主题/插件类合规资源，可获得20积分；</div>
+          </div>
+          <div className={styles.regulationContent}>
+            <label>2</label>
+            <div>
+              <div>成功发行一个小说/漫画类合规资源，可获得5积分；</div>
+              <div style={{ height: 5 }} />
+              <FComponentsLib.FContentText
+                type={'additional2'}
+                text={'建议按小说每章或漫画每话逐个发行资源，一个资源内上传了多章小说或者多话漫画的，仍按一个资源积分计算'}
+              />
+            </div>
+          </div>
+          <div className={styles.regulationContent}>
+            <label>3</label>
+            <div>成功发行一个图片/音频/视频/其他类合规资源，可获得2积分；</div>
+          </div>
+          <div className={styles.regulationContent}>
+            <label>4</label>
+            <div>若体验官对已发行资源在活动期内进行下架操作，则该资源所获积分将会被扣除；</div>
+          </div>
+          <div className={styles.regulationContent}>
+            <label>5</label>
+            <div>所有已发行资源将在活动结束后一周内由Freelog工作人员做内容合规巡检，若有违规资源，将做资源禁用并扣除相应积分。</div>
+          </div>
+        </Space>
+        <div style={{ height: 40 }} />
+        <Space size={20} direction={'vertical'} style={{ width: 820 }}>
+          <div className={styles.regulationTitle}>三、完成创建并运营节点相关任务，即可获得对应积分奖励</div>
+          <div className={styles.regulationContent}>
+            <label>1</label>
+            <div>成功创建一个节点并激活主题的，可获得2积分，目前每位用户最多可以创建3个节点，活动期内可获得积分上限6分。当体验官将已创建的节点访问限制被设置为“私密”或“暂停运营”，则该节点所获得的积分将扣除；</div>
+          </div>
+          <div className={styles.regulationContent}>
+            <label>2</label>
+            <div>在上述节点中，每添加并上线一个展品，可获得2积分。在活动期内，当体验官将已上架的展品操作下架，则该展品所获得的积分将扣除；</div>
+          </div>
+          <div className={styles.regulationContent}>
+            <label>3</label>
+            <div>分享本人或者其他用户节点至社交平台，每天每分享一个节点可获得2积分，每天分享的节点不可重复，活动期内通过分享节点可获得的积分上限为20分；</div>
+          </div>
+          <div className={styles.regulationContent}>
+            <label>4</label>
+            <div>分享本人或其他用户节点的展品至社交平台，每天每分享一个展品可获得2积分，每天分享的展品不可重复，活动期内通过分享展品可获得的积分上限为20分。</div>
+          </div>
+        </Space>
+        <div style={{ height: 40 }} />
+        <Space size={20} direction={'vertical'} style={{ width: 820 }}>
+          <div className={styles.regulationTitle}>四、向Freelog平台提出有效建议并完成活动问卷，即可获得对应积分奖励</div>
+          <div className={styles.regulationContent}>
+            <label>1</label>
+            <div>在活动期内，通过特定反馈入口提交有效建议的，每条建议可获得2积分，被平台采纳的建议可额外获得5积分。同一个用户提交的建议，平台工作人员将在活动期结束后一周内进行审查，被判定为无效建议（无实质内容或者内容重复的），将扣除该建议获得的积分；</div>
+          </div>
+          <div className={styles.regulationContent}>
+            <label>2</label>
+            <div>在活动期内，完成活动问卷提交可获得5积分；</div>
+          </div>
+          <div className={styles.regulationContent}>
+            <label>3</label>
+            <div>对提出建设性意见并被采纳的内测体验官，平台将在版本更新中进行鸣谢。</div>
+          </div>
+        </Space>
+        <div style={{ height: 40 }} />
+        <Space size={20} direction={'vertical'} style={{ width: 820 }}>
+          <div className={styles.regulationTitle}>五、违规用户行为说明</div>
+          <div className={styles.regulationContent}>
+            <label>1</label>
+            <div>活动期内所有内测体验官须遵守
+              <FComponentsLib.FTextBtn
+                style={{ display: 'inline' }}
+                type={'primary'}
+              >《Freelog平台管理规范》</FComponentsLib.FTextBtn>
+              ，违规者平台有权取消其体验官资格并扣除奖励不予发放；
+            </div>
+          </div>
+          <div className={styles.regulationContent}>
+            <label>2</label>
+            <div>同一资源不能由多人提交，重复参加。如资源内容由多位作者共同创作，只能由一人提交参与活动，相关奖励将发放给提交资源内容的资源作者；</div>
+          </div>
+          <div className={styles.regulationContent}>
+            <label>3</label>
+            <div>禁止一切违规刷数据的行为，如参赛资源存在刷数据的情况，则将被视为无效资源，取消活动参与资格；</div>
+          </div>
+          <div className={styles.regulationContent}>
+            <label>4</label>
+            <div>活动期间开放举报通道，用户可以通过向Freelog发送邮件（service@freelog.com）对涉嫌违规的行为和用户进行举报。
+              举报邮件内容需包含被举报作品名称、作品链接、涉嫌违规原因，否则不予处理。
+            </div>
+          </div>
+        </Space>
+        <div style={{ height: 40 }} />
+        <Space size={20} direction={'vertical'} style={{ width: 820 }}>
+          <div className={styles.regulationTitle}>六、本活动最终解释权归Freelog所有，如有疑问可联系官方邮箱service@freelog.com</div>
+        </Space>
       </div>
       <div style={{ height: 100 }} />
 
