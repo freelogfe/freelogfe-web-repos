@@ -229,7 +229,34 @@ function ExperienceOfficer({}: ExperienceOfficerProps) {
         <div style={{ height: 60 }} />
         <div className={styles.h1}>立即开启体验官积分之旅</div>
         <div style={{ height: 60 }} />
-        <img style={{ width: 1060 }} src={img_point1} alt={''} />
+        <img style={{ width: 334 }} src={img_point1} alt={''} />
+        <div style={{ height: 40 }} />
+        <div className={styles.pointCards}>
+          <div className={styles.pointCard}>
+            <FComponentsLib.FContentText type={'additional2'} text={'体验官积分'} />
+            <div className={styles.pointCardPoint}>
+              <div>分</div>
+              <div>60</div>
+              <div>分</div>
+            </div>
+          </div>
+          <div className={styles.pointCard}>
+            <FComponentsLib.FContentText type={'additional2'} text={'体验官积分'} />
+            <div className={styles.pointCardPoint}>
+              <div>分</div>
+              <div>180</div>
+              <div>位</div>
+            </div>
+          </div>
+          <div className={styles.pointCard}>
+            <FComponentsLib.FContentText type={'additional2'} text={'体验官积分'} />
+            <div className={styles.pointCardPoint}>
+              <div>分</div>
+              <div>30</div>
+              <div>分</div>
+            </div>
+          </div>
+        </div>
         <div style={{ height: 40 }} />
         <Space size={30}>
           <div className={styles.h3}>每天12：00更新：最近更新{'更新数据时间'}</div>
