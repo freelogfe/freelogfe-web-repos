@@ -232,7 +232,7 @@ const Model: ResourceAuthPageModelType = {
         },
       });
 
-      console.log(payload.resourceID, 'payload.resourceID sdiofjsdikfjlsdkjflkdsjflkj');
+      // console.log(payload.resourceID, 'payload.resourceID sdiofjsdikfjlsdkjflkdsjflkj');
 
       yield put<FetchResourceInfoAction>({
         type: 'fetchResourceInfo',
