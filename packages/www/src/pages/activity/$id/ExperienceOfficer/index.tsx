@@ -5,6 +5,8 @@ import * as AHooks from 'ahooks';
 import { connect } from 'dva';
 import { ConnectState } from '@/models/connect';
 import img_banner from '@/assets/activity/ExperienceOfficer/banner@2x.png';
+import img_award1 from '@/assets/activity/ExperienceOfficer/award1@2x.png';
+import img_award2 from '@/assets/activity/ExperienceOfficer/award2@2x.png';
 import { Affix, Popover, Space } from 'antd';
 import FComponentsLib from '@freelog/components-lib';
 import FPropaganda from '@/components/FPropaganda';
@@ -22,7 +24,7 @@ function ExperienceOfficer({}: ExperienceOfficerProps) {
   });
 
   return (<div className={styles.styles} ref={ref}>
-    <img className={styles.banner} src={img_banner} />
+    <img className={styles.banner} src={img_banner} alt={''} />
     <Affix
       offsetTop={0}
       target={() => {
@@ -71,10 +73,37 @@ function ExperienceOfficer({}: ExperienceOfficerProps) {
       </div>
       <div style={{ height: 50 }} />
       <div className={styles.award}>
-
+        <div style={{ height: 60 }} />
+        <div className={styles.h1}>体验官优秀奖</div>
+        <div style={{ height: 10 }} />
+        <div className={styles.h2}>体验官积分排名前八者可依次获得现金奖励</div>
+        <div style={{ height: 40 }} />
+        <img style={{ width: 820 }} src={img_award1} alt={''} />
+        <div style={{ height: 50 }} />
+        <Space size={20}>
+          <div className={styles.horizontalLine} />
+          <div className={styles.h3}>排名将会在活动结束后一周时公示，敬请期待</div>
+          <div className={styles.horizontalLine} />
+        </Space>
+        <div style={{ height: 60 }} />
+        <div className={styles.longDashed} />
+        <div style={{ height: 60 }} />
+        <div className={styles.h1}>体验官优秀奖</div>
+        <div style={{ height: 10 }} />
+        <div className={styles.h2}>体验官积分排名前八者可依次获得现金奖励</div>
+        <div style={{ height: 40 }} />
+        <img style={{ width: 560 }} src={img_award2} alt={''} />
+        <div style={{ height: 50 }} />
+        <Space size={20}>
+          <div className={styles.horizontalLine} />
+          <div className={styles.h3}>排名将会在活动结束后一周时公示，敬请期待</div>
+          <div className={styles.horizontalLine} />
+        </Space>
+        <div style={{ height: 60 }} />
       </div>
       <div style={{ height: 50 }} />
       <div className={styles.questionnaire}>
+
 
       </div>
 
