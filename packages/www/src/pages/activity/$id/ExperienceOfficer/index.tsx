@@ -231,6 +231,12 @@ function ExperienceOfficer({}: ExperienceOfficerProps) {
         <div style={{ height: 60 }} />
         <img style={{ width: 334 }} src={img_point1} alt={''} />
         <div style={{ height: 40 }} />
+
+        <div className={styles.noLogin}>
+          <FComponentsLib.FContentText text={'详细积分情况请登录后查看'} type={'additional2'} />
+          <FComponentsLib.FRectBtn type={'primary'}>立即登录</FComponentsLib.FRectBtn>
+        </div>
+
         <div className={styles.pointCards}>
           <div className={styles.pointCard}>
             <FComponentsLib.FContentText type={'additional2'} text={'体验官积分'} />
