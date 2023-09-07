@@ -15,6 +15,7 @@ import img_point2 from '@/assets/activity/ExperienceOfficer/point2@2x.png';
 import { Affix, Popover, Space, Table } from 'antd';
 import FComponentsLib from '@freelog/components-lib';
 import FPropaganda from '@/components/FPropaganda';
+import { Link } from 'umi';
 
 interface ExperienceOfficerProps {
   activityDetailsPage: ActivityDetailsPageModelState;
@@ -22,13 +23,17 @@ interface ExperienceOfficerProps {
 
 function ExperienceOfficer({}: ExperienceOfficerProps) {
 
-  const ref = React.useRef(null);
+  const ref_content1 = React.useRef<HTMLDivElement>(null);
+  const ref_content2 = React.useRef<HTMLDivElement>(null);
+  const ref_content3 = React.useRef<HTMLDivElement>(null);
+  const ref_content4 = React.useRef<HTMLDivElement>(null);
+  const ref_content5 = React.useRef<HTMLDivElement>(null);
 
   AHooks.useMount(() => {
     self._czc?.push(['_trackPageview', self.location.pathname]);
   });
 
-  return (<div className={styles.styles} ref={ref}>
+  return (<div className={styles.styles}>
     <img className={styles.banner} src={img_banner} alt={''} />
     <Affix
       offsetTop={0}
@@ -38,19 +43,62 @@ function ExperienceOfficer({}: ExperienceOfficerProps) {
     >
       <div className={styles.AffixContent}>
         <div className={styles.links}>
-          <a className={[styles.link, styles.activated].join(' ')}>
-            活动日程
-          </a>
-          <a className={styles.link}>活动奖励</a>
-          <a className={styles.link}>活动玩法</a>
-          <a className={styles.link}>如何参与</a>
-          <a className={styles.link}>活动规则</a>
+          <a
+            className={[styles.link, styles.activated].join(' ')}
+            onClick={() => {
+              // ref_content1.current?.scrollIntoView({
+              //   behavior: 'smooth',
+              //   block: 'nearest',
+              // });
+              const info = ref_content1.current?.getBoundingClientRect();
+              self.document.getElementById('layout-content')?.scrollBy({
+                top: (info?.top || 0) - 160,
+                behavior: 'smooth',
+              });
+            }}
+          >活动日程</a>
+          <a
+            onClick={() => {
+              const info = ref_content2.current?.getBoundingClientRect();
+              self.document.getElementById('layout-content')?.scrollBy({
+                top: (info?.top || 0) - 160,
+                behavior: 'smooth',
+              });
+            }}
+            className={styles.link}>活动奖励</a>
+          <a
+            onClick={() => {
+              const info = ref_content3.current?.getBoundingClientRect();
+              self.document.getElementById('layout-content')?.scrollBy({
+                top: (info?.top || 0) - 160,
+                behavior: 'smooth',
+              });
+            }}
+            className={styles.link}>活动玩法</a>
+          <a
+            onClick={() => {
+              const info = ref_content4.current?.getBoundingClientRect();
+              self.document.getElementById('layout-content')?.scrollBy({
+                top: (info?.top || 0) - 160,
+                behavior: 'smooth',
+              });
+            }}
+            className={styles.link}>如何参与</a>
+          <a
+            onClick={() => {
+              const info = ref_content5.current?.getBoundingClientRect();
+              self.document.getElementById('layout-content')?.scrollBy({
+                top: (info?.top || 0) - 160,
+                behavior: 'smooth',
+              });
+            }}
+            className={styles.link}>活动规则</a>
         </div>
       </div>
     </Affix>
     <div className={styles.content}>
       <div style={{ height: 40 }} />
-      <div className={styles.activityTime}>
+      <div className={styles.activityTime} ref={ref_content1}>
         <div className={styles.activityTimeCard}>
           <Space size={10}>
             <div className={styles.dot} style={{ backgroundColor: '#42C28C' }} />
@@ -77,7 +125,7 @@ function ExperienceOfficer({}: ExperienceOfficerProps) {
         </div>
       </div>
       <div style={{ height: 50 }} />
-      <div className={styles.award}>
+      <div className={styles.award} ref={ref_content2}>
         <div style={{ height: 60 }} />
         <div className={styles.h1}>体验官优秀奖</div>
         <div style={{ height: 10 }} />
@@ -107,7 +155,7 @@ function ExperienceOfficer({}: ExperienceOfficerProps) {
         <div style={{ height: 60 }} />
       </div>
       <div style={{ height: 50 }} />
-      <div className={styles.questionnaire}>
+      <div className={styles.questionnaire} ref={ref_content3}>
         <div style={{ height: 60 }} />
         <div className={styles.h1}>填写体验官招募问卷，获参与资格</div>
         <div style={{ height: 10 }} />
@@ -146,9 +194,8 @@ function ExperienceOfficer({}: ExperienceOfficerProps) {
         <div style={{ height: 60 }} />
 
       </div>
-
       <div style={{ height: 50 }} />
-      <div className={styles.point}>
+      <div className={styles.point} ref={ref_content4}>
         <div style={{ height: 60 }} />
         <div className={styles.h1}>立即开启体验官积分之旅</div>
         <div style={{ height: 60 }} />
@@ -190,9 +237,8 @@ function ExperienceOfficer({}: ExperienceOfficerProps) {
         />
         <div style={{ height: 60 }} />
       </div>
-
       <div style={{ height: 50 }} />
-      <div className={styles.regulation}>
+      <div className={styles.regulation} ref={ref_content5}>
         <div style={{ height: 60 }} />
         <div className={styles.h1}>内测体验官积分玩法详情</div>
         <div style={{ height: 60 }} />
