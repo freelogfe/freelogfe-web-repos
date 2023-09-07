@@ -14,13 +14,21 @@ interface ExperienceOfficerProps {
 }
 
 function ExperienceOfficer({}: ExperienceOfficerProps) {
+
+  const ref = React.useRef(null);
+
   AHooks.useMount(() => {
     self._czc?.push(['_trackPageview', self.location.pathname]);
   });
 
-  return (<div>
+  return (<div className={styles.styles} ref={ref}>
     <img className={styles.banner} src={img_banner} />
-    <Affix offsetTop={70}>
+    <Affix
+      offsetTop={0}
+      target={() => {
+        return self.document.getElementById('layout-content');
+      }}
+    >
       <div className={styles.AffixContent}>
         <div className={styles.links}>
           <a className={[styles.link, styles.activated].join(' ')}>

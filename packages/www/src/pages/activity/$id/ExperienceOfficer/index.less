@@ -1,115 +1,120 @@
 @import '../../../../config.less';
 
-.banner {
-  width: 100%;
-}
+.styles{
+  position: static;
 
-.AffixContent {
-  width: 100%;
-  background-color: white;
-  height: 80px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  .banner {
+    width: 100%;
+  }
 
-  .links {
+  .AffixContent {
+    width: 100%;
+    background-color: white;
+    height: 80px;
     display: flex;
+    justify-content: center;
     align-items: center;
-    justify-content: space-between;
-    width: 1060px;
 
-    .link {
-      width: 196px;
-      height: 48px;
-      background: #FFF;
-      border-radius: 6px;
-      border: 2px solid #E9A923;
+    .links {
       display: flex;
       align-items: center;
-      justify-content: center;
-      font-size: 18px;
-      font-weight: 600;
-      color: #E9A923;
+      justify-content: space-between;
+      width: 1060px;
 
-      &.activated {
-        background: #E9A923;
-        color: #fff;
+      .link {
+        width: 196px;
+        height: 48px;
+        background: #FFF;
+        border-radius: 6px;
+        border: 2px solid #E9A923;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        font-weight: 600;
+        color: #E9A923;
+
+        &.activated {
+          background: #E9A923;
+          color: #fff;
+        }
       }
     }
   }
-}
 
-.content {
-  width: 100%;
-  height: fit-content;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  background-image: url("../../../../assets/activity/ExperienceOfficer/background@2x.png");
-  background-size: 100% auto;
-  //height: 4246px;
-  background-repeat: repeat-y;
-
-  .activityTime {
-    width: 1060px;
+  .content {
+    width: 100%;
+    height: fit-content;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    flex-direction: column;
+    background-image: url("../../../../assets/activity/ExperienceOfficer/background@2x.png");
+    background-size: 100% auto;
+    //height: 4246px;
+    background-repeat: repeat-y;
 
-    .activityTimeCard {
-      width: 334px;
-      height: 148px;
+    .activityTime {
+      width: 1060px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      .activityTimeCard {
+        width: 334px;
+        height: 148px;
+        background: #FFF;
+        border-radius: 10px;
+        border: 2px solid #F2F2F2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+
+        .dot {
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+        }
+
+        .text{
+          font-size: 18px;
+          font-weight: 600;
+          color: #222;
+        }
+      }
+    }
+
+    .award {
+      width: 1060px;
+      height: 916px;
       background: #FFF;
       border-radius: 10px;
       border: 2px solid #F2F2F2;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
+    }
 
-      .dot {
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-      }
+    .questionnaire {
+      width: 1060px;
+      height: 1137px;
+      background: #FFFFFF;
+      border-radius: 10px;
+      border: 2px solid #F2F2F2;
+    }
 
-      .text{
-        font-size: 18px;
-        font-weight: 600;
-        color: #222;
-      }
+    .point {
+      width: 1060px;
+      height: 1203px;
+      background: #FFFFFF;
+      border-radius: 10px;
+      border: 2px solid #F2F2F2;
+    }
+
+    .regulation {
+      width: 1060px;
+      height: 1531px;
+      background: #FFFFFF;
+      border-radius: 10px;
+      border: 2px solid #F2F2F2;
     }
   }
-
-  .award {
-    width: 1060px;
-    height: 916px;
-    background: #FFF;
-    border-radius: 10px;
-    border: 2px solid #F2F2F2;
-  }
-
-  .questionnaire {
-    width: 1060px;
-    height: 1137px;
-    background: #FFFFFF;
-    border-radius: 10px;
-    border: 2px solid #F2F2F2;
-  }
-
-  .point {
-    width: 1060px;
-    height: 1203px;
-    background: #FFFFFF;
-    border-radius: 10px;
-    border: 2px solid #F2F2F2;
-  }
-
-  .regulation {
-    width: 1060px;
-    height: 1531px;
-    background: #FFFFFF;
-    border-radius: 10px;
-    border: 2px solid #F2F2F2;
-  }
 }
+

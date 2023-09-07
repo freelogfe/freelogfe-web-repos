@@ -89,8 +89,8 @@ function FBaseLayout({ children, global }: FBaseLayoutProps) {
     }
   }, [global.routerHistories]);
 
-  return (<div className={styles.Layout1}>
-    <div className={styles.Header1}>
+  return (<div className={styles.Layout}>
+    <div className={styles.Header}>
 
       <FComponentsLib.FHeaderNavigation
         UmiLinkPatch={Link}
@@ -177,7 +177,7 @@ function FBaseLayout({ children, global }: FBaseLayoutProps) {
     {/*  <div style={{ height: 70 }} />*/}
     {/*</Space>*/}
 
-    <div className={styles.Content1}>
+    <div className={styles.Content} id={'layout-content'}>
       <div>{children}</div>
     </div>
   </div>);
