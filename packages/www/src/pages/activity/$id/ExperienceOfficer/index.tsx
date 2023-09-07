@@ -10,7 +10,9 @@ import img_award2 from '@/assets/activity/ExperienceOfficer/award2@2x.png';
 import img_questionnaire1 from '@/assets/activity/ExperienceOfficer/questionnaire1@2x.png';
 import img_questionnaire2 from '@/assets/activity/ExperienceOfficer/questionnaire2@2x.png';
 import img_questionnaire3 from '@/assets/activity/ExperienceOfficer/questionnaire3@2x.png';
-import { Affix, Popover, Space } from 'antd';
+import img_point1 from '@/assets/activity/ExperienceOfficer/point1@2x.png';
+import img_point2 from '@/assets/activity/ExperienceOfficer/point2@2x.png';
+import { Affix, Popover, Space, Table } from 'antd';
 import FComponentsLib from '@freelog/components-lib';
 import FPropaganda from '@/components/FPropaganda';
 
@@ -147,11 +149,53 @@ function ExperienceOfficer({}: ExperienceOfficerProps) {
 
       <div style={{ height: 50 }} />
       <div className={styles.point}>
-
+        <div style={{ height: 60 }} />
+        <div className={styles.h1}>立即开启体验官积分之旅</div>
+        <div style={{ height: 60 }} />
+        <img style={{ width: 1060 }} src={img_point1} alt={''} />
+        <div style={{ height: 40 }} />
+        <Space size={30}>
+          <div className={styles.h3}>每天12：00更新：最近更新{'更新数据时间'}</div>
+          <FComponentsLib.FTextBtn type={'primary'} style={{ fontSize: 12 }}>积分活动获取记录</FComponentsLib.FTextBtn>
+        </Space>
+        <div style={{ height: 60 }} />
+        <div className={styles.longDashed} />
+        <div style={{ height: 60 }} />
+        <img style={{ width: 334 }} src={img_point2} alt={''} />
+        <div style={{ height: 40 }} />
+        <Table
+          style={{width: '100%'}}
+          columns={[
+            {
+              title: '任务详情',
+              dataIndex: 'task',
+              key: 'task',
+            },
+            {
+              title: '完成次数',
+              dataIndex: 'count',
+              key: 'count',
+            },
+            {
+              title: '获取积分',
+              dataIndex: 'point',
+              key: 'point',
+            },
+            {
+              title: '快捷入口',
+              dataIndex: 'entry',
+              key: 'entry',
+            },
+          ]}
+        />
+        <div style={{ height: 60 }} />
       </div>
 
       <div style={{ height: 50 }} />
       <div className={styles.regulation}>
+        <div style={{ height: 60 }} />
+        <div className={styles.h1}>内测体验官积分玩法详情</div>
+        <div style={{ height: 60 }} />
 
       </div>
       <div style={{ height: 100 }} />
