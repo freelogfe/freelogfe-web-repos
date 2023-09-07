@@ -16,6 +16,7 @@ import { Affix, Popover, Space, Table } from 'antd';
 import FComponentsLib from '@freelog/components-lib';
 import FPropaganda from '@/components/FPropaganda';
 import { Link } from 'umi';
+import { useGetState } from '@/layouts/FBaseLayout';
 
 interface ExperienceOfficerProps {
   activityDetailsPage: ActivityDetailsPageModelState;
@@ -23,15 +24,39 @@ interface ExperienceOfficerProps {
 
 function ExperienceOfficer({}: ExperienceOfficerProps) {
 
+  const position = AHooks.useScroll(self.document.getElementById('layout-content'));
+  // console.log(position, 'positionoisdjlkfjsldjflkjl');
+
   const ref_content1 = React.useRef<HTMLDivElement>(null);
   const ref_content2 = React.useRef<HTMLDivElement>(null);
   const ref_content3 = React.useRef<HTMLDivElement>(null);
   const ref_content4 = React.useRef<HTMLDivElement>(null);
   const ref_content5 = React.useRef<HTMLDivElement>(null);
 
+  const [$activated, set$activated, get$activated] = useGetState<number>(1);
+
   AHooks.useMount(() => {
     self._czc?.push(['_trackPageview', self.location.pathname]);
   });
+
+  React.useEffect(() => {
+    const info1 = ref_content1.current?.getBoundingClientRect();
+    const info2 = ref_content2.current?.getBoundingClientRect();
+    const info3 = ref_content3.current?.getBoundingClientRect();
+    const info4 = ref_content4.current?.getBoundingClientRect();
+    const info5 = ref_content5.current?.getBoundingClientRect();
+    if (info1 && info1.top > 160 && info1.top < 260) {
+      set$activated(1);
+    } else if (info2 && info2.top > 160 && info2.top < 260) {
+      set$activated(2);
+    } else if (info3 && info3.top > 160 && info3.top < 260) {
+      set$activated(3);
+    } else if (info4 && info4.top > 160 && info4.top < 260) {
+      set$activated(4);
+    } else if (info5 && info5.top > 160 && info5.top < 260) {
+      set$activated(5);
+    }
+  }, [position]);
 
   return (<div className={styles.styles}>
     <img className={styles.banner} src={img_banner} alt={''} />
@@ -44,17 +69,14 @@ function ExperienceOfficer({}: ExperienceOfficerProps) {
       <div className={styles.AffixContent}>
         <div className={styles.links}>
           <a
-            className={[styles.link, styles.activated].join(' ')}
+            className={[styles.link, $activated === 1 ? styles.activated : ''].join(' ')}
             onClick={() => {
-              // ref_content1.current?.scrollIntoView({
-              //   behavior: 'smooth',
-              //   block: 'nearest',
-              // });
               const info = ref_content1.current?.getBoundingClientRect();
               self.document.getElementById('layout-content')?.scrollBy({
                 top: (info?.top || 0) - 160,
                 behavior: 'smooth',
               });
+              // set$activated(1);
             }}
           >活动日程</a>
           <a
@@ -64,8 +86,10 @@ function ExperienceOfficer({}: ExperienceOfficerProps) {
                 top: (info?.top || 0) - 160,
                 behavior: 'smooth',
               });
+              // set$activated(2);
             }}
-            className={styles.link}>活动奖励</a>
+            className={[styles.link, $activated === 2 ? styles.activated : ''].join(' ')}
+          >活动奖励</a>
           <a
             onClick={() => {
               const info = ref_content3.current?.getBoundingClientRect();
@@ -73,8 +97,10 @@ function ExperienceOfficer({}: ExperienceOfficerProps) {
                 top: (info?.top || 0) - 160,
                 behavior: 'smooth',
               });
+              // set$activated(3);
             }}
-            className={styles.link}>活动玩法</a>
+            className={[styles.link, $activated === 3 ? styles.activated : ''].join(' ')}
+          >活动玩法</a>
           <a
             onClick={() => {
               const info = ref_content4.current?.getBoundingClientRect();
@@ -82,8 +108,10 @@ function ExperienceOfficer({}: ExperienceOfficerProps) {
                 top: (info?.top || 0) - 160,
                 behavior: 'smooth',
               });
+              // set$activated(4);
             }}
-            className={styles.link}>如何参与</a>
+            className={[styles.link, $activated === 4 ? styles.activated : ''].join(' ')}
+          >如何参与</a>
           <a
             onClick={() => {
               const info = ref_content5.current?.getBoundingClientRect();
@@ -91,8 +119,10 @@ function ExperienceOfficer({}: ExperienceOfficerProps) {
                 top: (info?.top || 0) - 160,
                 behavior: 'smooth',
               });
+              // set$activated(5);
             }}
-            className={styles.link}>活动规则</a>
+            className={[styles.link, $activated === 5 ? styles.activated : ''].join(' ')}
+          >活动规则</a>
         </div>
       </div>
     </Affix>
