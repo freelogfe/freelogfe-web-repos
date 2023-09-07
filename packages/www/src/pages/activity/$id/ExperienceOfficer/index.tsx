@@ -45,16 +45,17 @@ function ExperienceOfficer({}: ExperienceOfficerProps) {
     const info3 = ref_content3.current?.getBoundingClientRect();
     const info4 = ref_content4.current?.getBoundingClientRect();
     const info5 = ref_content5.current?.getBoundingClientRect();
-    if (info1 && info1.top > 155 && info1.top < 300) {
-      set$activated(1);
-    } else if (info2 && info2.top > 155 && info2.top < 300) {
-      set$activated(2);
-    } else if (info3 && info3.top > 155 && info3.top < 300) {
-      set$activated(3);
-    } else if (info4 && info4.top > 155 && info4.top < 300) {
-      set$activated(4);
-    } else if (info5 && info5.top > 155 && info5.top < 300) {
+    // console.log(info2, 'info2sidofjldkjfljsld');
+    if (info5 && info5.top <= 162) {
       set$activated(5);
+    } else if (info4 && info4.top <= 162) {
+      set$activated(4);
+    } else if (info3 && info3.top <= 162) {
+      set$activated(3);
+    } else if (info2 && info2.top <= 162) {
+      set$activated(2);
+    } else {
+      set$activated(1);
     }
   }, [position]);
 
