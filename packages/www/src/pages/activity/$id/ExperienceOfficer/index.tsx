@@ -22,7 +22,7 @@ interface ExperienceOfficerProps {
   activityDetailsPage: ActivityDetailsPageModelState;
 }
 
-function ExperienceOfficer({}: ExperienceOfficerProps) {
+function ExperienceOfficer({activityDetailsPage}: ExperienceOfficerProps) {
 
   const position = AHooks.useScroll(self.document.getElementById('layout-content'));
   // console.log(position, 'positionoisdjlkfjsldjflkjl');
@@ -136,7 +136,7 @@ function ExperienceOfficer({}: ExperienceOfficerProps) {
             <div className={styles.text}>活动开启</div>
           </Space>
           <div style={{ height: 20 }} />
-          <div className={styles.text}>2023/mm/dd</div>
+          <div className={styles.text}>{activityDetailsPage.startTime?.format('YYYY/MM/DD') || 'YYYY·MM·DD'}</div>
         </div>
         <div className={styles.activityTimeCard}>
           <Space size={10}>
@@ -144,7 +144,7 @@ function ExperienceOfficer({}: ExperienceOfficerProps) {
             <div className={styles.text}>活动结束</div>
           </Space>
           <div style={{ height: 20 }} />
-          <div className={styles.text}>2023/mm/dd</div>
+          <div className={styles.text}>{activityDetailsPage.endTime?.format('YYYY/MM/DD') || 'YYYY·MM·DD'}</div>
         </div>
         <div className={styles.activityTimeCard}>
           <Space size={10}>
@@ -152,7 +152,7 @@ function ExperienceOfficer({}: ExperienceOfficerProps) {
             <div className={styles.text}>结果公示</div>
           </Space>
           <div style={{ height: 20 }} />
-          <div className={styles.text}>2023/mm/dd</div>
+          <div className={styles.text}>{activityDetailsPage.announceTime?.format('YYYY/MM/DD')}</div>
         </div>
       </div>
       <div style={{ height: 50 }} />
@@ -327,11 +327,11 @@ function ExperienceOfficer({}: ExperienceOfficerProps) {
           <div className={styles.regulationTitle}>一、体验官积分活动相关时间和奖励发放规则说明</div>
           <div className={styles.regulationContent}>
             <label>1</label>
-            <div>体验官积分活动期为{'活动开始时间'}至{'活动结束时间'}；</div>
+            <div>体验官积分活动期为{activityDetailsPage.startTime?.format('YYYY/MM/DD') || 'YYYY·MM·DD'}至{activityDetailsPage.endTime?.format('YYYY/MM/DD') || 'YYYY·MM·DD'}；</div>
           </div>
           <div className={styles.regulationContent}>
             <label>2</label>
-            <div>活动公示时间为{'活动结束后一周'}，优秀体验官和幸运体验官获奖者将在此页奖励模块中公示，所有中奖者会有Freelog官方工作人员与您取得联系，7个工作日内发放相应奖励；</div>
+            <div>活动公示时间为{activityDetailsPage.announceTime?.format('YYYY/MM/DD') || 'YYYY·MM·DD'}，优秀体验官和幸运体验官获奖者将在此页奖励模块中公示，所有中奖者会有Freelog官方工作人员与您取得联系，7个工作日内发放相应奖励；</div>
           </div>
           <div className={styles.regulationContent}>
             <label>3</label>
