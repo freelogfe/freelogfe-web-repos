@@ -33,7 +33,7 @@
     "@types/react-copy-to-clipboard": "^4.3.0",
     "@wangeditor/editor": "^5.1.23",
     "@wangeditor/editor-for-react": "^1.0.6",
-    "antd": "^4.24.10",
+    "antd": "^4.24.12",
     "axios": "^0.19.2",
     "braft-editor": "^2.3.9",
     "cropperjs": "^1.5.13",

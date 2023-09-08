@@ -3,6 +3,7 @@ import styles from './index.less';
 import * as AHooks from 'ahooks';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
+import { Modal, Space, Pagination } from 'antd';
 
 interface RankingListProps {
 
@@ -16,6 +17,15 @@ function RankingList({}: RankingListProps) {
     userName: string;
     score: number;
   }[]>([]);
+
+  const [$modalList, set$modalList, get$modalList] = FUtil.Hook.useGetState<{
+    serial: number;
+    award: 'gold' | 'silver' | 'copper' | '';
+    userName: string;
+    score: number;
+  }[]>([]);
+  const [$current, set$current, get$current] = FUtil.Hook.useGetState<number>(1);
+  const [$modalOpen, set$modalOpen, get$modalOpen] = FUtil.Hook.useGetState<boolean>(false);
 
   AHooks.useMount(async () => {
     const { ret, errCode, msg, data }: {
@@ -49,23 +59,54 @@ function RankingList({}: RankingListProps) {
 
   });
 
+  AHooks.useMount(async () => {
+    const { ret, errCode, msg, data: data }: {
+      ret: number;
+      errCode: number;
+      msg: string;
+      data: {
+        balance: string;
+        num: string;
+        username: string;
+      }[];
+    } = await FServiceAPI.Operation.recordRank({
+      coinAccountType: 2,
+      limit: 200,
+    });
+
+    set$modalList(data.map((d, i) => {
+      let award: 'gold' | 'silver' | 'copper' | '' = '';
+      if (i < 1) {
+        award = 'gold';
+      } else if (i < 3) {
+        award = 'silver';
+      } else if (i < 8) {
+        award = 'copper';
+      }
+      return {
+        serial: i + 1,
+        award: award,
+        userName: d.username,
+        score: Number(d.balance),
+      };
+    }));
+
+  });
+
   return (<div className={styles.RankingList}>
     <FComponentsLib.FTitleText type={'h2'} text={'排名公示'} />
     <div style={{ height: 20 }} />
     <FComponentsLib.FContentText type={'additional2'} text={'统计截止时间：2023/mm/dd'} />
     <div style={{ height: 20 }} />
     <div className={styles.table}>
-      {/*<div className={styles.row} style={{ height: 30 }}>*/}
-      {/*  <FComponentsLib.FContentText text={'排名'} type={'additional2'} />*/}
-      {/*  <FComponentsLib.FContentText text={'用户名'} type={'additional2'} />*/}
-      {/*  <FComponentsLib.FContentText text={'积分'} type={'additional2'} />*/}
-      {/*</div>*/}
 
       <div className={styles.row} style={{ height: 30 }}>
         <FComponentsLib.FContentText text={'积分排行榜'} type={'additional2'} />
         <div />
         <div>
-          <FComponentsLib.FTextBtn type={'primary'} style={{ fontSize: 12 }}>查看完整榜单</FComponentsLib.FTextBtn>
+          <FComponentsLib.FTextBtn type={'primary'} style={{ fontSize: 12 }} onClick={() => {
+            set$modalOpen(true);
+          }}>查看完整榜单</FComponentsLib.FTextBtn>
         </div>
       </div>
 
@@ -82,33 +123,71 @@ function RankingList({}: RankingListProps) {
         })
       }
 
-      {/*<div className={styles.row}>*/}
-      {/*  <div className={styles.ranking}>*/}
-      {/*    <span>2</span>*/}
-      {/*    <GoldSilverCopper type={'silver'} />*/}
-      {/*  </div>*/}
-      {/*  <div>asdignia</div>*/}
-      {/*  <div>100分</div>*/}
-      {/*</div>*/}
-
-      {/*<div className={styles.row}>*/}
-      {/*  <div className={styles.ranking}>*/}
-      {/*    <span>3</span>*/}
-      {/*    <GoldSilverCopper type={'copper'} />*/}
-      {/*  </div>*/}
-      {/*  <div>asdignia</div>*/}
-      {/*  <div>100分</div>*/}
-      {/*</div>*/}
-
-      {/*<div className={styles.row}>*/}
-      {/*  <div className={styles.ranking}>*/}
-      {/*    <span>4</span>*/}
-      {/*    <GoldSilverCopper type={'copper'} />*/}
-      {/*  </div>*/}
-      {/*  <div>asdignia</div>*/}
-      {/*  <div>100分</div>*/}
-      {/*</div>*/}
     </div>
+
+    <Modal
+      open={$modalOpen}
+      title={'积分排行榜'}
+      footer={null}
+      width={1000}
+      onCancel={() => {
+        set$modalOpen(false);
+      }}
+    >
+      <div style={{
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        height: 524,
+        justifyContent: 'space-between',
+      }}>
+        <div className={styles.table}>
+          <div className={styles.row} style={{ height: 30 }}>
+            <FComponentsLib.FContentText text={'排名'} type={'additional2'} />
+            <FComponentsLib.FContentText text={'用户名'} type={'additional2'} />
+            <FComponentsLib.FContentText text={'积分'} type={'additional2'} />
+          </div>
+
+          {
+            $modalList
+              .filter((l, i) => {
+                return i > $current * 10 - 10 && i < $current * 10;
+              })
+              .map((l) => {
+                return (<div className={styles.row} key={l.serial}>
+                  <div className={styles.ranking}>
+                    <span>{l.serial}</span>
+                    <GoldSilverCopper type={l.award} />
+                  </div>
+                  <div>{l.userName}</div>
+                  <div>{l.score}分</div>
+                </div>);
+              })
+          }
+
+        </div>
+        <div style={{ display: 'flex', width: 820, alignItems: 'center', justifyContent: 'space-between' }}>
+          <Space size={10}>
+            <FComponentsLib.FContentText type={'additional2'} text={`共${$modalList.length}条数据`} />
+            <FComponentsLib.FContentText type={'additional2'} text={'统计截止时间：2023/mm/dd'} />
+          </Space>
+
+          <Pagination
+            current={$current}
+            size='small'
+            total={$modalList.length}
+            pageSize={10}
+            hideOnSinglePage={true}
+            showSizeChanger={false}
+            onChange={(value) => {
+              set$current(value);
+            }}
+          />
+        </div>
+      </div>
+
+    </Modal>
   </div>);
 }
 
