@@ -1,0 +1,71 @@
+@import '../../../../../config.less';
+
+.RankingList {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.table {
+  width: 820px;
+  //display: grid;
+  //grid-template-columns: 2fr 3fr 1fr;
+  //grid-template-rows: 26px repeat(auto-fill, 50px);
+  //grid-gap: 5px;
+
+  .row {
+    border-bottom: 1px solid #EAEAEA;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 50px;
+
+    & > div:nth-child(1) {
+      width: 35%;
+    }
+
+    & > div:nth-child(2) {
+      width: 50%;
+    }
+
+    & > div:nth-child(1) {
+      width: 15%;
+    }
+
+    .ranking {
+      width: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      & > span {
+        font-size: 14px;
+        font-weight: 400;
+        color: #666;
+        line-height: 20px;
+      }
+    }
+  }
+
+}
+
+.GoldSilverCopper {
+  padding: 2px 5px;
+  border-radius: 4px;
+  color: white;
+  line-height: 18px;
+  font-size: 12px;
+  font-weight: 600;
+
+  &.gold {
+    background: #D8D8D8 linear-gradient(225deg, #F8EA60 0%, #E39B0F 100%);
+  }
+
+  &.silver {
+    background: linear-gradient(225deg, #EFEFEF 0%, #7B7B7E 100%);
+  }
+
+  &.copper {
+    background: linear-gradient(225deg, #EDAF83 0%, #7E2800 100%);
+  }
+}

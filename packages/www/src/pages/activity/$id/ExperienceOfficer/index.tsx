@@ -19,6 +19,7 @@ import FPropaganda from '@/components/FPropaganda';
 // import { useGetState } from '@/layouts/FBaseLayout';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import PointCards from './PointCards';
+import RankingList from '@/pages/activity/$id/ExperienceOfficer/RankingList';
 
 interface ExperienceOfficerProps {
   activityDetailsPage: ActivityDetailsPageModelState;
@@ -165,12 +166,24 @@ function ExperienceOfficer({ activityDetailsPage }: ExperienceOfficerProps) {
         <div className={styles.h2}>体验官积分排名前八者可依次获得现金奖励</div>
         <div style={{ height: 40 }} />
         <img style={{ width: 820 }} src={img_award1} alt={''} />
-        <div style={{ height: 50 }} />
-        <Space size={20}>
-          <div className={styles.horizontalLine} />
-          <div className={styles.h3}>排名将会在活动结束后一周时公示，敬请期待</div>
-          <div className={styles.horizontalLine} />
-        </Space>
+
+        {
+          0 === 0 ?
+            (<>
+              <div style={{ height: 60 }} />
+              <RankingList />
+            </>)
+            : (<>
+              <div style={{ height: 50 }} />
+              <Space size={20}>
+                <div className={styles.horizontalLine} />
+                <div className={styles.h3}>排名将会在活动结束后一周时公示，敬请期待</div>
+                <div className={styles.horizontalLine} />
+              </Space>
+            </>)
+        }
+
+
         <div style={{ height: 60 }} />
         <div className={styles.longDashed} />
         <div style={{ height: 60 }} />

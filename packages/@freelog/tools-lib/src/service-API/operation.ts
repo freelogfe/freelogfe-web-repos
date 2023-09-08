@@ -13,3 +13,17 @@ export function operationCategories({...params}: OperationCategoriesParamsType =
     params: params,
   });
 }
+
+// 收益排行
+interface RecordRankParamsType {
+  coinAccountType: 1 | 2;
+  limit: number;
+}
+
+export function recordRank({...params}: RecordRankParamsType) {
+  return FUtil.Request({
+    method: 'POST',
+    url: `/v2/activities/coin/record/rank`,
+    data: params,
+  });
+}
