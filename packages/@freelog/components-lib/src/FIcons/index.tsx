@@ -57,6 +57,7 @@ import FMappingRuleVersion from './FMappingRuleVersion';
 import FNodes from './FNodes';
 import FObject from './FObject';
 import FPaperPlane from './FPaperPlane';
+import FPentacle from './FPentacle';
 import FPentagram from './FPentagram';
 import FPlayer from './FPlayer';
 import FPlus from './FPlus';
@@ -136,6 +137,7 @@ const FIcons = {
     FNodes,
     FObject,
     FPaperPlane,
+    FPentacle,
     FPentagram,
     FPlayer,
     FPlus,

@@ -15,11 +15,10 @@ import img_point2 from '@/assets/activity/ExperienceOfficer/point2@2x.png';
 import { Affix, Popover, Space, Table } from 'antd';
 import FComponentsLib from '@freelog/components-lib';
 import FPropaganda from '@/components/FPropaganda';
-// import { Link } from 'umi';
-// import { useGetState } from '@/layouts/FBaseLayout';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import PointCards from './PointCards';
-import RankingList from '@/pages/activity/$id/ExperienceOfficer/RankingList';
+import RankingList from './RankingList';
+import LuckyPrize from './LuckyPrize';
 
 interface ExperienceOfficerProps {
   activityDetailsPage: ActivityDetailsPageModelState;
@@ -192,12 +191,22 @@ function ExperienceOfficer({ activityDetailsPage }: ExperienceOfficerProps) {
         <div className={styles.h2}>体验官积分排名前八者可依次获得现金奖励</div>
         <div style={{ height: 40 }} />
         <img style={{ width: 560 }} src={img_award2} alt={''} />
-        <div style={{ height: 50 }} />
-        <Space size={20}>
-          <div className={styles.horizontalLine} />
-          <div className={styles.h3}>排名将会在活动结束后一周时公示，敬请期待</div>
-          <div className={styles.horizontalLine} />
-        </Space>
+        {
+          0 === 0 ?
+            (<>
+              <div style={{ height: 60 }} />
+              <LuckyPrize />
+            </>)
+            : (<>
+              <div style={{ height: 50 }} />
+              <Space size={20}>
+                <div className={styles.horizontalLine} />
+                <div className={styles.h3}>排名将会在活动结束后一周时公示，敬请期待</div>
+                <div className={styles.horizontalLine} />
+              </Space>
+            </>)
+        }
+
         <div style={{ height: 60 }} />
       </div>
       <div style={{ height: 50 }} />
