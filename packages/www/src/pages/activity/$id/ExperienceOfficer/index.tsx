@@ -17,12 +17,13 @@ import FComponentsLib from '@freelog/components-lib';
 import FPropaganda from '@/components/FPropaganda';
 import { Link } from 'umi';
 import { useGetState } from '@/layouts/FBaseLayout';
+import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 
 interface ExperienceOfficerProps {
   activityDetailsPage: ActivityDetailsPageModelState;
 }
 
-function ExperienceOfficer({activityDetailsPage}: ExperienceOfficerProps) {
+function ExperienceOfficer({ activityDetailsPage }: ExperienceOfficerProps) {
 
   const position = AHooks.useScroll(self.document.getElementById('layout-content'));
   // console.log(position, 'positionoisdjlkfjsldjflkjl');
@@ -250,37 +251,47 @@ function ExperienceOfficer({activityDetailsPage}: ExperienceOfficerProps) {
         <img style={{ width: 334 }} src={img_point1} alt={''} />
         <div style={{ height: 40 }} />
 
-        <div className={styles.noLogin}>
-          <FComponentsLib.FContentText text={'详细积分情况请登录后查看'} type={'additional2'} />
-          <FComponentsLib.FRectBtn type={'primary'}>立即登录</FComponentsLib.FRectBtn>
-        </div>
+        {
+          FUtil.Tool.getUserIDByCookies() === -1
+            ? (<div className={styles.noLogin}>
+              <FComponentsLib.FContentText text={'详细积分情况请登录后查看'} type={'additional2'} />
+              <FComponentsLib.FRectBtn
+                type={'primary'}
+                onClick={() => {
+                  // self.location.replace()
+                  FServiceAPI.User.currentUserInfo();
+                }}
+              >立即登录</FComponentsLib.FRectBtn>
+            </div>)
+            : (<div className={styles.pointCards}>
+              <div className={styles.pointCard}>
+                <FComponentsLib.FContentText type={'additional2'} text={'体验官积分'} />
+                <div className={styles.pointCardPoint}>
+                  <div>分</div>
+                  <div>60</div>
+                  <div>分</div>
+                </div>
+              </div>
+              <div className={styles.pointCard}>
+                <FComponentsLib.FContentText type={'additional2'} text={'体验官积分'} />
+                <div className={styles.pointCardPoint}>
+                  <div>分</div>
+                  <div>180</div>
+                  <div>位</div>
+                </div>
+              </div>
+              <div className={styles.pointCard}>
+                <FComponentsLib.FContentText type={'additional2'} text={'体验官积分'} />
+                <div className={styles.pointCardPoint}>
+                  <div>分</div>
+                  <div>30</div>
+                  <div>分</div>
+                </div>
+              </div>
+            </div>)
+        }
 
-        <div className={styles.pointCards}>
-          <div className={styles.pointCard}>
-            <FComponentsLib.FContentText type={'additional2'} text={'体验官积分'} />
-            <div className={styles.pointCardPoint}>
-              <div>分</div>
-              <div>60</div>
-              <div>分</div>
-            </div>
-          </div>
-          <div className={styles.pointCard}>
-            <FComponentsLib.FContentText type={'additional2'} text={'体验官积分'} />
-            <div className={styles.pointCardPoint}>
-              <div>分</div>
-              <div>180</div>
-              <div>位</div>
-            </div>
-          </div>
-          <div className={styles.pointCard}>
-            <FComponentsLib.FContentText type={'additional2'} text={'体验官积分'} />
-            <div className={styles.pointCardPoint}>
-              <div>分</div>
-              <div>30</div>
-              <div>分</div>
-            </div>
-          </div>
-        </div>
+
         <div style={{ height: 40 }} />
         <Space size={30}>
           <div className={styles.h3}>每天12：00更新：最近更新{'更新数据时间'}</div>
