@@ -15,8 +15,8 @@ import img_point2 from '@/assets/activity/ExperienceOfficer/point2@2x.png';
 import { Affix, Popover, Space, Table } from 'antd';
 import FComponentsLib from '@freelog/components-lib';
 import FPropaganda from '@/components/FPropaganda';
-import { Link } from 'umi';
-import { useGetState } from '@/layouts/FBaseLayout';
+// import { Link } from 'umi';
+// import { useGetState } from '@/layouts/FBaseLayout';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import PointCards from './PointCards';
 
