@@ -380,6 +380,9 @@ function ExperienceOfficer({ activityDetailsPage }: ExperienceOfficerProps) {
               <FComponentsLib.FTextBtn
                 style={{ display: 'inline' }}
                 type={'primary'}
+                onClick={() => {
+                  self.open('https://freelog2.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62cce8f2456ff0002e328eb2');
+                }}
               >《Freelog平台管理规范》</FComponentsLib.FTextBtn>
               ，违规者平台有权取消其体验官资格并扣除奖励不予发放；
             </div>
