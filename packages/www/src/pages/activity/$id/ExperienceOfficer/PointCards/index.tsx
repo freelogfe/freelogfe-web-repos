@@ -13,11 +13,10 @@ interface PointCardsProps {
 
 function PointCards({}: PointCardsProps) {
 
-  const [$isLogin, set$isLogin, get$isLogin] = FUtil.Hook.useGetState<boolean>(true);
+  const [$isLogin, set$isLogin, get$isLogin] = FUtil.Hook.useGetState<boolean>(FUtil.Tool.getUserIDByCookies() !== -1);
 
   AHooks.useMount(() => {
-    if (FUtil.Tool.getUserIDByCookies() === -1) {
-      set$isLogin(false);
+    if (!get$isLogin()) {
       return;
     }
 
