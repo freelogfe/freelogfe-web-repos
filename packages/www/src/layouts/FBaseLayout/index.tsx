@@ -42,7 +42,7 @@ const initStates: FBaseLayoutStates = {
 
 function FBaseLayout({ children, global }: FBaseLayoutProps) {
 
-  const [$userInfo, set$UserInfo, get$userInfo] = useGetState<FBaseLayoutStates['userInfo']>(initStates['userInfo']);
+  const [$userInfo, set$UserInfo, get$userInfo] = FUtil.Hook.useGetState<FBaseLayoutStates['userInfo']>(initStates['userInfo']);
   const [activeIDs, set_ActiveIDs] = React.useState<FBaseLayoutStates['activeIDs']>(initStates['activeIDs']);
 
   AHooks.useMount(async () => {
@@ -187,18 +187,18 @@ export default connect(({ global }: ConnectState) => ({
   global,
 }))(FBaseLayout);
 
-export function useGetState<T>(initVal: T): [T, (newVal: T) => void, () => T] {
-  const [state, setState] = React.useState<T>(initVal);
-  const ref = React.useRef<T>(initVal);
-
-  function setStateCopy(newVal: T): void {
-    ref.current = newVal;
-    setState(newVal);
-  }
-
-  function getState(): T {
-    return ref.current;
-  }
-
-  return [state, setStateCopy, getState];
-}
+// export function useGetState<T>(initVal: T): [T, (newVal: T) => void, () => T] {
+//   const [state, setState] = React.useState<T>(initVal);
+//   const ref = React.useRef<T>(initVal);
+//
+//   function setStateCopy(newVal: T): void {
+//     ref.current = newVal;
+//     setState(newVal);
+//   }
+//
+//   function getState(): T {
+//     return ref.current;
+//   }
+//
+//   return [state, setStateCopy, getState];
+// }
