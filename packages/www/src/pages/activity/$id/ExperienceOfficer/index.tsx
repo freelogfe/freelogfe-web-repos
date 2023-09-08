@@ -19,6 +19,7 @@ import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import PointCards from './PointCards';
 import RankingList from './RankingList';
 import LuckyPrize from './LuckyPrize';
+import moment from 'moment';
 
 interface ExperienceOfficerProps {
   activityDetailsPage: ActivityDetailsPageModelState;
@@ -167,7 +168,7 @@ function ExperienceOfficer({ activityDetailsPage }: ExperienceOfficerProps) {
         <img style={{ width: 820 }} src={img_award1} alt={''} />
 
         {
-          0 === 0 ?
+          activityDetailsPage.announceTime?.isBefore(moment()) ?
             (<>
               <div style={{ height: 60 }} />
               <RankingList />
@@ -192,7 +193,7 @@ function ExperienceOfficer({ activityDetailsPage }: ExperienceOfficerProps) {
         <div style={{ height: 40 }} />
         <img style={{ width: 560 }} src={img_award2} alt={''} />
         {
-          0 === 0 ?
+          activityDetailsPage.announceTime?.isBefore(moment()) ?
             (<>
               <div style={{ height: 60 }} />
               <LuckyPrize />
