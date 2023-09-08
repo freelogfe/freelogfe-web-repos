@@ -208,7 +208,11 @@ function ExperienceOfficer({}: ExperienceOfficerProps) {
           </div>
         </div>
         <div style={{ height: 40 }} />
-        <a className={styles.button}>立即成为首批体验官</a>
+        <a
+          className={styles.button}
+          href={'https://jinshuju.net/f/nbRmg5'}
+          target={'_blank'}
+        >立即成为首批体验官</a>
         <div style={{ height: 60 }} />
         <div className={styles.longDashed} />
         <div style={{ height: 60 }} />
@@ -219,8 +223,21 @@ function ExperienceOfficer({}: ExperienceOfficerProps) {
         <img style={{ width: 748 }} src={img_questionnaire3} alt={''} />
         <div style={{ height: 50 }} />
         <Space size={30}>
-          <a className={styles.button}>查看教程快速上手</a>
-          <a className={styles.button}>了解体验官积分规则</a>
+          <a
+            href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f'}
+            target={'_blank'}
+            className={styles.button}
+          >查看教程快速上手</a>
+          <a
+            className={styles.button}
+            onClick={() => {
+              const info = ref_content5.current?.getBoundingClientRect();
+              self.document.getElementById('layout-content')?.scrollBy({
+                top: (info?.top || 0) - 160,
+                behavior: 'smooth',
+              });
+            }}
+          >了解体验官积分规则</a>
         </Space>
         <div style={{ height: 60 }} />
 
