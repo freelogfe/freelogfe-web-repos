@@ -34,9 +34,9 @@ function RankingList({}: RankingListProps) {
 
     set$list(data.map((d, i) => {
       let award: 'gold' | 'silver' | 'copper' = 'copper';
-      if (d.num === '1') {
+      if (i < 1) {
         award = 'gold';
-      } else if (d.num === '2' || d.num === '3') {
+      } else if (i < 3) {
         award = 'silver';
       }
       return {
@@ -78,7 +78,7 @@ function RankingList({}: RankingListProps) {
             </div>
             <div>{l.userName}</div>
             <div>{l.score}分</div>
-          </div>)
+          </div>);
         })
       }
 
