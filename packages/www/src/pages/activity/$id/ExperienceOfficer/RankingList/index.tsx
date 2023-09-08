@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import * as AHooks from 'ahooks';
-import { FServiceAPI } from '@freelog/tools-lib';
+import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 
 interface RankingListProps {
@@ -10,18 +10,43 @@ interface RankingListProps {
 
 function RankingList({}: RankingListProps) {
 
+  const [$list, set$list, get$list] = FUtil.Hook.useGetState<{
+    serial: number;
+    award: 'gold' | 'silver' | 'copper' | '';
+    userName: string;
+    score: number;
+  }[]>([]);
+
   AHooks.useMount(async () => {
     const { ret, errCode, msg, data }: {
       ret: number;
       errCode: number;
       msg: string;
-      data: {}[];
+      data: {
+        balance: string;
+        num: string;
+        username: string;
+      }[];
     } = await FServiceAPI.Operation.recordRank({
       coinAccountType: 2,
-      limit: 100,
+      limit: 8,
     });
 
-    console.log(data, 'dataisdjflkasjd;lfkjsdlfjljsdflkjsdlkj');
+    set$list(data.map((d, i) => {
+      let award: 'gold' | 'silver' | 'copper' = 'copper';
+      if (d.num === '1') {
+        award = 'gold';
+      } else if (d.num === '2' || d.num === '3') {
+        award = 'silver';
+      }
+      return {
+        serial: i + 1,
+        award: award,
+        userName: d.username,
+        score: Number(d.balance),
+      };
+    }));
+
   });
 
   return (<div className={styles.RankingList}>
@@ -44,41 +69,45 @@ function RankingList({}: RankingListProps) {
         </div>
       </div>
 
-      <div className={styles.row}>
-        <div className={styles.ranking}>
-          <span>1</span>
-          <GoldSilverCopper type={'gold'} />
-        </div>
-        <div>asdignia</div>
-        <div>100分</div>
-      </div>
+      {
+        $list.map((l) => {
+          return (<div className={styles.row} key={l.serial}>
+            <div className={styles.ranking}>
+              <span>{l.serial}</span>
+              <GoldSilverCopper type={l.award} />
+            </div>
+            <div>{l.userName}</div>
+            <div>{l.score}分</div>
+          </div>)
+        })
+      }
 
-      <div className={styles.row}>
-        <div className={styles.ranking}>
-          <span>2</span>
-          <GoldSilverCopper type={'silver'} />
-        </div>
-        <div>asdignia</div>
-        <div>100分</div>
-      </div>
+      {/*<div className={styles.row}>*/}
+      {/*  <div className={styles.ranking}>*/}
+      {/*    <span>2</span>*/}
+      {/*    <GoldSilverCopper type={'silver'} />*/}
+      {/*  </div>*/}
+      {/*  <div>asdignia</div>*/}
+      {/*  <div>100分</div>*/}
+      {/*</div>*/}
 
-      <div className={styles.row}>
-        <div className={styles.ranking}>
-          <span>3</span>
-          <GoldSilverCopper type={'copper'} />
-        </div>
-        <div>asdignia</div>
-        <div>100分</div>
-      </div>
+      {/*<div className={styles.row}>*/}
+      {/*  <div className={styles.ranking}>*/}
+      {/*    <span>3</span>*/}
+      {/*    <GoldSilverCopper type={'copper'} />*/}
+      {/*  </div>*/}
+      {/*  <div>asdignia</div>*/}
+      {/*  <div>100分</div>*/}
+      {/*</div>*/}
 
-      <div className={styles.row}>
-        <div className={styles.ranking}>
-          <span>4</span>
-          <GoldSilverCopper type={'copper'} />
-        </div>
-        <div>asdignia</div>
-        <div>100分</div>
-      </div>
+      {/*<div className={styles.row}>*/}
+      {/*  <div className={styles.ranking}>*/}
+      {/*    <span>4</span>*/}
+      {/*    <GoldSilverCopper type={'copper'} />*/}
+      {/*  </div>*/}
+      {/*  <div>asdignia</div>*/}
+      {/*  <div>100分</div>*/}
+      {/*</div>*/}
     </div>
   </div>);
 }
