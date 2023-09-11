@@ -26,42 +26,20 @@
     }
   }
 }
+
 //固定模式
 .animation(@animation-name, @animation-duration, @animation-timing-function, @animation-delay,
   @animation-iteration-count,
   @animation-direction) {
   animation: @arguments;
 }
-.keyframes(0,0,0,0,packet);
+
+.keyframes(0, 0, 0, 0, packet);
 .play-newer {
   background: #ffffff;
-  .link {
-    font-size: 14px;
-    font-weight: 400;
-    color: #2784ff;
-    line-height: 20px;
-    height: 20px;
-    i {
-      display: none;
-    }
-    &:active {
-      i {
-        display: inline-block !important;
-      }
-      opacity: 0.8;
-      span {
-        border-bottom: 1px solid #2784ff;
-      }
-    }
-    &:hover {
-      i {
-        display: inline-block !important;
-      }
-      span {
-        border-bottom: 1px solid #2784ff;
-      }
-    }
-  }
+
+
+
   .red-pack {
     cursor: pointer;
     height: 80px;
@@ -73,6 +51,7 @@
     background: #ffffff;
     box-shadow: 0px 2px 5px 0px rgba(233, 169, 35, 0.3);
     border-radius: 10px;
+
     .cash {
       display: none;
       width: 10px;
@@ -80,30 +59,38 @@
       background: rgba(255, 255, 255, 0.5);
       height: 100%;
     }
+
     &:hover {
       box-shadow: 0px 2px 10px 0px rgba(233, 169, 35, 0.5) !important;
+
       .packet {
-        .animation(packet,1s,linear,0s,infinite,normal );
+        .animation(packet, 1s, linear, 0s, infinite, normal);
       }
+
       .cash {
         display: block;
-        .animation(cash,1s,linear,0s,infinite,normal );
+        .animation(cash, 1s, linear, 0s, infinite, normal);
       }
     }
   }
+
   .op-0 {
     opacity: 0 !important;
   }
+
   .push-test {
     background: #fafbfc;
   }
+
   .profile-wrap {
     background: #fafbfc;
   }
+
   .profile {
     width: 1440px;
     margin: auto;
     background: #fafbfc;
+
     .titleLabel {
       width: 16px;
       margin-right: 20px;
@@ -113,6 +100,7 @@
       border: 2px solid #e9a923;
       border-radius: 50%;
     }
+
     .title {
       font-size: 20px;
       font-weight: 600;
@@ -123,6 +111,7 @@
       color: #222222;
       line-height: 26px;
     }
+
     .titleLabel2 {
       width: 10px;
       height: 2px;
@@ -133,6 +122,7 @@
       border-radius: 1px;
       opacity: 0.3;
     }
+
     .title2 {
       font-size: 16px;
       font-weight: 400;
@@ -144,14 +134,17 @@
       line-height: 22px;
     }
   }
+
   .test-wrap {
     background: #ffffff;
   }
+
   .test {
     width: 1440px;
     margin: auto;
     z-index: 20;
     background: #ffffff;
+
     .title {
       font-size: 20px;
       font-weight: 600;
@@ -159,12 +152,14 @@
       line-height: 28px;
       margin-bottom: 30px;
     }
+
     .content {
       font-size: 16px;
       font-weight: 400;
       color: #222222;
       line-height: 22px;
     }
+
     .title-grey {
       font-size: 14px;
       font-weight: 400;
@@ -172,6 +167,7 @@
       line-height: 20px;
       opacity: 40%;
     }
+
     .title-yellow {
       font-size: 16px;
       font-weight: 600;
@@ -179,6 +175,7 @@
       line-height: 22px;
       margin-bottom: 4px;
     }
+
     .content2 {
       font-size: 14px;
       font-weight: 400;
@@ -190,6 +187,7 @@
       word-break: normal;
       word-wrap: break-word;
     }
+
     .tip {
       font-size: 14px;
       font-weight: 400;
@@ -201,4 +199,75 @@
     }
   }
 
+}
+
+
+.styles {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: white;
+
+
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.GoldSilverCopper {
+  padding: 2px 5px;
+  border-radius: 4px;
+  color: white;
+  line-height: 18px;
+  font-size: 12px;
+  font-weight: 600;
+
+  &.gold {
+    background: #D8D8D8 linear-gradient(225deg, #F8EA60 0%, #E39B0F 100%);
+  }
+
+  &.silver {
+    background: linear-gradient(225deg, #EFEFEF 0%, #7B7B7E 100%);
+  }
+
+  &.copper {
+    background: linear-gradient(225deg, #EDAF83 0%, #7E2800 100%);
+  }
+}
+
+.link {
+  font-size: 14px;
+  font-weight: 400;
+  color: #2784ff;
+  line-height: 20px;
+  height: 20px;
+
+  i {
+    display: none;
+  }
+
+  &:active {
+    i {
+      display: inline-block !important;
+    }
+
+    opacity: 0.8;
+
+    span {
+      border-bottom: 1px solid #2784ff;
+    }
+  }
+
+  &:hover {
+    i {
+      display: inline-block !important;
+    }
+
+    span {
+      border-bottom: 1px solid #2784ff;
+    }
+  }
 }
