@@ -52,7 +52,7 @@ function FCropperModal({ uploadRef, imgSrc, uploading, onOk, onCancel }: FCroppe
       // });
       const cav = cropper.getCroppedCanvas();
       cav
-        ? getRoundedCanvas(cav).toBlob((blob) => {
+        ? cav.toBlob((blob) => {
           // console.log(blob, '90iowe3jlskdfjsldkjl');
           onOk && onOk(blob);
         })
