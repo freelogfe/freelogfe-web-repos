@@ -930,35 +930,6 @@ const Model: NodeManagerModelType = {
           setting_nodeCover: payload.value,
         },
       });
-      // const { nodeManagerPage }: ConnectState = yield select(({ nodeManagerPage }: ConnectState) => ({
-      //     nodeManagerPage,
-      //   }),
-      // );
-      // const params: Parameters<typeof FServiceAPI.Node.setNodeInfo>[0] = {
-      //   nodeId: nodeManagerPage.nodeId,
-      //   nodeLogo: payload.value,
-      //   nodeTitle: nodeManagerPage.setting_nodeInfo.title,
-      //   nodeShortDescription: nodeManagerPage.setting_nodeInfo.introduction,
-      //   status: nodeManagerPage.setting_nodeInfo.limitation === 'public'
-      //     ? 1
-      //     : nodeManagerPage.setting_nodeInfo.limitation === 'private'
-      //       ? 2
-      //       : 8, // 可见性 1：公开 2：私密 3：暂停
-      //   nodeSuspendInfo: nodeManagerPage.setting_nodeInfo.limitationMessage,
-      // };
-      //
-      // const { ret, errCode, msg, data } = yield call(FServiceAPI.Node.setNodeInfo, params);
-      //
-      // yield put<ChangeAction>({
-      //   type: 'change',
-      //   payload: {
-      //     setting_nodeInfo: {
-      //       ...nodeManagerPage.setting_nodeInfo,
-      //       cover: payload.value,
-      //     },
-      //     nodeCover: payload.value,
-      //   },
-      // });
     },
     * onChange_Setting_Title({ payload }: OnChange_Setting_Title_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({

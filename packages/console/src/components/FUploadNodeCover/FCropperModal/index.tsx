@@ -11,14 +11,15 @@ interface FCropperModalProps {
   imgSrc: string;
   uploading: boolean;
 
-  // onOk?(blob: Blob | null): void;
-  onOk?(info: {
-    h: number;
-    w: number;
-    x: number;
-    y: number;
-    r: number;
-  }): void;
+  onOk?(blob: Blob | null): void;
+
+  // onOk?(info: {
+  //   h: number;
+  //   w: number;
+  //   x: number;
+  //   y: number;
+  //   r: number;
+  // }): void;
 
   onCancel?(): void;
 }
@@ -27,7 +28,7 @@ function FCropperModal({ uploadRef, imgSrc, uploading, onOk, onCancel }: FCroppe
   const [cropper, setCropper] = React.useState<Cropper>();
 
   return (<Modal
-    visible={!!imgSrc}
+    open={!!imgSrc}
     width={950}
     title={<FComponentsLib.FTitleText
       // text={'上传头像'}
@@ -40,22 +41,22 @@ function FCropperModal({ uploadRef, imgSrc, uploading, onOk, onCancel }: FCroppe
       if (!cropper) {
         return;
       }
-      const info = cropper.getData();
-      // console.log(info, '##SDfsiodlk');
-      onOk && onOk({
-        h: info.height,
-        w: info.width,
-        x: info.x,
-        y: info.y,
-        r: info.rotate,
-      });
-      // const cav = cropper?.getCroppedCanvas();
-      // cav
-      //   ? getRoundedCanvas(cav).toBlob((blob) => {
-      //     // console.log(blob, '90iowe3jlskdfjsldkjl');
-      //     onOk && onOk(blob);
-      //   })
-      //   : (onOk && onOk(null));
+      // const info = cropper.getData();
+      // // console.log(info, '##SDfsiodlk');
+      // onOk && onOk({
+      //   h: info.height,
+      //   w: info.width,
+      //   x: info.x,
+      //   y: info.y,
+      //   r: info.rotate,
+      // });
+      const cav = cropper.getCroppedCanvas();
+      cav
+        ? getRoundedCanvas(cav).toBlob((blob) => {
+          // console.log(blob, '90iowe3jlskdfjsldkjl');
+          onOk && onOk(blob);
+        })
+        : (onOk && onOk(null));
     }}
     onCancel={() => {
       onCancel && onCancel();
@@ -164,19 +165,19 @@ function FCropperModal({ uploadRef, imgSrc, uploading, onOk, onCancel }: FCroppe
 
 export default FCropperModal;
 
-// function getRoundedCanvas(sourceCanvas: HTMLCanvasElement): HTMLCanvasElement {
-//   const canvas = document.createElement('canvas');
-//   const context = canvas.getContext('2d');
-//   const width = sourceCanvas.width;
-//   const height = sourceCanvas.height;
-//
-//   canvas.width = width;
-//   canvas.height = height;
-//   context && (context.imageSmoothingEnabled = true);
-//   context && context.drawImage(sourceCanvas, 0, 0, width, height);
-//   context && (context.globalCompositeOperation = 'destination-in');
-//   context && context.beginPath();
-//   context && context.arc(width / 2, height / 2, Math.min(width, height) / 2, 0, 2 * Math.PI, true);
-//   context && context.fill();
-//   return canvas;
-// }
+function getRoundedCanvas(sourceCanvas: HTMLCanvasElement): HTMLCanvasElement {
+  const canvas = document.createElement('canvas');
+  const context = canvas.getContext('2d');
+  const width = sourceCanvas.width;
+  const height = sourceCanvas.height;
+
+  canvas.width = width;
+  canvas.height = height;
+  context && (context.imageSmoothingEnabled = true);
+  context && context.drawImage(sourceCanvas, 0, 0, width, height);
+  context && (context.globalCompositeOperation = 'destination-in');
+  context && context.beginPath();
+  context && context.arc(width / 2, height / 2, Math.min(width, height) / 2, 0, 2 * Math.PI, true);
+  context && context.fill();
+  return canvas;
+}
