@@ -3,9 +3,10 @@ import './index.less';
 import styles from './index.less';
 import img_banner from '@/assets/activity/guidebook/banner@2x.png';
 import img_officer from '@/assets/activity/guidebook/officer@2x.png';
+import img_invite from '@/assets/activity/guidebook/invite@2x.png';
 import cartoon from '@/assets/testplay/cartoon.png';
 import cash from '@/assets/testplay/cash.png';
-import invite from '@/assets/testplay/invite.png';
+// import invite from '@/assets/testplay/invite.png';
 import New from '@/assets/testplay/new.png';
 import quest from '@/assets/testplay/quest.png';
 import redpacket from '@/assets/testplay/redpacket.png';
@@ -266,7 +267,8 @@ function PlayNewer({ activityDetailsPage }: PlayNewerProps) {
               </a>
             </div>
             <div className='h-360 over-h'>
-              <img src={invite} alt='' className='h-100x' />
+              {/*<img src={img_invite} alt='' className='h-100x' />*/}
+              <img src={img_invite} alt='' style={{width: 420}} />
             </div>
           </div>
           {/*<div className='flex-row space-between w-100x align-center '>*/}
