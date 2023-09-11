@@ -11,7 +11,6 @@ import {
   OnChange_NameInput_Action,
   OnClick_CreateBtn_Action,
 } from '@/models/nodeCreatorPage';
-// import FInput from '@/components/FInput';
 import FContentLayout from '@/layouts/FContentLayout';
 import * as AHooks from 'ahooks';
 import { OnMount_Page_Action, OnUnmount_Page_Action } from '@/models/nodeCreatorPage';
@@ -76,30 +75,10 @@ function NodeCreator({ nodeCreatorPage, dispatch }: NodeCreatorProps) {
               text={FI18n.i18nNext.t('createnode_input_nodeaddress_label')}
             />
             <div className={styles.inputWrap}>
-              {/*<FInput*/}
-              {/*  value={nodeCreatorPage.nodeDomain}*/}
-              {/*  // debounce={300}*/}
-              {/*  className={styles.input}*/}
-              {/*  // placeholder={'输入节点地址'}*/}
-              {/*  placeholder={FI18n.i18nNext.t('createnode_input_nodeaddress_hint')}*/}
-              {/*  onChange={(e) => {*/}
-              {/*    dispatch<OnChange_DomainInput_Action>({*/}
-              {/*      type: 'nodeCreatorPage/onChange_DomainInput',*/}
-              {/*      payload: { value: e.target.value },*/}
-              {/*    });*/}
-              {/*  }}*/}
-              {/*  onBlur={() => {*/}
-              {/*    dispatch<OnBlur_DomainInput_Action>({*/}
-              {/*      type: 'nodeCreatorPage/onBlur_DomainInput',*/}
-              {/*    });*/}
-              {/*  }}*/}
-              {/*/> */}
               <FComponentsLib.FInput.FSingleLine
                 lengthLimit={-1}
                 value={nodeCreatorPage.nodeDomain}
-                // debounce={300}
                 className={styles.input}
-                // placeholder={'输入节点地址'}
                 placeholder={FI18n.i18nNext.t('createnode_input_nodeaddress_hint')}
                 onChange={(e) => {
                   dispatch<OnChange_DomainInput_Action>({
@@ -130,32 +109,12 @@ function NodeCreator({ nodeCreatorPage, dispatch }: NodeCreatorProps) {
           <div className={styles.name}>
             <FComponentsLib.FContentText
               type='negative'
-              // text={'节点名称'}
               text={FI18n.i18nNext.t('createnode_input_nodeid_label')}
             />
             <div className={styles.inputWrap}>
-              {/*<FInput*/}
-              {/*  value={nodeCreatorPage.nodeName}*/}
-              {/*  // debounce={300}*/}
-              {/*  onChange={(e) => {*/}
-              {/*    dispatch<OnChange_NameInput_Action>({*/}
-              {/*      type: 'nodeCreatorPage/onChange_NameInput',*/}
-              {/*      payload: { value: e.target.value },*/}
-              {/*    });*/}
-              {/*  }}*/}
-              {/*  onBlur={() => {*/}
-              {/*    dispatch<OnBlur_NameInput_Action>({*/}
-              {/*      type: 'nodeCreatorPage/onBlur_NameInput',*/}
-              {/*    });*/}
-              {/*  }}*/}
-              {/*  className={styles.input}*/}
-              {/*  // placeholder={'输入节点名称'}*/}
-              {/*  placeholder={FI18n.i18nNext.t('createnode_input_nodeid_hint')}*/}
-              {/*/>*/}
               <FComponentsLib.FInput.FSingleLine
                 lengthLimit={-1}
                 value={nodeCreatorPage.nodeName}
-                // debounce={300}
                 onChange={(e) => {
                   dispatch<OnChange_NameInput_Action>({
                     type: 'nodeCreatorPage/onChange_NameInput',
@@ -168,7 +127,6 @@ function NodeCreator({ nodeCreatorPage, dispatch }: NodeCreatorProps) {
                   });
                 }}
                 className={styles.input}
-                // placeholder={'输入节点名称'}
                 placeholder={FI18n.i18nNext.t('createnode_input_nodeid_hint')}
               />
             </div>
@@ -179,7 +137,22 @@ function NodeCreator({ nodeCreatorPage, dispatch }: NodeCreatorProps) {
             <FComponentsLib.FIcons.FCheck />}
           </div>
         </Space>
-        <pre className={styles.errorTip}>{nodeCreatorPage.nodeNameError}</pre>
+
+        {
+          nodeCreatorPage.nodeNameError === ''
+            ? (<div style={{ height: 10 }} />)
+            : (<pre className={styles.errorTip} style={{ height: 30 }}>{nodeCreatorPage.nodeNameError}</pre>)
+        }
+        <FComponentsLib.FContentText
+          text={FI18n.i18nNext.t('createnode_input_nodeid_alarm')}
+          type={'additional2'}
+          style={{ width: 624 }}
+        />
+        {
+          nodeCreatorPage.nodeNameError === '' && (<div style={{ height: 20 }} />)
+        }
+
+        <div style={{ height: 30 }} />
 
         <FComponentsLib.FHotspotTooltip
           id={'createNodePage.createBtn'}
@@ -199,7 +172,6 @@ function NodeCreator({ nodeCreatorPage, dispatch }: NodeCreatorProps) {
         </FComponentsLib.FHotspotTooltip>
 
         <div style={{ height: 60 }} />
-        <FComponentsLib.FContentText text={FI18n.i18nNext.t('createnode_input_nodeid_alarm')} type={'additional2'} />
         <FComponentsLib.FContentText text={'每个用户最多可创建3个节点，节点创建之后无法删除，请谨慎操作。'} type={'additional2'} />
       </div>
     </FContentLayout>
