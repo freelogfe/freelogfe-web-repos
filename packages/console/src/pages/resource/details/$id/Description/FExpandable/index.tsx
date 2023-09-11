@@ -8,7 +8,7 @@ interface FExpandableProps {
   children: React.ReactNode;
 }
 
-function FExpandable({children}: FExpandableProps) {
+function FExpandable({ children }: FExpandableProps) {
   const refContent = React.useRef<any>();
   const [expandable, setExpandable] = React.useState<boolean | null>(false);
 
@@ -24,19 +24,19 @@ function FExpandable({children}: FExpandableProps) {
     {
       expandable !== null && (<div className={styles.button}>
         {
-          expandable === true && (<FComponentsLib.FTextBtn
-            type="primary"
+          expandable && (<FComponentsLib.FTextBtn
+            type='primary'
             onClick={() => {
               setExpandable(false);
             }}
-          ><span>收起全部 <FComponentsLib.FIcons.FUp/></span></FComponentsLib.FTextBtn>)
+          ><span>收起全部 <FComponentsLib.FIcons.FUp style={{ fontSize: 12 }} /></span></FComponentsLib.FTextBtn>)
         }
       </div>)
     }
 
     <div
       className={styles.content}
-      style={expandable == false ? {height: 300} : {}}
+      style={expandable == false ? { height: 300 } : {}}
     >
       <div ref={refContent}>
         {children}
@@ -44,7 +44,7 @@ function FExpandable({children}: FExpandableProps) {
     </div>
 
     {
-      expandable === false && (<div className={styles.mask}/>)
+      expandable === false && (<div className={styles.mask} />)
     }
 
 
@@ -54,11 +54,11 @@ function FExpandable({children}: FExpandableProps) {
     >
       {
         expandable === false && (<FComponentsLib.FTextBtn
-          type="primary"
+          type='primary'
           onClick={() => {
             setExpandable(true);
           }}
-        ><span>展开查看全部 <FComponentsLib.FIcons.FDown/></span></FComponentsLib.FTextBtn>)
+        ><span>展开查看全部 <FComponentsLib.FIcons.FDown style={{ fontSize: 12 }} /></span></FComponentsLib.FTextBtn>)
       }
     </div>)}
   </div>);

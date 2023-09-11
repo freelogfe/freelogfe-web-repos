@@ -88,7 +88,7 @@ function Sider({ dispatch, nodeManagerPage, match }: SiderProps) {
                 title={nodeManagerPage.nodeName}
                 url={nodeManagerPage.nodeUrl}
                 onClickShare={() => {
-                  console.log('**********8 88888888d onClickShare')
+                  // console.log('**********8 88888888d onClickShare')
                   FServiceAPI.Activity.pushMessageTask({
                     taskConfigCode: 'TS000034',
                     meta: { nodeId: nodeManagerPage.nodeId },
