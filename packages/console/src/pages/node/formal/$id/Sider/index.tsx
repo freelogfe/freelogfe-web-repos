@@ -32,7 +32,6 @@ function Sider({ dispatch, nodeManagerPage, match }: SiderProps) {
         <div style={{ height: 35 }} />
 
         <div className={styles.cover}>
-          {/*<img src={nodeManagerPage.nodeCover || imgSrc} />*/}
           <FNodeCoverImage src={nodeManagerPage.nodeCover || imgSrc} width={80} />
         </div>
         <div style={{ height: 20 }} />
@@ -60,7 +59,6 @@ function Sider({ dispatch, nodeManagerPage, match }: SiderProps) {
           <FComponentsLib.FHotspotTooltip
             id={'nodeManager.nodeLink'}
             style={{ right: -110, top: -4 }}
-            // style={{ left: '50%', marginLeft: -16, bottom: -42 }}
             text={FI18n.i18nNext.t('hotpots_nodemanager_link_domain')}
             onMount={() => {
               FComponentsLib.fSetHotspotTooltipVisible('nodeManager.nodeLink', {
@@ -77,7 +75,6 @@ function Sider({ dispatch, nodeManagerPage, match }: SiderProps) {
                 }}
               >
                 <FTooltip title={FI18n.i18nNext.t('nodemgnt_btn_viewnode_tooltip')}>
-
                   <i className={`freelog fl-icon-fangwen`} style={{ fontSize: '14px' }} />
                 </FTooltip>
               </FComponentsLib.FTextBtn>
@@ -86,21 +83,29 @@ function Sider({ dispatch, nodeManagerPage, match }: SiderProps) {
                 title={FI18n.i18nNext.t('nodemgnt_btn_copynodeaddr_tooltip')}
                 iconStyle={{ fontSize: 14 }}
               />
-              <FShare type='node' title={nodeManagerPage.nodeName} url={nodeManagerPage.nodeUrl}>
-                <FComponentsLib.FTextBtn onClick={async () => {
-                  await FServiceAPI.Activity.pushMessageTask({
+              <FShare
+                type='node'
+                title={nodeManagerPage.nodeName}
+                url={nodeManagerPage.nodeUrl}
+                onClickShare={() => {
+                  console.log('**********8 88888888d onClickShare')
+                  FServiceAPI.Activity.pushMessageTask({
                     taskConfigCode: 'TS000034',
-                    // @ts-ignore
                     meta: { nodeId: nodeManagerPage.nodeId },
                   });
-                  await FServiceAPI.Activity.pushMessageTask({
+                  FServiceAPI.Activity.pushMessageTask({
                     taskConfigCode: 'TS000076',
-                    // @ts-ignore
                     meta: { nodeId: nodeManagerPage.nodeId },
                   });
-                }}>
+                }}
+              >
+                <FComponentsLib.FTextBtn
+                  onClick={async () => {
+
+                  }}
+                >
                   <FTooltip title={FI18n.i18nNext.t('nodemgnt_btn_sharenode_tooltip')}>
-                    <i className={`freelog fl-icon-fenxiang`} style={{ fontSize: '14px' }} />
+                    <i className={`freelog fl-icon-fenxiang`} style={{ fontSize: 14 }} />
                   </FTooltip>
                 </FComponentsLib.FTextBtn>
               </FShare>
@@ -114,12 +119,6 @@ function Sider({ dispatch, nodeManagerPage, match }: SiderProps) {
           <a
             className={nodeManagerPage.showPage === 'exhibit' ? styles.activated : ''}
             onClick={() => {
-              // dispatch<OnChange_ShowPage_Action>({
-              //   type: 'nodeManagerPage/onChange_ShowPage',
-              //   payload: {
-              //     value: 'exhibit',
-              //   },
-              // });
               history.push(FUtil.LinkTo.nodeManagement({
                 nodeID: nodeManagerPage.nodeId,
                 showPage: 'exhibit',
@@ -131,12 +130,6 @@ function Sider({ dispatch, nodeManagerPage, match }: SiderProps) {
           <a
             className={nodeManagerPage.showPage === 'theme' ? styles.activated : ''}
             onClick={() => {
-              // dispatch<OnChange_ShowPage_Action>({
-              //   type: 'nodeManagerPage/onChange_ShowPage',
-              //   payload: {
-              //     value: 'theme',
-              //   },
-              // });
               history.push(FUtil.LinkTo.nodeManagement({
                 nodeID: nodeManagerPage.nodeId,
                 showPage: 'theme',
@@ -148,15 +141,8 @@ function Sider({ dispatch, nodeManagerPage, match }: SiderProps) {
           <a
             className={nodeManagerPage.showPage === 'contract' ? styles.activated : ''}
             onClick={() => {
-              // dispatch<OnChange_ShowPage_Action>({
-              //   type: 'nodeManagerPage/onChange_ShowPage',
-              //   payload: {
-              //     value: 'contract',
-              //   },
-              // });
               history.push(FUtil.LinkTo.nodeManagement({
                 nodeID: nodeManagerPage.nodeId,
-                // @ts-ignore
                 showPage: 'contract',
               }));
             }}

@@ -13,21 +13,22 @@ interface shareBtnItem {
   bgColor: string;
 }
 
-export const FShare = (props: {
-  children: any;
+interface FShareProps {
+  children: React.ReactNode;
   type: 'node' | 'resource';
   title: string;
   url: string;
   cover?: string;
-}) => {
+
+  onClickShare?(): void;
+}
+
+export function FShare(props: FShareProps) {
   const { children, type, title, url, cover } = props;
   const [shareText, setShareText] = React.useState('');
   const [popupShow, setPopupShow] = React.useState(false);
   const [qrcodeShow, setQrcodeShow] = React.useState(false);
-  const [qrcodeInfo, setQrcodeInfo] = React.useState<{ name: string; url: string }>({
-    name: '',
-    url: '',
-  });
+  const [qrcodeInfo, setQrcodeInfo] = React.useState<{ name: string; url: string }>({ name: '', url: '' });
 
   /** 分享按钮 */
   const shareBtns: shareBtnItem[] = [
@@ -44,12 +45,13 @@ export const FShare = (props: {
   ];
 
   /** 关闭弹窗 */
-  const closePopup = () => {
+  function closePopup() {
     setPopupShow(false);
     setQrcodeShow(false);
-  };
+  }
 
-  const share = (item: { id: string; name: string }) => {
+  function share(item: { id: string; name: string }) {
+    props.onClickShare && props.onClickShare();
     const summary = ``;
 
     if (item.id === 'qqZone') {
@@ -85,71 +87,78 @@ export const FShare = (props: {
       document.execCommand('Copy');
       fMessage('链接复制成功～', 'success');
     }
-  };
+  }
 
   React.useEffect(() => {
     setShareText(`我在freelog发现一个不错的${type === 'node' ? '节点' : '资源'}：${title} ${url}`);
   }, []);
 
-  return (
-    <>
-      <div onClick={() => setPopupShow(true)}>{children}</div>
+  return (<>
+    <div onClick={() => setPopupShow(true)}>{children}</div>
 
-      {(popupShow || qrcodeShow) && (
-        <div className={styles.popup} onClick={closePopup}>
-          {popupShow && (
-            <div className={styles['share-popup']} onClick={(e) => e.stopPropagation()}>
-              <div className={styles['share-title']}>分享</div>
+    {(popupShow || qrcodeShow) && (
+      <div className={styles.popup} onClick={closePopup}>
+        {popupShow && (
+          <div className={styles['share-popup']} onClick={(e) => e.stopPropagation()}>
+            <div className={styles['share-title']}>分享</div>
 
-              <input id='url' className={styles['hidden-input']} value={url} readOnly />
+            <input id='url' className={styles['hidden-input']} value={url} readOnly />
 
-              <textarea
-                className={styles.textarea}
-                value={shareText}
-                onChange={(e) => setShareText(e.target.value)}
-              />
+            <textarea
+              className={styles.textarea}
+              value={shareText}
+              onChange={(e) => setShareText(e.target.value)}
+            />
 
-              <div className={styles['btns-box']}>
-                <div className={styles['share-btns']}>
-                  <div className={styles['share-label']}>快速分享至：</div>
-                  {shareBtns.map((item: shareBtnItem) => {
+            <div className={styles['btns-box']}>
+              <div className={styles['share-btns']}>
+                <div className={styles['share-label']}>快速分享至：</div>
+                {
+                  shareBtns.map((item: shareBtnItem) => {
                     return (
                       <FTooltip title={`分享至${item.name}`} key={item.id}>
                         <div
                           className={styles['share-btn-item']}
                           style={{ backgroundColor: item.bgColor }}
-                          onClick={() => share(item)}
+                          onClick={() => {
+                            share(item);
+                          }}
                         >
                           <i className={`freelog ${item.icon} ${styles.freelog}`} />
                         </div>
                       </FTooltip>
                     );
-                  })}
-                </div>
+                  })
+                }
+              </div>
 
-                <div className={styles['copy-btn']} onClick={() => share({ id: 'copy', name: '' })}>
-                  复制链接
-                </div>
+              <div
+                className={styles['copy-btn']}
+                onClick={() => {
+                  share({ id: 'copy', name: '' });
+                }}
+              >
+                复制链接
               </div>
             </div>
-          )}
+          </div>
+        )}
 
-          {qrcodeShow && (
-            <div className={styles['qrcode-popup']} onClick={(e) => e.stopPropagation()}>
-              <i
-                className={`freelog fl-icon-guanbi ${styles['close-btn']}`}
-                onClick={() => setQrcodeShow(false)}
-              />
-              <div className={styles['qrcode-text']}>分享到{qrcodeInfo.name}</div>
-              <QRCode value={qrcodeInfo.url} size={220} />
-              <div className={styles['qrcode-text']}>使用{qrcodeInfo.name}扫一扫完成分享</div>
-            </div>
-          )}
-        </div>
-      )}
-    </>
-  );
-};
+        {qrcodeShow && (
+          <div className={styles['qrcode-popup']} onClick={(e) => e.stopPropagation()}>
+            <i
+              className={`freelog fl-icon-guanbi ${styles['close-btn']}`}
+              onClick={() => setQrcodeShow(false)}
+            />
+            <div className={styles['qrcode-text']}>分享到{qrcodeInfo.name}</div>
+            <QRCode value={qrcodeInfo.url} size={220} />
+            <div className={styles['qrcode-text']}>使用{qrcodeInfo.name}扫一扫完成分享</div>
+          </div>
+        )}
+      </div>
+    )}
+  </>);
+}
 
 interface HandleDoubanUrlParams {
   href: string;
