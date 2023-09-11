@@ -72,7 +72,7 @@ function FCropperModal({ uploadRef, imgSrc, uploading, onOk, onCancel }: FCroppe
         <div style={{ height: 10 }} />
         <Cropper
           style={{ width: 560, height: 420 }}
-          aspectRatio={1}
+          // aspectRatio={1}
           rotatable={true}
           preview={'.' + styles.imgPreview}
           src={imgSrc}
