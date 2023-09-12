@@ -155,7 +155,7 @@ function PlayNewer({ activityDetailsPage }: PlayNewerProps) {
               </div>
               <div style={{ height: 40 }} />
               <a
-                href={FI18n.i18nNext.t('beta_event_guideline_contest_link')}
+                href={FI18n.i18nNext.t('event_beta_tester_link')}
                 target={'_blank'}
                 className={styles.link}
               >
