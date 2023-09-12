@@ -17,8 +17,6 @@ import { connect } from 'dva';
 import { ConnectState } from '@/models/connect';
 import FComponentsLib from '@freelog/components-lib';
 
-// import FComposition from '../../../../../../@freelog/components-lib/src/FIcons/FComposition';
-
 interface PlayNewerProps {
   activityDetailsPage: ActivityDetailsPageModelState;
 }
@@ -67,6 +65,7 @@ function PlayNewer({ activityDetailsPage }: PlayNewerProps) {
                 <label style={{ fontSize: 34, color: '#E9A923', fontWeight: 600, lineHeight: 1 }}>¥2000</label>
                 <FComponentsLib.FTitleText text={'现金大奖等你拿'} type={'h1'} />
               </div>
+              <div style={{ height: 30 }} />
               {/*<span className='title'>一、解锁体验官积分玩法，&nbsp;<label*/}
               {/*  style={{ fontSize: 34, color: '#E9A923', fontWeight: 600 }}>2000元</label>&nbsp;现金大奖等你拿</span>*/}
               {/*<span className='title-grey mb-15'>活动时间</span>*/}
