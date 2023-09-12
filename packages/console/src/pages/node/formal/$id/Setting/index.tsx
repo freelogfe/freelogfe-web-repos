@@ -110,7 +110,7 @@ function Setting({ dispatch, nodeManagerPage }: SettingProps) {
                 {/*/>*/}
                 <FNodeCoverImage
                   src={nodeManagerPage.setting_nodeInfo.cover || imgSrc}
-                  width={72}
+                  // width={72}
                 />
               </div>)
               : (<FUploadNodeCover
@@ -135,7 +135,7 @@ function Setting({ dispatch, nodeManagerPage }: SettingProps) {
                   {/*/>*/}
                   <FNodeCoverImage
                     src={nodeManagerPage.setting_nodeCover || imgSrc}
-                    width={72}
+                    // width={72}
                   />
                   <div className={styles.nodeCoverMask}>
                     <span>更换</span>

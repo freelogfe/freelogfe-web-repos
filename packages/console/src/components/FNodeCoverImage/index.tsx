@@ -12,15 +12,15 @@ interface FNodeCoverImageProps {
   className?: string;
 }
 
-interface FNodeCoverImageStates {
-  imgStyle: {
-    width: number;
-    height: number;
-    translateX: number;
-    translateY: number;
-    transform: string;
-  } | null;
-}
+// interface FNodeCoverImageStates {
+//   imgStyle: {
+//     width: number;
+//     height: number;
+//     translateX: number;
+//     translateY: number;
+//     transform: string;
+//   } | null;
+// }
 
 function FNodeCoverImage({ src, style = {}, className = '' }: FNodeCoverImageProps) {
 

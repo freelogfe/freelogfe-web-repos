@@ -32,7 +32,10 @@ function Sider({ dispatch, nodeManagerPage, match }: SiderProps) {
         <div style={{ height: 35 }} />
 
         <div className={styles.cover}>
-          <FNodeCoverImage src={nodeManagerPage.nodeCover || imgSrc} width={80} />
+          <FNodeCoverImage
+            src={nodeManagerPage.nodeCover || imgSrc}
+            // width={80}
+          />
         </div>
         <div style={{ height: 20 }} />
 
