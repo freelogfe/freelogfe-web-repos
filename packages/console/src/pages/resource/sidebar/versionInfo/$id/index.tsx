@@ -42,6 +42,8 @@ function VersionInfo({ dispatch, resourceVersionEditorPage, match }: VersionInfo
   const [editor, setEditor] = React.useState<EditorState>(BraftEditor.createEditorState(resourceVersionEditorPage.description));
   const [$customOptionsExpansion, set$customOptionsExpansion] = React.useState<boolean>(false);
 
+  const [$isSavingDescription, set$isSavingDescription] = FUtil.Hook.useGetState<boolean>(false);
+
   AHooks.useMount(async () => {
     dispatch<OnMount_Sidebar_Action>({
       type: 'resourceSider/onMount_Page',
@@ -344,6 +346,12 @@ function VersionInfo({ dispatch, resourceVersionEditorPage, match }: VersionInfo
                     onClick={() => {
                       const html: string = editor.toHTML();
                       const description: string = html === '<p></p>' ? '' : html;
+                      dispatch<ChangeAction>({
+                        type: 'resourceVersionEditorPage/change',
+                        payload: {
+                          description: description,
+                        },
+                      });
                       dispatch<UpdateDataSourceAction>({
                         type: 'resourceVersionEditorPage/updateDataSource',
                         payload: {
