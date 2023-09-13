@@ -608,6 +608,7 @@ function FResourceAuthorizationProcessor({
                 set_targetInfos(v);
               }}
               onChange_baseUpcastResources={(v) => {
+                // console.log(v, 'dsoijflksdjflksdjlkfjsdljflk');
                 onChanged && onChanged();
                 set_baseUpcastResources(v);
               }}

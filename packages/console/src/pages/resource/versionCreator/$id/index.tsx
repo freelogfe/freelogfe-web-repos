@@ -959,7 +959,7 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
                           async onSelect_Resource({ resourceID, resourceName }) {
                             // console.log('8***********8sdflksdjlkj');
                             // const p = await getProcessor('resourceVersionCreator');
-                            console.log(p, 'asdiolfj;lksdjflkdsjflkjdslkfjlksdjlkf');
+                            // console.log(p, 'asdiolfj;lksdjflkdsjflkjdslkfjlksdjlkf');
                             await p.addTargets([{
                               id: resourceID,
                               name: resourceName,

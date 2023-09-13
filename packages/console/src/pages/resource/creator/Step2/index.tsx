@@ -49,7 +49,7 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
   const [$showMore, set$ShowMore, get$ShowMore] = useGetState<boolean>(false);
 
   AHooks.useDebounceEffect(() => {
-    console.log(resourceCreatorPage.step2_dataIsDirty_count, 'resourceCreatorPage.step2_dataIsDirty_count wieosfjlskdjflk');
+    // console.log(resourceCreatorPage.step2_dataIsDirty_count, 'resourceCreatorPage.step2_dataIsDirty_count wieosfjlskdjflk');
     if (resourceCreatorPage.step2_dataIsDirty_count === 0) {
       return;
     }

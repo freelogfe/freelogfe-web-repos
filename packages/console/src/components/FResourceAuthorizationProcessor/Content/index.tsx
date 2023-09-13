@@ -153,8 +153,9 @@ function Content({
             type={'secondary'}
             onClick={() => {
               // onChange({ upThrow: false });
+              // console.log(baseUpcastResources, 'baseUpcastResources sidfjlsdkfjlkdsjflkjdslfkj');
               onChange_baseUpcastResources && onChange_baseUpcastResources(baseUpcastResources.filter((r) => {
-                return r.resourceID !== info?.targetID && r.resourceName === info?.targetName;
+                return r.resourceID !== info?.targetID && r.resourceName !== info?.targetName;
               }));
             }}
           >重新选择授权方案</FComponentsLib.FRectBtn>)
