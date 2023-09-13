@@ -26,6 +26,7 @@ function Description({ resourceDetailPage }: DescriptionProps) {
             {resourceDetailPage.resourceVersion_Info.description && (<div
               // ref={refContainer}
               // style={{height: marketResourcePage.showAllDescription ? 'fit-content' : 300}}
+              style={{ wordBreak: 'break-all' }}
               dangerouslySetInnerHTML={{ __html: resourceDetailPage.resourceVersion_Info.description }}
               className={styles.container}
             />)}
