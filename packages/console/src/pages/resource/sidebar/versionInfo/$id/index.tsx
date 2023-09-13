@@ -411,7 +411,7 @@ function VersionInfo({ dispatch, resourceVersionEditorPage, match }: VersionInfo
                 value={editor}
                 // defaultValue={editorText}
                 onChange={(value: EditorState) => setEditor(value)}
-                style={{ height: 500 }}
+                style={{ minHeight: 500 }}
               />
             </>)
             : (resourceVersionEditorPage.description && (

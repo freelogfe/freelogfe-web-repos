@@ -23,6 +23,8 @@ function FBraftEditor({ global, value, onChange, ...props }: FBraftEditorProps) 
     <BraftEditor
       {...props}
       value={value}
+      // style={{ overflow: 'auto' }}
+      // contentStyle={{overflow: 'hidden', backgroundColor: 'red'}}
       onChange={(value1) => {
         // console.log(value.toHTML(), value1.toHTML(), '###@#$@#');
         if (value.toHTML() === value1.toHTML()) {
