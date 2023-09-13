@@ -1359,9 +1359,12 @@ const Model: ResourceCreatorPageModelType = {
         },
       });
       setTimeout(() => {
-        history.push(FUtil.LinkTo.resourceVersionInfo({
+        // history.push(FUtil.LinkTo.resourceVersionInfo({
+        //   resourceID: resourceCreatorPage.step1_createdResourceInfo?.resourceID || '',
+        //   version: '1.0.0',
+        // }));
+        history.push(FUtil.LinkTo.resourceCreateSuccess({
           resourceID: resourceCreatorPage.step1_createdResourceInfo?.resourceID || '',
-          version: '1.0.0',
         }));
       }, 100);
 
