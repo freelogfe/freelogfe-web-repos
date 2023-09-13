@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import FComponentsLib from '@freelog/components-lib';
-import { FI18n } from '@freelog/tools-lib';
+import { FI18n, FUtil } from '@freelog/tools-lib';
 import fMessage from '@/components/fMessage';
 import FUploadCover from '@/components/FUploadCover';
 import FResourceLabelEditor from '@/components/FResourceLabelEditor';
@@ -14,6 +14,8 @@ import {
   OnClick_step4_preBtn_Action, OnClick_step4_submitBtn_Action,
 } from '@/models/resourceCreatorPage';
 import FCoverImage from '@/components/FCoverImage';
+import { Modal } from 'antd';
+import FInProcessModal from '@/components/FInProcessModal';
 
 interface Step4Props {
   dispatch: Dispatch;
@@ -21,6 +23,9 @@ interface Step4Props {
 }
 
 function Step4({ dispatch, resourceCreatorPage }: Step4Props) {
+
+  const [$inProcessModal, set$inProcessModal] = FUtil.Hook.useGetState<boolean>(false);
+
   return (<>
     <div style={{ height: 40 }} />
     <div className={styles.block}>
@@ -134,7 +139,9 @@ function Step4({ dispatch, resourceCreatorPage }: Step4Props) {
       <FComponentsLib.FRectBtn
         disabled={resourceCreatorPage.step4_resourceTitle.length > 100}
         type={'primary'}
-        onClick={() => {
+        onClick={async () => {
+          set$inProcessModal(true);
+          await FUtil.Tool.promiseSleep(500);
           dispatch<OnClick_step4_submitBtn_Action>({
             type: 'resourceCreatorPage/onClick_step4_submitBtn',
           });
@@ -142,6 +149,8 @@ function Step4({ dispatch, resourceCreatorPage }: Step4Props) {
       >{FI18n.i18nNext.t('rqr_step4_btn_release')}</FComponentsLib.FRectBtn>
     </div>
     <div style={{ height: 100 }} />
+
+    <FInProcessModal open={$inProcessModal} />
   </>);
 }
 
