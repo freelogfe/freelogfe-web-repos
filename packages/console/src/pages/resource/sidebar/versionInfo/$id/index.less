@@ -1,6 +1,6 @@
 @import '../../../../../config.less';
 
-.Header{
+.Header {
   width: 920px;
 }
 
@@ -9,4 +9,43 @@
   background-color: white;
   border-radius: 6px;
   width: 920px;
+}
+
+.description {
+  height: 548px;
+  background-color: #F7F8F9;
+  border-radius: 4px;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+
+  .container {
+    box-sizing: border-box;
+    max-width: 100%;
+    min-height: 100%;
+    padding: 15px;
+    word-break: break-all;
+
+    img, audio, video {
+      max-width: 100%;
+      height: auto;
+    }
+
+    p {
+      white-space: pre-wrap;
+      min-height: 1em;
+    }
+
+    pre {
+      padding: 15px;
+      background-color: #f1f1f1;
+      border-radius: 5px;
+    }
+
+    blockquote {
+      margin: 0;
+      padding: 15px;
+      background-color: #f1f1f1;
+      border-left: 3px solid #d1d1d1;
+    }
+  }
 }
