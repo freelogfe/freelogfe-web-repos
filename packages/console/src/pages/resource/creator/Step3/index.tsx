@@ -67,7 +67,8 @@ function Step3({ dispatch, resourceCreatorPage }: Step3Props) {
         resourceCreatorPage.step3_policies.length > 0 && (<>
           <div style={{ height: 20 }} />
           <FPolicyList
-            allDisabledSwitch={true}
+            activeBtnShow={false}
+            // allDisabledSwitch={true}
             dataSource={resourceCreatorPage.step3_policies}
             // onCheckChange={(data) => {
             //   if (data.using) {

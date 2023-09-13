@@ -14,6 +14,7 @@ interface FPolicyListProps {
 
   atLeastOneUsing?: boolean;
   allDisabledSwitch?: boolean;
+  activeBtnShow?: boolean;
 
   onCheckChange?(data: { id: string; using: boolean }): void;
 }
@@ -22,6 +23,7 @@ function FPolicyList({
                        dataSource,
                        atLeastOneUsing = false,
                        allDisabledSwitch = false,
+                       activeBtnShow = true,
                        onCheckChange,
                      }: FPolicyListProps) {
   // console.log(dataSource, 'dataSource#@@@@@#@##########');
@@ -39,6 +41,7 @@ function FPolicyList({
           <PolicyCard
             key={ds.policyId}
             fullInfo={ds}
+            activeBtnShow={activeBtnShow}
             onlineDisable={allDisabledSwitch || disabledOnlyUsing && ds.status === 1}
             onOnlineChange={(value) => {
               onCheckChange && onCheckChange({ id: ds.policyId, using: value });

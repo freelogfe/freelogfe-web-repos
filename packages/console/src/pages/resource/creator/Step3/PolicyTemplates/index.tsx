@@ -57,9 +57,9 @@ function PolicyTemplates({ onSelect }: PolicyTemplatesProps) {
           .filter((pt, pti) => {
             return $open || pti < 4;
           })
-          .map((pt) => {
+          .map((pt, pi) => {
             return (<a
-              key={pt.id}
+              key={pi}
               className={styles.policyTemplate}
               onClick={() => {
                 onSelect && onSelect({ text: pt.code, title: pt.title });
