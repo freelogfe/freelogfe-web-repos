@@ -23,6 +23,7 @@ import {
   OnUnmount_Page_Action,
   OnUpdate_Data_Action,
 } from '@/models/resourceSider';
+import { PolicyFullInfo_Type } from '@/type/contractTypes';
 
 interface SilderProps {
   dispatch: Dispatch;
@@ -362,7 +363,9 @@ export async function resourceOnline(resourceID: string): Promise<boolean> {
     };
     await FServiceAPI.Resource.update(params);
     return true;
-  } else if (data_resourceInfo.policies.every((p) => p.status === 0)) {
+  } else if (data_resourceInfo.policies.every((p) => {
+    return p.status === 0;
+  })) {
     const existingUsedPolicy = await fPolicyOperator({
       titleText: FI18n.i18nNext.t(
         'set_resource_available_for_auth_activate_auth_plan_title',
@@ -371,7 +374,7 @@ export async function resourceOnline(resourceID: string): Promise<boolean> {
         'set_resource_available_for_auth_activate_auth_plan_btn_done',
       ),
       tipText: FI18n.i18nNext.t('msg_set_resource_avaliable_for_auth02'),
-      policiesList: data_resourceInfo.policies,
+      policiesList: data_resourceInfo.policies as any,
     });
 
     if (!existingUsedPolicy) {

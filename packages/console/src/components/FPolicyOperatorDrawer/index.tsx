@@ -4,7 +4,8 @@ import styles from './index.less';
 import FDrawer from '../FDrawer';
 import { PolicyCard } from '../FPolicyList';
 import FComponentsLib from '@freelog/components-lib';
-import { FI18n } from '@freelog/tools-lib';
+import { FI18n, FUtil } from '@freelog/tools-lib';
+import { PolicyFullInfo_Type } from '@/type/contractTypes';
 
 interface FPolicyOperaterDrawerProps {
   titleText: string;
@@ -12,7 +13,7 @@ interface FPolicyOperaterDrawerProps {
   tipText: string;
   visible: boolean;
   // type: 'resource' | 'exhibit';
-  policiesList: any[];
+  policiesList: PolicyFullInfo_Type[];
 
   onCancel(): void;
 
@@ -35,15 +36,17 @@ function FPolicyOperatorDrawer({
                                  onNewPolicy,
                                }: FPolicyOperaterDrawerProps) {
 
-  const [activeList, setActiveList] = React.useState<string[]>([]);
-  const updateActiveList = () => {
-    const list = policiesList.filter((item) => item.checked).map((item) => item.policyId);
-    setActiveList(list);
-  };
+  const [$list, set$list, get$list] = FUtil.Hook.useGetState<PolicyFullInfo_Type[]>([]);
+  // const updateActiveList = () => {
+  //   const list = policiesList.filter((item) => item.checked).map((item) => item.policyId);
+  //   setActiveList(list);
+  // };
 
-  React.useEffect(() => {
-    if (visible) updateActiveList();
-  }, [visible]);
+  // React.useEffect(() => {
+  //   if (visible) {
+  //     updateActiveList();
+  //   }
+  // }, [visible]);
 
   return (
     <>
@@ -56,19 +59,35 @@ function FPolicyOperatorDrawer({
           </Space>
         }
         width={700}
-        onClose={() => onCancel()}
+        afterVisibleChange={(visible) => {
+          if (visible) {
+            set$list(policiesList);
+          }
+        }}
+        onClose={() => {
+          onCancel && onCancel();
+        }}
         topRight={
           <Space size={30}>
             <FComponentsLib.FTextBtn
-              onClick={() => onCancel()}>{FI18n.i18nNext.t('btn_cancel')}</FComponentsLib.FTextBtn>
-            <FComponentsLib.FRectBtn
-              disabled={activeList.length === 0}
               onClick={() => {
-                const updatePolicies: { policyID: string; checked: boolean; }[] = policiesList
-                  .map((item) => {
-                    return { policyID: item.policyId, checked: item.checked };
-                  });
-                onConfirm && onConfirm(updatePolicies);
+                onCancel && onCancel();
+              }}>{FI18n.i18nNext.t('btn_cancel')}</FComponentsLib.FTextBtn>
+            <FComponentsLib.FRectBtn
+              disabled={$list.every((l) => {
+                return l.status === 0;
+              })}
+              onClick={() => {
+                // const updatePolicies: { policyID: string; checked: boolean; }[] = policiesList
+                //   .map((item) => {
+                //     return { policyID: item.policyId, checked: item.checked };
+                //   });
+                onConfirm && onConfirm(get$list().map((l) => {
+                  return {
+                    policyID: l.policyId,
+                    checked: l.status === 1,
+                  };
+                }));
               }}
               type='primary'
             >
@@ -85,18 +104,45 @@ function FPolicyOperatorDrawer({
           </div>
         </div>
         {
-          policiesList.map((item) => {
+          $list.map((item) => {
             return (
               <div key={item.policyId}>
                 <Checkbox
                   style={{ marginBottom: '10px' }}
-                  checked={activeList.includes(item.policyId)}
+                  checked={item.status === 1}
                   onChange={(e) => {
-                    item.checked = e.target.checked;
-                    updateActiveList();
+                    // console.log('**** iuohwjelkfjlskej *****');
+                    // item.checked = e.target.checked;
+                    // updateActiveList();
+                    set$list(get$list().map((l) => {
+                      if (l.policyId === item.policyId) {
+                        return {
+                          ...l,
+                          status: e.target.checked ? 1 : 0,
+                        };
+                      }
+                      return l;
+                    }));
                   }}
                 />
-                <PolicyCard fullInfo={item} activeBtnShow={false} />
+                <PolicyCard
+                  fullInfo={item}
+                  activeBtnShow={false}
+                  onOnlineChange={(bool) => {
+                    // console.log(bool, ';bsd9fojsdlkfjsdlkjfldsjfldsjl');
+                    // item.checked = bool;
+                    // updateActiveList();
+                    set$list(get$list().map((l) => {
+                      if (l.policyId === item.policyId) {
+                        return {
+                          ...l,
+                          status: bool ? 1 : 0,
+                        };
+                      }
+                      return l;
+                    }));
+                  }}
+                />
               </div>
             );
           })
