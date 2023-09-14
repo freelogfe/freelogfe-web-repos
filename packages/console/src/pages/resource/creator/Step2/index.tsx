@@ -378,7 +378,7 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
                 <FTooltip title={FI18n.i18nNext.t('resourceinfo_add_btn_info')}>
                   <div>
                     <FComponentsLib.FTextBtn
-                      style={{ fontSize: 12, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 5 }}
+                      style={{ fontSize: 12, display: 'flex', alignItems: 'center', gap: 5 }}
                       type='primary'
                       onClick={async () => {
                         const dataSource: {
@@ -547,8 +547,11 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
                   set$ShowMore(true);
                 }}
               >更多设置</FComponentsLib.FTextBtn>
-              {FI18n.i18nNext.t('create_new_version_btn_moresetting_help')}
               {/*<FComponentsLib.FContentText text={'可以为资源文件添加可选配置，或进行依赖资源的声明'} type={'additional2'} />*/}
+              <FComponentsLib.FContentText
+                text={FI18n.i18nNext.t('create_new_version_btn_moresetting_help')}
+                type={'additional2'}
+              />
             </Space>)
         }
       </>)
@@ -571,7 +574,7 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
                   <FTooltip title={FI18n.i18nNext.t('info_versionoptions')}>
                     <div>
                       <FComponentsLib.FTextBtn
-                        style={{ fontSize: 12, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 5 }}
+                        style={{ fontSize: 12, display: 'flex', alignItems: 'center', gap: 5 }}
                         type='primary'
                         onClick={async () => {
                           const dataSource: {
@@ -714,7 +717,7 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
           <FTooltip title={FI18n.i18nNext.t('info_versionrely')}>
             <div>
               <FComponentsLib.FTextBtn
-                style={{ fontSize: 12, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 5 }}
+                style={{ fontSize: 12, display: 'flex', alignItems: 'center', gap: 5 }}
                 type='primary'
                 onClick={async () => {
                   const p = await getProcessor('resourceCreatorStep2');
