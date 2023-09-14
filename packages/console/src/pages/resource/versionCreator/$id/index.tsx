@@ -148,7 +148,7 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
           borderRadius: 4,
           fontSize: 12,
           color: '#666',
-          padding: 5,
+          padding: '0 5px',
           lineHeight: '18px',
           display: 'inline-block',
         }}>{resourceVersionCreatorPage.resourceInfo?.resourceType.join('/')}</label>
@@ -292,7 +292,7 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
             borderRadius: 4,
             fontSize: 12,
             color: '#666',
-            padding: 5,
+            padding: '0 5px',
             lineHeight: '18px',
             display: 'inline-block',
           }}>{resourceVersionCreatorPage.resourceInfo?.resourceType.join('/')}</label>
