@@ -248,7 +248,8 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
   }
 
   const hasError: boolean =
-    resourceVersionCreatorPage.versionInput === '' || versionInputHasError ||
+    resourceVersionCreatorPage.versionInput === '' ||
+    // versionInputHasError ||
     !resourceVersionCreatorPage.selectedFileInfo ||
     resourceVersionCreatorPage.selectedFile_UsedResources.length > 0 ||
     resourceVersionCreatorPage.rawPropertiesState !== 'success';
