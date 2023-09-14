@@ -274,36 +274,24 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
 
         {
           resourceCreatorPage.step1_createdResourceInfo?.resourceType[0] === '阅读'
-          && resourceCreatorPage.step1_createdResourceInfo?.resourceType[1] === '文章' && (<FComponentsLib.FTextBtn
-            disabled={resourceCreatorPage.step2_rawPropertiesState === 'parsing'}
-            type='primary'
-            onClick={() => {
-              // $prop.onClick_EditBtn && $prop.onClick_EditBtn();
-              dispatch<OnClick_step2_editMarkdownBtn_Action>({
-                type: 'resourceCreatorPage/onClick_step2_editMarkdownBtn',
-              });
-            }}
-          >编辑</FComponentsLib.FTextBtn>)
-        }
-
-        {
-          resourceCreatorPage.step1_createdResourceInfo?.resourceType[1] === '漫画'
-          && (resourceCreatorPage.step1_createdResourceInfo?.resourceType[2] === '条漫'
-            || resourceCreatorPage.step1_createdResourceInfo?.resourceType[2] === '页漫') && (<FComponentsLib.FTextBtn
-            disabled={resourceCreatorPage.step2_rawPropertiesState === 'parsing'}
-            type='primary'
-            onClick={() => {
-              // $prop.onClick_EditBtn && $prop.onClick_EditBtn();
-              dispatch<OnClick_step2_editCartoonBtn_Action>({
-                type: 'resourceCreatorPage/onClick_step2_editCartoonBtn',
-              });
-            }}
-          >编辑</FComponentsLib.FTextBtn>)
-        }
-
-        {
-          resourceCreatorPage.step1_createdResourceInfo?.resourceType[0] === '阅读' && resourceCreatorPage.step1_createdResourceInfo?.resourceType[1] === '文章' && (
+          && resourceCreatorPage.step1_createdResourceInfo?.resourceType[1] === '文章' && (<>
             <FComponentsLib.FTextBtn
+              style={{ fontSize: 12, display: 'flex', alignItems: 'center', gap: 5 }}
+              disabled={resourceCreatorPage.step2_rawPropertiesState === 'parsing'}
+              type='primary'
+              onClick={() => {
+                // $prop.onClick_EditBtn && $prop.onClick_EditBtn();
+                dispatch<OnClick_step2_editMarkdownBtn_Action>({
+                  type: 'resourceCreatorPage/onClick_step2_editMarkdownBtn',
+                });
+              }}
+            >
+              <FComponentsLib.FIcons.FEdit style={{ fontSize: 12 }} />
+              <span>编辑</span>
+            </FComponentsLib.FTextBtn>
+
+            <FComponentsLib.FTextBtn
+              style={{ fontSize: 12, display: 'flex', alignItems: 'center', gap: 5 }}
               type='primary'
               disabled={resourceCreatorPage.step2_rawPropertiesState === 'parsing'}
               onClick={() => {
@@ -316,12 +304,42 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
                 self.location.href = FUtil.Format.completeUrlByDomain('qi')
                   + `/v2/storages/files/${resourceCreatorPage.step2_fileInfo?.sha1 || ''}/download?attachmentName=${resourceCreatorPage.step2_fileInfo?.name || 'download'}`;
               }}
-            >下载</FComponentsLib.FTextBtn>)
+            >
+              <FComponentsLib.FIcons.FDownload style={{ fontSize: 12 }} />
+              <span>下载</span>
+            </FComponentsLib.FTextBtn>
+          </>)
         }
+
+        {
+          resourceCreatorPage.step1_createdResourceInfo?.resourceType[1] === '漫画'
+          && (resourceCreatorPage.step1_createdResourceInfo?.resourceType[2] === '条漫'
+            || resourceCreatorPage.step1_createdResourceInfo?.resourceType[2] === '页漫') && (<FComponentsLib.FTextBtn
+            disabled={resourceCreatorPage.step2_rawPropertiesState === 'parsing'}
+            type='primary'
+            style={{ fontSize: 12, display: 'flex', alignItems: 'center', gap: 5 }}
+            onClick={() => {
+              // $prop.onClick_EditBtn && $prop.onClick_EditBtn();
+              dispatch<OnClick_step2_editCartoonBtn_Action>({
+                type: 'resourceCreatorPage/onClick_step2_editCartoonBtn',
+              });
+            }}
+          >
+            <FComponentsLib.FIcons.FEdit style={{ fontSize: 12 }} />
+            <span>编辑</span>
+          </FComponentsLib.FTextBtn>)
+        }
+
+        {/*{*/}
+        {/*  resourceCreatorPage.step1_createdResourceInfo?.resourceType[0] === '阅读'*/}
+        {/*  && resourceCreatorPage.step1_createdResourceInfo?.resourceType[1] === '文章' && (*/}
+        {/*    )*/}
+        {/*}*/}
 
 
         <FComponentsLib.FTextBtn
           type='danger'
+          style={{ fontSize: 12, display: 'flex', alignItems: 'center', gap: 5 }}
           // disabled={$prop.disabledOperations?.includes('remove')}
           onClick={async () => {
             // $prop.onClick_DeleteBtn && $prop.onClick_DeleteBtn();
@@ -330,7 +348,10 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
             });
           }}
           // className={styles.delete}
-        >{FI18n.i18nNext.t('remove')}</FComponentsLib.FTextBtn>
+        >
+          <FComponentsLib.FIcons.FDelete style={{ fontSize: 12 }} />
+          <span>{FI18n.i18nNext.t('remove')}</span>
+        </FComponentsLib.FTextBtn>
       </div>
     </div>
 

@@ -368,33 +368,58 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
 
             {
               resourceVersionCreatorPage.resourceInfo?.resourceType[0] === '阅读'
-              && resourceVersionCreatorPage.resourceInfo?.resourceType[1] === '文章' && (<FComponentsLib.FTextBtn
-                disabled={resourceVersionCreatorPage.rawPropertiesState === 'parsing'}
-                type='primary'
-                onClick={async () => {
-                  // dispatch<OnClick_OpenMarkdownBtn_Action>({
-                  //   type: 'resourceVersionCreatorPage/onClick_OpenMarkdownBtn',
-                  // });
+              && resourceVersionCreatorPage.resourceInfo?.resourceType[1] === '文章' && (<>
+                <FComponentsLib.FTextBtn
+                  disabled={resourceVersionCreatorPage.rawPropertiesState === 'parsing'}
+                  type='primary'
+                  style={{ fontSize: 12, display: 'flex', alignItems: 'center', gap: 5 }}
+                  onClick={async () => {
+                    // dispatch<OnClick_OpenMarkdownBtn_Action>({
+                    //   type: 'resourceVersionCreatorPage/onClick_OpenMarkdownBtn',
+                    // });
 
-                  await dispatch<OnTrigger_SaveDraft_Action>({
-                    type: 'resourceVersionCreatorPage/onTrigger_SaveDraft',
-                    payload: {
-                      showSuccessTip: false,
-                    },
-                  });
-                  await fResourceMarkdownEditor({
-                    resourceID: resourceVersionCreatorPage.resourceInfo?.resourceID || '',
-                    async onChange_Saved(saved: boolean) {
-                      set_isMarkdownEditorDirty(!saved);
-                    },
-                  });
-                  await set_isMarkdownEditorDirty(false);
-                  await dispatch<OnClose_MarkdownEditor_Action>({
-                    type: 'resourceVersionCreatorPage/onClose_MarkdownEditor',
-                  });
+                    await dispatch<OnTrigger_SaveDraft_Action>({
+                      type: 'resourceVersionCreatorPage/onTrigger_SaveDraft',
+                      payload: {
+                        showSuccessTip: false,
+                      },
+                    });
+                    await fResourceMarkdownEditor({
+                      resourceID: resourceVersionCreatorPage.resourceInfo?.resourceID || '',
+                      async onChange_Saved(saved: boolean) {
+                        set_isMarkdownEditorDirty(!saved);
+                      },
+                    });
+                    await set_isMarkdownEditorDirty(false);
+                    await dispatch<OnClose_MarkdownEditor_Action>({
+                      type: 'resourceVersionCreatorPage/onClose_MarkdownEditor',
+                    });
 
-                }}
-              >编辑</FComponentsLib.FTextBtn>)
+                  }}
+                >
+                  <FComponentsLib.FIcons.FEdit style={{ fontSize: 12 }} />
+                  <span>编辑</span>
+                </FComponentsLib.FTextBtn>
+
+                <FComponentsLib.FTextBtn
+                  type='primary'
+                  disabled={resourceVersionCreatorPage.rawPropertiesState === 'parsing'}
+                  style={{ fontSize: 12, display: 'flex', alignItems: 'center', gap: 5 }}
+                  onClick={() => {
+                    // self.location.href = FUtil.Format.completeUrlByDomain('qi')
+                    //   + `/v2/storages/files/${$prop.fileInfo?.sha1}/download?attachmentName=${$prop.fileInfo?.name}`;
+                    if (!resourceVersionCreatorPage.selectedFileInfo) {
+                      return;
+                    }
+                    // console.log(type, '98ieowjfkldjflksdjflksjdflkjsdlfkjsdlkj');
+                    self.location.href = FUtil.Format.completeUrlByDomain('qi')
+                      + `/v2/storages/files/${resourceVersionCreatorPage.selectedFileInfo?.sha1 || ''}/download?attachmentName=${resourceVersionCreatorPage.selectedFileInfo?.name || 'download'}`;
+                  }}
+                >
+                  <FComponentsLib.FIcons.FDownload style={{ fontSize: 12 }} />
+                  <span>下载</span>
+                </FComponentsLib.FTextBtn>
+              </>)
             }
 
             {
@@ -403,6 +428,7 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
                 || resourceVersionCreatorPage.resourceInfo?.resourceType[2] === '页漫') && (<FComponentsLib.FTextBtn
                 disabled={resourceVersionCreatorPage.rawPropertiesState === 'parsing'}
                 type='primary'
+                style={{ fontSize: 12, display: 'flex', alignItems: 'center', gap: 5 }}
                 onClick={() => {
                   // dispatch<OnClick_OpenCartoonBtn_Action>({
                   //   type: 'resourceVersionCreatorPage/onClick_OpenCartoonBtn',
@@ -411,12 +437,16 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
                     type: 'resourceVersionCreatorPage/onClick_OpenCartoonBtn',
                   });
                 }}
-              >编辑</FComponentsLib.FTextBtn>)
+              >
+                <FComponentsLib.FIcons.FEdit style={{ fontSize: 12 }} />
+                <span>编辑</span>
+              </FComponentsLib.FTextBtn>)
             }
 
 
             <FComponentsLib.FTextBtn
               type='danger'
+              style={{ fontSize: 12, display: 'flex', alignItems: 'center', gap: 5 }}
               // disabled={$prop.disabledOperations?.includes('remove')}
               onClick={async () => {
                 if (resourceVersionCreatorPage.customProperties.length > 0 || resourceVersionCreatorPage.customConfigurations.length > 0) {
@@ -437,7 +467,10 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
                 }
               }}
               // className={styles.delete}
-            >{FI18n.i18nNext.t('remove')}</FComponentsLib.FTextBtn>
+            >
+              <FComponentsLib.FIcons.FDelete style={{ fontSize: 12 }} />
+              <span>{FI18n.i18nNext.t('remove')}</span>
+            </FComponentsLib.FTextBtn>
           </div>
         </div>
 
