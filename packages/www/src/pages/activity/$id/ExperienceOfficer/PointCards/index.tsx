@@ -2,8 +2,9 @@ import * as React from 'react';
 import styles from './index.less';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
-import { Space } from 'antd';
+import { Modal, Space } from 'antd';
 import * as AHooks from 'ahooks';
+import { listRewardRecordInfos } from '../../../../../../../@freelog/tools-lib/src/service-API/activities';
 
 // import { useGetState } from '@/layouts/FBaseLayout';
 
@@ -20,8 +21,11 @@ function PointCards({}: PointCardsProps) {
       return;
     }
 
-    const { data } = await FServiceAPI.Operation.rankInfo({ coinAccountType: 2 });
-    console.log(data, 'asdfo9ijlkewjf;laksdjfksjdlkfjsdlkfjlkjl');
+    const { data: data_rankInfo } = await FServiceAPI.Operation.rankInfo({ coinAccountType: 2 });
+    console.log(data_rankInfo, 'asdfo9ijlkewjf;laksdjfksjdlkfjsdlkfjlkjl');
+
+    const { data: data_RewardRecord } = await FServiceAPI.Activity.listRewardRecordInfos();
+    console.log(data_RewardRecord, 'siwejflksd data_RewardRecord');
 
   });
 
@@ -71,8 +75,43 @@ function PointCards({}: PointCardsProps) {
     <div style={{ height: 40 }} />
     <Space size={30}>
       <div className={styles.h3}>每天12：00更新：最近更新{'更新数据时间'}</div>
-      <FComponentsLib.FTextBtn type={'primary'} style={{ fontSize: 12 }}>积分活动获取记录</FComponentsLib.FTextBtn>
+      <FComponentsLib.FTextBtn
+        type={'primary'}
+        style={{ fontSize: 12 }}
+      >积分活动获取记录</FComponentsLib.FTextBtn>
     </Space>
+
+    <Modal open={true} width={1000} title={'积分活动获取记录'} footer={null}>
+      <div className={styles.modalContent}>
+        <div className={styles.records}>
+          <div className={styles.recordTitle}>
+            <FComponentsLib.FContentText text={'奖励明细'} type={'additional2'} />
+            <FComponentsLib.FContentText text={'积分'} type={'additional2'} />
+          </div>
+          <div className={styles.recordRow}>
+            <div>
+              <FComponentsLib.FContentText text={'发行一个游戏类型资源'} type={'highlight'} style={{ fontSize: 12 }} />
+              <div style={{ height: 5 }} />
+              <FComponentsLib.FContentText text={'2023/07/07 12:00:00'} type={'additional2'} />
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 5, color: '#EE4040' }}>
+                <span style={{ fontSize: 12 }}>积分已扣除</span>
+                <FComponentsLib.FIcons.FInfo style={{ fontSize: 14 }} />
+              </div>
+              <div style={{ width: 30 }} />
+              <div style={{
+                color: '#42C28C',
+                fontSize: 14,
+                opacity: .4,
+              }}>+2
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Modal>
   </>);
 }
 
