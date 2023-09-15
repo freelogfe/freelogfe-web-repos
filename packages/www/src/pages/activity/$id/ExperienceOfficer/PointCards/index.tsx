@@ -92,13 +92,15 @@ function PointCards({}: PointCardsProps) {
     <div style={{ height: 40 }} />
     <Space size={30}>
       <div className={styles.h3}>每天12：00更新：最近更新{'更新数据时间'}</div>
-      <FComponentsLib.FTextBtn
-        type={'primary'}
-        style={{ fontSize: 12 }}
-        onClick={() => {
-          set$modalOpen(true);
-        }}
-      >积分活动获取记录</FComponentsLib.FTextBtn>
+      {
+        $isLogin && (<FComponentsLib.FTextBtn
+          type={'primary'}
+          style={{ fontSize: 12 }}
+          onClick={() => {
+            set$modalOpen(true);
+          }}
+        >积分活动获取记录</FComponentsLib.FTextBtn>)
+      }
     </Space>
 
     <Modal
