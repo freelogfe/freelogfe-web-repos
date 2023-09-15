@@ -16,10 +16,11 @@ interface SuccessProps extends RouteComponentProps<{ id: string; }> {
 
 function Success({ match, dispatch }: SuccessProps) {
 
-  const [$resourceInfo, set$resourceInfo] = FUtil.Hook.useGetState<null | {
+  const [$resourceInfo, set$resourceInfo, get$resourceInfo] = FUtil.Hook.useGetState<null | {
     cover: string;
     name: string;
     type: string[];
+    version: string;
   }>(null);
 
   AHooks.useMount(async () => {
@@ -29,6 +30,7 @@ function Success({ match, dispatch }: SuccessProps) {
       cover: data.coverImages[0] || '',
       name: data.resourceName,
       type: data.resourceType,
+      version: data.latestVersion,
     });
   });
 
@@ -78,6 +80,7 @@ function Success({ match, dispatch }: SuccessProps) {
         onClick={() => {
           history.replace(FUtil.LinkTo.resourceVersionInfo({
             resourceID: match.params.id,
+            version: get$resourceInfo()?.version,
           }));
         }}
       >管理我的资源</FComponentsLib.FTextBtn>
