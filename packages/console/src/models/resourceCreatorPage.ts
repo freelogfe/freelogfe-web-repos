@@ -351,7 +351,7 @@ const Model: ResourceCreatorPageModelType = {
         };
         const { data: data_info } = yield call(FServiceAPI.Resource.info, params1);
         if (!!data_info) {
-          nameErrorText = '资源名已存在';
+          nameErrorText = '资源授权标识已存在';
         }
       }
 
