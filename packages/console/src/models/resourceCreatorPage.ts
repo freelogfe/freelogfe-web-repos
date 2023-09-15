@@ -339,7 +339,7 @@ const Model: ResourceCreatorPageModelType = {
       }));
       let nameErrorText: string = '';
       if (resourceCreatorPage.step1_resourceName === '') {
-        nameErrorText = '请输入资源名称';
+        nameErrorText = '请输入资源授权标识';
       } else if (resourceCreatorPage.step1_resourceName.length > 60) {
         nameErrorText = '不多于60个字符';
       } else if (!FUtil.Regexp.RESOURCE_NAME.test(resourceCreatorPage.step1_resourceName)) {
