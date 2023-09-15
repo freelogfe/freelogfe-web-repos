@@ -2,11 +2,8 @@ import * as React from 'react';
 import styles from './index.less';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
-import { Modal, Space } from 'antd';
+import { Modal, Pagination, Space } from 'antd';
 import * as AHooks from 'ahooks';
-import { listRewardRecordInfos } from '../../../../../../../@freelog/tools-lib/src/service-API/activities';
-
-// import { useGetState } from '@/layouts/FBaseLayout';
 
 interface PointCardsProps {
 
@@ -15,6 +12,14 @@ interface PointCardsProps {
 function PointCards({}: PointCardsProps) {
 
   const [$isLogin, set$isLogin, get$isLogin] = FUtil.Hook.useGetState<boolean>(FUtil.Tool.getUserIDByCookies() !== -1);
+  const [$modalOpen, set$modalOpen, get$modalOpen] = FUtil.Hook.useGetState<boolean>(false);
+  const [$rewardRecord, set$rewardRecord, get$rewardRecord] = FUtil.Hook.useGetState<{
+    rewardNum: number;
+    status: 1 | 2 | 3 | 4;
+    title: string;
+    updateTime: string;
+  }[]>([]);
+  const [$current, set$current, get$current] = FUtil.Hook.useGetState<number>(1);
 
   AHooks.useMount(async () => {
     if (!get$isLogin()) {
@@ -24,9 +29,21 @@ function PointCards({}: PointCardsProps) {
     const { data: data_rankInfo } = await FServiceAPI.Operation.rankInfo({ coinAccountType: 2 });
     console.log(data_rankInfo, 'asdfo9ijlkewjf;laksdjfksjdlkfjsdlkfjlkjl');
 
-    const { data: data_RewardRecord } = await FServiceAPI.Activity.listRewardRecordInfos();
+    const { data: data_RewardRecord }: {
+      data: {
+        rewardNum: number;
+        status: 1 | 2 | 3 | 4;
+        title: string;
+        updateTime: string;
+      }[];
+    } = await FServiceAPI.Activity.listRewardRecordInfos();
     console.log(data_RewardRecord, 'siwejflksd data_RewardRecord');
-
+    set$rewardRecord(data_RewardRecord.map((rr) => {
+      return {
+        ...rr,
+        updateTime: FUtil.Format.formatDateTime(rr.updateTime, true),
+      };
+    }));
   });
 
   return (<>
@@ -78,37 +95,77 @@ function PointCards({}: PointCardsProps) {
       <FComponentsLib.FTextBtn
         type={'primary'}
         style={{ fontSize: 12 }}
+        onClick={() => {
+          set$modalOpen(true);
+        }}
       >积分活动获取记录</FComponentsLib.FTextBtn>
     </Space>
 
-    <Modal open={true} width={1000} title={'积分活动获取记录'} footer={null}>
+    <Modal
+      open={$modalOpen}
+      width={1000}
+      title={'积分活动获取记录'}
+      footer={null}
+      onCancel={() => {
+        set$modalOpen(false);
+      }}
+    >
       <div className={styles.modalContent}>
         <div className={styles.records}>
           <div className={styles.recordTitle}>
             <FComponentsLib.FContentText text={'奖励明细'} type={'additional2'} />
             <FComponentsLib.FContentText text={'积分'} type={'additional2'} />
           </div>
-          <div className={styles.recordRow}>
-            <div>
-              <FComponentsLib.FContentText text={'发行一个游戏类型资源'} type={'highlight'} style={{ fontSize: 12 }} />
-              <div style={{ height: 5 }} />
-              <FComponentsLib.FContentText text={'2023/07/07 12:00:00'} type={'additional2'} />
-            </div>
 
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 5, color: '#EE4040' }}>
-                <span style={{ fontSize: 12 }}>积分已扣除</span>
-                <FComponentsLib.FIcons.FInfo style={{ fontSize: 14 }} />
-              </div>
-              <div style={{ width: 30 }} />
-              <div style={{
-                color: '#42C28C',
-                fontSize: 14,
-                opacity: .4,
-              }}>+2
-              </div>
-            </div>
-          </div>
+          {
+            $rewardRecord
+              .filter((l, i) => {
+                return i > $current * 10 - 10 && i < $current * 10;
+              })
+              .map((rr, ri) => {
+                return (<div key={ri} className={styles.recordRow}>
+                  <div>
+                    <FComponentsLib.FContentText text={rr.title} type={'highlight'} style={{ fontSize: 12 }} />
+                    <div style={{ height: 5 }} />
+                    <FComponentsLib.FContentText text={rr.updateTime} type={'additional2'} />
+                  </div>
+
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    {
+                      rr.status === 4 && (<>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 5, color: '#EE4040' }}>
+                          <span style={{ fontSize: 12 }}>积分已扣除</span>
+                          <FComponentsLib.FIcons.FInfo style={{ fontSize: 14 }} />
+                        </div>
+                        <div style={{ width: 30 }} />
+                      </>)
+                    }
+                    <div style={{
+                      color: '#42C28C',
+                      fontSize: 14,
+                      opacity: rr.status === 4 ? .4 : 1,
+                    }}>+{rr.rewardNum}
+                    </div>
+                  </div>
+                </div>);
+              })
+          }
+
+        </div>
+
+        <div style={{ height: 20 }} />
+        <div style={{ width: 820, display: 'flex', justifyContent: 'flex-end' }}>
+          <Pagination
+            current={$current}
+            size='small'
+            total={$rewardRecord.length}
+            pageSize={10}
+            hideOnSinglePage={true}
+            showSizeChanger={false}
+            onChange={(value) => {
+              set$current(value);
+            }}
+          />
         </div>
       </div>
     </Modal>
