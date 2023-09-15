@@ -15,10 +15,13 @@ function PointCards({}: PointCardsProps) {
 
   const [$isLogin, set$isLogin, get$isLogin] = FUtil.Hook.useGetState<boolean>(FUtil.Tool.getUserIDByCookies() !== -1);
 
-  AHooks.useMount(() => {
+  AHooks.useMount(async () => {
     if (!get$isLogin()) {
       return;
     }
+
+    const { data } = await FServiceAPI.Operation.rankInfo({ coinAccountType: 2 });
+    console.log(data, 'asdfo9ijlkewjf;laksdjfksjdlkfjsdlkfjlkjl');
 
   });
 

@@ -257,3 +257,30 @@ export function getRewardRecordInfos(params: GetRewardRecordInfosParamsType) {
     data: params,
   });
 }
+
+// 个人奖励领取记录
+interface ListRewardRecordInfosParamsType {
+  rewardGroupCodes?: string[];
+  statusArray?: number[];
+}
+
+export function listRewardRecordInfos(params: ListRewardRecordInfosParamsType = {}) {
+  return FUtil.Request({
+    method: 'POST',
+    url: `/v2/activities/facade/listRewardRecordInfos`,
+    data: params,
+  });
+}
+
+// 统计个人的奖励情况
+interface StatisticRewardRecordsParamsType {
+  codes: string[];
+}
+
+export function statisticRewardRecords(params: StatisticRewardRecordsParamsType) {
+  return FUtil.Request({
+    method: 'POST',
+    url: `/v2/activities/facade/statisticRewardRecords`,
+    data: params,
+  });
+}

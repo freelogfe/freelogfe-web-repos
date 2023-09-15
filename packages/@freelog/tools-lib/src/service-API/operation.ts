@@ -27,3 +27,16 @@ export function recordRank({...params}: RecordRankParamsType) {
     data: params,
   });
 }
+
+// 收益详情
+interface RankInfoParamsType {
+  coinAccountType: 1 | 2;
+}
+
+export function rankInfo({...params}: RankInfoParamsType) {
+  return FUtil.Request({
+    method: 'POST',
+    url: `/v2/activities/coin/record/rankInfo`,
+    data: params,
+  });
+}
