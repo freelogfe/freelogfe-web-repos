@@ -141,18 +141,23 @@ export function PolicyCard({
       >
         <div className={styles.ModalTile}>
           <FComponentsLib.FTitleText text={fullInfo.policyName} type='h2' />
-          <div style={{ width: 20 }} />
-          <label style={{ color: fullInfo.status === 1 ? '#42C28C' : '#B4B6BA' }}>
-            {FI18n.i18nNext.t('btn_activate_auth_plan')}
-          </label>
-          <div style={{ width: 10 }} />
-          <FSwitch
-            disabled={onlineDisable}
-            checked={fullInfo.status === 1}
-            onChange={(value) => {
-              onOnlineChange && onOnlineChange(value);
-            }}
-          />
+
+          {
+            activeBtnShow && (<>
+              <div style={{ width: 20 }} />
+              <label style={{ color: fullInfo.status === 1 ? '#42C28C' : '#B4B6BA' }}>
+                {FI18n.i18nNext.t('btn_activate_auth_plan')}
+              </label>
+              <div style={{ width: 10 }} />
+              <FSwitch
+                disabled={onlineDisable}
+                checked={fullInfo.status === 1}
+                onChange={(value) => {
+                  onOnlineChange && onOnlineChange(value);
+                }}
+              />
+            </>)
+          }
         </div>
         <div style={{ padding: '0 20px' }}>
           <FPolicyDisplay containerHeight={770} fullInfo={fullInfo} />

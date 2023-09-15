@@ -140,8 +140,10 @@ function Step4({ dispatch, resourceCreatorPage }: Step4Props) {
         disabled={resourceCreatorPage.step4_resourceTitle.length > 100}
         type={'primary'}
         onClick={async () => {
-          set$inProcessModal(true);
-          await FUtil.Tool.promiseSleep(500);
+          if (resourceCreatorPage.step3_policies.length > 0) {
+            set$inProcessModal(true);
+            await FUtil.Tool.promiseSleep(500);
+          }
           dispatch<OnClick_step4_submitBtn_Action>({
             type: 'resourceCreatorPage/onClick_step4_submitBtn',
           });
