@@ -498,11 +498,11 @@ function Header({
   return (
     <div className={styles.Header}>
       <div style={{ display: 'flex', alignItems: 'center' }}>
-        <FComponentsLib.FTitleText
+        <FComponentsLib.FContentText
           text={`当前版本 ${version}`}
-          type='h1'
+          type={'highlight'}
           singleRow
-          style={{ maxWidth: 750 }}
+          style={{ maxWidth: 750, fontSize: 16 }}
         />
         <div style={{ width: 8 }} />
         <FComponentsLib.FDropdown
@@ -531,9 +531,15 @@ function Header({
         </FComponentsLib.FDropdown>
         <div style={{ width: 30 }} />
         <Badge count={hasDraft ? '草稿' : 0} size={'small'}>
-          <FComponentsLib.FTextBtn onClick={() => {
-            self.open(FUtil.LinkTo.resourceVersionCreator({ resourceID: resourceID }));
-          }}>更新版本</FComponentsLib.FTextBtn>
+          <FComponentsLib.FTextBtn
+            style={{ display: 'flex', alignItems: 'center', gap: 5 }}
+            onClick={() => {
+              self.open(FUtil.LinkTo.resourceVersionCreator({ resourceID: resourceID }));
+            }}
+          >
+            <FComponentsLib.FIcons.FUpdateVersion style={{ fontSize: 14 }} />
+            <span>更新版本</span>
+          </FComponentsLib.FTextBtn>
         </Badge>
       </div>
       <div style={{ height: 10 }} />
@@ -570,7 +576,7 @@ function Header({
                   // onClick={() => onClickDownload && onClickDownload()}
                 >
                   <FComponentsLib.FIcons.FDownload
-                    style={{ fontSize: 16, fontWeight: 600 }}
+                    style={{ fontSize: 12, fontWeight: 600 }}
                   />
                 </FComponentsLib.FTextBtn>
               </div>
@@ -582,7 +588,7 @@ function Header({
                   onClick={() => onClickDownload && onClickDownload()}
                 >
                   <FComponentsLib.FIcons.FDownload
-                    style={{ fontSize: 16, fontWeight: 600 }}
+                    style={{ fontSize: 12, fontWeight: 600 }}
                   />
                 </FComponentsLib.FTextBtn>
               </div>

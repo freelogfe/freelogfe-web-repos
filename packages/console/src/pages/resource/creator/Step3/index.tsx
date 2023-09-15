@@ -35,7 +35,7 @@ function Step3({ dispatch, resourceCreatorPage }: Step3Props) {
                 payload: {},
               });
             }}>
-            <FComponentsLib.FIcons.FConfiguration style={{ fontSize: 14 }} />
+            <FComponentsLib.FIcons.FContract style={{ fontSize: 14 }} />
             <span>添加策略</span>
           </FComponentsLib.FTextBtn>)
         }

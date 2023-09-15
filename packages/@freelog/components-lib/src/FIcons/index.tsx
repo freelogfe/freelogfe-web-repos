@@ -76,6 +76,7 @@ import FUnbinding from './FUnbinding';
 import FUp from './FUp';
 import FUpcast from './FUpcast';
 import FUpdate from './FUpdate';
+import FUpdateVersion from './FUpdateVersion';
 import FUser from './FUser';
 import FWarning from './FWarning';
 import FWeChat from './FWeChat';
@@ -157,6 +158,7 @@ const FIcons = {
     FUp,
     FUpcast,
     FUpdate,
+    FUpdateVersion,
     FUser,
     FWarning,
     FWeChat,
