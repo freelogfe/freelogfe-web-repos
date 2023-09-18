@@ -8,8 +8,9 @@ interface FModal extends ModalProps {
   children?: React.ReactNode | React.ReactNodeArray;
 }
 
-function FModal({ children, ...props }: FModal) {
+function FModal({ visible, children, ...props }: FModal) {
   return (<Modal
+    open={visible}
     className={styles.styles}
     {...props}
   >{children}</Modal>);

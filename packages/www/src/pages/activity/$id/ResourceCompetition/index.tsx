@@ -61,7 +61,7 @@ function ResourceCompetition({
 
       <FModal
         width={1000}
-        visible={modalVisible}
+        open={modalVisible}
         footer={null}
         centered
         onCancel={() => {

@@ -72,7 +72,7 @@ const Model: ActivityDetailsPageModelType = {
         _id: payload.activityID,
       };
       const { ret, errCode, data } = yield call(FServiceAPI.Activity.find4Client, params);
-      console.log(data, 'data sdio9fjasdlkfjl;sdjflkjl');
+      // console.log(data, 'data sdio9fjasdlkfjl;sdjflkjl');
       if (ret !== 0 || errCode !== 0 || !data) {
         yield put<ChangeAction>({
           type: 'change',
