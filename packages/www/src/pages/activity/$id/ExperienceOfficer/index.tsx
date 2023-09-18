@@ -20,6 +20,7 @@ import PointCards from './PointCards';
 import RankingList from './RankingList';
 import LuckyPrize from './LuckyPrize';
 import moment from 'moment';
+import TaskList from '@/pages/activity/$id/ExperienceOfficer/TaskList';
 
 interface ExperienceOfficerProps {
   activityDetailsPage: ActivityDetailsPageModelState;
@@ -280,31 +281,32 @@ function ExperienceOfficer({ activityDetailsPage }: ExperienceOfficerProps) {
         <div style={{ height: 60 }} />
         <img style={{ width: 334 }} src={img_point2} alt={''} />
         <div style={{ height: 40 }} />
-        <Table
-          style={{ width: '100%' }}
-          columns={[
-            {
-              title: '任务详情',
-              dataIndex: 'task',
-              key: 'task',
-            },
-            {
-              title: '完成次数',
-              dataIndex: 'count',
-              key: 'count',
-            },
-            {
-              title: '获取积分',
-              dataIndex: 'point',
-              key: 'point',
-            },
-            {
-              title: '快捷入口',
-              dataIndex: 'entry',
-              key: 'entry',
-            },
-          ]}
-        />
+        <TaskList />
+        {/*<Table*/}
+        {/*  style={{ width: '100%' }}*/}
+        {/*  columns={[*/}
+        {/*    {*/}
+        {/*      title: '任务详情',*/}
+        {/*      dataIndex: 'task',*/}
+        {/*      key: 'task',*/}
+        {/*    },*/}
+        {/*    {*/}
+        {/*      title: '完成次数',*/}
+        {/*      dataIndex: 'count',*/}
+        {/*      key: 'count',*/}
+        {/*    },*/}
+        {/*    {*/}
+        {/*      title: '获取积分',*/}
+        {/*      dataIndex: 'point',*/}
+        {/*      key: 'point',*/}
+        {/*    },*/}
+        {/*    {*/}
+        {/*      title: '快捷入口',*/}
+        {/*      dataIndex: 'entry',*/}
+        {/*      key: 'entry',*/}
+        {/*    },*/}
+        {/*  ]}*/}
+        {/*/>*/}
         <div style={{ height: 60 }} />
       </div>
       <div style={{ height: 50 }} />

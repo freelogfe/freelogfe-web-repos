@@ -10,10 +10,14 @@ interface TaskListProps {
 function TaskList({}: TaskListProps) {
 
   AHooks.useMount(async () => {
-    await FServiceAPI.Activity.statisticRewardRecords({ codes: [] });
+    const { data } = await FServiceAPI.Activity.statisticRewardRecords({ codes: [] });
+    console.log(data, 'TaskList dataw8eiojsdflk ');
+
   });
 
-  return (<div>__Template</div>);
+  return (<div>
+
+  </div>);
 }
 
 export default TaskList;

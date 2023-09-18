@@ -4,6 +4,7 @@ import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 import { Modal, Pagination, Space } from 'antd';
 import * as AHooks from 'ahooks';
+import moment, { Moment } from 'moment';
 
 interface PointCardsProps {
 
@@ -20,14 +21,36 @@ function PointCards({}: PointCardsProps) {
     updateTime: string;
   }[]>([]);
   const [$current, set$current, get$current] = FUtil.Hook.useGetState<number>(1);
+  const [$statistics, set$statistics, get$statistics] = FUtil.Hook.useGetState<{
+    score: number;
+    rank: number;
+    gap: number;
+  } | null>(null);
 
   AHooks.useMount(async () => {
     if (!get$isLogin()) {
       return;
     }
 
-    const { data: data_rankInfo } = await FServiceAPI.Operation.rankInfo({ coinAccountType: 2 });
+    const { data: data_rankInfo }: {
+      data: {
+        balance: number;
+        beforeBalance: number;
+        sortNum: number;
+      }
+    } = await FServiceAPI.Operation.rankInfo({
+      coinAccountType: 2,
+      // @ts-ignore
+      limitTime: moment().format('YYYY-MM-DD HH:mm:ss'),
+    });
     console.log(data_rankInfo, 'asdfo9ijlkewjf;laksdjfksjdlkfjsdlkfjlkjl');
+    if (data_rankInfo) {
+      set$statistics({
+        score: Number(data_rankInfo.balance),
+        rank: data_rankInfo.sortNum,
+        gap: data_rankInfo.sortNum,
+      });
+    }
 
     const { data: data_RewardRecord }: {
       data: {
@@ -37,7 +60,7 @@ function PointCards({}: PointCardsProps) {
         updateTime: string;
       }[];
     } = await FServiceAPI.Activity.listRewardRecordInfos();
-    console.log(data_RewardRecord, 'siwejflksd data_RewardRecord');
+    // console.log(data_RewardRecord, 'siwejflksd data_RewardRecord');
     set$rewardRecord(data_RewardRecord.map((rr) => {
       return {
         ...rr,
@@ -65,23 +88,23 @@ function PointCards({}: PointCardsProps) {
             <FComponentsLib.FContentText type={'additional2'} text={'体验官积分'} />
             <div className={styles.pointCardPoint}>
               <div>分</div>
-              <div>60</div>
+              <div>{$statistics?.score || '--'}</div>
               <div>分</div>
             </div>
           </div>
           <div className={styles.pointCard}>
-            <FComponentsLib.FContentText type={'additional2'} text={'体验官积分'} />
+            <FComponentsLib.FContentText type={'additional2'} text={'体验官排名'} />
             <div className={styles.pointCardPoint}>
               <div>分</div>
-              <div>180</div>
+              <div>{$statistics?.rank || '--'}</div>
               <div>位</div>
             </div>
           </div>
           <div className={styles.pointCard}>
-            <FComponentsLib.FContentText type={'additional2'} text={'体验官积分'} />
+            <FComponentsLib.FContentText type={'additional2'} text={'距离前一名'} />
             <div className={styles.pointCardPoint}>
               <div>分</div>
-              <div>30</div>
+              <div>{$statistics?.gap || '--'}</div>
               <div>分</div>
             </div>
           </div>
