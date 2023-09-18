@@ -43,7 +43,7 @@ function PointCards({}: PointCardsProps) {
       // @ts-ignore
       limitTime: moment().format('YYYY-MM-DD HH:mm:ss'),
     });
-    console.log(data_rankInfo, 'asdfo9ijlkewjf;laksdjfksjdlkfjsdlkfjlkjl');
+    // console.log(data_rankInfo, 'asdfo9ijlkewjf;laksdjfksjdlkfjsdlkfjlkjl');
     if (data_rankInfo) {
       set$statistics({
         score: Number(data_rankInfo.balance),
