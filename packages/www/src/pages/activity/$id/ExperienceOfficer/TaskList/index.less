@@ -1,3 +1,29 @@
 @import '../../../../../config.less';
 
+.table {
+  width: 820px;
 
+  .row {
+    border-bottom: 1px solid #EAEAEA;
+    display: flex;
+    align-items: center;
+    //justify-content: space-between;
+    height: 50px;
+
+    & > div:nth-child(1) {
+      width: 40%;
+    }
+
+    & > div:nth-child(2) {
+      width: 20%;
+    }
+
+    & > div:nth-child(3) {
+      width: 20%;
+    }
+
+    & > div:nth-child(4) {
+      width: 20%;
+    }
+  }
+}
