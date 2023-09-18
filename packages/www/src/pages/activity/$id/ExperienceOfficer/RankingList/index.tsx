@@ -4,6 +4,7 @@ import * as AHooks from 'ahooks';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 import { Modal, Space, Pagination } from 'antd';
+import moment, { Moment } from 'moment';
 
 interface RankingListProps {
 
@@ -28,6 +29,7 @@ function RankingList({}: RankingListProps) {
   const [$modalOpen, set$modalOpen, get$modalOpen] = FUtil.Hook.useGetState<boolean>(false);
 
   AHooks.useMount(async () => {
+
     const { ret, errCode, msg, data }: {
       ret: number;
       errCode: number;
@@ -40,6 +42,8 @@ function RankingList({}: RankingListProps) {
     } = await FServiceAPI.Operation.recordRank({
       coinAccountType: 2,
       limit: 8,
+      // @ts-ignore
+      limitTime: moment().format('YYYY-MM-DD HH:mm:ss'),
     });
 
     set$list(data.map((d, i) => {
