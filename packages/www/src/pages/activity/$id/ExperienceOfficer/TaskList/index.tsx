@@ -326,7 +326,7 @@ function TaskList({}: TaskListProps) {
                   />
                 </div>);
               }
-              return (<div className={styles.row} style={{ marginLeft: 20 }}>
+              return (<div className={styles.row} style={{ marginLeft: 20 }} key={rt.code}>
                 <FComponentsLib.FContentText
                   text={rt.title}
                   type={'normal'}
