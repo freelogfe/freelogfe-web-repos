@@ -26,7 +26,7 @@ function PointCards({}: PointCardsProps) {
     rank: number;
     gap: number;
   } | null>(null);
-  const [$updateTime, set$updateTime, get$updateTime] = FUtil.Hook.useGetState<string>(moment().hour(-12).format('YYYY-MM-DD') + ' 12:00:00')
+  const [$updateTime, set$updateTime, get$updateTime] = FUtil.Hook.useGetState<string>(moment().hour(-12).format('YYYY-MM-DD') + ' 12:00:00');
 
   AHooks.useMount(async () => {
     // console.log(, '89wieojskdjflksdjlfkjl');
@@ -61,7 +61,9 @@ function PointCards({}: PointCardsProps) {
         title: string;
         updateTime: string;
       }[];
-    } = await FServiceAPI.Activity.listRewardRecordInfos();
+    } = await FServiceAPI.Activity.listRewardRecordInfos({
+      rewardGroupCodes: ['RG00008'],
+    });
     // console.log(data_RewardRecord, 'siwejflksd data_RewardRecord');
     set$rewardRecord(data_RewardRecord.map((rr) => {
       return {
@@ -90,7 +92,7 @@ function PointCards({}: PointCardsProps) {
             <FComponentsLib.FContentText type={'additional2'} text={'体验官积分'} />
             <div className={styles.pointCardPoint}>
               <div>分</div>
-              <div>{$statistics?.score || '--'}</div>
+              <div>{$statistics?.score || 0}</div>
               <div>分</div>
             </div>
           </div>
@@ -98,7 +100,7 @@ function PointCards({}: PointCardsProps) {
             <FComponentsLib.FContentText type={'additional2'} text={'体验官排名'} />
             <div className={styles.pointCardPoint}>
               <div>分</div>
-              <div>{$statistics?.rank || '--'}</div>
+              <div>{$statistics?.rank || 0}</div>
               <div>位</div>
             </div>
           </div>
@@ -106,7 +108,7 @@ function PointCards({}: PointCardsProps) {
             <FComponentsLib.FContentText type={'additional2'} text={'距离前一名'} />
             <div className={styles.pointCardPoint}>
               <div>分</div>
-              <div>{$statistics?.gap || '--'}</div>
+              <div>{$statistics?.gap || 0}</div>
               <div>分</div>
             </div>
           </div>
