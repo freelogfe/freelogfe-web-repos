@@ -165,6 +165,7 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
       <div className={styles.styles}>
         {
           !isCartoon && (<LocalUpload
+            style={{ width: '100%', flexGrow: 1 }}
             resourceTypeCode={resourceCreatorPage.step1_createdResourceInfo?.resourceTypeCode || ''}
             onSucceed={(value) => {
               dispatch<OnSucceed_step2_localUpload_Action>({
@@ -180,6 +181,7 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
 
         {
           !isCartoon && (<StorageSpace
+            style={{ width: '100%', flexGrow: 1 }}
             resourceTypeCode={resourceCreatorPage.step1_createdResourceInfo?.resourceTypeCode || ''}
             onSucceed={(value) => {
               dispatch<OnSucceed_step2_storageSpace_Action>({
@@ -190,11 +192,11 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
           />)
         }
 
-
         {
           !isCartoon && resourceCreatorPage.step1_createdResourceInfo?.resourceType[0] === '阅读'
           && resourceCreatorPage.step1_createdResourceInfo?.resourceType[1] === '文章'
           && (<MarkdownEditor
+            style={{ width: '100%', flexGrow: 1 }}
             onClickBtn={() => {
               dispatch<OnClick_step2_editMarkdownBtn_Action>({
                 type: 'resourceCreatorPage/onClick_step2_editMarkdownBtn',
@@ -205,6 +207,7 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
 
         {
           isCartoon && (<CartoonEditor
+            style={{ width: '100%', flexGrow: 1 }}
             onClickBtn={() => {
               dispatch<OnClick_step2_editCartoonBtn_Action>({
                 type: 'resourceCreatorPage/onClick_step2_editCartoonBtn',

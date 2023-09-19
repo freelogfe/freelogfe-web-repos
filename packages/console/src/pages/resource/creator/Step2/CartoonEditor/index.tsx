@@ -5,11 +5,13 @@ import img_markdown from '@/assets/cartoon-editor-icons.png';
 import FComponentsLib from '@freelog/components-lib';
 
 interface CartoonEditorProps {
+  style?: React.CSSProperties;
+
   onClickBtn?(): void;
 }
 
-function CartoonEditor({ onClickBtn }: CartoonEditorProps) {
-  return (<div className={styles.cartoonEditor}>
+function CartoonEditor({ style, onClickBtn }: CartoonEditorProps) {
+  return (<div className={styles.cartoonEditor} style={style}>
     <img
       src={img_markdown}
       alt={''}

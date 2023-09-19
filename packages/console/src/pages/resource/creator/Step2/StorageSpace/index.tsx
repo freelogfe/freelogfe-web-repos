@@ -7,9 +7,11 @@ import { useGetState } from '@/utils/hooks';
 import fMessage from '@/components/fMessage';
 import FModal from '@/components/FModal';
 import FTable from '@/components/FTable';
+
 // import { Progress } from 'antd';
 
 interface StorageSpaceProps {
+  style?: React.CSSProperties;
   resourceTypeCode: string;
 
   onSucceed?(value: {
@@ -51,14 +53,14 @@ const initStates: StorageSpaceStates = {
   $objectInfo: null,
 };
 
-function StorageSpace({ resourceTypeCode, onSucceed }: StorageSpaceProps) {
+function StorageSpace({ style = {}, resourceTypeCode, onSucceed }: StorageSpaceProps) {
 
   const [$selfUsedResource, set$selfUsedResource, get$selfUsedResource] = useGetState<StorageSpaceStates['$selfUsedResource']>(initStates['$selfUsedResource']);
   const [$otherUsedResource, set$otherUsedResource, get$otherUsedResource] = useGetState<StorageSpaceStates['$otherUsedResource']>(initStates['$otherUsedResource']);
   const [$objectInfo, set$objectInfo, get$objectInfo] = useGetState<StorageSpaceStates['$objectInfo']>(initStates['$objectInfo']);
 
   return (<>
-    <div className={styles.storageSpace}>
+    <div className={styles.storageSpace} style={style}>
       <FComponentsLib.FIcons.FStorageSpace style={{ fontSize: 60 }} />
       <div style={{ height: 40 }} />
       <FComponentsLib.FContentText

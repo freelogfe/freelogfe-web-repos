@@ -52,10 +52,10 @@ import fAddCustomOptions from '@/components/fAddCustomOptions';
 import VersionInput from '@/pages/resource/version/creator/$id/VersionInput';
 import FPrompt from '@/components/FPrompt';
 import FSkeletonNode from '@/components/FSkeletonNode';
-import {
-  OnClick_step2_editCartoonBtn_Action,
-  OnClick_step2_editMarkdownBtn_Action,
-} from '@/models/resourceCreatorPage';
+// import {
+//   OnClick_step2_editCartoonBtn_Action,
+//   OnClick_step2_editMarkdownBtn_Action,
+// } from '@/models/resourceCreatorPage';
 
 interface VersionCreatorProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -161,6 +161,7 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
       <div className={styles.styles}>
         {
           !isCartoon && (<LocalUpload
+            style={{ width: '100%', flexGrow: 1 }}
             resourceTypeCode={resourceVersionCreatorPage.resourceInfo?.resourceTypeCode || ''}
             onSucceed={(value) => {
               dispatch<OnSucceed_UploadFile_Action>({
@@ -176,6 +177,7 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
 
         {
           !isCartoon && (<StorageSpace
+            style={{ width: '100%', flexGrow: 1 }}
             resourceTypeCode={resourceVersionCreatorPage.resourceInfo?.resourceTypeCode || ''}
             onSucceed={(value) => {
               dispatch<OnSucceed_ImportObject_Action>({
@@ -195,6 +197,7 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
           !isCartoon && resourceVersionCreatorPage.resourceInfo?.resourceType[0] === '阅读'
           && resourceVersionCreatorPage.resourceInfo?.resourceType[1] === '文章'
           && (<MarkdownEditor
+            style={{ width: '100%', flexGrow: 1 }}
             onClickBtn={() => {
               // dispatch<OnClick_step2_editMarkdownBtn_Action>({
               //   type: 'resourceCreatorPage/onClick_step2_editMarkdownBtn',
@@ -206,6 +209,7 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
 
         {
           isCartoon && (<CartoonEditor
+            style={{ width: '100%', flexGrow: 1 }}
             onClickBtn={() => {
               // dispatch<OnClick_step2_editCartoonBtn_Action>({
               //   type: 'resourceCreatorPage/onClick_step2_editCartoonBtn',

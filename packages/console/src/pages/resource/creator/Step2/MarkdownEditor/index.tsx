@@ -3,14 +3,17 @@ import styles from './index.less';
 import img from '@/assets/file-object.svg';
 import img_markdown from '@/assets/createVersion_markdown.png';
 import FComponentsLib from '@freelog/components-lib';
-import fResourceMarkdownEditor from '@/components/fResourceMarkdownEditor';
+
+// import fResourceMarkdownEditor from '@/components/fResourceMarkdownEditor';
 
 interface MarkdownEditorProps {
+  style?: React.CSSProperties;
+
   onClickBtn?(): void;
 }
 
-function MarkdownEditor({ onClickBtn }: MarkdownEditorProps) {
-  return (<div className={styles.markdownEditor}>
+function MarkdownEditor({ style, onClickBtn }: MarkdownEditorProps) {
+  return (<div className={styles.markdownEditor} style={style}>
     <img
       src={img_markdown}
       alt={''}

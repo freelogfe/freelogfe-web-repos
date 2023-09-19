@@ -13,6 +13,7 @@ import { Progress } from 'antd';
 
 interface LocalUploadProps {
   resourceTypeCode: string;
+  style?: React.CSSProperties;
 
   onSucceed?(value: { sha1: string; fileName: string }): void;
 }
@@ -48,7 +49,7 @@ const initStates: LocalUploadStates = {
   $uploadingProgress: null,
 };
 
-function LocalUpload({ resourceTypeCode, onSucceed }: LocalUploadProps) {
+function LocalUpload({ style, resourceTypeCode, onSucceed }: LocalUploadProps) {
 
   const uploadCancelHandler = React.useRef<any>();
   const [$accept, set$accept, get$accept] = useGetState<LocalUploadStates['$accept']>(initStates['$accept']);
@@ -79,7 +80,7 @@ function LocalUpload({ resourceTypeCode, onSucceed }: LocalUploadProps) {
   });
 
   return (<>
-    <div className={styles.localUpload}>
+    <div className={styles.localUpload} style={style}>
       <FComponentsLib.FIcons.FLocalUpload style={{ fontSize: 60 }} />
       <div style={{ height: 40 }} />
       <FComponentsLib.FContentText text={'选择本地文件作为发行对象'} type={'additional2'} />
