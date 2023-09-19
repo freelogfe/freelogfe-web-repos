@@ -62,6 +62,7 @@ import FPentacle from './FPentacle';
 import FPentagram from './FPentagram';
 import FPlayer from './FPlayer';
 import FPlus from './FPlus';
+import FPolicy from './FPolicy';
 import FProperty from './FProperty';
 import FRedo from './FRedo';
 import FResource from './FResource';
@@ -144,6 +145,7 @@ const FIcons = {
     FPentagram,
     FPlayer,
     FPlus,
+    FPolicy,
     FProperty,
     FRedo,
     FResource,

@@ -47,6 +47,7 @@ function Policy({ dispatch, resourceAuthPage, match }: PolicyProps) {
 
   });
 
+
   return (<>
     <div>
       <div style={{ height: 40 }} />
@@ -66,7 +67,8 @@ function Policy({ dispatch, resourceAuthPage, match }: PolicyProps) {
                   type: 'resourceAuthPage/onAdd_Policy',
                 });
               }}>
-              <FComponentsLib.FIcons.FContract style={{ fontSize: 14 }} />
+              {/*@ts-ignore*/}
+              <FComponentsLib.FIcons.FPolicy style={{ fontSize: 14 }} />
               <span>添加策略</span>
             </FComponentsLib.FTextBtn>)
           }
