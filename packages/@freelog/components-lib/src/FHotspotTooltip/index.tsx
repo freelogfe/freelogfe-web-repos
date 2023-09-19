@@ -21,7 +21,8 @@ type ContentKey = 'header.gotoConsoleBtn'
     | 'resourceDetailPage.checkPolicy'
     | 'nodeManager.nodeLink'
     | 'exhibitDetailPage.onlineSwitch'
-    | 'exhibitDetailPage.createFirstPolicy';
+    | 'exhibitDetailPage.createFirstPolicy'
+    | 'resourceVersionEditorPage.noVersionAndCreateVersion';
 
 type ContentValue = 'show' | 'hide';
 
@@ -47,6 +48,7 @@ const defaultContent: HotspotTooltip_LocalStorage_Content = {
     'nodeManager.nodeLink': 'show',
     'exhibitDetailPage.onlineSwitch': 'hide',
     'exhibitDetailPage.createFirstPolicy': 'show',
+    'resourceVersionEditorPage.noVersionAndCreateVersion': 'show',
 };
 
 function getHotspotTooltip_LocalStorage_Content(key: ContentKey): ContentValue | undefined {

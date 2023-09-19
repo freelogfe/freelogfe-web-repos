@@ -94,15 +94,52 @@ function VersionInfo({ dispatch, resourceVersionEditorPage, match }: VersionInfo
     });
   }
 
+  // if (resourceVersionEditorPage.version === '') {
+  //   return (<FNoDataTip
+  //     height={'calc(100vh - 70px)'}
+  //     tipText={'上传资源，开启授权之旅'}
+  //     btnText={'上传资源'}
+  //     onClick={() => {
+  //       self.open(FUtil.LinkTo.resourceVersionCreator({ resourceID: match.params.id }));
+  //     }}
+  //   />);
+  // }
   if (resourceVersionEditorPage.version === '') {
-    return (<FNoDataTip
-      height={'calc(100vh - 70px)'}
-      tipText={'上传资源，开启授权之旅'}
-      btnText={'上传资源'}
-      onClick={() => {
-        self.open(FUtil.LinkTo.resourceVersionCreator({ resourceID: match.params.id }));
-      }}
-    />);
+    return (<div
+      className={styles.noData}
+      style={{ height: 'calc(100vh - 70px)' }}
+    >
+      <div />
+      <div>
+        <FComponentsLib.FTipText
+          type='first'
+          text={'上传资源，开启授权之旅'}
+        />
+
+        <div style={{ height: 30 }} />
+        <FComponentsLib.FHotspotTooltip
+          id={'resourceVersionEditorPage.noVersionAndCreateVersion'}
+          style={{ left: -44, top: 8 }}
+          text={FI18n.i18nNext.t('hotpots_editresource_btn_createnewversion')}
+          onMount={() => {
+            FComponentsLib.fSetHotspotTooltipVisible('resourceVersionEditorPage.noVersionAndCreateVersion', {
+              value: false,
+              effectiveImmediately: false,
+              onlyNullish: false,
+            });
+          }}
+        >
+          <FComponentsLib.FRectBtn
+            size='large'
+            className={styles.btn}
+            onClick={() => {
+              self.open(FUtil.LinkTo.resourceVersionCreator({ resourceID: match.params.id }));
+            }}
+          >上传资源</FComponentsLib.FRectBtn>
+        </FComponentsLib.FHotspotTooltip>
+      </div>
+      <div />
+    </div>);
   }
 
   return (<>
