@@ -48,7 +48,7 @@ function RankingList({ deadline }: RankingListProps) {
     });
 
     set$list(data.map((d, i) => {
-      let award: 'gold' | 'silver' | 'copper' = '';
+      let award: 'gold' | 'silver' | 'copper' | '' = '';
       if (i < 1) {
         award = 'gold';
       } else if (i < 3) {
