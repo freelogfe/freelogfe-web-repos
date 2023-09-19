@@ -48,9 +48,9 @@ function PointCards({}: PointCardsProps) {
     // console.log(data_rankInfo, 'asdfo9ijlkewjf;laksdjfksjdlkfjsdlkfjlkjl');
     if (data_rankInfo) {
       set$statistics({
-        score: Number(data_rankInfo.balance),
+        score: data_rankInfo.balance,
         rank: data_rankInfo.sortNum,
-        gap: data_rankInfo.sortNum,
+        gap: data_rankInfo.beforeBalance,
       });
     }
 
