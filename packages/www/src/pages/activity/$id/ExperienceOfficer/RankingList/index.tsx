@@ -7,10 +7,10 @@ import { Modal, Space, Pagination } from 'antd';
 import moment, { Moment } from 'moment';
 
 interface RankingListProps {
-
+  deadline: string;
 }
 
-function RankingList({}: RankingListProps) {
+function RankingList({ deadline }: RankingListProps) {
 
   const [$list, set$list, get$list] = FUtil.Hook.useGetState<{
     serial: number;
@@ -19,12 +19,12 @@ function RankingList({}: RankingListProps) {
     score: number;
   }[]>([]);
 
-  const [$modalList, set$modalList, get$modalList] = FUtil.Hook.useGetState<{
-    serial: number;
-    award: 'gold' | 'silver' | 'copper' | '';
-    userName: string;
-    score: number;
-  }[]>([]);
+  // const [$modalList, set$modalList, get$modalList] = FUtil.Hook.useGetState<{
+  //   serial: number;
+  //   award: 'gold' | 'silver' | 'copper' | '';
+  //   userName: string;
+  //   score: number;
+  // }[]>([]);
   const [$current, set$current, get$current] = FUtil.Hook.useGetState<number>(1);
   const [$modalOpen, set$modalOpen, get$modalOpen] = FUtil.Hook.useGetState<boolean>(false);
 
@@ -41,45 +41,14 @@ function RankingList({}: RankingListProps) {
       }[];
     } = await FServiceAPI.Operation.recordRank({
       coinAccountType: 2,
-      limit: 8,
+      limit: 200,
       // @ts-ignore
-      limitTime: moment().format('YYYY-MM-DD HH:mm:ss'),
+      // limitTime: moment().format('YYYY-MM-DD HH:mm:ss'),
+      limitTime: deadline,
     });
 
     set$list(data.map((d, i) => {
-      let award: 'gold' | 'silver' | 'copper' = 'copper';
-      if (i < 1) {
-        award = 'gold';
-      } else if (i < 3) {
-        award = 'silver';
-      }
-      return {
-        serial: i + 1,
-        award: award,
-        userName: d.username,
-        score: Number(d.balance),
-      };
-    }));
-
-  });
-
-  AHooks.useMount(async () => {
-    const { ret, errCode, msg, data: data }: {
-      ret: number;
-      errCode: number;
-      msg: string;
-      data: {
-        balance: string;
-        num: string;
-        username: string;
-      }[];
-    } = await FServiceAPI.Operation.recordRank({
-      coinAccountType: 2,
-      limit: 200,
-    });
-
-    set$modalList(data.map((d, i) => {
-      let award: 'gold' | 'silver' | 'copper' | '' = '';
+      let award: 'gold' | 'silver' | 'copper' = '';
       if (i < 1) {
         award = 'gold';
       } else if (i < 3) {
@@ -97,10 +66,44 @@ function RankingList({}: RankingListProps) {
 
   });
 
+  // AHooks.useMount(async () => {
+  //   const { ret, errCode, msg, data: data }: {
+  //     ret: number;
+  //     errCode: number;
+  //     msg: string;
+  //     data: {
+  //       balance: string;
+  //       num: string;
+  //       username: string;
+  //     }[];
+  //   } = await FServiceAPI.Operation.recordRank({
+  //     coinAccountType: 2,
+  //     limit: 200,
+  //   });
+  //
+  //   set$modalList(data.map((d, i) => {
+  //     let award: 'gold' | 'silver' | 'copper' | '' = '';
+  //     if (i < 1) {
+  //       award = 'gold';
+  //     } else if (i < 3) {
+  //       award = 'silver';
+  //     } else if (i < 8) {
+  //       award = 'copper';
+  //     }
+  //     return {
+  //       serial: i + 1,
+  //       award: award,
+  //       userName: d.username,
+  //       score: Number(d.balance),
+  //     };
+  //   }));
+  //
+  // });
+
   return (<div className={styles.RankingList}>
     <FComponentsLib.FTitleText type={'h2'} text={'排名公示'} />
     <div style={{ height: 20 }} />
-    <FComponentsLib.FContentText type={'additional2'} text={'统计截止时间：2023/mm/dd'} />
+    <FComponentsLib.FContentText type={'additional2'} text={`统计截止时间：${deadline}`} />
     <div style={{ height: 20 }} />
     <div className={styles.table}>
 
@@ -115,16 +118,20 @@ function RankingList({}: RankingListProps) {
       </div>
 
       {
-        $list.map((l) => {
-          return (<div className={styles.row} key={l.serial}>
-            <div className={styles.ranking}>
-              <span>{l.serial}</span>
-              <GoldSilverCopper type={l.award} />
-            </div>
-            <div>{l.userName}</div>
-            <div>{l.score}分</div>
-          </div>);
-        })
+        $list
+          .filter((l, i) => {
+            return i < 8;
+          })
+          .map((l) => {
+            return (<div className={styles.row} key={l.serial}>
+              <div className={styles.ranking}>
+                <span>{l.serial}</span>
+                <GoldSilverCopper type={l.award} />
+              </div>
+              <div>{l.userName}</div>
+              <div>{l.score}分</div>
+            </div>);
+          })
       }
 
     </div>
@@ -143,7 +150,7 @@ function RankingList({}: RankingListProps) {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        height: 524,
+        height: 574,
         justifyContent: 'space-between',
       }}>
         <div className={styles.table}>
@@ -154,9 +161,9 @@ function RankingList({}: RankingListProps) {
           </div>
 
           {
-            $modalList
+            $list
               .filter((l, i) => {
-                return i > $current * 10 - 10 && i < $current * 10;
+                return (i >= $current * 10 - 10) && (i < $current * 10);
               })
               .map((l) => {
                 return (<div className={styles.row} key={l.serial}>
@@ -173,14 +180,14 @@ function RankingList({}: RankingListProps) {
         </div>
         <div style={{ display: 'flex', width: 820, alignItems: 'center', justifyContent: 'space-between' }}>
           <Space size={10}>
-            <FComponentsLib.FContentText type={'additional2'} text={`共${$modalList.length}条数据`} />
-            <FComponentsLib.FContentText type={'additional2'} text={'统计截止时间：2023/mm/dd'} />
+            <FComponentsLib.FContentText type={'additional2'} text={`共${$list.length}条数据`} />
+            <FComponentsLib.FContentText type={'additional2'} text={`统计截止时间：${deadline}`} />
           </Space>
 
           <Pagination
             current={$current}
             size='small'
-            total={$modalList.length}
+            total={$list.length}
             pageSize={10}
             hideOnSinglePage={true}
             showSizeChanger={false}
