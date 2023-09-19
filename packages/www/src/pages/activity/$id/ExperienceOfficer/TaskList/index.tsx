@@ -124,6 +124,77 @@ const task: any = {
   },
 };
 
+const resourceTask1 = [
+  {
+    'code': '####',
+    'title': '发行一个资源',
+    'complete': '--',
+    'score': '--',
+  },
+  {
+    'code': 'RS0000801',
+    'title': '游戏/主题/插件',
+    'complete': '--',
+    'score': '--',
+  },
+  {
+    'code': 'RS0000802',
+    'title': '小说/漫画',
+    'complete': '--',
+    'score': '--',
+  },
+  {
+    'code': 'RS0000803',
+    'title': '其他类型资源',
+    'complete': '--',
+    'score': '--',
+  },
+];
+
+const resourceTask2 = [{
+  'code': 'RS0000804',
+  'title': '创建一个节点并激活主题',
+  'complete': '--',
+  'score': '--',
+  'link': task['RS0000804'].link,
+}, {
+  'code': 'RS0000805',
+  'title': '添加并上线一个展品',
+  'complete': '--',
+  'score': '--',
+  'link': task['RS0000805'].link,
+}, {
+  'code': 'RS0000806',
+  'title': '完成10次节点分享',
+  'complete': '--',
+  'score': '--',
+  'link': task['RS0000806'].link,
+}, {
+  'code': 'RS0000807',
+  'title': '完成10次展品分享',
+  'complete': '--',
+  'score': '--',
+  'link': task['RS0000807'].link,
+}, {
+  'code': 'RS0000808',
+  'title': '提交一个使用建议',
+  'complete': '--',
+  'score': '--',
+  'link': task['RS0000808'].link,
+}, {
+  'code': 'RS0000809',
+  'title': '提交一个建议后被采纳',
+  'complete': '--',
+  'score': '--',
+  'link': task['RS0000809'].link,
+}, {
+  'code': 'RS0000810',
+  'title': '提交一份活动调研问卷',
+  'complete': '--',
+  'score': '--',
+  'link': task['RS0000810'].link,
+}];
+
 function TaskList({}: TaskListProps) {
 
   const [$isLogin, set$isLogin, get$isLogin] = FUtil.Hook.useGetState<boolean>(FUtil.Tool.getUserIDByCookies() !== -1);
@@ -133,14 +204,17 @@ function TaskList({}: TaskListProps) {
     title: string;
     complete: string;
     score: string;
-  }[]>([]);
+  }[]>(resourceTask1);
   const [$resourceTask2, set$resourceTask2, get$resourceTask2] = FUtil.Hook.useGetState<{
     code: string;
     title: string;
     complete: string;
     score: string;
     link: React.ReactNode;
-  }[]>([]);
+  }[]>(resourceTask2);
+
+  console.log(JSON.stringify($resourceTask1), '$resourceTask1 weis9djf;sldkfjlksdjlkjl');
+  console.log(JSON.stringify($resourceTask2), '$resourceTask2 weis9djf;sldkfjlksdjlkjl');
 
   AHooks.useMount(async () => {
     if (!get$isLogin()) {
@@ -165,7 +239,7 @@ function TaskList({}: TaskListProps) {
 
     for (const r of data_record1) {
       totalComplete += Number(r.completionTime);
-      totalScore += r.sumRewardNum;
+      totalScore += Number(r.sumRewardNum);
     }
 
     // console.log(data_record1, 'TaskList dataw8eiojsdflk ');
