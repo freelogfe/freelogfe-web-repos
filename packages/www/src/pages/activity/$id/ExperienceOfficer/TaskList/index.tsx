@@ -213,8 +213,8 @@ function TaskList({}: TaskListProps) {
     link: React.ReactNode;
   }[]>(resourceTask2);
 
-  console.log(JSON.stringify($resourceTask1), '$resourceTask1 weis9djf;sldkfjlksdjlkjl');
-  console.log(JSON.stringify($resourceTask2), '$resourceTask2 weis9djf;sldkfjlksdjlkjl');
+  // console.log(JSON.stringify($resourceTask1), '$resourceTask1 weis9djf;sldkfjlksdjlkjl');
+  // console.log(JSON.stringify($resourceTask2), '$resourceTask2 weis9djf;sldkfjlksdjlkjl');
 
   AHooks.useMount(async () => {
     if (!get$isLogin()) {

@@ -26,8 +26,10 @@ function PointCards({}: PointCardsProps) {
     rank: number;
     gap: number;
   } | null>(null);
+  const [$updateTime, set$updateTime, get$updateTime] = FUtil.Hook.useGetState<string>(moment().hour(-12).format('YYYY-MM-DD') + ' 12:00:00')
 
   AHooks.useMount(async () => {
+    // console.log(, '89wieojskdjflksdjlfkjl');
     if (!get$isLogin()) {
       return;
     }
@@ -41,7 +43,7 @@ function PointCards({}: PointCardsProps) {
     } = await FServiceAPI.Operation.rankInfo({
       coinAccountType: 2,
       // @ts-ignore
-      limitTime: moment().format('YYYY-MM-DD HH:mm:ss'),
+      limitTime: get$updateTime(),
     });
     // console.log(data_rankInfo, 'asdfo9ijlkewjf;laksdjfksjdlkfjsdlkfjlkjl');
     if (data_rankInfo) {
@@ -114,7 +116,7 @@ function PointCards({}: PointCardsProps) {
 
     <div style={{ height: 40 }} />
     <Space size={30}>
-      <div className={styles.h3}>每天12：00更新：最近更新{'更新数据时间'}</div>
+      <div className={styles.h3}>每天12：00更新：最近更新 {$updateTime}</div>
       {
         $isLogin && (<FComponentsLib.FTextBtn
           type={'primary'}

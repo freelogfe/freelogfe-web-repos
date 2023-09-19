@@ -188,9 +188,9 @@ function ExperienceOfficer({ activityDetailsPage }: ExperienceOfficerProps) {
         <div style={{ height: 60 }} />
         <div className={styles.longDashed} />
         <div style={{ height: 60 }} />
-        <div className={styles.h1}>体验官优秀奖</div>
+        <div className={styles.h1}>体验官幸运奖</div>
         <div style={{ height: 10 }} />
-        <div className={styles.h2}>体验官积分排名前八者可依次获得现金奖励</div>
+        <div className={styles.h2}>抽取20位未获优秀奖的体验官锦鲤，赠送100元现金奖励</div>
         <div style={{ height: 40 }} />
         <img style={{ width: 560 }} src={img_award2} alt={''} />
         {
@@ -282,31 +282,6 @@ function ExperienceOfficer({ activityDetailsPage }: ExperienceOfficerProps) {
         <img style={{ width: 334 }} src={img_point2} alt={''} />
         <div style={{ height: 40 }} />
         <TaskList />
-        {/*<Table*/}
-        {/*  style={{ width: '100%' }}*/}
-        {/*  columns={[*/}
-        {/*    {*/}
-        {/*      title: '任务详情',*/}
-        {/*      dataIndex: 'task',*/}
-        {/*      key: 'task',*/}
-        {/*    },*/}
-        {/*    {*/}
-        {/*      title: '完成次数',*/}
-        {/*      dataIndex: 'count',*/}
-        {/*      key: 'count',*/}
-        {/*    },*/}
-        {/*    {*/}
-        {/*      title: '获取积分',*/}
-        {/*      dataIndex: 'point',*/}
-        {/*      key: 'point',*/}
-        {/*    },*/}
-        {/*    {*/}
-        {/*      title: '快捷入口',*/}
-        {/*      dataIndex: 'entry',*/}
-        {/*      key: 'entry',*/}
-        {/*    },*/}
-        {/*  ]}*/}
-        {/*/>*/}
         <div style={{ height: 60 }} />
       </div>
       <div style={{ height: 50 }} />
