@@ -26,7 +26,7 @@ function PointCards({}: PointCardsProps) {
     rank: number;
     gap: number;
   } | null>(null);
-  const [$updateTime, set$updateTime, get$updateTime] = FUtil.Hook.useGetState<string>(moment().hours(-12).format('YYYY-MM-DD') + ' 12:00:00');
+  const [$updateTime, set$updateTime, get$updateTime] = FUtil.Hook.useGetState<string>(moment().subtract(12, 'hours').format('YYYY-MM-DD') + ' 12:00:00');
 
   AHooks.useMount(async () => {
     // console.log(, '89wieojskdjflksdjlfkjl');
