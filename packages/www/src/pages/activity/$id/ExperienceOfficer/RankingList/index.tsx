@@ -104,6 +104,7 @@ function RankingList({ deadline }: RankingListProps) {
     <FComponentsLib.FTitleText type={'h2'} text={'排名公示'} />
     <div style={{ height: 20 }} />
     <FComponentsLib.FContentText type={'additional2'} text={`统计截止时间：${deadline}`} />
+    <FComponentsLib.FContentText type={'additional2'} text={'若出现相同积分，则以用户达成该积分的时间先后排序'} />
     <div style={{ height: 20 }} />
     <div className={styles.table}>
 
