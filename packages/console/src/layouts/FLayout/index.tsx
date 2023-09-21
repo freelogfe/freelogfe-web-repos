@@ -14,6 +14,7 @@ import { RouteComponentProps } from 'react-router';
 import { FServiceAPI, FUtil, FI18n } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 import * as AHooks from 'ahooks';
+import FLoadingTip from '@/components/FLoadingTip';
 
 // import useUrlState from '@ahooksjs/use-url-state';
 
@@ -175,9 +176,9 @@ function FLayout({
       },
     ];
 
-  // if (global.globalLoading) {
-  //   return <FLoadingTip height={window.innerHeight} />;
-  // }
+  if (global.globalLoading) {
+    return <FLoadingTip height={window.innerHeight} />;
+  }
 
   return (
     <div className={styles.Layout1}>

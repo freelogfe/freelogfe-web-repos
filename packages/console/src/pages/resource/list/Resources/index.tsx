@@ -30,19 +30,31 @@ interface ResourceProps {
   resourceListPage: ResourceListPageModelState;
 }
 
-const resourceStatusOptions = [
-  { text: FI18n.i18nNext.t('filter_resource_status_all'), value: '#' },
-  // { text: '上架', value: 1 },
-  { text: FI18n.i18nNext.t('filter_resource_status_availableforauth'), value: 1 },
-  // { text: '下架', value: 4 },
-  { text: FI18n.i18nNext.t('filter_resource_status_pendingauth'), value: 4 },
-  // { text: '待发行', value: 0 },
-  { text: FI18n.i18nNext.t('filter_resource_status_prepareforrelease'), value: 0 },
-  // { text: '冻结', value: 2 },
-  { text: FI18n.i18nNext.t('filter_resource_status_removedbyfreelog'), value: 2 },
-];
+// const resourceStatusOptions = [
+//   { text: FI18n.i18nNext.t('filter_resource_status_all'), value: '#' },
+//   // { text: '上架', value: 1 },
+//   { text: FI18n.i18nNext.t('filter_resource_status_availableforauth'), value: 1 },
+//   // { text: '下架', value: 4 },
+//   { text: FI18n.i18nNext.t('filter_resource_status_pendingauth'), value: 4 },
+//   // { text: '待发行', value: 0 },
+//   { text: FI18n.i18nNext.t('filter_resource_status_prepareforrelease'), value: 0 },
+//   // { text: '冻结', value: 2 },
+//   { text: FI18n.i18nNext.t('filter_resource_status_removedbyfreelog'), value: 2 },
+// ];
 
 function Resources({ dispatch, resourceListPage }: ResourceProps) {
+
+  const [$resourceStatusOptions, set$resourceStatusOptions] = FUtil.Hook.useGetState([
+    { text: FI18n.i18nNext.t('filter_resource_status_all'), value: '#' },
+    // { text: '上架', value: 1 },
+    { text: FI18n.i18nNext.t('filter_resource_status_availableforauth'), value: 1 },
+    // { text: '下架', value: 4 },
+    { text: FI18n.i18nNext.t('filter_resource_status_pendingauth'), value: 4 },
+    // { text: '待发行', value: 0 },
+    { text: FI18n.i18nNext.t('filter_resource_status_prepareforrelease'), value: 0 },
+    // { text: '冻结', value: 2 },
+    { text: FI18n.i18nNext.t('filter_resource_status_removedbyfreelog'), value: 2 },
+  ]);
 
   AHooks.useMount(() => {
     dispatch<OnMountAction>({
@@ -112,7 +124,7 @@ function Resources({ dispatch, resourceListPage }: ResourceProps) {
           <FComponentsLib.FDropdown
             overlay={
               <FMenu
-                options={resourceStatusOptions as any}
+                options={$resourceStatusOptions as any}
                 onClick={(value) => {
                   // onChangeResourceStatus && onChangeResourceStatus(value === '#' ? value : Number(value) as 0)
                   dispatch<OnChangeStatusAction>({
@@ -127,7 +139,7 @@ function Resources({ dispatch, resourceListPage }: ResourceProps) {
           >
               <span style={{ cursor: 'pointer' }}>
 
-                {resourceStatusOptions.find((rs) => {
+                {$resourceStatusOptions.find((rs) => {
                   return rs.value === resourceListPage.resourceStatus;
                 })?.text}
                 <FComponentsLib.FIcons.FDown style={{ marginLeft: 8, fontSize: 12 }} />
