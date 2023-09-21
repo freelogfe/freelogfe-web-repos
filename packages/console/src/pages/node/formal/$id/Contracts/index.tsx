@@ -625,8 +625,8 @@ function Contract({ dispatch, nodeManager_Contract_Page }: ContractProps) {
                       // debounce={300}
                       onChange={(value) => {
                         setAuthorizedFilterInput(value);
-
                       }}
+                      placeholder={FI18n.i18nNext.t('nodemngt_contract_search_hint')}
                     />
                   </div>
                   {
