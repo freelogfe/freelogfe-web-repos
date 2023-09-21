@@ -33,7 +33,7 @@ import {
   OnChange_VersionInput_Action,
   OnClick_CreateVersionBtn_Action,
   OnClick_ImportLastVersionDependents_Btn_Action,
-  OnClick_OpenCartoonBtn_Action, OnClick_OpenMarkdownBtn_Action,
+  OnClick_OpenCartoonBtn_Action,
   OnClose_CartoonEditor_Action,
   OnClose_MarkdownEditor_Action,
   OnDelete_ObjectFile_Action,
@@ -52,10 +52,6 @@ import fAddCustomOptions from '@/components/fAddCustomOptions';
 import VersionInput from '@/pages/resource/version/creator/$id/VersionInput';
 import FPrompt from '@/components/FPrompt';
 import FSkeletonNode from '@/components/FSkeletonNode';
-// import {
-//   OnClick_step2_editCartoonBtn_Action,
-//   OnClick_step2_editMarkdownBtn_Action,
-// } from '@/models/resourceCreatorPage';
 
 interface VersionCreatorProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -132,16 +128,23 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
     return (<div className={styles.noSelectedFileInfo}>
       <div style={{ height: 40 }} />
       <div style={{ display: 'flex', alignItems: 'center', width: 920 }}>
-        <FCoverImage
-          src={resourceVersionCreatorPage.resourceInfo?.cover || ''}
-          width={36}
-          style={{ borderRadius: 4 }}
-        />
-        <div style={{ width: 10 }} />
-        <FComponentsLib.FContentText
-          text={resourceVersionCreatorPage.resourceInfo?.resourceName || ''}
-          type={'highlight'}
-        />
+        <a onClick={() => {
+          self.open(FUtil.LinkTo.resourceVersionInfo({
+            resourceID: resourceVersionCreatorPage.resourceInfo?.resourceID || '',
+            version: resourceVersionCreatorPage.resourceInfo?.latestVersion || undefined,
+          }));
+        }} style={{ display: 'flex', alignItems: 'center' }}>
+          <FCoverImage
+            src={resourceVersionCreatorPage.resourceInfo?.cover || ''}
+            width={36}
+            style={{ borderRadius: 4 }}
+          />
+          <div style={{ width: 10 }} />
+          <FComponentsLib.FContentText
+            text={resourceVersionCreatorPage.resourceInfo?.resourceName || ''}
+            type={'highlight'}
+          />
+        </a>
         <div style={{ width: 5 }} />
         <label style={{
           backgroundColor: '#E4E7EB',

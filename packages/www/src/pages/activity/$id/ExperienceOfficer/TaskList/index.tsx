@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import * as AHooks from 'ahooks';
-import { FServiceAPI, FUtil } from '@freelog/tools-lib';
+import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 
 interface TaskListProps {
@@ -118,7 +118,8 @@ const task: any = {
       style={{ fontSize: 12 }}
       type={'primary'}
       onClick={() => {
-        self.open('https://jinshuju.net/f/nbRmg5');
+        // self.open('https://jinshuju.net/f/nbRmg5');
+        self.open(FI18n.i18nNext.t('beta_survey_link_a'));
       }}
     >填写问卷</FComponentsLib.FTextBtn>,
   },
