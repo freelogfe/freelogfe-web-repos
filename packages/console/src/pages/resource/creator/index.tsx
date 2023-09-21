@@ -93,7 +93,7 @@ function ResourceCreator({
               ? styles.stepActivated
               : '',
             resourceCreatorPage.step > 3 && resourceCreatorPage.step3_policies.length > 0
-              ? styles.stepFinished1
+              ? styles.stepFinished
               : ''].join(' ')}>
           <div style={{ width: 30 }}>
             <FComponentsLib.FIcons.FArrowRight className={styles.iconFArrowRight} />
