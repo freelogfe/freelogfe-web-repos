@@ -149,7 +149,8 @@ function PointCards({}: PointCardsProps) {
           {
             $rewardRecord
               .filter((l, i) => {
-                return i > $current * 10 - 10 && i < $current * 10;
+                // return i > $current * 10 - 10 && i < $current * 10;
+                return (i >= $current * 10 - 10) && (i < $current * 10);
               })
               .map((rr, ri) => {
                 return (<div key={ri} className={styles.recordRow}>
