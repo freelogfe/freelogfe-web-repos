@@ -61,7 +61,7 @@ function Sider({ dispatch, nodeManagerPage, match }: SiderProps) {
           <div style={{ height: 10 }} />
           <FComponentsLib.FHotspotTooltip
             id={'nodeManager.nodeLink'}
-            style={{ right: -110, top: -4 }}
+            style={{ right: -80, top: -4 }}
             text={FI18n.i18nNext.t('hotpots_nodemanager_link_domain')}
             onMount={() => {
               FComponentsLib.fSetHotspotTooltipVisible('nodeManager.nodeLink', {
