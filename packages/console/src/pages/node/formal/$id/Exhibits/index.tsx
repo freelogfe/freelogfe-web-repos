@@ -32,7 +32,9 @@ import FCoverImage from '@/components/FCoverImage';
 import { Helmet } from 'react-helmet';
 import FComponentsLib from '@freelog/components-lib';
 import FResourceTypeFilter from '@/components/FResourceTypeFilter';
-import { fOnOffFeedback } from '@/components/FOnOffFeedback';
+import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
+
+// import { fOnOffFeedback } from '@/components/FOnOffFeedback';
 
 interface ExhibitsProps {
   dispatch: Dispatch;
@@ -178,6 +180,15 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
               // onClick={(checked) => changeStatus(checked, record)}
               onChange={async (value) => {
                 // console.log('9e8wijofijdslkfjldskjflksdjlkjlkjl');
+                if (!value) {
+                  const confirm: boolean = await fPromiseModalConfirm({
+                    title: '下架展品',
+                    description: '下架后，其它用户将无法签约该展品，确认要下架吗？',
+                  });
+                  if (!confirm) {
+                    return;
+                  }
+                }
 
                 dispatch<OnOnlineOrOfflineAction>({
                   type: 'nodeManagerPage/onOnlineOrOffline',

@@ -190,16 +190,24 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
                       if (checked) {
                         await onlineExhibit(exhibitInfoPage.exhibit_ID);
                       } else {
-                        const params2: Parameters<typeof FServiceAPI.Exhibit.presentablesOnlineStatus>[0] = {
-                          presentableId: exhibitInfoPage.exhibit_ID,
-                          onlineStatus: 0,
-                        };
-                        await FServiceAPI.Exhibit.presentablesOnlineStatus(params2);
-                        // message.success({
-                        //   content: FI18n.i18nNext.t('remove_resource_from_auth_msg_done'),
-                        //   duration: 2,
-                        // });
-                        fOnOffFeedback({state: 'off', message: FI18n.i18nNext.t('remove_resource_from_auth_msg_done')})
+
+                        const confirm: boolean = await fPromiseModalConfirm({
+                          title: '下架展品',
+                          description: '下架后，其它用户将无法签约该展品，确认要下架吗？',
+                        });
+
+                        if (confirm) {
+                          const params2: Parameters<typeof FServiceAPI.Exhibit.presentablesOnlineStatus>[0] = {
+                            presentableId: exhibitInfoPage.exhibit_ID,
+                            onlineStatus: 0,
+                          };
+                          await FServiceAPI.Exhibit.presentablesOnlineStatus(params2);
+                          fOnOffFeedback({
+                            state: 'off',
+                            message: FI18n.i18nNext.t('remove_resource_from_auth_msg_done'),
+                          });
+                        }
+
                       }
                       FComponentsLib.fSetHotspotTooltipVisible('exhibitDetailPage.onlineSwitch', {
                         value: false,
