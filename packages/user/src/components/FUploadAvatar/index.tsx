@@ -5,6 +5,7 @@ import { Upload } from 'antd';
 import FCropperModal from './FCropperModal';
 import { FServiceAPI, FI18n, FUtil } from '@freelog/tools-lib';
 import fMessage from '@/components/fMessage';
+import Compressor from 'compressorjs';
 
 // import FUtil1 from '@/utils';
 
@@ -60,20 +61,36 @@ function FUploadAvatar({ children, onUploadSuccess, onError }: FUploadAvatarProp
       return;
     }
     set_uploading(true);
-    const myFile = new File([blob], 'image.jpeg', {
-      type: blob.type,
+
+    new Compressor(blob, {
+      // quality: blob.size,
+
+      // The compression process is asynchronous,
+      // which means you have to access the `result` in the `success` hook function.
+      async success(result) {
+        console.log(result.size, ' result.size');
+        const myFile = new File([result], 'image.png', {
+          type: result.type,
+        });
+        const { ret, errCode, msg, data } = await FServiceAPI.User.uploadHeadImg({
+          file: myFile,
+        });
+        await FUtil.Tool.promiseSleep(1000);
+        if (ret !== 0 || errCode !== 0) {
+          fMessage(msg, 'error');
+        } else {
+          onUploadSuccess && onUploadSuccess(FUtil.Tool.getAvatarUrl());
+        }
+        set_image(initStates['image']);
+        set_uploading(false);
+
+      },
+      error(err) {
+        fMessage(err.message);
+      },
     });
-    const { ret, errCode, msg, data } = await FServiceAPI.User.uploadHeadImg({
-      file: myFile,
-    });
-    await FUtil.Tool.promiseSleep(1000);
-    if (ret !== 0 || errCode !== 0) {
-      fMessage(msg, 'error');
-    } else {
-      onUploadSuccess && onUploadSuccess(FUtil.Tool.getAvatarUrl());
-    }
-    set_image(initStates['image']);
-    set_uploading(false);
+
+
     // console.log(data, 'data900iokewflsdjflkjlk');
   }
 

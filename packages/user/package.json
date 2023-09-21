@@ -29,6 +29,7 @@
     "ahooks": "^3.4.1",
     "animate.css": "^4.1.1",
     "antd": "^4.23.2",
+    "compressorjs": "^1.2.1",
     "cropperjs": "^1.5.12",
     "dva": "^2.4.1",
     "react": "^18.2.0",
