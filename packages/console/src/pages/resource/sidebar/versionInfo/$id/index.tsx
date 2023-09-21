@@ -567,7 +567,7 @@ function Header({
           <FComponentsLib.FIcons.FDown style={{ fontSize: 12 }} />
         </FComponentsLib.FDropdown>
         <div style={{ width: 30 }} />
-        <Badge count={hasDraft ? '草稿' : 0} size={'small'}>
+        <Badge count={hasDraft ? '草稿' : 0} size={'small'} offset={[20, 0]}>
           <FComponentsLib.FTextBtn
             style={{ display: 'flex', alignItems: 'center', gap: 5 }}
             onClick={() => {
