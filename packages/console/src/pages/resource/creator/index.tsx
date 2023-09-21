@@ -88,7 +88,13 @@ function ResourceCreator({
         </div>
 
         <div
-          className={[styles.step, resourceCreatorPage.step === 3 ? styles.stepActivated : '', resourceCreatorPage.step > 3 ? styles.stepFinished1 : ''].join(' ')}>
+          className={[styles.step,
+            resourceCreatorPage.step === 3
+              ? styles.stepActivated
+              : '',
+            resourceCreatorPage.step > 3 && resourceCreatorPage.step3_policies.length > 0
+              ? styles.stepFinished1
+              : ''].join(' ')}>
           <div style={{ width: 30 }}>
             <FComponentsLib.FIcons.FArrowRight className={styles.iconFArrowRight} />
             <FComponentsLib.FIcons.FCheckMark className={styles.iconFCheckMark} />
