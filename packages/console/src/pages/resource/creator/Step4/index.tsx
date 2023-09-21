@@ -29,21 +29,14 @@ function Step4({ dispatch, resourceCreatorPage }: Step4Props) {
   return (<>
     <div style={{ height: 40 }} />
     <div className={styles.block}>
-      {/*<FComponentsLib.FContentText text={'资源标题'} type={'highlight'} />*/}
       <FComponentsLib.FContentText text={FI18n.i18nNext.t('rqr_input_resouce_title')} type={'highlight'} />
       <div style={{ height: 5 }} />
-      {/*<FComponentsLib.FContentText*/}
-      {/*  text={'标题直接影响商品的搜索曝光机会，建议在标题中加入品牌/内容主旨，例如，《大明风华：明朝人的城市生活》；标题长度不超过100个字符。'}*/}
-      {/*  type={'additional2'}*/}
-      {/*/>*/}
       <FComponentsLib.FContentText text={FI18n.i18nNext.t('rqr_input_resouce_title_help')} type={'additional2'} />
       <div style={{ height: 20 }} />
       <FComponentsLib.FInput.FSingleLine
         value={resourceCreatorPage.step4_resourceTitle}
         lengthLimit={100}
         style={{ width: '100%' }}
-        // placeholder={FI18n.i18nNext.t('输入资源授权标识')}
-        // placeholder={FI18n.i18nNext.t('rqr_input_resourceauthid_hint')}
         placeholder={resourceCreatorPage.step1_createdResourceInfo?.resourceName || FI18n.i18nNext.t('rqr_input_resourceauthid_hint')}
         onChange={(e) => {
           dispatch<OnChange_step4_resourceTitle_Action>({

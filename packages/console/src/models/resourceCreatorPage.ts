@@ -405,6 +405,7 @@ const Model: ResourceCreatorPageModelType = {
             resourceTypeCode: data.resourceTypeCode,
           },
           step1_dataIsDirty_count: 0,
+          step4_resourceTitle: resourceCreatorPage.step1_resourceName,
         },
       });
     },
