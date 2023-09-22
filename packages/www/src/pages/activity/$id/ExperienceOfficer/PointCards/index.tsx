@@ -5,6 +5,7 @@ import FComponentsLib from '@freelog/components-lib';
 import { Modal, Pagination, Space } from 'antd';
 import * as AHooks from 'ahooks';
 import moment, { Moment } from 'moment';
+import FTooltip from '@/components/FTooltip';
 
 interface PointCardsProps {
 
@@ -19,6 +20,7 @@ function PointCards({}: PointCardsProps) {
     status: 1 | 2 | 3 | 4;
     title: string;
     updateTime: string;
+    reason: string;
   }[]>([]);
   const [$current, set$current, get$current] = FUtil.Hook.useGetState<number>(1);
   const [$statistics, set$statistics, get$statistics] = FUtil.Hook.useGetState<{
@@ -60,6 +62,7 @@ function PointCards({}: PointCardsProps) {
         status: 1 | 2 | 3 | 4;
         title: string;
         updateTime: string;
+        extra: string;
       }[];
     } = await FServiceAPI.Activity.listRewardRecordInfos({
       rewardGroupCodes: ['RG00008'],
@@ -67,9 +70,11 @@ function PointCards({}: PointCardsProps) {
     });
     // console.log(data_RewardRecord, 'siwejflksd data_RewardRecord');
     set$rewardRecord(data_RewardRecord.map((rr) => {
+      const obj: { reason: string } = JSON.parse(rr.extra);
       return {
         ...rr,
         updateTime: FUtil.Format.formatDateTime(rr.updateTime, true),
+        reason: obj.reason || '',
       };
     }));
   });
@@ -106,7 +111,10 @@ function PointCards({}: PointCardsProps) {
             </div>
           </div>
           <div className={styles.pointCard}>
-            <FComponentsLib.FContentText type={'additional2'} text={'距离前一名'} />
+            <FComponentsLib.FContentText
+              type={'additional2'}
+              text={'距离前一名'}
+            />
             <div className={styles.pointCardPoint}>
               <div>分</div>
               <div>{$statistics?.gap || 0}</div>
@@ -115,7 +123,6 @@ function PointCards({}: PointCardsProps) {
           </div>
         </div>)
     }
-
 
     <div style={{ height: 40 }} />
     <Space size={30}>
@@ -164,10 +171,12 @@ function PointCards({}: PointCardsProps) {
                   <div style={{ display: 'flex', alignItems: 'center' }}>
                     {
                       rr.status === 4 && (<>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 5, color: '#EE4040' }}>
-                          <span style={{ fontSize: 12 }}>积分已扣除</span>
-                          <FComponentsLib.FIcons.FInfo style={{ fontSize: 14 }} />
-                        </div>
+                        <FTooltip title={rr.reason}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 5, color: '#EE4040' }}>
+                            <span style={{ fontSize: 12 }}>积分已扣除</span>
+                            <FComponentsLib.FIcons.FInfo style={{ fontSize: 14 }} />
+                          </div>
+                        </FTooltip>
                         <div style={{ width: 30 }} />
                       </>)
                     }
