@@ -63,7 +63,7 @@ function PointCards({}: PointCardsProps) {
       }[];
     } = await FServiceAPI.Activity.listRewardRecordInfos({
       rewardGroupCodes: ['RG00008'],
-      statusArray: [3],
+      statusArray: [3, 4],
     });
     // console.log(data_RewardRecord, 'siwejflksd data_RewardRecord');
     set$rewardRecord(data_RewardRecord.map((rr) => {
