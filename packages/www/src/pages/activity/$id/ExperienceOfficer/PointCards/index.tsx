@@ -8,11 +8,12 @@ import moment, { Moment } from 'moment';
 import FTooltip from '@/components/FTooltip';
 
 interface PointCardsProps {
-
+  endTime: Moment;
 }
 
-function PointCards({}: PointCardsProps) {
+function PointCards({ endTime }: PointCardsProps) {
 
+  const [$momentTime, set$momentTime, get$momentTime] = FUtil.Hook.useGetState<Moment>(moment());
   const [$isLogin, set$isLogin, get$isLogin] = FUtil.Hook.useGetState<boolean>(FUtil.Tool.getUserIDByCookies() !== -1);
   const [$modalOpen, set$modalOpen, get$modalOpen] = FUtil.Hook.useGetState<boolean>(false);
   const [$rewardRecord, set$rewardRecord, get$rewardRecord] = FUtil.Hook.useGetState<{
@@ -28,7 +29,9 @@ function PointCards({}: PointCardsProps) {
     rank: number;
     gap: number;
   } | null>(null);
-  const [$updateTime, set$updateTime, get$updateTime] = FUtil.Hook.useGetState<string>(moment().subtract(12, 'hours').format('YYYY-MM-DD') + ' 12:00:00');
+  const [$updateTime, set$updateTime, get$updateTime] = FUtil.Hook.useGetState<string>(get$momentTime().isBefore(endTime)
+    ? (get$momentTime().subtract(12, 'hours').format('YYYY-MM-DD') + ' 12:00:00')
+    : endTime.format('YYYY-MM-DD HH:mm:ss'));
 
   AHooks.useMount(async () => {
     // console.log(, '89wieojskdjflksdjlfkjl');

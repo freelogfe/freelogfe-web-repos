@@ -20,7 +20,7 @@ import PointCards from './PointCards';
 import RankingList from './RankingList';
 import LuckyPrize from './LuckyPrize';
 import moment from 'moment';
-import TaskList from '@/pages/activity/$id/ExperienceOfficer/TaskList';
+import TaskList from './TaskList';
 
 interface ExperienceOfficerProps {
   activityDetailsPage: ActivityDetailsPageModelState;
@@ -277,7 +277,10 @@ function ExperienceOfficer({ activityDetailsPage }: ExperienceOfficerProps) {
         <div style={{ height: 60 }} />
         <img style={{ width: 334 }} src={img_point1} alt={''} />
         <div style={{ height: 40 }} />
-        <PointCards />
+        {
+          activityDetailsPage.endTime && (<PointCards endTime={activityDetailsPage.endTime} />)
+        }
+
         <div style={{ height: 60 }} />
         <div className={styles.longDashed} />
         <div style={{ height: 60 }} />
