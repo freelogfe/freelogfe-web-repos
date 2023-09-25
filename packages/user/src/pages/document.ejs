@@ -17,29 +17,61 @@
 <head>
     <meta charSet="utf-8" />
     <title>Freelog</title>
+
+    <!--  正式环境 -->
+    <!--    <script src='https://s9.cnzz.com/z_stat.php?id=1281181588&web_id=1281181586'></script>-->
+    <!--  测试环境 -->
+    <!--    <script src='https://s9.cnzz.com/z_stat.php?id=1281181588&web_id=1281181588'></script>-->
+    <!--    <script>-->
+    <!--        console.log('888888888888888888888888888************************')-->
+    <!--    </script>-->
+    <script>
+      // console.log('888888888888888888888888888************************0000000000000000000');
+      (function() {
+
+        const el = self.document.createElement('script');
+        // el.type = 'text/javascript';
+        // el.charset = 'utf-8';
+        // el.async = true;
+        const ref = self.document.getElementsByTagName('head')[0];
+        // console.log(ref, 'ref siodfjlskdjflkdsjlkjl');
+        // console.log(ref, 'ref');
+        // ref.parentNode.insertBefore(el, ref);
+        ref.appendChild(el);
+        if (self.location.host.includes('.freelog.com')) {
+          el.src = 'https://s9.cnzz.com/z_stat.php?id=1281181586&web_id=1281181586';
+        } else {
+          el.src = 'https://s9.cnzz.com/z_stat.php?id=1281181588&web_id=1281181588';
+        }
+      })();
+
+      // setTimeout(() => {
+      //   self.document.querySelector(`[title = '站长统计']`)?.style.display = 'none';
+      // }, 300);
+    </script>
 </head>
 <body>
 <div id="root"></div>
 <!--<script type="text/javascript" src="https://s9.cnzz.com/z_stat.php?id=1281181588&web_id=1281181588"></script>-->
-<script>
-  (function() {
-    const el = self.document.createElement('script');
-    // el.type = 'text/javascript';
-    // el.charset = 'utf-8';
-    el.async = true;
-    const ref = self.document.body.getElementsByTagName('script')[0];
-    // console.log(ref, 'ref');
-    ref.parentNode.insertBefore(el, ref);
-    if (self.location.host.includes('.freelog.com')) {
-      el.src = 'https://s9.cnzz.com/z_stat.php?id=1281181586&web_id=1281181586';
-    } else {
-      el.src = 'https://s9.cnzz.com/z_stat.php?id=1281181588&web_id=1281181588';
-    }
-  })();
+<!--<script>-->
+<!--  (function() {-->
+<!--    const el = self.document.createElement('script');-->
+<!--    // el.type = 'text/javascript';-->
+<!--    // el.charset = 'utf-8';-->
+<!--    el.async = true;-->
+<!--    const ref = self.document.body.getElementsByTagName('script')[0];-->
+<!--    // console.log(ref, 'ref');-->
+<!--    ref.parentNode.insertBefore(el, ref);-->
+<!--    if (self.location.host.includes('.freelog.com')) {-->
+<!--      el.src = 'https://s9.cnzz.com/z_stat.php?id=1281181586&web_id=1281181586';-->
+<!--    } else {-->
+<!--      el.src = 'https://s9.cnzz.com/z_stat.php?id=1281181588&web_id=1281181588';-->
+<!--    }-->
+<!--  })();-->
 
-  setTimeout(() => {
-    self.document.querySelector(`[title = '站长统计']`)?.style.display = 'none'
-  }, 300);
-</script>
+<!--  setTimeout(() => {-->
+<!--    self.document.querySelector(`[title = '站长统计']`)?.style.display = 'none'-->
+<!--  }, 300);-->
+<!--</script>-->
 </body>
 </html>
