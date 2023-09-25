@@ -70,7 +70,7 @@ function Notice({}: NoticeProps) {
               type='primary'
               onClick={async () => {
                 await FServiceAPI.Activity.eventTrackingAdsClick({ _id: n.id });
-                window.open(n.href);
+                self.open(n.href);
               }}
             >查看详情</FComponentsLib.FTextBtn>
           </Space>
