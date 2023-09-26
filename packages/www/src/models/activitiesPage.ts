@@ -60,8 +60,21 @@ const Model: activitiesPageModelType = {
       const params: Parameters<typeof FServiceAPI.Activity.list4Client>[0] = {
         limit: 100,
       };
-      const { data } = yield call(FServiceAPI.Activity.list4Client, params);
-      // console.log(data, 'data9023ulk');
+      const { data }: {
+        data: {
+          dataList: {
+            _id: string;
+            title: string;
+            cover: string;
+            status: 1 | 2 | 3 | 4 | 5;
+            persist: boolean;
+            link: string;
+            startTime: string;
+            limitTime: string;
+          }[];
+        }
+      } = yield call(FServiceAPI.Activity.list4Client, params);
+      console.log(data, 'data9023ulk');
       const status: any = {
         1: '',
         2: '',
@@ -69,7 +82,7 @@ const Model: activitiesPageModelType = {
         4: 'ongoing',
         5: 'end',
       };
-      const list: ActivitiesPageModelState['list'] = (data.dataList as any[]).map<ActivitiesPageModelState['list'][0]>((d) => {
+      const list: ActivitiesPageModelState['list'] = data.dataList.map<ActivitiesPageModelState['list'][0]>((d) => {
         return {
           activityID: d._id,
           activityTitle: d.title,
