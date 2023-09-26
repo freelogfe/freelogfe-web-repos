@@ -77,7 +77,7 @@ function PointCards({ endTime }: PointCardsProps) {
       return {
         ...rr,
         updateTime: FUtil.Format.formatDateTime(rr.updateTime, true),
-        reason: obj.reason || '',
+        reason: obj?.reason || '',
       };
     }));
   });
