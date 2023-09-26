@@ -850,7 +850,7 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
                       {
                         resourceVersionCreatorPage.preVersion_customConfigurations.length > 0 && (
                           <FComponentsLib.FTextBtn
-                            type={'default'}
+                            type='primary'
                             style={{ fontSize: 12 }}
                             onClick={async () => {
                               const data: {
