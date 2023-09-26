@@ -4,7 +4,8 @@ import styles from './index.less';
 import img_Banner3_1 from '@/assets/home/banner3-1.png';
 import img_Banner3_2 from '@/assets/home/banner3-2.png';
 import img_Banner3_3 from '@/assets/home/banner3-3.png';
-import Banner2 from '@/pages/home/Banner2';
+import Notice from './Notice';
+import Banner2 from './Banner2';
 import FComponentsLib from '@freelog/components-lib';
 import Ads from '@/pages/home/Ads';
 import { Popover } from 'antd';
@@ -33,17 +34,18 @@ function HomePage({}: HomePageProps) {
   });
 
   return (<div>
-    <div className={styles.banner0}>
-      <span className={styles.banner0White}>内测期间参</span>
-      <a
-        className={styles.banner0Red}
-        target={'_blank'}
-        // href={FI18n.i18nNext.t('beta_event_guideline_contest_link')}
-        href={topLink}
-      >资源创作大赛</a>
-      <span className={styles.banner0White}>，最低可领15元现金奖励，更有机会赢取2000元大奖！</span>
-      <FComponentsLib.FIcons.FPentagram style={{ color: '#F3E574' }} />
-    </div>
+    {/*<div className={styles.banner0}>*/}
+    {/*  <span className={styles.banner0White}>内测期间参</span>*/}
+    {/*  <a*/}
+    {/*    className={styles.banner0Red}*/}
+    {/*    target={'_blank'}*/}
+    {/*    // href={FI18n.i18nNext.t('beta_event_guideline_contest_link')}*/}
+    {/*    href={topLink}*/}
+    {/*  >资源创作大赛</a>*/}
+    {/*  <span className={styles.banner0White}>，最低可领15元现金奖励，更有机会赢取2000元大奖！</span>*/}
+    {/*  <FComponentsLib.FIcons.FPentagram style={{ color: '#F3E574' }} />*/}
+    {/*</div>*/}
+    <Notice />
     <div className={styles.banner1}>
       <div className={styles.banner1Content}>
         <div style={{ height: 110 }} />
