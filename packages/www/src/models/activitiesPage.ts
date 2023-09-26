@@ -74,7 +74,7 @@ const Model: activitiesPageModelType = {
           }[];
         }
       } = yield call(FServiceAPI.Activity.list4Client, params);
-      console.log(data, 'data9023ulk');
+      // console.log(data, 'data9023ulk');
       const status: any = {
         1: '',
         2: '',

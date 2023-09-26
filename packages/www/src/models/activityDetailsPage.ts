@@ -9,7 +9,7 @@ export interface ActivityDetailsPageModelState {
   pageState: 'loading' | 'loaded' | 'noDate';
   activityID: string;
   pageTitle: string;
-  showActivity: '' | 'play-newer' | 'ResourceCompetition' | 'invite-friend' | 'Questionnaire' | 'experiencer';
+  showActivity: '' | 'play-newer' | 'ResourceCompetition' | 'invite-friend' | 'Questionnaire' | 'ExperienceOfficer';
 
   startTime: Moment | null;
   endTime: Moment | null;
@@ -71,7 +71,20 @@ const Model: ActivityDetailsPageModelType = {
       const params: Parameters<typeof FServiceAPI.Activity.find4Client>[0] = {
         _id: payload.activityID,
       };
-      const { ret, errCode, data } = yield call(FServiceAPI.Activity.find4Client, params);
+      const { ret, errCode, data }: {
+        ret: number;
+        errCode: number;
+        data: {
+          _id: string;
+          title: string;
+          cover: string;
+          status: 1 | 2 | 3 | 4 | 5;
+          persist: boolean;
+          link: string;
+          startTime: string;
+          limitTime: string;
+        };
+      } = yield call(FServiceAPI.Activity.find4Client, params);
       // console.log(data, 'data sdio9fjasdlkfjl;sdjflkjl');
       if (ret !== 0 || errCode !== 0 || !data) {
         yield put<ChangeAction>({
@@ -82,14 +95,25 @@ const Model: ActivityDetailsPageModelType = {
         });
         return;
       }
+
+      // 'play-newer' | 'ResourceCompetition' | 'invite-friend' | 'Questionnaire' | 'experiencer'
+      if (data.link !== 'play-newer'
+        && data.link !== 'ResourceCompetition'
+        && data.link !== 'invite-friend'
+        && data.link !== 'Questionnaire'
+        && data.link !== 'ExperienceOfficer') {
+        self.location.replace(data.link);
+        return;
+      }
+
       const nowTimestamp: number = Date.now();
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           pageState: 'loaded',
           activityID: payload.activityID,
-          showActivity: data?.link || '',
-          pageTitle: data?.title || '活动不存在或者已暂停',
+          showActivity: data.link || '',
+          pageTitle: data.title || '活动不存在或者已暂停',
 
           startTime: data.persist ? null : moment(data.startTime),
           endTime: data.persist ? null : moment(data.limitTime),
