@@ -308,6 +308,10 @@ function ExperienceOfficer({ activityDetailsPage }: ExperienceOfficerProps) {
             <label>3</label>
             <div>幸运体验官获奖者入选条件为：除金银铜牌体验官以外的所有体验官；最低要求完成新手任务+提交至少一条有效建议+提交活动问卷。</div>
           </div>
+          <div className={styles.regulationContent}>
+            <label>4</label>
+            <div>每日积分情况更新（活动期内每天12：00更新）及最终活动排名公示时，若出现多人同积分的情况，则根据达成该积分的具体时间早晚顺序依次排序。即达成该积分时间更早的排行靠前，达成时间更晚的排行靠后。</div>
+          </div>
         </Space>
         <div style={{ height: 40 }} />
         <Space size={20} direction={'vertical'} style={{ width: 820 }}>

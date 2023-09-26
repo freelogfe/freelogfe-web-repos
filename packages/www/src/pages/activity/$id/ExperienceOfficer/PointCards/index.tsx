@@ -141,6 +141,8 @@ function PointCards({ endTime }: PointCardsProps) {
       }
     </Space>
 
+    <FComponentsLib.FContentText text={'注：若出现相同积分，则以用户达成该积分的时间先后排序'} type={'additional2'} />
+
     <Modal
       open={$modalOpen}
       width={1000}
