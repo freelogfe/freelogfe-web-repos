@@ -47,7 +47,7 @@ export default function ResourceList({
                   imgSrc={
                     item.coverImages[0]
                       ? item.coverImages[0]
-                      : 'http://static.testfreelog.com/static/default_cover.png'
+                      : '//static.freelog.com/static/default_cover.png'
                   }
                 />
                 <ResourceInfo
