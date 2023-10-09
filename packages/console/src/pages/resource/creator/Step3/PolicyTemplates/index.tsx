@@ -69,8 +69,8 @@ function PolicyTemplates({ onSelect }: PolicyTemplatesProps) {
               <div style={{ height: 15 }} />
               {/*<FComponentsLib.FContentText text={'公开（所有缔约方可签约）'} />*/}
               {
-                pt.translation.split('\n').map((t) => {
-                  return (<FComponentsLib.FContentText text={t} />);
+                pt.translation.split('\n').map((t, ti) => {
+                  return (<FComponentsLib.FContentText text={t} key={ti} />);
                 })
               }
 
