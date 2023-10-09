@@ -51,47 +51,57 @@
   }
 }
 
+
+
 .FCascader {
   width: 100%;
 
-  .itemChildren {
-    position: absolute;
-    left: 100%;
-    top: 0;
-    width: 100%;
-    background: #FFF;
-    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.2);
-    border-radius: 4px;
-    display: none;
+}
+
+.itemChildren {
+  //position: absolute;
+  //left: 100%;
+  //top: 0;
+  //width: 100%;
+  background: #FFF;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  //display: none;
+}
+
+.item {
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  font-weight: 400;
+  color: #222;
+  cursor: pointer;
+  position: relative;
+
+  &.itemLatest {
+    color: @f-primary-color;
   }
 
-  .item {
-    padding: 10px 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-size: 14px;
-    font-weight: 400;
-    color: #222;
-    cursor: pointer;
-    position: relative;
+  .itemRightIcon {
+    font-size: 12px;
+    //transform: rotate(90deg);
+  }
 
-    &.itemLatest {
-      color: @f-primary-color;
+  &:hover {
+    background-color: @f-primary-color;
+    color: white;
+
+    & > .itemChildren {
+      display: block;
     }
+  }
+}
 
-    .itemRightIcon {
-      font-size: 12px;
-      //transform: rotate(90deg);
-    }
-
-    &:hover {
-      background-color: @f-primary-color;
-      color: white;
-
-      & > .itemChildren {
-        display: block;
-      }
-    }
+.PopoverOverlayClassName {
+  :global(.ant-popover-inner-content) {
+    padding: 0;
+    width: 200px;
   }
 }

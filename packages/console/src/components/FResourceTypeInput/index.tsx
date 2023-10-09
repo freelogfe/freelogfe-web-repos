@@ -510,9 +510,7 @@ function FResourceTypeInput(
                         >
                           <span>{o1.label}</span>
                           {
-                            o1.children.length > 0 && (<>
-                              <FComponentsLib.FIcons.FRight className={styles.itemRightIcon} />
-                            </>)
+                            o1.children.length > 0 && (<FComponentsLib.FIcons.FRight className={styles.itemRightIcon} />)
                           }
                         </div>
                       </Popover>
@@ -551,9 +549,7 @@ function FResourceTypeInput(
               >
                 <span>{o0.label}</span>
                 {
-                  o0.children.length > 0 && (<>
-                    <FComponentsLib.FIcons.FRight className={styles.itemRightIcon} />
-                  </>)
+                  o0.children.length > 0 && (<FComponentsLib.FIcons.FRight className={styles.itemRightIcon} />)
                 }
               </div>
             </Popover>);

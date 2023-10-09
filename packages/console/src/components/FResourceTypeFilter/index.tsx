@@ -3,7 +3,7 @@ import styles from './index.less';
 import * as AHooks from 'ahooks';
 import { FI18n, FServiceAPI } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
-import { Dropdown } from 'antd';
+import { Dropdown, Popover } from 'antd';
 
 interface FResourceTypeFilterProps {
   value: {
@@ -189,65 +189,85 @@ function FResourceTypeFilter({ value, omitTheme = false, onChange }: FResourceTy
       <div className={styles.FCascader}>
         {
           $options.map((o0) => {
-            return (<div
-              className={styles.item}
+            return (<Popover
               key={o0.value}
-              onClick={() => {
-                if (o0.children.length === 0) {
-                  onDropdownChange(o0);
-                }
-              }}
-            >
-              <span>{o0.label}</span>
-              {
-                o0.children.length > 0 && (<>
-                  <FComponentsLib.FIcons.FRight className={styles.itemRightIcon} />
-                  <div className={styles.itemChildren}>
-                    {
-                      o0.children.map((o1, o1Index, data) => {
-                        return (<React.Fragment key={o1.value}>
-                          <div
-                            className={styles.item}
-                            onClick={() => {
-                              if (o1.children.length === 0) {
-                                onDropdownChange(o1);
-                              }
-                            }}
-                          >
-                            <span>{o1.label}</span>
-                            {
-                              o1.children.length > 0 && (<>
-                                <FComponentsLib.FIcons.FRight className={styles.itemRightIcon} />
-                                <div className={styles.itemChildren}>
-                                  {
-                                    o1.children.map((o2) => {
-                                      return (<React.Fragment key={o2.value}>
-                                        <div
-                                          className={styles.item}
-                                          onClick={() => {
-                                            if (o2.children.length === 0) {
-                                              onDropdownChange(o2);
-                                            }
-                                          }}
-                                        >
-                                          <span>{o2.label}</span>
-                                        </div>
-
-                                      </React.Fragment>);
-                                    })
-                                  }
-
+              // getPopupContainer={() => {
+              // return ref.current;
+              // }}
+              zIndex={10000}
+              open={o0.children.length === 0 ? false : undefined}
+              overlayClassName={styles.PopoverOverlayClassName}
+              placement={'rightTop'}
+              title={null}
+              content={<div className={styles.itemChildren}>
+                {
+                  o0.children.map((o1, o1Index, data) => {
+                    return (<React.Fragment key={o1.value}>
+                      <Popover
+                        zIndex={10001}
+                        // showArrow={false}
+                        // getPopupContainer={() => {
+                        //   return ref.current;
+                        // }}
+                        open={o1.children.length === 0 ? false : undefined}
+                        overlayClassName={styles.PopoverOverlayClassName}
+                        title={null}
+                        placement={'rightTop'}
+                        content={<div className={styles.itemChildren}>
+                          {
+                            o1.children.map((o2) => {
+                              return (<React.Fragment key={o2.value}>
+                                <div
+                                  className={styles.item}
+                                  onClick={() => {
+                                    if (o2.children.length === 0) {
+                                      onDropdownChange(o2);
+                                    }
+                                  }}
+                                >
+                                  <span>{o2.label}</span>
                                 </div>
-                              </>)
+
+                              </React.Fragment>);
+                            })
+                          }
+
+                        </div>}
+                      >
+                        <div
+                          className={styles.item}
+                          onClick={() => {
+                            if (o1.children.length === 0) {
+                              onDropdownChange(o1);
                             }
-                          </div>
-                        </React.Fragment>);
-                      })
-                    }
-                  </div>
-                </>)
-              }
-            </div>);
+                          }}
+                        >
+                          <span>{o1.label}</span>
+                          {
+                            o1.children.length > 0 && (<FComponentsLib.FIcons.FRight className={styles.itemRightIcon} />)
+                          }
+                        </div>
+                      </Popover>
+                    </React.Fragment>);
+                  })
+                }
+              </div>}
+            >
+              <div
+                className={styles.item}
+                key={o0.value}
+                onClick={() => {
+                  if (o0.children.length === 0) {
+                    onDropdownChange(o0);
+                  }
+                }}
+              >
+                <span>{o0.label}</span>
+                {
+                  o0.children.length > 0 && (<FComponentsLib.FIcons.FRight className={styles.itemRightIcon} />)
+                }
+              </div>
+            </Popover>);
           })
         }
       </div>
