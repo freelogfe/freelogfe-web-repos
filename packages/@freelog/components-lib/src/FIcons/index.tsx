@@ -44,6 +44,7 @@ import FLine from './FLine';
 import FLinkedin from './FLinkedin';
 import FLoading from './FLoading';
 import FLocalUpload from './FLocalUpload';
+import FLock from './FLock';
 import FLoudspeaker from './FLoudspeaker';
 import FMappingRuleActive from './FMappingRuleActive';
 import FMappingRuleAdd from './FMappingRuleAdd';
@@ -127,6 +128,7 @@ const FIcons = {
     FLinkedin,
     FLoading,
     FLocalUpload,
+    FLock,
     FLoudspeaker,
     FMappingRuleActive,
     FMappingRuleAdd,

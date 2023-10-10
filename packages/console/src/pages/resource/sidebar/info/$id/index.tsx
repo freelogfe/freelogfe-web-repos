@@ -109,6 +109,39 @@ function Info({ dispatch, resourceInfoPage, match }: InfoProps) {
     {
       !!resourceInfoPage.resourceInfo && resourceInfoPage.pageState === 'loaded' && (<div>
         <div style={{ height: 40 }} />
+
+        <div className={styles.block}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <FComponentsLib.FContentText text={'资源授权标识'} type={'highlight'} />
+            <FComponentsLib.FCopyToClipboard
+              text={resourceInfoPage.resourceInfo.resourceName}
+              title={'复制'}
+            >
+              <FComponentsLib.FTextBtn
+                type={'primary'}
+                style={{ fontSize: 12 }}
+              >复制</FComponentsLib.FTextBtn>
+            </FComponentsLib.FCopyToClipboard>
+          </div>
+          <div style={{ height: 5 }} />
+          <FComponentsLib.FContentText
+            text={'此资源在整个授权系统中的唯一标识符，一旦创建则不能更改。'}
+            type={'additional2'}
+          />
+          <div style={{ height: 20 }} />
+          <div className={styles.resourceTitle} style={{ justifyContent: 'space-between' }}>
+            <FComponentsLib.FContentText
+              text={resourceInfoPage.resourceInfo.resourceName}
+              type={'normal'}
+            />
+
+            <FComponentsLib.FIcons.FLock style={{ color: '#999', fontSize: 14 }} />
+          </div>
+
+        </div>
+
+        <div style={{ height: 5 }} />
+
         <div className={styles.block}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <FComponentsLib.FContentText text={'资源标题'} type={'highlight'} />
@@ -118,6 +151,7 @@ function Info({ dispatch, resourceInfoPage, match }: InfoProps) {
                 ? (<Space size={10}>
                   <FComponentsLib.FTextBtn
                     type={'default'}
+                    style={{ fontSize: 12 }}
                     onClick={() => {
                       dispatch<OnClick_CancelEditTitleBtn_Action>({
                         type: 'resourceInfoPage/onClick_CancelEditTitleBtn',
@@ -125,6 +159,7 @@ function Info({ dispatch, resourceInfoPage, match }: InfoProps) {
                     }}
                   >取消</FComponentsLib.FTextBtn>
                   <FComponentsLib.FTextBtn
+                    style={{ fontSize: 12 }}
                     disabled={resourceInfoPage.title_Input.length > 100}
                     type={'primary'}
                     onClick={() => {
@@ -136,6 +171,7 @@ function Info({ dispatch, resourceInfoPage, match }: InfoProps) {
                 </Space>)
                 : (<FComponentsLib.FTextBtn
                   type={'primary'}
+                  style={{ fontSize: 12 }}
                   onClick={() => {
                     dispatch<OnClick_EditTitleBtn_Action>({
                       type: 'resourceInfoPage/onClick_EditTitleBtn',
