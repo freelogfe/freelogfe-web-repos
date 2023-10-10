@@ -285,7 +285,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                         return rso.value === nodeManagerPage.exhibit_SelectedStatus.toString();
                       })?.text
                     }
-                    <FComponentsLib.FIcons.FDown style={{ marginLeft: 8, fontSize: 12 }} />
+                    <FComponentsLib.FIcons.FDown style={{ marginLeft: 10, fontSize: 12 }} />
                   </span>
                   </FDropdownMenu>
                 </div>
