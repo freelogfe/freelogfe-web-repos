@@ -914,6 +914,7 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
                   resourceVersionCreatorPage.customConfigurations.length > 0 && (<>
                     <div style={{ height: 20 }} />
                     <FResourceOptions
+                      theme={'dark'}
                       // dataSource={resourceVersionCreatorPage.customOptionsData}
                       dataSource={resourceVersionCreatorPage.customConfigurations}
                       onEdit={async (value) => {
