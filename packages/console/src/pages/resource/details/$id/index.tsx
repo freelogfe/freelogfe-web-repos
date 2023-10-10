@@ -28,6 +28,7 @@ import FLoadingTip from '@/components/FLoadingTip';
 import { FI18n, FServiceAPI } from '@freelog/tools-lib';
 import { FShare } from '@/components/FShare';
 import FComponentsLib from '@freelog/components-lib';
+import FTooltip from '@/components/FTooltip';
 
 interface ResourceDetailsProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -97,9 +98,12 @@ function ResourceDetails({ match, dispatch, resourceDetailPage }: ResourceDetail
 
         <div className={styles.header}>
           <Space size={10}>
-            <label className={styles.resourceType}>
-              {FUtil.Format.resourceTypeKeyArrToResourceType(resourceDetailPage.resource_Info?.type || [])}
-            </label>
+            <FTooltip
+              title={FUtil.Format.resourceTypeKeyArrToResourceType(resourceDetailPage.resource_Info?.type || [])}>
+              <label className={styles.resourceType}>
+                {FUtil.Format.resourceTypeKeyArrToResourceType(resourceDetailPage.resource_Info?.type || [])}
+              </label>
+            </FTooltip>
             <FComponentsLib.FTitleText
               style={{ width: 500 }}
               singleRow
