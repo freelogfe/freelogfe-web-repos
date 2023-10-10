@@ -409,7 +409,7 @@ function FResourcePropertyEditorDrawer({
             value={$state.nameInput}
             className={styles.input}
             onChange={(e) => {
-              const value: string = e.target.value;
+              const value: string = e.target.value.trim();
               let errorText: string = '';
               if (value === '') {
                 errorText = '输入属性名称';
