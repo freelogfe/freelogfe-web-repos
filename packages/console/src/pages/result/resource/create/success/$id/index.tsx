@@ -53,7 +53,7 @@ function Success({ match, dispatch }: SuccessProps) {
     }}>{FI18n.i18nNext.t('resource_created_successfully')}</div>
     <div style={{ height: 60 }} />
     <div className={styles.resourceInfo}>
-      <FCoverImage src={''} width={68} />
+      <FCoverImage src={$resourceInfo?.cover || ''} width={68} />
       <div>
         <FComponentsLib.FContentText
           text={$resourceInfo?.name || ''}
