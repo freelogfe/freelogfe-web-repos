@@ -572,7 +572,9 @@ const Model: ResourceVersionCreatorModelType = {
         }[];
       }[] = dependentAllResourcesWithContracts
         .filter((r) => {
-          return r.contracts.length > 0;
+          return r.contracts.length > 0 && baseUpcastResources.every((b) => {
+            return b.resourceID !== r.resourceID;
+          });
         })
         .map((r) => {
           return {
@@ -596,7 +598,6 @@ const Model: ResourceVersionCreatorModelType = {
         }),
         dependencies: dependencies,
         resolveResources: resolveResources,
-        // @ts-ignore
         inputAttrs: resourceVersionCreatorPage.additionalProperties
           .filter((ap) => {
             return ap.value !== '';
