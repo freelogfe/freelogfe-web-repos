@@ -63,7 +63,7 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
   const ref = React.useRef(null);
   const size = AHooks.useSize(ref);
   const [$showMore, set$ShowMore, get$ShowMore] = useGetState<boolean>(false);
-  const [versionInputHasError, set_versionInputHasError] = React.useState<boolean>(false);
+  const [$versionInputHasError, set$versionInputHasError] = React.useState<boolean>(false);
   const [isMarkdownEditorDirty, set_isMarkdownEditorDirty] = React.useState<boolean>(false);
 
   AHooks.useMount(() => {
@@ -256,7 +256,7 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
 
   const hasError: boolean =
     resourceVersionCreatorPage.versionInput === '' ||
-    // versionInputHasError ||
+    $versionInputHasError ||
     !resourceVersionCreatorPage.selectedFileInfo ||
     resourceVersionCreatorPage.selectedFile_UsedResources.length > 0 ||
     resourceVersionCreatorPage.rawPropertiesState !== 'success';
@@ -322,8 +322,8 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
             });
           }}
           onChangeError={(hasError) => {
-            // console.log(hasError, 'hasErroriosdjflkjsdlkfjlk sdlkfjlkj');
-            set_versionInputHasError(hasError);
+            console.log(hasError, 'hasErroriosdjflkjsdlkfjlk sdlkfjlkj');
+            set$versionInputHasError(hasError);
           }}
         />
 

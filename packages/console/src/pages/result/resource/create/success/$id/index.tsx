@@ -35,12 +35,12 @@ function Success({ match, dispatch }: SuccessProps) {
   });
 
 
-  function goto() {
-    // self._czc?.push(['_trackEvent', '资源创建成功页', '创建新版本', '', 1]);
-    history.replace(FUtil.LinkTo.resourceVersionInfo({
-      resourceID: match.params.id,
-    }));
-  }
+  // function goto() {
+  //   // self._czc?.push(['_trackEvent', '资源创建成功页', '创建新版本', '', 1]);
+  //   history.replace(FUtil.LinkTo.resourceVersionInfo({
+  //     resourceID: match.params.id,
+  //   }));
+  // }
 
   return (<div className={styles.Success}>
     <div style={{ flexGrow: 2 }} />

@@ -78,7 +78,7 @@ function VersionInput({ value, resourceLatestVersion, onChange, onChangeError }:
                 }
                 set$input(inputValue);
                 set$inputError(inputValueError);
-                // onChangeError && onChangeError(inputValueError !== '');
+                onChangeError && onChangeError(inputValueError !== '');
                 // if (inputValue === '' || inputValueError === '') {
                 //   onChange && onChange(inputValue);
                 // }
@@ -92,6 +92,7 @@ function VersionInput({ value, resourceLatestVersion, onChange, onChangeError }:
               style={{ fontSize: 12 }}
               onClick={() => {
                 set$isEdit(false);
+                onChangeError && onChangeError(false);
               }}
             >取消</FComponentsLib.FTextBtn>
             <div style={{ width: 10 }} />
