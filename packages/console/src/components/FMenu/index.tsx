@@ -39,22 +39,6 @@ function FMenu({ options, value, onClick }: FMenuProps) {
     onClick={(param: any) => onClick && onClick(param.key)}
     items={items}
   />);
-  // return (
-  //   <Menu
-  //     selectable={false}
-  //     className={styles.Menu}
-  //     mode='vertical'
-  //     onClick={(param: any) => onClick && onClick(param.key)}
-  //   >
-  //     {
-  //       (options || [])
-  //         .map((i: FMenuItem) => (<Menu.Item
-  //           key={i.value}
-  //           className={styles.MenuItem + ' ' + (value === i.value ? styles.active : '')}
-  //         >{i.text || i.value}</Menu.Item>))
-  //     }
-  //   </Menu>
-  // );
 }
 
 export default FMenu;

@@ -122,6 +122,7 @@ function Resources({ dispatch, resourceListPage }: ResourceProps) {
           <span>{FI18n.i18nNext.t('resource_state')}：</span>
 
           <FComponentsLib.FDropdown
+            // visible={true}
             overlay={
               <FMenu
                 options={$resourceStatusOptions as any}
@@ -142,7 +143,7 @@ function Resources({ dispatch, resourceListPage }: ResourceProps) {
                 {$resourceStatusOptions.find((rs) => {
                   return rs.value === resourceListPage.resourceStatus;
                 })?.text}
-                <FComponentsLib.FIcons.FDown style={{ marginLeft: 8, fontSize: 12 }} />
+                <FComponentsLib.FIcons.FDown style={{ marginLeft: 10, fontSize: 12 }} />
               </span>
           </FComponentsLib.FDropdown>
         </div>
