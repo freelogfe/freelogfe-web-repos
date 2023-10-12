@@ -6,6 +6,7 @@ import ResourceInfo from './resource/info';
 import PolicyTag from './resource/policyTag';
 import { FServiceAPI, FI18n, FUtil } from '@freelog/tools-lib';
 import FNoDataTip from '@/components/FNoDataTip';
+import FCoverImage from '@/components/FCoverImage';
 
 interface ResourceListProps {
   onClick?: any;
@@ -43,13 +44,14 @@ export default function ResourceList({
                   );
                 }}
               >
-                <ResourceImage
-                  imgSrc={
-                    item.coverImages[0]
-                      ? item.coverImages[0]
-                      : '//static.freelog.com/static/default_cover.png'
-                  }
-                />
+                <FCoverImage src={item.coverImages[0]} width={280}/>
+                {/*<ResourceImage*/}
+                {/*  imgSrc={*/}
+                {/*    item.coverImages[0]*/}
+                {/*      ? item.coverImages[0]*/}
+                {/*      : '//static.freelog.com/static/default_cover.png'*/}
+                {/*  }*/}
+                {/*/>*/}
                 <ResourceInfo
                   name={item.resourceTitle || item.resourceName}
                   type={item.resourceType.join(' / ')}
