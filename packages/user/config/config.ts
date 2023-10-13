@@ -95,7 +95,7 @@ export default defineConfig({
         {
           exact: true,
           path: 'binding',
-          wrappers: ['@/pages/logged/index'],
+          // wrappers: ['@/pages/logged/index'],
           component: '@/pages/logged/binding/index',
           title: '绑定 - Freelog',
         },

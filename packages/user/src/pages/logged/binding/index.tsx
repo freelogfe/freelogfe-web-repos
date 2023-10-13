@@ -6,14 +6,25 @@ import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import fMessage from '@/components/fMessage';
 import { getUrlOfBindingWechat } from '@/utils';
 import FPasswordInput from '@/components/FPasswordInput';
+import { connect } from 'dva';
+import { ConnectState } from '@/models/connect';
+import { Dispatch } from 'redux';
+import * as AHooks from 'ahooks';
+import { FetchInfoAction } from '@/models/user';
 
 interface BindingProps {
-
+  dispatch: Dispatch;
 }
 
-function Binding({}: BindingProps) {
+function Binding({dispatch}: BindingProps) {
 
   const [password, set_password] = React.useState<string>('');
+
+  AHooks.useMount(() => {
+    dispatch<FetchInfoAction>({
+      type: 'user/fetchInfo',
+    });
+  });
 
   async function verify() {
     const params: Parameters<typeof FServiceAPI.User.verifyLoginPassword>[0] = {
@@ -76,4 +87,4 @@ function Binding({}: BindingProps) {
   </div>);
 }
 
-export default Binding;
+export default connect(({}: ConnectState) => ({}))(Binding);
