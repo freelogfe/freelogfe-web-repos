@@ -368,9 +368,9 @@ function InviteFriend({ activityDetailsPage }: InviteFriendProps) {
                 <div className='flex-row title-row align-end'>
                   <div className='flex-row align-end c1'>
                     <span className='title'>我的邀请记录</span>
-                    <span className='tip'>
-                      好友在注册后的7天内完成指定任务，即可领取奖励
-                    </span>
+                    {/*<span className='tip'>*/}
+                    {/*  好友在注册后的7天内完成指定任务，即可领取奖励*/}
+                    {/*</span>*/}
                   </div>
                   <span className='tip c2'>最近更新</span>
                   <span className='tip c3'>奖励进度</span>
