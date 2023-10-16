@@ -123,7 +123,7 @@ function InviteFriend({ activityDetailsPage }: InviteFriendProps) {
     setUserData({
       userInfo: userInfo.data,
       ...res.data,
-      textCopy: `邀你一起参与Freelog内测啦！Freelog，国内首家基于智能合约的资源自动化交易平台，参与内测至少可领【61元】现金奖励，发布小说、漫画等资源还可赢取【2000元】现金奖励！活动仅限800人，快快戳链接注册参与吧！
+      textCopy: `邀你一起参与Freelog内测啦！Freelog，国内首家基于智能合约的资源自动化交易平台，参与内测至少可领【43元】现金奖励，发布小说、漫画等资源还可赢取【2000元】现金奖励！活动仅限800人，快快戳链接注册参与吧！
 
 
 前往Freelog注册：${FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.logon({ invitationCode: res.data.code })}
