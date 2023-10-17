@@ -45,13 +45,6 @@ export default function ResourceList({
                 }}
               >
                 <FCoverImage src={item.coverImages[0]} width={280}/>
-                {/*<ResourceImage*/}
-                {/*  imgSrc={*/}
-                {/*    item.coverImages[0]*/}
-                {/*      ? item.coverImages[0]*/}
-                {/*      : '//static.freelog.com/static/default_cover.png'*/}
-                {/*  }*/}
-                {/*/>*/}
                 <ResourceInfo
                   name={item.resourceTitle || item.resourceName}
                   type={item.resourceType.join(' / ')}
