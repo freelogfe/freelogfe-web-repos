@@ -427,7 +427,7 @@ function FResourceTypeInput(
           type={'additional2'}
         />
       </div>
-      <div style={{ height: 20 }} />
+      <div style={{ height: 10 }} />
       <div className={styles.FCascader}>
         {
           $state.$options.map((o0) => {
