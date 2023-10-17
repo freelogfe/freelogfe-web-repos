@@ -320,7 +320,7 @@ function LocalUpload({ style, resourceTypeCode, onSucceed }: LocalUploadProps) {
           {
             title: '类型',
             dataIndex: 'resourceType',
-            width: 100,
+            width: 300,
             render(value, record, index) {
               return (<FComponentsLib.FContentText
                 text={record.resourceType.join(' / ')}
@@ -330,6 +330,7 @@ function LocalUpload({ style, resourceTypeCode, onSucceed }: LocalUploadProps) {
           {
             title: '版本',
             dataIndex: 'resourceVersion',
+            width: 160,
             render(value, record, index) {
               return (<FComponentsLib.FContentText
                 text={record.resourceVersion}
@@ -390,7 +391,7 @@ function LocalUpload({ style, resourceTypeCode, onSucceed }: LocalUploadProps) {
           {
             title: '类型',
             dataIndex: 'resourceType',
-            width: 100,
+            width: 300,
             render(value, record, index) {
               return (<FComponentsLib.FContentText
                 text={record.resourceType.join(' / ')}
@@ -400,6 +401,7 @@ function LocalUpload({ style, resourceTypeCode, onSucceed }: LocalUploadProps) {
           {
             title: '版本',
             dataIndex: 'resourceVersion',
+            width: 160,
             render(value, record, index) {
               return (<FComponentsLib.FContentText
                 text={record.resourceVersion}
