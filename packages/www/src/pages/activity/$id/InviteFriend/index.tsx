@@ -190,7 +190,7 @@ function InviteFriend({ activityDetailsPage }: InviteFriendProps) {
                 >
                   Freelog内测玩法指南
                 </a>
-                <span className='tip'>(至少可领61元现金奖励哦!)</span>
+                <span className='tip'>(至少可领43元现金奖励哦!)</span>
               </div>
             </div>
           </div>
@@ -198,7 +198,7 @@ function InviteFriend({ activityDetailsPage }: InviteFriendProps) {
         <div className='flex-column praise w-100x align-center'>
           <div className='category'>
             <div className='invite-circle active-reward'>
-              <div className='circle-inside'></div>
+              <div className='circle-inside'/>
             </div>
             <span>活动奖励</span>
           </div>
