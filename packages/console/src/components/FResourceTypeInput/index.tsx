@@ -4,6 +4,7 @@ import { AutoComplete, Dropdown, Popover, Space } from 'antd';
 import * as AHooks from 'ahooks';
 import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
+import FTooltip from '@/components/FTooltip';
 
 interface Option {
   value: string;
@@ -263,15 +264,20 @@ function FResourceTypeInput(
         autoFocus={true}
         allowClear={true}
         defaultOpen={true}
+        open={true}
         options={[
           ...($state._autoCompleteInputIsNew ? [
             {
               value: '#new',
-              label: (<div className={styles.autoCompleteOption}>
-                <span>{$state._autoCompleteInput}</span>
-                {/*<FComponentsLib.FTextBtn>添加新类型</FComponentsLib.FTextBtn>*/}
-                <FComponentsLib.FTextBtn>{FI18n.i18nNext.t('createresource_selectresourcetype_btn_addthis')}</FComponentsLib.FTextBtn>
-              </div>),
+              label: (
+                <div className={styles.autoCompleteOption}>
+                  <FTooltip title={'1234'} mouseEnterDelay={.5}>
+                    <span>{$state._autoCompleteInput}</span>
+                  </FTooltip>
+                  {/*<FComponentsLib.FTextBtn>添加新类型</FComponentsLib.FTextBtn>*/}
+                  <FComponentsLib.FTextBtn>{FI18n.i18nNext.t('createresource_selectresourcetype_btn_addthis')}</FComponentsLib.FTextBtn>
+                </div>
+              ),
               data: {
                 value: '#new',
                 label: '',
@@ -510,7 +516,8 @@ function FResourceTypeInput(
                         >
                           <span>{o1.label}</span>
                           {
-                            o1.children.length > 0 && (<FComponentsLib.FIcons.FRight className={styles.itemRightIcon} />)
+                            o1.children.length > 0 && (
+                              <FComponentsLib.FIcons.FRight className={styles.itemRightIcon} />)
                           }
                         </div>
                       </Popover>
