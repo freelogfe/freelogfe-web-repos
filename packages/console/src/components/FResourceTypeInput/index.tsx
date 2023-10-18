@@ -264,14 +264,14 @@ function FResourceTypeInput(
         autoFocus={true}
         allowClear={true}
         defaultOpen={true}
-        open={true}
+        // open={true}
         options={[
           ...($state._autoCompleteInputIsNew ? [
             {
               value: '#new',
               label: (
                 <div className={styles.autoCompleteOption}>
-                  <FTooltip title={'1234'} mouseEnterDelay={.5}>
+                  <FTooltip overlayInnerStyle={{width: 'fit-content'}} title={$state._autoCompleteInput} mouseEnterDelay={.5}>
                     <span>{$state._autoCompleteInput}</span>
                   </FTooltip>
                   {/*<FComponentsLib.FTextBtn>添加新类型</FComponentsLib.FTextBtn>*/}
