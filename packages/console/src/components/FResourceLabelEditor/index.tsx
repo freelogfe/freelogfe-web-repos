@@ -215,14 +215,17 @@ function FResourceLabelEditor($prop: FResourceLabelEditorProps) {
       $state.labels1.length > 0 && (<>
         <div style={{ height: 25 }} />
 
-        <FComponentsLib.FContentText text={'推荐标签:'} type={'additional2'} />
+        <FComponentsLib.FContentText
+          text={'推荐标签:'}
+          type={'additional2'}
+        />
         <div style={{ height: 10 }} />
         <div className={styles.Labels}>
           {
             $state.labels1.map((l) => {
               const selected: boolean = $prop.value.includes(l.name);
               return (<FTooltip
-                title={l.description}
+                title={l.description.substring(0, 100)}
                 placement={'top'}
                 key={l.id}
                 open={l.description === '' ? false : undefined}
@@ -250,14 +253,17 @@ function FResourceLabelEditor($prop: FResourceLabelEditorProps) {
       $state.labels2.length > 0 && (<>
         <div style={{ height: 25 }} />
 
-        <FComponentsLib.FContentText text={'推荐活动:'} type={'additional2'} />
+        <FComponentsLib.FContentText
+          text={'推荐活动:'}
+          type={'additional2'}
+        />
         <div style={{ height: 10 }} />
         <div className={styles.Labels}>
           {
             $state.labels2.map((l) => {
               const selected: boolean = $prop.value.includes(l.name);
               return (<FTooltip
-                title={l.description}
+                title={l.description.substring(0, 100)}
                 placement={'top'}
                 key={l.id}
                 open={l.description === '' ? false : undefined}
