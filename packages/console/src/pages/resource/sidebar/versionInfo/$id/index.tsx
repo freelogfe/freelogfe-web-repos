@@ -482,7 +482,7 @@ function VersionInfo({ dispatch, resourceVersionEditorPage, match }: VersionInfo
             <FViewportCards_Resource
               resourceID={resourceVersionEditorPage.resourceID}
               version={resourceVersionEditorPage.version}
-              graphShow={['relationship', 'authorization', 'dependency']}
+              graphShow={['authorization', 'dependency']}
               onMount={({ hasData }) => {
                 // console.log(hasData, 'hasDataiosdjflkjsdflkjlk');
                 dispatch<ChangeAction>({
