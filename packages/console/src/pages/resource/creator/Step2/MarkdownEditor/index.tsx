@@ -35,11 +35,11 @@ function MarkdownEditor({ style, onClickBtn }: MarkdownEditorProps) {
         }}
       >立即体验</FComponentsLib.FRectBtn>
     </div>
-    <Modal open={true}>
-      <MicroApp
-        name='markdownEditor'
-      />
-    </Modal>
+    {/*<Modal open={true}>*/}
+    {/*  <MicroApp*/}
+    {/*    name='markdownEditor'*/}
+    {/*  />*/}
+    {/*</Modal>*/}
   </>);
 }
 

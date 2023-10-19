@@ -36,9 +36,9 @@ export default defineConfig({
       apps: [
         {
           name: 'markdownEditor', // 唯一 id
-          // entry: 'http://creator-tools.testfreelog.com/', // html entry
-          entry: 'http://localhost:7100', // html entry
-          // container: document,
+          entry: '//localhost:7100', // html entry
+          // entry: '//192.168.2.28:8080', // html entry
+          // credentials: true,
         },
         // {
         //   name: 'app2', // 唯一 id

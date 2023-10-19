@@ -5,13 +5,12 @@ import StorageSpace from '@/pages/resource/creator/Step2/StorageSpace';
 import MarkdownEditor from '@/pages/resource/creator/Step2/MarkdownEditor';
 import CartoonEditor from '@/pages/resource/creator/Step2/CartoonEditor';
 import FComponentsLib from '@freelog/components-lib';
-import { history } from 'umi';
 import { FI18n, FUtil } from '@freelog/tools-lib';
 import img from '@/assets/file-object.svg';
 import FTooltip from '@/components/FTooltip';
 import fResourcePropertyEditor from '@/components/fResourcePropertyEditor';
 import FResourceProperties from '@/components/FResourceProperties';
-import { Space } from 'antd';
+import { Drawer, Space } from 'antd';
 import fResourceOptionEditor from '@/components/fResourceOptionEditor';
 import FResourceOptions from '@/components/FResourceOptions';
 import FResourceAuthorizationProcessor, { getProcessor } from '@/components/FResourceAuthorizationProcessor';
@@ -52,6 +51,7 @@ import fAddCustomOptions from '@/components/fAddCustomOptions';
 import VersionInput from '@/pages/resource/version/creator/$id/VersionInput';
 import FPrompt from '@/components/FPrompt';
 import FSkeletonNode from '@/components/FSkeletonNode';
+import { MicroApp, withRouter, history } from 'umi';
 
 interface VersionCreatorProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -60,6 +60,7 @@ interface VersionCreatorProps extends RouteComponentProps<{ id: string }> {
 
 function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: VersionCreatorProps) {
 
+  // console.log(match.params, 'match sdiofjsld;kjflksdjfj')
   const ref = React.useRef(null);
   const size = AHooks.useSize(ref);
   const [$showMore, set$ShowMore, get$ShowMore] = useGetState<boolean>(false);
@@ -250,6 +251,21 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
           });
         }}
       />
+      <Drawer open={true} width={'100%'} title={null} footer={null} closable={false}>
+        <MicroApp
+          name='markdownEditor'
+          resourceID={match.params.id}
+          onChange_Saved={(saved: boolean) => {
+            // onChange_Saved && onChange_Saved(saved);
+          }}
+          onClose={() => {
+            // set_visible(false);
+            // setTimeout(() => {
+            //   // onClose && onClose();
+            // }, 300);
+          }}
+        />
+      </Drawer>
 
     </div>);
   }
@@ -1167,9 +1183,27 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
         });
       }}
     />
+
+    <Drawer open={true} width={'100%'} title={null} footer={null} closable={false}>
+      {/*<MicroApp*/}
+      {/*  name='markdownEditor'*/}
+      {/*  resourceID={match.params.id}*/}
+      {/*  onChange_Saved={(saved: boolean) => {*/}
+      {/*    // onChange_Saved && onChange_Saved(saved);*/}
+      {/*  }}*/}
+      {/*  onClose={() => {*/}
+      {/*    // set_visible(false);*/}
+      {/*    // setTimeout(() => {*/}
+      {/*    //   // onClose && onClose();*/}
+      {/*    // }, 300);*/}
+      {/*  }}*/}
+      {/*/>*/}
+    </Drawer>
   </>);
 }
 
-export default connect(({ resourceVersionCreatorPage }: ConnectState) => ({
+export default withRouter(connect(({ resourceVersionCreatorPage }: ConnectState) => ({
   resourceVersionCreatorPage: resourceVersionCreatorPage,
-}))(VersionCreator);
+}))(VersionCreator));
+
+
