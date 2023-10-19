@@ -40,10 +40,14 @@ export default defineConfig({
           // entry: '//192.168.2.28:8080', // html entry
           // credentials: true,
         },
-        // {
-        //   name: 'app2', // 唯一 id
-        //   entry: '//localhost:7002', // html entry
-        // },
+        {
+          name: 'markdownEditor1', // 唯一 id
+          entry: '//192.168.2.28:8080', // html entry
+        },
+        {
+          name: 'markdownEditor2', // 唯一 id
+          entry: '//localhost:7105', // html entry
+        },
       ],
     },
   },
