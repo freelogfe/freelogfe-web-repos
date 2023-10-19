@@ -30,4 +30,21 @@ export default defineConfig({
   },
   hash: true,
   favicon: '//static.freelog.com/static/favicon.ico',
+  qiankun: {
+    master: {
+      // 注册子应用信息
+      apps: [
+        {
+          name: 'markdownEditor', // 唯一 id
+          // entry: 'http://creator-tools.testfreelog.com/', // html entry
+          entry: 'http://localhost:7100', // html entry
+          // container: document,
+        },
+        // {
+        //   name: 'app2', // 唯一 id
+        //   entry: '//localhost:7002', // html entry
+        // },
+      ],
+    },
+  },
 });
