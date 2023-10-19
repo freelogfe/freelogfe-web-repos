@@ -66,6 +66,7 @@
     "@types/showdown": "^2.0.1",
     "@types/sortablejs": "^1.15.1",
     "@umijs/plugin-esbuild": "^1.4.2",
+    "@umijs/plugin-qiankun": "^2.44.1",
     "@umijs/preset-react": "~1.8.32",
     "@umijs/test": "^3.5.40",
     "lint-staged": "^10.5.4",
