@@ -15,6 +15,15 @@ export default defineConfig({
   fastRefresh: {},
   devServer: {},
   proxy: {
+    '/api': {
+      target: 'http://qi.testfreelog.com',
+      secure: false,
+      changeOrigin: true,
+      headers: {},
+      pathRewrite: {
+        "^/api": 'http://qi.testfreelog.com',
+      },
+    },
     '/v2': {
       target: 'http://qi.testfreelog.com',
       secure: false,
@@ -34,20 +43,20 @@ export default defineConfig({
     master: {
       // 注册子应用信息
       apps: [
-        {
-          name: 'markdownEditor', // 唯一 id
-          entry: '//localhost:7100', // html entry
-          // entry: '//192.168.2.28:8080', // html entry
-          // credentials: true,
-        },
+        // {
+        //   name: 'markdownEditor', // 唯一 id
+        //   entry: '//localhost:7100', // html entry
+        //   // entry: '//192.168.2.28:8080', // html entry
+        //   // credentials: true,
+        // },
         {
           name: 'markdownEditor1', // 唯一 id
           entry: '//192.168.2.28:8080', // html entry
         },
-        {
-          name: 'markdownEditor2', // 唯一 id
-          entry: '//localhost:7105', // html entry
-        },
+        // {
+        //   name: 'markdownEditor2', // 唯一 id
+        //   entry: '//localhost:7105', // html entry
+        // },
       ],
     },
   },
