@@ -133,7 +133,7 @@ function FStorageUploadTasksPanel({ bucketName, availableStorageSize, onSuccess 
         <FComponentsLib.FTextBtn
           onClick={async () => {
             // console.log('####38dshlkfjhsdlkjl');
-            console.log(get_uploadTaskQueue(), 'get_uploadTaskQueue 98weijfslkdjflsdjflsjdfljlfjds');
+            // console.log(get_uploadTaskQueue(), 'get_uploadTaskQueue 98weijfslkdjflsdjflsjdfljlfjds');
             const isExits: boolean = get_uploadTaskQueue().some((i) => {
               return i.state !== 'success';
             });
