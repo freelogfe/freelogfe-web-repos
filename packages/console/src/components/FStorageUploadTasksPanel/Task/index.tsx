@@ -156,7 +156,7 @@ function Task({
     {
       taskState === 'sameName' && (<UploadSameName
         onClick={async () => {
-          console.log('startUploadFile we9oifjsdkifjsdl;fjlksdjflk');
+          // console.log('startUploadFile we9oifjsdkifjsdl;fjlksdjflk');
           await startUploadFile();
         }}
       />)
