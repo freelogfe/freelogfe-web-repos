@@ -130,7 +130,7 @@ function Examples({ }) {
 
     <Drawer open={true} width={'100%'} title={null} footer={null} closable={false}>
       <MicroApp
-        name='markdownEditor'
+        name='markdownEditor1'
         resourceID={'6530ef390fa584002e943dc9'}
         onChange_Saved={(saved: boolean) => {
           // onChange_Saved && onChange_Saved(saved);

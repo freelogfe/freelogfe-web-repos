@@ -1669,6 +1669,8 @@
 	            var nBitsTotal = this._nDataBytes * 8;
 	            var nBitsLeft = data.sigBytes * 8;
 
+              console.log(nBitsLeft, 'nBitsLeft**********************')
+              console.log(0x80 << (24 - nBitsLeft % 32), 'nBitsLeft###########################')
 	            // Add padding
 	            dataWords[nBitsLeft >>> 5] |= 0x80 << (24 - nBitsLeft % 32);
 
