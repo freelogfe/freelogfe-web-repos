@@ -29,7 +29,7 @@ function FMicroApp_MarkdownEditorDrawer({
     title={null}
     footer={null}
     closable={false}
-    destroyOnClose
+    destroyOnClose={true}
   >
     <MicroApp
       name='markdownEditor'
