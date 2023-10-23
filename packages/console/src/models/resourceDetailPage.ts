@@ -13,6 +13,7 @@ export interface ResourceDetailPageModelState {
 
   resource_ID: string;
   resource_Info: null | {
+    title: string;
     cover: string;
     name: string;
     type: string[];
@@ -189,6 +190,7 @@ const initStates: ResourceDetailPageModelState = {
   resource_ID: '',
   resource_Info: {
     cover: '',
+    title: '',
     name: '',
     type: [],
     tags: [],
@@ -635,6 +637,7 @@ const Model: ResourceDetailPageModelType = {
           resource_Info: {
             cover: data_ResourceDetail.coverImages.length > 0 ? data_ResourceDetail.coverImages[0] : '',
             name: data_ResourceDetail.resourceName,
+            title: data_ResourceDetail.resourceTitle || '',
             type: data_ResourceDetail.resourceType,
             tags: data_ResourceDetail.tags,
             about: data_ResourceDetail.intro,
@@ -956,6 +959,7 @@ interface HandleResourceBatchInfoParams {
 type HandleResourceBatchInfoReturn = {
   resourceId: string;
   resourceName: string;
+  resourceTitle: string;
   resourceType: string[];
   latestVersion: string;
   coverImages: string[];
