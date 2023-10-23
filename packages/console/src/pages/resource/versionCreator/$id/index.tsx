@@ -52,6 +52,7 @@ import VersionInput from '@/pages/resource/version/creator/$id/VersionInput';
 import FPrompt from '@/components/FPrompt';
 import FSkeletonNode from '@/components/FSkeletonNode';
 import { MicroApp, withRouter, history } from 'umi';
+import FMicroApp_MarkdownEditorDrawer from '@/components/FMicroApp_MarkdownEditorDrawer';
 
 interface VersionCreatorProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -113,10 +114,26 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
         showSuccessTip: false,
       },
     });
-    await fResourceMarkdownEditor({
-      resourceID: resourceVersionCreatorPage.resourceInfo?.resourceID || '',
-      async onChange_Saved(saved: boolean) {
-        set_isMarkdownEditorDirty(!saved);
+    dispatch<ChangeAction>({
+      type: 'resourceVersionCreatorPage/change',
+      payload: {
+        isOpenMarkdown: true,
+      },
+    });
+    // await fResourceMarkdownEditor({
+    //   resourceID: resourceVersionCreatorPage.resourceInfo?.resourceID || '',
+    //   async onChange_Saved(saved: boolean) {
+    //     set_isMarkdownEditorDirty(!saved);
+    //   },
+    // });
+
+  }
+
+  async function onClose_EditMarkdown() {
+    dispatch<ChangeAction>({
+      type: 'resourceVersionCreatorPage/change',
+      payload: {
+        isOpenMarkdown: false,
       },
     });
     await set_isMarkdownEditorDirty(false);
@@ -207,6 +224,13 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
               //   type: 'resourceCreatorPage/onClick_step2_editMarkdownBtn',
               // });
               onClick_EditMarkdownBtn();
+
+              // dispatch<ChangeAction>({
+              //   type: 'resourceVersionCreatorPage/change',
+              //   payload: {
+              //     isOpenMarkdown: true,
+              //   },
+              // });
             }}
           />)
         }
@@ -249,6 +273,28 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
           dispatch<OnClose_CartoonEditor_Action>({
             type: 'resourceVersionCreatorPage/onClose_CartoonEditor',
           });
+        }}
+      />
+
+      <FMicroApp_MarkdownEditorDrawer
+        open={resourceVersionCreatorPage.isOpenMarkdown}
+        resourceID={resourceVersionCreatorPage.resourceInfo?.resourceID || ''}
+        onChange_Saved={(saved) => {
+          dispatch<ChangeAction>({
+            type: 'resourceVersionCreatorPage/change',
+            payload: {
+              isDirtyMarkdownEditor: !saved,
+            },
+          });
+        }}
+        onClose={() => {
+          // dispatch<ChangeAction>({
+          //   type: 'resourceVersionCreatorPage/change',
+          //   payload: {
+          //     isOpenMarkdown: false,
+          //   },
+          // });
+          onClose_EditMarkdown();
         }}
       />
       {/*<Drawer open={false} width={'100%'} title={null} footer={null} closable={false}>*/}
@@ -402,22 +448,24 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
                     //   type: 'resourceVersionCreatorPage/onClick_OpenMarkdownBtn',
                     // });
 
-                    await dispatch<OnTrigger_SaveDraft_Action>({
-                      type: 'resourceVersionCreatorPage/onTrigger_SaveDraft',
-                      payload: {
-                        showSuccessTip: false,
-                      },
-                    });
-                    await fResourceMarkdownEditor({
-                      resourceID: resourceVersionCreatorPage.resourceInfo?.resourceID || '',
-                      async onChange_Saved(saved: boolean) {
-                        set_isMarkdownEditorDirty(!saved);
-                      },
-                    });
-                    await set_isMarkdownEditorDirty(false);
-                    await dispatch<OnClose_MarkdownEditor_Action>({
-                      type: 'resourceVersionCreatorPage/onClose_MarkdownEditor',
-                    });
+                    onClick_EditMarkdownBtn();
+
+                    // await dispatch<OnTrigger_SaveDraft_Action>({
+                    //   type: 'resourceVersionCreatorPage/onTrigger_SaveDraft',
+                    //   payload: {
+                    //     showSuccessTip: false,
+                    //   },
+                    // });
+                    // await fResourceMarkdownEditor({
+                    //   resourceID: resourceVersionCreatorPage.resourceInfo?.resourceID || '',
+                    //   async onChange_Saved(saved: boolean) {
+                    //     set_isMarkdownEditorDirty(!saved);
+                    //   },
+                    // });
+                    // await set_isMarkdownEditorDirty(false);
+                    // await dispatch<OnClose_MarkdownEditor_Action>({
+                    //   type: 'resourceVersionCreatorPage/onClose_MarkdownEditor',
+                    // });
 
                   }}
                 >
@@ -1184,7 +1232,40 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
       }}
     />
 
-    <Drawer open={true} width={'100%'} title={null} footer={null} closable={false}>
+    <FMicroApp_MarkdownEditorDrawer
+      open={resourceVersionCreatorPage.isOpenMarkdown}
+      resourceID={resourceVersionCreatorPage.resourceInfo?.resourceID || ''}
+      onChange_Saved={(saved) => {
+        dispatch<ChangeAction>({
+          type: 'resourceVersionCreatorPage/change',
+          payload: {
+            isDirtyMarkdownEditor: !saved,
+          },
+        });
+      }}
+      onClose={() => {
+        // dispatch<ChangeAction>({
+        //   type: 'resourceVersionCreatorPage/change',
+        //   payload: {
+        //     isOpenMarkdown: false,
+        //   },
+        // });
+        onClose_EditMarkdown();
+      }}
+    />
+
+    {/*<FMicroApp_MarkdownEditorDrawer*/}
+    {/*  open={false}*/}
+    {/*  resourceID={resourceVersionCreatorPage.resourceInfo?.resourceID || ''}*/}
+    {/*  onChange_Saved={(saved) => {*/}
+
+    {/*  }}*/}
+    {/*  onClose={() => {*/}
+
+    {/*  }}*/}
+    {/*/>*/}
+
+    {/*<Drawer open={true} width={'100%'} title={null} footer={null} closable={false}>*/}
       {/*<MicroApp*/}
       {/*  name='markdownEditor'*/}
       {/*  resourceID={match.params.id}*/}
@@ -1198,7 +1279,7 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
       {/*    // }, 300);*/}
       {/*  }}*/}
       {/*/>*/}
-    </Drawer>
+    {/*</Drawer>*/}
   </>);
 }
 

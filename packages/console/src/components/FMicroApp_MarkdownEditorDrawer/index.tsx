@@ -18,6 +18,11 @@ function FMicroApp_MarkdownEditorDrawer({
                                           onChange_Saved,
                                           onClose,
                                         }: FMicroApp_MarkdownEditorDrawer_Props) {
+
+  if (!resourceID) {
+    return null;
+  }
+
   return (<Drawer
     open={open}
     width={'100%'}

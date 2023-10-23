@@ -114,6 +114,7 @@ export interface ResourceVersionCreatorPageModelState {
   // promptLeavePath: string;
   releaseTipVisible: boolean;
 
+  isOpenMarkdown: boolean;
   isOpenCartoon: boolean;
   isDirtyCartoonEditor: boolean;
   isDirtyMarkdownEditor: boolean;
@@ -326,6 +327,7 @@ const initStates: ResourceVersionCreatorPageModelState = {
 
   releaseTipVisible: false,
 
+  isOpenMarkdown: false,
   isOpenCartoon: false,
   isDirtyCartoonEditor: false,
   isDirtyMarkdownEditor: false,
