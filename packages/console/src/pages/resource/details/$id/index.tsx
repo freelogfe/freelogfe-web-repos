@@ -107,13 +107,13 @@ function ResourceDetails({ match, dispatch, resourceDetailPage }: ResourceDetail
             <FComponentsLib.FTitleText
               style={{ width: 500 }}
               singleRow
-              text={resourceDetailPage.resource_Info?.name || resourceDetailPage.resource_Info?.title || ''}
+              text={resourceDetailPage.resource_Info?.title || resourceDetailPage.resource_Info?.name || ''}
             />
           </Space>
           <div className={styles.btns}>
             <FShare
               type='resource'
-              title={resourceDetailPage.resource_Info?.name || resourceDetailPage.resource_Info?.title || ''}
+              title={resourceDetailPage.resource_Info?.title || resourceDetailPage.resource_Info?.name || ''}
               url={window.location.href}
             >
               <FComponentsLib.FTextBtn
