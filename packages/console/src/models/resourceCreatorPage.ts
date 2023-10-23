@@ -71,6 +71,7 @@ export interface ResourceCreatorPageModelState {
     input: string;
     select: string[];
   }[];
+  step2_isOpenMarkdown: boolean;
   step2_dataIsDirty_count: number;
 
   step3_policies: PolicyFullInfo_Type[];
@@ -79,6 +80,11 @@ export interface ResourceCreatorPageModelState {
   step4_resourceCover: string;
   step4_resourceLabels: string[];
   step4_dataIsDirty_count: number;
+
+
+  // isOpenCartoon: boolean;
+  // isDirtyCartoonEditor: boolean;
+  // isDirtyMarkdownEditor: boolean;
 }
 
 export interface ChangeAction extends AnyAction {
@@ -137,6 +143,10 @@ export interface OnSucceed_step2_storageSpace_Action extends AnyAction {
 
 export interface OnClick_step2_editMarkdownBtn_Action extends AnyAction {
   type: 'resourceCreatorPage/onClick_step2_editMarkdownBtn';
+}
+
+export interface OnClose_step2_editMarkdown extends AnyAction {
+  type: 'resourceCreatorPage/onClose_step2_editMarkdown';
 }
 
 export interface OnClick_step2_editCartoonBtn_Action extends AnyAction {
@@ -229,6 +239,7 @@ export interface ResourceCreatorPageModelType {
     onSucceed_step2_localUpload: (action: OnSucceed_step2_localUpload_Action, effects: EffectsCommandMap) => void;
     onSucceed_step2_storageSpace: (action: OnSucceed_step2_storageSpace_Action, effects: EffectsCommandMap) => void;
     onClick_step2_editMarkdownBtn: (action: OnClick_step2_editMarkdownBtn_Action, effects: EffectsCommandMap) => void;
+    onClose_step2_editMarkdown: (action: OnClose_step2_editMarkdown, effects: EffectsCommandMap) => void;
     onClick_step2_editCartoonBtn: (action: OnClick_step2_editCartoonBtn_Action, effects: EffectsCommandMap) => void;
     onRemove_step2_file: (action: OnRemove_step2_file_Action, effects: EffectsCommandMap) => void;
     onChange_step2_additionalProperties: (action: OnChange_step2_additionalProperties_Action, effects: EffectsCommandMap) => void;
@@ -270,6 +281,7 @@ export const initStates: ResourceCreatorPageModelState = {
   step2_customProperties: [],
   step2_customConfigurations: [],
   step2_dataIsDirty_count: 0,
+  step2_isOpenMarkdown: false,
 
   step3_policies: [],
 
@@ -685,23 +697,38 @@ const Model: ResourceCreatorPageModelType = {
         } = yield call(FServiceAPI.Resource.saveVersionsDraft, params1);
       }
 
-      yield call(fResourceMarkdownEditor, {
-        resourceID: resourceCreatorPage.step1_createdResourceInfo.resourceID,
-        async onChange_Saved(saved: boolean) {
-          // set_isMarkdownEditorDirty(!saved);
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          step2_isOpenMarkdown: true,
         },
       });
+
+      // yield call(fResourceMarkdownEditor, {
+      //   resourceID: resourceCreatorPage.step1_createdResourceInfo.resourceID,
+      //   async onChange_Saved(saved: boolean) {
+      //     // set_isMarkdownEditorDirty(!saved);
+      //   },
+      // });
+
+
+    },
+    * onClose_step2_editMarkdown({}: OnClose_step2_editMarkdown, { select, put, call }: EffectsCommandMap) {
+      const { resourceCreatorPage }: ConnectState = yield select(({ resourceCreatorPage }: ConnectState) => ({
+        resourceCreatorPage,
+      }));
 
       yield put<ChangeAction>({
         type: 'change',
         payload: {
+          step2_isOpenMarkdown: false,
           step2_rawPropertiesState: 'parsing',
           step2_dataIsDirty_count: resourceCreatorPage.step2_dataIsDirty_count + 1,
         },
       });
 
       const params2: Parameters<typeof FServiceAPI.Resource.lookDraft>[0] = {
-        resourceId: resourceCreatorPage.step1_createdResourceInfo.resourceID,
+        resourceId: resourceCreatorPage.step1_createdResourceInfo?.resourceID || '',
       };
       const { data: data_draft2 }: {
         data: null | {
@@ -723,7 +750,7 @@ const Model: ResourceCreatorPageModelType = {
 
       const params4: Parameters<typeof getFilesSha1Info>[0] = {
         sha1: [data_draft2.draftData.selectedFileInfo.sha1],
-        resourceTypeCode: resourceCreatorPage.step1_createdResourceInfo.resourceTypeCode,
+        resourceTypeCode: resourceCreatorPage.step1_createdResourceInfo?.resourceTypeCode || '',
       };
       const {
         result,
