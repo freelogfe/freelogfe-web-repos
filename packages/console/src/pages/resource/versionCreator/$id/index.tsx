@@ -251,21 +251,21 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
           });
         }}
       />
-      <Drawer open={true} width={'100%'} title={null} footer={null} closable={false}>
-        <MicroApp
-          name='markdownEditor'
-          resourceID={match.params.id}
-          onChange_Saved={(saved: boolean) => {
-            // onChange_Saved && onChange_Saved(saved);
-          }}
-          onClose={() => {
-            // set_visible(false);
-            // setTimeout(() => {
-            //   // onClose && onClose();
-            // }, 300);
-          }}
-        />
-      </Drawer>
+      {/*<Drawer open={false} width={'100%'} title={null} footer={null} closable={false}>*/}
+      {/*  <MicroApp*/}
+      {/*    name='markdownEditor'*/}
+      {/*    resourceID={match.params.id}*/}
+      {/*    onChange_Saved={(saved: boolean) => {*/}
+      {/*      // onChange_Saved && onChange_Saved(saved);*/}
+      {/*    }}*/}
+      {/*    onClose={() => {*/}
+      {/*      // set_visible(false);*/}
+      {/*      // setTimeout(() => {*/}
+      {/*      //   // onClose && onClose();*/}
+      {/*      // }, 300);*/}
+      {/*    }}*/}
+      {/*  />*/}
+      {/*</Drawer>*/}
 
     </div>);
   }
