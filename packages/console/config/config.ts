@@ -43,12 +43,12 @@ export default defineConfig({
     master: {
       // 注册子应用信息
       apps: [
-        // {
-        //   name: 'markdownEditor', // 唯一 id
-        //   entry: '//localhost:7100', // html entry
-        //   // entry: '//192.168.2.28:8080', // html entry
-        //   // credentials: true,
-        // },
+        {
+          name: 'markdownEditor', // 唯一 id
+          entry: '//creator-tools.testfreelog.com', // html entry
+          // entry: '//192.168.2.28:8080', // html entry
+          // credentials: true,
+        },
         {
           name: 'markdownEditor1', // 唯一 id
           entry: '//192.168.2.28:8080', // html entry
