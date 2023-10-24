@@ -196,7 +196,7 @@ function StorageSpace({ style = {}, resourceTypeCode, onSucceed }: StorageSpaceP
           {
             title: '类型',
             dataIndex: 'resourceType',
-            width: 300,
+            width: 280,
             render(value, record, index) {
               return (<FComponentsLib.FContentText
                 text={record.resourceType.join(' / ')}
@@ -266,7 +266,7 @@ function StorageSpace({ style = {}, resourceTypeCode, onSucceed }: StorageSpaceP
           {
             title: '类型',
             dataIndex: 'resourceType',
-            width: 300,
+            width: 280,
             render(value, record, index) {
               return (<FComponentsLib.FContentText
                 text={record.resourceType.join(' / ')}
