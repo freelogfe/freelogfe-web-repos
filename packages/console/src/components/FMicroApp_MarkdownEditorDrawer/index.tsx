@@ -30,6 +30,7 @@ function FMicroApp_MarkdownEditorDrawer({
     footer={null}
     closable={false}
     destroyOnClose={true}
+    bodyStyle={{ padding: 0 }}
   >
     <MicroApp
       name='markdownEditor'
