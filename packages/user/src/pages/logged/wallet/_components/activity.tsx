@@ -5,7 +5,6 @@ import reward from '@/assets/reward.jpg';
 import bindWarning from '@/assets/bind-warning.png';
 import { Spin } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
-import moment from 'moment';
 import FComponentsLib from '@freelog/components-lib';
 import * as AHooks from 'ahooks';
 import { Modal } from 'antd';
@@ -75,6 +74,7 @@ function CoinActivity(props: CoinActivity) {
       setAmountSum(data.data.amountSum);
     }
   };
+
   return (
     <div className='w-100x h-170 mt-20 flex-column'>
       <div
@@ -162,7 +162,7 @@ function CoinActivity(props: CoinActivity) {
         <div className='w-100x flex-column-center'>
           <div className={styles.accountTitle}>提示</div>
           <div className='w-72 mt-60 mb-20'>
-            <img src={bindWarning} className='w-100x'></img>
+            <img src={bindWarning} className='w-100x' />
           </div>
           <div className={styles.middleTip}>需要激活羽币账户才能参加活动</div>
           <FComponentsLib.FRectBtn
@@ -205,20 +205,20 @@ function CoinActivity(props: CoinActivity) {
           </div>
           <div className={styles.text + ' mt-20'}>羽币领取规则</div>
           <div className='flex-row mt-10 align-center'>
-            <div className={styles.dot}></div>
+            <div className={styles.dot} />
             <span className={styles.text1}>
               首次领取羽币，需激活羽币账号，激活成功后即可领取100羽币；
             </span>
           </div>
           <div className='flex-row mt-10 align-center'>
-            <div className={styles.dot}></div>
+            <div className={styles.dot} />
             <span className={styles.text1}>
               可通过每日登陆领取羽币，内测活动期间
               ，用户每日成功登陆Freelog，即可领取30羽币；
             </span>
           </div>
           <div className='flex-row mt-10 align-center'>
-            <div className={styles.dot}></div>
+            <div className={styles.dot} />
             <span className={styles.text1}>
               内测活动期间，羽币领取上限为1000羽币。
             </span>
@@ -226,25 +226,25 @@ function CoinActivity(props: CoinActivity) {
 
           <div className={styles.text + ' mt-20'}>羽币使用规则</div>
           <div className='flex-row mt-10 align-center'>
-            <div className={styles.dot}></div>
+            <div className={styles.dot} />
             <span className={styles.text1}>
               羽币可用于购买Freelog平台上的资源或展品授权；
             </span>
           </div>
           <div className='flex-row mt-10 align-center'>
-            <div className={styles.dot}></div>
+            <div className={styles.dot} />
             <span className={styles.text1}>羽币仅限内测活动期间使用。</span>
           </div>
 
           <div className={styles.text + ' mt-20'}>羽币兑换规则</div>
           <div className='flex-row mt-10 align-center'>
-            <div className={styles.dot + ' shrink-0'}></div>
+            <div className={styles.dot + ' shrink-0'} />
             <div className={styles.text1 + ' text-breakAll'}>
               羽币为Freelog平台的虚拟货币，与真实货币无任何联系，Freelog平台不支持以任何形式、任何比例进行羽币与真实货币中间的兑换；
             </div>
           </div>
           <div className='flex-row mt-30 align-center'>
-            <div className={styles.dot + ' shrink-0'}></div>
+            <div className={styles.dot + ' shrink-0'} />
             <div className={styles.text1 + ' text-breakAll'}>
               用户在内测活动期间，使用羽币购买资源或展品授权的次数达到3次及以上，内测活动结束后，积累的羽币可在Freelog积分商城进行奖品兑换，使用羽币购买资源或展品授权的次数少于3次，内测活动结束后，所得羽币将会清零。
             </div>
