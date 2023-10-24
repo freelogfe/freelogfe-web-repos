@@ -91,7 +91,7 @@ function ResourceDetails({ match, dispatch, resourceDetailPage }: ResourceDetail
   return (
     <div className={styles.style}>
       <Helmet>
-        <title>{`${resourceDetailPage.resource_Info?.name || ''} - Freelog`}</title>
+        <title>{`${resourceDetailPage.resource_Info?.title || resourceDetailPage.resource_Info?.name || ''} - Freelog`}</title>
       </Helmet>
       <div className={styles.wrap}>
         <div style={{ height: 35 }} />
