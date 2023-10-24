@@ -16,6 +16,7 @@ import * as AHooks from 'ahooks';
 import { OnMount_Page_Action, OnUnmount_Page_Action } from '@/models/nodeCreatorPage';
 import FComponentsLib from '@freelog/components-lib';
 import { FI18n, FUtil } from '@freelog/tools-lib';
+import moment from 'moment';
 
 interface NodeCreatorProps {
   dispatch: Dispatch;
@@ -23,7 +24,7 @@ interface NodeCreatorProps {
 }
 
 function NodeCreator({ nodeCreatorPage, dispatch }: NodeCreatorProps) {
-
+  console.log(moment(FI18n.i18nNext.t('event_contest_eventperiod_end')).format('YYYY-MM-DD'), 'sdiofjsdlkfjlskdjflkjlkjl');
   AHooks.useMount(() => {
     self._czc?.push(['_trackPageview', self.location.pathname]);
     dispatch<OnMount_Page_Action>({
