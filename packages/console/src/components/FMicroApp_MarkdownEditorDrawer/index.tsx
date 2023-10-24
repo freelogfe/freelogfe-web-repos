@@ -19,12 +19,12 @@ function FMicroApp_MarkdownEditorDrawer({
                                           onClose,
                                         }: FMicroApp_MarkdownEditorDrawer_Props) {
 
-  if (!resourceID) {
+  if (!resourceID || !open) {
     return null;
   }
 
   return (<Drawer
-    open={open}
+    open={true}
     width={'100%'}
     title={null}
     footer={null}
