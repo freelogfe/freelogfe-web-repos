@@ -271,7 +271,8 @@ function FResourceTypeInput(
               value: '#new',
               label: (
                 <div className={styles.autoCompleteOption}>
-                  <FTooltip overlayInnerStyle={{width: 'fit-content'}} title={$state._autoCompleteInput} mouseEnterDelay={.5}>
+                  <FTooltip overlayInnerStyle={{ width: 'fit-content' }} title={$state._autoCompleteInput}
+                            mouseEnterDelay={.5}>
                     <span>{$state._autoCompleteInput}</span>
                   </FTooltip>
                   {/*<FComponentsLib.FTextBtn>添加新类型</FComponentsLib.FTextBtn>*/}
@@ -290,7 +291,12 @@ function FResourceTypeInput(
             return {
               value: aco.value,
               label: (<div className={styles.autoCompleteOption}>
-                <span>{aco.labels.join('/')}</span>
+                <FTooltip
+                  overlayInnerStyle={{ width: 'fit-content' }}
+                  title={aco.labels.join('/')}
+                  mouseEnterDelay={.5}>
+                  <span>{aco.labels.join('/')}</span>
+                </FTooltip>
                 <FComponentsLib.FContentText
                   // text={`${aco.count}个资源`}
                   text={FI18n.i18nNext.t('createresource_selectresourcetype_input_resourceqty', {
@@ -306,7 +312,12 @@ function FResourceTypeInput(
             return {
               value: aco.value,
               label: (<div className={styles.autoCompleteOption}>
-                <span>{aco.labels.join('/')}</span>
+                <FTooltip
+                  overlayInnerStyle={{ width: 'fit-content' }}
+                  title={aco.labels.join('/')}
+                  mouseEnterDelay={.5}>
+                  <span>{aco.labels.join('/')}</span>
+                </FTooltip>
                 <FComponentsLib.FContentText
                   // text={`${aco.count}个资源`}
                   text={FI18n.i18nNext.t('createresource_selectresourcetype_input_resourceqty', {
