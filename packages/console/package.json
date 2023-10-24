@@ -44,6 +44,7 @@
     "jszip": "^3.10.1",
     "moment": "^2.29.4",
     "monaco-editor": "^0.34.1",
+    "qiankun": "^2.10.14",
     "qrcode.react": "^1.0.1",
     "react": "^18.2.0",
     "react-cropper": "^2.3.3",

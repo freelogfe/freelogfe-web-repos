@@ -39,6 +39,7 @@ specifiers:
   moment: ^2.29.4
   monaco-editor: ^0.34.1
   prettier: ^2.8.8
+  qiankun: ^2.10.14
   qrcode.react: ^1.0.1
   react: ^18.2.0
   react-cropper: ^2.3.3
@@ -79,6 +80,7 @@ dependencies:
   jszip: 3.10.1
   moment: 2.29.4
   monaco-editor: 0.34.1
+  qiankun: 2.10.14
   qrcode.react: 1.0.1_react@18.2.0
   react: 18.2.0
   react-cropper: 2.3.3_react@18.2.0
@@ -4949,7 +4951,6 @@ packages:
     resolution: {integrity: sha512-XXtXpGAq811qBgFVdOU6LoOC67rirwv7qwz/zuz1KxbpAM7QYX6kMvELOdSfhjZ9ntQnsdEOXT2zV7xMYaky6w==}
     dependencies:
       '@babel/runtime': 7.22.15
-    dev: true
 
   /import-local/3.1.0:
     resolution: {integrity: sha512-ASB07uLtnDs1o6EHjKpX34BKYDSqnFerfTOJL2HvMqF70LnxpjkzDB8J44oT9pu4AMPkQwf8jl6szgvNd2tRIg==}
@@ -7095,7 +7096,6 @@ packages:
       import-html-entry: 1.15.2
       lodash: 4.17.21
       single-spa: 5.9.5
-    dev: true
 
   /qr.js/0.0.0:
     resolution: {integrity: sha512-c4iYnWb+k2E+vYpRimHqSu575b1/wKl4XFeJGpFmrJQz5I88v9aY2czh7s0w36srfCM1sXgC/xpoJz5dJfq+OQ==}
@@ -8715,7 +8715,6 @@ packages:
 
   /single-spa/5.9.5:
     resolution: {integrity: sha512-9SQdmsyz4HSP+3gs6PJzhkaMEg+6zTlu9oxIghnwUX3eq+ajq4ft5egl0iyR55LAmO/UwvU8NgIWs/ZyQMa6dw==}
-    dev: true
 
   /sisteransi/1.0.5:
     resolution: {integrity: sha512-bLGGlR1QxBcynn2d5YmDX4MGjlZvy2MRBDRNHLJ8VI6l6+9FUiyTFNJ0IveOSP0bcXgVDPRcfGqA0pjaqUpfVg==}
