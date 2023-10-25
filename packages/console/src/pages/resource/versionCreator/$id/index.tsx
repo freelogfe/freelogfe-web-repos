@@ -164,6 +164,7 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
       <div className={styles.styles}>
         {
           !isCartoon && (<LocalUpload
+            resourceType={resourceVersionCreatorPage.resourceInfo?.resourceType || []}
             style={{ width: '100%', flexGrow: 1 }}
             resourceTypeCode={resourceVersionCreatorPage.resourceInfo?.resourceTypeCode || ''}
             onSucceed={(value) => {

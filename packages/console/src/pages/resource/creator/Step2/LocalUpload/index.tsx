@@ -13,6 +13,7 @@ import { Progress } from 'antd';
 
 interface LocalUploadProps {
   resourceTypeCode: string;
+  resourceType: string[];
   style?: React.CSSProperties;
 
   onSucceed?(value: { sha1: string; fileName: string }): void;
@@ -49,7 +50,7 @@ const initStates: LocalUploadStates = {
   $uploadingProgress: null,
 };
 
-function LocalUpload({ style, resourceTypeCode, onSucceed }: LocalUploadProps) {
+function LocalUpload({ style, resourceTypeCode, resourceType, onSucceed }: LocalUploadProps) {
 
   const uploadCancelHandler = React.useRef<any>();
   const [$accept, set$accept, get$accept] = useGetState<LocalUploadStates['$accept']>(initStates['$accept']);
@@ -57,8 +58,6 @@ function LocalUpload({ style, resourceTypeCode, onSucceed }: LocalUploadProps) {
   const [$selfUsedResource, set$selfUsedResource, get$selfUsedResource] = useGetState<LocalUploadStates['$selfUsedResource']>(initStates['$selfUsedResource']);
   const [$otherUsedResource, set$otherUsedResource, get$otherUsedResource] = useGetState<LocalUploadStates['$otherUsedResource']>(initStates['$otherUsedResource']);
   const [$uploadingProgress, set$uploadingProgress, get$uploadingProgress] = useGetState<LocalUploadStates['$uploadingProgress']>(initStates['$uploadingProgress']);
-
-  // console.log($selfUsedResource, '$selfUsedResourceisodjflkjsdl;kfj sadlfjl;skdjflkj');
 
   AHooks.useMount(async () => {
     const { data }: {
@@ -68,15 +67,10 @@ function LocalUpload({ style, resourceTypeCode, onSucceed }: LocalUploadProps) {
     } = await FServiceAPI.Resource.getResourceTypeInfoByCode({
       code: resourceTypeCode,
     });
-    // console.log(data, 'data9iosdjlkfjlksdjflkjl');
     if (!data) {
       return;
     }
     set$accept(data.formats.join(','));
-    // set_uploadFileAccept(data.formats.join(','));
-    // $setState({
-    //   _uploadFileAccept: data.formats.join(','),
-    // });
   });
 
   return (<>
@@ -93,28 +87,17 @@ function LocalUpload({ style, resourceTypeCode, onSucceed }: LocalUploadProps) {
             accept: $accept,
           });
 
+          // console.log(files, resourceType, 'filesisdjflkjsdlkfj kljl')
+
           if (!files || files.length === 0) {
             return;
           }
-
-          if (files[0].size > 200 * 1024 * 1024) {
-            // $setState({
-            //   fState: 'unsuccessful',
-            //   fUploadedError: 'unexpectedSize',
-            // });
+          console.log(resourceType, 'resourceTypesd9ifujlksdjflkjdslkj');
+          console.log(files[0], 'files[0]是0富婆上岛咖啡但是');
+          if (resourceType[0] === '视频' ? files[0].size > 1024 * 1024 * 1024 : files[0].size > 200 * 1024 * 1024) {
             fMessage('文件大小不能超过200MB', 'error');
             return;
           }
-
-          // $setState({
-          //   fState: 'parsing',
-          //   fUploadedError: '',
-          //   fInfo: {
-          //     sha1: '',
-          //     name: file.name,
-          //     from: '本地上传',
-          //   },
-          // });
 
           const sha1: string = await FUtil.Tool.getSHA1Hash(files[0]);
           set$fileInfo({
@@ -145,8 +128,6 @@ function LocalUpload({ style, resourceTypeCode, onSucceed }: LocalUploadProps) {
               }[];
             } = await FServiceAPI.Resource.getResourceBySha1(params3);
 
-            // console.log(data_ResourcesBySha1, 'data_ResourcesBySha1 w8e39iofjsd;flkjsdlfjdlsjfljl');
-
             if (data_ResourcesBySha1.length > 0) {
               if (data_ResourcesBySha1[0].userId === FUtil.Tool.getUserIDByCookies()) {
                 const usedResources: LocalUploadStates['$selfUsedResource'] = data_ResourcesBySha1.map((d) => {
@@ -163,16 +144,7 @@ function LocalUpload({ style, resourceTypeCode, onSucceed }: LocalUploadProps) {
                     };
                   });
                 }).flat();
-                // tempUploadFileInfo.current = {
-                //   fileName: file.name,
-                //   sha1: sha1,
-                // };
                 set$selfUsedResource(usedResources);
-                // $setState({
-                //   fUsedResource: usedResources,
-                //   fState: 'unsuccessful',
-                //   fUploadedError: 'selfTakeUp',
-                // });
               } else {
                 const usedResources: LocalUploadStates['$otherUsedResource'] = data_ResourcesBySha1.map((d) => {
                   return d.resourceVersions.map((v: any) => {
@@ -189,57 +161,26 @@ function LocalUpload({ style, resourceTypeCode, onSucceed }: LocalUploadProps) {
                   });
                 }).flat();
                 set$otherUsedResource(usedResources);
-
-                // $setState({
-                //   fUsedResource: usedResources,
-                //   fState: 'unsuccessful',
-                //   fUploadedError: 'othersTakeUp',
-                // });
               }
             } else {
-              // $prop.onSucceed_UploadFile && $prop.onSucceed_UploadFile({
-              //   sha1,
-              //   fileName: file.name,
-              // });
               onSucceed && onSucceed({
                 sha1: sha1,
                 fileName: files[0].name,
               });
             }
           } else {
-            // $setState({
-            //   fState: 'uploading',
-            //   fUploadedError: '',
-            //   fInfo: {
-            //     sha1: '',
-            //     name: file.name,
-            //     from: '本地上传',
-            //   },
-            // });
             set$uploadingProgress(0);
             const [promise, cancel] = await FServiceAPI.Storage.uploadFile({
               file: files[0],
               // resourceType: resourceVersionCreatorPage.resourceType,
             }, {
               onUploadProgress(progressEvent: any) {
-                // set_fUploadingProgress(Math.floor(progressEvent.loaded / progressEvent.total * 100));
-                // $setState({
-                //   fUploadingProgress: Math.floor(progressEvent.loaded / progressEvent.total * 100),
-                // });
                 set$uploadingProgress(Math.floor(progressEvent.loaded / progressEvent.total * 100));
               },
             }, true);
             uploadCancelHandler.current = cancel;
             const { data } = await promise;
             uploadCancelHandler.current = null;
-            // set_fUploadingProgress(0);
-            // $setState({
-            //   fUploadingProgress: 0,
-            // });
-            // $prop.onSucceed_UploadFile && $prop.onSucceed_UploadFile({
-            //   sha1,
-            //   fileName: file.name,
-            // });
             await FUtil.Tool.promiseSleep(1000);
             onSucceed && onSucceed({
               sha1: sha1,
@@ -247,37 +188,6 @@ function LocalUpload({ style, resourceTypeCode, onSucceed }: LocalUploadProps) {
             });
           }
 
-          // const [promise, cancel] = await FServiceAPI.Storage.uploadFile({
-          //   file: files[0],
-          //   // resourceType: resourceVersionCreatorPage.resourceType,
-          // }, {
-          //   onUploadProgress(progressEvent: any) {
-          //     // set_fUploadingProgress(Math.floor(progressEvent.loaded / progressEvent.total * 100));
-          //     // $setState({
-          //     //   fUploadingProgress: Math.floor(progressEvent.loaded / progressEvent.total * 100),
-          //     // });
-          //   },
-          // }, true);
-          // const { ret, errCode, msg, data }: {
-          //   ret: number;
-          //   errCode: number;
-          //   msg: string;
-          //   data: {
-          //     fileSize: number;
-          //     sha1: string;
-          //   };
-          // } = await promise;
-          // console.log(data, 'dataoijsdlkfjlsdkjfkldsjflkjdslkfjl');
-          // dispatch<OnSucceed_step2_localUpload_Action>({
-          //   type: 'resourceCreatorPage/onSucceed_step2_localUpload',
-          //   payload: {
-          //     value: {
-          //       name: files[0].name,
-          //       sha1: data.sha1,
-          //       from: '本地上传',
-          //     },
-          //   },
-          // });
         }}
       >本地上传</FComponentsLib.FRectBtn>
     </div>

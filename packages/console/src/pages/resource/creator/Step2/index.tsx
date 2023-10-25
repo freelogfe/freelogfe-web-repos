@@ -65,100 +65,6 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
     && (resourceCreatorPage.step1_createdResourceInfo?.resourceType[2] === '条漫'
       || resourceCreatorPage.step1_createdResourceInfo?.resourceType[2] === '页漫');
 
-  // async function onClick_editMarkdownBtn() {
-  //   if (!resourceCreatorPage.step1_createdResourceInfo?.resourceID) {
-  //     return;
-  //   }
-  //
-  //   const draftData: IResourceCreateVersionDraftType = {
-  //     versionInput: '1.0.0',
-  //     selectedFileInfo: null,
-  //     additionalProperties: [],
-  //     customProperties: [],
-  //     customConfigurations: [],
-  //     directDependencies: [],
-  //     descriptionEditorInput: '',
-  //     baseUpcastResources: [],
-  //   };
-  //
-  //   const params1: Parameters<typeof FServiceAPI.Resource.saveVersionsDraft>[0] = {
-  //     resourceId: resourceCreatorPage.step1_createdResourceInfo.resourceID,
-  //     draftData: draftData,
-  //   };
-  //   const { ret, errCode, data: data_draft1 }: {
-  //     ret: number;
-  //     errCode: number;
-  //     data: {
-  //       resourceId: string;
-  //       updateDate: string;
-  //       draftData: IResourceCreateVersionDraftType;
-  //     };
-  //   } = await FServiceAPI.Resource.saveVersionsDraft(params1);
-  //
-  //   await fResourceMarkdownEditor({
-  //     resourceID: resourceCreatorPage.step1_createdResourceInfo.resourceID,
-  //     async onChange_Saved(saved: boolean) {
-  //       // set_isMarkdownEditorDirty(!saved);
-  //     },
-  //   });
-  //
-  //   const params2: Parameters<typeof FServiceAPI.Resource.lookDraft>[0] = {
-  //     resourceId: resourceCreatorPage.step1_createdResourceInfo.resourceID,
-  //   };
-  //   const { data: data_draft2 }: {
-  //     data: null | {
-  //       resourceId: string;
-  //       updateDate: string;
-  //       draftData: IResourceCreateVersionDraftType;
-  //     };
-  //   } = await FServiceAPI.Resource.lookDraft(params2);
-  //
-  //   if (!data_draft2?.draftData.selectedFileInfo) {
-  //     return;
-  //   }
-  //
-  //   const params3: Parameters<typeof FServiceAPI.Resource.getResourceBySha1>[0] = {
-  //     fileSha1: data_draft2.draftData.selectedFileInfo.sha1,
-  //   };
-  //
-  //   const { data: data_ResourcesBySha1 }: { data: any[] } = await FServiceAPI.Resource.getResourceBySha1(params3);
-  //   // yield put<ChangeAction>({
-  //   //   type: 'change',
-  //   //   payload: {
-  //   //     selectedFile_UsedResources: data_ResourcesBySha1
-  //   //       .filter((d) => {
-  //   //         return d.userId !== FUtil.Tool.getUserIDByCookies();
-  //   //       })
-  //   //       .map((d) => {
-  //   //         return d.resourceVersions.map((v: any) => {
-  //   //           return {
-  //   //             resourceId: d.resourceId,
-  //   //             resourceName: d.resourceName,
-  //   //             resourceType: d.resourceType,
-  //   //             resourceVersion: v.version,
-  //   //             url: FUtil.LinkTo.resourceDetails({
-  //   //               resourceID: d.resourceId,
-  //   //               version: v.version,
-  //   //             }),
-  //   //           };
-  //   //         });
-  //   //       }).flat(),
-  //   //   },
-  //   // });
-  //
-  //   //   selectedFileInfo: draftData.selectedFileInfo,
-  //   //   additionalProperties: draftData.additionalProperties?.map((p) => {
-  //   //   return {
-  //   //     key: p.key,
-  //   //     name: '',
-  //   //     value: p.value,
-  //   //     description: '',
-  //   //   };
-  //   // }) || [],
-  //   //   customProperties: draftData.customProperties || [],
-  //   //   customConfigurations: draftData.customConfigurations || [],
-  // }
-
   if (!resourceCreatorPage.step2_fileInfo) {
     return (<>
       <div style={{ height: 40 }} />
@@ -167,6 +73,7 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
           !isCartoon && (<LocalUpload
             style={{ width: '100%', flexGrow: 1 }}
             resourceTypeCode={resourceCreatorPage.step1_createdResourceInfo?.resourceTypeCode || ''}
+            resourceType={resourceCreatorPage.step1_createdResourceInfo?.resourceType || []}
             onSucceed={(value) => {
               dispatch<OnSucceed_step2_localUpload_Action>({
                 type: 'resourceCreatorPage/onSucceed_step2_localUpload',
