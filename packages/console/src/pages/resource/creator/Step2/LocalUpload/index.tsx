@@ -131,6 +131,7 @@ function LocalUpload({ style, resourceTypeCode, resourceType, onSucceed }: Local
             };
           });
         }).flat();
+        set$uploadingProgress(null);
         set$selfUsedResource(usedResources);
       } else {
         const usedResources: LocalUploadStates['$otherUsedResource'] = data_ResourcesBySha1.map((d) => {
@@ -147,9 +148,11 @@ function LocalUpload({ style, resourceTypeCode, resourceType, onSucceed }: Local
             };
           });
         }).flat();
+        set$uploadingProgress(null);
         set$otherUsedResource(usedResources);
       }
     } else {
+      set$uploadingProgress(null);
       onSucceed && onSucceed({
         sha1: data.sha1,
         fileName: files[0].name,
