@@ -46,8 +46,8 @@ function Task({
   const [progress, set_progress] = React.useState<TaskStates['progress']>(0);
 
   AHooks.useMount(async () => {
-    // fileSha1.current = await fileSha1Queue.getSha1(task.file);
-    fileSha1.current = await FUtil.Tool.getSHA1Hash(task.file);
+    fileSha1.current = await fileSha1Queue.getSha1(task.file);
+    // fileSha1.current = await FUtil.Tool.getSHA1Hash(task.file);
     await verifySameName();
   });
 

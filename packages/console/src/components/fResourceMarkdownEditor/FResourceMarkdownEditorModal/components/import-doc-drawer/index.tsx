@@ -14,6 +14,7 @@ import FModal from '@/components/FModal';
 import FComponentsLib from '@freelog/components-lib';
 import { editorContext } from '../..';
 import { importDoc } from '../../custom/dom/resource/utils';
+import fileSha1Queue from '@/utils/FileSha1Queue';
 
 const { Option } = Select;
 
@@ -474,7 +475,8 @@ export const ImportDocDrawer = (props: Props) => {
     const uploadTaskQueue = await Promise.all(
       fileList.map(async (file) => ({
         uid: file.uid,
-        sha1: await FUtil.Tool.getSHA1Hash(file),
+        // sha1: await FUtil.Tool.getSHA1Hash(file),
+        sha1: await fileSha1Queue.getSha1(file),
         bucketName: refs.current.uploadBucket,
         name: file.name.replace(/[\\|\/|:|\*|\?|"|<|>|\||\s|@|\$|#]/g, '_'),
         file: file,
