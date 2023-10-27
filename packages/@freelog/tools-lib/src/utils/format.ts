@@ -32,7 +32,7 @@ export function formatDateTime(date: string, showTime: boolean = false) {
  * @param domain 要组合的三级域名
  */
 export function completeUrlByDomain(domain: string): string {
-  let origin: string = `http://${domain}.testfreelog.com`;
+  let origin: string = `https://${domain}.testfreelog.com`;
 
   if (window.location.origin.includes('.freelog.com')) {
     origin = `https://${domain}.freelog.com`;
