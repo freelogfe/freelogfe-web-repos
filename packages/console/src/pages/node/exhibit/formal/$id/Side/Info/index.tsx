@@ -1,14 +1,11 @@
 import * as React from 'react';
 import styles from './index.less';
 import {
-  // ChangeAction,
-  ExhibitInfoPageModelState,
-  OnChange_Side_InputTitle_Action,
+  ExhibitInfoPageModelState, OnChange_Side_ExhibitInputIntroduction_Action,
+  OnChange_Side_InputTitle_Action, OnSave_Side_ExhibitIntroduction_Action,
   UpdateBaseInfoAction,
 } from '@/models/exhibitInfoPage';
 import { Space } from 'antd';
-// import FInput from '@/components/FInput';
-// import FLabelEditor from '@/components/FLabelEditor';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import { ConnectState } from '@/models/connect';
@@ -27,12 +24,6 @@ interface InfoProps {
 
 function Info({ dispatch, exhibitInfoPage }: InfoProps) {
   function onChangePInputTitle(value: string | null) {
-    // dispatch<ChangeAction>({
-    //   type: 'exhibitInfoPage/change',
-    //   payload: {
-    //     side_ExhibitInputTitle: value,
-    //   },
-    // });
     dispatch<OnChange_Side_InputTitle_Action>({
       type: 'exhibitInfoPage/onChange_Side_InputTitle',
       payload: {
@@ -85,17 +76,32 @@ function Info({ dispatch, exhibitInfoPage }: InfoProps) {
     {
       exhibitInfoPage.side_ExhibitInputTitle === null
         ? (<Space size={10}>
-          <FComponentsLib.FContentText
-            text={exhibitInfoPage.side_ExhibitTitle}
-            style={{ overflowWrap: 'anywhere' }}
-          />
-          <FTooltip title={'编辑'}>
-            <div>
-              <FComponentsLib.FTextBtn onClick={() => {
-                onChangePInputTitle(exhibitInfoPage.side_ExhibitTitle);
-              }}><FComponentsLib.FIcons.FEdit /></FComponentsLib.FTextBtn>
-            </div>
-          </FTooltip>
+          {
+            exhibitInfoPage.side_ExhibitTitle === ''
+              ? (<>
+                <FComponentsLib.FTextBtn onClick={() => {
+                  onChangePInputTitle(exhibitInfoPage.side_ExhibitTitle);
+                }}><FComponentsLib.FIcons.FAdd /></FComponentsLib.FTextBtn>
+                <FComponentsLib.FTextBtn onClick={() => {
+                  onChangePInputTitle(exhibitInfoPage.side_ExhibitTitle);
+                }}>添加标题</FComponentsLib.FTextBtn>
+              </>)
+              : (<>
+                <FComponentsLib.FContentText
+                  text={exhibitInfoPage.side_ExhibitTitle}
+                  style={{ overflowWrap: 'anywhere' }}
+                />
+                <FTooltip title={'编辑'}>
+                  <div>
+                    <FComponentsLib.FTextBtn onClick={() => {
+                      onChangePInputTitle(exhibitInfoPage.side_ExhibitTitle);
+                    }}><FComponentsLib.FIcons.FEdit /></FComponentsLib.FTextBtn>
+                  </div>
+                </FTooltip>
+              </>)
+          }
+
+
         </Space>)
         : (<>
           <FComponentsLib.FInput.FSingleLine
@@ -145,10 +151,97 @@ function Info({ dispatch, exhibitInfoPage }: InfoProps) {
     <FComponentsLib.FTitleText text={'展品简介'} type='h4' />
     <div style={{ height: 15 }} />
 
-    <FComponentsLib.FInput.FMultiLine
-      lengthLimit={200}
-      value={'1234'}
-    />
+    {
+      exhibitInfoPage.side_ExhibitInputIntroduction === null
+        ? (<Space size={10}>
+          {
+            exhibitInfoPage.side_ExhibitIntroduction === ''
+              ? (<>
+                <FComponentsLib.FTextBtn onClick={() => {
+                  dispatch<OnChange_Side_ExhibitInputIntroduction_Action>({
+                    type: 'exhibitInfoPage/onChange_Side_ExhibitInputIntroduction',
+                    payload: {
+                      value: '',
+                    },
+                  });
+                }}><FComponentsLib.FIcons.FAdd /></FComponentsLib.FTextBtn>
+                <FComponentsLib.FTextBtn onClick={() => {
+                  dispatch<OnChange_Side_ExhibitInputIntroduction_Action>({
+                    type: 'exhibitInfoPage/onChange_Side_ExhibitInputIntroduction',
+                    payload: {
+                      value: '',
+                    },
+                  });
+                }}>展品简介</FComponentsLib.FTextBtn>
+              </>)
+              : (<>
+                <FComponentsLib.FContentText
+                  text={exhibitInfoPage.side_ExhibitIntroduction}
+                  style={{ overflowWrap: 'anywhere' }}
+                />
+                <FTooltip title={'编辑'}>
+                  <div>
+                    <FComponentsLib.FTextBtn onClick={() => {
+                      dispatch<OnChange_Side_ExhibitInputIntroduction_Action>({
+                        type: 'exhibitInfoPage/onChange_Side_ExhibitInputIntroduction',
+                        payload: {
+                          value: exhibitInfoPage.side_ExhibitIntroduction,
+                        },
+                      });
+                    }}><FComponentsLib.FIcons.FEdit /></FComponentsLib.FTextBtn>
+                  </div>
+                </FTooltip>
+              </>)
+          }
+
+        </Space>)
+        : (<>
+          <FComponentsLib.FInput.FMultiLine
+            lengthLimit={200}
+            value={exhibitInfoPage.side_ExhibitInputIntroduction}
+            onChange={(e) => {
+              dispatch<OnChange_Side_ExhibitInputIntroduction_Action>({
+                type: 'exhibitInfoPage/onChange_Side_ExhibitInputIntroduction',
+                payload: {
+                  value: e.target.value,
+                },
+              });
+            }}
+          />
+          <div style={{ height: 10 }} />
+          <div className={styles.btn}>
+            <FComponentsLib.FTextBtn
+              type='default'
+              // size="small"
+              onClick={() => {
+                dispatch<OnChange_Side_ExhibitInputIntroduction_Action>({
+                  type: 'exhibitInfoPage/onChange_Side_ExhibitInputIntroduction',
+                  payload: {
+                    value: null,
+                  },
+                });
+              }}
+            >{FI18n.i18nNext.t('btn_cancel')}</FComponentsLib.FTextBtn>
+            <div style={{ width: 15 }} />
+            <FComponentsLib.FRectBtn
+              disabled={exhibitInfoPage.side_ExhibitInputIntroduction.length > 200}
+              size='small'
+              onClick={() => {
+                dispatch<OnSave_Side_ExhibitIntroduction_Action>({
+                  type: 'exhibitInfoPage/onSave_Side_ExhibitIntroduction',
+                });
+                dispatch<OnChange_Side_ExhibitInputIntroduction_Action>({
+                  type: 'exhibitInfoPage/onChange_Side_ExhibitInputIntroduction',
+                  payload: {
+                    value: null,
+                  },
+                });
+              }}
+            >{FI18n.i18nNext.t('btn_save')}</FComponentsLib.FRectBtn>
+          </div>
+        </>)
+    }
+
 
     <div style={{ height: 30 }} />
 

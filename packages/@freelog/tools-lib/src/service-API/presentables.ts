@@ -33,6 +33,7 @@ export function createPresentable(params: CreatePresentableParamsType) {
 interface UpdatePresentableParamsType {
   presentableId: string;
   presentableTitle?: string;
+  presentableIntro?: string;
   tags?: string[];
   coverImages?: string[];
   addPolicies?: {

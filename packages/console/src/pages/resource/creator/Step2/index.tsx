@@ -72,6 +72,7 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
           !isCartoon && (<LocalUpload
             style={{ width: '100%', flexGrow: 1 }}
             resourceTypeCode={resourceCreatorPage.step1_createdResourceInfo?.resourceTypeCode || ''}
+            resourceType={resourceCreatorPage.step1_createdResourceInfo?.resourceType || []}
             onSucceed={(value) => {
               dispatch<OnSucceed_step2_localUpload_Action>({
                 type: 'resourceCreatorPage/onSucceed_step2_localUpload',

@@ -10,8 +10,9 @@ import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 import { getFilesSha1Info } from '@/utils/service';
 import * as AHooks from 'ahooks';
-import { RcFile } from 'antd/lib/upload/interface';
+import type { RcFile } from 'antd/lib/upload';
 import fileSha1Queue from '@/utils/FileSha1Queue';
+// import fileSha1Queue from '@/utils/FileSha1Queue';
 
 interface TaskProps {
   task: {
@@ -47,6 +48,7 @@ function Task({
 
   AHooks.useMount(async () => {
     fileSha1.current = await fileSha1Queue.getSha1(task.file);
+    // fileSha1.current = await FUtil.Tool.getSHA1Hash(task.file);
     await verifySameName();
   });
 
