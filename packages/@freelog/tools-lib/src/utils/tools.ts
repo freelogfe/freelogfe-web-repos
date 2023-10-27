@@ -1,4 +1,4 @@
-import * as CryptoJS from 'crypto-js';
+// import * as CryptoJS from 'crypto-js';
 
 /**
  * 根据 File 获取 SHA1 Hash 字符串
@@ -8,12 +8,21 @@ import * as CryptoJS from 'crypto-js';
 export function getSHA1Hash(file: File): Promise<string> {
   return new Promise((resolve) => {
     const reader: FileReader = new FileReader();
-    reader.onload = function () {
-      const wordArray = CryptoJS.lib.WordArray.create(reader.result as any);
-      const hash = CryptoJS.SHA1(wordArray).toString();
-      resolve(hash);
-    };
     reader.readAsArrayBuffer(file);
+    reader.onload = async () => {
+      if (!reader.result) {
+        resolve('');
+        return '';
+      }
+      if (typeof reader.result === 'string') {
+        resolve('');
+        return '';
+      }
+      const sha1 = await crypto.subtle.digest('SHA-1', reader.result).then(a => Array.from(new Uint8Array(a)).map(a => a.toString(16).padStart(2, '0')).join(''));
+      resolve(sha1);
+      return '';
+    };
+
   });
 }
 
