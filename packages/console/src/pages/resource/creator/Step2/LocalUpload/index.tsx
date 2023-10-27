@@ -453,7 +453,12 @@ function LocalUpload({ style, resourceTypeCode, resourceType, onSucceed }: Local
         <div style={{ height: 20 }} />
         {
           $uploadingProgress !== 100
-            ? (<FComponentsLib.FTextBtn type={'default'}>取消上传</FComponentsLib.FTextBtn>)
+            ? (<FComponentsLib.FTextBtn
+              type={'default'}
+              onClick={() => {
+                uploadCancelHandler.current && uploadCancelHandler.current();
+              }}
+            >取消上传</FComponentsLib.FTextBtn>)
             : (<FComponentsLib.FContentText text={'上传成功'} type={'highlight'} />)
         }
       </div>
