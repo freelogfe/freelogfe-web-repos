@@ -11,6 +11,7 @@ import FComponentsLib from '@freelog/components-lib';
 import { getFilesSha1Info } from '@/utils/service';
 import * as AHooks from 'ahooks';
 import type { RcFile } from 'antd/lib/upload';
+import fileSha1Queue from '@/utils/FileSha1Queue';
 // import fileSha1Queue from '@/utils/FileSha1Queue';
 
 interface TaskProps {
