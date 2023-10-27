@@ -1,6 +1,6 @@
 {
   "name": "@freelog/tools-lib",
-  "version": "0.1.155",
+  "version": "0.1.156",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",

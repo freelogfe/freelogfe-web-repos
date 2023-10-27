@@ -18,7 +18,7 @@ export function getSHA1Hash(file: File): Promise<string> {
         resolve('');
         return '';
       }
-      const sha1 = await crypto.subtle.digest('SHA-1', reader.result).then(a => Array.from(new Uint8Array(a)).map(a => a.toString(16).padStart(2, '0')).join(''));
+      const sha1: string = await self.crypto.subtle.digest('SHA-1', reader.result).then(a => Array.from(new Uint8Array(a)).map(a => a.toString(16).padStart(2, '0')).join(''));
       resolve(sha1);
       return '';
     };
