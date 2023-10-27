@@ -10,7 +10,7 @@ specifiers:
   '@freelog/components-lib': ^0.1.30
   '@freelog/nmr_translator': ^5.1.4
   '@freelog/resource-policy-lang': ^1.5.3
-  '@freelog/tools-lib': ^0.1.156
+  '@freelog/tools-lib': ^0.1.157
   '@types/file-saver': ^2.0.5
   '@types/react': ^18.2.6
   '@types/react-copy-to-clipboard': ^4.3.0
@@ -63,7 +63,7 @@ dependencies:
   '@freelog/components-lib': 0.1.30
   '@freelog/nmr_translator': 5.1.4
   '@freelog/resource-policy-lang': 1.5.3_typescript@4.9.5
-  '@freelog/tools-lib': 0.1.156
+  '@freelog/tools-lib': 0.1.157
   '@types/react-copy-to-clipboard': 4.3.0
   '@wangeditor/editor': 5.1.23
   '@wangeditor/editor-for-react': 1.0.6_omoyz7df4qskprnmrkig6mddwm
@@ -1002,13 +1002,12 @@ packages:
       - typescript
     dev: false
 
-  /@freelog/tools-lib/0.1.156:
-    resolution: {integrity: sha512-NyjJ5V4h4xz2h/aFUwFeIKfQ3StzFfk3jci7OdH5HxO0TAyJsCAPIkN/T1cA3kn4d3CatfOOc/0/eg6guT20aA==}
+  /@freelog/tools-lib/0.1.157:
+    resolution: {integrity: sha512-onk35S2wJp8s7BEF2HsTjCHvtAbMl9frl2aSL5SQiqDsebA/KTTznyLmZl4sd50mhOzFx7+9DzcgZzN7iBUd9Q==}
     engines: {node: '>=10'}
     dependencies:
       '@freelog/resource-policy-lang': 1.1.26
       axios: 0.21.4
-      crypto-js: 4.1.1
       html-react-parser: 4.2.0_react@18.2.0
       i18next: 21.10.0
       js-cookie: 3.0.5
@@ -3592,10 +3591,6 @@ packages:
       public-encrypt: 4.0.3
       randombytes: 2.1.0
       randomfill: 1.0.4
-
-  /crypto-js/4.1.1:
-    resolution: {integrity: sha512-o2JlM7ydqd3Qk9CA0L4NL6mTzU2sdx96a+oOfPu8Mkl/PK51vSyoi8/rQ8NknZtk44vq15lmhAj9CIAGwgeWKw==}
-    dev: false
 
   /css-animation/1.6.1:
     resolution: {integrity: sha512-/48+/BaEaHRY6kNQ2OIPzKf9A6g8WjZYjhiNDNuIVbsm5tXCGIAsHDjB4Xu1C4vXJtUWZo26O68OQkDpNBaPog==}

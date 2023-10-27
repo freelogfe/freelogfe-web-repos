@@ -10,6 +10,7 @@ import FModal from '@/components/FModal';
 import FTable from '@/components/FTable';
 import * as AHooks from 'ahooks';
 import { Progress } from 'antd';
+import fileSha1Queue from '@/utils/FileSha1Queue';
 
 interface LocalUploadProps {
   resourceTypeCode: string;
@@ -158,11 +159,6 @@ function LocalUpload({ style, resourceTypeCode, resourceType, onSucceed }: Local
         fileName: files[0].name,
       });
     }
-
-    // onSucceed && onSucceed({
-    //   sha1: data.sha1,
-    //   fileName: files[0].name,
-    // });
   }
 
   return (<>
@@ -195,8 +191,14 @@ function LocalUpload({ style, resourceTypeCode, resourceType, onSucceed }: Local
             return;
           }
 
-          const sha1: string = await FUtil.Tool.getSHA1Hash(files[0]);
-          console.log(sha1, 'sha1 sdiojflksdjfljsdlkfjlsdjfljl');
+          if (resourceType[0] === '视频') {
+            uploadVideo(files);
+            return;
+          }
+
+          // const sha1: string = await FUtil.Tool.getSHA1Hash(files[0]);
+          const sha1: string = await fileSha1Queue.getSha1(files[0]);
+          // console.log(sha1, 'sha1 sdiojflksdjfljsdlkfjlsdjfljl');
           set$fileInfo({
             sha1: sha1,
             fileName: files[0].name,
