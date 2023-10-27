@@ -456,6 +456,7 @@ function LocalUpload({ style, resourceTypeCode, resourceType, onSucceed }: Local
             ? (<FComponentsLib.FTextBtn
               type={'default'}
               onClick={() => {
+                set$uploadingProgress(null);
                 uploadCancelHandler.current && uploadCancelHandler.current();
               }}
             >取消上传</FComponentsLib.FTextBtn>)
