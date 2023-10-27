@@ -330,8 +330,8 @@ export const InsertResourceDrawer = (props: Props) => {
     const uploadTaskQueue = await Promise.all(
       fileList.map(async (file) => ({
         uid: file.uid,
-        // sha1: await FUtil.Tool.getSHA1Hash(file),
-        sha1: await fileSha1Queue.getSha1(file),
+        sha1: await FUtil.Tool.getSHA1Hash(file),
+        // sha1: await fileSha1Queue.getSha1(file),
         bucketName: refs.current.uploadBucket,
         name: file.name.replace(/[\\|\/|:|\*|\?|"|<|>|\||\s|@|\$|#]/g, '_'),
         file: file,

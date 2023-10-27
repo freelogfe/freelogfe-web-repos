@@ -196,8 +196,8 @@ function LocalUpload({ style, resourceTypeCode, resourceType, onSucceed }: Local
             return;
           }
 
-          // const sha1: string = await FUtil.Tool.getSHA1Hash(files[0]);
-          const sha1: string = await fileSha1Queue.getSha1(files[0]);
+          const sha1: string = await FUtil.Tool.getSHA1Hash(files[0]);
+          // const sha1: string = await fileSha1Queue.getSha1(files[0]);
           // console.log(sha1, 'sha1 sdiojflksdjfljsdlkfjlsdjfljl');
           set$fileInfo({
             sha1: sha1,

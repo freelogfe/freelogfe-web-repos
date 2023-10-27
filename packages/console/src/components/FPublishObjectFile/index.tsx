@@ -177,8 +177,8 @@ function FPublishObjectFile($prop: FPublishObjectFileProps) {
       },
     });
 
-    // const sha1: string = await FUtil.Tool.getSHA1Hash(file);
-    const sha1: string = await fileSha1Queue.getSha1(file);
+    const sha1: string = await FUtil.Tool.getSHA1Hash(file);
+    // const sha1: string = await fileSha1Queue.getSha1(file);
     const { data: data_fileIssExists }: any = await FServiceAPI.Storage.fileIsExist({ sha1 });
 
     if (data_fileIssExists[0].isExisting) {
