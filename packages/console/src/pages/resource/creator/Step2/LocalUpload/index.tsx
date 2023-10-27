@@ -185,17 +185,18 @@ function LocalUpload({ style, resourceTypeCode, resourceType, onSucceed }: Local
             return;
           }
 
-          if (resourceType[0] === '视频' ? files[0].size > 1024 * 1024 * 1024 : files[0].size > 200 * 1024 * 1024) {
+          if (resourceType[0] === '视频' && files[0].size > 500 * 1024 * 1024) {
+            fMessage('文件大小不能超过500MB', 'error');
+            return;
+          }
+
+          if (resourceType[0] !== '视频' && files[0].size > 200 * 1024 * 1024) {
             fMessage('文件大小不能超过200MB', 'error');
             return;
           }
 
-          if (resourceType[0] === '视频') {
-            uploadVideo(files);
-            return;
-          }
-
           const sha1: string = await FUtil.Tool.getSHA1Hash(files[0]);
+          console.log(sha1, 'sha1 sdiojflksdjfljsdlkfjlsdjfljl');
           set$fileInfo({
             sha1: sha1,
             fileName: files[0].name,
