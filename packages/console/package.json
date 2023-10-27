@@ -29,7 +29,7 @@
     "@freelog/components-lib": "^0.1.30",
     "@freelog/nmr_translator": "^5.1.4",
     "@freelog/resource-policy-lang": "^1.5.3",
-    "@freelog/tools-lib": "^0.1.157",
+    "@freelog/tools-lib": "^0.1.158",
     "@types/react-copy-to-clipboard": "^4.3.0",
     "@wangeditor/editor": "^5.1.23",
     "@wangeditor/editor-for-react": "^1.0.6",
