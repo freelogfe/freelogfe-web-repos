@@ -67,7 +67,7 @@ function FCoverImage({ src, width, style = {}, className = '' }: FCoverImageProp
           }}
         />)
         : (<img
-          src={src || (FUtil.Format.completeUrlByDomain('static') + '/static/default_cover.png')}
+          src={src || '//static.freelog.com/static/default_cover.png'}
           style={{
             width: width,
             height: width / 4 * 3,

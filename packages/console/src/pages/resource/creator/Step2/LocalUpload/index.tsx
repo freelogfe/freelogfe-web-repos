@@ -10,7 +10,7 @@ import FModal from '@/components/FModal';
 import FTable from '@/components/FTable';
 import * as AHooks from 'ahooks';
 import { Progress } from 'antd';
-import fileSha1Queue from '@/utils/FileSha1Queue';
+// import fileSha1Queue from '@/utils/FileSha1Queue';
 
 interface LocalUploadProps {
   resourceTypeCode: string;
@@ -181,8 +181,8 @@ function LocalUpload({ style, resourceTypeCode, resourceType, onSucceed }: Local
             return;
           }
 
-          if (resourceType[0] === '视频' && files[0].size > 500 * 1024 * 1024) {
-            fMessage('文件大小不能超过500MB', 'error');
+          if (resourceType[0] === '视频' && files[0].size > 1024 * 1024 * 1024) {
+            fMessage('文件大小不能超过1GB', 'error');
             return;
           }
 
@@ -191,10 +191,10 @@ function LocalUpload({ style, resourceTypeCode, resourceType, onSucceed }: Local
             return;
           }
 
-          if (resourceType[0] === '视频') {
-            uploadVideo(files);
-            return;
-          }
+          // if (resourceType[0] === '视频') {
+          //   uploadVideo(files);
+          //   return;
+          // }
 
           const sha1: string = await FUtil.Tool.getSHA1Hash(files[0]);
           // const sha1: string = await fileSha1Queue.getSha1(files[0]);
@@ -278,7 +278,10 @@ function LocalUpload({ style, resourceTypeCode, resourceType, onSucceed }: Local
               },
             }, true);
             uploadCancelHandler.current = cancel;
-            const { data } = await promise;
+            const { data, ret, errCode, msg } = await promise;
+            if (ret !== 0 || errCode !== 0) {
+              return fMessage(msg, 'error');
+            }
             uploadCancelHandler.current = null;
             await FUtil.Tool.promiseSleep(1000);
             onSucceed && onSucceed({
