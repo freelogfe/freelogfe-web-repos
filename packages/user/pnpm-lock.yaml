@@ -5,7 +5,7 @@ specifiers:
   '@ant-design/icons': ^4.7.0
   '@emotion/react': ^11.10.4
   '@freelog/components-lib': ^0.1.29
-  '@freelog/tools-lib': ^0.1.157
+  '@freelog/tools-lib': ^0.1.158
   '@types/react': ^18.0.17
   '@types/react-dom': ^18.0.6
   '@umijs/preset-react': ^1.8.8
@@ -30,7 +30,7 @@ dependencies:
   '@ant-design/icons': 4.7.0_biqbaboplfbrettd7655fr4n2y
   '@emotion/react': 11.10.4_cqh2xvpdsku6kcm7gzjr2ofjje
   '@freelog/components-lib': 0.1.29
-  '@freelog/tools-lib': 0.1.157
+  '@freelog/tools-lib': 0.1.158
   ahooks: 3.7.0_react@18.2.0
   animate.css: 4.1.1
   antd: 4.24.5_biqbaboplfbrettd7655fr4n2y
@@ -976,8 +976,8 @@ packages:
       moment: 2.29.4
     dev: false
 
-  /@freelog/tools-lib/0.1.157:
-    resolution: {integrity: sha512-onk35S2wJp8s7BEF2HsTjCHvtAbMl9frl2aSL5SQiqDsebA/KTTznyLmZl4sd50mhOzFx7+9DzcgZzN7iBUd9Q==}
+  /@freelog/tools-lib/0.1.158:
+    resolution: {integrity: sha512-8ffj3B5AYMl6hTEgu/LFv5Cgijp4G3HXPUzzUz/VQRlZLkl1XzQ8ZdYN0BLsvI2l8El5HOHBPduN96rfl3/5DQ==}
     engines: {node: '>=10'}
     dependencies:
       '@freelog/resource-policy-lang': 1.1.26
@@ -2722,8 +2722,8 @@ packages:
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
     dependencies:
-      caniuse-lite: 1.0.30001554
-      electron-to-chromium: 1.4.568
+      caniuse-lite: 1.0.30001558
+      electron-to-chromium: 1.4.571
       node-releases: 2.0.13
       update-browserslist-db: 1.0.13_browserslist@4.22.1
     dev: false
@@ -2805,8 +2805,8 @@ packages:
   /caniuse-lite/1.0.30001388:
     resolution: {integrity: sha512-znVbq4OUjqgLxMxoNX2ZeeLR0d7lcDiE5uJ4eUiWdml1J1EkxbnQq6opT9jb9SMfJxB0XA16/ziHwni4u1I3GQ==}
 
-  /caniuse-lite/1.0.30001554:
-    resolution: {integrity: sha512-A2E3U//MBwbJVzebddm1YfNp7Nud5Ip+IPn4BozBmn4KqVX7AvluoIDFWjsv5OkGnKUXQVmMSoMKLa3ScCblcQ==}
+  /caniuse-lite/1.0.30001558:
+    resolution: {integrity: sha512-/Et7DwLqpjS47JPEcz6VnxU9PwcIdVi0ciLXRWBQdj1XFye68pSQYpV0QtPTfUKWuOaEig+/Vez2l74eDc1tPQ==}
     dev: false
 
   /capture-exit/2.0.0:
@@ -3494,8 +3494,8 @@ packages:
   /electron-to-chromium/1.4.240:
     resolution: {integrity: sha512-r20dUOtZ4vUPTqAajDGonIM1uas5tf85Up+wPdtNBNvBSqGCfkpvMVvQ1T8YJzPV9/Y9g3FbUDcXb94Rafycow==}
 
-  /electron-to-chromium/1.4.568:
-    resolution: {integrity: sha512-3TCOv8+BY6Ltpt1/CmGBMups2IdKOyfEmz4J8yIS4xLSeMm0Rf+psSaxLuswG9qMKt+XbNbmADybtXGpTFlbDg==}
+  /electron-to-chromium/1.4.571:
+    resolution: {integrity: sha512-Sc+VtKwKCDj3f/kLBjdyjMpNzoZsU6WuL/wFb6EH8USmHEcebxRXcRrVpOpayxd52tuey4RUDpUsw5OS5LhJqg==}
     dev: false
 
   /elliptic/6.5.4:

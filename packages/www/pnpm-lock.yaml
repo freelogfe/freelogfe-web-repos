@@ -4,7 +4,7 @@ specifiers:
   '@ahooksjs/use-url-state': ^3.5.0
   '@ant-design/icons': ^4.7.0
   '@freelog/components-lib': ^0.1.30
-  '@freelog/tools-lib': ^0.1.155
+  '@freelog/tools-lib': ^0.1.158
   '@types/react': ^18.0.17
   '@types/react-dom': ^18.0.6
   '@umijs/preset-react': ^2.1.4
@@ -23,7 +23,7 @@ dependencies:
   '@ahooksjs/use-url-state': 3.5.0_react@18.2.0
   '@ant-design/icons': 4.7.0_biqbaboplfbrettd7655fr4n2y
   '@freelog/components-lib': 0.1.30
-  '@freelog/tools-lib': 0.1.155
+  '@freelog/tools-lib': 0.1.158
   animate.css: 4.1.1
   antd: 4.24.14_biqbaboplfbrettd7655fr4n2y
   dva: 2.4.1_biqbaboplfbrettd7655fr4n2y
@@ -681,13 +681,12 @@ packages:
       moment: 2.29.4
     dev: false
 
-  /@freelog/tools-lib/0.1.155:
-    resolution: {integrity: sha512-5kgI6tUDHypr6EfsakDPgn6EyYiBeaFo//wr86DWHrtHzOtxDvR5wPzWKqUBsba1dQqZw8jQZRJ3FB5Wi4ZYSg==}
+  /@freelog/tools-lib/0.1.158:
+    resolution: {integrity: sha512-8ffj3B5AYMl6hTEgu/LFv5Cgijp4G3HXPUzzUz/VQRlZLkl1XzQ8ZdYN0BLsvI2l8El5HOHBPduN96rfl3/5DQ==}
     engines: {node: '>=10'}
     dependencies:
       '@freelog/resource-policy-lang': 1.1.26
       axios: 0.21.4
-      crypto-js: 4.1.1
       html-react-parser: 4.2.2_react@18.2.0
       i18next: 21.10.0
       js-cookie: 3.0.1
@@ -2945,10 +2944,6 @@ packages:
       public-encrypt: 4.0.3
       randombytes: 2.1.0
       randomfill: 1.0.4
-
-  /crypto-js/4.1.1:
-    resolution: {integrity: sha512-o2JlM7ydqd3Qk9CA0L4NL6mTzU2sdx96a+oOfPu8Mkl/PK51vSyoi8/rQ8NknZtk44vq15lmhAj9CIAGwgeWKw==}
-    dev: false
 
   /css-animation/1.6.1:
     resolution: {integrity: sha512-/48+/BaEaHRY6kNQ2OIPzKf9A6g8WjZYjhiNDNuIVbsm5tXCGIAsHDjB4Xu1C4vXJtUWZo26O68OQkDpNBaPog==}
