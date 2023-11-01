@@ -34,6 +34,7 @@ import * as AHooks from 'ahooks';
 import FSkeletonNode from '@/components/FSkeletonNode';
 import { ChangeAction } from '@/models/resourceVersionCreatorPage';
 import FMicroApp_MarkdownEditorDrawer from '@/components/FMicroApp_MarkdownEditorDrawer';
+import fMessage from '@/components/fMessage';
 
 interface Step2Props {
   dispatch: Dispatch;
@@ -207,6 +208,15 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
               disabled={resourceCreatorPage.step2_rawPropertiesState === 'parsing'}
               type='primary'
               onClick={() => {
+
+                const fileSize = resourceCreatorPage.step2_rawProperties.find((r) => {
+                  return r.key === 'fileSize';
+                })?.value || 0;
+                if (Number(fileSize) > 1024 * 1024) {
+                  fMessage(FI18n.i18nNext.t('mdeditor_import_error_lengthlimitation'), 'error');
+                  return;
+                }
+
                 // $prop.onClick_EditBtn && $prop.onClick_EditBtn();
                 dispatch<OnClick_step2_editMarkdownBtn_Action>({
                   type: 'resourceCreatorPage/onClick_step2_editMarkdownBtn',
