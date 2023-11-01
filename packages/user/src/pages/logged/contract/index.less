@@ -3,23 +3,28 @@
 .styles {
   width: 100%;
   padding: 0 20px;
+
   .exhibitTip {
     font-size: 12px;
     font-weight: 400;
     color: #999999;
     line-height: 17px;
+
     .link {
       font-size: 12px;
       font-weight: 400;
       color: #2784ff;
+
       &:active {
         border-bottom: 1px solid #2784ff;
       }
+
       &:hover {
         border-bottom: 1px solid #2784ff;
       }
     }
   }
+
   .header {
     //height: 100px;
     display: flex;
@@ -43,9 +48,9 @@
   }
 
   .content {
-    background: #ffffff;
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
+    //background: #ffffff;
+    //box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    //border-radius: 8px;
 
     .filter {
       display: flex;
@@ -56,6 +61,16 @@
       .filterInput {
         width: 300px !important;
       }
+    }
+
+    .moreFilter {
+      display: flex;
+      padding: 20px;
+      align-items: center;
+      //justify-content: space-between;
+      background: #FFF;
+      border-radius: 6px;
+      gap: 30px;
     }
 
     .target {
@@ -133,6 +148,7 @@
 }
 
 .table {
+  background-color: white;
   .rowClassName {
     .hoverVisible {
       visibility: hidden;

@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import FTable from '@/components/FTable';
 import { ColumnsType } from 'antd/lib/table';
-import { Space, DatePicker } from 'antd';
+import { Space, DatePicker, AutoComplete } from 'antd';
 import FIdentityTypeBadge from '@/components/FIdentityTypeBadge';
 import * as AHooks from 'ahooks';
 import { connect } from 'dva';
@@ -23,7 +23,10 @@ import {
   OnClick_Authorized_LoadMoreBtn_Action,
   OnClickViewDetailsBtnAction,
   OnCloseContractDetailsDrawerAction,
-  OnMountPageAction, OnUnmountPageAction,
+  OnMountPageAction,
+  OnUnmountPageAction,
+  OnChange_Authorize_MoreFilterShow_Action,
+  OnChange_Authorized_MoreFilterShow_Action,
 } from '@/models/contractPage';
 import FContractDetailsDrawer from '@/components/FContractDetailsDrawer';
 import FInput from '@/components/FInput';
@@ -560,26 +563,18 @@ function Contract({ dispatch, contractPage }: ContractProps) {
                         }}
                       />
                     </Space>
-                    <Space size={2}>
-                      <FComponentsLib.FContentText text={'签约时间：'} />
-                      <RangePicker
-                        value={contractPage.authorize_Date}
-                        onChange={(value: any) => {
-                          // console.log(value, '@Asdfai89jhkljrlk');
-                          dispatch<OnChange_Authorize_Date_Action>({
-                            type: 'contractPage/onChange_Authorize_Date',
-                            payload: {
-                              value: value,
-                            },
-                          });
-                        }}
-                        // locale={{lang: 'en'}}
-                        disabledDate={(date: any) => {
-                          // console.log(date, 'date234234234');
-                          return moment().isBefore(date);
-                        }}
-                      />
-                    </Space>
+                    <FComponentsLib.FTextBtn
+                      type={'primary'}
+                      style={{ fontSize: 14 }}
+                      onClick={() => {
+                        dispatch<OnChange_Authorize_MoreFilterShow_Action>({
+                          type: 'contractPage/onChange_Authorize_MoreFilterShow',
+                          payload: {
+                            value: !contractPage.authorize_moreFilterShow,
+                          },
+                        });
+                      }}
+                    >{contractPage.authorize_moreFilterShow ? '收起筛选条件' : '更多筛选条件'}</FComponentsLib.FTextBtn>
                   </Space>
                   <FComponentsLib.FInput.FSearch
                     lengthLimit={-1}
@@ -596,12 +591,69 @@ function Contract({ dispatch, contractPage }: ContractProps) {
                     placeholder={FI18n.i18nNext.t('contractmngt_search_hint')}
                   />
                 </div>
+                {
+                  contractPage.authorize_moreFilterShow && (<>
+                    <div style={{ height: 20 }} />
+                    <div className={styles.moreFilter}>
+                      <div>
+                        <FComponentsLib.FContentText type={'additional2'} text={'签约时间'} />
+                        <div style={{ height: 4 }} />
+                        <RangePicker
+                          value={contractPage.authorize_Date}
+                          onChange={(value: any) => {
+                            // console.log(value, '@Asdfai89jhkljrlk');
+                            dispatch<OnChange_Authorize_Date_Action>({
+                              type: 'contractPage/onChange_Authorize_Date',
+                              payload: {
+                                value: value,
+                              },
+                            });
+                          }}
+                          // locale={{lang: 'en'}}
+                          disabledDate={(date: any) => {
+                            // console.log(date, 'date234234234');
+                            return moment().isBefore(date);
+                          }}
+                        />
+                      </div>
+
+                      <div>
+                        <FComponentsLib.FContentText type={'additional2'} text={'授权方标识'} />
+                        <div style={{ height: 4 }} />
+                        <AutoComplete
+                          style={{ width: 340, height: 38 }}
+                          value={''}
+                          options={[]}
+                          onChange={(value) => {
+
+                          }}
+                        />
+                      </div>
+
+                      <div>
+                        <FComponentsLib.FContentText type={'additional2'} text={'被授权方标识'} />
+                        <div style={{ height: 4 }} />
+                        <AutoComplete
+                          value={''}
+                          style={{ width: 340, height: 38 }}
+                          options={[]}
+                          onChange={(value) => {
+
+                          }}
+                        />
+                      </div>
+
+                    </div>
+                  </>)
+                }
+
+                <div style={{ height: 20 }} />
                 {contractPage.authorize_ListState === 'loading' && (
-                  <FLoadingTip height={600} />
+                  <FLoadingTip height={500} />
                 )}
 
                 {contractPage.authorize_ListState === 'noSearchResult' && (
-                  <FNoDataTip height={600} tipText={'无搜索结果'} />
+                  <FNoDataTip height={500} tipText={'无搜索结果'} />
                 )}
                 {contractPage.authorize_ListState === 'loaded' && (
                   <>
@@ -698,26 +750,19 @@ function Contract({ dispatch, contractPage }: ContractProps) {
                         }}
                       />
                     </Space>
-                    <Space size={2}>
-                      <FComponentsLib.FContentText text={'签约时间：'} />
-                      <RangePicker
-                        value={contractPage.authorized_Date}
-                        onChange={(value: any) => {
-                          // console.log(value, '@Asdfai89jhkljrlk');
-                          dispatch<OnChange_Authorized_Date_Action>({
-                            type: 'contractPage/onChange_Authorized_Date',
-                            payload: {
-                              value: value,
-                            },
-                          });
-                        }}
-                        // locale={{lang: 'en'}}
-                        disabledDate={(date: any) => {
-                          // console.log(date, 'date234234234');
-                          return moment().isBefore(date);
-                        }}
-                      />
-                    </Space>
+
+                    <FComponentsLib.FTextBtn
+                      type={'primary'}
+                      style={{ fontSize: 14 }}
+                      onClick={() => {
+                        dispatch<OnChange_Authorized_MoreFilterShow_Action>({
+                          type: 'contractPage/onChange_Authorized_MoreFilterShow',
+                          payload: {
+                            value: !contractPage.authorized_moreFilterShow,
+                          },
+                        });
+                      }}
+                    >{contractPage.authorized_moreFilterShow ? '收起筛选条件' : '更多筛选条件'}</FComponentsLib.FTextBtn>
                   </Space>
                   <FComponentsLib.FInput.FSearch
                     value={keywordsInput2}
@@ -733,6 +778,65 @@ function Contract({ dispatch, contractPage }: ContractProps) {
                     placeholder={FI18n.i18nNext.t('contractmngt_search_hint')}
                   />
                 </div>
+
+                {
+                  contractPage.authorized_moreFilterShow && (<>
+                    <div style={{ height: 20 }} />
+                    <div className={styles.moreFilter}>
+                      <div>
+                        <FComponentsLib.FContentText type={'additional2'} text={'签约时间'} />
+                        <div style={{ height: 4 }} />
+                        <RangePicker
+                          value={contractPage.authorized_Date}
+                          onChange={(value: any) => {
+                            // console.log(value, '@Asdfai89jhkljrlk');
+                            dispatch<OnChange_Authorized_Date_Action>({
+                              type: 'contractPage/onChange_Authorized_Date',
+                              payload: {
+                                value: value,
+                              },
+                            });
+                          }}
+                          // locale={{lang: 'en'}}
+                          disabledDate={(date: any) => {
+                            // console.log(date, 'date234234234');
+                            return moment().isBefore(date);
+                          }}
+                        />
+                      </div>
+
+                      <div>
+                        <FComponentsLib.FContentText type={'additional2'} text={'授权方标识'} />
+                        <div style={{ height: 4 }} />
+                        <AutoComplete
+                          style={{ width: 340, height: 38 }}
+                          value={''}
+                          options={[]}
+                          onChange={(value) => {
+
+                          }}
+                        />
+                      </div>
+
+                      <div>
+                        <FComponentsLib.FContentText type={'additional2'} text={'被授权方标识'} />
+                        <div style={{ height: 4 }} />
+                        <AutoComplete
+                          value={''}
+                          style={{ width: 340, height: 38 }}
+                          options={[]}
+                          onChange={(value) => {
+
+                          }}
+                        />
+                      </div>
+
+                    </div>
+                  </>)
+                }
+
+                <div style={{ height: 20 }} />
+
                 {
                   contractPage.authorized_SubjectIds && (
                     <div className={styles.exhibitTip + ' ml-20 mt-20'}>
@@ -753,7 +857,9 @@ function Contract({ dispatch, contractPage }: ContractProps) {
                     重置
                   </span>
                     </div>
-                  )}
+                  )
+                }
+
                 {
                   contractPage.authorized_ListState === 'loading' && (
                     <FLoadingTip height={600} />
