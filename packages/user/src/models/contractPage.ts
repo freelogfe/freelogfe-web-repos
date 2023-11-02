@@ -26,9 +26,13 @@ export interface ContractPageModelState {
   }[];
   authorized_SubjectIds: string;
   authorize_Status: 'all' | Authorize_Status;
-  authorize_Date: [Moment, Moment] | null;
   authorize_Keywords: string;
   authorize_moreFilterShow: boolean;
+  authorize_Date: [Moment, Moment] | null;
+  authorize_authorizeInput: string;
+  authorize_authorizeOptions: { label: string, value: string }[];
+  authorize_authorizedInput: string;
+  authorize_authorizedOptions: { label: string, value: string }[];
   authorize_ListState: 'loading' | 'noData' | 'noSearchResult' | 'loaded';
   authorize_ListMore: 'loading' | 'andMore' | 'noMore';
   authorize_List: {
@@ -58,9 +62,13 @@ export interface ContractPageModelState {
     text: string;
   }[];
   authorized_Status: 'all' | Authorized_Status;
-  authorized_Date: [Moment, Moment] | null;
   authorized_Keywords: string;
   authorized_moreFilterShow: boolean;
+  authorized_Date: [Moment, Moment] | null;
+  authorized_authorizeInput: string;
+  authorized_authorizeOptions: { label: string, value: string }[];
+  authorized_authorizedInput: string;
+  authorized_authorizedOptions: { label: string, value: string }[];
   authorized_ListState: 'loading' | 'noData' | 'noSearchResult' | 'loaded';
   authorized_ListMore: 'loading' | 'andMore' | 'noMore';
   authorized_List: {
@@ -149,6 +157,20 @@ export interface OnChange_Authorize_MoreFilterShow_Action extends AnyAction {
   };
 }
 
+export interface OnChange_Authorize_AuthorizeInput_Action extends AnyAction {
+  type: 'contractPage/onChange_Authorize_AuthorizeInput';
+  payload: {
+    value: string;
+  };
+}
+
+export interface OnChange_Authorize_AuthorizedInput_Action extends AnyAction {
+  type: 'contractPage/onChange_Authorize_AuthorizedInput';
+  payload: {
+    value: string;
+  };
+}
+
 export interface OnClick_Authorize_LoadMoreBtn_Action extends AnyAction {
   type: 'contractPage/onClick_Authorize_LoadMoreBtn';
 }
@@ -197,6 +219,20 @@ export interface OnChange_Authorized_MoreFilterShow_Action extends AnyAction {
   };
 }
 
+export interface OnChange_Authorized_AuthorizeInput_Action extends AnyAction {
+  type: 'contractPage/onChange_Authorized_AuthorizeInput';
+  payload: {
+    value: string;
+  };
+}
+
+export interface OnChange_Authorized_AuthorizedInput_Action extends AnyAction {
+  type: 'contractPage/onChange_Authorized_AuthorizedInput';
+  payload: {
+    value: string;
+  };
+}
+
 export interface OnClick_Authorized_LoadMoreBtn_Action extends AnyAction {
   type: 'contractPage/onClick_Authorized_LoadMoreBtn';
 }
@@ -230,6 +266,8 @@ interface ContractPageModelType {
     onChange_Authorize_Date: (action: OnChange_Authorize_Date_Action, effects: EffectsCommandMap) => void;
     onChange_Authorize_KeywordsInput: (action: OnChange_Authorize_KeywordsInput_Action, effects: EffectsCommandMap) => void;
     onChange_Authorize_MoreFilterShow: (action: OnChange_Authorize_MoreFilterShow_Action, effects: EffectsCommandMap) => void;
+    onChange_Authorize_AuthorizeInput: (action: OnChange_Authorize_AuthorizeInput_Action, effects: EffectsCommandMap) => void;
+    onChange_Authorize_AuthorizedInput: (action: OnChange_Authorize_AuthorizedInput_Action, effects: EffectsCommandMap) => void;
     onClick_Authorize_LoadMoreBtn: (action: OnClick_Authorize_LoadMoreBtn_Action, effects: EffectsCommandMap) => void;
     onChange_Authorized_SubjectIds: (action: OnChange_Authorized_SubjectIds_Action, effects: EffectsCommandMap) => void;
     onChange_Authorized_SubjectType: (action: OnChange_Authorized_SubjectType_Action, effects: EffectsCommandMap) => void;
@@ -237,6 +275,8 @@ interface ContractPageModelType {
     onChange_Authorized_Date: (action: OnChange_Authorized_Date_Action, effects: EffectsCommandMap) => void;
     onChange_Authorized_KeywordsInput: (action: OnChange_Authorized_KeywordsInput_Action, effects: EffectsCommandMap) => void;
     onChange_Authorized_MoreFilterShow: (action: OnChange_Authorized_MoreFilterShow_Action, effects: EffectsCommandMap) => void;
+    onChange_Authorized_AuthorizeInput: (action: OnChange_Authorized_AuthorizeInput_Action, effects: EffectsCommandMap) => void;
+    onChange_Authorized_AuthorizedInput: (action: OnChange_Authorized_AuthorizedInput_Action, effects: EffectsCommandMap) => void;
     onClick_Authorized_LoadMoreBtn: (action: OnClick_Authorized_LoadMoreBtn_Action, effects: EffectsCommandMap) => void;
 
     fetch_Authorize_List: (action: Fetch_Authorize_List_Action, effects: EffectsCommandMap) => void;
@@ -279,9 +319,13 @@ const initStates: ContractPageModelState = {
     text: '已终止',
   }],
   authorize_Status: 'all',
-  authorize_Date: null,
   authorize_Keywords: '',
   authorize_moreFilterShow: false,
+  authorize_Date: null,
+  authorize_authorizeInput: '',
+  authorize_authorizeOptions: [],
+  authorize_authorizedInput: '',
+  authorize_authorizedOptions: [],
   authorize_ListState: 'loading',
   authorize_ListMore: 'loading',
   authorize_List: [],
@@ -311,9 +355,13 @@ const initStates: ContractPageModelState = {
     text: '已终止',
   }],
   authorized_Status: 'all',
-  authorized_Date: null,
   authorized_Keywords: '',
   authorized_moreFilterShow: false,
+  authorized_Date: null,
+  authorized_authorizeInput: '',
+  authorized_authorizeOptions: [],
+  authorized_authorizedInput: '',
+  authorized_authorizedOptions: [],
   authorized_ListState: 'loading',
   authorized_ListMore: 'loading',
   authorized_List: [],
@@ -334,7 +382,6 @@ const Model: ContractPageModelType = {
       // yield put<Fetch_Authorized_List_Action>({
       //   type: 'fetch_Authorized_List',
       // });
-
     },
     * onUnmountPage({}: OnUnmountPageAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
@@ -421,6 +468,36 @@ const Model: ContractPageModelType = {
         },
       });
     },
+    * onChange_Authorize_AuthorizeInput({ payload }: OnChange_Authorize_AuthorizeInput_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          authorize_authorizeInput: payload.value,
+        },
+      });
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          authorize_authorizeOptions: [{ label: '1234', value: '1234' }],
+        },
+      });
+    },
+    * onChange_Authorize_AuthorizedInput({ payload }: OnChange_Authorize_AuthorizedInput_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          authorize_authorizedInput: payload.value,
+        },
+      });
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          authorize_authorizedOptions: [{ label: '1234', value: '1234' }],
+        },
+      });
+    },
     * onClick_Authorize_LoadMoreBtn(action: OnClick_Authorize_LoadMoreBtn_Action, { put }: EffectsCommandMap) {
       yield put<Fetch_Authorize_List_Action>({
         type: 'fetch_Authorize_List',
@@ -497,6 +574,36 @@ const Model: ContractPageModelType = {
         type: 'change',
         payload: {
           authorized_moreFilterShow: payload.value,
+        },
+      });
+    },
+    * onChange_Authorized_AuthorizeInput({ payload }: OnChange_Authorized_AuthorizeInput_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          authorized_authorizeInput: payload.value,
+        },
+      });
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          authorized_authorizeOptions: [{ label: '1234', value: '1234' }],
+        },
+      });
+    },
+    * onChange_Authorized_AuthorizedInput({ payload }: OnChange_Authorized_AuthorizedInput_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          authorized_authorizedInput: payload.value,
+        },
+      });
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          authorized_authorizedOptions: [{ label: '1234', value: '1234' }],
         },
       });
     },

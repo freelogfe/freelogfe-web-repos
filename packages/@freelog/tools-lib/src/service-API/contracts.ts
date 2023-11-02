@@ -52,7 +52,7 @@ export function contractDetails({contractId, ...params}: ContractDetailsParamsTy
   });
 }
 
-// 查询合同分页列表
+// 查看合同分页列表
 interface ContractsParamsType {
   skip?: number;
   limit?: number;
@@ -78,6 +78,23 @@ export function contracts(params: ContractsParamsType) {
   return FUtil.Request({
     method: 'GET',
     url: `/v2/contracts`,
+    params: params,
+  });
+}
+
+// 查询合约授权方搜索建议
+interface KeywordSuggestParamsType {
+  identityType: 1 | 2;
+  prefix: string;
+  prefixType: 1 | 2;
+  startDate?: string;
+  endDate?: string;
+}
+
+export function keywordSuggest(params: KeywordSuggestParamsType) {
+  return FUtil.Request({
+    method: 'GET',
+    url: `/v2/contracts/keywordSuggest`,
     params: params,
   });
 }

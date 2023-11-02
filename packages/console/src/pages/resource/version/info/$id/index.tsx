@@ -103,12 +103,12 @@ function VersionEditor({ dispatch, resourceVersionEditorPage, match }: VersionEd
         isCartoon={resourceVersionEditorPage.resourceInfo?.resourceType[0] === '阅读' && resourceVersionEditorPage.resourceInfo?.resourceType[1] === '漫画'}
         onClickDownload={(extension) => {
           if (!extension) {
-            self.location.href = FUtil.Format.completeUrlByDomain('qi')
+            self.location.href = FUtil.Format.completeUrlByDomain('api')
               + `/v2/resources/${resourceVersionEditorPage.resourceID}/versions/${resourceVersionEditorPage.version}/download`;
             return;
           }
 
-          self.location.href = FUtil.Format.completeUrlByDomain('qi')
+          self.location.href = FUtil.Format.completeUrlByDomain('api')
             + `/v2/resources/${resourceVersionEditorPage.resourceID}/versions/${resourceVersionEditorPage.version}/download?fileSuffix=${extension}`;
         }}
       />}>

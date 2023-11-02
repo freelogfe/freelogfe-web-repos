@@ -414,29 +414,6 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
             </div>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            {/*{*/}
-            {/*  $prop.showEditBtnAfterSucceed && (<FComponentsLib.FTextBtn*/}
-            {/*    disabled={$prop.disabledOperations?.includes('edit')}*/}
-            {/*    type='primary'*/}
-            {/*    onClick={() => {*/}
-            {/*      $prop.onClick_EditBtn && $prop.onClick_EditBtn();*/}
-            {/*    }}*/}
-            {/*    // className={styles.delete}*/}
-            {/*  >编辑</FComponentsLib.FTextBtn>)*/}
-            {/*}*/}
-
-            {/*{*/}
-            {/*  $prop.showDownloadBtnAfterSucceed && (<FComponentsLib.FTextBtn*/}
-            {/*    type='primary'*/}
-            {/*    disabled={$prop.disabledOperations?.includes('download')}*/}
-            {/*    onClick={() => {*/}
-            {/*      // self.location.href = FUtil.Format.completeUrlByDomain('qi')*/}
-            {/*      //   + `/v2/storages/files/${$prop.fileInfo?.sha1}/download?attachmentName=${$prop.fileInfo?.name}`;*/}
-            {/*      $prop.onClick_DownloadBtn && $prop.onClick_DownloadBtn();*/}
-            {/*    }}*/}
-            {/*  >下载</FComponentsLib.FTextBtn>)*/}
-            {/*}*/}
-
             {
               resourceVersionCreatorPage.resourceInfo?.resourceType[0] === '阅读'
               && resourceVersionCreatorPage.resourceInfo?.resourceType[1] === '文章' && (<>
@@ -445,29 +422,7 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
                   type='primary'
                   style={{ fontSize: 12, display: 'flex', alignItems: 'center', gap: 5 }}
                   onClick={async () => {
-                    // dispatch<OnClick_OpenMarkdownBtn_Action>({
-                    //   type: 'resourceVersionCreatorPage/onClick_OpenMarkdownBtn',
-                    // });
-
                     onClick_EditMarkdownBtn();
-
-                    // await dispatch<OnTrigger_SaveDraft_Action>({
-                    //   type: 'resourceVersionCreatorPage/onTrigger_SaveDraft',
-                    //   payload: {
-                    //     showSuccessTip: false,
-                    //   },
-                    // });
-                    // await fResourceMarkdownEditor({
-                    //   resourceID: resourceVersionCreatorPage.resourceInfo?.resourceID || '',
-                    //   async onChange_Saved(saved: boolean) {
-                    //     set_isMarkdownEditorDirty(!saved);
-                    //   },
-                    // });
-                    // await set_isMarkdownEditorDirty(false);
-                    // await dispatch<OnClose_MarkdownEditor_Action>({
-                    //   type: 'resourceVersionCreatorPage/onClose_MarkdownEditor',
-                    // });
-
                   }}
                 >
                   <FComponentsLib.FIcons.FEdit style={{ fontSize: 12 }} />
@@ -485,7 +440,7 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
                       return;
                     }
                     // console.log(type, '98ieowjfkldjflksdjflksjdflkjsdlfkjsdlkj');
-                    self.location.href = FUtil.Format.completeUrlByDomain('qi')
+                    self.location.href = FUtil.Format.completeUrlByDomain('api')
                       + `/v2/storages/files/${resourceVersionCreatorPage.selectedFileInfo?.sha1 || ''}/download?attachmentName=${resourceVersionCreatorPage.selectedFileInfo?.name || 'download'}`;
                   }}
                 >
@@ -1267,19 +1222,19 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
     {/*/>*/}
 
     {/*<Drawer open={true} width={'100%'} title={null} footer={null} closable={false}>*/}
-      {/*<MicroApp*/}
-      {/*  name='markdownEditor'*/}
-      {/*  resourceID={match.params.id}*/}
-      {/*  onChange_Saved={(saved: boolean) => {*/}
-      {/*    // onChange_Saved && onChange_Saved(saved);*/}
-      {/*  }}*/}
-      {/*  onClose={() => {*/}
-      {/*    // set_visible(false);*/}
-      {/*    // setTimeout(() => {*/}
-      {/*    //   // onClose && onClose();*/}
-      {/*    // }, 300);*/}
-      {/*  }}*/}
-      {/*/>*/}
+    {/*<MicroApp*/}
+    {/*  name='markdownEditor'*/}
+    {/*  resourceID={match.params.id}*/}
+    {/*  onChange_Saved={(saved: boolean) => {*/}
+    {/*    // onChange_Saved && onChange_Saved(saved);*/}
+    {/*  }}*/}
+    {/*  onClose={() => {*/}
+    {/*    // set_visible(false);*/}
+    {/*    // setTimeout(() => {*/}
+    {/*    //   // onClose && onClose();*/}
+    {/*    // }, 300);*/}
+    {/*  }}*/}
+    {/*/>*/}
     {/*</Drawer>*/}
   </>);
 }

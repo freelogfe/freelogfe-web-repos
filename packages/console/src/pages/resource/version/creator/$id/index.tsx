@@ -457,7 +457,7 @@ function VersionCreator({
                       return;
                     }
                     // console.log(type, '98ieowjfkldjflksdjflksjdflkjsdlfkjsdlkj');
-                    self.location.href = FUtil.Format.completeUrlByDomain('qi')
+                    self.location.href = FUtil.Format.completeUrlByDomain('api')
                       + `/v2/storages/files/${resourceVersionCreatorPage.selectedFileInfo.sha1}/download?attachmentName=${resourceVersionCreatorPage.selectedFileInfo.name}${extension}`;
                   }}
                 />

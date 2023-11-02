@@ -1394,7 +1394,7 @@ async function compileCodeText({ text, targetType }: CompileCodeText): Promise<{
     };
   }
   try {
-    const result = await compile(text, targetType, FUtil.Format.completeUrlByDomain('qi'), 'dev');
+    const result = await compile(text, targetType, FUtil.Format.completeUrlByDomain('api'), 'dev');
     // console.log(result, 'resultresult@$!@$#@#$');
     return {
       errors: [

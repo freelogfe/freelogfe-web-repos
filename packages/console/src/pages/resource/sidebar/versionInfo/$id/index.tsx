@@ -155,12 +155,12 @@ function VersionInfo({ dispatch, resourceVersionEditorPage, match }: VersionInfo
         hasDraft={!!resourceVersionEditorPage.draft}
         onClickDownload={(extension) => {
           if (!extension) {
-            self.location.href = FUtil.Format.completeUrlByDomain('qi')
+            self.location.href = FUtil.Format.completeUrlByDomain('api')
               + `/v2/resources/${resourceVersionEditorPage.resourceID}/versions/${resourceVersionEditorPage.version}/download`;
             return;
           }
 
-          self.location.href = FUtil.Format.completeUrlByDomain('qi')
+          self.location.href = FUtil.Format.completeUrlByDomain('api')
             + `/v2/resources/${resourceVersionEditorPage.resourceID}/versions/${resourceVersionEditorPage.version}/download?fileSuffix=${extension}`;
         }}
         onChangeVersion={(version) => {

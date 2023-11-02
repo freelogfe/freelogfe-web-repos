@@ -2,6 +2,4 @@
 
 import { FUtil } from '@freelog/tools-lib';
 
-export const defaultCover = `${FUtil.Format.completeUrlByDomain(
-  'static',
-)}/static/default_cover.png`;
+export const defaultCover = `//static.freelog.com/static/default_cover.png`;
