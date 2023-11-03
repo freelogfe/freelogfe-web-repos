@@ -10,6 +10,7 @@ import FModal from '@/components/FModal';
 import FTable from '@/components/FTable';
 import * as AHooks from 'ahooks';
 import { Progress } from 'antd';
+
 // import fileSha1Queue from '@/utils/FileSha1Queue';
 
 interface LocalUploadProps {
@@ -74,92 +75,92 @@ function LocalUpload({ style, resourceTypeCode, resourceType, onSucceed }: Local
     set$accept(data.formats.join(','));
   });
 
-  async function uploadVideo(files: RcFile[]) {
-    set$uploadingProgress(0);
-    const [promise, cancel] = await FServiceAPI.Storage.uploadFile({
-      file: files[0],
-      // resourceType: resourceVersionCreatorPage.resourceType,
-    }, {
-      onUploadProgress(progressEvent: any) {
-        set$uploadingProgress(Math.floor(progressEvent.loaded / progressEvent.total * 100));
-      },
-    }, true);
-    uploadCancelHandler.current = cancel;
-    const { data }: {
-      data: {
-        sha1: string;
-      }
-    } = await promise;
-    // console.log(data, 'data sadiofjslkdjflksdjflkjlkdsjlfkj');
-    uploadCancelHandler.current = null;
-    // await FUtil.Tool.promiseSleep(1000);
-
-    set$fileInfo({
-      sha1: data.sha1,
-      fileName: files[0].name,
-    });
-
-    const params3: Parameters<typeof FServiceAPI.Resource.getResourceBySha1>[0] = {
-      fileSha1: data.sha1,
-    };
-
-    const { data: data_ResourcesBySha1 }: {
-      data: {
-        userId: number;
-        resourceId: string;
-        resourceName: string;
-        resourceType: string[];
-        version: string;
-        resourceVersions: {
-          version: string;
-        }[];
-      }[];
-    } = await FServiceAPI.Resource.getResourceBySha1(params3);
-
-    if (data_ResourcesBySha1.length > 0) {
-      if (data_ResourcesBySha1[0].userId === FUtil.Tool.getUserIDByCookies()) {
-        const usedResources: LocalUploadStates['$selfUsedResource'] = data_ResourcesBySha1.map((d) => {
-          return d.resourceVersions.map((v) => {
-            return {
-              resourceID: d.resourceId,
-              resourceName: d.resourceName,
-              resourceType: d.resourceType,
-              resourceVersion: v.version,
-              url: FUtil.LinkTo.resourceVersionInfo({
-                resourceID: d.resourceId,
-                version: v.version,
-              }),
-            };
-          });
-        }).flat();
-        set$uploadingProgress(null);
-        set$selfUsedResource(usedResources);
-      } else {
-        const usedResources: LocalUploadStates['$otherUsedResource'] = data_ResourcesBySha1.map((d) => {
-          return d.resourceVersions.map((v: any) => {
-            return {
-              resourceID: d.resourceId,
-              resourceName: d.resourceName,
-              resourceType: d.resourceType,
-              resourceVersion: v.version,
-              url: FUtil.LinkTo.resourceDetails({
-                resourceID: d.resourceId,
-                version: v.version,
-              }),
-            };
-          });
-        }).flat();
-        set$uploadingProgress(null);
-        set$otherUsedResource(usedResources);
-      }
-    } else {
-      set$uploadingProgress(null);
-      onSucceed && onSucceed({
-        sha1: data.sha1,
-        fileName: files[0].name,
-      });
-    }
-  }
+  // async function uploadVideo(files: RcFile[]) {
+  //   set$uploadingProgress(0);
+  //   const [promise, cancel] = await FServiceAPI.Storage.uploadFile({
+  //     file: files[0],
+  //     // resourceType: resourceVersionCreatorPage.resourceType,
+  //   }, {
+  //     onUploadProgress(progressEvent: any) {
+  //       set$uploadingProgress(Math.floor(progressEvent.loaded / progressEvent.total * 100));
+  //     },
+  //   }, true);
+  //   uploadCancelHandler.current = cancel;
+  //   const { data }: {
+  //     data: {
+  //       sha1: string;
+  //     }
+  //   } = await promise;
+  //   // console.log(data, 'data sadiofjslkdjflksdjflkjlkdsjlfkj');
+  //   uploadCancelHandler.current = null;
+  //   // await FUtil.Tool.promiseSleep(1000);
+  //
+  //   set$fileInfo({
+  //     sha1: data.sha1,
+  //     fileName: files[0].name,
+  //   });
+  //
+  //   const params3: Parameters<typeof FServiceAPI.Resource.getResourceBySha1>[0] = {
+  //     fileSha1: data.sha1,
+  //   };
+  //
+  //   const { data: data_ResourcesBySha1 }: {
+  //     data: {
+  //       userId: number;
+  //       resourceId: string;
+  //       resourceName: string;
+  //       resourceType: string[];
+  //       version: string;
+  //       resourceVersions: {
+  //         version: string;
+  //       }[];
+  //     }[];
+  //   } = await FServiceAPI.Resource.getResourceBySha1(params3);
+  //
+  //   if (data_ResourcesBySha1.length > 0) {
+  //     if (data_ResourcesBySha1[0].userId === FUtil.Tool.getUserIDByCookies()) {
+  //       const usedResources: LocalUploadStates['$selfUsedResource'] = data_ResourcesBySha1.map((d) => {
+  //         return d.resourceVersions.map((v) => {
+  //           return {
+  //             resourceID: d.resourceId,
+  //             resourceName: d.resourceName,
+  //             resourceType: d.resourceType,
+  //             resourceVersion: v.version,
+  //             url: FUtil.LinkTo.resourceVersionInfo({
+  //               resourceID: d.resourceId,
+  //               version: v.version,
+  //             }),
+  //           };
+  //         });
+  //       }).flat();
+  //       set$uploadingProgress(null);
+  //       set$selfUsedResource(usedResources);
+  //     } else {
+  //       const usedResources: LocalUploadStates['$otherUsedResource'] = data_ResourcesBySha1.map((d) => {
+  //         return d.resourceVersions.map((v: any) => {
+  //           return {
+  //             resourceID: d.resourceId,
+  //             resourceName: d.resourceName,
+  //             resourceType: d.resourceType,
+  //             resourceVersion: v.version,
+  //             url: FUtil.LinkTo.resourceDetails({
+  //               resourceID: d.resourceId,
+  //               version: v.version,
+  //             }),
+  //           };
+  //         });
+  //       }).flat();
+  //       set$uploadingProgress(null);
+  //       set$otherUsedResource(usedResources);
+  //     }
+  //   } else {
+  //     set$uploadingProgress(null);
+  //     onSucceed && onSucceed({
+  //       sha1: data.sha1,
+  //       fileName: files[0].name,
+  //     });
+  //   }
+  // }
 
   return (<>
     <div className={styles.localUpload} style={style}>
@@ -284,6 +285,7 @@ function LocalUpload({ style, resourceTypeCode, resourceType, onSucceed }: Local
             }
             uploadCancelHandler.current = null;
             await FUtil.Tool.promiseSleep(1000);
+            set$uploadingProgress(null);
             onSucceed && onSucceed({
               sha1: sha1,
               fileName: files[0].name,
@@ -299,6 +301,7 @@ function LocalUpload({ style, resourceTypeCode, resourceType, onSucceed }: Local
       width={920}
       open={$selfUsedResource.length > 0}
       onOk={() => {
+        set$selfUsedResource([]);
         const fileInfo = get$fileInfo();
         if (fileInfo) {
           onSucceed && onSucceed(fileInfo);

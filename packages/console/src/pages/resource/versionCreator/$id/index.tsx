@@ -111,17 +111,18 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
 
   async function onClick_EditMarkdownBtn() {
 
-    const { result } = await getFilesSha1Info({
-      sha1: [resourceVersionCreatorPage.selectedFileInfo?.sha1 || ''],
-      resourceTypeCode: '',
-    });
+    if (resourceVersionCreatorPage.selectedFileInfo) {
+      const { result } = await getFilesSha1Info({
+        sha1: [resourceVersionCreatorPage.selectedFileInfo?.sha1 || ''],
+        resourceTypeCode: '',
+      });
 
 
-    if (result[0].fileSize > 1024 * 1024) {
-      fMessage(FI18n.i18nNext.t('mdeditor_import_error_lengthlimitation'), 'error');
-      return;
+      if (result[0].fileSize > 1024 * 1024) {
+        fMessage(FI18n.i18nNext.t('mdeditor_import_error_lengthlimitation'), 'error');
+        return;
+      }
     }
-
     await dispatch<OnTrigger_SaveDraft_Action>({
       type: 'resourceVersionCreatorPage/onTrigger_SaveDraft',
       payload: {
@@ -156,8 +157,20 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
     });
   }
 
-  if (!resourceVersionCreatorPage.selectedFileInfo) {
-    return (<div className={styles.noSelectedFileInfo}>
+  // if (!resourceVersionCreatorPage.selectedFileInfo) {
+  //   return ();
+  // }
+
+  const hasError: boolean =
+    resourceVersionCreatorPage.versionInput === '' ||
+    $versionInputHasError ||
+    !resourceVersionCreatorPage.selectedFileInfo ||
+    resourceVersionCreatorPage.selectedFile_UsedResources.length > 0 ||
+    resourceVersionCreatorPage.rawPropertiesState !== 'success';
+
+  return (<>
+    <div className={styles.noSelectedFileInfo}
+         style={{ display: !resourceVersionCreatorPage.selectedFileInfo ? 'flex' : 'none' }}>
       <div style={{ height: 40 }} />
       <div style={{ display: 'flex', alignItems: 'center', width: 920 }}>
         <a onClick={() => {
@@ -328,18 +341,7 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
       {/*  />*/}
       {/*</Drawer>*/}
 
-    </div>);
-  }
-
-  const hasError: boolean =
-    resourceVersionCreatorPage.versionInput === '' ||
-    $versionInputHasError ||
-    !resourceVersionCreatorPage.selectedFileInfo ||
-    resourceVersionCreatorPage.selectedFile_UsedResources.length > 0 ||
-    resourceVersionCreatorPage.rawPropertiesState !== 'success';
-
-  return (<>
-
+    </div>
     <FPrompt
       watch={resourceVersionCreatorPage.dataIsDirty || isMarkdownEditorDirty || resourceVersionCreatorPage.isDirtyCartoonEditor}
       messageText={'还没有保存草稿或发行，现在离开会导致信息丢失'}
@@ -357,7 +359,8 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
       }}
     />
 
-    <div className={styles.selectedFileInfo}>
+    <div className={styles.selectedFileInfo}
+         style={{ display: resourceVersionCreatorPage.selectedFileInfo ? 'flex' : 'none' }}>
       <div style={{ width: 920 }}>
         <div style={{ height: 40 }} />
         <div style={{ display: 'flex', alignItems: 'center', width: 920 }}>
@@ -413,7 +416,7 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
             <div>
               <FComponentsLib.FContentText
                 type='highlight'
-                text={resourceVersionCreatorPage.selectedFileInfo.name}
+                text={resourceVersionCreatorPage.selectedFileInfo?.name || ''}
                 style={{ maxWidth: 600 }}
                 singleRow
               />
@@ -422,7 +425,7 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
                 <FComponentsLib.FContentText
                   className={styles.infoSize}
                   type='additional1'
-                  text={resourceVersionCreatorPage.selectedFileInfo.from}
+                  text={resourceVersionCreatorPage.selectedFileInfo?.from || ''}
                 />
               </div>
             </div>

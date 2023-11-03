@@ -163,6 +163,7 @@ function StorageSpace({ style = {}, resourceTypeCode, onSucceed }: StorageSpaceP
       width={920}
       open={$selfUsedResource.length > 0}
       onOk={() => {
+        set$selfUsedResource([]);
         const fileInfo = get$objectInfo();
         if (fileInfo) {
           onSucceed && onSucceed(fileInfo);
