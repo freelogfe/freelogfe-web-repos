@@ -33,15 +33,16 @@ import {
   OnChange_Authorized_AuthorizedInput_Action,
 } from '@/models/contractPage';
 import FContractDetailsDrawer from '@/components/FContractDetailsDrawer';
-import FInput from '@/components/FInput';
+// import FInput from '@/components/FInput';
 import FDropdownMenu from '@/components/FDropdownMenu';
-import moment, { Moment } from 'moment';
+import moment from 'moment';
 import FNoDataTip from '@/components/FNoDataTip';
 import FLoadingTip from '@/components/FLoadingTip';
 import FCoverImage from '@/components/FCoverImage';
 import FComponentsLib from '@freelog/components-lib';
 import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
 import useUrlState from '@ahooksjs/use-url-state';
+import AuthAutoComplete from './AuthAutoComplete';
 
 const RangePicker: any = DatePicker.RangePicker;
 
@@ -166,9 +167,6 @@ function Contract({ dispatch, contractPage }: ContractProps) {
                 />
               </FComponentsLib.FTextBtn>
               <div style={{ height: 10 }} />
-              {/*<Space size={5} className={styles.targetInfoLabels}>*/}
-              {/*  <label>{record.contractName}</label>*/}
-              {/*</Space>*/}
               <FComponentsLib.F_Contract_And_Policy_Labels
                 data={[{ text: record.contractName, dot: '' }]}
               />
@@ -636,10 +634,12 @@ function Contract({ dispatch, contractPage }: ContractProps) {
                       <div>
                         <FComponentsLib.FContentText type={'additional2'} text={'授权方标识'} />
                         <div style={{ height: 4 }} />
-                        <AutoComplete
-                          style={{ width: 340, height: 38 }}
+                        <AuthAutoComplete
+                          identityType={2}
+                          prefixType={1}
+                          // style={{ width: 340, height: 38 }}
                           value={contractPage.authorize_authorizeInput}
-                          options={contractPage.authorize_authorizeOptions}
+                          // options={contractPage.authorize_authorizeOptions}
                           onChange={(value) => {
                             dispatch<OnChange_Authorize_AuthorizeInput_Action>({
                               type: 'contractPage/onChange_Authorize_AuthorizeInput',

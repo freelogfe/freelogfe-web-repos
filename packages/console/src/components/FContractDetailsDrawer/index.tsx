@@ -264,7 +264,7 @@ function FContractDetailsDrawer({ contractID = '', onClose, onChange_SomeContrac
   }
 
   async function syncVersionUsedContracts(value: FContractDetailsDrawerStates['versionAllContractIDs'][number]) {
-
+    // @ts-ignore
     const params: Parameters<typeof FServiceAPI.Resource.updateResourceVersionInfo>[0] = {
       version: value.version,
       resourceId: baseInfo?.licenseeId || '',

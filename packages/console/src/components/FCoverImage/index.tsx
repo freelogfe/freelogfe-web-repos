@@ -23,7 +23,7 @@ interface FCoverImageStates {
   } | null;
 }
 
-function FCoverImage({ src, width, style = {}, className = '' }: FCoverImageProps) {
+function FCoverImage({ src = '', width, style = {}, className = '' }: FCoverImageProps) {
 
   const [imgStyle, setImgStyle] = React.useState<FCoverImageStates['imgStyle']>(null);
 
