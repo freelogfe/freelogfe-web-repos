@@ -98,6 +98,7 @@ export interface ChangeAction extends AnyAction {
 
 export interface OnMountPageAction extends AnyAction {
   type: 'contractPage/onMountPage';
+  payload: Partial<ContractPageModelState>;
 }
 
 export interface OnUnmountPageAction extends AnyAction {
@@ -373,7 +374,12 @@ const Model: ContractPageModelType = {
   namespace: 'contractPage',
   state: initStates,
   effects: {
-    * onMountPage({}: OnMountPageAction, { call, put }: EffectsCommandMap) {
+    * onMountPage({ payload }: OnMountPageAction, { call, put }: EffectsCommandMap) {
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload,
+      });
       // console.log('#@#$@#$!!!!!!!');
       // yield put<Fetch_Authorize_List_Action>({
       //   type: 'fetch_Authorize_List',

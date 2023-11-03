@@ -56,12 +56,27 @@ function Contract({ dispatch, contractPage }: ContractProps) {
     exhibitId: string;
     status: string;
     nodeName: string;
+    identityType: '1' | '2';
+    licensorName: string;
+    licenseeName: string;
   }>();
 
   const [keywordsInput1, set_keywordsInput1] = React.useState<string>('');
   const [keywordsInput2, set_keywordsInput2] = React.useState<string>('');
 
   AHooks.useMount(() => {
+    // console.log(urlParams, 'urlParamss sdfsdlfjlksdjlfkjlkj');
+    dispatch<OnMountPageAction>({
+      type: 'contractPage/onMountPage',
+      payload: {
+        showPage: urlParams.identityType === '2' ? 'authorized' : 'authorize',
+        authorize_authorizeInput: urlParams.identityType === '1' ? urlParams.licensorName : '',
+        authorize_authorizedInput: urlParams.identityType === '1' ? urlParams.licenseeName : '',
+        authorized_authorizeInput: urlParams.identityType === '2' ? urlParams.licensorName : '',
+        authorized_authorizedInput: urlParams.identityType === '2' ? urlParams.licenseeName : '',
+      },
+    });
+
     if (urlParams.exhibitId) {
       dispatch<OnChangeShowPageAction>({
         type: 'contractPage/onChangeShowPage',
@@ -78,10 +93,9 @@ function Contract({ dispatch, contractPage }: ContractProps) {
         },
       });
     }
-    dispatch<OnMountPageAction>({
-      type: 'contractPage/onMountPage',
-    });
   });
+
+  // dispatch<>
 
   AHooks.useUnmount(() => {
     dispatch<OnUnmountPageAction>({

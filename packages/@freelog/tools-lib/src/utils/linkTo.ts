@@ -409,10 +409,15 @@ export function reward({}: RewardParamsType = {}) {
 
 // 我的合约
 interface ContractParamsType {
+  identityType?: 1 | 2;
+  licensorName?: string;
+  licenseeName?: string;
 }
 
-export function contract({}: ContractParamsType = {}) {
-  return `/logged/contract`;
+export function contract({...params}: ContractParamsType = {}) {
+  return `/logged/contract${handleQuery({
+    ...params
+  })}`;
 }
 
 // 个人设置
