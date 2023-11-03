@@ -26,7 +26,9 @@ function AuthAutoComplete({ value, onChange, identityType, prefixType }: AuthAut
   });
 
   async function handleData() {
-    const { data }: {
+    const { ret, errCode, data }: {
+      ret: number;
+      errCode: number;
       data: {
         suggest: string; count: number;
       }[];
@@ -36,13 +38,16 @@ function AuthAutoComplete({ value, onChange, identityType, prefixType }: AuthAut
       prefix: value,
     });
 
-    // console.log(data, 'data sdiofjlsdkjflsdjlfjdslfjljl');
+    if (ret !== 0 || errCode !== 0) {
+      set$options([]);
+      return;
+    }
 
     set$options(data.map((d) => {
       return { value: d.suggest, label: d.suggest };
     }));
   }
-// console.log($options, '$options')
+
   return (<AutoComplete
     style={{ width: 340, height: 38 }}
     value={value}

@@ -635,7 +635,7 @@ function Contract({ dispatch, contractPage }: ContractProps) {
                         <FComponentsLib.FContentText type={'additional2'} text={'授权方标识'} />
                         <div style={{ height: 4 }} />
                         <AuthAutoComplete
-                          identityType={2}
+                          identityType={1}
                           prefixType={1}
                           // style={{ width: 340, height: 38 }}
                           value={contractPage.authorize_authorizeInput}
@@ -654,10 +654,12 @@ function Contract({ dispatch, contractPage }: ContractProps) {
                       <div>
                         <FComponentsLib.FContentText type={'additional2'} text={'被授权方标识'} />
                         <div style={{ height: 4 }} />
-                        <AutoComplete
+                        <AuthAutoComplete
+                          identityType={1}
+                          prefixType={2}
+                          // style={{ width: 340, height: 38 }}
                           value={contractPage.authorize_authorizedInput}
-                          style={{ width: 340, height: 38 }}
-                          options={contractPage.authorize_authorizedOptions}
+                          // options={contractPage.authorize_authorizeOptions}
                           onChange={(value) => {
                             dispatch<OnChange_Authorize_AuthorizedInput_Action>({
                               type: 'contractPage/onChange_Authorize_AuthorizedInput',
@@ -667,6 +669,19 @@ function Contract({ dispatch, contractPage }: ContractProps) {
                             });
                           }}
                         />
+                        {/*<AutoComplete*/}
+                        {/*  value={contractPage.authorize_authorizedInput}*/}
+                        {/*  style={{ width: 340, height: 38 }}*/}
+                        {/*  options={contractPage.authorize_authorizedOptions}*/}
+                        {/*  onChange={(value) => {*/}
+                        {/*    dispatch<OnChange_Authorize_AuthorizedInput_Action>({*/}
+                        {/*      type: 'contractPage/onChange_Authorize_AuthorizedInput',*/}
+                        {/*      payload: {*/}
+                        {/*        value: value,*/}
+                        {/*      },*/}
+                        {/*    });*/}
+                        {/*  }}*/}
+                        {/*/>*/}
                       </div>
 
                     </div>
@@ -834,10 +849,12 @@ function Contract({ dispatch, contractPage }: ContractProps) {
                       <div>
                         <FComponentsLib.FContentText type={'additional2'} text={'授权方标识'} />
                         <div style={{ height: 4 }} />
-                        <AutoComplete
-                          style={{ width: 340, height: 38 }}
+                        <AuthAutoComplete
+                          identityType={2}
+                          prefixType={1}
+                          // style={{ width: 340, height: 38 }}
                           value={contractPage.authorized_authorizeInput}
-                          options={contractPage.authorized_authorizeOptions}
+                          // options={contractPage.authorize_authorizeOptions}
                           onChange={(value) => {
                             dispatch<OnChange_Authorized_AuthorizeInput_Action>({
                               type: 'contractPage/onChange_Authorized_AuthorizeInput',
@@ -847,15 +864,30 @@ function Contract({ dispatch, contractPage }: ContractProps) {
                             });
                           }}
                         />
+                        {/*<AutoComplete*/}
+                        {/*  style={{ width: 340, height: 38 }}*/}
+                        {/*  value={contractPage.authorized_authorizeInput}*/}
+                        {/*  options={contractPage.authorized_authorizeOptions}*/}
+                        {/*  onChange={(value) => {*/}
+                        {/*    dispatch<OnChange_Authorized_AuthorizeInput_Action>({*/}
+                        {/*      type: 'contractPage/onChange_Authorized_AuthorizeInput',*/}
+                        {/*      payload: {*/}
+                        {/*        value: value,*/}
+                        {/*      },*/}
+                        {/*    });*/}
+                        {/*  }}*/}
+                        {/*/>*/}
                       </div>
 
                       <div>
                         <FComponentsLib.FContentText type={'additional2'} text={'被授权方标识'} />
                         <div style={{ height: 4 }} />
-                        <AutoComplete
+                        <AuthAutoComplete
+                          identityType={2}
+                          prefixType={2}
+                          // style={{ width: 340, height: 38 }}
                           value={contractPage.authorized_authorizedInput}
-                          style={{ width: 340, height: 38 }}
-                          options={contractPage.authorized_authorizedOptions}
+                          // options={contractPage.authorize_authorizeOptions}
                           onChange={(value) => {
                             dispatch<OnChange_Authorized_AuthorizedInput_Action>({
                               type: 'contractPage/onChange_Authorized_AuthorizedInput',
@@ -865,6 +897,19 @@ function Contract({ dispatch, contractPage }: ContractProps) {
                             });
                           }}
                         />
+                        {/*<AutoComplete*/}
+                        {/*  value={contractPage.authorized_authorizedInput}*/}
+                        {/*  style={{ width: 340, height: 38 }}*/}
+                        {/*  options={contractPage.authorized_authorizedOptions}*/}
+                        {/*  onChange={(value) => {*/}
+                        {/*    dispatch<OnChange_Authorized_AuthorizedInput_Action>({*/}
+                        {/*      type: 'contractPage/onChange_Authorized_AuthorizedInput',*/}
+                        {/*      payload: {*/}
+                        {/*        value: value,*/}
+                        {/*      },*/}
+                        {/*    });*/}
+                        {/*  }}*/}
+                        {/*/>*/}
                       </div>
 
                     </div>
