@@ -35,6 +35,7 @@ import FSkeletonNode from '@/components/FSkeletonNode';
 import { ChangeAction } from '@/models/resourceVersionCreatorPage';
 import FMicroApp_MarkdownEditorDrawer from '@/components/FMicroApp_MarkdownEditorDrawer';
 import fMessage from '@/components/fMessage';
+import { getFilesSha1Info } from '@/utils/service';
 
 interface Step2Props {
   dispatch: Dispatch;
@@ -207,12 +208,15 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
               style={{ fontSize: 12, display: 'flex', alignItems: 'center', gap: 5 }}
               disabled={resourceCreatorPage.step2_rawPropertiesState === 'parsing'}
               type='primary'
-              onClick={() => {
+              onClick={async () => {
 
-                const fileSize = resourceCreatorPage.step2_rawProperties.find((r) => {
-                  return r.key === 'fileSize';
-                })?.value || 0;
-                if (Number(fileSize) > 1024 * 1024) {
+                const { result } = await getFilesSha1Info({
+                  sha1: [resourceCreatorPage.step2_fileInfo?.sha1 || ''],
+                  resourceTypeCode: '',
+                });
+
+
+                if (result[0].fileSize > 1024 * 1024) {
                   fMessage(FI18n.i18nNext.t('mdeditor_import_error_lengthlimitation'), 'error');
                   return;
                 }

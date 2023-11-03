@@ -53,6 +53,8 @@ import FPrompt from '@/components/FPrompt';
 import FSkeletonNode from '@/components/FSkeletonNode';
 import { MicroApp, withRouter, history } from 'umi';
 import FMicroApp_MarkdownEditorDrawer from '@/components/FMicroApp_MarkdownEditorDrawer';
+import { getFilesSha1Info } from '@/utils/service';
+import fMessage from '@/components/fMessage';
 
 interface VersionCreatorProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -108,6 +110,18 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
       || resourceVersionCreatorPage.resourceInfo?.resourceType[2] === '页漫');
 
   async function onClick_EditMarkdownBtn() {
+
+    const { result } = await getFilesSha1Info({
+      sha1: [resourceVersionCreatorPage.selectedFileInfo?.sha1 || ''],
+      resourceTypeCode: '',
+    });
+
+
+    if (result[0].fileSize > 1024 * 1024) {
+      fMessage(FI18n.i18nNext.t('mdeditor_import_error_lengthlimitation'), 'error');
+      return;
+    }
+
     await dispatch<OnTrigger_SaveDraft_Action>({
       type: 'resourceVersionCreatorPage/onTrigger_SaveDraft',
       payload: {

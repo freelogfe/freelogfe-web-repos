@@ -3,6 +3,7 @@ import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 interface FileInfo {
   sha1: string;
   state: 'success' | 'fail' | 'nonentity';
+  fileSize: number;
   info: {
     key: string;
     name: string;
@@ -48,6 +49,7 @@ export async function getFilesSha1Info({
       msg: string;
       data: {
         sha1: string;
+        fileSize: number;
         metaAnalyzeStatus: number;
         metaInfoArray: FileInfo['info'];
       }[];
@@ -92,6 +94,7 @@ export async function getFilesSha1Info({
         return {
           sha1: d.sha1,
           state,
+          fileSize: d.fileSize,
           info: d.metaInfoArray,
         };
       });
