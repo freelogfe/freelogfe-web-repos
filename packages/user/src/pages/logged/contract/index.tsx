@@ -30,7 +30,7 @@ import {
   OnChange_Authorize_AuthorizeInput_Action,
   OnChange_Authorize_AuthorizedInput_Action,
   OnChange_Authorized_AuthorizeInput_Action,
-  OnChange_Authorized_AuthorizedInput_Action,
+  OnChange_Authorized_AuthorizedInput_Action, Fetch_Authorized_List_Action, Fetch_Authorize_List_Action,
 } from '@/models/contractPage';
 import FContractDetailsDrawer from '@/components/FContractDetailsDrawer';
 // import FInput from '@/components/FInput';
@@ -101,6 +101,14 @@ function Contract({ dispatch, contractPage }: ContractProps) {
   });
 
   AHooks.useDebounceEffect(() => {
+    dispatch<Fetch_Authorize_List_Action>({
+      type: 'contractPage/fetch_Authorize_List',
+    });
+  }, [contractPage.authorize_authorizeInput, contractPage.authorize_authorizedInput], {
+    wait: 300,
+  });
+
+  AHooks.useDebounceEffect(() => {
     dispatch<OnChange_Authorized_KeywordsInput_Action>({
       type: 'contractPage/onChange_Authorized_KeywordsInput',
       payload: {
@@ -108,6 +116,14 @@ function Contract({ dispatch, contractPage }: ContractProps) {
       },
     });
   }, [keywordsInput2], {
+    wait: 300,
+  });
+
+  AHooks.useDebounceEffect(() => {
+    dispatch<Fetch_Authorized_List_Action>({
+      type: 'contractPage/fetch_Authorized_List',
+    });
+  }, [contractPage.authorized_authorizeInput, contractPage.authorized_authorizedInput], {
     wait: 300,
   });
 

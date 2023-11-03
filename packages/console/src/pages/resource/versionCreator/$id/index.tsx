@@ -42,7 +42,7 @@ import {
   OnTrigger_SaveDraft_Action,
   OnUnmountPageAction,
 } from '@/models/resourceVersionCreatorPage';
-import fResourceMarkdownEditor from '@/components/fResourceMarkdownEditor';
+// import fResourceMarkdownEditor from '@/components/fResourceMarkdownEditor';
 import { ComicTool } from '@/components/fComicTool/FComicToolModal';
 import { ReleaseTip } from '@/pages/resource/version/creator/$id';
 import fConfirmModal from '@/components/fConfirmModal';

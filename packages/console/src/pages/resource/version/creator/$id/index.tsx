@@ -37,7 +37,7 @@ import FResourceAuthorizationProcessor, { getProcessor } from '@/components/FRes
 import VersionInput from './VersionInput';
 import fAddDependencies from '@/components/fAddDependencies';
 import FPrompt from '@/components/FPrompt';
-import fResourceMarkdownEditor from '@/components/fResourceMarkdownEditor';
+// import fResourceMarkdownEditor from '@/components/fResourceMarkdownEditor';
 import { RouteComponentProps } from 'react-router';
 import fConfirmModal from '@/components/fConfirmModal';
 import FTooltip from '@/components/FTooltip';
@@ -121,12 +121,12 @@ function VersionCreator({
         showSuccessTip: false,
       },
     });
-    await fResourceMarkdownEditor({
-      resourceID: resourceVersionCreatorPage.resourceInfo?.resourceID || '',
-      async onChange_Saved(saved: boolean) {
-        set_isMarkdownEditorDirty(!saved);
-      },
-    });
+    // await fResourceMarkdownEditor({
+    //   resourceID: resourceVersionCreatorPage.resourceInfo?.resourceID || '',
+    //   async onChange_Saved(saved: boolean) {
+    //     set_isMarkdownEditorDirty(!saved);
+    //   },
+    // });
     await set_isMarkdownEditorDirty(false);
     await dispatch<OnClose_MarkdownEditor_Action>({
       type: 'resourceVersionCreatorPage/onClose_MarkdownEditor',

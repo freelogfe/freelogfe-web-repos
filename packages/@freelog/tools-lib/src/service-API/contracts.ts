@@ -58,7 +58,9 @@ interface ContractsParamsType {
   limit?: number;
   identityType: 1 | 2;
   licensorId?: string;
+  licensorName?: string;
   licenseeId?: string;
+  licenseeName?: string;
   subjectIds?: string;
   subjectType?: 1 | 2 | 3;
   isDefault?: number;

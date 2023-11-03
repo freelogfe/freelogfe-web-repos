@@ -238,14 +238,14 @@ export interface OnClick_Authorized_LoadMoreBtn_Action extends AnyAction {
 }
 
 export interface Fetch_Authorize_List_Action extends AnyAction {
-  type: 'fetch_Authorize_List';
+  type: 'fetch_Authorize_List' | 'contractPage/fetch_Authorize_List';
   payload?: {
     loadMore: boolean;
   };
 }
 
 export interface Fetch_Authorized_List_Action extends AnyAction {
-  type: 'fetch_Authorized_List';
+  type: 'fetch_Authorized_List' | 'contractPage/fetch_Authorized_List';
   payload?: {
     loadMore: boolean;
   };
@@ -695,6 +695,8 @@ const Model: ContractPageModelType = {
         startDate: contractPage.authorize_Date ? contractPage.authorize_Date[0].format(FUtil.Predefined.momentDateFormat) : undefined,
         endDate: contractPage.authorize_Date ? contractPage.authorize_Date[1]?.format(FUtil.Predefined.momentDateFormat) + ' 23:59:59' : undefined,
         keywords: contractPage.authorize_Keywords || undefined,
+        licensorName: contractPage.authorize_authorizeInput || undefined,
+        licenseeName: contractPage.authorize_authorizedInput || undefined,
       };
 
       const data: { dataList: any[]; totalItem: number; } = yield call(contractList, params);
@@ -728,7 +730,14 @@ const Model: ContractPageModelType = {
       ];
 
       if (resultList.length === 0) {
-        if (params.subjectType === undefined && params.status === undefined && params.authStatus === undefined && params.startDate === undefined && params.endDate === undefined && params.keywords === undefined) {
+        if (params.subjectType === undefined
+          && params.status === undefined
+          && params.authStatus === undefined
+          && params.startDate === undefined
+          && params.endDate === undefined
+          && params.keywords === undefined
+          && params.licensorName === undefined
+          && params.licenseeName === undefined) {
           yield put<ChangeAction>({
             type: 'change',
             payload: {
@@ -840,6 +849,8 @@ const Model: ContractPageModelType = {
         startDate: contractPage.authorized_Date ? contractPage.authorized_Date[0].format(FUtil.Predefined.momentDateFormat) : undefined,
         endDate: contractPage.authorized_Date ? contractPage.authorized_Date[1].format(FUtil.Predefined.momentDateFormat) + ' 23:59:59' : undefined,
         keywords: contractPage.authorized_Keywords || undefined,
+        licensorName: contractPage.authorized_authorizeInput || undefined,
+        licenseeName: contractPage.authorized_authorizedInput || undefined,
       };
       if (contractPage.authorized_SubjectIds) {
         params = {
@@ -878,7 +889,14 @@ const Model: ContractPageModelType = {
       ];
 
       if (resultList.length === 0) {
-        if (params.subjectType === undefined && params.status === undefined && params.authStatus === undefined && params.startDate === undefined && params.endDate === undefined && params.keywords === undefined) {
+        if (params.subjectType === undefined
+          && params.status === undefined
+          && params.authStatus === undefined
+          && params.startDate === undefined
+          && params.endDate === undefined
+          && params.keywords === undefined
+          && params.licensorName === undefined
+          && params.licenseeName === undefined) {
           yield put<ChangeAction>({
             type: 'change',
             payload: {

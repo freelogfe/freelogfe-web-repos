@@ -10,10 +10,10 @@ import { PolicyFullInfo_Type } from '@/type/contractTypes';
 import fPolicyBuilder from '@/components/fPolicyBuilder';
 import { history } from 'umi';
 import { IResourceCreateVersionDraftType } from '@/type/resourceTypes';
-import fResourceMarkdownEditor from '@/components/fResourceMarkdownEditor';
+// import fResourceMarkdownEditor from '@/components/fResourceMarkdownEditor';
 import fComicTool from '@/components/fComicTool';
 import { getProcessor } from '@/components/FResourceAuthorizationProcessor';
-import moment from 'moment';
+// import moment from 'moment';
 
 export interface ResourceCreatorPageModelState {
   userInfo: {
