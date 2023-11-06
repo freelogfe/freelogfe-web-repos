@@ -21,11 +21,10 @@ interface SignProps {
 }
 
 function Sign({ dispatch, resourceDetailPage }: SignProps) {
-  // const babelsRef = React.useRef(null);
-  // const babelsSize = AHooks.useSize(babelsRef);
+  const ref = React.useRef(null);
+  const size = AHooks.useSize(ref);
 
-  // const resourceInfoLength: number = resourceDetailPage.resource_Info?.about.length || 0;
-
+  console.log(size, 'size sdifjlskdjfldsjfljsdlkjlk');
 
   const resource = resourceDetailPage.sign_SignResources.find((r) => r.selected);
 
@@ -38,41 +37,50 @@ function Sign({ dispatch, resourceDetailPage }: SignProps) {
           style={{ borderRadius: 10, display: 'block' }}
         />
         <div style={{ height: 15 }} />
-        <Tooltip
-          // open={true}
-          title={<div className={styles.babels}
-                      style={{ padding: '14px 12px', overflow: 'visible', maxHeight: 'fit-content' }}>
-            {
-              (resourceDetailPage.resource_Info?.tags || [])
-                .map((t) => (
-                  <label
-                    key={t}
-                    onClick={() => {
-                      self.open(FUtil.LinkTo.globalSearch({ search: t }));
-                    }}
-                  >{t}</label>))
-            }
-          </div>}
-          // mouseEnterDelay={3}
-          overlayClassName={styles.TooltipOverlay}
-          // color={'rgba(0, 0, 0, 0.5)'}
-          color={'#fff'}
-          // visible={true}
-          placement='top'
-        >
-          <div className={styles.babels}>
-            {
-              (resourceDetailPage.resource_Info?.tags || [])
-                .map((t) => (
-                  <label
-                    key={t}
-                    onClick={() => {
-                      self.open(FUtil.LinkTo.globalSearch({ search: t }));
-                    }}
-                  >{t}</label>))
-            }
-          </div>
-        </Tooltip>
+
+        <div className={styles.babels} ref={ref}>
+          {
+            (resourceDetailPage.resource_Info?.tags || [])
+              .map((t) => (
+                <label
+                  key={t}
+                  onClick={() => {
+                    self.open(FUtil.LinkTo.globalSearch({ search: t }));
+                  }}
+                >{t}</label>))
+          }
+        </div>
+        {
+          (size?.height || 0) >= 112 && (<>
+            <div style={{ height: 10 }} />
+            <Tooltip
+              // open={true}
+              title={<div className={styles.babels}
+                          style={{ padding: '14px 12px', overflow: 'visible', maxHeight: 'fit-content' }}>
+                {
+                  (resourceDetailPage.resource_Info?.tags || [])
+                    .map((t) => (
+                      <label
+                        key={t}
+                        onClick={() => {
+                          self.open(FUtil.LinkTo.globalSearch({ search: t }));
+                        }}
+                      >{t}</label>))
+                }
+              </div>}
+              // mouseEnterDelay={3}
+              overlayClassName={styles.TooltipOverlay}
+              // color={'rgba(0, 0, 0, 0.5)'}
+              color={'#fff'}
+              // visible={true}
+              placement='right'
+            >
+              <div style={{ display: 'inline-block' }}>
+                <FComponentsLib.FTextBtn style={{ fontSize: 12 }}>更多标签</FComponentsLib.FTextBtn>
+              </div>
+            </Tooltip>
+          </>)
+        }
 
         <div style={{ height: 15 }} />
         <FComponentsLib.FContentText

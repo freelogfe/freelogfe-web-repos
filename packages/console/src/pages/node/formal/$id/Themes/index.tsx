@@ -189,7 +189,11 @@ function Themes({ match, dispatch, nodeManagerPage }: ThemesProps) {
                     themeList.map((item) => {
                       return (<div className={styles.theme} key={item.resourceId}>
                         <div className={styles.cover}>
-                          <img className={styles['cover-img']} src={item.coverImages[0]} alt={''} />
+                          <img
+                            className={styles['cover-img']}
+                            src={item.coverImages[0]}
+                            alt={''}
+                          />
                           <div className={styles.triangle} />
                           <div className={styles['free-text']}>免费</div>
                         </div>
