@@ -51,7 +51,7 @@ import fAddCustomOptions from '@/components/fAddCustomOptions';
 import VersionInput from '@/pages/resource/version/creator/$id/VersionInput';
 import FPrompt from '@/components/FPrompt';
 import FSkeletonNode from '@/components/FSkeletonNode';
-import { MicroApp, withRouter, history } from 'umi';
+import { withRouter, history } from 'umi';
 import FMicroApp_MarkdownEditorDrawer from '@/components/FMicroApp_MarkdownEditorDrawer';
 import { getFilesSha1Info } from '@/utils/service';
 import fMessage from '@/components/fMessage';
