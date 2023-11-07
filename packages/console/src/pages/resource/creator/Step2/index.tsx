@@ -32,7 +32,7 @@ import FResourceAuthorizationProcessor, { getProcessor } from '@/components/FRes
 import fAddDependencies from '@/components/fAddDependencies';
 import * as AHooks from 'ahooks';
 import FSkeletonNode from '@/components/FSkeletonNode';
-import { ChangeAction } from '@/models/resourceVersionCreatorPage';
+// import { ChangeAction } from '@/models/resourceVersionCreatorPage';
 import FMicroApp_MarkdownEditorDrawer from '@/components/FMicroApp_MarkdownEditorDrawer';
 import fMessage from '@/components/fMessage';
 import { getFilesSha1Info } from '@/utils/service';
@@ -159,23 +159,7 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
 
       <div style={{ height: 100 }} />
 
-      <FMicroApp_MarkdownEditorDrawer
-        open={resourceCreatorPage.step2_isOpenMarkdown}
-        resourceID={resourceCreatorPage.step1_createdResourceInfo?.resourceID || ''}
-        onChange_Saved={(saved) => {
-          // dispatch<ChangeAction>({
-          //   type: 'resourceVersionCreatorPage/change',
-          //   payload: {
-          //     isDirtyMarkdownEditor: !saved,
-          //   },
-          // });
-        }}
-        onClose={() => {
-          dispatch<OnClose_step2_editMarkdown>({
-            type: 'resourceCreatorPage/onClose_step2_editMarkdown',
-          });
-        }}
-      />
+
     </div>
     <div style={{ display: resourceCreatorPage.step2_fileInfo ? 'block' : 'none' }}>
       <div style={{ height: 40 }} />
@@ -218,7 +202,7 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
                   });
 
 
-                  if (result[0].fileSize > 1024 * 1024) {
+                  if (result[0].fileSize > 1024 * 1024 * 1024) {
                     fMessage(FI18n.i18nNext.t('mdeditor_import_error_lengthlimitation'), 'error');
                     return;
                   }
@@ -804,6 +788,24 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
         }}
       />
     </div>
+
+    {/*<FMicroApp_MarkdownEditorDrawer*/}
+    {/*  open={resourceCreatorPage.step2_isOpenMarkdown}*/}
+    {/*  resourceID={resourceCreatorPage.step1_createdResourceInfo?.resourceID || ''}*/}
+    {/*  onChange_Saved={(saved) => {*/}
+    {/*    // dispatch<ChangeAction>({*/}
+    {/*    //   type: 'resourceVersionCreatorPage/change',*/}
+    {/*    //   payload: {*/}
+    {/*    //     isDirtyMarkdownEditor: !saved,*/}
+    {/*    //   },*/}
+    {/*    // });*/}
+    {/*  }}*/}
+    {/*  onClose={() => {*/}
+    {/*    dispatch<OnClose_step2_editMarkdown>({*/}
+    {/*      type: 'resourceCreatorPage/onClose_step2_editMarkdown',*/}
+    {/*    });*/}
+    {/*  }}*/}
+    {/*/>*/}
   </>);
 }
 
