@@ -56,6 +56,7 @@ export default [
           { exact: true, path: 'list', component: '../pages/resource/list', title: '我的资源 - Freelog' },
           { exact: true, path: 'collect', component: '../pages/resource/list', title: '我的收藏 - Freelog' },
           { exact: true, path: 'creator', component: '../pages/resource/creator', title: '创建资源 - Freelog' },
+          { exact: true, path: 'creatorBatch', component: '../pages/resource/creatorBatch', title: '批量创建资源 - Freelog' },
           { exact: true, path: 'details/:id', component: '../pages/resource/details/$id', title: '市场资源 - Freelog' },
           {
             path: 'sidebar',
