@@ -202,7 +202,7 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
                   });
 
 
-                  if (result[0].fileSize > 1024 * 1024 * 1024) {
+                  if (result[0].fileSize > 2 * 1024 * 1024) {
                     fMessage(FI18n.i18nNext.t('mdeditor_import_error_lengthlimitation'), 'error');
                     return;
                   }
