@@ -44,7 +44,7 @@ interface ResourceCreatorBatchPageModelType {
 const initStates: ResourceCreatorBatchPageState = {
   info: null,
 
-  showPage: 'uploadFile',
+  showPage: 'resourceList',
 };
 
 const Model: ResourceCreatorBatchPageModelType = {
