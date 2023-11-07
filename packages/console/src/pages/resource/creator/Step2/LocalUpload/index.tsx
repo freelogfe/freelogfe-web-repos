@@ -451,12 +451,16 @@ function LocalUpload({ style, resourceTypeCode, resourceType, onSucceed }: Local
     >
       <div className={styles.progressBox}>
         <Progress
+          // strokeColor={'#2784ff'}
           type='circle'
-          strokeColor={{
-            '0%': '#108ee9',
-            '100%': '#87d068',
-          }}
+          // strokeColor={{
+          //   '0%': '#108ee9',
+          //   '100%': '#87d068',
+          // }}
           percent={$uploadingProgress || 0}
+          success={{
+            strokeColor: '#52c41a'
+          }}
         />
         <div style={{ height: 20 }} />
         {
