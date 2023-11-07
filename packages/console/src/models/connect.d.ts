@@ -11,7 +11,6 @@ import { UserModelState } from './user';
 import { GlobalModelState } from './global';
 import { StorageHomePageModelState } from './storageHomePage';
 import { StorageObjectEditorModelState } from './storageObjectEditor';
-// import { StorageObjectDepSelectorModelState } from './storageObjectDepSelector';
 import { ResourceDetailPageModelState } from './resourceDetailPage';
 import { NodesModelState } from './nodes';
 import { NodeManagerModelState } from './nodeManagerPage';
@@ -23,9 +22,9 @@ import { ResourceEditorPageModelState } from './resourceEditorPage';
 import { DashboardPageModelState } from './dashboardPage';
 import { NodeCreatorPageModelState } from './nodeCreatorPage';
 import { ResourceSiderModelState } from './resourceSider';
+import { ResourceCreatorBatchPageState } from './resourceCreatorBatchPage';
 
 export {
-  // RouterHistoriesModelState,
   GlobalSearchingModelState,
   DiscoverPageModelState,
   ResourceListPageModelState,
@@ -35,24 +34,22 @@ export {
   ResourceVersionCreatorPageModelState,
   ResourceVersionEditorPageModelState,
   ResourceAuthPageModelState,
-  // ResourceInfoModelState,
   UserModelState,
   GlobalModelState,
   StorageHomePageModelState,
   StorageObjectEditorModelState,
-  // StorageObjectDepSelectorModelState,
   ResourceDetailPageModelState,
   NodesModelState,
   NodeManagerModelState,
   NodeManager_Contract_Page_ModelState,
   ExhibitInfoPageModelState,
-  // ResourceDepSelectorModelState,
   InformalNodeManagerPageModelState,
   InformExhibitInfoPageModelState,
   ResourceEditorPageModelState,
   DashboardPageModelState,
   NodeCreatorPageModelState,
   ResourceSiderModelState,
+  ResourceCreatorBatchPageState
 };
 
 export interface ConnectState {
@@ -72,7 +69,6 @@ export interface ConnectState {
   global: GlobalModelState;
   storageHomePage: StorageHomePageModelState;
   storageObjectEditor: StorageObjectEditorModelState;
-  // storageObjectDepSelector: StorageObjectDepSelectorModelState;
   resourceDetailPage: ResourceDetailPageModelState;
   nodes: NodesModelState;
   nodeManagerPage: NodeManagerModelState;
@@ -83,4 +79,5 @@ export interface ConnectState {
   dashboardPage: DashboardPageModelState;
   nodeCreatorPage: NodeCreatorPageModelState;
   resourceSider: ResourceSiderModelState;
+  resourceCreatorBatchPage: ResourceCreatorBatchPageState;
 }
