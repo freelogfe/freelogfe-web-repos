@@ -182,13 +182,13 @@ function Resources({ dispatch, resourceListPage }: ResourceProps) {
         <div style={{ height: 40 }} />
         <div className={styles.Content}>
           <div
-            className={'flex-column-center mb-20 m-10 ' + styles.createCard}
+            className={styles.createCard}
             onClick={() => history.push(FUtil.LinkTo.resourceCreator())}
           >
-            <div className={'flex-column-center ' + styles.createButton}>
+            <div className={styles.createButton}>
               <i className={['freelog', 'fl-icon-tianjia'].join(' ')} />
             </div>
-            <span className={'mt-20 ' + styles.createText}>创建资源</span>
+            <span className={styles.createText}>创建资源</span>
           </div>
           {
             resourceListPage.resource_List.map((i, j) => {

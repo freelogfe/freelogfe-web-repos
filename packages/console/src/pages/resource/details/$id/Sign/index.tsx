@@ -13,7 +13,7 @@ import FCoverImage from '@/components/FCoverImage';
 import FComponentsLib from '@freelog/components-lib';
 import { FI18n, FUtil } from '@freelog/tools-lib';
 import * as AHooks from 'ahooks';
-import FPopover from '@/components/FPopover';
+// import FPopover from '@/components/FPopover';
 
 interface SignProps {
   dispatch: Dispatch;
