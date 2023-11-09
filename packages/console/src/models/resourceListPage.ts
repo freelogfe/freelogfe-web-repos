@@ -14,18 +14,8 @@ export interface ResourceListPageModelState {
   };
   resourceStatus: 0 | 1 | 2 | 4 | '#';
   inputText: string;
-  // pageSize: number;
-  // totalNum: number;
-  // dataSource: {
-  //   id: string;
-  //   cover: string;
-  //   title: string;
-  //   version: string;
-  //   policy: string[],
-  //   type: string[];
-  //   status: 0 | 1;
-  //   authProblem: boolean;
-  // }[];
+
+  isBatchManagement: boolean;
 
   resource_List: {
     id: string;
@@ -43,7 +33,7 @@ export interface ResourceListPageModelState {
 }
 
 export interface ChangeAction extends AnyAction {
-  type: 'change',
+  type: 'change' | 'resourceListPage/change',
   payload: Partial<ResourceListPageModelState>;
 }
 
@@ -91,24 +81,18 @@ export interface OnClickLoadingMordAction extends AnyAction {
   type: 'resourceListPage/onClickLoadingMord';
 }
 
-// export interface ClearDataAction extends AnyAction {
-//   type: 'resourceListPage/clearData';
-// }
-
 export interface ResourceListPageModelType {
   namespace: 'resourceListPage';
   state: ResourceListPageModelState;
   effects: {
     onMount: (action: OnMountAction, effects: EffectsCommandMap) => void;
     onUnmount: (action: OnUnmountAction, effects: EffectsCommandMap) => void;
-    // changeStates: (action: ChangeStatesAction, effects: EffectsCommandMap) => void;
     fetchDataSource: (action: FetchDataSourceAction, effects: EffectsCommandMap) => void;
     onChangeResourceType: (action: OnChangeResourceTypeAction, effects: EffectsCommandMap) => void;
     onChangeStatus: (action: OnChangeStatusAction, effects: EffectsCommandMap) => void;
     onChangeKeywords: (action: OnChangeKeywordsAction, effects: EffectsCommandMap) => void;
     onAwaited_KeywordsChange: (action: OnAwaited_KeywordsChange_Action, effects: EffectsCommandMap) => void;
     onClickLoadingMord: (action: OnClickLoadingMordAction, effects: EffectsCommandMap) => void;
-    // clearData: (action: ClearDataAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<ResourceListPageModelState, ChangeAction>;
@@ -127,10 +111,7 @@ const initStates: ResourceListPageModelState = {
   },
   resourceStatus: '#',
   inputText: '',
-  // dataSource: [],
-  // pageSize: 20,
-  // totalNum: -1,
-
+  isBatchManagement: false,
   resource_List: [],
   resource_ListState: 'loading',
   resource_ListMore: 'loading',

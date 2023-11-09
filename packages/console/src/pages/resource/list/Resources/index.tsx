@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {
+  ChangeAction,
   OnAwaited_KeywordsChange_Action,
   OnChangeKeywordsAction,
   OnChangeResourceTypeAction,
@@ -24,6 +25,7 @@ import { Space } from 'antd';
 import { history } from 'umi';
 import FResourceCard from '@/components/FResourceCard';
 import FListFooter from '@/components/FListFooter';
+import FConfiguration from '../../../../../../@freelog/components-lib/src/FIcons/FConfiguration';
 
 interface ResourceProps {
   dispatch: Dispatch;
@@ -99,15 +101,9 @@ function Resources({ dispatch, resourceListPage }: ResourceProps) {
       <div className={styles.filterLeft}>
         <div>
           <span>{FI18n.i18nNext.t('resource_type')}：</span>
-
           <FResourceTypeFilter
             value={resourceListPage.resourceTypeCodes}
             onChange={(value) => {
-              // console.log(value, 'valuedsoiflksdjflsdjlkfjklj');
-              // if (!value) {
-              //   return;
-              // }
-              // onChangeResourceTypeCodes && onChangeResourceTypeCodes(value);
               dispatch<OnChangeResourceTypeAction>({
                 type: 'resourceListPage/onChangeResourceType',
                 payload: {
@@ -116,9 +112,9 @@ function Resources({ dispatch, resourceListPage }: ResourceProps) {
               });
             }}
           />
-
         </div>
-        <div style={{ marginLeft: 60 }}>
+        <div style={{ width: 60 }} />
+        <div>
           <span>{FI18n.i18nNext.t('resource_state')}：</span>
 
           <FComponentsLib.FDropdown
@@ -147,6 +143,26 @@ function Resources({ dispatch, resourceListPage }: ResourceProps) {
               </span>
           </FComponentsLib.FDropdown>
         </div>
+        {
+          !resourceListPage.isBatchManagement && (<>
+            <div style={{ width: 60 }} />
+            <FComponentsLib.FTextBtn
+              style={{ fontSize: 14 }}
+              onClick={() => {
+                dispatch<ChangeAction>({
+                  type: 'resourceListPage/change',
+                  payload: {
+                    isBatchManagement: true,
+                  },
+                });
+              }}
+            >
+              <FComponentsLib.FIcons.FConfiguration style={{ fontSize: 14 }} />
+              &nbsp;批量管理
+            </FComponentsLib.FTextBtn>
+          </>)
+        }
+
       </div>
       <Space size={20}>
         <FComponentsLib.FInput.FSearch
@@ -181,17 +197,27 @@ function Resources({ dispatch, resourceListPage }: ResourceProps) {
       resourceListPage.resource_ListState === 'loaded' && (<>
         <div style={{ height: 40 }} />
         <div className={styles.Content}>
-          <div
-            className={styles.createCard}
-            onClick={() => history.push(FUtil.LinkTo.resourceCreator())}
-          >
-            <div className={styles.createButton}>
-              <i className={['freelog', 'fl-icon-tianjia'].join(' ')} />
-            </div>
-            <span className={styles.createText}>创建资源</span>
-          </div>
+          {
+            !resourceListPage.isBatchManagement && (<div
+              className={styles.createCard}
+              onClick={() => history.push(FUtil.LinkTo.resourceCreator())}
+            >
+              <div className={styles.createButton}>
+                <i className={['freelog', 'fl-icon-tianjia'].join(' ')} />
+              </div>
+              <span className={styles.createText}>创建资源</span>
+            </div>)
+          }
+
           {
             resourceListPage.resource_List.map((i, j) => {
+
+              if (resourceListPage.isBatchManagement) {
+                return (<div>
+
+                </div>)
+              }
+
               return (<FResourceCard
                   key={i.id}
                   resource={i}
