@@ -22,6 +22,7 @@ import FListFooter from '@/components/FListFooter';
 import FComponentsLib from '@freelog/components-lib';
 import fReadLocalFiles from '@/components/fReadLocalFiles';
 import FStorageUploadTasksPanel, { getStorageUploadTasksPanel } from '@/components/FStorageUploadTasksPanel';
+import { ChangeAction } from '@/models/resourceListPage';
 
 interface ContentProps {
   dispatch: Dispatch;
@@ -163,6 +164,7 @@ function Content({ storageHomePage, dispatch }: ContentProps) {
 
     {
       storageHomePage.object_ListState === 'loaded' && (<>
+
         <div className={styles.body}>
           <FTable
             rowClassName={styles.rowClassName}

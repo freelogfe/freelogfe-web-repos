@@ -2,7 +2,6 @@ import * as React from 'react';
 import styles from './index.less';
 import Sider from './Sider';
 import Content from './Content';
-import FLeftSiderLayout from '@/layouts/FLeftSiderLayout';
 import Header from './Header';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
@@ -14,7 +13,6 @@ import {
 import { withRouter } from 'umi';
 import { RouteComponentProps } from 'react-router';
 import { ChangeAction, FetchInfoAction, storageObjectEditorInitData } from '@/models/storageObjectEditor';
-import Details from '@/pages/storage/Content/Details';
 import useUrlState from '@ahooksjs/use-url-state';
 import { FUtil, FI18n } from '@freelog/tools-lib';
 import fCreateBucket from '@/components/fCreateBucket';
@@ -90,22 +88,57 @@ function Storage({ match, history, storageHomePage, storageObjectEditor, dispatc
     return null;
   }
 
-  return (<>
-    <FLeftSiderLayout
-      header={storageHomePage.bucketList?.length === 0 ? null : <Header />}
-      sider={<Sider />}
-      type='table'
-      contentStyles={{
-        backgroundColor: storageHomePage.object_List.length === 0 ? 'transparent' : undefined,
-        boxShadow: storageHomePage.object_List.length === 0 ? 'none' : undefined,
-      }}
-      hasBottom={storageHomePage.object_List.length !== 0}
-    >
-      <Content />
-    </FLeftSiderLayout>
+  return (<div
+    className={styles.leftRight}
+  >
+    <div className={styles.Slider}>
+      <div>
+        <Sider />
+      </div>
+    </div>
+    <div className={styles.rightContent}>
+      <div style={{ width: '100%' }}>
+        {storageHomePage.bucketList?.length === 0 ? null : <Header />}
+        <Content />
+      </div>
+    </div>
+  </div>);
 
-    <Details />
-  </>);
+  // return (<>
+  //   <FLeftSiderLayout
+  //     header={storageHomePage.bucketList?.length === 0 ? null : <Header />}
+  //     sider={<Sider />}
+  //     type='table'
+  //     contentStyles={{
+  //       backgroundColor: storageHomePage.object_List.length === 0 ? 'transparent' : undefined,
+  //       boxShadow: storageHomePage.object_List.length === 0 ? 'none' : undefined,
+  //     }}
+  //     hasBottom={storageHomePage.object_List.length !== 0}
+  //   >
+  //
+  //     <div className={styles.handled}>
+  //       <FComponentsLib.FContentText type={'additional2'} style={{ fontSize: 14 }} text={'选择对象后可执行批量操作:'} />
+  //       <FComponentsLib.FTextBtn type={'primary'}>
+  //         <FComponentsLib.FIcons.FConfiguration style={{ fontSize: 14 }} />
+  //         &nbsp;设置资源类型
+  //       </FComponentsLib.FTextBtn>
+  //
+  //       <FComponentsLib.FTextBtn
+  //         type={'danger'}
+  //         onClick={() => {
+  //         }}
+  //       >
+  //         <FComponentsLib.FIcons.FDelete style={{ fontSize: 14 }} />
+  //         &nbsp;删除对象
+  //       </FComponentsLib.FTextBtn>
+  //     </div>
+  //     <div style={{ height: 20 }} />
+  //
+  //     <Content />
+  //   </FLeftSiderLayout>
+  //
+  //   <Details />
+  // </>);
 }
 
 export default withRouter(connect(({

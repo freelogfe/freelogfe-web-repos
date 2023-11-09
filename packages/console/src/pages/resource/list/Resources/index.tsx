@@ -25,11 +25,6 @@ import { Checkbox, Space } from 'antd';
 import { history } from 'umi';
 import FResourceCard from '@/components/FResourceCard';
 import FListFooter from '@/components/FListFooter';
-import FConfiguration from '../../../../../../@freelog/components-lib/src/FIcons/FConfiguration';
-import FCoverImage from '@/components/FCoverImage';
-import FUpcast from '../../../../../../@freelog/components-lib/src/FIcons/FUpcast';
-import FExit from '../../../../../../@freelog/components-lib/src/FIcons/FExit';
-import FPolicy from '../../../../../../@freelog/components-lib/src/FIcons/FPolicy';
 import FResourceCard_AbleCheck from '@/components/FResourceCard_AbleCheck';
 
 interface ResourceProps {
