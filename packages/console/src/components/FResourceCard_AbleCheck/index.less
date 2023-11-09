@@ -1,0 +1,39 @@
+@import '../../config.less';
+
+.ableCheckCard {
+  width: 300px;
+  background: #FFF;
+  border-radius: 10px;
+  border: 1px solid #E5E7EB;
+  padding: 10px;
+  cursor: pointer;
+
+  &:hover {
+
+  }
+
+  &.checked {
+    border-color: #2784FF;
+  }
+
+  &.disabled {
+    opacity: .4;
+    cursor: not-allowed;
+  }
+
+  .ableCheckCardInfo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .MetaFooter {
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    flex-wrap: wrap;
+    height: 24px;
+  }
+
+
+}

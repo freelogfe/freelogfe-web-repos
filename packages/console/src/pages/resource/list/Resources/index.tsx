@@ -21,11 +21,16 @@ import styles from './index.less';
 import FResourceTypeFilter from '@/components/FResourceTypeFilter';
 import FComponentsLib from '@freelog/components-lib';
 import FMenu from '@/components/FMenu';
-import { Space } from 'antd';
+import { Checkbox, Space } from 'antd';
 import { history } from 'umi';
 import FResourceCard from '@/components/FResourceCard';
 import FListFooter from '@/components/FListFooter';
 import FConfiguration from '../../../../../../@freelog/components-lib/src/FIcons/FConfiguration';
+import FCoverImage from '@/components/FCoverImage';
+import FUpcast from '../../../../../../@freelog/components-lib/src/FIcons/FUpcast';
+import FExit from '../../../../../../@freelog/components-lib/src/FIcons/FExit';
+import FPolicy from '../../../../../../@freelog/components-lib/src/FIcons/FPolicy';
+import FResourceCard_AbleCheck from '@/components/FResourceCard_AbleCheck';
 
 interface ResourceProps {
   dispatch: Dispatch;
@@ -196,6 +201,56 @@ function Resources({ dispatch, resourceListPage }: ResourceProps) {
     {
       resourceListPage.resource_ListState === 'loaded' && (<>
         <div style={{ height: 40 }} />
+
+        {
+          resourceListPage.isBatchManagement && (<>
+            <div className={styles.batchHandle}>
+              <div className={styles.batchHandleLeft}>
+                <Checkbox />
+                <div style={{ width: 10 }} />
+                <FComponentsLib.FContentText text={'全选'} type={'normal'} />
+                <div style={{ width: 30 }} />
+                <FComponentsLib.FContentText text={'已选择3个资源'} type={'additional2'} style={{ fontSize: 14 }} />
+              </div>
+
+              <div className={styles.batchHandleRight}>
+                <FComponentsLib.FTextBtn type={'primary'}>
+                  <FComponentsLib.FIcons.FUpcast style={{ fontSize: 14 }} />
+                  &nbsp;上架
+                </FComponentsLib.FTextBtn>
+
+                <FComponentsLib.FTextBtn type={'primary'}>
+                  <FComponentsLib.FIcons.FUpcast style={{ fontSize: 14, transform: 'rotate(180deg)' }} />
+                  &nbsp;下架
+                </FComponentsLib.FTextBtn>
+
+                <FComponentsLib.FTextBtn type={'primary'}>
+                  <FComponentsLib.FIcons.FPolicy style={{ fontSize: 14 }} />
+                  &nbsp;添加授权策略
+                </FComponentsLib.FTextBtn>
+
+                <FComponentsLib.FTextBtn
+                  type={'danger'}
+                  onClick={() => {
+                    dispatch<ChangeAction>({
+                      type: 'resourceListPage/change',
+                      payload: {
+                        isBatchManagement: false,
+                      },
+                    });
+                  }}
+                >
+                  <FComponentsLib.FIcons.FExit style={{ fontSize: 14 }} />
+                  &nbsp;退出批量管理
+                </FComponentsLib.FTextBtn>
+              </div>
+
+            </div>
+
+            <div style={{ height: 40 }} />
+          </>)
+        }
+
         <div className={styles.Content}>
           {
             !resourceListPage.isBatchManagement && (<div
@@ -213,9 +268,15 @@ function Resources({ dispatch, resourceListPage }: ResourceProps) {
             resourceListPage.resource_List.map((i, j) => {
 
               if (resourceListPage.isBatchManagement) {
-                return (<div>
-
-                </div>)
+                return (<FResourceCard_AbleCheck
+                  checked={j % 2 === 0}
+                  disabled={j % 3 === 0}
+                  key={i.id}
+                  cover={i.cover}
+                  latestVersion={i.version}
+                  resourceType={i.type.join('/')}
+                  policies={i.policy}
+                />);
               }
 
               return (<FResourceCard
