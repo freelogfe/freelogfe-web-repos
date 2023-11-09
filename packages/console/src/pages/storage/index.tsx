@@ -60,10 +60,6 @@ function Storage({ match, history, storageHomePage, storageObjectEditor, dispatc
     }
   }, [state.createBucket]);
 
-  // async function onCreateBucket() {
-  //
-  // }
-
   React.useEffect(() => {
     handleObject();
 

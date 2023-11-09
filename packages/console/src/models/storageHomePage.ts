@@ -7,13 +7,9 @@ import { RcFile } from 'antd/lib/upload/interface';
 import fMessage from '@/components/fMessage';
 import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 import { history } from 'umi';
+import { listStateAndListMore } from '@/components/FListFooter';
 
 export interface StorageHomePageModelState {
-  // newBucketName: string;
-  // newBucketNameIsDirty: boolean;
-  // newBucketNameError: string;
-  // newBucketModalVisible: boolean;
-
   bucketList: {
     bucketName: string;
     bucketType: 0 | 1 | 2;
@@ -349,13 +345,20 @@ const Model: StorageHomePageModelType = {
       }
 
       // console.log(data, 'isjflksdjflksjdlk');
+      const { state, more } = listStateAndListMore({
+        list_Length: objectListData.length,
+        total_Length: data.totalItem,
+        has_FilterCriteria: storageHomePage.filterInput !== '',
+      });
 
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           object_List: objectListData,
-          object_ListState: 'loaded',
-          object_ListMore: (data?.totalItem || 0) > objectListData.length ? 'andMore' : 'noMore',
+          // object_ListState: 'loaded',
+          // object_ListMore: (data?.totalItem || 0) > objectListData.length ? 'andMore' : 'noMore',
+          object_ListState: state,
+          object_ListMore: more,
           total: data?.totalItem,
           isLoading: false,
         },

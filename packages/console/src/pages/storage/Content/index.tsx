@@ -126,20 +126,11 @@ function Content({ storageHomePage, dispatch }: ContentProps) {
 
   return (<div>
     {
-      storageHomePage.total === -1 && (<FLoadingTip height={'calc(100vh - 170px)'} />)
+      storageHomePage.object_ListState === 'loading' && (<FLoadingTip height={'calc(100vh - 170px)'} />)
     }
 
     {
-      storageHomePage.total === 0 && storageHomePage.filterInput !== '' && (<>
-        <FNoDataTip
-          height={'calc(100vh - 170px)'}
-          tipText={'无搜索结果'}
-        />
-      </>)
-    }
-
-    {
-      storageHomePage.total === 0 && storageHomePage.filterInput === '' && (<>
+      storageHomePage.object_ListState === 'noData' && storageHomePage.filterInput === '' && (<>
         <FNoDataTip
           height={'calc(100vh - 170px)'}
           tipText={FI18n.i18nNext.t('objects_list_empty')}
@@ -151,11 +142,6 @@ function Content({ storageHomePage, dispatch }: ContentProps) {
               if (!files) {
                 return;
               }
-
-              // dispatch<UploadFilesAction>({
-              //   type: 'storageHomePage/uploadFiles',
-              //   payload: files,
-              // });
               (await getStorageUploadTasksPanel()).addTask(files);
             }}
             size='large'
@@ -167,7 +153,16 @@ function Content({ storageHomePage, dispatch }: ContentProps) {
     }
 
     {
-      storageHomePage.total > 0 && (<>
+      storageHomePage.object_ListState === 'noSearchResult' && storageHomePage.filterInput !== '' && (<>
+        <FNoDataTip
+          height={'calc(100vh - 170px)'}
+          tipText={'无搜索结果'}
+        />
+      </>)
+    }
+
+    {
+      storageHomePage.object_ListState === 'loaded' && (<>
         <div className={styles.body}>
           <FTable
             rowClassName={styles.rowClassName}
@@ -189,7 +184,6 @@ function Content({ storageHomePage, dispatch }: ContentProps) {
       </>)
     }
 
-    {/*<FUploadTasksPanel />*/}
     <FStorageUploadTasksPanel
       bucketName={storageHomePage.activatedBucket}
       availableStorageSize={storageHomePage.totalStorage - storageHomePage.usedStorage}
