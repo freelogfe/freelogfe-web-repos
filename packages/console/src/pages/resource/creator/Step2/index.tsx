@@ -200,7 +200,7 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
                     sha1: [resourceCreatorPage.step2_fileInfo?.sha1 || ''],
                     resourceTypeCode: '',
                   });
-                  
+
                   if (result[0].fileSize > 2 * 1024 * 1024) {
                     fMessage(FI18n.i18nNext.t('mdeditor_import_error_lengthlimitation'), 'error');
                     return;
@@ -255,13 +255,6 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
               <span>编辑</span>
             </FComponentsLib.FTextBtn>)
           }
-
-          {/*{*/}
-          {/*  resourceCreatorPage.step1_createdResourceInfo?.resourceType[0] === '阅读'*/}
-          {/*  && resourceCreatorPage.step1_createdResourceInfo?.resourceType[1] === '文章' && (*/}
-          {/*    )*/}
-          {/*}*/}
-
 
           <FComponentsLib.FTextBtn
             type='danger'
@@ -787,24 +780,6 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
         }}
       />
     </div>
-
-    {/*<FMicroApp_MarkdownEditorDrawer*/}
-    {/*  open={resourceCreatorPage.step2_isOpenMarkdown}*/}
-    {/*  resourceID={resourceCreatorPage.step1_createdResourceInfo?.resourceID || ''}*/}
-    {/*  onChange_Saved={(saved) => {*/}
-    {/*    // dispatch<ChangeAction>({*/}
-    {/*    //   type: 'resourceVersionCreatorPage/change',*/}
-    {/*    //   payload: {*/}
-    {/*    //     isDirtyMarkdownEditor: !saved,*/}
-    {/*    //   },*/}
-    {/*    // });*/}
-    {/*  }}*/}
-    {/*  onClose={() => {*/}
-    {/*    dispatch<OnClose_step2_editMarkdown>({*/}
-    {/*      type: 'resourceCreatorPage/onClose_step2_editMarkdown',*/}
-    {/*    });*/}
-    {/*  }}*/}
-    {/*/>*/}
   </>);
 }
 
