@@ -16,12 +16,12 @@ export default defineConfig({
   devServer: {},
   proxy: {
     '/api': {
-      target: 'http://qi.testfreelog.com',
+      target: 'https://api.testfreelog.com',
       secure: false,
       changeOrigin: true,
       headers: {},
       pathRewrite: {
-        "^/api": 'http://qi.testfreelog.com',
+        "^/api": 'https://api.testfreelog.com',
       },
     },
     '/v2': {
