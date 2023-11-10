@@ -175,7 +175,7 @@ interface DownloadObjectParamsType {
 }
 
 export function downloadObject(params: DownloadObjectParamsType) {
-  return window.location.href = FUtil.Format.completeUrlByDomain('qi') + `/v2/storages/objects/${params.objectIdOrName}/file`;
+  return window.location.href = FUtil.Format.completeUrlByDomain('api') + `/v2/storages/objects/${params.objectIdOrName}/file`;
 }
 
 // 根据sha1查询文件是否存在
