@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import { Space } from 'antd';
+import { Checkbox, Space } from 'antd';
 import FTable from '@/components/FTable';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
@@ -34,6 +34,21 @@ function Content({ storageHomePage, dispatch }: ContentProps) {
   const isUserDataBucket = storageHomePage.activatedBucket === '.UserNodeData';
 
   const columns: ColumnsType<NonNullable<StorageHomePageModelState['object_List']>[number]> = [
+    {
+      title: <div>
+        <Checkbox />&nbsp;&nbsp;<FComponentsLib.FTitleText
+        style={{ display: 'inline-block' }}
+        type='table'
+        text={'全选'}
+      />
+      </div>,
+      dataIndex: 'checked',
+      key: 'checked',
+      render() {
+        return (<Checkbox />);
+      },
+      width: 100,
+    },
     {
       title: (<FComponentsLib.FTitleText type='table' text={FI18n.i18nNext.t('object_name')} />),
       dataIndex: 'name',
