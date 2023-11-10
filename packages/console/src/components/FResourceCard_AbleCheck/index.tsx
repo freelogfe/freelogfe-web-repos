@@ -3,6 +3,7 @@ import styles from './index.less';
 import { Checkbox } from 'antd';
 import FCoverImage from '@/components/FCoverImage';
 import FComponentsLib from '@freelog/components-lib';
+import FResourceStatusBadge from '@/components/FResourceStatusBadge';
 
 interface FResourceCard_AbleCheck_Props {
   checked: boolean;
@@ -11,6 +12,7 @@ interface FResourceCard_AbleCheck_Props {
   resourceType: string;
   latestVersion: string;
   policies: string[];
+  status: 0 | 1 | 2 | 4;
 
   onChange?(checked: boolean): void;
 }
@@ -22,9 +24,10 @@ function FResourceCard_AbleCheck({
                                    resourceType,
                                    latestVersion,
                                    policies,
+                                   status,
                                    onChange,
                                  }: FResourceCard_AbleCheck_Props) {
-  return (
+  return (<div style={{ position: 'relative' }}>
     <div
       className={[styles.ableCheckCard, checked ? styles.checked : '', disabled ? styles.disabled : ''].join(' ')}
       onClick={() => {
@@ -78,7 +81,20 @@ function FResourceCard_AbleCheck({
             : (<FComponentsLib.FContentText text={'暂无策略…'} type='additional2' />)
         }
       </div>
-    </div>);
+    </div>
+
+    <div style={{ position: 'absolute', top: 52, left: 20 }}>
+      <FResourceStatusBadge
+        status={status === 2
+          ? 'freeze'
+          : status === 1
+            ? 'online'
+            : status === 0
+              ? 'unreleased'
+              : 'offline'}
+      />
+    </div>
+  </div>);
 }
 
 export default FResourceCard_AbleCheck;

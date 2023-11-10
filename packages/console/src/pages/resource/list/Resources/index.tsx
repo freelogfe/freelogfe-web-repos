@@ -201,7 +201,29 @@ function Resources({ dispatch, resourceListPage }: ResourceProps) {
           resourceListPage.isBatchManagement && (<>
             <div className={styles.batchHandle}>
               <div className={styles.batchHandleLeft}>
-                <Checkbox />
+                <Checkbox
+                  checked={resourceListPage.checkedResourceIDs.length === resourceListPage.resource_List.length}
+                  indeterminate={resourceListPage.checkedResourceIDs.length !== 0 && resourceListPage.checkedResourceIDs.length !== resourceListPage.resource_List.length}
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      dispatch<ChangeAction>({
+                        type: 'resourceListPage/change',
+                        payload: {
+                          checkedResourceIDs: resourceListPage.resource_List.map((o) => {
+                            return o.id;
+                          }),
+                        },
+                      });
+                    } else {
+                      dispatch<ChangeAction>({
+                        type: 'resourceListPage/change',
+                        payload: {
+                          checkedResourceIDs: [],
+                        },
+                      });
+                    }
+                  }}
+                />
                 <div style={{ width: 10 }} />
                 <FComponentsLib.FContentText text={'全选'} type={'normal'} />
                 <div style={{ width: 30 }} />
@@ -264,13 +286,36 @@ function Resources({ dispatch, resourceListPage }: ResourceProps) {
 
               if (resourceListPage.isBatchManagement) {
                 return (<FResourceCard_AbleCheck
-                  checked={j % 2 === 0}
-                  disabled={j % 3 === 0}
+                  checked={resourceListPage.checkedResourceIDs.includes(i.id)}
+                  disabled={i.status === 2}
                   key={i.id}
                   cover={i.cover}
                   latestVersion={i.version}
                   resourceType={i.type.join('/')}
                   policies={i.policy}
+                  status={i.status}
+                  onChange={(value) => {
+                    if (value) {
+                      dispatch<ChangeAction>({
+                        type: 'resourceListPage/change',
+                        payload: {
+                          checkedResourceIDs: [
+                            ...resourceListPage.checkedResourceIDs,
+                            i.id,
+                          ],
+                        },
+                      });
+                    } else {
+                      dispatch<ChangeAction>({
+                        type: 'resourceListPage/change',
+                        payload: {
+                          checkedResourceIDs: resourceListPage.checkedResourceIDs.filter((id) => {
+                            return id !== i.id;
+                          }),
+                        },
+                      });
+                    }
+                  }}
                 />);
               }
 

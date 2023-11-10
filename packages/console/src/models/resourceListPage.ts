@@ -16,6 +16,7 @@ export interface ResourceListPageModelState {
   inputText: string;
 
   isBatchManagement: boolean;
+  checkedResourceIDs: string[];
 
   resource_List: {
     id: string;
@@ -25,11 +26,12 @@ export interface ResourceListPageModelState {
     version: string;
     policy: string[],
     type: string[];
-    status: 0 | 1;
+    status: 0 | 1 | 2 | 4;
     authProblem: boolean;
   }[];
   resource_ListState: 'loading' | 'noData' | 'noSearchResult' | 'loaded';
   resource_ListMore: 'loading' | 'andMore' | 'noMore';
+
 }
 
 export interface ChangeAction extends AnyAction {
@@ -112,6 +114,7 @@ const initStates: ResourceListPageModelState = {
   resourceStatus: '#',
   inputText: '',
   isBatchManagement: false,
+  checkedResourceIDs: [],
   resource_List: [],
   resource_ListState: 'loading',
   resource_ListMore: 'loading',
