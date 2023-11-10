@@ -3,6 +3,7 @@ import styles from './index.less';
 import { Space } from 'antd';
 import FComponentsLib from '@freelog/components-lib';
 import FCoverImage from '@/components/FCoverImage';
+import FResourceLabelEditor2 from '@/components/FResourceLabelEditor2';
 
 interface ResourceListProps {
 
@@ -83,14 +84,7 @@ function ResourceList({}: ResourceListProps) {
 
               <div className={styles.whiteCardRightRow}>
                 <FComponentsLib.FContentText text={'资源标签'} type={'negative'} />
-                <div style={{
-                  minHeight: 38,
-                  borderRadius: 4,
-                  border: '1px solid #D4D4D4',
-                  width: 540,
-                }}>
-
-                </div>
+                <FResourceLabelEditor2 value={['1234', '5667']} />
               </div>
               <div style={{ height: 15 }} />
 
