@@ -4,7 +4,7 @@ import { InputProps } from 'antd/lib/input';
 import styles from './index.less';
 import { ChangeEvent } from 'react';
 import * as AHooks from 'ahooks';
-import { RefSelectProps } from 'antd/lib/select';
+// import { RefSelectProps } from 'antd/lib/select';
 
 interface FInputProps extends InputProps {
   onPressEnter?(value: any): void;

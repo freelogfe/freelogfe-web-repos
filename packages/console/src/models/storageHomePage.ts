@@ -35,15 +35,16 @@ export interface StorageHomePageModelState {
   isLoading: boolean;
   pageSize: number;
   total: number;
+  checkedResourceIDs: string[];
 
-  uploadTaskQueue: {
-    uid: string;
-    file: RcFile
-    name: string;
-    state: 'loading' | 'success' | 'failed';
-  }[];
-  uploadPanelVisible: boolean;
-  uploadPanelOpen: boolean;
+  // uploadTaskQueue: {
+  //   uid: string;
+  //   file: RcFile
+  //   name: string;
+  //   state: 'loading' | 'success' | 'failed';
+  // }[];
+  // uploadPanelVisible: boolean;
+  // uploadPanelOpen: boolean;
 }
 
 export interface ChangeAction extends AnyAction {
@@ -101,10 +102,10 @@ export interface DeleteObjectAction extends AnyAction {
   payload: string;
 }
 
-export interface UploadFilesAction extends AnyAction {
-  type: 'storageHomePage/uploadFiles';
-  payload: RcFile[];
-}
+// export interface UploadFilesAction extends AnyAction {
+//   type: 'storageHomePage/uploadFiles';
+//   payload: RcFile[];
+// }
 
 export interface UpdateAObjectAction extends AnyAction {
   type: 'storageHomePage/updateAObject';
@@ -124,7 +125,7 @@ interface StorageHomePageModelType {
     onChange_FilterInput: (action: OnChange_FilterInput_Action, effects: EffectsCommandMap) => void;
     fetchObjects: (action: FetchObjectsAction, effects: EffectsCommandMap) => void;
     deleteObject: (action: DeleteObjectAction, effects: EffectsCommandMap) => void;
-    uploadFiles: (action: UploadFilesAction, effects: EffectsCommandMap) => void;
+    // uploadFiles: (action: UploadFilesAction, effects: EffectsCommandMap) => void;
     updateAObject: (action: UpdateAObjectAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
@@ -138,11 +139,6 @@ interface StorageHomePageModelType {
 const Model: StorageHomePageModelType = {
   namespace: 'storageHomePage',
   state: {
-    // newBucketName: '',
-    // newBucketNameIsDirty: false,
-    // newBucketNameError: '',
-    // newBucketModalVisible: false,
-
     bucketList: null,
     activatedBucket: '',
     totalStorage: -1,
@@ -155,10 +151,11 @@ const Model: StorageHomePageModelType = {
     isLoading: true,
     pageSize: 100,
     total: -1,
+    checkedResourceIDs: [],
 
-    uploadTaskQueue: [],
-    uploadPanelVisible: false,
-    uploadPanelOpen: false,
+    // uploadTaskQueue: [],
+    // uploadPanelVisible: false,
+    // uploadPanelOpen: false,
   },
   effects: {
     * fetchBuckets({ payload }: FetchBucketsAction, { call, put, select }: EffectsCommandMap) {
@@ -387,43 +384,43 @@ const Model: StorageHomePageModelType = {
         type: 'fetchBuckets',
       });
     },
-    * uploadFiles({ payload }: UploadFilesAction, { select, put, call }: EffectsCommandMap) {
-      const { storageHomePage }: ConnectState = yield select(({ storageHomePage }: ConnectState) => ({
-        storageHomePage,
-      }));
-      // console.log(payload, 'payload@!@#$!@#$@#!4213424');
-      if (payload[0].size > 200 * 1024 * 1024) {
-        fMessage('单个文件不能大于 200 M', 'warning');
-        return;
-      }
-      const totalSize: number = payload.map((f) => f.size).reduce((p, c) => p + c, 0);
-      if (storageHomePage.totalStorage - storageHomePage.usedStorage < totalSize) {
-        fMessage(FI18n.i18nNext.t('uploadobject_alarm_storage_full'), 'warning');
-        return;
-      }
-
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          uploadPanelVisible: true,
-        },
-      });
-      // console.time('getInfo');
-      const uploadTaskQueue: StorageHomePageModelState['uploadTaskQueue'] = yield call(getInfo, payload);
-      // console.timeEnd('getInfo');
-
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          uploadTaskQueue: [
-            ...uploadTaskQueue,
-            ...storageHomePage.uploadTaskQueue,
-          ],
-          uploadPanelOpen: true,
-          uploadPanelVisible: true,
-        },
-      });
-    },
+    // * uploadFiles({ payload }: UploadFilesAction, { select, put, call }: EffectsCommandMap) {
+    //   const { storageHomePage }: ConnectState = yield select(({ storageHomePage }: ConnectState) => ({
+    //     storageHomePage,
+    //   }));
+    //   // console.log(payload, 'payload@!@#$!@#$@#!4213424');
+    //   if (payload[0].size > 200 * 1024 * 1024) {
+    //     fMessage('单个文件不能大于 200 M', 'warning');
+    //     return;
+    //   }
+    //   const totalSize: number = payload.map((f) => f.size).reduce((p, c) => p + c, 0);
+    //   if (storageHomePage.totalStorage - storageHomePage.usedStorage < totalSize) {
+    //     fMessage(FI18n.i18nNext.t('uploadobject_alarm_storage_full'), 'warning');
+    //     return;
+    //   }
+    //
+    //   yield put<ChangeAction>({
+    //     type: 'change',
+    //     payload: {
+    //       uploadPanelVisible: true,
+    //     },
+    //   });
+    //   console.time('getInfo');
+    //   const uploadTaskQueue: StorageHomePageModelState['uploadTaskQueue'] = yield call(getInfo, payload);
+    //   console.timeEnd('getInfo');
+    //
+    //   yield put<ChangeAction>({
+    //     type: 'change',
+    //     payload: {
+    //       uploadTaskQueue: [
+    //         ...uploadTaskQueue,
+    //         ...storageHomePage.uploadTaskQueue,
+    //       ],
+    //       uploadPanelOpen: true,
+    //       uploadPanelVisible: true,
+    //     },
+    //   });
+    // },
     * updateAObject({ payload }: UpdateAObjectAction, { select, put }: EffectsCommandMap) {
       const { id, ...data } = payload;
       const { storageHomePage }: ConnectState = yield select(({ storageHomePage }: ConnectState) => ({
@@ -469,14 +466,14 @@ const Model: StorageHomePageModelType = {
 
 export default Model;
 
-async function getInfo(payload: RcFile[]): Promise<StorageHomePageModelState['uploadTaskQueue']> {
-  return Promise.all(payload.map<Promise<StorageHomePageModelState['uploadTaskQueue'][number]>>(async (fo) => ({
-    uid: fo.uid,
-    name: fo.name.replace(/[\\|\/|:|\*|\?|"|<|>|\||\s|@|\$|#]/g, '_'),
-    file: fo,
-    state: 'loading',
-  })));
-}
+// async function getInfo(payload: RcFile[]): Promise<StorageHomePageModelState['uploadTaskQueue']> {
+//   return Promise.all(payload.map<Promise<StorageHomePageModelState['uploadTaskQueue'][number]>>(async (fo) => ({
+//     uid: fo.uid,
+//     name: fo.name.replace(/[\\|\/|:|\*|\?|"|<|>|\||\s|@|\$|#]/g, '_'),
+//     file: fo,
+//     state: 'loading',
+//   })));
+// }
 
 function transformTableData(i: any) {
   return {

@@ -7,7 +7,7 @@ import { Dispatch } from 'redux';
 import { ConnectState, StorageHomePageModelState } from '@/models/connect';
 import {
   DeleteObjectAction,
-  FetchObjectsAction, FetchSpaceStatisticAction, FetchBucketsAction,
+  FetchObjectsAction, FetchSpaceStatisticAction, FetchBucketsAction, ChangeAction,
 } from '@/models/storageHomePage';
 import FNoDataTip from '@/components/FNoDataTip';
 import FLoadingTip from '@/components/FLoadingTip';
@@ -21,6 +21,7 @@ import FListFooter from '@/components/FListFooter';
 import FComponentsLib from '@freelog/components-lib';
 import fReadLocalFiles from '@/components/fReadLocalFiles';
 import FStorageUploadTasksPanel, { getStorageUploadTasksPanel } from '@/components/FStorageUploadTasksPanel';
+import * as AHooks from 'ahooks';
 
 interface ContentProps {
   dispatch: Dispatch;
@@ -28,22 +29,87 @@ interface ContentProps {
 }
 
 function Content({ storageHomePage, dispatch }: ContentProps) {
-  storageHomePage.total
+
+  AHooks.useDebounceEffect(() => {
+    const allIDs: string[] = storageHomePage.object_List.map((ol) => {
+      return ol.id;
+    });
+
+    dispatch<ChangeAction>({
+      type: 'storageHomePage/change',
+      payload: {
+        checkedResourceIDs: storageHomePage.checkedResourceIDs.filter((id) => {
+          return allIDs.includes(id);
+        }),
+      },
+    });
+
+  }, [storageHomePage.object_List], {
+    wait: 30,
+  });
+
+
   const isUserDataBucket = storageHomePage.activatedBucket === '.UserNodeData';
 
   const columns: ColumnsType<NonNullable<StorageHomePageModelState['object_List']>[number]> = [
     {
-      title: <div>
-        <Checkbox />&nbsp;&nbsp;<FComponentsLib.FTitleText
-        style={{ display: 'inline-block' }}
-        type='table'
-        text={'全选'}
-      />
-      </div>,
+      title: <Space size={5}>
+        <Checkbox
+          checked={storageHomePage.checkedResourceIDs.length === storageHomePage.object_List.length}
+          indeterminate={storageHomePage.checkedResourceIDs.length !== 0 && storageHomePage.checkedResourceIDs.length !== storageHomePage.object_List.length}
+          onChange={(e) => {
+            if (e.target.checked) {
+              dispatch<ChangeAction>({
+                type: 'storageHomePage/change',
+                payload: {
+                  checkedResourceIDs: storageHomePage.object_List.map((o) => {
+                    return o.id;
+                  }),
+                },
+              });
+            } else {
+              dispatch<ChangeAction>({
+                type: 'storageHomePage/change',
+                payload: {
+                  checkedResourceIDs: [],
+                },
+              });
+            }
+          }}
+        />
+        <FComponentsLib.FTitleText
+          style={{ display: 'inline-block' }}
+          type='table'
+          text={'全选'}
+        />
+      </Space>,
       dataIndex: 'checked',
       key: 'checked',
-      render() {
-        return (<Checkbox />);
+      render(text, record) {
+        return (<Checkbox
+          checked={storageHomePage.checkedResourceIDs.includes(record.id)}
+          onChange={(e) => {
+            if (e.target.checked) {
+              dispatch<ChangeAction>({
+                type: 'storageHomePage/change',
+                payload: {
+                  checkedResourceIDs: [
+                    ...storageHomePage.checkedResourceIDs,
+                    record.id,
+                  ],
+                },
+              });
+            } else {
+              dispatch<ChangeAction>({
+                type: 'storageHomePage/change',
+                payload: {
+                  checkedResourceIDs: storageHomePage.checkedResourceIDs.filter((id) => {
+                    return id !== record.id;
+                  }),
+                },
+              });
+            }
+          }} />);
       },
       width: 100,
     },
