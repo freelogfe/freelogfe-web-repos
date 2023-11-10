@@ -32,18 +32,6 @@ interface ResourceProps {
   resourceListPage: ResourceListPageModelState;
 }
 
-// const resourceStatusOptions = [
-//   { text: FI18n.i18nNext.t('filter_resource_status_all'), value: '#' },
-//   // { text: '上架', value: 1 },
-//   { text: FI18n.i18nNext.t('filter_resource_status_availableforauth'), value: 1 },
-//   // { text: '下架', value: 4 },
-//   { text: FI18n.i18nNext.t('filter_resource_status_pendingauth'), value: 4 },
-//   // { text: '待发行', value: 0 },
-//   { text: FI18n.i18nNext.t('filter_resource_status_prepareforrelease'), value: 0 },
-//   // { text: '冻结', value: 2 },
-//   { text: FI18n.i18nNext.t('filter_resource_status_removedbyfreelog'), value: 2 },
-// ];
-
 function Resources({ dispatch, resourceListPage }: ResourceProps) {
 
   const [$resourceStatusOptions, set$resourceStatusOptions] = FUtil.Hook.useGetState([
@@ -76,6 +64,24 @@ function Resources({ dispatch, resourceListPage }: ResourceProps) {
     });
   }, [resourceListPage.inputText], {
     wait: 300,
+  });
+
+  AHooks.useDebounceEffect(() => {
+    const allIDs: string[] = resourceListPage.resource_List.map((ol) => {
+      return ol.id;
+    });
+
+    dispatch<ChangeAction>({
+      type: 'resourceListPage/change',
+      payload: {
+        checkedResourceIDs: resourceListPage.checkedResourceIDs.filter((id) => {
+          return allIDs.includes(id);
+        }),
+      },
+    });
+
+  }, [resourceListPage.resource_List], {
+    wait: 30,
   });
 
   if (resourceListPage.resource_ListState === 'loading') {
@@ -227,7 +233,11 @@ function Resources({ dispatch, resourceListPage }: ResourceProps) {
                 <div style={{ width: 10 }} />
                 <FComponentsLib.FContentText text={'全选'} type={'normal'} />
                 <div style={{ width: 30 }} />
-                <FComponentsLib.FContentText text={'已选择3个资源'} type={'additional2'} style={{ fontSize: 14 }} />
+                <FComponentsLib.FContentText
+                  text={`已选择${resourceListPage.checkedResourceIDs.length}个资源`}
+                  type={'additional2'}
+                  style={{ fontSize: 14 }}
+                />
               </div>
 
               <div className={styles.batchHandleRight}>
