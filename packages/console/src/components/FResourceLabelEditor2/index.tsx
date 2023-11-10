@@ -3,6 +3,7 @@ import styles from './index.less';
 import FComponentsLib from '@freelog/components-lib';
 import { Input, InputRef } from 'antd';
 import * as AHooks from 'ahooks';
+import { FUtil } from '@freelog/tools-lib';
 
 interface FResourceLabelEditor2Props {
   value: string[];
@@ -11,8 +12,8 @@ interface FResourceLabelEditor2Props {
 function FResourceLabelEditor2({ value }: FResourceLabelEditor2Props) {
   const refDiv = React.useRef<HTMLDivElement>(null);
   const inputRef = React.useRef<InputRef>(null);
-  const [$showInput, set$showInput] = React.useState<boolean>(false);
-  const [$input, set$input] = React.useState<string>('');
+  const [$showInput, set$showInput, get$showInput] = FUtil.Hook.useGetState<boolean>(false);
+  const [$input, set$input] = FUtil.Hook.useGetState<string>('');
 
   AHooks.useClickAway(() => {
     set$showInput(false);
@@ -21,6 +22,9 @@ function FResourceLabelEditor2({ value }: FResourceLabelEditor2Props) {
   return (<div
     className={styles.editor2}
     onClick={() => {
+      if (get$showInput()) {
+        return;
+      }
       set$showInput(true);
       setTimeout(() => {
         inputRef.current?.focus();
