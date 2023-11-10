@@ -7,7 +7,6 @@ import { Dispatch } from 'redux';
 import { ConnectState, StorageHomePageModelState } from '@/models/connect';
 import {
   DeleteObjectAction,
-  // UploadFilesAction,
   FetchObjectsAction, FetchSpaceStatisticAction, FetchBucketsAction,
 } from '@/models/storageHomePage';
 import FNoDataTip from '@/components/FNoDataTip';
@@ -22,7 +21,6 @@ import FListFooter from '@/components/FListFooter';
 import FComponentsLib from '@freelog/components-lib';
 import fReadLocalFiles from '@/components/fReadLocalFiles';
 import FStorageUploadTasksPanel, { getStorageUploadTasksPanel } from '@/components/FStorageUploadTasksPanel';
-import { ChangeAction } from '@/models/resourceListPage';
 
 interface ContentProps {
   dispatch: Dispatch;
@@ -30,7 +28,7 @@ interface ContentProps {
 }
 
 function Content({ storageHomePage, dispatch }: ContentProps) {
-
+  storageHomePage.total
   const isUserDataBucket = storageHomePage.activatedBucket === '.UserNodeData';
 
   const columns: ColumnsType<NonNullable<StorageHomePageModelState['object_List']>[number]> = [

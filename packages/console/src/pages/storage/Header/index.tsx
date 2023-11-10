@@ -51,29 +51,11 @@ function Header({ dispatch, storageHomePage }: HeaderProps) {
     </div>
     {
       !isUserDataBucket && (storageHomePage.total > 0 || storageHomePage.filterInput !== '') && (<Space size={30}>
-        {/*<FInput*/}
-        {/*  value={''}*/}
-        {/*  theme={'dark'}*/}
-        {/*  debounce={300}*/}
-        {/*  onDebounceChange={(value) => {*/}
-        {/*    dispatch<OnChange_FilterInput_Action>({*/}
-        {/*      type: 'storageHomePage/onChange_FilterInput',*/}
-        {/*      payload: {*/}
-        {/*        value: value,*/}
-        {/*      },*/}
-        {/*    });*/}
-        {/*  }}*/}
-        {/*  placeholder={FI18n.i18nNext.t('storage_search_objects_hint')}*/}
-        {/*/>*/}
         <FComponentsLib.FInput.FSearch
-          // lengthLimit={-1}
           value={filterInput}
-          // theme={'dark'}
-          // debounce={300}
           style={{ width: 300 }}
           onChange={(value) => {
             setFilterInput(value);
-
           }}
           placeholder={FI18n.i18nNext.t('storage_search_objects_hint')}
         />
@@ -84,16 +66,10 @@ function Header({ dispatch, storageHomePage }: HeaderProps) {
               multiple: true,
             });
 
-            // console.log(files, 'filesfilesfilesfiles903i2ojsfdkfjsdlk');
-            // console.log('********');
-            // console.timeEnd('fReadLocalFiles');
             if (!files) {
               return;
             }
-            // dispatch<UploadFilesAction>({
-            //   type: 'storageHomePage/uploadFiles',
-            //   payload: files,
-            // });
+
             (await getStorageUploadTasksPanel()).addTask(files);
           }}
           type='primary'
@@ -102,7 +78,6 @@ function Header({ dispatch, storageHomePage }: HeaderProps) {
     }
   </div>);
 }
-
 
 export default connect(({ storageHomePage }: ConnectState) => ({
   storageHomePage: storageHomePage,
