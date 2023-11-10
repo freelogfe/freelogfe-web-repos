@@ -4,6 +4,7 @@ import { Space } from 'antd';
 import FComponentsLib from '@freelog/components-lib';
 import FCoverImage from '@/components/FCoverImage';
 import FResourceLabelEditor2 from '@/components/FResourceLabelEditor2';
+import FResourceNameInput from '@/components/FResourceNameInput';
 
 interface ResourceListProps {
 
@@ -56,14 +57,7 @@ function ResourceList({}: ResourceListProps) {
               <div style={{ height: 15 }} />
               <div className={styles.whiteCardRightRow}>
                 <FComponentsLib.FContentText text={'授权标识'} type={'negative'} />
-                <div style={{
-                  height: 38,
-                  borderRadius: 4,
-                  border: '1px solid #D4D4D4',
-                  width: 540,
-                }}>
-
-                </div>
+                <FResourceNameInput />
               </div>
               <div style={{ height: 15 }} />
 

@@ -22,9 +22,6 @@ function FResourceLabelEditor2({ value }: FResourceLabelEditor2Props) {
   return (<div
     className={styles.editor2}
     onClick={() => {
-      if (get$showInput()) {
-        return;
-      }
       set$showInput(true);
       setTimeout(() => {
         inputRef.current?.focus();
@@ -35,7 +32,7 @@ function FResourceLabelEditor2({ value }: FResourceLabelEditor2Props) {
     {
       value.map((v) => {
         return (<label key={v} className={styles.selectedLabel}>
-          <span>标签1</span>
+          <span>{v}</span>
           <FComponentsLib.FIcons.FClose
             style={{ fontSize: 12 }}
             onClick={() => {
