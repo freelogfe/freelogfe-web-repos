@@ -13,6 +13,7 @@ import { IResourceCreateVersionDraftType } from '@/type/resourceTypes';
 // import fResourceMarkdownEditor from '@/components/fResourceMarkdownEditor';
 import fComicTool from '@/components/fComicTool';
 import { getProcessor } from '@/components/FResourceAuthorizationProcessor';
+
 // import moment from 'moment';
 
 export interface ResourceCreatorPageModelState {
@@ -1282,7 +1283,7 @@ const Model: ResourceCreatorPageModelType = {
         },
       });
     },
-    * onClick_step3_submitBtn({}: OnClick_step3_submitBtn_Action, { put }: EffectsCommandMap) {
+    * onClick_step3_submitBtn({}: OnClick_step3_submitBtn_Action, { select, call, put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -1290,7 +1291,38 @@ const Model: ResourceCreatorPageModelType = {
         },
       });
 
+      const { resourceCreatorPage }: ConnectState = yield select(({ resourceCreatorPage }: ConnectState) => ({
+        resourceCreatorPage,
+      }));
+      const params: Parameters<typeof FServiceAPI.Resource.info>[0] = {
+        resourceIdOrName: resourceCreatorPage.step1_createdResourceInfo?.resourceID || '',
+        isLoadPolicyInfo: 1,
+        isTranslate: 1,
+      };
+      // console.log(params, 'params9iosdj;flkjlk lksdajf;lkjl');
+      const { data: data_resourceInfo }: {
+        data: {
+          userId: number;
+          status: number;
+          resourceId: string;
+          resourceName: string;
+          resourceTitle: string;
+          resourceVersions: {
+            version: string;
+          }[];
+          latestVersion: string;
+          coverImages: string[];
+          resourceType: string[];
+          policies: PolicyFullInfo_Type[];
+        };
+      } = yield call(FServiceAPI.Resource.info, params);
 
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          step4_resourceCover: data_resourceInfo.coverImages[0] || '',
+        },
+      });
     },
     * onChange_step4_resourceTitle({ payload }: OnChange_step4_resourceTitle_Action, {
       select,
