@@ -80,11 +80,6 @@ export interface ResourceCreatorPageModelState {
   step4_resourceCover: string;
   step4_resourceLabels: string[];
   step4_dataIsDirty_count: number;
-
-
-  // isOpenCartoon: boolean;
-  // isDirtyCartoonEditor: boolean;
-  // isDirtyMarkdownEditor: boolean;
 }
 
 export interface ChangeAction extends AnyAction {
@@ -1245,8 +1240,6 @@ const Model: ResourceCreatorPageModelType = {
         data: any;
       } = yield call(FServiceAPI.Resource.update, params);
 
-      // console.log(data, '9ieowjflksdjflksdjlfkjsdlkj');
-
       if (ret !== 0 || errCode !== 0) {
         fMessage(msg, 'error');
         return;
@@ -1269,7 +1262,6 @@ const Model: ResourceCreatorPageModelType = {
           status: 0 | 1;
         }
       } = yield call(FServiceAPI.Resource.info, params1);
-      // console.log(data_ResourceDetails, 'data_ResourceDetails @#$RFDSASDFSDFASDF');
 
       if (ret !== 0 || errCode !== 0) {
         return;
@@ -1290,14 +1282,6 @@ const Model: ResourceCreatorPageModelType = {
         },
       });
     },
-    // * onClick_step3_skipBtn({}: OnClick_step3_skipBtn_Action, { put }: EffectsCommandMap) {
-    //   yield put<ChangeAction>({
-    //     type: 'change',
-    //     payload: {
-    //       step: 4,
-    //     },
-    //   });
-    // },
     * onClick_step3_submitBtn({}: OnClick_step3_submitBtn_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
@@ -1305,6 +1289,8 @@ const Model: ResourceCreatorPageModelType = {
           step: 4,
         },
       });
+
+
     },
     * onChange_step4_resourceTitle({ payload }: OnChange_step4_resourceTitle_Action, {
       select,
