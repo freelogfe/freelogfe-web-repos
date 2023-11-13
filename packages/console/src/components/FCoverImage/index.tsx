@@ -1,9 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import { CSSProperties, ImgHTMLAttributes } from 'react';
-import { FUtil } from '@freelog/tools-lib';
-
-// import * as imgSrc from '@/assets/default-resource-cover.jpg';
+import { CSSProperties } from 'react';
 
 interface FCoverImageProps {
   src: string;
