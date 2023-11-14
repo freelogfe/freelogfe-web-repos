@@ -23,7 +23,6 @@ interface FResourceTypeInput_Batch_Props {
   value: {
     value: string;
     labels: string[];
-    customInput?: string;
   } | null;
 
   onChange?(value: FResourceTypeInput_Batch_Props['value']): void;
@@ -61,7 +60,6 @@ function FResourceTypeInput_Batch({ value, onChange }: FResourceTypeInput_Batch_
     // set_isOpen(false);
     set$isOpen(false);
   }
-
 
   return (<Dropdown
     open={$isOpen}
@@ -177,7 +175,7 @@ function FResourceTypeInput_Batch({ value, onChange }: FResourceTypeInput_Batch_
         value === null
           ? (<span>{FI18n.i18nNext.t('createresource_selectresourcetype_input_hint')}</span>)
           : (<FComponentsLib.FContentText
-            text={(value.customInput ? [...value.labels, value.customInput] : value.labels).join(' / ')}
+            text={(value.labels).join(' / ')}
             type={'normal'}
           />)
       }

@@ -3,9 +3,12 @@ import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription } from 'dva';
 
 export type ResourceCreatorBatchPageState = WholeReadonly<{
-  info: null | {};
-
   showPage: 'resourceType' | 'uploadFile' | 'resourceList';
+
+  selectedResourceType: {
+    value: string;
+    labels: string[];
+  } | null;
 }>;
 
 export interface ChangeAction extends AnyAction {
@@ -42,9 +45,9 @@ interface ResourceCreatorBatchPageModelType {
 }
 
 const initStates: ResourceCreatorBatchPageState = {
-  info: null,
-
   showPage: 'resourceType',
+
+  selectedResourceType: null,
 };
 
 const Model: ResourceCreatorBatchPageModelType = {
