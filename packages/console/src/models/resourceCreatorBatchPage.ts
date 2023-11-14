@@ -2,17 +2,17 @@ import { DvaReducer, WholeReadonly } from '@/models/shared';
 import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription } from 'dva';
 
-export type ResourceCreatorBatchPageState = WholeReadonly<{
+export type ResourceCreatorBatchPageState = {
   showPage: 'resourceType' | 'uploadFile' | 'resourceList';
 
   selectedResourceType: {
     value: string;
     labels: string[];
   } | null;
-}>;
+};
 
 export interface ChangeAction extends AnyAction {
-  type: 'change';
+  type: 'change' | 'resourceCreatorBatchPage/change';
   payload: Partial<ResourceCreatorBatchPageState>;
 }
 
