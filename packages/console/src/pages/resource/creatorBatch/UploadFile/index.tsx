@@ -1,9 +1,11 @@
 import * as React from 'react';
 import styles from './index.less';
 import FComponentsLib from '@freelog/components-lib';
+import { connect } from 'dva';
+import { ConnectState, ResourceCreatorBatchPageState } from '@/models/connect';
 
 interface UploadFileProps {
-
+  resourceCreatorBatchPage: ResourceCreatorBatchPageState;
 }
 
 function UploadFile({}: UploadFileProps) {
@@ -44,4 +46,6 @@ function UploadFile({}: UploadFileProps) {
   </div>);
 }
 
-export default UploadFile;
+export default connect(({ resourceCreatorBatchPage }: ConnectState) => ({
+  resourceCreatorBatchPage: resourceCreatorBatchPage,
+}))(UploadFile);

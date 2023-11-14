@@ -3,9 +3,12 @@ import styles from './index.less';
 import FComponentsLib from '@freelog/components-lib';
 import { FI18n } from '@freelog/tools-lib';
 import FResourceTypeInput from '@/components/FResourceTypeInput';
+import { connect } from 'dva';
+import { ConnectState, ResourceCreatorBatchPageState } from '@/models/connect';
+import FResourceTypeInput_Batch from '@/components/FResourceTypeInput_Batch';
 
 interface ResourceTypeProps {
-
+  resourceCreatorBatchPage: ResourceCreatorBatchPageState;
 }
 
 function ResourceType({}: ResourceTypeProps) {
@@ -24,7 +27,7 @@ function ResourceType({}: ResourceTypeProps) {
       <div style={{ height: 5 }} />
       <FComponentsLib.FContentText text={FI18n.i18nNext.t('rqr_input_resourcetype_help')} type={'additional2'} />
       <div style={{ height: 20 }} />
-      <FResourceTypeInput
+      <FResourceTypeInput_Batch
         // value={resourceCreatorPage.step1_resourceType}
         value={null}
         onChange={(value) => {
@@ -45,4 +48,6 @@ function ResourceType({}: ResourceTypeProps) {
   </div>);
 }
 
-export default ResourceType;
+export default connect(({ resourceCreatorBatchPage }: ConnectState) => ({
+  resourceCreatorBatchPage: resourceCreatorBatchPage,
+}))(ResourceType);

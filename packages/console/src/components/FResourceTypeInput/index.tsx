@@ -76,8 +76,7 @@ const initStates: FResourceTypeInputStates = {
   _autoCompleteInputIsNew: false,
 };
 
-function FResourceTypeInput(
-  $prop: FResourceTypeInputProps) {
+function FResourceTypeInput($prop: FResourceTypeInputProps) {
 
   const ref = React.useRef<any>();
 

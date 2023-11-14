@@ -566,6 +566,7 @@ interface ResourceTypesParamsType {
   category?: 1 | 2; // 种类 1：基础资源类型 2：自定义资源类型
   isMine?: boolean;
   status?: 0 | 1;
+  supportCreateBatch?: 1 | 2;
 }
 
 export function resourceTypes({...params}: ResourceTypesParamsType = {}) {

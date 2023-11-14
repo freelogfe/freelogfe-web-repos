@@ -5,9 +5,11 @@ import FComponentsLib from '@freelog/components-lib';
 import FCoverImage from '@/components/FCoverImage';
 import FResourceLabelEditor2 from '@/components/FResourceLabelEditor2';
 import FResourceNameInput from '@/components/FResourceNameInput';
+import { connect } from 'dva';
+import { ConnectState, ResourceCreatorBatchPageState } from '@/models/connect';
 
 interface ResourceListProps {
-
+  resourceCreatorBatchPage: ResourceCreatorBatchPageState;
 }
 
 function ResourceList({}: ResourceListProps) {
@@ -303,4 +305,6 @@ function ResourceList({}: ResourceListProps) {
   </>);
 }
 
-export default ResourceList;
+export default connect(({ resourceCreatorBatchPage }: ConnectState) => ({
+  resourceCreatorBatchPage: resourceCreatorBatchPage,
+}))(ResourceList);

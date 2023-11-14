@@ -1,24 +1,5 @@
 @import '../../config.less';
 
-.square {
-  width: 360px;
-  height: 38px;
-  background: #FFF;
-  border-radius: 4px;
-  border: 1px solid #D4D4D4;
-  padding: 0 10px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  cursor: pointer;
-  position: relative;
-
-  & > span {
-    color: #BEBEBE;
-    font-size: 14px;
-  }
-}
-
 .overlayClassName {
   background-color: #FFF;
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.2);
@@ -55,6 +36,13 @@
   width: 100%;
 }
 
+.PopoverOverlayClassName {
+  :global(.ant-popover-inner-content) {
+    padding: 0;
+    width: 200px;
+  }
+}
+
 .itemChildren {
   background: #FFF;
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.2);
@@ -86,34 +74,21 @@
   }
 }
 
-.AutoComplete {
+.square {
+  width: 360px;
   height: 38px;
-
-  //:global(.ant-select-selection-placeholder) {
-  //  line-height: 36px;
-  //}
-}
-
-.autoCompleteOption {
+  background: #FFF;
+  border-radius: 4px;
+  border: 1px solid #D4D4D4;
+  padding: 0 10px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  cursor: pointer;
+  position: relative;
 
   & > span {
-    color: #333;
+    color: #BEBEBE;
     font-size: 14px;
-    line-height: 20px;
-    display: inline-block;
-    max-width: 250px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-}
-
-.PopoverOverlayClassName {
-  :global(.ant-popover-inner-content) {
-    padding: 0;
-    width: 200px;
   }
 }
