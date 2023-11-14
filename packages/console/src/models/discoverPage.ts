@@ -22,8 +22,6 @@ export interface DiscoverPageModelState {
   }[];
 
   resourceType: string;
-  // operationCategories: HandledOperationCategories;
-  // selectedOperationCategoryID: string;
   selectedOperationCategoryIDs: string[];
   inputText: string;
   dataSource: {
@@ -73,21 +71,12 @@ export interface OnMountExamplesPageAction extends AnyAction {
   type: 'discoverPage/onMountExamplesPage';
 }
 
-export interface OnUnmountExamplesPageAction extends AnyAction {
-  type: 'discoverPage/onUnmountExamplesPage';
-}
-
 export interface FetchDataSourceAction extends AnyAction {
   type: 'fetchDataSource';
   payload: {
     restart: boolean;
   };
 }
-
-// export interface ChangeStatesAction extends AnyAction {
-//   type: 'marketPage/changeStates';
-//   payload: Partial<Pick<MarketPageModelState, 'inputText' | 'resourceType'>>;
-// }
 
 export interface OnChangeResourceTypeAction extends AnyAction {
   type: 'discoverPage/onChangeResourceType';
@@ -130,7 +119,6 @@ export interface DiscoverPageModelType {
     onUnmountPage: (action: OnUnmountPageAction, effects: EffectsCommandMap) => void;
     onMountMarketPage: (action: OnMountMarketPageAction, effects: EffectsCommandMap) => void;
     onUnmountMarketPage: (action: OnUnmountMarketPageAction, effects: EffectsCommandMap) => void;
-    // changeStates: (action: ChangeStatesAction, effects: EffectsCommandMap) => void;
     fetchDataSource: (action: FetchDataSourceAction, effects: EffectsCommandMap) => void;
 
     onChange_SelectedOperationCategoryIDs: (action: OnChange_SelectedOperationCategoryIDs_Action, effects: EffectsCommandMap) => void;
@@ -157,9 +145,6 @@ const marketInitStates: Pick<DiscoverPageModelState,
     ...FUtil.Predefined.resourceTypes.map((i) => ({ value: i, text: i })),
   ],
   resourceType: '-1',
-
-  // operationCategories: [],
-  // selectedOperationCategoryID: '/#all',
   selectedOperationCategoryIDs: ['#all'],
   inputText: '',
   tags: '',

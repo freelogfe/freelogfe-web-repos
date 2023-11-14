@@ -13,6 +13,7 @@ import { IResourceCreateVersionDraftType } from '@/type/resourceTypes';
 // import fResourceMarkdownEditor from '@/components/fResourceMarkdownEditor';
 import fComicTool from '@/components/fComicTool';
 import { getProcessor } from '@/components/FResourceAuthorizationProcessor';
+
 // import moment from 'moment';
 
 export interface ResourceCreatorPageModelState {
@@ -80,11 +81,6 @@ export interface ResourceCreatorPageModelState {
   step4_resourceCover: string;
   step4_resourceLabels: string[];
   step4_dataIsDirty_count: number;
-
-
-  // isOpenCartoon: boolean;
-  // isDirtyCartoonEditor: boolean;
-  // isDirtyMarkdownEditor: boolean;
 }
 
 export interface ChangeAction extends AnyAction {
@@ -1245,8 +1241,6 @@ const Model: ResourceCreatorPageModelType = {
         data: any;
       } = yield call(FServiceAPI.Resource.update, params);
 
-      // console.log(data, '9ieowjflksdjflksdjlfkjsdlkj');
-
       if (ret !== 0 || errCode !== 0) {
         fMessage(msg, 'error');
         return;
@@ -1269,7 +1263,6 @@ const Model: ResourceCreatorPageModelType = {
           status: 0 | 1;
         }
       } = yield call(FServiceAPI.Resource.info, params1);
-      // console.log(data_ResourceDetails, 'data_ResourceDetails @#$RFDSASDFSDFASDF');
 
       if (ret !== 0 || errCode !== 0) {
         return;
@@ -1290,19 +1283,44 @@ const Model: ResourceCreatorPageModelType = {
         },
       });
     },
-    // * onClick_step3_skipBtn({}: OnClick_step3_skipBtn_Action, { put }: EffectsCommandMap) {
-    //   yield put<ChangeAction>({
-    //     type: 'change',
-    //     payload: {
-    //       step: 4,
-    //     },
-    //   });
-    // },
-    * onClick_step3_submitBtn({}: OnClick_step3_submitBtn_Action, { put }: EffectsCommandMap) {
+    * onClick_step3_submitBtn({}: OnClick_step3_submitBtn_Action, { select, call, put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           step: 4,
+        },
+      });
+
+      const { resourceCreatorPage }: ConnectState = yield select(({ resourceCreatorPage }: ConnectState) => ({
+        resourceCreatorPage,
+      }));
+      const params: Parameters<typeof FServiceAPI.Resource.info>[0] = {
+        resourceIdOrName: resourceCreatorPage.step1_createdResourceInfo?.resourceID || '',
+        isLoadPolicyInfo: 1,
+        isTranslate: 1,
+      };
+      // console.log(params, 'params9iosdj;flkjlk lksdajf;lkjl');
+      const { data: data_resourceInfo }: {
+        data: {
+          userId: number;
+          status: number;
+          resourceId: string;
+          resourceName: string;
+          resourceTitle: string;
+          resourceVersions: {
+            version: string;
+          }[];
+          latestVersion: string;
+          coverImages: string[];
+          resourceType: string[];
+          policies: PolicyFullInfo_Type[];
+        };
+      } = yield call(FServiceAPI.Resource.info, params);
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          step4_resourceCover: data_resourceInfo.coverImages[0] || '',
         },
       });
     },

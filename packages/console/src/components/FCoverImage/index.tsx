@@ -1,9 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import { CSSProperties, ImgHTMLAttributes } from 'react';
-import { FUtil } from '@freelog/tools-lib';
-
-// import * as imgSrc from '@/assets/default-resource-cover.jpg';
+import { CSSProperties } from 'react';
 
 interface FCoverImageProps {
   src: string;
@@ -21,11 +18,13 @@ interface FCoverImageStates {
     translateY: number;
     transform: string;
   } | null;
+  $hasError: boolean;
 }
 
 function FCoverImage({ src = '', width, style = {}, className = '' }: FCoverImageProps) {
 
   const [imgStyle, setImgStyle] = React.useState<FCoverImageStates['imgStyle']>(null);
+  const [$hasError, set$hasError] = React.useState<FCoverImageStates['$hasError']>(false);
 
   React.useEffect(() => {
     if (!src.includes('#')) {
@@ -41,10 +40,9 @@ function FCoverImage({ src = '', width, style = {}, className = '' }: FCoverImag
         transform: `rotate(${r})`,
       });
     }
-
   }, [src, width]);
 
-
+  // console.log(src, 'SSSRRRRCCCCCCsdiopfjsldkjlk');
   return (<div
     className={[styles.FCoverImage, className].join(' ')}
     style={{
@@ -67,16 +65,18 @@ function FCoverImage({ src = '', width, style = {}, className = '' }: FCoverImag
           }}
         />)
         : (<img
-          // src={src || (FUtil.Format.completeUrlByDomain('static') + '/static/default_cover.png')}
-          src={src || '//static.freelog.com/static/default_cover.png'}
+          src={!$hasError && !!src ? src : '//static.freelog.com/static/default_cover.png'}
           style={{
             width: width,
             height: width / 4 * 3,
           }}
           alt={''}
+          onError={(e) => {
+            // console.log(e, 'EEEEEEEEEEEEEEEEEEEeeeeee');
+            set$hasError(true);
+          }}
         />)
     }
-    {/*http://static.testfreelog.com/static/default_cover.png*/}
   </div>);
 }
 
