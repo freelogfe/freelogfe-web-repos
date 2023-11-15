@@ -1156,12 +1156,13 @@ const Model: ResourceVersionCreatorModelType = {
         resourceName: string;
       }[] = [];
 
-      if (resourceVersionCreatorPage.selectedFileInfo) {
+      // if (resourceVersionCreatorPage.selectedFileInfo) {
         const p: { getAllTargets(): void; getBaseUpcastResources(): { resourceID: string; resourceName: string; }[] } = yield call(getProcessor, 'resourceVersionCreator');
         directDependencies = yield call(p.getAllTargets);
         baseUpcastResources = yield call(p.getBaseUpcastResources);
-      }
-      // console.log(baseUpcastResources, 'baseUpcastResourcesoisjdlkfjlsdkjflsdjfljsl');
+      // }
+      console.log(directDependencies, 'directDependenciesewfdsfsdfsd ');
+      console.log(baseUpcastResources, 'baseUpcastResourcesoisjdlkfjlsdkjflsdjfljsl');
 
       const draftData: IResourceCreateVersionDraftType = {
         versionInput: resourceVersionCreatorPage.versionInput,
