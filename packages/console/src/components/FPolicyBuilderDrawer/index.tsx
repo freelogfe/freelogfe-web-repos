@@ -1064,7 +1064,7 @@ function FPolicyBuilder({
                                               } else if (valueNum <= 0) {
                                                 payment_AmountError = '必须大于0';
                                                 // } else if (!new RegExp(/^\d+(\.\d{0,2})?$/).test(value)) {
-                                              } else if (!Number.isInteger(valueNum * 100)) {
+                                              } else if (!(new RegExp(/^(\d+(\.\d{1,2})?)$/).test(String(valueNum)))) {
                                                 payment_AmountError = '不超过2位小数';
                                               } else if (valueNum >= 1000000) {
                                                 payment_AmountError = FI18n.i18nNext.t('authplan_transactionevent_err_limitation');
