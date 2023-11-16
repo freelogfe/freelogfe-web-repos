@@ -69,6 +69,7 @@ function UploadFile({ dispatch, resourceCreatorBatchPage }: UploadFileProps) {
             fileUID: f.uid,
             fileName: f.name,
             sha1: f.sha1,
+            cover: '',
             resourceName: name,
             resourceTitle: name,
             resourceLabels: [],

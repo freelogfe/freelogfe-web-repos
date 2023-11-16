@@ -14,6 +14,7 @@ export type ResourceCreatorBatchPageState = {
     fileUID: string;
     fileName: string;
     sha1: string;
+    cover: string;
     resourceName: string;
     resourceTitle: string;
     resourceLabels: string[];

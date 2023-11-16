@@ -3,10 +3,10 @@ import styles from './index.less';
 import { Input, InputRef } from 'antd';
 
 interface FResourceNameInputProps {
-
+  value: string;
 }
 
-function FResourceNameInput({}: FResourceNameInputProps) {
+function FResourceNameInput({value}: FResourceNameInputProps) {
 
   const inputRef = React.useRef<InputRef>(null);
 
@@ -17,7 +17,7 @@ function FResourceNameInput({}: FResourceNameInputProps) {
     }}
   >
     <label>freelog&nbsp;/&nbsp;</label>
-    <Input ref={inputRef} className={styles.input} />
+    <Input ref={inputRef} className={styles.input} value={value} />
   </div>);
 }
 
