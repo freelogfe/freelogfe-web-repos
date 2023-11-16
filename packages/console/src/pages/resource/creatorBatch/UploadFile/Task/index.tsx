@@ -12,12 +12,20 @@ import { Canceler } from 'axios';
 interface TaskProps {
   file: RcFile;
 
-  onSuccess?(): void;
+  onSuccess?(value: {
+    uid: string;
+    name: string;
+    sha1: string;
+  }): void;
 
-  onFail?(): void;
+  onFail?(value: {
+    uid: string;
+    name: string;
+    sha1: string;
+  }): void;
 }
 
-function Task({ file, onSuccess }: TaskProps) {
+function Task({ file, onSuccess, onFail }: TaskProps) {
   const canceler = React.useRef<Canceler | null>(null);
   const [$taskState, set$taskState, get$taskState] = FUtil.Hook.useGetState<'loading' | 'uploading' | 'success' | 'failed'>('loading');
   const [$progress, set$progress, get$progress] = FUtil.Hook.useGetState<number>(0);
@@ -46,10 +54,12 @@ function Task({ file, onSuccess }: TaskProps) {
       try {
         const { data } = await promise;
       } catch (e) {
-        if ($taskState !== 'uploading') {
-          // onFail && onFail({ uid: task.uid, objectName: task.name });
-          return;
-        }
+        onFail && onFail({
+          uid: file.uid,
+          name: file.name,
+          sha1: fileSha1,
+        });
+        return;
       }
     }
 
@@ -60,14 +70,19 @@ function Task({ file, onSuccess }: TaskProps) {
 
     if (result[0].state === 'success') {
       set$taskState('success');
-      // set_progress(0);
-      // onSucceed && onSucceed({ uid: task.uid, objectName: task.name, sha1: fileSha1.current });
+      onSuccess && onSuccess({
+        uid: file.uid,
+        name: file.name,
+        sha1: fileSha1,
+      });
       return;
     }
-    // console.log('failed  dsifojmsdklfjsda;lfkjsdl;kfj;lksdjflsdjflkjsdlkj');
     set$taskState('failed');
-    // set_progress(0);
-    // onFail && onFail({ uid: task.uid, objectName: task.name });
+    onFail && onFail({
+      uid: file.uid,
+      name: file.name,
+      sha1: fileSha1,
+    });
   });
 
   AHooks.useUnmount(() => {
