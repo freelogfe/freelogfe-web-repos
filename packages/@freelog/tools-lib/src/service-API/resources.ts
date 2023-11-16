@@ -644,3 +644,19 @@ export function getAttrsInfoByKey({...params}: GetAttrsInfoByKeyParamsType) {
     params: params,
   });
 }
+
+// 通过key取资源属性
+interface GenerateResourceNamesParamsType {
+  data: {
+    name: string;
+    num: number;
+  }[];
+}
+
+export function generateResourceNames({data}: GenerateResourceNamesParamsType) {
+  return FUtil.Request({
+    method: 'POST',
+    url: `/v2/resources/generateResourceNames`,
+    data: data,
+  });
+}

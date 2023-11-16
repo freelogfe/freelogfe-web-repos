@@ -11,6 +11,8 @@ import Task from './Task';
 import * as AHooks from 'ahooks';
 import { Dispatch } from 'redux';
 import { ChangeAction } from '@/models/resourceCreatorBatchPage';
+import { generateResourceNames } from '../../../../../../@freelog/tools-lib/src/service-API/resources';
+import data from '@/utils/category';
 
 interface UploadFileProps {
   dispatch: Dispatch;
@@ -34,16 +36,56 @@ function UploadFile({ dispatch, resourceCreatorBatchPage }: UploadFileProps) {
 
   AHooks.useDebounceEffect(() => {
     if ($files.length > 0 && ($successFiles.length + $failFiles.length === $files.length)) {
-      dispatch<ChangeAction>({
-        type: 'resourceCreatorBatchPage/change',
-        payload: {
-          showPage: 'resourceList',
-        },
-      });
+      gotoList();
     }
   }, [$files, $successFiles, $failFiles], {
     wait: 300,
   });
+
+  async function gotoList() {
+    const { data }: {
+      data: {
+        [k: string]: {
+          resourceNewNames: string[];
+          status: 1 | 2;
+        };
+      }
+    } = await FServiceAPI.Resource.generateResourceNames({
+      data: get$successFiles().map((f) => {
+        return {
+          name: f.name.replace(new RegExp(/\.[\w-]+$/), ''),
+          num: 1,
+        };
+      }),
+    });
+    console.log(data, '但是覅收到了 奥萨蒂哦附件 adsf 刘');
+    dispatch<ChangeAction>({
+      type: 'resourceCreatorBatchPage/change',
+      payload: {
+        showPage: 'resourceList',
+        resourceListInfo: get$successFiles().map((f) => {
+          // console.log(data[f.name.replace(new RegExp(/\.[\w-]+$/), '')].resourceNewNames[0], 'asdifjsdlkfjlaksdjflksdjlkfj');
+          // const name: string = data[f.name.replace(new RegExp(/\.[\w-]+$/), '')].resourceNewNames[0];
+          const name: string = data[f.name.replace(new RegExp(/\.[\w-]+$/), '')].resourceNewNames[0];
+          return {
+            fileUID: f.uid,
+            fileName: f.name,
+            sha1: f.sha1,
+            resourceName: name,
+            resourceTitle: name,
+            resourceLabels: [],
+            resourcePolicies: [],
+            showMore: false,
+            additionalProperties: [],
+            customProperties: [],
+            customConfigurations: [],
+            directDependencies: [],
+            baseUpcastResources: [],
+          };
+        }),
+      },
+    });
+  }
 
   return (<div className={styles.container2}>
     <div style={{ height: 35 }} />

@@ -7,9 +7,7 @@ export interface IResourceCreateVersionDraftType {
   } | null;
   additionalProperties: {
     key: string;
-    // name: string;
     value: string;
-    // description: string;
   }[];
   customProperties: {
     key: string;

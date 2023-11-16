@@ -10,7 +10,47 @@ export type ResourceCreatorBatchPageState = {
     labels: string[];
   } | null;
 
-
+  resourceListInfo: {
+    fileUID: string;
+    fileName: string;
+    sha1: string;
+    resourceName: string;
+    resourceTitle: string;
+    resourceLabels: string[];
+    resourcePolicies: {
+      title: string;
+      text: string;
+    }[];
+    showMore: boolean;
+    additionalProperties: {
+      key: string;
+      value: string;
+    }[];
+    customProperties: {
+      key: string;
+      name: string;
+      value: string;
+      description: string;
+    }[];
+    customConfigurations: {
+      key: string;
+      name: string;
+      description: string;
+      type: 'input' | 'select';
+      input: string;
+      select: string[];
+    }[];
+    directDependencies: {
+      id: string;
+      name: string;
+      type: 'resource' | 'object';
+      versionRange?: string;
+    }[];
+    baseUpcastResources: {
+      resourceID: string;
+      resourceName: string;
+    }[];
+  }[];
 };
 
 export interface ChangeAction extends AnyAction {
@@ -50,6 +90,8 @@ const initStates: ResourceCreatorBatchPageState = {
   showPage: 'resourceType',
 
   selectedResourceType: null,
+
+  resourceListInfo: [],
 };
 
 const Model: ResourceCreatorBatchPageModelType = {
