@@ -8,14 +8,42 @@ import { RcFile } from 'antd/lib/upload/interface';
 import fReadLocalFiles from '@/components/fReadLocalFiles';
 import { Modal } from 'antd';
 import Task from './Task';
+import * as AHooks from 'ahooks';
+import { Dispatch } from 'redux';
+import { ChangeAction } from '@/models/resourceCreatorBatchPage';
 
 interface UploadFileProps {
+  dispatch: Dispatch;
   resourceCreatorBatchPage: ResourceCreatorBatchPageState;
 }
 
-function UploadFile({ resourceCreatorBatchPage }: UploadFileProps) {
+function UploadFile({ dispatch, resourceCreatorBatchPage }: UploadFileProps) {
 
   const [$files, set$files, get$files] = FUtil.Hook.useGetState<RcFile[]>([]);
+
+  const [$successFiles, set$successFiles, get$successFiles] = FUtil.Hook.useGetState<{
+    uid: string;
+    name: string;
+    sha1: string;
+  }[]>([]);
+  const [$failFiles, set$failFiles, get$failFiles] = FUtil.Hook.useGetState<{
+    uid: string;
+    name: string;
+    sha1: string;
+  }[]>([]);
+
+  AHooks.useDebounceEffect(() => {
+    if ($files.length > 0 && ($successFiles.length + $failFiles.length === $files.length)) {
+      dispatch<ChangeAction>({
+        type: 'resourceCreatorBatchPage/change',
+        payload: {
+          showPage: 'resourceList',
+        },
+      });
+    }
+  }, [$files, $successFiles, $failFiles], {
+    wait: 300,
+  });
 
   return (<div className={styles.container2}>
     <div style={{ height: 35 }} />
@@ -84,7 +112,7 @@ function UploadFile({ resourceCreatorBatchPage }: UploadFileProps) {
       closable={false}
       width={600}
       bodyStyle={{
-        padding: 20
+        padding: 20,
       }}
     >
       {
@@ -92,9 +120,17 @@ function UploadFile({ resourceCreatorBatchPage }: UploadFileProps) {
           return (<Task
             key={file.uid}
             file={file}
-            onFail={() => {
+            onFail={(value) => {
+              set$failFiles([
+                ...get$failFiles(),
+                value,
+              ]);
             }}
-            onSuccess={() => {
+            onSuccess={(value) => {
+              set$successFiles([
+                ...get$successFiles(),
+                value,
+              ]);
             }}
           />);
         })
