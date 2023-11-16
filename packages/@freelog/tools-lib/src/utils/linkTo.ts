@@ -70,12 +70,28 @@ export function resourceDetails({resourceID, ...params}: ResourceDetailsParamsTy
   return `/resource/details/${resourceID}${handleQuery(params)}`;
 }
 
+// 资源创建入口
+interface ResourceCreatorParamsType {
+}
+
+export function resourceCreatorEntry({}: ResourceCreatorParamsType = {}): TReturnType {
+  return `/resource/creatorEntry`;
+}
+
 // 资源创建
 interface ResourceCreatorParamsType {
 }
 
 export function resourceCreator({}: ResourceCreatorParamsType = {}): TReturnType {
   return `/resource/creator`;
+}
+
+// 资源批量创建
+interface ResourceCreatorParamsType {
+}
+
+export function resourceCreatorBatch({}: ResourceCreatorParamsType = {}): TReturnType {
+  return `/resource/creatorBatch`;
 }
 
 // 我的资源

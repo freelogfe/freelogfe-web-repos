@@ -264,12 +264,12 @@ function FLayout({
             {
               id: 'createResource',
               text: '创建资源',
-              href: '/resource/creator',
+              href: FUtil.LinkTo.resourceCreatorEntry(),
             },
             {
               id: 'createNode',
               text: '创建节点',
-              href: '/node/creator',
+              href: FUtil.LinkTo.nodeCreator(),
             },
           ]}
           userPanel={
