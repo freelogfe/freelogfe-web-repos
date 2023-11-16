@@ -33,8 +33,10 @@ function ResourceList({ resourceCreatorBatchPage }: ResourceListProps) {
             />
           </Space>
 
-          <FComponentsLib.FContentText text={`共 ${resourceCreatorBatchPage.resourceListInfo.length} 个资源`}
-                                       type={'additional2'} />
+          <FComponentsLib.FContentText
+            text={`共 ${resourceCreatorBatchPage.resourceListInfo.length} 个资源`}
+            type={'additional2'}
+          />
 
         </div>
 
