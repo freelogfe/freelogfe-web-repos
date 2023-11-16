@@ -64,8 +64,6 @@ function UploadFile({ dispatch, resourceCreatorBatchPage }: UploadFileProps) {
       payload: {
         showPage: 'resourceList',
         resourceListInfo: get$successFiles().map((f) => {
-          // console.log(data[f.name.replace(new RegExp(/\.[\w-]+$/), '')].resourceNewNames[0], 'asdifjsdlkfjlaksdjflksdjlkfj');
-          // const name: string = data[f.name.replace(new RegExp(/\.[\w-]+$/), '')].resourceNewNames[0];
           const name: string = data[f.name.replace(new RegExp(/\.[\w-]+$/), '')].resourceNewNames[0];
           return {
             fileUID: f.uid,
