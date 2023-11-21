@@ -7,7 +7,12 @@ import { Dispatch } from 'redux';
 import { ConnectState, StorageHomePageModelState } from '@/models/connect';
 import {
   DeleteObjectAction,
-  FetchObjectsAction, FetchSpaceStatisticAction, FetchBucketsAction, ChangeAction, OnBatchDeleteObjectsAction,
+  FetchObjectsAction,
+  FetchSpaceStatisticAction,
+  FetchBucketsAction,
+  ChangeAction,
+  OnBatchDeleteObjectsAction,
+  OnBatchUpdateObjectsAction,
 } from '@/models/storageHomePage';
 import FNoDataTip from '@/components/FNoDataTip';
 import FLoadingTip from '@/components/FLoadingTip';
@@ -22,6 +27,13 @@ import FComponentsLib from '@freelog/components-lib';
 import fReadLocalFiles from '@/components/fReadLocalFiles';
 import FStorageUploadTasksPanel, { getStorageUploadTasksPanel } from '@/components/FStorageUploadTasksPanel';
 import * as AHooks from 'ahooks';
+import FDrawer from '@/components/FDrawer';
+import FUploadCover from '@/components/FUploadCover';
+import { OnChange_Cover_Action } from '@/models/resourceInfoPage';
+import fMessage from '@/components/fMessage';
+import FCoverImage from '@/components/FCoverImage';
+import FResourceTypeInput from '@/components/FResourceTypeInput';
+import fResourceTypeInputDrawer from '@/components/fResourceTypeInputDrawer';
 
 interface ContentProps {
   dispatch: Dispatch;
@@ -246,13 +258,22 @@ function Content({ storageHomePage, dispatch }: ContentProps) {
 
         <div className={styles.handled}>
           <FComponentsLib.FContentText type={'additional2'} style={{ fontSize: 14 }} text={'选择对象后可执行批量操作:'} />
-          <FComponentsLib.FTextBtn type={'primary'}>
+          <FComponentsLib.FTextBtn
+            disabled={storageHomePage.checkedObjectIDs.length === 0}
+            type={'primary'}
+            onClick={() => {
+              dispatch<OnBatchUpdateObjectsAction>({
+                type: 'storageHomePage/onBatchUpdateObjects',
+              });
+            }}
+          >
             <FComponentsLib.FIcons.FConfiguration style={{ fontSize: 14 }} />
             &nbsp;设置资源类型
           </FComponentsLib.FTextBtn>
 
           <FComponentsLib.FTextBtn
             type={'danger'}
+            disabled={storageHomePage.checkedObjectIDs.length === 0}
             onClick={() => {
               // console.log('(*YOIOIUY*(OUOIJLKJLkj');
               dispatch<OnBatchDeleteObjectsAction>({
@@ -286,6 +307,7 @@ function Content({ storageHomePage, dispatch }: ContentProps) {
             }}
           />
         </div>
+
 
       </>)
     }

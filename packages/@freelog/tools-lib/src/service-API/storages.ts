@@ -286,6 +286,21 @@ export function updateObject({objectIdOrName, ...params}: UpdateObjectParamsType
   });
 }
 
+// 批量更新存储对象
+interface BatchUpdateObjectParamsType {
+  objectIds: string[];
+  resourceTypeCode: string;
+  resourceTypeName?: string;
+}
+
+export function batchUpdateObject({...params}: BatchUpdateObjectParamsType) {
+  return FUtil.Request({
+    method: 'PUT',
+    url: `/v2/storages/objects/updateBatch`,
+    data: params,
+  });
+}
+
 // 批量查询存储对象列表
 interface BatchObjectListParamsType {
   fullObjectNames?: string;

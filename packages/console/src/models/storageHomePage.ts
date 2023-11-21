@@ -8,6 +8,8 @@ import fMessage from '@/components/fMessage';
 import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 import { history } from 'umi';
 import { listStateAndListMore } from '@/components/FListFooter';
+import fResourceTypeInputDrawer from '@/components/fResourceTypeInputDrawer';
+import { batchUpdateObject } from '../../../@freelog/tools-lib/src/service-API/storages';
 
 export interface StorageHomePageModelState {
   bucketList: {
@@ -396,7 +398,7 @@ const Model: StorageHomePageModelType = {
       });
     },
     * onBatchDeleteObjects({}: OnBatchDeleteObjectsAction, { select, call, put }: EffectsCommandMap) {
-      console.log('OnBatchDeleteObjectsAction 9ioewj;flisjd;lkfjls;kdjfl;ksdjlfk;j');
+      // console.log('OnBatchDeleteObjectsAction 9ioewj;flisjd;lkfjls;kdjfl;ksdjlfk;j');
       const { storageHomePage }: ConnectState = yield select(({ storageHomePage }: ConnectState) => ({
         storageHomePage,
       }));
@@ -421,7 +423,26 @@ const Model: StorageHomePageModelType = {
         type: 'fetchBuckets',
       });
     },
-    * onBatchUpdateObjects({}: OnBatchUpdateObjectsAction, {}: EffectsCommandMap) {
+    * onBatchUpdateObjects({}: OnBatchUpdateObjectsAction, { select, call, put }: EffectsCommandMap) {
+      const { storageHomePage }: ConnectState = yield select(({ storageHomePage }: ConnectState) => ({
+        storageHomePage,
+      }));
+
+      const value: {
+        value: string;
+        labels: string[];
+        customInput?: string;
+      } | null = yield call(fResourceTypeInputDrawer);
+      if (!value) {
+        return;
+      }
+      const params: Parameters<typeof FServiceAPI.Storage.batchUpdateObject>[0] = {
+        objectIds: storageHomePage.checkedObjectIDs,
+        resourceTypeCode: value.value,
+        resourceTypeName: value.customInput,
+      };
+      const { data } = yield call(FServiceAPI.Storage.batchUpdateObject, params);
+      console.log(data, ';DDFSdfksjdlkfjlsdjljl');
 
     },
   },

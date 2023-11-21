@@ -71,13 +71,6 @@ function Info({ dispatch, resourceInfoPage, match }: InfoProps) {
     <Helmet>
       <title>{`资源信息 · ${resourceInfoPage.resourceInfo?.resourceName || ''}  - Freelog`}</title>
     </Helmet>
-    {/*<FLeftSiderLayout*/}
-    {/*  sider={<Sider />}*/}
-    {/*  header={<FComponentsLib.FTitleText*/}
-    {/*    text={FI18n.i18nNext.t('resource_information')}*/}
-    {/*    type='h1'*/}
-    {/*  />}*/}
-    {/*>*/}
     {
       resourceInfoPage.pageState === 'loading' && (<div>
         <div style={{ height: 40 }} />
@@ -205,17 +198,6 @@ function Info({ dispatch, resourceInfoPage, match }: InfoProps) {
                 }}
               />)
               : (<div className={styles.resourceTitle}>
-                {/*{*/}
-                {/*  nodeManagerPage.setting_nodeInfo.title*/}
-                {/*    ? (<FComponentsLib.FContentText*/}
-                {/*      text={nodeManagerPage.setting_nodeInfo.title}*/}
-                {/*      type={'normal'}*/}
-                {/*    />)*/}
-                {/*    : (<i style={{ color: '#999' }}>暂无无内容...</i>)*/}
-                {/*}*/}
-
-                {/*<i style={{ color: '#999' }}>暂无无内容...</i>*/}
-
                 <FComponentsLib.FContentText
                   text={resourceInfoPage.resourceInfo.resourceTitle || resourceInfoPage.resourceInfo.resourceName || ''}
                   type={'normal'}

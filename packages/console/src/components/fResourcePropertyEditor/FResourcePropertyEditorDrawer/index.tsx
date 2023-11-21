@@ -8,7 +8,6 @@ import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
 import moment from 'moment';
 import FLoadingTip from '@/components/FLoadingTip';
 import { useGetState } from '@/utils/hooks';
-import { get } from 'sortablejs';
 
 interface FResourcePropertyEditorDrawerProps {
   disabledKeys: string[];
