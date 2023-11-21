@@ -77,6 +77,33 @@ export function update(params: UpdateParamsType) {
   });
 }
 
+// 批量更新资源信息
+interface BatchUpdateParamsType {
+  resourceIds: string[];
+  status?: 0 | 1;
+  // resourceTitle?: string;
+  // intro?: string;
+  // tags?: string[];
+  // coverImages?: string[];
+  addPolicies?: {
+    policyName: string;
+    policyText: string;
+    status?: 0 | 1; // 1:上线 0:下线
+  }[];
+  // updatePolicies?: {
+  //   policyId: string;
+  //   status: 0 | 1; // 0:下线策略 1:上线策略
+  // }[];
+}
+
+export function batchUpdate(params: BatchUpdateParamsType) {
+  return FUtil.Request({
+    method: 'PUT',
+    url: `/v2/resources/updateBatch`,
+    data: params,
+  });
+}
+
 // 查看资源分页列表
 interface ListParamsType {
   skip?: number;

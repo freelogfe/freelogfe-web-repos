@@ -241,17 +241,32 @@ function Resources({ dispatch, resourceListPage }: ResourceProps) {
               </div>
 
               <div className={styles.batchHandleRight}>
-                <FComponentsLib.FTextBtn type={'primary'}>
+                <FComponentsLib.FTextBtn
+                  type={'primary'}
+                  onClick={() => {
+
+                  }}
+                >
                   <FComponentsLib.FIcons.FUpcast style={{ fontSize: 14 }} />
                   &nbsp;上架
                 </FComponentsLib.FTextBtn>
 
-                <FComponentsLib.FTextBtn type={'primary'}>
+                <FComponentsLib.FTextBtn
+                  type={'primary'}
+                  onClick={() => {
+
+                  }}
+                >
                   <FComponentsLib.FIcons.FUpcast style={{ fontSize: 14, transform: 'rotate(180deg)' }} />
                   &nbsp;下架
                 </FComponentsLib.FTextBtn>
 
-                <FComponentsLib.FTextBtn type={'primary'}>
+                <FComponentsLib.FTextBtn
+                  type={'primary'}
+                  onClick={() => {
+
+                  }}
+                >
                   <FComponentsLib.FIcons.FPolicy style={{ fontSize: 14 }} />
                   &nbsp;添加授权策略
                 </FComponentsLib.FTextBtn>

@@ -83,6 +83,19 @@ export interface OnClickLoadingMordAction extends AnyAction {
   type: 'resourceListPage/onClickLoadingMord';
 }
 
+export interface OnBatchUpdateAction extends AnyAction {
+  type: 'resourceListPage/onBatchUpdate';
+  payload: {
+    status: 0 | 4;
+    addPolicies: {
+      policyName: string;
+      policyText: string;
+      status: 0 | 1;
+    }[];
+  };
+}
+
+
 export interface ResourceListPageModelType {
   namespace: 'resourceListPage';
   state: ResourceListPageModelState;
@@ -95,6 +108,7 @@ export interface ResourceListPageModelType {
     onChangeKeywords: (action: OnChangeKeywordsAction, effects: EffectsCommandMap) => void;
     onAwaited_KeywordsChange: (action: OnAwaited_KeywordsChange_Action, effects: EffectsCommandMap) => void;
     onClickLoadingMord: (action: OnClickLoadingMordAction, effects: EffectsCommandMap) => void;
+    onBatchUpdate: (action: OnBatchUpdateAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<ResourceListPageModelState, ChangeAction>;
@@ -162,12 +176,6 @@ const Model: ResourceListPageModelType = {
         });
       }
 
-      // const resourceTypes: Array<string | number> = resourceListPage.resourceTypeCodes.labels.filter((rt) => {
-      //   return rt !== '全部';
-      // });
-
-      // console.log(resourceListPage.resourceTypeCodes, 'resourceListPage.resourceTypeCodes 98wiedosfjsdlkfjlsdjfljl');
-
       const resourceTypes: string[] = resourceListPage.resourceTypeCodes.value.split('#');
       let resourceTypeCode: string = resourceTypes[0];
       let resourceTypeCategory: 1 | 2 = 1;
@@ -193,7 +201,6 @@ const Model: ResourceListPageModelType = {
         status: resourceListPage.resourceStatus === '#' ? undefined : (resourceListPage.resourceStatus as 0),
         isSelf: 1,
       };
-
 
       const { ret, errCode, data: data_resourceList }: {
         ret: number;
@@ -314,8 +321,6 @@ const Model: ResourceListPageModelType = {
           inputText: payload.value,
         },
       });
-
-
     },
     * onAwaited_KeywordsChange({}: OnAwaited_KeywordsChange_Action, { put }: EffectsCommandMap) {
       yield put<FetchDataSourceAction>({
@@ -333,12 +338,9 @@ const Model: ResourceListPageModelType = {
         },
       });
     },
-    // * clearData({}: ClearDataAction, {put}: EffectsCommandMap) {
-    //   yield put<ChangeAction>({
-    //     type: 'change',
-    //     payload: initStates,
-    //   });
-    // },
+    * onBatchUpdate({ payload }: OnBatchUpdateAction, {}: EffectsCommandMap) {
+
+    },
   },
 
   reducers: {
