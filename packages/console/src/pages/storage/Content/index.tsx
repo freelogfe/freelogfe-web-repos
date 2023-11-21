@@ -7,7 +7,7 @@ import { Dispatch } from 'redux';
 import { ConnectState, StorageHomePageModelState } from '@/models/connect';
 import {
   DeleteObjectAction,
-  FetchObjectsAction, FetchSpaceStatisticAction, FetchBucketsAction, ChangeAction,
+  FetchObjectsAction, FetchSpaceStatisticAction, FetchBucketsAction, ChangeAction, OnBatchDeleteObjectsAction,
 } from '@/models/storageHomePage';
 import FNoDataTip from '@/components/FNoDataTip';
 import FLoadingTip from '@/components/FLoadingTip';
@@ -38,7 +38,7 @@ function Content({ storageHomePage, dispatch }: ContentProps) {
     dispatch<ChangeAction>({
       type: 'storageHomePage/change',
       payload: {
-        checkedResourceIDs: storageHomePage.checkedResourceIDs.filter((id) => {
+        checkedObjectIDs: storageHomePage.checkedObjectIDs.filter((id) => {
           return allIDs.includes(id);
         }),
       },
@@ -55,14 +55,14 @@ function Content({ storageHomePage, dispatch }: ContentProps) {
     {
       title: <Space size={5}>
         <Checkbox
-          checked={storageHomePage.checkedResourceIDs.length === storageHomePage.object_List.length}
-          indeterminate={storageHomePage.checkedResourceIDs.length !== 0 && storageHomePage.checkedResourceIDs.length !== storageHomePage.object_List.length}
+          checked={storageHomePage.checkedObjectIDs.length === storageHomePage.object_List.length}
+          indeterminate={storageHomePage.checkedObjectIDs.length !== 0 && storageHomePage.checkedObjectIDs.length !== storageHomePage.object_List.length}
           onChange={(e) => {
             if (e.target.checked) {
               dispatch<ChangeAction>({
                 type: 'storageHomePage/change',
                 payload: {
-                  checkedResourceIDs: storageHomePage.object_List.map((o) => {
+                  checkedObjectIDs: storageHomePage.object_List.map((o) => {
                     return o.id;
                   }),
                 },
@@ -71,7 +71,7 @@ function Content({ storageHomePage, dispatch }: ContentProps) {
               dispatch<ChangeAction>({
                 type: 'storageHomePage/change',
                 payload: {
-                  checkedResourceIDs: [],
+                  checkedObjectIDs: [],
                 },
               });
             }
@@ -87,14 +87,14 @@ function Content({ storageHomePage, dispatch }: ContentProps) {
       key: 'checked',
       render(text, record) {
         return (<Checkbox
-          checked={storageHomePage.checkedResourceIDs.includes(record.id)}
+          checked={storageHomePage.checkedObjectIDs.includes(record.id)}
           onChange={(e) => {
             if (e.target.checked) {
               dispatch<ChangeAction>({
                 type: 'storageHomePage/change',
                 payload: {
-                  checkedResourceIDs: [
-                    ...storageHomePage.checkedResourceIDs,
+                  checkedObjectIDs: [
+                    ...storageHomePage.checkedObjectIDs,
                     record.id,
                   ],
                 },
@@ -103,7 +103,7 @@ function Content({ storageHomePage, dispatch }: ContentProps) {
               dispatch<ChangeAction>({
                 type: 'storageHomePage/change',
                 payload: {
-                  checkedResourceIDs: storageHomePage.checkedResourceIDs.filter((id) => {
+                  checkedObjectIDs: storageHomePage.checkedObjectIDs.filter((id) => {
                     return id !== record.id;
                   }),
                 },
@@ -254,9 +254,15 @@ function Content({ storageHomePage, dispatch }: ContentProps) {
           <FComponentsLib.FTextBtn
             type={'danger'}
             onClick={() => {
+              // console.log('(*YOIOIUY*(OUOIJLKJLkj');
+              dispatch<OnBatchDeleteObjectsAction>({
+                type: 'storageHomePage/onBatchDeleteObjects',
+              });
             }}
           >
-            <FComponentsLib.FIcons.FDelete style={{ fontSize: 14 }} />
+            <FComponentsLib.FIcons.FDelete
+              style={{ fontSize: 14 }}
+            />
             &nbsp;删除对象
           </FComponentsLib.FTextBtn>
         </div>

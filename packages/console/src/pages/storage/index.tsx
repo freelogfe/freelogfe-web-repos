@@ -21,10 +21,10 @@ import * as AHooks from 'ahooks';
 interface StorageProps extends RouteComponentProps<{}> {
   dispatch: Dispatch;
   storageHomePage: StorageHomePageModelState;
-  storageObjectEditor: StorageObjectEditorModelState;
+  // storageObjectEditor: StorageObjectEditorModelState;
 }
 
-function Storage({ match, history, storageHomePage, storageObjectEditor, dispatch }: StorageProps) {
+function Storage({ match, history, storageHomePage, dispatch }: StorageProps) {
 
   const [state] = useUrlState<{ bucketName: string; objectID: string; createBucket: string }>();
 
@@ -103,42 +103,6 @@ function Storage({ match, history, storageHomePage, storageObjectEditor, dispatc
       </div>
     </div>
   </div>);
-
-  // return (<>
-  //   <FLeftSiderLayout
-  //     header={storageHomePage.bucketList?.length === 0 ? null : <Header />}
-  //     sider={<Sider />}
-  //     type='table'
-  //     contentStyles={{
-  //       backgroundColor: storageHomePage.object_List.length === 0 ? 'transparent' : undefined,
-  //       boxShadow: storageHomePage.object_List.length === 0 ? 'none' : undefined,
-  //     }}
-  //     hasBottom={storageHomePage.object_List.length !== 0}
-  //   >
-  //
-  //     <div className={styles.handled}>
-  //       <FComponentsLib.FContentText type={'additional2'} style={{ fontSize: 14 }} text={'选择对象后可执行批量操作:'} />
-  //       <FComponentsLib.FTextBtn type={'primary'}>
-  //         <FComponentsLib.FIcons.FConfiguration style={{ fontSize: 14 }} />
-  //         &nbsp;设置资源类型
-  //       </FComponentsLib.FTextBtn>
-  //
-  //       <FComponentsLib.FTextBtn
-  //         type={'danger'}
-  //         onClick={() => {
-  //         }}
-  //       >
-  //         <FComponentsLib.FIcons.FDelete style={{ fontSize: 14 }} />
-  //         &nbsp;删除对象
-  //       </FComponentsLib.FTextBtn>
-  //     </div>
-  //     <div style={{ height: 20 }} />
-  //
-  //     <Content />
-  //   </FLeftSiderLayout>
-  //
-  //   <Details />
-  // </>);
 }
 
 export default withRouter(connect(({

@@ -35,16 +35,7 @@ export interface StorageHomePageModelState {
   isLoading: boolean;
   pageSize: number;
   total: number;
-  checkedResourceIDs: string[];
-
-  // uploadTaskQueue: {
-  //   uid: string;
-  //   file: RcFile
-  //   name: string;
-  //   state: 'loading' | 'success' | 'failed';
-  // }[];
-  // uploadPanelVisible: boolean;
-  // uploadPanelOpen: boolean;
+  checkedObjectIDs: string[];
 }
 
 export interface ChangeAction extends AnyAction {
@@ -102,14 +93,17 @@ export interface DeleteObjectAction extends AnyAction {
   payload: string;
 }
 
-// export interface UploadFilesAction extends AnyAction {
-//   type: 'storageHomePage/uploadFiles';
-//   payload: RcFile[];
-// }
-
 export interface UpdateAObjectAction extends AnyAction {
   type: 'storageHomePage/updateAObject';
   payload: Pick<StorageHomePageModelState['object_List'][number], 'id'> & Partial<Omit<StorageHomePageModelState['object_List'][number], 'id'>>;
+}
+
+export interface OnBatchDeleteObjectsAction extends AnyAction {
+  type: 'storageHomePage/onBatchDeleteObjects';
+}
+
+export interface OnBatchUpdateObjectsAction extends AnyAction {
+  type: 'storageHomePage/onBatchUpdateObjects';
 }
 
 interface StorageHomePageModelType {
@@ -125,8 +119,9 @@ interface StorageHomePageModelType {
     onChange_FilterInput: (action: OnChange_FilterInput_Action, effects: EffectsCommandMap) => void;
     fetchObjects: (action: FetchObjectsAction, effects: EffectsCommandMap) => void;
     deleteObject: (action: DeleteObjectAction, effects: EffectsCommandMap) => void;
-    // uploadFiles: (action: UploadFilesAction, effects: EffectsCommandMap) => void;
     updateAObject: (action: UpdateAObjectAction, effects: EffectsCommandMap) => void;
+    onBatchDeleteObjects: (action: OnBatchDeleteObjectsAction, effects: EffectsCommandMap) => void;
+    onBatchUpdateObjects: (action: OnBatchUpdateObjectsAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<StorageHomePageModelState, ChangeAction>;
@@ -151,11 +146,7 @@ const Model: StorageHomePageModelType = {
     isLoading: true,
     pageSize: 100,
     total: -1,
-    checkedResourceIDs: [],
-
-    // uploadTaskQueue: [],
-    // uploadPanelVisible: false,
-    // uploadPanelOpen: false,
+    checkedObjectIDs: [],
   },
   effects: {
     * fetchBuckets({ payload }: FetchBucketsAction, { call, put, select }: EffectsCommandMap) {
@@ -384,43 +375,6 @@ const Model: StorageHomePageModelType = {
         type: 'fetchBuckets',
       });
     },
-    // * uploadFiles({ payload }: UploadFilesAction, { select, put, call }: EffectsCommandMap) {
-    //   const { storageHomePage }: ConnectState = yield select(({ storageHomePage }: ConnectState) => ({
-    //     storageHomePage,
-    //   }));
-    //   // console.log(payload, 'payload@!@#$!@#$@#!4213424');
-    //   if (payload[0].size > 200 * 1024 * 1024) {
-    //     fMessage('单个文件不能大于 200 M', 'warning');
-    //     return;
-    //   }
-    //   const totalSize: number = payload.map((f) => f.size).reduce((p, c) => p + c, 0);
-    //   if (storageHomePage.totalStorage - storageHomePage.usedStorage < totalSize) {
-    //     fMessage(FI18n.i18nNext.t('uploadobject_alarm_storage_full'), 'warning');
-    //     return;
-    //   }
-    //
-    //   yield put<ChangeAction>({
-    //     type: 'change',
-    //     payload: {
-    //       uploadPanelVisible: true,
-    //     },
-    //   });
-    //   console.time('getInfo');
-    //   const uploadTaskQueue: StorageHomePageModelState['uploadTaskQueue'] = yield call(getInfo, payload);
-    //   console.timeEnd('getInfo');
-    //
-    //   yield put<ChangeAction>({
-    //     type: 'change',
-    //     payload: {
-    //       uploadTaskQueue: [
-    //         ...uploadTaskQueue,
-    //         ...storageHomePage.uploadTaskQueue,
-    //       ],
-    //       uploadPanelOpen: true,
-    //       uploadPanelVisible: true,
-    //     },
-    //   });
-    // },
     * updateAObject({ payload }: UpdateAObjectAction, { select, put }: EffectsCommandMap) {
       const { id, ...data } = payload;
       const { storageHomePage }: ConnectState = yield select(({ storageHomePage }: ConnectState) => ({
@@ -440,6 +394,35 @@ const Model: StorageHomePageModelType = {
           }),
         },
       });
+    },
+    * onBatchDeleteObjects({}: OnBatchDeleteObjectsAction, { select, call, put }: EffectsCommandMap) {
+      console.log('OnBatchDeleteObjectsAction 9ioewj;flisjd;lkfjls;kdjfl;ksdjlfk;j');
+      const { storageHomePage }: ConnectState = yield select(({ storageHomePage }: ConnectState) => ({
+        storageHomePage,
+      }));
+      const params: Parameters<typeof FServiceAPI.Storage.deleteObjects>[0] = {
+        bucketName: storageHomePage.activatedBucket,
+        objectIds: storageHomePage.checkedObjectIDs.join(','),
+      };
+      yield call(FServiceAPI.Storage.deleteObjects, params);
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          object_List: storageHomePage.object_List.filter((ol) => {
+            return !storageHomePage.checkedObjectIDs.includes(ol.id);
+          }),
+          total: storageHomePage.total - storageHomePage.checkedObjectIDs.length,
+        },
+      });
+      yield put<FetchSpaceStatisticAction>({
+        type: 'fetchSpaceStatistic',
+      });
+      yield put<FetchBucketsAction>({
+        type: 'fetchBuckets',
+      });
+    },
+    * onBatchUpdateObjects({}: OnBatchUpdateObjectsAction, {}: EffectsCommandMap) {
+
     },
   },
   reducers: {
