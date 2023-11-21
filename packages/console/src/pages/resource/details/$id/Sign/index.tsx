@@ -84,8 +84,9 @@ function Sign({ dispatch, resourceDetailPage }: SignProps) {
 
         <div style={{ height: 15 }} />
         <FComponentsLib.FContentText
-          text={resourceDetailPage.resource_Info?.about} type={'normal'}
-          style={{ fontSize: 12, wordBreak: 'break-all' }}
+          text={resourceDetailPage.resource_Info?.about}
+          type={'normal'}
+          className={styles.resourceInfoAbout}
         />
       </div>
     </div>
