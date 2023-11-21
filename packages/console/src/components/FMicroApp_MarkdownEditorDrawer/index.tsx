@@ -33,7 +33,7 @@ function FMicroApp_MarkdownEditorDrawer({
     bodyStyle={{ padding: 0 }}
   >
     <MicroApp
-      name='markdownEditor'
+      name={self.location.host.endsWith('.testfreelog.com') ? 'markdownEditor_test' : 'markdownEditor'}
       resourceID={resourceID}
       onChange_Saved={(saved: boolean) => {
         onChange_Saved && onChange_Saved(saved);

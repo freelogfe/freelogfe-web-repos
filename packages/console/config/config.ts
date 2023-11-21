@@ -44,19 +44,17 @@ export default defineConfig({
       // 注册子应用信息
       apps: [
         {
-          name: 'markdownEditor', // 唯一 id
+          name: 'markdownEditor_test', // 唯一 id
           entry: '//creator-tools.testfreelog.com', // html entry
           // entry: '//192.168.2.28:8080', // html entry
           // credentials: true,
         },
-        // {
-        //   name: 'markdownEditor1', // 唯一 id
-        //   entry: '//192.168.2.28:8080', // html entry
-        // },
-        // {
-        //   name: 'markdownEditor2', // 唯一 id
-        //   entry: '//localhost:7105', // html entry
-        // },
+        {
+          name: 'markdownEditor', // 唯一 id
+          entry: '//creator-tools.freelog.com', // html entry
+          // entry: '//192.168.2.28:8080', // html entry
+          // credentials: true,
+        },
       ],
     },
   },
