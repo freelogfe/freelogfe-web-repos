@@ -244,7 +244,8 @@ function FResourceTypeFilter({ value, omitTheme = false, onChange }: FResourceTy
                         >
                           <span>{o1.label}</span>
                           {
-                            o1.children.length > 0 && (<FComponentsLib.FIcons.FRight className={styles.itemRightIcon} />)
+                            o1.children.length > 0 && (
+                              <FComponentsLib.FIcons.FRight className={styles.itemRightIcon} />)
                           }
                         </div>
                       </Popover>
@@ -271,6 +272,7 @@ function FResourceTypeFilter({ value, omitTheme = false, onChange }: FResourceTy
           })
         }
       </div>
+      <div style={{ height: 10 }} />
     </div>)}
   >
     <div className={styles.square}>
