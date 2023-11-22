@@ -27,6 +27,7 @@ import FResourceCard from '@/components/FResourceCard';
 import FListFooter from '@/components/FListFooter';
 import FResourceCard_AbleCheck from '@/components/FResourceCard_AbleCheck';
 import fPolicyBuilder from '@/components/fPolicyBuilder';
+import FResourceFeedback from '@/components/FResourceFeedback';
 
 interface ResourceProps {
   dispatch: Dispatch;
@@ -426,6 +427,7 @@ function Resources({ dispatch, resourceListPage }: ResourceProps) {
       </>)
     }
     <div style={{ height: 100 }} />
+    <FResourceFeedback />
   </>);
 }
 
