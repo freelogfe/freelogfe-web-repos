@@ -4,7 +4,7 @@ import FComponentsLib from '@freelog/components-lib';
 import { FI18n, FServiceAPI } from '@freelog/tools-lib';
 import FTooltip from '@/components/FTooltip';
 import * as AHooks from 'ahooks';
-import { InputRef } from 'antd';
+import { InputRef, Space } from 'antd';
 
 interface FResourceLabelEditorProps {
   value: string[];
@@ -118,63 +118,66 @@ function FResourceLabelEditor($prop: FResourceLabelEditorProps) {
   }
 
   return (<div>
-    <FComponentsLib.FInput.FSingleLine
-      ref={inputElementRef}
-      lengthLimit={-1}
-      value={$state.input}
-      placeholder={FI18n.i18nNext.t('hint_add_resource_tag')}
-      className={[styles.Input].join(' ')}
-      onChange={(e) => {
-        const value = e.target.value.replaceAll('#', '');
-        // set_input(value);
-        $setState({
-          input: value,
-        });
-
-        let errorText: string = '';
-        // if (!value) {
-        //   errorText = '不能为空';
-        // } else
-        if (value.length > 20) {
-          errorText = '不超过20个字符';
-        } else if ($prop.value.includes(value)) {
-          errorText = '不能有重复';
-        }
-        // set_errorText(errorText);
-        $setState({
-          inputError: errorText,
-        });
-      }}
-      onPressEnter={() => {
-        if ($state.inputError !== '') {
-          return;
-        }
-        if ($state.input === '') {
+    <Space size={20}>
+      <FComponentsLib.FInput.FSingleLine
+        ref={inputElementRef}
+        lengthLimit={-1}
+        value={$state.input}
+        placeholder={FI18n.i18nNext.t('hint_add_resource_tag')}
+        className={[styles.Input].join(' ')}
+        onChange={(e) => {
+          const value = e.target.value.replaceAll('#', '');
+          // set_input(value);
           $setState({
-            inputError: '不能为空',
+            input: value,
           });
-          return;
-        }
-        $setState({
-          input: '',
-        });
-        $prop.onChange && $prop.onChange([
-          ...$prop.value,
-          $state.input.replace(new RegExp(/#/, 'g'), ''),
-        ]);
-      }}
-      onKeyUp={(event) => {
-        if (event.key === 'Escape') {
-          // set_input('');
-          // set_errorText('');
+
+          let errorText: string = '';
+          // if (!value) {
+          //   errorText = '不能为空';
+          // } else
+          if (value.length > 20) {
+            errorText = '不超过20个字符';
+          } else if ($prop.value.includes(value)) {
+            errorText = '不能有重复';
+          }
+          // set_errorText(errorText);
+          $setState({
+            inputError: errorText,
+          });
+        }}
+        onPressEnter={() => {
+          if ($state.inputError !== '') {
+            return;
+          }
+          if ($state.input === '') {
+            $setState({
+              inputError: '不能为空',
+            });
+            return;
+          }
           $setState({
             input: '',
-            inputError: '',
           });
-          inputElementRef.current?.blur();
-        }
-      }}
-    />
+          $prop.onChange && $prop.onChange([
+            ...$prop.value,
+            $state.input.replace(new RegExp(/#/, 'g'), ''),
+          ]);
+        }}
+        onKeyUp={(event) => {
+          if (event.key === 'Escape') {
+            // set_input('');
+            // set_errorText('');
+            $setState({
+              input: '',
+              inputError: '',
+            });
+            inputElementRef.current?.blur();
+          }
+        }}
+      />
+      <FComponentsLib.FContentText text={`还可添加${20 - $prop.value.length}个标签`} type={'additional2'} />
+    </Space>
     {
       $state.inputError !== '' && (<>
         <div style={{ height: 5 }} />
