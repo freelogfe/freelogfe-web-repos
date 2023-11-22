@@ -80,7 +80,7 @@ export function update(params: UpdateParamsType) {
 // 批量更新资源信息
 interface BatchUpdateParamsType {
   resourceIds: string[];
-  status?: 0 | 1;
+  status?: 1 | 4;
   // resourceTitle?: string;
   // intro?: string;
   // tags?: string[];

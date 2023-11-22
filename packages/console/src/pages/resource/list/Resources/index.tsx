@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {
   ChangeAction,
-  OnAwaited_KeywordsChange_Action,
+  OnAwaited_KeywordsChange_Action, OnBatchUpdateAction,
   OnChangeKeywordsAction,
   OnChangeResourceTypeAction,
   OnChangeStatusAction,
@@ -242,9 +242,15 @@ function Resources({ dispatch, resourceListPage }: ResourceProps) {
 
               <div className={styles.batchHandleRight}>
                 <FComponentsLib.FTextBtn
+                  disabled={resourceListPage.checkedResourceIDs.length === 0}
                   type={'primary'}
                   onClick={() => {
-
+                    dispatch<OnBatchUpdateAction>({
+                      type: 'resourceListPage/onBatchUpdate',
+                      payload: {
+                        status: 1,
+                      },
+                    });
                   }}
                 >
                   <FComponentsLib.FIcons.FUpcast style={{ fontSize: 14 }} />
@@ -252,9 +258,15 @@ function Resources({ dispatch, resourceListPage }: ResourceProps) {
                 </FComponentsLib.FTextBtn>
 
                 <FComponentsLib.FTextBtn
+                  disabled={resourceListPage.checkedResourceIDs.length === 0}
                   type={'primary'}
                   onClick={() => {
-
+                    dispatch<OnBatchUpdateAction>({
+                      type: 'resourceListPage/onBatchUpdate',
+                      payload: {
+                        status: 4,
+                      },
+                    });
                   }}
                 >
                   <FComponentsLib.FIcons.FUpcast style={{ fontSize: 14, transform: 'rotate(180deg)' }} />
@@ -264,7 +276,12 @@ function Resources({ dispatch, resourceListPage }: ResourceProps) {
                 <FComponentsLib.FTextBtn
                   type={'primary'}
                   onClick={() => {
-
+                    dispatch<OnBatchUpdateAction>({
+                      type: 'resourceListPage/onBatchUpdate',
+                      payload: {
+                        addPolicies: [],
+                      },
+                    });
                   }}
                 >
                   <FComponentsLib.FIcons.FPolicy style={{ fontSize: 14 }} />

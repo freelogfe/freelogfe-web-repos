@@ -86,8 +86,8 @@ export interface OnClickLoadingMordAction extends AnyAction {
 export interface OnBatchUpdateAction extends AnyAction {
   type: 'resourceListPage/onBatchUpdate';
   payload: {
-    status: 0 | 4;
-    addPolicies: {
+    status?: 1 | 4;
+    addPolicies?: {
       policyName: string;
       policyText: string;
       status: 0 | 1;
@@ -338,8 +338,17 @@ const Model: ResourceListPageModelType = {
         },
       });
     },
-    * onBatchUpdate({ payload }: OnBatchUpdateAction, {}: EffectsCommandMap) {
+    * onBatchUpdate({ payload }: OnBatchUpdateAction, { select, call, put }: EffectsCommandMap) {
+      const { resourceListPage }: ConnectState = yield select(({ resourceListPage }: ConnectState) => ({
+        resourceListPage,
+      }));
 
+      const parmas: Parameters<typeof FServiceAPI.Resource.batchUpdate>[0] = {
+        resourceIds: resourceListPage.checkedResourceIDs,
+        ...payload,
+      };
+      const { data } = yield call(FServiceAPI.Resource.batchUpdate, parmas);
+      console.log(data, 'asdfiojlkewjl;fkjsdlkfjlksdjlkj');
     },
   },
 
