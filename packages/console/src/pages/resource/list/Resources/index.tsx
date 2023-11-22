@@ -26,6 +26,7 @@ import { history } from 'umi';
 import FResourceCard from '@/components/FResourceCard';
 import FListFooter from '@/components/FListFooter';
 import FResourceCard_AbleCheck from '@/components/FResourceCard_AbleCheck';
+import fPolicyBuilder from '@/components/fPolicyBuilder';
 
 interface ResourceProps {
   dispatch: Dispatch;
@@ -275,11 +276,20 @@ function Resources({ dispatch, resourceListPage }: ResourceProps) {
 
                 <FComponentsLib.FTextBtn
                   type={'primary'}
-                  onClick={() => {
+                  onClick={async () => {
+                    const result = await fPolicyBuilder({ targetType: 'resource' });
+                    if (!result) {
+                      return;
+                    }
+
                     dispatch<OnBatchUpdateAction>({
                       type: 'resourceListPage/onBatchUpdate',
                       payload: {
-                        addPolicies: [],
+                        addPolicies: [{
+                          policyName: result.title,
+                          policyText: result.text,
+                          status: 1,
+                        }],
                       },
                     });
                   }}

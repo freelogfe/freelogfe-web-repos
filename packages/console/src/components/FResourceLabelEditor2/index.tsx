@@ -7,13 +7,15 @@ import { FUtil } from '@freelog/tools-lib';
 
 interface FResourceLabelEditor2Props {
   value: string[];
+
+  onChange?(value: string[]): void;
 }
 
-function FResourceLabelEditor2({ value }: FResourceLabelEditor2Props) {
+function FResourceLabelEditor2({ value, onChange }: FResourceLabelEditor2Props) {
   const refDiv = React.useRef<HTMLDivElement>(null);
   const inputRef = React.useRef<InputRef>(null);
   const [$showInput, set$showInput, get$showInput] = FUtil.Hook.useGetState<boolean>(false);
-  const [$input, set$input] = FUtil.Hook.useGetState<string>('');
+  const [$input, set$input, get$input] = FUtil.Hook.useGetState<string>('');
 
   AHooks.useClickAway(() => {
     set$showInput(false);
@@ -50,6 +52,10 @@ function FResourceLabelEditor2({ value }: FResourceLabelEditor2Props) {
         placeholder={'输入标签后按回车添加'}
         onChange={(e) => {
           set$input(e.target.value);
+        }}
+        onPressEnter={() => {
+          onChange && onChange([...value, get$input()]);
+          set$input('');
         }}
       />)
     }

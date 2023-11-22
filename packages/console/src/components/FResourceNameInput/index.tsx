@@ -3,10 +3,13 @@ import styles from './index.less';
 import { Input, InputRef } from 'antd';
 
 interface FResourceNameInputProps {
+  userName: string;
   value: string;
+
+  onChange?(value: string): void;
 }
 
-function FResourceNameInput({value}: FResourceNameInputProps) {
+function FResourceNameInput({ userName, value, onChange }: FResourceNameInputProps) {
 
   const inputRef = React.useRef<InputRef>(null);
 
@@ -16,8 +19,15 @@ function FResourceNameInput({value}: FResourceNameInputProps) {
       inputRef.current?.focus();
     }}
   >
-    <label>freelog&nbsp;/&nbsp;</label>
-    <Input ref={inputRef} className={styles.input} value={value} />
+    <label>{userName}&nbsp;/&nbsp;</label>
+    <Input
+      ref={inputRef}
+      className={styles.input}
+      value={value}
+      onChange={(e) => {
+        onChange && onChange(e.target.value);
+      }}
+    />
   </div>);
 }
 

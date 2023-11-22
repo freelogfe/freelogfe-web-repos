@@ -50,13 +50,25 @@ interface CardProps {
       resourceName: string;
     }[];
   };
+
+  onChange?(value: CardProps['info']): void;
+
+  onDelete?(): void;
+
+  onAddPolicy?(): void;
 }
 
-function Card({order, info}: CardProps) {
+function Card({ order, info, onChange, onDelete, onAddPolicy }: CardProps) {
   return (<div className={styles.resourceContainer}>
     <div className={styles.resourceOrder}>
       <FComponentsLib.FContentText text={`资源${order}`} type={'highlight'} style={{ fontSize: 12 }} />
-      <FComponentsLib.FTextBtn style={{ fontSize: 12 }} type={'danger'}>
+      <FComponentsLib.FTextBtn
+        style={{ fontSize: 12 }}
+        type={'danger'}
+        onClick={() => {
+          onDelete && onDelete();
+        }}
+      >
         <FComponentsLib.FIcons.FDelete style={{ fontSize: 12 }} />
         &nbsp;删除
       </FComponentsLib.FTextBtn>
@@ -64,9 +76,14 @@ function Card({order, info}: CardProps) {
     <div style={{ height: 5 }} />
     <div className={styles.whiteCard}>
       <div className={styles.whiteCardLeft}>
-        <FCoverImage src={info.cover} width={240} style={{ display: 'block' }} />
+        <FCoverImage
+          src={info.cover}
+          width={240}
+          style={{ display: 'block' }}
+        />
         <div style={{ height: 10 }} />
-        <FComponentsLib.FTextBtn type={'primary'}>上传封面</FComponentsLib.FTextBtn>
+        <FComponentsLib.FTextBtn
+          type={'primary'}>上传封面</FComponentsLib.FTextBtn>
       </div>
       <div className={styles.whiteCardRight}>
         <div className={styles.whiteCardRightRow}>
@@ -76,7 +93,16 @@ function Card({order, info}: CardProps) {
         <div style={{ height: 15 }} />
         <div className={styles.whiteCardRightRow}>
           <FComponentsLib.FContentText text={'授权标识'} type={'negative'} />
-          <FResourceNameInput value={info.resourceName} />
+          <FResourceNameInput
+            userName={'freelog'}
+            value={info.resourceName}
+            onChange={(value) => {
+              onChange && onChange({
+                ...info,
+                resourceName: value,
+              });
+            }}
+          />
         </div>
         <div style={{ height: 15 }} />
 
@@ -91,26 +117,44 @@ function Card({order, info}: CardProps) {
               border: '1px solid #D4D4D4',
               width: 540,
             }}
+            onChange={(e) => {
+              onChange && onChange({
+                ...info,
+                resourceTitle: e.target.value,
+              });
+            }}
           />
         </div>
         <div style={{ height: 15 }} />
 
         <div className={styles.whiteCardRightRow}>
           <FComponentsLib.FContentText text={'资源标签'} type={'negative'} />
-          <FResourceLabelEditor2 value={info.resourceLabels} />
+          <FResourceLabelEditor2
+            value={info.resourceLabels}
+            onChange={(value) => {
+              onChange && onChange({
+                ...info,
+                resourceLabels: value,
+              });
+            }}
+          />
         </div>
         <div style={{ height: 15 }} />
 
         <div className={styles.whiteCardRightRow}>
           <FComponentsLib.FContentText text={'资源策略'} type={'negative'} />
           <div style={{ width: 540 }}>
-            <Space size={5}>
-              <FComponentsLib.FTextBtn onClick={() => {
-              }}><FComponentsLib.FIcons.FAdd /></FComponentsLib.FTextBtn>
-              <FComponentsLib.FTextBtn onClick={() => {
-              }}>添加策略</FComponentsLib.FTextBtn>
+            <Space
+              size={5}
+              onClick={() => {
+                onAddPolicy && onAddPolicy();
+              }}
+            >
+              <FComponentsLib.FTextBtn
+              ><FComponentsLib.FIcons.FAdd /></FComponentsLib.FTextBtn>
+              <FComponentsLib.FTextBtn
+              >添加策略</FComponentsLib.FTextBtn>
             </Space>
-
           </div>
         </div>
       </div>
