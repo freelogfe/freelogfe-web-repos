@@ -11,8 +11,6 @@ import Task from './Task';
 import * as AHooks from 'ahooks';
 import { Dispatch } from 'redux';
 import { ChangeAction } from '@/models/resourceCreatorBatchPage';
-import { generateResourceNames } from '../../../../../../@freelog/tools-lib/src/service-API/resources';
-import data from '@/utils/category';
 
 interface UploadFileProps {
   dispatch: Dispatch;
@@ -75,6 +73,7 @@ function UploadFile({ dispatch, resourceCreatorBatchPage }: UploadFileProps) {
             resourceLabels: [],
             resourcePolicies: [],
             showMore: false,
+            rawProperties: [],
             additionalProperties: [],
             customProperties: [],
             customConfigurations: [],

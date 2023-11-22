@@ -23,9 +23,17 @@ export type ResourceCreatorBatchPageState = {
       text: string;
     }[];
     showMore: boolean;
+    rawProperties: {
+      key: string;
+      name: string;
+      value: string;
+      description: string;
+    }[];
     additionalProperties: {
       key: string;
+      name: string;
       value: string;
+      description: string;
     }[];
     customProperties: {
       key: string;

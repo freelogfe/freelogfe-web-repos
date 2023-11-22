@@ -4,7 +4,7 @@ import { Space } from 'antd';
 import FComponentsLib from '@freelog/components-lib';
 import { connect } from 'dva';
 import { ConnectState, ResourceCreatorBatchPageState } from '@/models/connect';
-import Card from '@/pages/resource/creatorBatch/ResourceList/Card';
+import Card from './Card';
 
 interface ResourceListProps {
   resourceCreatorBatchPage: ResourceCreatorBatchPageState;
@@ -44,7 +44,10 @@ function ResourceList({ resourceCreatorBatchPage }: ResourceListProps) {
           resourceCreatorBatchPage.resourceListInfo.map((r, ri) => {
             return (<React.Fragment key={r.fileUID}>
               <div style={{ height: 40 }} />
-              <Card order={ri + 1} info={r} />
+              <Card
+                order={ri + 1}
+                info={r}
+              />
             </React.Fragment>);
           })
         }

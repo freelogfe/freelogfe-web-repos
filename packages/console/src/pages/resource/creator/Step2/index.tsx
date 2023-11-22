@@ -630,9 +630,7 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
 
         <div className={styles.block}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            {/*{FI18n.i18nNext.t('claim_rely_title')}*/}
             <FComponentsLib.FContentText text={FI18n.i18nNext.t('claim_rely_title')} type={'highlight'} />
-            {/*<FTooltip title={FI18n.i18nNext.t('resourceinfo_add_btn_info')}>*/}
             <FTooltip title={FI18n.i18nNext.t('info_versionrely')}>
               <div>
                 <FComponentsLib.FTextBtn
@@ -642,7 +640,6 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
                     const p = await getProcessor('resourceCreatorStep2');
                     const baseUpcastResources: Awaited<ReturnType<typeof p.getBaseUpcastResources>> = await p.getBaseUpcastResources();
                     await fAddDependencies({
-                      // resourceTypeCode: resourceVersionCreatorPage.resourceInfo?.resourceTypeCode || '',
                       existingResources: (await p.getAllTargets()).map((t) => {
                         return {
                           resourceID: t.id,
@@ -651,20 +648,11 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
                       }),
                       baseUpcastResources: baseUpcastResources,
                       async onSelect_Resource({ resourceID, resourceName }) {
-                        // console.log('8***********8sdflksdjlkj');
-                        // const p = await getProcessor('resourceCreatorStep2');
                         await p.addTargets([{
                           id: resourceID,
                           name: resourceName,
                           type: 'resource',
-                          // versionRange: '^0.1.0',
                         }]);
-                        // await dispatch<OnChange_DataIsDirty_Action>({
-                        //   type: 'resourceVersionCreatorPage/onChange_DataIsDirty',
-                        //   payload: {
-                        //     value: true,
-                        //   },
-                        // });
                       },
                       async onDeselect_Resource({ resourceID, resourceName }) {
                         // const p = await getProcessor('resourceCreatorStep2');
@@ -673,12 +661,6 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
                           name: resourceName,
                           type: 'resource',
                         });
-                        // await dispatch<OnChange_DataIsDirty_Action>({
-                        //   type: 'resourceVersionCreatorPage/onChange_DataIsDirty',
-                        //   payload: {
-                        //     value: true,
-                        //   },
-                        // });
                       },
                     });
                   }}
@@ -715,13 +697,6 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
                 resourceID={resourceCreatorPage.step1_createdResourceInfo?.resourceID || ''}
                 processorIdentifier={'resourceCreatorStep2'}
                 onChanged={() => {
-                  // dispatch<OnChange_DataIsDirty_Action>({
-                  //   type: 'resourceVersionCreatorPage/onChange_DataIsDirty',
-                  //   payload: {
-                  //     value: true,
-                  //   },
-                  // });
-                  // console.log('****** w0e98iofjsdlk ***((((((((');
                 }}
               />
             </div>
@@ -734,21 +709,15 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
 
       <div className={styles.btn}>
 
-        {/*{FI18n.i18nNext.t('rqr_step3_btn_later')}*/}
         <FComponentsLib.FTextBtn
           type={'default'}
           onClick={() => {
-            // history.push(FUtil.LinkTo.resourceVersion({
-            //   resourceID: resourceCreatorPage.step1_createdResourceInfo?.resourceID || '',
-            //   version: '1.0.0',
-            // }));
             history.push(FUtil.LinkTo.resourceVersionInfo({
               resourceID: resourceCreatorPage.step1_createdResourceInfo?.resourceID || '',
             }));
           }}
         >{FI18n.i18nNext.t('rqr_step2_btn_later')}</FComponentsLib.FTextBtn>
 
-        {/*{FI18n.i18nNext.t('rqr_step3_btn_next')}*/}
         <FComponentsLib.FRectBtn
           disabled={!resourceCreatorPage.step2_fileInfo}
           type={'primary'}
