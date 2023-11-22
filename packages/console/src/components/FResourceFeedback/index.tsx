@@ -4,12 +4,12 @@ import { Modal, Space } from 'antd';
 import FComponentsLib from '@freelog/components-lib';
 
 interface FResourceFeedbackProps {
-
+  show?: '' | 'operating';
 }
 
-function FResourceFeedback({}: FResourceFeedbackProps) {
+function FResourceFeedback({ show = '' }: FResourceFeedbackProps) {
   return (<Modal
-    open={true}
+    open={show !== ''}
     title={null}
     footer={null}
     closable={false}
@@ -27,10 +27,13 @@ function FResourceFeedback({}: FResourceFeedbackProps) {
       overflow: 'hidden',
     }}
   >
-    <Space size={10} className={styles.operating}>
-      <FComponentsLib.FIcons.FLoading style={{ fontSize: 16 }} />
-      <div>正在上架/下架</div>
-    </Space>
+    {
+      show === 'operating' && (<Space size={10} className={styles.operating}>
+        <FComponentsLib.FIcons.FLoading style={{ fontSize: 16 }} />
+        <div>正在上架/下架</div>
+      </Space>)
+    }
+
   </Modal>);
 }
 

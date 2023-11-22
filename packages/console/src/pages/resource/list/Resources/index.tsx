@@ -21,13 +21,14 @@ import styles from './index.less';
 import FResourceTypeFilter from '@/components/FResourceTypeFilter';
 import FComponentsLib from '@freelog/components-lib';
 import FMenu from '@/components/FMenu';
-import { Checkbox, Space } from 'antd';
+import { Checkbox, Modal, Space } from 'antd';
 import { history } from 'umi';
 import FResourceCard from '@/components/FResourceCard';
 import FListFooter from '@/components/FListFooter';
 import FResourceCard_AbleCheck from '@/components/FResourceCard_AbleCheck';
 import fPolicyBuilder from '@/components/fPolicyBuilder';
 import FResourceFeedback from '@/components/FResourceFeedback';
+import FCoverImage from '@/components/FCoverImage';
 
 interface ResourceProps {
   dispatch: Dispatch;
@@ -427,10 +428,102 @@ function Resources({ dispatch, resourceListPage }: ResourceProps) {
       </>)
     }
     <div style={{ height: 100 }} />
-    <FResourceFeedback />
+    <FResourceFeedback show={''} />
+
+    <ResultModal />
   </>);
 }
 
 export default connect(({ resourceListPage }: ConnectState) => ({
   resourceListPage: resourceListPage,
 }))(Resources);
+
+interface ResultModalProps {
+
+}
+
+function ResultModal({}: ResultModalProps) {
+  return (<Modal
+    open={true}
+    title={null}
+    footer={null}
+    centered={true}
+    width={800}
+    bodyStyle={{
+      padding: '50px 60px 40px',
+      borderRadius: 10,
+    }}
+    style={{
+      borderRadius: 10,
+      overflow: 'hidden',
+    }}
+  >
+    <div style={{
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: 20,
+      fontSize: 14,
+      fontWeight: 600,
+      color: '#42C28C',
+    }}>
+      <FComponentsLib.FIcons.FUpcast
+        style={{
+          fontSize: 76,
+          color: '#42C28C',
+        }}
+      />
+      <div>成功上架2个资源</div>
+    </div>
+    <div style={{ height: 50 }} />
+    <FComponentsLib.FContentText type={'negative'} text={'以下资源上架失败：'} />
+    <div style={{ height: 20 }} />
+    <div
+      style={{ maxHeight: 260, overflowY: 'auto', paddingRight: 10 }}
+    >
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          paddingBottom: 5,
+          borderBottom: '1px solid #E5E7EB',
+        }}>
+        <FComponentsLib.FContentText type={'negative'} text={'资源'} />
+        <FComponentsLib.FContentText type={'negative'} text={'资源上架失败原因'} />
+      </div>
+      {
+        [1, 2].map((v) => {
+          return (<div
+            key={v}
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              height: 78,
+              borderBottom: '1px solid #E5E7EB',
+            }}>
+            <Space size={10}>
+              <FCoverImage
+                src={''}
+                width={64}
+                style={{ borderRadius: 4 }}
+              />
+              <div>
+                <FComponentsLib.FContentText type={'highlight'} text={'kuazhang/蜻蜓照片01'} />
+                <div style={{ height: 10 }} />
+                <FComponentsLib.FContentText type={'additional2'} text={'jpg'} />
+              </div>
+            </Space>
+
+            <FComponentsLib.FContentText type={'additional2'} text={'无可用授权策略'} />
+          </div>);
+        })
+      }
+    </div>
+    <div style={{ height: 40 }} />
+    <div style={{ display: 'flex', justifyContent: 'center' }}>
+      <FComponentsLib.FRectBtn>知道了</FComponentsLib.FRectBtn>
+    </div>
+
+  </Modal>);
+}
