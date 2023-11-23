@@ -278,6 +278,7 @@ function Resources({ dispatch, resourceListPage }: ResourceProps) {
 
                 <FComponentsLib.FTextBtn
                   type={'primary'}
+                  disabled={resourceListPage.checkedResourceIDs.length === 0}
                   onClick={async () => {
                     const result = await fPolicyBuilder({ targetType: 'resource' });
                     if (!result) {
@@ -537,53 +538,56 @@ function ResultModal({ type, dataSource, onClose }: ResultModalProps) {
       onClose && onClose();
     }}
   >
-    <div style={{
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      gap: 20,
-      fontSize: 14,
-      fontWeight: 600,
-      color: '#42C28C',
-    }}>
-      {
-        type === 'online' && (<>
-          <FComponentsLib.FIcons.FUpcast
-            style={{
-              fontSize: 76,
-              color: '#42C28C',
-            }}
-          />
-          <div>成功上架{$succeedCount}个资源</div>
-        </>)
-      }
+    {
+      $succeedCount > 0 && (<div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: 20,
+        fontSize: 14,
+        fontWeight: 600,
+        color: '#42C28C',
+      }}>
+        {
+          type === 'online' && (<>
+            <FComponentsLib.FIcons.FUpcast
+              style={{
+                fontSize: 76,
+                color: '#42C28C',
+              }}
+            />
+            <div>成功上架{$succeedCount}个资源</div>
+          </>)
+        }
 
-      {
-        type === 'offline' && (<>
-          <FComponentsLib.FIcons.FUpcast
-            style={{
-              fontSize: 76,
-              color: '#42C28C',
-              transform: 'rotate(180deg)',
-            }}
-          />
-          <div>成功下架{$succeedCount}个资源</div>
-        </>)
-      }
+        {
+          type === 'offline' && (<>
+            <FComponentsLib.FIcons.FUpcast
+              style={{
+                fontSize: 76,
+                color: '#42C28C',
+                transform: 'rotate(180deg)',
+              }}
+            />
+            <div>成功下架{$succeedCount}个资源</div>
+          </>)
+        }
 
-      {
-        type === 'addPolicy' && (<>
-          <FComponentsLib.FIcons.FCheck
-            style={{
-              fontSize: 76,
-              color: '#42C28C',
-            }}
-          />
-          <div>新授权策略已经添加至{$succeedCount}个资源</div>
-        </>)
-      }
+        {
+          type === 'addPolicy' && (<>
+            <FComponentsLib.FIcons.FCheck
+              style={{
+                fontSize: 76,
+                color: '#42C28C',
+              }}
+            />
+            <div>新授权策略已经添加至{$succeedCount}个资源</div>
+          </>)
+        }
 
-    </div>
+      </div>)
+    }
+
 
     {
       $failedList.length > 0 && (<>
