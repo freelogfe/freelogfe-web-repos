@@ -364,7 +364,7 @@ const Model: ResourceListPageModelType = {
           };
         }
       } = yield call(FServiceAPI.Resource.batchUpdate, parmas);
-      console.log(data, 'asdfiojlkewjl;fkjsdlkfjlksdjlkj');
+      // console.log(data, 'asdfiojlkewjl;fkjsdlkfjlksdjlkj');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -410,7 +410,13 @@ const Model: ResourceListPageModelType = {
               return {
                 ...rl,
                 // ...(data[rl.id].data || {}),
-                // policy: data[rl.id].data.policy,
+                policy: data[rl.id].data.policies
+                  .filter((l: any) => {
+                    return l.status === 1;
+                  })
+                  .map((l: any) => {
+                    return l.policyName;
+                  }),
                 status: data[rl.id].data.status,
               };
             }
