@@ -441,9 +441,29 @@ const Model: StorageHomePageModelType = {
         resourceTypeCode: value.value,
         resourceTypeName: value.customInput,
       };
-      const { data } = yield call(FServiceAPI.Storage.batchUpdateObject, params);
-      console.log(data, ';DDFSdfksjdlkfjlsdjljl');
-
+      const { data }: {
+        data: {
+          [k: string]: {
+            data: any;
+            status: 1 | 2;
+          };
+        }
+      } = yield call(FServiceAPI.Storage.batchUpdateObject, params);
+      // console.log(data, ';DDFSdfksjdlkfjlsdjljl');
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          object_List: storageHomePage.object_List.map((rl) => {
+            if (data[rl.id] && data[rl.id].status === 1) {
+              return {
+                ...rl,
+                type: data[rl.id].data.resourceType,
+              };
+            }
+            return rl;
+          }),
+        },
+      });
     },
   },
   reducers: {

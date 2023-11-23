@@ -409,7 +409,9 @@ const Model: ResourceListPageModelType = {
             if (data[rl.id] && data[rl.id].status === 1) {
               return {
                 ...rl,
-                ...(data[rl.id].data || {}),
+                // ...(data[rl.id].data || {}),
+                // policy: data[rl.id].data.policy,
+                status: data[rl.id].data.status,
               };
             }
             return rl;
