@@ -11,6 +11,7 @@ import Task from './Task';
 import * as AHooks from 'ahooks';
 import { Dispatch } from 'redux';
 import { ChangeAction } from '@/models/resourceCreatorBatchPage';
+import { getFilesSha1Info } from '@/utils/service';
 
 interface UploadFileProps {
   dispatch: Dispatch;
@@ -57,6 +58,15 @@ function UploadFile({ dispatch, resourceCreatorBatchPage }: UploadFileProps) {
       }),
     });
     // console.log(data, '但是覅收到了 奥萨蒂哦附件 adsf 刘');
+
+    const result = await getFilesSha1Info({
+      sha1: get$successFiles().map((f) => {
+        return f.sha1;
+      }),
+      resourceTypeCode: resourceCreatorBatchPage.selectedResourceType?.value || '',
+    });
+
+    console.log(result, 'result s9difjlsdkjflkdsjlfkjdslkjflkdsjfljsdlkfjlksjdkfjlksdf');
 
     dispatch<ChangeAction>({
       type: 'resourceCreatorBatchPage/change',
