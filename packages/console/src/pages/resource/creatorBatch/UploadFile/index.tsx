@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import FComponentsLib from '@freelog/components-lib';
 import { connect } from 'dva';
-import { ConnectState, ResourceCreatorBatchPageState } from '@/models/connect';
+import { ConnectState, ResourceCreatorBatchPageState, ResourceVersionCreatorPageModelState } from '@/models/connect';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import { RcFile } from 'antd/lib/upload/interface';
 import fReadLocalFiles from '@/components/fReadLocalFiles';
@@ -59,7 +59,7 @@ function UploadFile({ dispatch, resourceCreatorBatchPage }: UploadFileProps) {
     });
     // console.log(data, '但是覅收到了 奥萨蒂哦附件 adsf 刘');
 
-    const result = await getFilesSha1Info({
+    const { result } = await getFilesSha1Info({
       sha1: get$successFiles().map((f) => {
         return f.sha1;
       }),
@@ -74,6 +74,9 @@ function UploadFile({ dispatch, resourceCreatorBatchPage }: UploadFileProps) {
         showPage: 'resourceList',
         resourceListInfo: get$successFiles().map((f) => {
           const name: string = data[f.name.replace(new RegExp(/\.[\w-]+$/), '')].resourceNewNames[0];
+          const successFile = result.find((file) => {
+            return f.sha1 === file.sha1;
+          });
           return {
             fileUID: f.uid,
             fileName: f.name,
@@ -84,8 +87,34 @@ function UploadFile({ dispatch, resourceCreatorBatchPage }: UploadFileProps) {
             resourceLabels: [],
             resourcePolicies: [],
             showMore: false,
-            rawProperties: [],
-            additionalProperties: [],
+            rawProperties: (successFile?.info || [])
+              .filter((i) => {
+                return i.insertMode === 1;
+              })
+              .map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((i) => {
+                return {
+                  key: i.key,
+                  name: i.name,
+                  value: i.valueDisplay,
+                  description: i.remark,
+                };
+              }),
+            additionalProperties: (successFile?.info || [])
+              .filter((i) => {
+                return i.insertMode === 2;
+              })
+              .map<ResourceVersionCreatorPageModelState['additionalProperties'][number]>((i) => {
+                // const item = data_draft?.draftData.additionalProperties?.find((ap) => {
+                //   return ap.key === i.key;
+                // }) || {};
+                return {
+                  key: i.key,
+                  name: i.name,
+                  value: i.valueDisplay,
+                  description: i.remark,
+                  // ...item,
+                };
+              }),
             customProperties: [],
             customConfigurations: [],
             directDependencies: [],
