@@ -3,13 +3,10 @@ import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription } from 'dva';
 import { ConnectState } from '@/models/connect';
 import moment from 'moment';
-import { RcFile } from 'antd/lib/upload/interface';
-import fMessage from '@/components/fMessage';
 import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 import { history } from 'umi';
 import { listStateAndListMore } from '@/components/FListFooter';
 import fResourceTypeInputDrawer from '@/components/fResourceTypeInputDrawer';
-import { batchUpdateObject } from '../../../@freelog/tools-lib/src/service-API/storages';
 
 export interface StorageHomePageModelState {
   bucketList: {
@@ -266,12 +263,8 @@ const Model: StorageHomePageModelType = {
       const { storageHomePage }: ConnectState = yield select(({ storageHomePage }: ConnectState) => ({
         storageHomePage,
       }));
-      // new RegExp(/\\|\/|:|\*|\?|"|<|>|\||@|#|\$/)
-      // console.log(payload.objectName.replace(, '_')
-      // console.log(payload.objectName, payload.objectName.replace(new RegExp(/\\|\/|:|\*|\?|"|<|>|\||@|#|\$|\s/, 'g'), '_'), '93wslidkjflksdjflksdjflsdkj');
       const params: Parameters<typeof FServiceAPI.Storage.createObject>[0] = {
         bucketName: storageHomePage.activatedBucket,
-        // .replace(new RegExp(/\\|\/|:|\*|\?|"|<|>|\||@|#|\$|\s/, 'g'), '_')
         objectName: payload.objectName,
         sha1: payload.sha1,
       };
@@ -333,8 +326,6 @@ const Model: StorageHomePageModelType = {
       } else if (payload === 'insert') {
         objectListData = (data?.dataList || []).map(transformTableData);
       }
-
-      // console.log(data, 'isjflksdjflksjdlk');
       const { state, more } = listStateAndListMore({
         list_Length: objectListData.length,
         total_Length: data.totalItem,
@@ -345,8 +336,6 @@ const Model: StorageHomePageModelType = {
         type: 'change',
         payload: {
           object_List: objectListData,
-          // object_ListState: 'loaded',
-          // object_ListMore: (data?.totalItem || 0) > objectListData.length ? 'andMore' : 'noMore',
           object_ListState: state,
           object_ListMore: more,
           total: data?.totalItem,
@@ -496,15 +485,6 @@ const Model: StorageHomePageModelType = {
 };
 
 export default Model;
-
-// async function getInfo(payload: RcFile[]): Promise<StorageHomePageModelState['uploadTaskQueue']> {
-//   return Promise.all(payload.map<Promise<StorageHomePageModelState['uploadTaskQueue'][number]>>(async (fo) => ({
-//     uid: fo.uid,
-//     name: fo.name.replace(/[\\|\/|:|\*|\?|"|<|>|\||\s|@|\$|#]/g, '_'),
-//     file: fo,
-//     state: 'loading',
-//   })));
-// }
 
 function transformTableData(i: any) {
   return {
