@@ -56,7 +56,8 @@ function UploadFile({ dispatch, resourceCreatorBatchPage }: UploadFileProps) {
         };
       }),
     });
-    console.log(data, '但是覅收到了 奥萨蒂哦附件 adsf 刘');
+    // console.log(data, '但是覅收到了 奥萨蒂哦附件 adsf 刘');
+
     dispatch<ChangeAction>({
       type: 'resourceCreatorBatchPage/change',
       payload: {
