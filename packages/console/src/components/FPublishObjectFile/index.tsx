@@ -13,7 +13,7 @@ import fReadLocalFiles from '@/components/fReadLocalFiles';
 import icons from './icons.png';
 // import FDropdownMenu from '@/components/FDropdownMenu';
 import * as AHooks from 'ahooks';
-import fileSha1Queue from '@/utils/FileSha1Queue';
+// import fileSha1Queue from '@/utils/FileSha1Queue';
 
 interface FPublishObjectFileProps {
   resourceType: {

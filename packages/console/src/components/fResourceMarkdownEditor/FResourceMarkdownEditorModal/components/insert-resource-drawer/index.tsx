@@ -14,7 +14,7 @@ import { ObjectItem } from '../object-item';
 import { ResourceCard } from '../resource-card';
 import { insertUrlResource } from '../../custom/dom/resource/utils';
 import { editorContext } from '../..';
-import fileSha1Queue from '@/utils/FileSha1Queue';
+// import fileSha1Queue from '@/utils/FileSha1Queue';
 
 const { Option } = Select;
 

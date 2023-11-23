@@ -14,7 +14,7 @@ import FComponentsLib from '@freelog/components-lib';
 import { comicToolContext } from '../..';
 import { errorMessage, getExt } from '../../utils/common';
 import { uncompressComicArchive } from '../../core/import-comic';
-import fileSha1Queue from '@/utils/FileSha1Queue';
+// import fileSha1Queue from '@/utils/FileSha1Queue';
 
 const { Option } = Select;
 

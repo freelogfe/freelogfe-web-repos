@@ -14,7 +14,7 @@ import FModal from '@/components/FModal';
 import FComponentsLib from '@freelog/components-lib';
 import { editorContext } from '../..';
 import { importDoc } from '../../custom/dom/resource/utils';
-import fileSha1Queue from '@/utils/FileSha1Queue';
+// import fileSha1Queue from '@/utils/FileSha1Queue';
 
 const { Option } = Select;
 

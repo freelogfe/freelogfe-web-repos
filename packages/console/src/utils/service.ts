@@ -42,7 +42,6 @@ export async function getFilesSha1Info({
   let allData: FileInfo[] = [];
 
   while (true) {
-    // console.log(needHandleSha1.join(','), 'needHandleSha1.join()90ojlskdfjsdlk')
     const { ret, errCode, data, msg }: {
       ret: number,
       errCode: number,
@@ -58,12 +57,7 @@ export async function getFilesSha1Info({
       resourceTypeCode: resourceTypeCode,
     });
 
-    // console.log(data, 'dataiosdjflksjdflk;jsdlkfjlksdjflksdjlkfj');
-
     if (ret !== 0 || errCode !== 0) {
-      // console.log({
-      //   ret, errCode, data, msg
-      // }, '09iowksdjaklfjs;oalijflskdjflsdkjflkj');
       return {
         error: msg,
         result: allData,
@@ -108,7 +102,6 @@ export async function getFilesSha1Info({
       break;
     }
     await FUtil.Tool.promiseSleep(delay);
-    // delay += 500;
   }
   return {
     error: '',
