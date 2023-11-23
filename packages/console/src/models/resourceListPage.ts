@@ -17,6 +17,13 @@ export interface ResourceListPageModelState {
 
   isBatchManagement: boolean;
   checkedResourceIDs: string[];
+  updateResourceResultType: '' | 'online' | 'offline' | 'addPolicy',
+  updateResourceResult: {
+    [k: string]: {
+      data: string;
+      status: 1 | 2;
+    };
+  } | null;
 
   resource_List: {
     id: string;
@@ -129,6 +136,8 @@ const initStates: ResourceListPageModelState = {
   inputText: '',
   isBatchManagement: false,
   checkedResourceIDs: [],
+  updateResourceResultType: '',
+  updateResourceResult: null,
   resource_List: [],
   resource_ListState: 'loading',
   resource_ListMore: 'loading',
@@ -349,6 +358,51 @@ const Model: ResourceListPageModelType = {
       };
       const { data } = yield call(FServiceAPI.Resource.batchUpdate, parmas);
       console.log(data, 'asdfiojlkewjl;fkjsdlkfjlksdjlkj');
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          updateResourceResult: data,
+        },
+      });
+
+      if (payload.addPolicies !== undefined) {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            updateResourceResultType: 'addPolicy',
+          },
+        });
+      } else if (payload.status === 1) {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            updateResourceResultType: 'online',
+          },
+        });
+      } else if (payload.status === 4) {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            updateResourceResultType: 'offline',
+          },
+        });
+      } else {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            updateResourceResultType: '',
+          },
+        });
+      }
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          resource_List: resourceListPage.resource_List.map((rl) => {
+            return rl;
+          }),
+        },
+      });
     },
   },
 

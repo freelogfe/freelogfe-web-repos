@@ -17,6 +17,7 @@ interface IResourceInfo {
   }[];
   resourceId: string;
   resourceName: string;
+  resourceTitle: string;
   resourceType: string[];
   resourceVersions: {
     createDate: string;

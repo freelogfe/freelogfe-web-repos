@@ -15,7 +15,7 @@ import { Dispatch } from 'redux';
 import { ConnectState } from '@/models/connect';
 import FNoDataTip from '@/components/FNoDataTip';
 import FLoadingTip from '@/components/FLoadingTip';
-import { FI18n, FUtil } from '@freelog/tools-lib';
+import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
 import * as AHooks from 'ahooks';
 import styles from './index.less';
 import FResourceTypeFilter from '@/components/FResourceTypeFilter';
@@ -430,7 +430,20 @@ function Resources({ dispatch, resourceListPage }: ResourceProps) {
     <div style={{ height: 100 }} />
     <FResourceFeedback show={''} />
 
-    <ResultModal />
+    <ResultModal
+      type={resourceListPage.updateResourceResultType}
+      dataSource={resourceListPage.updateResourceResult}
+      onClose={() => {
+        // set$batchUpdateFailedList(null);
+        dispatch<ChangeAction>({
+          type: 'resourceListPage/change',
+          payload: {
+            updateResourceResultType: '',
+            updateResourceResult: null,
+          },
+        });
+      }}
+    />
   </>);
 }
 
@@ -439,12 +452,75 @@ export default connect(({ resourceListPage }: ConnectState) => ({
 }))(Resources);
 
 interface ResultModalProps {
+  type: '' | 'online' | 'offline' | 'addPolicy';
+  dataSource: {
+    [k: string]: {
+      data: string;
+      status: 1 | 2;
+    };
+  } | null;
 
+  onClose?(): void;
 }
 
-function ResultModal({}: ResultModalProps) {
+function ResultModal({ type, dataSource, onClose }: ResultModalProps) {
+
+  const [$succeedCount, set$succeedCount, get$succeedCount] = FUtil.Hook.useGetState<number>(0);
+  const [$failedList, set$failedList, get$failedList] = FUtil.Hook.useGetState<{
+    cover: string;
+    resourceID: string;
+    resourceName: string;
+    resourceTitle: string;
+    resourceType: string;
+    failedReason: string;
+  }[]>([]);
+
+  AHooks.useDebounceEffect(() => {
+    handledData();
+  }, [dataSource], {
+    wait: 30,
+  });
+
+  async function handledData() {
+    if (!dataSource) {
+      set$succeedCount(0);
+      set$failedList([]);
+      return;
+    }
+    const succeedCount = Object.values(dataSource).filter((d) => {
+      return d.status === 1;
+    }).length;
+    set$succeedCount(succeedCount);
+    const failedResourceIDs: string[] = Object.entries(dataSource)
+      .filter((d) => {
+        return d[1].status === 2;
+      })
+      .map((d) => {
+        return d[0];
+      });
+    if (failedResourceIDs.length > 0) {
+      const { data } = await FServiceAPI.Resource.batchInfo({
+        resourceIds: failedResourceIDs.join(','),
+      });
+      // console.log(data, 'data sdifjalskdjflsdjlkfjlksdjlkj');
+
+      set$failedList(data.map((d) => {
+        return {
+          cover: d.coverImages[0],
+          resourceID: d.resourceId,
+          resourceName: d.resourceName,
+          resourceTitle: d.resourceTitle,
+          resourceType: d.resourceType.join('/'),
+          failedReason: dataSource[d.resourceId].data,
+        };
+      }));
+    }
+
+
+  }
+
   return (<Modal
-    open={true}
+    open={type !== '' && !!dataSource}
     title={null}
     footer={null}
     centered={true}
@@ -457,6 +533,9 @@ function ResultModal({}: ResultModalProps) {
       borderRadius: 10,
       overflow: 'hidden',
     }}
+    onCancel={() => {
+      onClose && onClose();
+    }}
   >
     <div style={{
       display: 'flex',
@@ -467,62 +546,124 @@ function ResultModal({}: ResultModalProps) {
       fontWeight: 600,
       color: '#42C28C',
     }}>
-      <FComponentsLib.FIcons.FUpcast
-        style={{
-          fontSize: 76,
-          color: '#42C28C',
-        }}
-      />
-      <div>成功上架2个资源</div>
-    </div>
-    <div style={{ height: 50 }} />
-    <FComponentsLib.FContentText type={'negative'} text={'以下资源上架失败：'} />
-    <div style={{ height: 20 }} />
-    <div
-      style={{ maxHeight: 260, overflowY: 'auto', paddingRight: 10 }}
-    >
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          paddingBottom: 5,
-          borderBottom: '1px solid #E5E7EB',
-        }}>
-        <FComponentsLib.FContentText type={'negative'} text={'资源'} />
-        <FComponentsLib.FContentText type={'negative'} text={'资源上架失败原因'} />
-      </div>
       {
-        [1, 2].map((v) => {
-          return (<div
-            key={v}
+        type === 'online' && (<>
+          <FComponentsLib.FIcons.FUpcast
+            style={{
+              fontSize: 76,
+              color: '#42C28C',
+            }}
+          />
+          <div>成功上架{$succeedCount}个资源</div>
+        </>)
+      }
+
+      {
+        type === 'offline' && (<>
+          <FComponentsLib.FIcons.FUpcast
+            style={{
+              fontSize: 76,
+              color: '#42C28C',
+              transform: 'rotate(180deg)',
+            }}
+          />
+          <div>成功下架{$succeedCount}个资源</div>
+        </>)
+      }
+
+      {
+        type === 'addPolicy' && (<>
+          <FComponentsLib.FIcons.FCheck
+            style={{
+              fontSize: 76,
+              color: '#42C28C',
+            }}
+          />
+          <div>新授权策略已经添加至{$succeedCount}个资源</div>
+        </>)
+      }
+
+    </div>
+
+    {
+      $failedList.length > 0 && (<>
+        <div style={{ height: 50 }} />
+        {
+          type === 'online' && (<FComponentsLib.FContentText type={'negative'} text={'以下资源上架失败：'} />)
+        }
+
+        {
+          type === 'offline' && (<FComponentsLib.FContentText type={'negative'} text={'以下资源下架失败：'} />)
+        }
+
+        {
+          type === 'addPolicy' && (<FComponentsLib.FContentText type={'negative'} text={'以下资源因授权策略重复或重命名无法添加：'} />)
+        }
+
+        <div style={{ height: 20 }} />
+        <div
+          style={{ maxHeight: 260, overflowY: 'auto', paddingRight: 10 }}
+        >
+          <div
             style={{
               display: 'flex',
               justifyContent: 'space-between',
-              alignItems: 'center',
-              height: 78,
+              paddingBottom: 5,
               borderBottom: '1px solid #E5E7EB',
             }}>
-            <Space size={10}>
-              <FCoverImage
-                src={''}
-                width={64}
-                style={{ borderRadius: 4 }}
-              />
-              <div>
-                <FComponentsLib.FContentText type={'highlight'} text={'kuazhang/蜻蜓照片01'} />
-                <div style={{ height: 10 }} />
-                <FComponentsLib.FContentText type={'additional2'} text={'jpg'} />
-              </div>
-            </Space>
+            <FComponentsLib.FContentText type={'negative'} text={'资源'} />
+            {
+              type === 'online' && (<FComponentsLib.FContentText type={'negative'} text={'资源上架失败原因'} />)
+            }
 
-            <FComponentsLib.FContentText type={'additional2'} text={'无可用授权策略'} />
-          </div>);
-        })
-      }
-    </div>
+            {
+              type === 'offline' && (<FComponentsLib.FContentText type={'negative'} text={'资源下架失败原因'} />)
+            }
+
+            {
+              type === 'addPolicy' && (<FComponentsLib.FContentText type={'negative'} text={'添加策略失败原因'} />)
+            }
+
+          </div>
+          {
+            $failedList.map((v) => {
+              return (<div
+                key={v.resourceID}
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  height: 78,
+                  borderBottom: '1px solid #E5E7EB',
+                }}>
+                <Space size={10}>
+                  <FCoverImage
+                    src={v.cover}
+                    width={64}
+                    style={{ borderRadius: 4 }}
+                  />
+                  <div>
+                    <FComponentsLib.FContentText type={'highlight'} text={v.resourceTitle || v.resourceName} />
+                    <div style={{ height: 10 }} />
+                    <FComponentsLib.FContentText type={'additional2'} text={v.resourceType} />
+                  </div>
+                </Space>
+
+                <FComponentsLib.FContentText type={'additional2'} text={v.failedReason} />
+              </div>);
+            })
+          }
+        </div>
+      </>)
+    }
+
     <div style={{ height: 40 }} />
     <div style={{ display: 'flex', justifyContent: 'center' }}>
-      <FComponentsLib.FRectBtn>知道了</FComponentsLib.FRectBtn>
+      <FComponentsLib.FRectBtn
+        onClick={() => {
+          onClose && onClose();
+        }}
+      >知道了</FComponentsLib.FRectBtn>
     </div>
 
   </Modal>);
