@@ -57,7 +57,6 @@ function UploadFile({ dispatch, resourceCreatorBatchPage }: UploadFileProps) {
         };
       }),
     });
-    // console.log(data, '但是覅收到了 奥萨蒂哦附件 adsf 刘');
 
     const { result } = await getFilesSha1Info({
       sha1: get$successFiles().map((f) => {
@@ -66,7 +65,7 @@ function UploadFile({ dispatch, resourceCreatorBatchPage }: UploadFileProps) {
       resourceTypeCode: resourceCreatorBatchPage.selectedResourceType?.value || '',
     });
 
-    console.log(result, 'result s9difjlsdkjflkdsjlfkjdslkjflkdsjfljsdlkfjlksjdkfjlksdf');
+    // console.log(result, 'result s9difjlsdkjflkdsjlfkjdslkjflkdsjfljsdlkfjlksjdkfjlksdf');
 
     dispatch<ChangeAction>({
       type: 'resourceCreatorBatchPage/change',
@@ -104,15 +103,11 @@ function UploadFile({ dispatch, resourceCreatorBatchPage }: UploadFileProps) {
                 return i.insertMode === 2;
               })
               .map<ResourceVersionCreatorPageModelState['additionalProperties'][number]>((i) => {
-                // const item = data_draft?.draftData.additionalProperties?.find((ap) => {
-                //   return ap.key === i.key;
-                // }) || {};
                 return {
                   key: i.key,
                   name: i.name,
                   value: i.valueDisplay,
                   description: i.remark,
-                  // ...item,
                 };
               }),
             customProperties: [],
