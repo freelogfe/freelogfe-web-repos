@@ -356,7 +356,14 @@ const Model: ResourceListPageModelType = {
         resourceIds: resourceListPage.checkedResourceIDs,
         ...payload,
       };
-      const { data } = yield call(FServiceAPI.Resource.batchUpdate, parmas);
+      const { data }: {
+        data: {
+          [k: string]: {
+            data: any;
+            status: 1 | 2;
+          };
+        }
+      } = yield call(FServiceAPI.Resource.batchUpdate, parmas);
       console.log(data, 'asdfiojlkewjl;fkjsdlkfjlksdjlkj');
       yield put<ChangeAction>({
         type: 'change',
@@ -399,6 +406,12 @@ const Model: ResourceListPageModelType = {
         type: 'change',
         payload: {
           resource_List: resourceListPage.resource_List.map((rl) => {
+            if (data[rl.id] && data[rl.id].status === 1) {
+              return {
+                ...rl,
+                ...(data[rl.id].data || {}),
+              };
+            }
             return rl;
           }),
         },
