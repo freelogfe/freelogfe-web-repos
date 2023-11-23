@@ -11,9 +11,6 @@ import fResourcePropertyEditor from '@/components/fResourcePropertyEditor';
 import FResourceProperties from '@/components/FResourceProperties';
 import fResourceOptionEditor from '@/components/fResourceOptionEditor';
 import FResourceOptions from '@/components/FResourceOptions';
-// import fResourceOptionEditor from '@/components/fResourceOptionEditor';
-// import { OnChange_step2_customConfigurations_Action } from '@/models/resourceCreatorPage';
-// import FResourceOptions from '@/components/FResourceOptions';
 
 interface CardProps {
   order: number;
