@@ -45,8 +45,18 @@ function ResourceList({ resourceCreatorBatchPage }: ResourceListProps) {
             return (<React.Fragment key={r.fileUID}>
               <div style={{ height: 40 }} />
               <Card
+                resourceType={resourceCreatorBatchPage.selectedResourceType?.labels || []}
                 order={ri + 1}
                 info={r}
+                onChange={(value) => {
+
+                }}
+                onDelete={() => {
+
+                }}
+                onAddPolicy={() => {
+
+                }}
               />
             </React.Fragment>);
           })

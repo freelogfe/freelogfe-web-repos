@@ -9,9 +9,15 @@ import { FI18n, FUtil } from '@freelog/tools-lib';
 import FTooltip from '@/components/FTooltip';
 import fResourcePropertyEditor from '@/components/fResourcePropertyEditor';
 import FResourceProperties from '@/components/FResourceProperties';
+import fResourceOptionEditor from '@/components/fResourceOptionEditor';
+import FResourceOptions from '@/components/FResourceOptions';
+// import fResourceOptionEditor from '@/components/fResourceOptionEditor';
+// import { OnChange_step2_customConfigurations_Action } from '@/models/resourceCreatorPage';
+// import FResourceOptions from '@/components/FResourceOptions';
 
 interface CardProps {
   order: number;
+  resourceType: string[];
   info: {
     fileUID: string;
     fileName: string;
@@ -70,7 +76,7 @@ interface CardProps {
   onAddPolicy?(): void;
 }
 
-function Card({ order, info, onChange, onDelete, onAddPolicy }: CardProps) {
+function Card({ order, info, resourceType, onChange, onDelete, onAddPolicy }: CardProps) {
 
   const [$showMore, set$showMore, get$showMore] = FUtil.Hook.useGetState<boolean>(false);
 
@@ -340,8 +346,158 @@ function Card({ order, info, onChange, onDelete, onAddPolicy }: CardProps) {
             }}
           />
         </div>
+
+        {
+          (resourceType.includes('插件') || resourceType.includes('主题'))
+          && (<>
+            <div style={{ height: 5 }} />
+            <div className={styles.block}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <FComponentsLib.FContentText text={FI18n.i18nNext.t('resourceoptions_title')} type={'highlight'} />
+                {
+                  info.customConfigurations.length < 30 && (
+                    // <FTooltip title={FI18n.i18nNext.t('resourceinfo_add_btn_info')}>
+                    <FTooltip title={FI18n.i18nNext.t('info_versionoptions')}>
+                      <div>
+                        <FComponentsLib.FTextBtn
+                          style={{ fontSize: 12, display: 'flex', alignItems: 'center', gap: 5 }}
+                          type='primary'
+                          onClick={async () => {
+                            const dataSource: {
+                              key: string;
+                              name: string;
+                              type: 'input' | 'select';
+                              input: string;
+                              select: string[];
+                              description: string;
+                            } | null = await fResourceOptionEditor({
+                              disabledKeys: [
+                                ...info.rawProperties.map<string>((rp) => rp.key),
+                                ...info.additionalProperties.map<string>((rp) => rp.key),
+                                ...info.customProperties.map<string>((bp) => bp.key),
+                                ...info.customConfigurations.map<string>((pp) => pp.key),
+                              ],
+                              disabledNames: [
+                                ...info.rawProperties.map<string>((rp) => rp.name),
+                                ...info.additionalProperties.map<string>((rp) => rp.name),
+                                ...info.customProperties.map<string>((bp) => bp.name),
+                                ...info.customConfigurations.map<string>((pp) => pp.name),
+                              ],
+                            });
+
+                            if (!dataSource) {
+                              return;
+                            }
+
+                            //   await dispatch<OnChange_step2_customConfigurations_Action>({
+                            //   type: 'resourceCreatorPage/onChange_step2_customConfigurations',
+                            //   payload: {
+                            //   value: [
+                            //   ...info.customConfigurations,
+                            //   dataSource,
+                            //   ],
+                            // },
+                            // });
+                          }}
+                        >
+                          <FComponentsLib.FIcons.FConfiguration style={{ fontSize: 14 }} />
+                          <span>{FI18n.i18nNext.t('resourceoptions_add_btn')}</span>
+                        </FComponentsLib.FTextBtn>
+                      </div>
+                    </FTooltip>)
+                }
+
+              </div>
+
+              {
+                info.customConfigurations.length === 0 && (<>
+                  <div style={{ height: 10 }} />
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    {/*<span>{FI18n.i18nNext.t('resourceoptions_list_empty')}</span>*/}
+                    <FComponentsLib.FContentText
+                      text={FI18n.i18nNext.t('resourceoptions_list_empty')}
+                      type={'additional2'}
+                    />
+                  </div>
+                  <div style={{ height: 20 }} />
+                </>)
+              }
+
+              {
+                info.customConfigurations.length > 0 && (<>
+                  <div style={{ height: 20 }} />
+                  <FResourceOptions
+                    theme={'dark'}
+                    // dataSource={resourceVersionCreatorPage.customOptionsData}
+                    dataSource={info.customConfigurations}
+                    onEdit={async (value) => {
+                      const index: number = info.customConfigurations.findIndex((p) => {
+                        return p === value;
+                      });
+
+                      const dataSource: {
+                        key: string;
+                        name: string;
+                        type: 'input' | 'select';
+                        input: string;
+                        select: string[];
+                        description: string;
+                      } | null = await fResourceOptionEditor({
+                        disabledKeys: [
+                          ...info.rawProperties.map<string>((rp) => rp.key),
+                          ...info.additionalProperties.map<string>((rp) => rp.key),
+                          ...info.customProperties.map<string>((bp) => bp.key),
+                          ...info.customConfigurations.map<string>((pp) => pp.key),
+                        ],
+                        disabledNames: [
+                          ...info.rawProperties.map<string>((rp) => rp.name),
+                          ...info.additionalProperties.map<string>((rp) => rp.name),
+                          ...info.customProperties.map<string>((bp) => bp.name),
+                          ...info.customConfigurations.map<string>((pp) => pp.name),
+                        ],
+                        defaultData: value,
+                      });
+
+                      if (!dataSource) {
+                        return;
+                      }
+
+                      //   await dispatch<OnChange_step2_customConfigurations_Action>({
+                      //   type: 'resourceCreatorPage/onChange_step2_customConfigurations',
+                      //   payload: {
+                      //   value: resourceCreatorPage.step2_customConfigurations.map((a, b) => {
+                      //   if (b !== index) {
+                      //   return a;
+                      // }
+                      //   return dataSource;
+                      // }),
+                      // },
+                      // });
+                    }}
+                    onDelete={async (value) => {
+                      //   await dispatch<OnChange_step2_customConfigurations_Action>({
+                      //   type: 'resourceCreatorPage/onChange_step2_customConfigurations',
+                      //   payload: {
+                      //   value: resourceCreatorPage.step2_customConfigurations.filter((a) => {
+                      //   return a.key !== value.key && a.name !== value.name;
+                      // }),
+                      // },
+                      // });
+                    }}
+                  />
+                </>)
+              }
+
+            </div>
+
+
+          </>)
+        }
+        {/*<div style={{ height: 5 }} />*/}
       </>)
     }
+
+      {/*<div style={{height: 5}}/>*/}
 
 
   </div>);

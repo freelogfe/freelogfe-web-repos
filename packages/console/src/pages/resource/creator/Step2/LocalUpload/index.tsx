@@ -11,8 +11,6 @@ import FTable from '@/components/FTable';
 import * as AHooks from 'ahooks';
 import { Progress } from 'antd';
 
-// import fileSha1Queue from '@/utils/FileSha1Queue';
-
 interface LocalUploadProps {
   resourceTypeCode: string;
   resourceType: string[];
