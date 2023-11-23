@@ -407,15 +407,22 @@ const Model: StorageHomePageModelType = {
         objectIds: storageHomePage.checkedObjectIDs.join(','),
       };
       yield call(FServiceAPI.Storage.deleteObjects, params);
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          object_List: storageHomePage.object_List.filter((ol) => {
-            return !storageHomePage.checkedObjectIDs.includes(ol.id);
-          }),
-          total: storageHomePage.total - storageHomePage.checkedObjectIDs.length,
-        },
-      });
+      if (storageHomePage.object_List.length - storageHomePage.checkedObjectIDs.length > 0) {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            object_List: storageHomePage.object_List.filter((ol) => {
+              return !storageHomePage.checkedObjectIDs.includes(ol.id);
+            }),
+            total: storageHomePage.total - storageHomePage.checkedObjectIDs.length,
+          },
+        });
+      } else {
+        yield put<FetchObjectsAction>({
+          type: 'fetchObjects',
+        });
+      }
+
       yield put<FetchSpaceStatisticAction>({
         type: 'fetchSpaceStatistic',
       });
