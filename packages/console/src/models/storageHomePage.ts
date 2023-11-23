@@ -312,8 +312,6 @@ const Model: StorageHomePageModelType = {
         },
       });
       const { data } = yield call(FServiceAPI.Storage.objectList, params);
-      // console.log(data, 'data!@#$!@#$@!#!@#@!#$33333');
-
       let objectListData: StorageHomePageModelState['object_List'] = [];
 
       if (payload === 'restart') {
