@@ -15,6 +15,9 @@ import FResourceAuthorizationProcessor, { getProcessor } from '@/components/FRes
 import fAddDependencies from '@/components/fAddDependencies';
 import * as AHooks from 'ahooks';
 import FResourceAuthorizationProcessor_Simple, { getProcessor_simple } from '@/components/FResourceAuthorizationProcessor_Simple';
+import { OnChange_step4_resourceCover_Action } from '@/models/resourceCreatorPage';
+import fMessage from '@/components/fMessage';
+import FUploadCover from '@/components/FUploadCover';
 
 interface CardProps {
   order: number;
@@ -105,8 +108,26 @@ function Card({ order, info, resourceType, onChange, onDelete, onAddPolicy }: Ca
           style={{ display: 'block' }}
         />
         <div style={{ height: 10 }} />
-        <FComponentsLib.FTextBtn
-          type={'primary'}>上传封面</FComponentsLib.FTextBtn>
+        <FUploadCover
+          onUploadSuccess={(url) => {
+            // dispatch<OnChange_step4_resourceCover_Action>({
+            //   type: 'resourceCreatorPage/onChange_step4_resourceCover',
+            //   payload: {
+            //     value: url,
+            //   },
+            // });
+            onChange && onChange({
+              ...info,
+              cover: url,
+            });
+          }}
+          onError={(err) => {
+            fMessage(err, 'error');
+          }}
+        >
+          <FComponentsLib.FTextBtn
+            type={'primary'}>上传封面</FComponentsLib.FTextBtn>
+        </FUploadCover>
       </div>
       <div className={styles.whiteCardRight}>
         <div className={styles.whiteCardRightRow}>
