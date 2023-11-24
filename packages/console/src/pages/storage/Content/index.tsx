@@ -27,13 +27,6 @@ import FComponentsLib from '@freelog/components-lib';
 import fReadLocalFiles from '@/components/fReadLocalFiles';
 import FStorageUploadTasksPanel, { getStorageUploadTasksPanel } from '@/components/FStorageUploadTasksPanel';
 import * as AHooks from 'ahooks';
-import FDrawer from '@/components/FDrawer';
-import FUploadCover from '@/components/FUploadCover';
-import { OnChange_Cover_Action } from '@/models/resourceInfoPage';
-import fMessage from '@/components/fMessage';
-import FCoverImage from '@/components/FCoverImage';
-import FResourceTypeInput from '@/components/FResourceTypeInput';
-import fResourceTypeInputDrawer from '@/components/fResourceTypeInputDrawer';
 
 interface ContentProps {
   dispatch: Dispatch;
@@ -307,8 +300,6 @@ function Content({ storageHomePage, dispatch }: ContentProps) {
             }}
           />
         </div>
-
-
       </>)
     }
 
@@ -359,7 +350,6 @@ function ToolsBar({
                   }: ToolsBarProps) {
   return (<Space
     className={styles.toolBar}
-    // style={{visibility: hoverRecord?.key !== record?.key ? 'visibility' : 'inherit'} as CSSProperties}
     size={25}>
     {
       showEdit && (<FTooltip title={FI18n.i18nNext.t('tip_edit_object')}>
