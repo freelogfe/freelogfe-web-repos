@@ -12,6 +12,8 @@ import * as AHooks from 'ahooks';
 import { Dispatch } from 'redux';
 import { ChangeAction } from '@/models/resourceCreatorBatchPage';
 import { getFilesSha1Info } from '@/utils/service';
+import fObjectSelectorDrawer from '@/components/fObjectSelectorDrawer';
+import fObjectsSelectorDrawer from '@/components/fObjectsSelectorDrawer';
 
 interface UploadFileProps {
   dispatch: Dispatch;
@@ -176,6 +178,14 @@ function UploadFile({ dispatch, resourceCreatorBatchPage }: UploadFileProps) {
         <div style={{ height: 40 }} />
         <FComponentsLib.FRectBtn
           type={'primary'}
+          onClick={async () => {
+            const obj = await fObjectsSelectorDrawer({
+              resourceTypeCode: resourceCreatorBatchPage.selectedResourceType?.value || '',
+            });
+            if (!obj) {
+              return;
+            }
+          }}
         >存储空间导入</FComponentsLib.FRectBtn>
       </div>
     </div>
