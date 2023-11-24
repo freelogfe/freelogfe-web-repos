@@ -107,13 +107,42 @@ function ResourceList({ dispatch, resourceCreatorBatchPage }: ResourceListProps)
                   //   okText: '是，应用于所有资源',
                   // });
                   if (confirm) {
-
+                    dispatch<ChangeAction>({
+                      type: 'resourceCreatorBatchPage/change',
+                      payload: {
+                        resourceListInfo: resourceCreatorBatchPage.resourceListInfo.map((rli) => {
+                          // if (r.fileUID !== rli.fileUID) {
+                          //   return rli;
+                          // }
+                          if (rli.resourcePolicies.some((p) => {
+                            return p.text === result.text || p.title === result.title;
+                          })) {
+                            return rli;
+                          }
+                          return {
+                            ...rli,
+                            resourcePolicies: [
+                              ...rli.resourcePolicies,
+                              {
+                                title: result.title,
+                                text: result.text,
+                              },
+                            ],
+                          };
+                        }),
+                      },
+                    });
                   } else {
                     dispatch<ChangeAction>({
                       type: 'resourceCreatorBatchPage/change',
                       payload: {
                         resourceListInfo: resourceCreatorBatchPage.resourceListInfo.map((rli) => {
                           if (r.fileUID !== rli.fileUID) {
+                            return rli;
+                          }
+                          if (rli.resourcePolicies.some((p) => {
+                            return p.text === result.text || p.title === result.title;
+                          })) {
                             return rli;
                           }
                           return {
