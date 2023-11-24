@@ -108,16 +108,12 @@ function FResourceAuthorizationProcessor({
                                            onChanged,
                                          }: FResourceAuthorizationProcessorProps) {
 
-  // const addingTargetsRef = React.useRef<Target[]>([]);
-
   const [licenseeResource, set_licenseeResource, get_licenseeResource] = useGetState<FResourceAuthorizationProcessorStates['licenseeResource']>(initStates['licenseeResource']);
   const [relations, set_relations, get_relations] = useGetState<FResourceAuthorizationProcessorStates['relations']>(initStates['relations']);
   const [targetInfos, set_targetInfos, get_targetInfos] = useGetState<FResourceAuthorizationProcessorStates['targetInfos']>(initStates['targetInfos']);
   const [activatedTarget, set_activatedTarget, get_activatedTarget] = useGetState<FResourceAuthorizationProcessorStates['activatedTarget']>(initStates['activatedTarget']);
   const [baseUpcastResources, set_baseUpcastResources, get_baseUpcastResources] = useGetState<FResourceAuthorizationProcessorStates['baseUpcastResources']>(initStates['baseUpcastResources']);
   const [targetInfos_CheckedPolicies, set_targetInfos_CheckedPolicies, get_targetInfos_CheckedPolicies] = useGetState<FResourceAuthorizationProcessorStates['targetInfos_CheckedPolicies']>(initStates['targetInfos_CheckedPolicies']);
-
-  // console.log(relations, targetInfos, '###################### targetInfos_SelectedPoliciesisdjflkjsdlfjlj');
 
   AHooks.useAsyncEffect(async () => {
     if (resourceID !== '') {
@@ -134,7 +130,6 @@ function FResourceAuthorizationProcessor({
       } = await FServiceAPI.Resource.info({
         resourceIdOrName: resourceID,
       });
-      // console.log(data_resource, 'data_resource asoidflsdkfjlsdkfjsdfsd');
       set_licenseeResource({
         resourceID: data_resource.resourceId,
         resourceName: data_resource.resourceName,
@@ -225,8 +220,6 @@ function FResourceAuthorizationProcessor({
       resourceIds: needAddResourceIDs.join(','),
       isLoadPolicyInfo: 1,
       isLoadLatestVersionInfo: 1,
-      // projection: 'resourceId,resourceName,resourceType,latestVersion,status,policies,resourceVersions,userId',
-      // isLoadFreezeReason: 1,
       isTranslate: 1,
     };
 
@@ -307,13 +300,6 @@ function FResourceAuthorizationProcessor({
       });
 
     let targetInfos: FResourceAuthorizationProcessorStates['targetInfos'] = [];
-    // let targetInfos = get_targetInfos()
-    //   .filter((t) => {
-    //     if (t.targetType === 'resource') {
-    //       return relationResourceIDs.includes(t.targetID);
-    //     }
-    //     return relationObjectIDs.includes(t.targetID);
-    //   });
 
     const existentResourceIDs: string[] = targetInfos
       .filter((t) => {
@@ -350,13 +336,6 @@ function FResourceAuthorizationProcessor({
             versionRange: r.versionRange,
           };
         }),
-        // upcastResourceIDs: get_targetInfos()
-        //   .filter((t) => {
-        //     return t.upThrow;
-        //   })
-        //   .map((t) => {
-        //     return t.targetID;
-        //   }),
       });
       targetInfos = [
         ...resourceTargetInfos,
@@ -366,7 +345,6 @@ function FResourceAuthorizationProcessor({
 
 
     if (needAddObjectIDs.length > 0) {
-      // console.log(needAddObjectIDs, 'needAddObjectIDsdsoijfsdklfjdslkj');
       const { data: data_objs }: {
         data: {
           bucketId: string;
@@ -378,8 +356,6 @@ function FResourceAuthorizationProcessor({
       } = await FServiceAPI.Storage.batchObjectList({
         objectIds: needAddObjectIDs.join(','),
       });
-      // console.log(data_objs, 'data_objsisoedjflskdjfl');
-
       const objTargetInfos: FResourceAuthorizationProcessorStates['targetInfos'] = data_objs.map((o) => {
         return {
           targetID: o.objectId,
@@ -434,13 +410,10 @@ function FResourceAuthorizationProcessor({
   }
 
   function _syncActivatedTarget() {
-    // console.log(get_relations(), '_syncActivatedTarget sdf _syncActivatedTarget sdifojsldkjl');
-    // console.log(get_targetInfos(), 'get_targetInfos sdf get_targetInfos sdifojsldkjl');
     if (get_relations().length === 0) {
       set_activatedTarget(null);
     } else {
       const at = get_activatedTarget();
-      // console.log(at, 'at sdfijsodkjflk at sdifojlkjlk');
       if (!at) {
         set_activatedTarget(get_relations()[0]);
       } else if (!get_targetInfos().some((t) => {
@@ -456,9 +429,7 @@ function FResourceAuthorizationProcessor({
       return !(r.id === target.id && r.name === target.name && r.type === target.type);
     });
     set_relations(result);
-    // console.log('@@@@@@@@@ 111111111 9023ujrfsdlkfjl');
     await _syncTargetInfo();
-    // console.log(get_relations(), get_targetInfos(), '@@@@@@@@@ 222222222 0923ulksdjlfjl');
     await _syncActivatedTarget();
     return { err: '' };
   }
@@ -540,7 +511,6 @@ function FResourceAuthorizationProcessor({
   }
 
   async function setBaseUpcastResources(value: IBaseUpcastResource[]): Promise<{ err: string }> {
-    // console.log(value, 'valueiosdjflksdjflksdjflkj==========================');
     if (get_licenseeResource()?.latestVersion !== '') {
       return { err: '非首个版本，基础上抛无法修改' };
     }
@@ -746,9 +716,6 @@ async function _batchHandleResources({
   const params: Parameters<typeof FServiceAPI.Resource.batchInfo>[0] = {
     resourceIds: licensorResourceIDs.join(','),
     isLoadPolicyInfo: 1,
-    // isLoadLatestVersionInfo: 1,
-    // projection: 'resourceId,resourceName,resourceType,latestVersion,status,policies,resourceVersions,userId',
-    // isLoadFreezeReason: 1,
     isTranslate: 1,
   };
 
@@ -767,9 +734,6 @@ async function _batchHandleResources({
     }[];
   } = await FServiceAPI.Resource.batchInfo(params) as any;
 
-  // console.log(data_batchResourceInfo, 'data_batchResourceInfoiosjflkdjfl');
-  // console.log(resourceID, 'resourceIDoiidddddd');
-
   const params1: Parameters<typeof FServiceAPI.Contract.batchContracts>[0] = {
     subjectIds: licensorResourceIDs.join(','),
     licenseeId: licenseeResource?.resourceID || '',
@@ -787,8 +751,6 @@ async function _batchHandleResources({
       status: 0 | 1;
     }[];
   } = await FServiceAPI.Contract.batchContracts(params1);
-
-  // console.log(data_batchContracts, 'data_batchContractso9iedjlskdjflsdkjl');
 
   const params2: BatchCycleDependencyCheckParams = {
     resourceId: licenseeResource?.resourceID || '',
@@ -826,8 +788,6 @@ async function _batchHandleResources({
       resourceId: string;
     }[];
   } = await FServiceAPI.Resource.batchAuth(params4);
-
-  // console.log(data_batchAuth, 'data_batchAuth9iowsejfsldkfjl;skdjflksdj');
 
   const resourceTargetInfos: FResourceAuthorizationProcessorStates['targetInfos'] = data_batchResourceInfo.map((r) => {
     let error: FResourceAuthorizationProcessorStates['targetInfos'][number]['error'] = '';
@@ -868,9 +828,6 @@ async function _batchHandleResources({
       return c.policyId;
     });
 
-    // const upThrow: boolean = upcastResourceIDs.includes(r.resourceId) || licenseeResource?.baseUpcastResources.some((bur) => {
-    //   return bur.resourceID === r.resourceId;
-    // }) || false;
     return {
       targetID: r.resourceId,
       targetName: r.resourceName,
@@ -881,8 +838,6 @@ async function _batchHandleResources({
       versions: r.resourceVersions.map((v) => {
         return v.version;
       }),
-      // upThrow: upThrow,
-      // upThrowDisabled: licenseeResource?.latestVersion !== '',
       contracts: contracts.map((c) => {
         return {
           contractID: c.contractId,
