@@ -37,14 +37,14 @@ function UploadFile({ dispatch, resourceCreatorBatchPage }: UploadFileProps) {
 
   AHooks.useDebounceEffect(() => {
     if ($files.length > 0 && ($successFiles.length + $failFiles.length === $files.length)) {
-      gotoList();
+      localUploadGotoList();
     }
   }, [$files, $successFiles, $failFiles], {
     wait: 300,
   });
 
-  async function gotoList() {
-    const { data }: {
+  async function localUploadGotoList() {
+    const { data: data_ResourceNames }: {
       data: {
         [k: string]: {
           resourceNewNames: string[];
@@ -74,13 +74,107 @@ function UploadFile({ dispatch, resourceCreatorBatchPage }: UploadFileProps) {
       payload: {
         showPage: 'resourceList',
         resourceListInfo: get$successFiles().map((f) => {
-          const name: string = data[f.name.replace(new RegExp(/\.[\w-]+$/), '')].resourceNewNames[0];
+          const name: string = data_ResourceNames[f.name.replace(new RegExp(/\.[\w-]+$/), '')].resourceNewNames[0];
           const successFile = result.find((file) => {
             return f.sha1 === file.sha1;
           });
           return {
             fileUID: f.uid,
             fileName: f.name,
+            sha1: f.sha1,
+            cover: '',
+            resourceName: name,
+            resourceTitle: name,
+            resourceLabels: [],
+            resourcePolicies: [],
+            showMore: false,
+            rawProperties: (successFile?.info || [])
+              .filter((i) => {
+                return i.insertMode === 1;
+              })
+              .map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((i) => {
+                return {
+                  key: i.key,
+                  name: i.name,
+                  value: i.valueDisplay,
+                  description: i.remark,
+                };
+              }),
+            additionalProperties: (successFile?.info || [])
+              .filter((i) => {
+                return i.insertMode === 2;
+              })
+              .map<ResourceVersionCreatorPageModelState['additionalProperties'][number]>((i) => {
+                return {
+                  key: i.key,
+                  name: i.name,
+                  value: i.valueDisplay,
+                  description: i.remark,
+                };
+              }),
+            customProperties: [],
+            customConfigurations: [],
+            directDependencies: [],
+            baseUpcastResources: [],
+          };
+        }),
+      },
+    });
+  }
+
+  async function storageSpaceGotoList(objIDs: string[]) {
+    const { data: data_objs }: {
+      data: {
+        customProperty: any;
+        customPropertyDescriptors: any[]
+        dependencies: [],
+        objectId: string;
+        objectName: string;
+        sha1: string;
+      }[];
+    } = await FServiceAPI.Storage.batchObjectList({
+      objectIds: objIDs.join(','),
+    });
+    // console.log(data_objs, 'data_objs 是地方就是领导看见分厘卡记录 ');
+
+    const { data: data_ResourceNames }: {
+      data: {
+        [k: string]: {
+          resourceNewNames: string[];
+          status: 1 | 2;
+        };
+      }
+    } = await FServiceAPI.Resource.generateResourceNames({
+      data: data_objs.map((f) => {
+        return {
+          name: f.objectName.replace(new RegExp(/\.[\w-]+$/), ''),
+          num: 1,
+        };
+      }),
+    });
+    // console.log(data_ResourceNames, 'data_ResourceNames sdifjsa;dlkfjlsdjlfkjsldj');
+
+    const { result } = await getFilesSha1Info({
+      sha1: data_objs.map((f) => {
+        return f.sha1;
+      }),
+      resourceTypeCode: resourceCreatorBatchPage.selectedResourceType?.value || '',
+    });
+
+    console.log(result, 'result saedifojsdlkfjlksdjflkjlkj');
+
+    dispatch<ChangeAction>({
+      type: 'resourceCreatorBatchPage/change',
+      payload: {
+        showPage: 'resourceList',
+        resourceListInfo: data_objs.map((f) => {
+          const name: string = data_ResourceNames[f.objectName.replace(new RegExp(/\.[\w-]+$/), '')].resourceNewNames[0];
+          const successFile = result.find((file) => {
+            return f.sha1 === file.sha1;
+          });
+          return {
+            fileUID: f.objectId,
+            fileName: f.objectName,
             sha1: f.sha1,
             cover: '',
             resourceName: name,
@@ -182,10 +276,12 @@ function UploadFile({ dispatch, resourceCreatorBatchPage }: UploadFileProps) {
             const objIDs: string[] | null = await fObjectsSelectorDrawer({
               resourceTypeCode: resourceCreatorBatchPage.selectedResourceType?.value || '',
             });
-            console.log(objIDs, 'objIDs');
+            // console.log(objIDs, 'objIDs');
             if (!objIDs) {
               return;
             }
+
+            storageSpaceGotoList(objIDs);
           }}
         >存储空间导入</FComponentsLib.FRectBtn>
       </div>
