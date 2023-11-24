@@ -9,8 +9,8 @@ import { Dispatch } from 'redux';
 import { ChangeAction } from '@/models/resourceCreatorBatchPage';
 
 interface ResourceTypeProps {
-  resourceCreatorBatchPage: ResourceCreatorBatchPageState;
   dispatch: Dispatch;
+  resourceCreatorBatchPage: ResourceCreatorBatchPageState;
 }
 
 function ResourceType({ resourceCreatorBatchPage, dispatch }: ResourceTypeProps) {

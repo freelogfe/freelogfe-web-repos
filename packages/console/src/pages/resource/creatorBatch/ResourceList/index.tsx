@@ -5,12 +5,15 @@ import FComponentsLib from '@freelog/components-lib';
 import { connect } from 'dva';
 import { ConnectState, ResourceCreatorBatchPageState } from '@/models/connect';
 import Card from './Card';
+import { Dispatch } from 'redux';
+import { ChangeAction } from '@/models/resourceCreatorBatchPage';
 
 interface ResourceListProps {
+  dispatch: Dispatch;
   resourceCreatorBatchPage: ResourceCreatorBatchPageState;
 }
 
-function ResourceList({ resourceCreatorBatchPage }: ResourceListProps) {
+function ResourceList({ dispatch, resourceCreatorBatchPage }: ResourceListProps) {
   return (<>
     <div className={styles.container3}>
       <div style={{ width: 920 }}>
@@ -49,7 +52,17 @@ function ResourceList({ resourceCreatorBatchPage }: ResourceListProps) {
                 order={ri + 1}
                 info={r}
                 onChange={(value) => {
-
+                  dispatch<ChangeAction>({
+                    type: 'resourceCreatorBatchPage/change',
+                    payload: {
+                      resourceListInfo: resourceCreatorBatchPage.resourceListInfo.map((rli) => {
+                        if (value.fileUID !== rli.fileUID) {
+                          return rli;
+                        }
+                        return value;
+                      }),
+                    },
+                  });
                 }}
                 onDelete={() => {
 
