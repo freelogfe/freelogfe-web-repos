@@ -21,6 +21,7 @@ import FUploadCover from '@/components/FUploadCover';
 
 interface CardProps {
   order: number;
+  username: string;
   resourceType: string[];
   info: {
     fileUID: string;
@@ -80,14 +81,18 @@ interface CardProps {
   onAddPolicy?(): void;
 }
 
-function Card({ order, info, resourceType, onChange, onDelete, onAddPolicy }: CardProps) {
+function Card({ order, username, info, resourceType, onChange, onDelete, onAddPolicy }: CardProps) {
   const ref = React.useRef(null);
   const size = AHooks.useSize(ref);
   const [$showMore, set$showMore, get$showMore] = FUtil.Hook.useGetState<boolean>(false);
 
   return (<div className={styles.resourceContainer}>
     <div className={styles.resourceOrder}>
-      <FComponentsLib.FContentText text={`资源${order}`} type={'highlight'} style={{ fontSize: 12 }} />
+      <FComponentsLib.FContentText
+        text={`资源${order}`}
+        type={'highlight'}
+        style={{ fontSize: 12 }}
+      />
       <FComponentsLib.FTextBtn
         style={{ fontSize: 12 }}
         type={'danger'}
@@ -138,7 +143,7 @@ function Card({ order, info, resourceType, onChange, onDelete, onAddPolicy }: Ca
         <div className={styles.whiteCardRightRow}>
           <FComponentsLib.FContentText text={'授权标识'} type={'negative'} />
           <FResourceNameInput
-            userName={'freelog'}
+            userName={username}
             value={info.resourceName}
             onChange={(value) => {
               onChange && onChange({

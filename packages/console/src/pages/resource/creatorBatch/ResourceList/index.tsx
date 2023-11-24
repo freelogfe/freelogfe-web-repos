@@ -10,6 +10,8 @@ import { ChangeAction } from '@/models/resourceCreatorBatchPage';
 import fPolicyBuilder from '@/components/fPolicyBuilder';
 // import fConfirmModal from '@/components/fConfirmModal';
 import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
+import { FServiceAPI, FUtil } from '@freelog/tools-lib';
+import * as AHooks from 'ahooks';
 
 interface ResourceListProps {
   dispatch: Dispatch;
@@ -17,6 +19,18 @@ interface ResourceListProps {
 }
 
 function ResourceList({ dispatch, resourceCreatorBatchPage }: ResourceListProps) {
+
+  const [$username, set$username, get$username] = FUtil.Hook.useGetState<string>('');
+
+  AHooks.useMount(async () => {
+    const { data }: {
+      data: {
+        username: string;
+      };
+    } = await FServiceAPI.User.currentUserInfo();
+    // console.log(data, 'data sdifjals;dkfjl;ksdjlfkjlskdjflkjl');
+    set$username(data.username);
+  });
 
   React.useEffect(() => {
     if (resourceCreatorBatchPage.resourceListInfo.length === 0) {
@@ -65,6 +79,7 @@ function ResourceList({ dispatch, resourceCreatorBatchPage }: ResourceListProps)
               <Card
                 resourceType={resourceCreatorBatchPage.selectedResourceType?.labels || []}
                 order={ri + 1}
+                username={$username}
                 info={r}
                 onChange={(value) => {
                   dispatch<ChangeAction>({
