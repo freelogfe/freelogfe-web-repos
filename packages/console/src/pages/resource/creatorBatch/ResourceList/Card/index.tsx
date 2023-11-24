@@ -14,6 +14,7 @@ import FResourceOptions from '@/components/FResourceOptions';
 import FResourceAuthorizationProcessor, { getProcessor } from '@/components/FResourceAuthorizationProcessor';
 import fAddDependencies from '@/components/fAddDependencies';
 import * as AHooks from 'ahooks';
+import FResourceAuthorizationProcessor_Simple, { getProcessor_simple } from '@/components/FResourceAuthorizationProcessor_Simple';
 
 interface CardProps {
   order: number;
@@ -509,7 +510,7 @@ function Card({ order, info, resourceType, onChange, onDelete, onAddPolicy }: Ca
               style={{ fontSize: 12, display: 'flex', alignItems: 'center', gap: 5 }}
               type='primary'
               onClick={async () => {
-                const p = await getProcessor(info.fileUID);
+                const p = await getProcessor_simple(info.fileUID);
                 const baseUpcastResources: Awaited<ReturnType<typeof p.getBaseUpcastResources>> = await p.getBaseUpcastResources();
                 await fAddDependencies({
                   existingResources: (await p.getAllTargets()).map((t) => {
@@ -563,10 +564,10 @@ function Card({ order, info, resourceType, onChange, onDelete, onAddPolicy }: Ca
           size && size.height > 0 && (<div style={{ height: 20 }} />)
         }
         <div ref={ref}>
-          <FResourceAuthorizationProcessor
+          <FResourceAuthorizationProcessor_Simple
             width={860}
             height={600}
-            resourceID={'655f068d5ecea7002f400b59'}
+            // resourceID={'655f068d5ecea7002f400b59'}
             processorIdentifier={info.fileUID}
             onChanged={() => {
             }}
