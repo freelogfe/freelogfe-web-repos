@@ -186,16 +186,17 @@ function FObjectsSelectorDrawer({ resourceTypeCode, onSelect, onClose }: FObject
     topRight={<Space size={30}>
       <FComponentsLib.FTextBtn
         onClick={() => {
-
+          set_visible(false);
         }}
         type='default'
       >取消</FComponentsLib.FTextBtn>
       <FComponentsLib.FRectBtn
         // disabled={hasError}
         onClick={async () => {
-
+          onSelect && onSelect(get$checkedObjectIDs());
+          set_visible(false);
         }}
-      >保存</FComponentsLib.FRectBtn>
+      >确定</FComponentsLib.FRectBtn>
     </Space>}
   >
     <div className={styles.filter}>

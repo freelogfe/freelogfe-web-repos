@@ -179,10 +179,11 @@ function UploadFile({ dispatch, resourceCreatorBatchPage }: UploadFileProps) {
         <FComponentsLib.FRectBtn
           type={'primary'}
           onClick={async () => {
-            const obj = await fObjectsSelectorDrawer({
+            const objIDs: string[] | null = await fObjectsSelectorDrawer({
               resourceTypeCode: resourceCreatorBatchPage.selectedResourceType?.value || '',
             });
-            if (!obj) {
+            console.log(objIDs, 'objIDs');
+            if (!objIDs) {
               return;
             }
           }}
