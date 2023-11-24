@@ -161,7 +161,7 @@ function UploadFile({ dispatch, resourceCreatorBatchPage }: UploadFileProps) {
       resourceTypeCode: resourceCreatorBatchPage.selectedResourceType?.value || '',
     });
 
-    console.log(result, 'result saedifojsdlkfjlksdjflkjlkj');
+    // console.log(result, 'result saedifojsdlkfjlksdjflkjlkj');
 
     dispatch<ChangeAction>({
       type: 'resourceCreatorBatchPage/change',

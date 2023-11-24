@@ -8,7 +8,7 @@ import Card from './Card';
 import { Dispatch } from 'redux';
 import { ChangeAction } from '@/models/resourceCreatorBatchPage';
 import fPolicyBuilder from '@/components/fPolicyBuilder';
-import fConfirmModal from '@/components/fConfirmModal';
+// import fConfirmModal from '@/components/fConfirmModal';
 import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
 
 interface ResourceListProps {
@@ -17,6 +17,18 @@ interface ResourceListProps {
 }
 
 function ResourceList({ dispatch, resourceCreatorBatchPage }: ResourceListProps) {
+
+  React.useEffect(() => {
+    if (resourceCreatorBatchPage.resourceListInfo.length === 0) {
+      dispatch<ChangeAction>({
+        type: 'resourceCreatorBatchPage/change',
+        payload: {
+          showPage: 'uploadFile',
+        },
+      });
+    }
+  }, [resourceCreatorBatchPage.resourceListInfo.length]);
+
   return (<>
     <div className={styles.container3}>
       <div style={{ width: 920 }}>
