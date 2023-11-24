@@ -98,13 +98,13 @@ let processors: {
 } = {};
 
 function FResourceAuthorizationProcessor_Simple({
-                                           // resourceID,
-                                           processorIdentifier = '',
-                                           width = '100%',
-                                           height = '100%',
-                                           onMount,
-                                           onChanged,
-                                         }: FResourceAuthorizationProcessor_Simple_Props) {
+                                                  // resourceID,
+                                                  processorIdentifier = '',
+                                                  width = '100%',
+                                                  height = '100%',
+                                                  onMount,
+                                                  onChanged,
+                                                }: FResourceAuthorizationProcessor_Simple_Props) {
 
   // const [licenseeResource, set_licenseeResource, get_licenseeResource] = useGetState<FResourceAuthorizationProcessorStates['licenseeResource']>(initStates['licenseeResource']);
   const [relations, set_relations, get_relations] = FUtil.Hook.useGetState<FResourceAuthorizationProcessor_Simple_States['relations']>(initStates['relations']);
@@ -462,12 +462,16 @@ function FResourceAuthorizationProcessor_Simple({
   async function isCompleteAuthorization(): Promise<boolean> {
     return get_targetInfos()
       .filter((t) => {
-        return t.targetType === 'resource' && !get_baseUpcastResources().some((r) => {
+        // t.targetType === 'resource' &&
+        return !get_baseUpcastResources().some((r) => {
           return r.resourceID === t.targetID && r.resourceName === t.targetName;
         });
       })
       .every((t) => {
-        return t.contracts.length > 0;
+        // return t.contracts.length > 0;
+        return t.enabledPolicies.some((p) => {
+          return p.checked;
+        });
       });
   }
 
