@@ -27,6 +27,7 @@ import FComponentsLib from '@freelog/components-lib';
 import fReadLocalFiles from '@/components/fReadLocalFiles';
 import FStorageUploadTasksPanel, { getStorageUploadTasksPanel } from '@/components/FStorageUploadTasksPanel';
 import * as AHooks from 'ahooks';
+import Details from './Details';
 
 interface ContentProps {
   dispatch: Dispatch;
@@ -319,6 +320,8 @@ function Content({ storageHomePage, dispatch }: ContentProps) {
         });
       }}
     />
+
+    <Details/>
   </div>);
 }
 

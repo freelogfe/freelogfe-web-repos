@@ -77,7 +77,7 @@ function Details({ storageObjectEditor, dispatch }: DetailsProps) {
   return (<FDrawer
     destroyOnClose={true}
     title={'编辑对象信息'}
-    open={!!storageObjectEditor.objectId}
+    open={storageObjectEditor.objectId !== ''}
     width={720}
     topRight={<Space size={30}>
       <FComponentsLib.FTextBtn
@@ -105,6 +105,9 @@ function Details({ storageObjectEditor, dispatch }: DetailsProps) {
       history.replace(FUtil.LinkTo.storageSpace({
         bucketName: storageObjectEditor.bucketName,
       }));
+    }}
+    getContainer={() => {
+      return self.document.body;
     }}
   >
     <div className={styles.divContainer}>
