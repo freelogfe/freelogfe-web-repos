@@ -185,7 +185,7 @@ function Card({ order, info, resourceType, onChange, onDelete, onAddPolicy }: Ca
         </div>
         <div style={{ height: 15 }} />
 
-        <div className={styles.whiteCardRightRow}>
+        <div className={styles.whiteCardRightRow} style={{ alignItems: 'flex-start' }}>
           <FComponentsLib.FContentText text={'资源策略'} type={'negative'} />
           <div style={{ width: 540 }}>
             <Space
@@ -197,6 +197,23 @@ function Card({ order, info, resourceType, onChange, onDelete, onAddPolicy }: Ca
               <FComponentsLib.FTextBtn><FComponentsLib.FIcons.FAdd /></FComponentsLib.FTextBtn>
               <FComponentsLib.FTextBtn>添加策略</FComponentsLib.FTextBtn>
             </Space>
+
+            {
+              info.resourcePolicies.length > 0 && (<>
+                <div style={{ height: 15 }} />
+                <div className={styles.policies}>
+                  {
+                    info.resourcePolicies.map((p) => {
+                      return (<label className={styles.policy} key={p.title}>
+                        <span>{p.title}</span>
+                        <a><FComponentsLib.FIcons.FClose style={{ fontSize: 8 }} /></a>
+                      </label>);
+                    })
+                  }
+                </div>
+              </>)
+            }
+
           </div>
         </div>
       </div>
