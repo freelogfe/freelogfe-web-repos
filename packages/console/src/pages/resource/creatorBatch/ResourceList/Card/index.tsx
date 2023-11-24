@@ -237,6 +237,13 @@ function Card({ order, info, resourceType, onChange, onDelete, onAddPolicy }: Ca
                         //     ],
                         //   },
                         // });
+                        onChange && onChange({
+                          ...info,
+                          customProperties: [
+                            ...info.customProperties,
+                            dataSource,
+                          ],
+                        });
                       }}
                     >
                       <FComponentsLib.FIcons.FProperty style={{ fontSize: 14 }} />
@@ -294,6 +301,15 @@ function Card({ order, info, resourceType, onChange, onDelete, onAddPolicy }: Ca
               //     }),
               //   },
               // });
+              onChange && onChange({
+                ...info,
+                additionalProperties: info.additionalProperties.map((v, i) => {
+                  if (i !== index) {
+                    return v;
+                  }
+                  return dataSource;
+                }),
+              });
             }}
             onEdit_alterableData={async (value) => {
               const index: number = info.customProperties.findIndex((p) => {
@@ -334,6 +350,15 @@ function Card({ order, info, resourceType, onChange, onDelete, onAddPolicy }: Ca
               //     }),
               //   },
               // });
+              onChange && onChange({
+                ...info,
+                customProperties: info.customProperties.map((v, i) => {
+                  if (i !== index) {
+                    return v;
+                  }
+                  return dataSource;
+                }),
+              });
             }}
             onDelete_alterableData={async (value) => {
               // console.log(value, 'AAAAAAsdofijsdflksdjfldsjlkj');
@@ -345,6 +370,12 @@ function Card({ order, info, resourceType, onChange, onDelete, onAddPolicy }: Ca
               //     }),
               //   },
               // });
+              onChange && onChange({
+                ...info,
+                customProperties: info.customProperties.filter((v, i) => {
+                  return v.key !== value.key && v.name !== value.name;
+                }),
+              });
             }}
           />
         </div>
@@ -400,6 +431,13 @@ function Card({ order, info, resourceType, onChange, onDelete, onAddPolicy }: Ca
                             //   ],
                             // },
                             // });
+                            onChange && onChange({
+                              ...info,
+                              customConfigurations: [
+                                ...info.customConfigurations,
+                                dataSource,
+                              ],
+                            });
                           }}
                         >
                           <FComponentsLib.FIcons.FConfiguration style={{ fontSize: 14 }} />
@@ -475,6 +513,16 @@ function Card({ order, info, resourceType, onChange, onDelete, onAddPolicy }: Ca
                       // }),
                       // },
                       // });
+
+                      onChange && onChange({
+                        ...info,
+                        customConfigurations: info.customConfigurations.map((a, b) => {
+                          if (b !== index) {
+                            return a;
+                          }
+                          return dataSource;
+                        }),
+                      });
                     }}
                     onDelete={async (value) => {
                       //   await dispatch<OnChange_step2_customConfigurations_Action>({
@@ -485,14 +533,18 @@ function Card({ order, info, resourceType, onChange, onDelete, onAddPolicy }: Ca
                       // }),
                       // },
                       // });
+
+                      onChange && onChange({
+                        ...info,
+                        customConfigurations: info.customConfigurations.filter((a) => {
+                          return a.key !== value.key && a.name !== value.name;
+                        }),
+                      });
                     }}
                   />
                 </>)
               }
-
             </div>
-
-
           </>)
         }
         <div style={{ height: 5 }} />
