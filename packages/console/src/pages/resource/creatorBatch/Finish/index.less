@@ -1,0 +1,42 @@
+@import '../../../../config.less';
+
+.container4 {
+  min-height: calc(100vh - 70px);
+  background-color: #FAFBFC;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  overflow-y: auto;
+
+  .list {
+    width: 920px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+
+    .card {
+      background-color: white;
+      border-radius: 6px;
+      padding: 10px 20px 10px 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+
+      .cardLeft {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        .MetaFooter {
+          display: flex;
+          align-items: center;
+          overflow: hidden;
+          flex-wrap: wrap;
+          height: 24px;
+        }
+      }
+    }
+  }
+}

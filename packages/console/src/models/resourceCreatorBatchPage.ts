@@ -3,7 +3,7 @@ import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription } from 'dva';
 
 export type ResourceCreatorBatchPageState = {
-  showPage: 'resourceType' | 'uploadFile' | 'resourceList';
+  showPage: 'resourceType' | 'uploadFile' | 'resourceList' | 'finish';
 
   selectedResourceType: {
     value: string;
@@ -96,7 +96,7 @@ interface ResourceCreatorBatchPageModelType {
 }
 
 const initStates: ResourceCreatorBatchPageState = {
-  showPage: 'resourceType',
+  showPage: 'finish',
 
   selectedResourceType: null,
 
