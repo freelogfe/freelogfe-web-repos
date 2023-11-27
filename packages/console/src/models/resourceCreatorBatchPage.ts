@@ -96,7 +96,7 @@ interface ResourceCreatorBatchPageModelType {
 }
 
 const initStates: ResourceCreatorBatchPageState = {
-  showPage: 'finish',
+  showPage: 'resourceType',
 
   selectedResourceType: null,
 
