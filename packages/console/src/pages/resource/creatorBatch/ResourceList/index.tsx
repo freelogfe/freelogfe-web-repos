@@ -12,6 +12,9 @@ import fPolicyBuilder from '@/components/fPolicyBuilder';
 import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import * as AHooks from 'ahooks';
+import { getProcessor } from '@/components/FResourceAuthorizationProcessor';
+import { getProcessor_simple } from '@/components/FResourceAuthorizationProcessor_Simple';
+import fMessage from '@/components/fMessage';
 
 interface ResourceListProps {
   dispatch: Dispatch;
@@ -43,8 +46,189 @@ function ResourceList({ dispatch, resourceCreatorBatchPage }: ResourceListProps)
     }
   }, [resourceCreatorBatchPage.resourceListInfo.length]);
 
-  function onClickRelease() {
+  async function onClickRelease() {
+    const createResourceObjects: {
+      name: string;
+      resourceTitle?: string;
+      policies?: {
+        policyName: string;
+        policyText: string;
+        status?: 1 | 0;
+      }[];
+      coverImages?: string[];
+      intro?: string;
+      tags?: string[];
 
+      version: string;
+      fileSha1: string;
+      filename: string;
+      description?: string;
+      dependencies?: {
+        resourceId: string;
+        versionRange: string;
+      }[];
+      customPropertyDescriptors?: {
+        key: string;
+        name: string;
+        defaultValue: string;
+        type: 'editableText' | 'readonlyText' | 'radio' | 'checkbox' | 'select';
+        candidateItems?: string[];
+        remark?: string;
+      }[];
+      baseUpcastResources?: {
+        resourceId: string;
+      }[];
+      resolveResources: {
+        resourceId: string;
+        contracts: {
+          policyId: string;
+        }[];
+      }[];
+      inputAttrs?: {
+        key: string;
+        value: string;
+      }[];
+    }[] = [];
+
+    for (const item of resourceCreatorBatchPage.resourceListInfo) {
+      const p: {
+        getAllTargets(): Promise<{
+          id: string;
+          name: string;
+          type: 'resource' | 'object';
+          versionRange?: string;
+        }[]>;
+        getAllResourcesWithPolicies(): Promise<{
+          resourceID: string;
+          resourceName: string;
+          policyIDs: string[];
+        }[]>;
+        isCompleteAuthorization(): Promise<boolean>;
+        getBaseUpcastResources(): Promise<{ resourceID: string; resourceName: string; }[]>;
+      } = await getProcessor_simple(item.fileUID);
+      // console.log(p, 'sdifsldkflsdkfjlkdsjlkjflksdjl');
+
+      const isCompleteAuthorization: boolean = await p.isCompleteAuthorization();
+
+      if (!isCompleteAuthorization) {
+        fMessage('依赖中存在未获取授权的资源', 'error');
+        return;
+      }
+
+      const dependentAllResourcesWithPolicies: {
+        resourceID: string;
+        resourceName: string;
+        policyIDs: string[];
+      }[] = await p.getAllResourcesWithPolicies();
+
+      const dependentAllTargets: {
+        id: string;
+        name: string;
+        type: 'resource' | 'object';
+        versionRange?: string;
+      }[] = await p.getAllTargets();
+      const baseUpcastResources: {
+        resourceID: string;
+        resourceName: string;
+      }[] = await p.getBaseUpcastResources();
+
+      const resolveResources: {
+        resourceId: string;
+        contracts: {
+          policyId: string;
+        }[];
+      }[] = dependentAllResourcesWithPolicies
+        .filter((r) => {
+          return r.policyIDs.length > 0 && baseUpcastResources.every((b) => {
+            return b.resourceID !== r.resourceID;
+          });
+        })
+        .map((r) => {
+          return {
+            resourceId: r.resourceID,
+            contracts: r.policyIDs.map((policyID) => {
+              return {
+                policyId: policyID,
+              };
+            }),
+          };
+        });
+
+      createResourceObjects.push({
+        name: item.resourceName,
+        resourceTitle: item.resourceTitle,
+        policies: item.resourcePolicies.map((p) => {
+          return {
+            policyName: p.title,
+            policyText: p.text,
+            status: 1,
+          };
+        }),
+        coverImages: [item.cover],
+        intro: '',
+        tags: item.resourceLabels,
+        version: '1.0.0',
+        fileSha1: item.sha1,
+        filename: item.fileName,
+        description: '',
+        dependencies: dependentAllTargets
+          .map((r) => {
+            return {
+              resourceId: r.id,
+              versionRange: r.versionRange || '',
+            };
+          }),
+        customPropertyDescriptors: [
+          ...item.customProperties
+            .map<NonNullable<Parameters<typeof FServiceAPI.Resource.createVersion>[0]['customPropertyDescriptors']>[number]>
+            ((i) => {
+              return {
+                type: 'readonlyText',
+                key: i.key,
+                name: i.name,
+                remark: i.description,
+                defaultValue: i.value,
+              };
+            }),
+          ...item.customConfigurations
+            .map<NonNullable<Parameters<typeof FServiceAPI.Resource.createVersion>[0]['customPropertyDescriptors']>[number]>((i) => {
+              const isInput: boolean = i.type === 'input';
+              const options: string[] = i.select;
+              return {
+                type: isInput ? 'editableText' : 'select',
+                key: i.key,
+                name: i.name,
+                remark: i.description,
+                defaultValue: isInput ? i.input : options[0],
+                // defaultValue: isInput ? i.input : '',
+                candidateItems: isInput ? undefined : options,
+              };
+            }),
+        ],
+        baseUpcastResources: baseUpcastResources.map((r) => {
+          return { resourceId: r.resourceID };
+        }),
+        resolveResources: resolveResources,
+        inputAttrs: item.additionalProperties
+          .filter((ap) => {
+            return ap.value !== '';
+          })
+          .map((ap) => {
+            return {
+              key: ap.key,
+              value: ap.value,
+            };
+          }),
+      });
+    }
+
+    const params: Parameters<typeof FServiceAPI.Resource.createBatch>[0] = {
+      resourceTypeCode: resourceCreatorBatchPage.selectedResourceType?.value || '',
+      // @ts-ignore
+      createResourceObjects: createResourceObjects,
+    };
+    const { data } = await FServiceAPI.Resource.createBatch(params);
+    console.log(data, 'data isdjflksjdlkfjslkdjflkjsolikfjewsoijlkj');
   }
 
   return (<>

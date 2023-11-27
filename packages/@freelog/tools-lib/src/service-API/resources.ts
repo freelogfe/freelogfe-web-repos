@@ -69,6 +69,7 @@ export interface CreateBatchParamsType {
 
     version: string;
     fileSha1: string;
+    filename: string;
     description?: string;
     dependencies?: {
       resourceId: string;
@@ -95,7 +96,7 @@ export interface CreateBatchParamsType {
       key: string;
       value: string;
     }[];
-  }
+  }[];
 }
 
 export function createBatch(params: CreateBatchParamsType) {
