@@ -43,6 +43,10 @@ function ResourceList({ dispatch, resourceCreatorBatchPage }: ResourceListProps)
     }
   }, [resourceCreatorBatchPage.resourceListInfo.length]);
 
+  function onClickRelease() {
+
+  }
+
   return (<>
     <div className={styles.container3}>
       <div style={{ width: 920 }}>
@@ -205,7 +209,11 @@ function ResourceList({ dispatch, resourceCreatorBatchPage }: ResourceListProps)
         </div>
         <Space size={20}>
           <FComponentsLib.FRectBtn>继续添加</FComponentsLib.FRectBtn>
-          <FComponentsLib.FRectBtn>现在发行</FComponentsLib.FRectBtn>
+          <FComponentsLib.FRectBtn
+            onClick={() => {
+              onClickRelease();
+            }}
+          >现在发行</FComponentsLib.FRectBtn>
         </Space>
 
       </div>

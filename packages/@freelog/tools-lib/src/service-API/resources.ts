@@ -51,6 +51,61 @@ export function create(params: CreateParamsType) {
   });
 }
 
+// 批量创建资源
+export interface CreateBatchParamsType {
+  resourceTypeCode: string;
+  resourceTypeName?: string;
+  createResourceObjects: {
+    name: string;
+    resourceTitle?: string;
+    policies?: {
+      policyName: string;
+      policyText: string;
+      status?: 1 | 0;
+    }[];
+    coverImages?: string[];
+    intro?: string;
+    tags?: string[];
+
+    version: string;
+    fileSha1: string;
+    description?: string;
+    dependencies?: {
+      resourceId: string;
+      versionRange: string;
+    }[];
+    customPropertyDescriptors?: {
+      key: string;
+      name: string;
+      defaultValue: string;
+      type: 'editableText' | 'readonlyText' | 'radio' | 'checkbox' | 'select';
+      candidateItems?: string[];
+      remark?: string;
+    }[];
+    baseUpcastResources?: {
+      resourceId: string;
+    }[];
+    resolveResources: {
+      resourceId: string;
+      contracts: {
+        policyId: string;
+      }[];
+    }[];
+    inputAttrs?: {
+      key: string;
+      value: string;
+    }[];
+  }
+}
+
+export function createBatch(params: CreateBatchParamsType) {
+  return FUtil.Request({
+    method: 'POST',
+    url: `/v2/resources/createBatch`,
+    data: params,
+  });
+}
+
 // 更新资源信息
 interface UpdateParamsType {
   resourceId: string;
