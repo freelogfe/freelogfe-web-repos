@@ -229,6 +229,42 @@ function ResourceList({ dispatch, resourceCreatorBatchPage }: ResourceListProps)
     };
     const { data } = await FServiceAPI.Resource.createBatch(params);
     console.log(data, 'data isdjflksjdlkfjslkdjflkjsolikfjewsoijlkj');
+    const list: {
+      resourceID: string;
+      resourceName: string;
+      resourceTitle: string;
+      cover: string;
+      status: 'online' | 'offline' | 'unreleased' | 'freeze';
+      policies: string[];
+      failReason: string;
+    }[] = Object.values(data).map((d: any) => {
+      const data = d.data;
+      return {
+        resourceID: data.resourceId,
+        resourceName: data.resourceName,
+        resourceTitle: data.resourceTitle,
+        cover: data.coverImages,
+        status: data.status === 2
+          ? 'freeze'
+          : data.status === 1
+            ? 'online'
+            : data.status === 0
+              ? 'unreleased'
+              : 'offline',
+        policies: data.policies.map((p: any) => {
+          return p.policyName;
+        }),
+        failReason: d.message || '',
+      };
+    });
+    console.log(list, 'sdiofj;sldkjflksdjfolijsdolfjlksdjlkj');
+    dispatch<ChangeAction>({
+      type: 'resourceCreatorBatchPage/change',
+      payload: {
+        showPage: 'finish',
+        resultList: list,
+      },
+    });
   }
 
   return (<>

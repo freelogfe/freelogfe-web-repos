@@ -60,6 +60,16 @@ export type ResourceCreatorBatchPageState = {
       resourceName: string;
     }[];
   }[];
+
+  resultList: {
+    resourceID: string;
+    resourceName: string;
+    resourceTitle: string;
+    cover: string;
+    status: 'online' | 'offline' | 'unreleased' | 'freeze';
+    policies: string[];
+    failReason: string;
+  }[];
 };
 
 export interface ChangeAction extends AnyAction {
@@ -101,6 +111,8 @@ const initStates: ResourceCreatorBatchPageState = {
   selectedResourceType: null,
 
   resourceListInfo: [],
+
+  resultList: [],
 };
 
 const Model: ResourceCreatorBatchPageModelType = {
