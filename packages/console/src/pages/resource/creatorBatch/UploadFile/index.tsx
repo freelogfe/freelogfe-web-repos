@@ -73,51 +73,54 @@ function UploadFile({ dispatch, resourceCreatorBatchPage }: UploadFileProps) {
       type: 'resourceCreatorBatchPage/change',
       payload: {
         showPage: 'resourceList',
-        resourceListInfo: get$successFiles().map((f) => {
-          const name: string = data_ResourceNames[f.name.replace(new RegExp(/\.[\w-]+$/), '')].resourceNewNames[0];
-          const successFile = result.find((file) => {
-            return f.sha1 === file.sha1;
-          });
-          return {
-            fileUID: f.uid,
-            fileName: f.name,
-            sha1: f.sha1,
-            cover: '',
-            resourceName: name,
-            resourceTitle: name,
-            resourceLabels: [],
-            resourcePolicies: [],
-            showMore: false,
-            rawProperties: (successFile?.info || [])
-              .filter((i) => {
-                return i.insertMode === 1;
-              })
-              .map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((i) => {
-                return {
-                  key: i.key,
-                  name: i.name,
-                  value: i.valueDisplay,
-                  description: i.remark,
-                };
-              }),
-            additionalProperties: (successFile?.info || [])
-              .filter((i) => {
-                return i.insertMode === 2;
-              })
-              .map<ResourceVersionCreatorPageModelState['additionalProperties'][number]>((i) => {
-                return {
-                  key: i.key,
-                  name: i.name,
-                  value: i.valueDisplay,
-                  description: i.remark,
-                };
-              }),
-            customProperties: [],
-            customConfigurations: [],
-            directDependencies: [],
-            baseUpcastResources: [],
-          };
-        }),
+        resourceListInfo: [
+          ...get$successFiles().map((f) => {
+            const name: string = data_ResourceNames[f.name.replace(new RegExp(/\.[\w-]+$/), '')].resourceNewNames[0];
+            const successFile = result.find((file) => {
+              return f.sha1 === file.sha1;
+            });
+            return {
+              fileUID: f.uid,
+              fileName: f.name,
+              sha1: f.sha1,
+              cover: '',
+              resourceName: name,
+              resourceTitle: name,
+              resourceLabels: [],
+              resourcePolicies: [],
+              showMore: false,
+              rawProperties: (successFile?.info || [])
+                .filter((i) => {
+                  return i.insertMode === 1;
+                })
+                .map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((i) => {
+                  return {
+                    key: i.key,
+                    name: i.name,
+                    value: i.valueDisplay,
+                    description: i.remark,
+                  };
+                }),
+              additionalProperties: (successFile?.info || [])
+                .filter((i) => {
+                  return i.insertMode === 2;
+                })
+                .map<ResourceVersionCreatorPageModelState['additionalProperties'][number]>((i) => {
+                  return {
+                    key: i.key,
+                    name: i.name,
+                    value: i.valueDisplay,
+                    description: i.remark,
+                  };
+                }),
+              customProperties: [],
+              customConfigurations: [],
+              directDependencies: [],
+              baseUpcastResources: [],
+            };
+          }),
+          ...resourceCreatorBatchPage.resourceListInfo,
+        ],
       },
     });
   }
@@ -167,51 +170,54 @@ function UploadFile({ dispatch, resourceCreatorBatchPage }: UploadFileProps) {
       type: 'resourceCreatorBatchPage/change',
       payload: {
         showPage: 'resourceList',
-        resourceListInfo: data_objs.map((f) => {
-          const name: string = data_ResourceNames[f.objectName.replace(new RegExp(/\.[\w-]+$/), '')].resourceNewNames[0];
-          const successFile = result.find((file) => {
-            return f.sha1 === file.sha1;
-          });
-          return {
-            fileUID: f.objectId,
-            fileName: f.objectName,
-            sha1: f.sha1,
-            cover: '',
-            resourceName: name,
-            resourceTitle: name,
-            resourceLabels: [],
-            resourcePolicies: [],
-            showMore: false,
-            rawProperties: (successFile?.info || [])
-              .filter((i) => {
-                return i.insertMode === 1;
-              })
-              .map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((i) => {
-                return {
-                  key: i.key,
-                  name: i.name,
-                  value: i.valueDisplay,
-                  description: i.remark,
-                };
-              }),
-            additionalProperties: (successFile?.info || [])
-              .filter((i) => {
-                return i.insertMode === 2;
-              })
-              .map<ResourceVersionCreatorPageModelState['additionalProperties'][number]>((i) => {
-                return {
-                  key: i.key,
-                  name: i.name,
-                  value: i.valueDisplay,
-                  description: i.remark,
-                };
-              }),
-            customProperties: [],
-            customConfigurations: [],
-            directDependencies: [],
-            baseUpcastResources: [],
-          };
-        }),
+        resourceListInfo: [
+          ...data_objs.map((f) => {
+            const name: string = data_ResourceNames[f.objectName.replace(new RegExp(/\.[\w-]+$/), '')].resourceNewNames[0];
+            const successFile = result.find((file) => {
+              return f.sha1 === file.sha1;
+            });
+            return {
+              fileUID: f.objectId,
+              fileName: f.objectName,
+              sha1: f.sha1,
+              cover: '',
+              resourceName: name,
+              resourceTitle: name,
+              resourceLabels: [],
+              resourcePolicies: [],
+              showMore: false,
+              rawProperties: (successFile?.info || [])
+                .filter((i) => {
+                  return i.insertMode === 1;
+                })
+                .map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((i) => {
+                  return {
+                    key: i.key,
+                    name: i.name,
+                    value: i.valueDisplay,
+                    description: i.remark,
+                  };
+                }),
+              additionalProperties: (successFile?.info || [])
+                .filter((i) => {
+                  return i.insertMode === 2;
+                })
+                .map<ResourceVersionCreatorPageModelState['additionalProperties'][number]>((i) => {
+                  return {
+                    key: i.key,
+                    name: i.name,
+                    value: i.valueDisplay,
+                    description: i.remark,
+                  };
+                }),
+              customProperties: [],
+              customConfigurations: [],
+              directDependencies: [],
+              baseUpcastResources: [],
+            };
+          }),
+          ...resourceCreatorBatchPage.resourceListInfo,
+        ],
       },
     });
   }

@@ -428,7 +428,16 @@ function ResourceList({ dispatch, resourceCreatorBatchPage }: ResourceListProps)
           &nbsp;已添加授权策略的资源将会自动上架
         </div>
         <Space size={20}>
-          <FComponentsLib.FRectBtn>继续添加</FComponentsLib.FRectBtn>
+          <FComponentsLib.FRectBtn
+            onClick={() => {
+              dispatch<ChangeAction>({
+                type: 'resourceCreatorBatchPage/change',
+                payload: {
+                  showPage: 'uploadFile',
+                },
+              });
+            }}
+          >继续添加</FComponentsLib.FRectBtn>
           <FComponentsLib.FRectBtn
             onClick={() => {
               onClickRelease();
