@@ -34,9 +34,24 @@ function Finish({ dispatch, resourceCreatorBatchPage }: FinishProps) {
     </div>
     <div style={{ height: 60 }} />
     <Space size={60}>
-      <FComponentsLib.FTextBtn type={'primary'}>管理我的资源</FComponentsLib.FTextBtn>
-      <FComponentsLib.FTextBtn type={'primary'}>继续发行(单个)</FComponentsLib.FTextBtn>
-      <FComponentsLib.FTextBtn type={'primary'}>继续发行(批量)</FComponentsLib.FTextBtn>
+      <FComponentsLib.FTextBtn
+        type={'primary'}
+        onClick={() => {
+          self.open(FUtil.LinkTo.myResources());
+        }}
+      >管理我的资源</FComponentsLib.FTextBtn>
+      <FComponentsLib.FTextBtn
+        type={'primary'}
+        onClick={() => {
+          self.open(FUtil.LinkTo.resourceCreator());
+        }}
+      >继续发行(单个)</FComponentsLib.FTextBtn>
+      <FComponentsLib.FTextBtn
+        type={'primary'}
+        onClick={() => {
+          self.open(FUtil.LinkTo.resourceCreatorBatch());
+        }}
+      >继续发行(批量)</FComponentsLib.FTextBtn>
     </Space>
     <div style={{ height: 50 }} />
     <div className={styles.list}>
@@ -63,8 +78,7 @@ function Finish({ dispatch, resourceCreatorBatchPage }: FinishProps) {
                 <div style={{ height: 10 }} />
                 <div className={styles.MetaFooter}>
                   {
-                    result.policies
-                      // ? resource.policy.map((i: string) => <Policy key={i} text={i} />)
+                    result.policies.length > 0
                       ? (<FComponentsLib.F_Contract_And_Policy_Labels
                         data={result.policies.map((p) => {
                           return {
