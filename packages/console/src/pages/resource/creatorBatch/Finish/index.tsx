@@ -103,7 +103,7 @@ function Finish({ dispatch, resourceCreatorBatchPage }: FinishProps) {
                   ? (<Space size={5}>
                       <span style={{ color: '#EE4040' }}>发行失败</span>
                       <FTooltip title={result.failReason}>
-                        <FComponentsLib.FIcons.FInfo style={{ color: '#EE4040' }} />
+                        <FComponentsLib.FIcons.FInfo style={{ color: '#EE4040', fontSize: 16 }} />
                       </FTooltip>
                     </Space>
                   )

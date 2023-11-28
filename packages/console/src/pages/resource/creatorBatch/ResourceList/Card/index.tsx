@@ -11,11 +11,11 @@ import fResourcePropertyEditor from '@/components/fResourcePropertyEditor';
 import FResourceProperties from '@/components/FResourceProperties';
 import fResourceOptionEditor from '@/components/fResourceOptionEditor';
 import FResourceOptions from '@/components/FResourceOptions';
-import FResourceAuthorizationProcessor, { getProcessor } from '@/components/FResourceAuthorizationProcessor';
+// import FResourceAuthorizationProcessor, { getProcessor } from '@/components/FResourceAuthorizationProcessor';
 import fAddDependencies from '@/components/fAddDependencies';
 import * as AHooks from 'ahooks';
 import FResourceAuthorizationProcessor_Simple, { getProcessor_simple } from '@/components/FResourceAuthorizationProcessor_Simple';
-import { OnChange_step4_resourceCover_Action } from '@/models/resourceCreatorPage';
+// import { OnChange_step4_resourceCover_Action } from '@/models/resourceCreatorPage';
 import fMessage from '@/components/fMessage';
 import FUploadCover from '@/components/FUploadCover';
 
