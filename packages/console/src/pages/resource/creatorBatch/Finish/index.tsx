@@ -8,6 +8,7 @@ import { connect } from 'dva';
 import { ConnectState, ResourceCreatorBatchPageState } from '@/models/connect';
 import { Dispatch } from 'redux';
 import { FUtil } from '../../../../../../@freelog/tools-lib';
+import FTooltip from '@/components/FTooltip';
 
 interface FinishProps {
   dispatch: Dispatch;
@@ -57,7 +58,10 @@ function Finish({ dispatch, resourceCreatorBatchPage }: FinishProps) {
     <div className={styles.list}>
       {
         resourceCreatorBatchPage.resultList.map((result) => {
-          return (<div className={styles.card} key={result.resourceID}>
+          return (<div
+            className={[styles.card, result.failReason !== '' ? styles.error : ''].join(' ')}
+            key={result.resourceID}
+          >
             <div className={styles.cardLeft}>
               <div style={{ position: 'relative' }}>
                 <FCoverImage
@@ -94,14 +98,25 @@ function Finish({ dispatch, resourceCreatorBatchPage }: FinishProps) {
               </div>
             </div>
             <div className={styles.cardRight}>
-              <FComponentsLib.FTextBtn
-                type={'primary'}
-                onClick={() => {
-                  self.open(FUtil.LinkTo.resourceDetails({
-                    resourceID: result.resourceID,
-                  }));
-                }}
-              >查看资源详情</FComponentsLib.FTextBtn>
+              {
+                result.failReason !== ''
+                  ? (<Space size={5}>
+                      <span style={{ color: '#EE4040' }}>发行失败</span>
+                      <FTooltip title={result.failReason}>
+                        <FComponentsLib.FIcons.FInfo style={{ color: '#EE4040' }} />
+                      </FTooltip>
+                    </Space>
+                  )
+                  : (<FComponentsLib.FTextBtn
+                    type={'primary'}
+                    onClick={() => {
+                      self.open(FUtil.LinkTo.resourceDetails({
+                        resourceID: result.resourceID,
+                      }));
+                    }}
+                  >查看资源详情</FComponentsLib.FTextBtn>)
+              }
+
             </div>
           </div>);
         })
