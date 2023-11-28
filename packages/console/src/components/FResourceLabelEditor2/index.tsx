@@ -38,6 +38,9 @@ function FResourceLabelEditor2({ value, onChange }: FResourceLabelEditor2Props) 
           <FComponentsLib.FIcons.FClose
             style={{ fontSize: 12 }}
             onClick={() => {
+              onChange && onChange(value.filter((v1) => {
+                return v1 !== v;
+              }));
             }}
           />
         </label>);

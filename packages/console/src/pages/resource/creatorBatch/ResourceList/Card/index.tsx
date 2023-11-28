@@ -115,12 +115,6 @@ function Card({ order, username, info, resourceType, onChange, onDelete, onAddPo
         <div style={{ height: 10 }} />
         <FUploadCover
           onUploadSuccess={(url) => {
-            // dispatch<OnChange_step4_resourceCover_Action>({
-            //   type: 'resourceCreatorPage/onChange_step4_resourceCover',
-            //   payload: {
-            //     value: url,
-            //   },
-            // });
             onChange && onChange({
               ...info,
               cover: url,
@@ -211,7 +205,16 @@ function Card({ order, username, info, resourceType, onChange, onDelete, onAddPo
                     info.resourcePolicies.map((p) => {
                       return (<label className={styles.policy} key={p.title}>
                         <span>{p.title}</span>
-                        <a><FComponentsLib.FIcons.FClose style={{ fontSize: 8 }} /></a>
+                        <a onClick={() => {
+                          // onChange && onChange();
+                          // console.log(p, 'sdoifsdlkfjlk');
+                          onChange && onChange({
+                            ...info,
+                            resourcePolicies: info.resourcePolicies.filter((l) => {
+                              return l.title !== p.title;
+                            }),
+                          });
+                        }}><FComponentsLib.FIcons.FClose style={{ fontSize: 8 }} /></a>
                       </label>);
                     })
                   }
