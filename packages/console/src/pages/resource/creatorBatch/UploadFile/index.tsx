@@ -54,7 +54,10 @@ function UploadFile({ dispatch, resourceCreatorBatchPage }: UploadFileProps) {
     } = await FServiceAPI.Resource.generateResourceNames({
       data: get$successFiles().map((f) => {
         return {
-          name: f.name.replace(new RegExp(/\.[\w-]+$/), ''),
+          name: f.name
+            .replace(new RegExp(/\.[\w-]+$/), '')
+            .substring(0, 60)
+            .replace(new RegExp(/[\\|\/|:|\*|\?|"|<|>|\||\s|@|\$|#]/g), '_'),
           num: 1,
         };
       }),
@@ -68,14 +71,18 @@ function UploadFile({ dispatch, resourceCreatorBatchPage }: UploadFileProps) {
     });
 
     // console.log(result, 'result s9difjlsdkjflkdsjlfkjdslkjflkdsjfljsdlkfjlksjdkfjlksdf');
-
+    console.log(data_ResourceNames, 'data_ResourceNames sidfjlsdkjflksdjlfkjlkdsjlk');
     dispatch<ChangeAction>({
       type: 'resourceCreatorBatchPage/change',
       payload: {
         showPage: 'resourceList',
         resourceListInfo: [
           ...get$successFiles().map((f) => {
-            const name: string = data_ResourceNames[f.name.replace(new RegExp(/\.[\w-]+$/), '')].resourceNewNames[0];
+            const str: string = f.name.replace(new RegExp(/\.[\w-]+$/), '')
+              .substring(0, 60)
+              .replace(new RegExp(/[\\|\/|:|\*|\?|"|<|>|\||\s|@|\$|#]/g), '_');
+            console.log(str, 'str sfdjlkfjlksdjflkjsdlkfjlksdjlfjlkj0w9e3iojskldjflksdjlj');
+            const name: string = data_ResourceNames[str].resourceNewNames[0];
             const successFile = result.find((file) => {
               return f.sha1 === file.sha1;
             });
@@ -85,9 +92,9 @@ function UploadFile({ dispatch, resourceCreatorBatchPage }: UploadFileProps) {
               sha1: f.sha1,
               cover: '',
               resourceName: name,
-              resourceNameError: name,
+              resourceNameError: '',
               resourceTitle: name,
-              resourceTitleError: name,
+              resourceTitleError: '',
               resourceLabels: [],
               resourcePolicies: [],
               showMore: false,
@@ -174,7 +181,9 @@ function UploadFile({ dispatch, resourceCreatorBatchPage }: UploadFileProps) {
         showPage: 'resourceList',
         resourceListInfo: [
           ...data_objs.map((f) => {
-            const name: string = data_ResourceNames[f.objectName.replace(new RegExp(/\.[\w-]+$/), '')].resourceNewNames[0];
+            const str: string = f.objectName.replace(new RegExp(/\.[\w-]+$/), '');
+            console.log(str, 'str sfdjlkfjlksdjflkjsdlkfjlksdjlfjlkj');
+            const name: string = data_ResourceNames[str].resourceNewNames[0];
             const successFile = result.find((file) => {
               return f.sha1 === file.sha1;
             });
