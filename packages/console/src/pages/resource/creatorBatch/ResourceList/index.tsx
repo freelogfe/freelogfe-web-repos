@@ -429,6 +429,7 @@ function ResourceList({ dispatch, resourceCreatorBatchPage }: ResourceListProps)
         </div>
         <Space size={20}>
           <FComponentsLib.FRectBtn
+            disabled={resourceCreatorBatchPage.resourceListInfo.length >= 20}
             onClick={() => {
               dispatch<ChangeAction>({
                 type: 'resourceCreatorBatchPage/change',
