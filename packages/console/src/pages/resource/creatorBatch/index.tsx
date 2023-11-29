@@ -6,12 +6,29 @@ import ResourceType from './ResourceType';
 import UploadFile from './UploadFile';
 import ResourceList from './ResourceList';
 import Finish from './Finish';
+import * as AHooks from 'ahooks';
+import { Dispatch } from 'redux';
+import { OnMount_Page_Action, OnUnmount_Page_Action } from '@/models/resourceCreatorBatchPage';
 
 interface CreatorBatchProps {
+  dispatch: Dispatch;
   resourceCreatorBatchPage: ResourceCreatorBatchPageState;
 }
 
-function CreatorBatch({ resourceCreatorBatchPage }: CreatorBatchProps) {
+function CreatorBatch({ dispatch, resourceCreatorBatchPage }: CreatorBatchProps) {
+
+  AHooks.useMount(() => {
+    dispatch<OnMount_Page_Action>({
+      type: 'resourceCreatorBatchPage/onMount_Page',
+    });
+  });
+
+  AHooks.useUnmount(() => {
+    dispatch<OnUnmount_Page_Action>({
+      type: 'resourceCreatorBatchPage/onUnmount_Page',
+    });
+  });
+
 
   if (resourceCreatorBatchPage.showPage === 'resourceType') {
     return (<ResourceType />);
