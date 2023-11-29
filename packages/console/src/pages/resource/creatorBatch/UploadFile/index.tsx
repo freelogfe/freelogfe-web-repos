@@ -310,6 +310,7 @@ function UploadFile({ dispatch, resourceCreatorBatchPage }: UploadFileProps) {
       {
         $files.map((file) => {
           return (<Task
+            resourceTypeCode={resourceCreatorBatchPage.selectedResourceType?.value || ''}
             key={file.uid}
             file={file}
             onFail={(value) => {

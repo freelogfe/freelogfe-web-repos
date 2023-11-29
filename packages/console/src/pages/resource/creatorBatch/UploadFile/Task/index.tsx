@@ -11,6 +11,7 @@ import { Canceler } from 'axios';
 
 interface TaskProps {
   file: RcFile;
+  resourceTypeCode: string;
 
   onSuccess?(value: {
     uid: string;
@@ -25,9 +26,9 @@ interface TaskProps {
   }): void;
 }
 
-function Task({ file, onSuccess, onFail }: TaskProps) {
+function Task({ file, resourceTypeCode, onSuccess, onFail }: TaskProps) {
   const canceler = React.useRef<Canceler | null>(null);
-  const [$taskState, set$taskState, get$taskState] = FUtil.Hook.useGetState<'loading' | 'uploading' | 'success' | 'failed'>('loading');
+  const [$taskState, set$taskState, get$taskState] = FUtil.Hook.useGetState<'loading' | 'uploading' | 'parsing' | 'success' | 'failed'>('loading');
   const [$progress, set$progress, get$progress] = FUtil.Hook.useGetState<number>(0);
 
   AHooks.useMount(async () => {
@@ -63,9 +64,10 @@ function Task({ file, onSuccess, onFail }: TaskProps) {
       }
     }
 
+    set$taskState('parsing');
     const { result } = await getFilesSha1Info({
       sha1: [fileSha1],
-      resourceTypeCode: '',
+      resourceTypeCode: resourceTypeCode,
     });
 
     if (result[0].state === 'success') {
@@ -103,6 +105,10 @@ function Task({ file, onSuccess, onFail }: TaskProps) {
 
     {
       $taskState === 'loading' && (<FComponentsLib.FTextBtn>加载中...</FComponentsLib.FTextBtn>)
+    }
+
+    {
+      $taskState === 'parsing' && (<FComponentsLib.FTextBtn>解析中...</FComponentsLib.FTextBtn>)
     }
     {/*{*/}
     {/*  $taskState === 'uploading' && (<Uploading*/}
