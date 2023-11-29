@@ -7,7 +7,7 @@ import FResourceStatusBadge from '@/components/FResourceStatusBadge';
 import { connect } from 'dva';
 import { ConnectState, ResourceCreatorBatchPageState } from '@/models/connect';
 import { Dispatch } from 'redux';
-import { FUtil } from '../../../../../../@freelog/tools-lib';
+import { FUtil } from '@freelog/tools-lib';
 import FTooltip from '@/components/FTooltip';
 
 interface FinishProps {
