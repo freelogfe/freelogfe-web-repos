@@ -196,7 +196,7 @@ function Card({ order, username, info, resourceType, onChange, onDelete, onAddPo
         <div className={styles.whiteCardRightRow}>
           <FComponentsLib.FContentText text={'资源标题'} type={'negative'} />
           <FComponentsLib.FInput.FSingleLine
-            lengthLimit={-1}
+            lengthLimit={100}
             value={info.resourceTitle}
             style={{
               height: 38,

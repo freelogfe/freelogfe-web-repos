@@ -439,6 +439,9 @@ function ResourceList({ dispatch, resourceCreatorBatchPage }: ResourceListProps)
             }}
           >继续添加</FComponentsLib.FRectBtn>
           <FComponentsLib.FRectBtn
+            disabled={resourceCreatorBatchPage.resourceListInfo.some((r) => {
+              return r.resourceNameError !== '' || r.resourceTitle.length > 100;
+            })}
             onClick={() => {
               onClickRelease();
             }}
