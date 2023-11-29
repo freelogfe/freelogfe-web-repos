@@ -46,6 +46,36 @@ function ResourceList({ dispatch, resourceCreatorBatchPage }: ResourceListProps)
     }
   }, [resourceCreatorBatchPage.resourceListInfo.length]);
 
+  AHooks.useDebounceEffect(() => {
+    const map: Map<string, number> = new Map<string, number>();
+
+    for (const info of resourceCreatorBatchPage.resourceListInfo) {
+      map.set(info.resourceName, (map.get(info.resourceName) || 0) + 1);
+    }
+
+    console.log(map, 'map sdifjsdlkfjlsdjflkjflsdjlfkj');
+
+    if (Array.from(map.values()).some((v) => {
+      return v !== 0;
+    })) {
+      dispatch<ChangeAction>({
+        type: 'resourceCreatorBatchPage/change',
+        payload: {
+          resourceListInfo: resourceCreatorBatchPage.resourceListInfo.map((info) => {
+            return {
+              ...info,
+              resourceNameError: (info.resourceNameError !== '' && info.resourceNameError !== '不能重复')
+                ? info.resourceNameError
+                : ((map.get(info.resourceName) || 0) > 1 ? '不能重复' : ''),
+            };
+          }),
+        },
+      });
+    }
+  }, [resourceCreatorBatchPage.resourceListInfo], {
+    wait: 30,
+  });
+
   async function onClickRelease() {
     const createResourceObjects: {
       name: string;
