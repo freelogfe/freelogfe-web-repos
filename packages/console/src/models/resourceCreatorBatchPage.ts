@@ -16,7 +16,9 @@ export type ResourceCreatorBatchPageState = {
     sha1: string;
     cover: string;
     resourceName: string;
+    resourceNameError: string;
     resourceTitle: string;
+    resourceTitleError: string;
     resourceLabels: string[];
     resourcePolicies: {
       title: string;

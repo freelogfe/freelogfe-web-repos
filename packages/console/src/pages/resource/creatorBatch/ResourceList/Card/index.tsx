@@ -5,7 +5,7 @@ import FCoverImage from '@/components/FCoverImage';
 import FResourceNameInput from '@/components/FResourceNameInput';
 import FResourceLabelEditor2 from '@/components/FResourceLabelEditor2';
 import { Space } from 'antd';
-import { FI18n, FUtil } from '@freelog/tools-lib';
+import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
 import FTooltip from '@/components/FTooltip';
 import fResourcePropertyEditor from '@/components/fResourcePropertyEditor';
 import FResourceProperties from '@/components/FResourceProperties';
@@ -29,7 +29,9 @@ interface CardProps {
     sha1: string;
     cover: string;
     resourceName: string;
+    resourceNameError: string;
     resourceTitle: string;
+    resourceTitleError: string;
     resourceLabels: string[];
     resourcePolicies: {
       title: string;
@@ -85,6 +87,42 @@ function Card({ order, username, info, resourceType, onChange, onDelete, onAddPo
   const ref = React.useRef(null);
   const size = AHooks.useSize(ref);
   const [$showMore, set$showMore, get$showMore] = FUtil.Hook.useGetState<boolean>(false);
+
+  AHooks.useDebounceEffect(() => {
+    onVerifyResourceName();
+  }, [info.resourceName], {
+    wait: 300,
+  });
+
+  async function onVerifyResourceName() {
+    onChange && onChange({
+      ...info,
+      resourceNameError: '###***',
+    });
+
+    let nameErrorText: string = '';
+    if (info.resourceName === '') {
+      nameErrorText = '请输入资源授权标识';
+    } else if (info.resourceName.length > 60) {
+      nameErrorText = '不多于60个字符';
+    } else if (!FUtil.Regexp.RESOURCE_NAME.test(info.resourceName)) {
+      // nameErrorText = `不符合正则 ${FUtil.Regexp.RESOURCE_NAME}`;
+      nameErrorText = FI18n.i18nNext.t('naming_convention_resource_name');
+    } else {
+      const params1: Parameters<typeof FServiceAPI.Resource.info>[0] = {
+        resourceIdOrName: encodeURIComponent(`${username}/${info.resourceName}`),
+      };
+      const { data: data_info } = await FServiceAPI.Resource.info(params1);
+      if (!!data_info) {
+        nameErrorText = '资源授权标识已存在';
+      }
+    }
+
+    onChange && onChange({
+      ...info,
+      resourceNameError: nameErrorText,
+    });
+  }
 
   return (<div className={styles.resourceContainer}>
     <div className={styles.resourceOrder}>
@@ -147,6 +185,12 @@ function Card({ order, username, info, resourceType, onChange, onDelete, onAddPo
             }}
           />
         </div>
+        {
+          info.resourceNameError !== '' && info.resourceNameError !== '###***' && (<>
+            <div style={{ height: 5 }} />
+            <div style={{ color: '#EE4040' }}>{info.resourceNameError}</div>
+          </>)
+        }
         <div style={{ height: 15 }} />
 
         <div className={styles.whiteCardRightRow}>

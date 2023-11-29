@@ -228,7 +228,7 @@ function ResourceList({ dispatch, resourceCreatorBatchPage }: ResourceListProps)
       createResourceObjects: createResourceObjects,
     };
     const { data } = await FServiceAPI.Resource.createBatch(params);
-    console.log(data, 'data isdjflksjdlkfjslkdjflkjsolikfjewsoijlkj');
+    // console.log(data, 'data isdjflksjdlkfjslkdjflkjsolikfjewsoijlkj');
     const list: {
       resourceID: string;
       resourceName: string;
