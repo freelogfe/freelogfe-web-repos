@@ -53,12 +53,14 @@ function UploadFile({ dispatch, resourceCreatorBatchPage }: UploadFileProps) {
       }
     } = await FServiceAPI.Resource.generateResourceNames({
       data: get$successFiles().map((f) => {
+        // console.log(f.name, getARightName(f.name), ' f.name sdfijsd;lkfjlk;sdjflksjdlkfjsdlkj');
         return {
           name: getARightName(f.name),
           num: 1,
         };
       }),
     });
+
 
     const { result } = await getFilesSha1Info({
       sha1: get$successFiles().map((f) => {
@@ -68,7 +70,7 @@ function UploadFile({ dispatch, resourceCreatorBatchPage }: UploadFileProps) {
     });
 
     // console.log(result, 'result s9difjlsdkjflkdsjlfkjdslkjflkdsjfljsdlkfjlksjdkfjlksdf');
-    console.log(data_ResourceNames, 'data_ResourceNames sidfjlsdkjflksdjlfkjlkdsjlk');
+    // console.log(data_ResourceNames, 'data_ResourceNames sidfjlsdkjflksdjlfkjlkdsjlk');
     dispatch<ChangeAction>({
       type: 'resourceCreatorBatchPage/change',
       payload: {
@@ -269,7 +271,7 @@ function UploadFile({ dispatch, resourceCreatorBatchPage }: UploadFileProps) {
               return;
             }
 
-            // console.log(files, 'files 09wie3ojrflsikdjflsdjlfkjlkjlk');
+            console.log(files, 'files 09wie3ojrflsikdjflsdjlfkjlkjlk');
             set$files(files);
           }}
         >本地上传</FComponentsLib.FRectBtn>
@@ -312,6 +314,7 @@ function UploadFile({ dispatch, resourceCreatorBatchPage }: UploadFileProps) {
     >
       {
         $files.map((file) => {
+          // console.log(file, 'sdFSDFSDFSDFSAFsdfsdalkjflkjl');
           return (<Task
             resourceTypeCode={resourceCreatorBatchPage.selectedResourceType?.value || ''}
             key={file.uid}
@@ -323,6 +326,7 @@ function UploadFile({ dispatch, resourceCreatorBatchPage }: UploadFileProps) {
               ]);
             }}
             onSuccess={(value) => {
+              // console.log(value, 'value sdifjsldkfjlksdjfklsdjlkfjlkj');
               set$successFiles([
                 ...get$successFiles(),
                 value,
