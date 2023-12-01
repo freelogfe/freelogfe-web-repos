@@ -196,7 +196,7 @@ function Card({ order, username, info, resourceType, onChange, onDelete, onAddPo
         <div className={styles.whiteCardRightRow}>
           <FComponentsLib.FContentText text={'资源标题'} type={'negative'} />
           <FComponentsLib.FInput.FSingleLine
-            lengthLimit={100}
+            lengthLimit={-1}
             value={info.resourceTitle}
             style={{
               height: 38,
@@ -205,13 +205,23 @@ function Card({ order, username, info, resourceType, onChange, onDelete, onAddPo
               width: 540,
             }}
             onChange={(e) => {
+              const value: string = e.target.value;
               onChange && onChange({
                 ...info,
-                resourceTitle: e.target.value,
+                resourceTitle: value.length > 100 ? '不超过100个字符' : '',
               });
             }}
+            placeholder={info.resourceName}
           />
         </div>
+
+        {
+          info.resourceTitleError !== '' && (<>
+            <div style={{ height: 5 }} />
+            <div style={{ color: '#EE4040' }}>{info.resourceTitleError}</div>
+          </>)
+        }
+
         <div style={{ height: 15 }} />
 
         <div className={styles.whiteCardRightRow}>
@@ -226,6 +236,8 @@ function Card({ order, username, info, resourceType, onChange, onDelete, onAddPo
             }}
           />
         </div>
+
+
         <div style={{ height: 15 }} />
 
         <div className={styles.whiteCardRightRow} style={{ alignItems: 'flex-start' }}>

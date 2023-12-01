@@ -53,7 +53,7 @@ function ResourceList({ dispatch, resourceCreatorBatchPage }: ResourceListProps)
       map.set(info.resourceName, (map.get(info.resourceName) || 0) + 1);
     }
 
-    console.log(map, 'map sdifjsdlkfjlsdjflkjflsdjlfkj');
+    // console.log(map, 'map sdifjsdlkfjlsdjflkjflsdjlfkj');
 
     if (Array.from(map.values()).some((v) => {
       return v !== 0;
@@ -471,7 +471,7 @@ function ResourceList({ dispatch, resourceCreatorBatchPage }: ResourceListProps)
           >继续添加</FComponentsLib.FRectBtn>
           <FComponentsLib.FRectBtn
             disabled={resourceCreatorBatchPage.resourceListInfo.some((r) => {
-              return r.resourceNameError !== '' || r.resourceTitle.length > 100;
+              return r.resourceNameError !== '' || r.resourceTitleError !== '';
             })}
             onClick={() => {
               onClickRelease();

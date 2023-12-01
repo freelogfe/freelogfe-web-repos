@@ -1,6 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import { Input, InputRef } from 'antd';
+import { FI18n } from '../../../../@freelog/tools-lib';
 
 interface FResourceNameInputProps {
   userName: string;
@@ -27,6 +28,7 @@ function FResourceNameInput({ userName, value, onChange }: FResourceNameInputPro
       onChange={(e) => {
         onChange && onChange(e.target.value);
       }}
+      placeholder={FI18n.i18nNext.t('rqr_input_resourceauthid_hint')}
     />
   </div>);
 }
