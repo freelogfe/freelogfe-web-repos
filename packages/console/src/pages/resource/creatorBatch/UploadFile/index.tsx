@@ -271,7 +271,7 @@ function UploadFile({ dispatch, resourceCreatorBatchPage }: UploadFileProps) {
               return;
             }
 
-            console.log(files, 'files 09wie3ojrflsikdjflsdjlfkjlkjlk');
+            // console.log(files, 'files 09wie3ojrflsikdjflsdjlfkjlkjlk');
             set$files(files);
           }}
         >本地上传</FComponentsLib.FRectBtn>

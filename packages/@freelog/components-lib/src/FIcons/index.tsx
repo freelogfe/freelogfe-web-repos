@@ -67,6 +67,7 @@ import FPolicy from './FPolicy';
 import FProperty from './FProperty';
 import FRedo from './FRedo';
 import FResource from './FResource';
+import FResourceFile from './FResourceFile';
 import FRight from './FRight';
 import FRotate from './FRotate';
 import FSafetyLock from './FSafetyLock';
@@ -151,6 +152,7 @@ const FIcons = {
     FProperty,
     FRedo,
     FResource,
+    FResourceFile,
     FRight,
     FRotate,
     FSafetyLock,
