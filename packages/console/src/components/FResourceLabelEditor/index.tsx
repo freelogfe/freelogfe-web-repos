@@ -133,15 +133,12 @@ function FResourceLabelEditor($prop: FResourceLabelEditorProps) {
           });
 
           let errorText: string = '';
-          // if (!value) {
-          //   errorText = '不能为空';
-          // } else
+
           if (value.length > 20) {
             errorText = '不超过20个字符';
           } else if ($prop.value.includes(value)) {
             errorText = '不能有重复';
           }
-          // set_errorText(errorText);
           $setState({
             inputError: errorText,
           });

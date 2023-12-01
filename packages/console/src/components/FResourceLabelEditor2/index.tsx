@@ -16,71 +16,97 @@ function FResourceLabelEditor2({ value, onChange }: FResourceLabelEditor2Props) 
   const inputRef = React.useRef<InputRef>(null);
   const [$showInput, set$showInput, get$showInput] = FUtil.Hook.useGetState<boolean>(false);
   const [$input, set$input, get$input] = FUtil.Hook.useGetState<string>('');
+  const [$inputError, set$inputError, get$inputError] = FUtil.Hook.useGetState<string>('');
 
   AHooks.useClickAway(() => {
     set$showInput(false);
+    set$input('');
+    set$inputError('');
   }, refDiv);
 
-  return (<div
-    className={styles.editor2}
-    onClick={() => {
-      set$showInput(true);
-      setTimeout(() => {
-        inputRef.current?.focus();
-      });
-    }}
-    ref={refDiv}
-  >
-    {
-      value.map((v) => {
-        return (<label key={v} className={styles.selectedLabel}>
-          <span>{v}</span>
-          <FComponentsLib.FIcons.FClose
-            style={{ fontSize: 12 }}
-            onClick={() => {
-              onChange && onChange(value.filter((v1) => {
-                return v1 !== v;
-              }));
-            }}
-          />
-        </label>);
-      })
-    }
+  return (<div>
+    <div
+      className={styles.editor2}
+      onClick={() => {
+        set$showInput(true);
+        setTimeout(() => {
+          inputRef.current?.focus();
+        });
+      }}
+      ref={refDiv}
+    >
+      {
+        value.map((v) => {
+          return (<label key={v} className={styles.selectedLabel}>
+            <span>{v}</span>
+            <FComponentsLib.FIcons.FClose
+              style={{ fontSize: 12 }}
+              onClick={() => {
+                onChange && onChange(value.filter((v1) => {
+                  return v1 !== v;
+                }));
+              }}
+            />
+          </label>);
+        })
+      }
 
-    {
-      ($showInput || value.length === 0) && (<Input
-        ref={inputRef}
-        value={$input}
-        className={styles.input}
-        placeholder={'输入标签后按回车添加'}
-        onChange={(e) => {
-          set$input(e.target.value);
-        }}
-        onPressEnter={() => {
-          if (get$input() === '') {
-            return;
-          }
-          onChange && onChange([...value, get$input()]);
-          set$input('');
-        }}
-        onBlur={() => {
-          set$input('');
-        }}
-        onKeyUp={(event) => {
-          if (event.key === 'Escape') {
-            // set_input('');
-            // set_errorText('');
+      {
+        ($showInput || value.length === 0) && value.length < 20 && (<Input
+          ref={inputRef}
+          value={$input}
+          className={styles.input}
+          placeholder={'输入标签后按回车添加'}
+          onChange={(e) => {
+            set$input(e.target.value);
+
+            let errorText: string = '';
+
+            if (e.target.value.length > 20) {
+              errorText = '不超过20个字符';
+            } else if (value.includes(e.target.value)) {
+              errorText = '不能有重复';
+            }
+
+            set$inputError(errorText);
             // $setState({
-            //   input: '',
-            //   inputError: '',
+            //   inputError: $prop.value.includes($state.input) ? '不能有重复' : $state.inputError,
             // });
-            inputRef.current?.blur();
-            set$showInput(false);
-          }
-        }}
-      />)
-    }
+          }}
+          onPressEnter={() => {
+            if (get$input() === '' || get$inputError() !== '') {
+              return;
+            }
+            onChange && onChange([...value, get$input()]);
+            set$input('');
+          }}
+          onBlur={() => {
+            set$input('');
+          }}
+          onKeyUp={(event) => {
+            if (event.key === 'Escape') {
+              // set_input('');
+              // set_errorText('');
+              // $setState({
+              //   input: '',
+              //   inputError: '',
+              // });
+              inputRef.current?.blur();
+              set$showInput(false);
+              set$input('');
+              set$inputError('');
+            }
+          }}
+        />)
+      }
 
+    </div>
+    {
+      $inputError !== '' && (<>
+        <div style={{ height: 5 }} />
+        <div style={{ color: '#EE4040', fontSize: 12 }}>{$inputError}</div>
+      </>)
+    }
   </div>);
 }
 
