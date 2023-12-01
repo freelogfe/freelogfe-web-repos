@@ -169,7 +169,11 @@ function Card({ order, username, info, resourceType, onChange, onDelete, onAddPo
       <div className={styles.whiteCardRight}>
         <div className={styles.whiteCardRightRow}>
           <FComponentsLib.FContentText text={'文件名'} type={'negative'} />
-          <FComponentsLib.FContentText text={info.fileName} type={'normal'} style={{ width: 540 }} />
+          <FComponentsLib.FContentText
+            text={info.fileName}
+            type={'normal'}
+            style={{ width: 540, wordBreak: 'break-all' }}
+          />
         </div>
         <div style={{ height: 15 }} />
         <div className={styles.whiteCardRightRow}>
@@ -194,7 +198,10 @@ function Card({ order, username, info, resourceType, onChange, onDelete, onAddPo
         <div style={{ height: 15 }} />
 
         <div className={styles.whiteCardRightRow}>
-          <FComponentsLib.FContentText text={'资源标题'} type={'negative'} />
+          <FComponentsLib.FContentText
+            text={'资源标题'}
+            type={'negative'}
+          />
           <FComponentsLib.FInput.FSingleLine
             lengthLimit={-1}
             value={info.resourceTitle}
