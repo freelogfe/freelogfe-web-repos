@@ -57,6 +57,9 @@ function FResourceLabelEditor2({ value, onChange }: FResourceLabelEditor2Props) 
           set$input(e.target.value);
         }}
         onPressEnter={() => {
+          if (get$input() === '') {
+            return;
+          }
           onChange && onChange([...value, get$input()]);
           set$input('');
         }}
