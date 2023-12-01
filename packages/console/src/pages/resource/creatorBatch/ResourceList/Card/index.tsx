@@ -333,19 +333,9 @@ function Card({ order, username, info, resourceType, onChange, onDelete, onAddPo
                             ...info.customConfigurations.map<string>((pp) => pp.name),
                           ],
                         });
-                        // console.log(dataSource, 'dataSource9iojskldjflksdjflk');
                         if (!dataSource) {
                           return;
                         }
-                        // await dispatch<OnChange_step2_customProperties_Action>({
-                        //   type: 'resourceCreatorPage/onChange_step2_customProperties',
-                        //   payload: {
-                        //     value: [
-                        //       ...resourceCreatorPage.step2_customProperties,
-                        //       dataSource,
-                        //     ],
-                        //   },
-                        // });
                         onChange && onChange({
                           ...info,
                           customProperties: [

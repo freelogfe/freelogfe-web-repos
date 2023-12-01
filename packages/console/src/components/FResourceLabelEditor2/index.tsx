@@ -60,6 +60,9 @@ function FResourceLabelEditor2({ value, onChange }: FResourceLabelEditor2Props) 
           onChange && onChange([...value, get$input()]);
           set$input('');
         }}
+        onBlur={() => {
+          set$input('');
+        }}
       />)
     }
 
