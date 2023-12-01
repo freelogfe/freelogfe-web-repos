@@ -327,7 +327,9 @@ function Resources({ dispatch, resourceListPage }: ResourceProps) {
           {
             !resourceListPage.isBatchManagement && (<div
               className={styles.createCard}
-              onClick={() => history.push(FUtil.LinkTo.resourceCreator())}
+              onClick={() => {
+                self.open(FUtil.LinkTo.resourceCreatorEntry());
+              }}
             >
               <div className={styles.createButton}>
                 <i className={['freelog', 'fl-icon-tianjia'].join(' ')} />
