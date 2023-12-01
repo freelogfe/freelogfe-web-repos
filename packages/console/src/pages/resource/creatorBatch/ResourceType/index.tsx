@@ -45,6 +45,7 @@ function ResourceType({ resourceCreatorBatchPage, dispatch }: ResourceTypeProps)
     <div className={styles.footer}>
       <div><FComponentsLib.FIcons.FInfo style={{ fontSize: 14 }} />&nbsp;批量发行适用于一次性发行多个同类型资源，目前仅针对部分资源类型开放。</div>
       <FComponentsLib.FRectBtn
+        disabled={!resourceCreatorBatchPage.selectedResourceType}
         onClick={() => {
           dispatch<ChangeAction>({
             type: 'resourceCreatorBatchPage/change',
