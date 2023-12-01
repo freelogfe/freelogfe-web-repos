@@ -113,44 +113,6 @@ function FResourceAuthorizationProcessor_Simple({
   const [baseUpcastResources, set_baseUpcastResources, get_baseUpcastResources] = FUtil.Hook.useGetState<FResourceAuthorizationProcessor_Simple_States['baseUpcastResources']>(initStates['baseUpcastResources']);
   const [targetInfos_CheckedPolicies, set_targetInfos_CheckedPolicies, get_targetInfos_CheckedPolicies] = FUtil.Hook.useGetState<FResourceAuthorizationProcessor_Simple_States['targetInfos_CheckedPolicies']>(initStates['targetInfos_CheckedPolicies']);
 
-  // AHooks.useAsyncEffect(async () => {
-  //   if (resourceID !== '') {
-  //     const { data: data_resource }: {
-  //       data: {
-  //         resourceId: string;
-  //         resourceName: string;
-  //         latestVersion: string;
-  //         baseUpcastResources: {
-  //           resourceId: string;
-  //           resourceName: string;
-  //         }[];
-  //       }
-  //     } = await FServiceAPI.Resource.info({
-  //       resourceIdOrName: resourceID,
-  //     });
-  //     set_licenseeResource({
-  //       resourceID: data_resource.resourceId,
-  //       resourceName: data_resource.resourceName,
-  //       latestVersion: data_resource.latestVersion,
-  //       baseUpcastResources: data_resource.baseUpcastResources.map((b) => {
-  //         return {
-  //           resourceID: b.resourceId,
-  //           resourceName: b.resourceName,
-  //         };
-  //       }),
-  //     });
-  //     if (data_resource.latestVersion !== '') {
-  //       set_baseUpcastResources(data_resource.baseUpcastResources.map((b) => {
-  //         return {
-  //           resourceID: b.resourceId,
-  //           resourceName: b.resourceName,
-  //         };
-  //       }));
-  //     }
-  //
-  //   }
-  // }, [resourceID]);
-
   AHooks.useMount(() => {
     const processor = {
       addTargets,
@@ -161,7 +123,6 @@ function FResourceAuthorizationProcessor_Simple({
       getAllResourcesWithPolicies,
       clear,
       getBaseUpcastResources,
-      // setBaseUpcastResources,
     };
     processors[processorIdentifier] = processor;
     onMount && onMount(processor);
@@ -460,6 +421,7 @@ function FResourceAuthorizationProcessor_Simple({
   }
 
   async function isCompleteAuthorization(): Promise<boolean> {
+    // console.log(get_targetInfos_CheckedPolicies(), 'get_targetInfos() sdoifjsdlkfjlksdjflkjlk');
     return get_targetInfos()
       .filter((t) => {
         // t.targetType === 'resource' &&
@@ -469,9 +431,10 @@ function FResourceAuthorizationProcessor_Simple({
       })
       .every((t) => {
         // return t.contracts.length > 0;
-        return t.enabledPolicies.some((p) => {
-          return p.checked;
-        });
+        // return t.enabledPolicies.some((p) => {
+        //   return p.checked;
+        // });
+        return get_targetInfos_CheckedPolicies()[t.targetID].length > 0;
       });
   }
 

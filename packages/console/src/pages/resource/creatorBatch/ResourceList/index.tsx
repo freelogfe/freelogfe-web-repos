@@ -140,6 +140,8 @@ function ResourceList({ dispatch, resourceCreatorBatchPage }: ResourceListProps)
 
       const isCompleteAuthorization: boolean = await p.isCompleteAuthorization();
 
+      console.log(isCompleteAuthorization, 'isCompleteAuthorization sdijf;lksdjflkjsdlkfjlkj');
+
       if (!isCompleteAuthorization) {
         fMessage('依赖中存在未获取授权的资源', 'error');
         return;

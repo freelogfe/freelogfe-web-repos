@@ -179,16 +179,6 @@ function Nav({
                                     dot: '' as '',
                                   };
                                 }),
-                              // ...info.enabledPolicies
-                              //   .filter((k) => {
-                              //     return k.checked;
-                              //   })
-                              //   .map((j) => {
-                              //     return {
-                              //       text: j.policyFullInfo.policyName,
-                              //       dot: '' as '',
-                              //     };
-                              //   }),
                             ]}
                           />)
                       }
