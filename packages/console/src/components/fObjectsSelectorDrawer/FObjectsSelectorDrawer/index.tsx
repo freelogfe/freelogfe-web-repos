@@ -191,7 +191,7 @@ function FObjectsSelectorDrawer({ resourceTypeCode, onSelect, onClose }: FObject
         type='default'
       >取消</FComponentsLib.FTextBtn>
       <FComponentsLib.FRectBtn
-        // disabled={hasError}
+        disabled={$checkedObjectIDs.length === 0}
         onClick={async () => {
           onSelect && onSelect(get$checkedObjectIDs());
           set_visible(false);

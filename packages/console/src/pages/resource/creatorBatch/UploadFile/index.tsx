@@ -14,6 +14,7 @@ import { ChangeAction } from '@/models/resourceCreatorBatchPage';
 import { getFilesSha1Info } from '@/utils/service';
 import fObjectSelectorDrawer from '@/components/fObjectSelectorDrawer';
 import fObjectsSelectorDrawer from '@/components/fObjectsSelectorDrawer';
+import fMessage from '@/components/fMessage';
 
 interface UploadFileProps {
   dispatch: Dispatch;
@@ -71,61 +72,67 @@ function UploadFile({ dispatch, resourceCreatorBatchPage }: UploadFileProps) {
 
     // console.log(result, 'result s9difjlsdkjflkdsjlfkjdslkjflkdsjfljsdlkfjlksjdkfjlksdf');
     // console.log(data_ResourceNames, 'data_ResourceNames sidfjlsdkjflksdjlfkjlkdsjlk');
+
+    let resourceListInfo = [
+      ...resourceCreatorBatchPage.resourceListInfo,
+      ...get$successFiles().map((f) => {
+        const name: string = data_ResourceNames[getARightName(f.name)].resourceNewNames[0];
+        const successFile = result.find((file) => {
+          return f.sha1 === file.sha1;
+        });
+        return {
+          fileUID: f.uid,
+          fileName: f.name,
+          sha1: f.sha1,
+          cover: '',
+          resourceName: name,
+          resourceNameError: '',
+          resourceTitle: f.name.substring(0, 100),
+          resourceTitleError: '',
+          resourceLabels: [],
+          resourcePolicies: [],
+          showMore: false,
+          rawProperties: (successFile?.info || [])
+            .filter((i) => {
+              return i.insertMode === 1;
+            })
+            .map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((i) => {
+              return {
+                key: i.key,
+                name: i.name,
+                value: i.valueDisplay,
+                description: i.remark,
+              };
+            }),
+          additionalProperties: (successFile?.info || [])
+            .filter((i) => {
+              return i.insertMode === 2;
+            })
+            .map<ResourceVersionCreatorPageModelState['additionalProperties'][number]>((i) => {
+              return {
+                key: i.key,
+                name: i.name,
+                value: i.valueDisplay,
+                description: i.remark,
+              };
+            }),
+          customProperties: [],
+          customConfigurations: [],
+          directDependencies: [],
+          baseUpcastResources: [],
+        };
+      }),
+    ];
+
+    if (resourceListInfo.length > 20) {
+      fMessage('上传不能超过20个文件', 'warning');
+      resourceListInfo = resourceListInfo.slice(0, 20);
+    }
     dispatch<ChangeAction>({
       type: 'resourceCreatorBatchPage/change',
       payload: {
         showPage: 'resourceList',
-        resourceListInfo: [
-          ...resourceCreatorBatchPage.resourceListInfo,
-          ...get$successFiles().map((f) => {
-            const name: string = data_ResourceNames[getARightName(f.name)].resourceNewNames[0];
-            const successFile = result.find((file) => {
-              return f.sha1 === file.sha1;
-            });
-            return {
-              fileUID: f.uid,
-              fileName: f.name,
-              sha1: f.sha1,
-              cover: '',
-              resourceName: name,
-              resourceNameError: '',
-              resourceTitle: f.name.substring(0, 100),
-              resourceTitleError: '',
-              resourceLabels: [],
-              resourcePolicies: [],
-              showMore: false,
-              rawProperties: (successFile?.info || [])
-                .filter((i) => {
-                  return i.insertMode === 1;
-                })
-                .map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((i) => {
-                  return {
-                    key: i.key,
-                    name: i.name,
-                    value: i.valueDisplay,
-                    description: i.remark,
-                  };
-                }),
-              additionalProperties: (successFile?.info || [])
-                .filter((i) => {
-                  return i.insertMode === 2;
-                })
-                .map<ResourceVersionCreatorPageModelState['additionalProperties'][number]>((i) => {
-                  return {
-                    key: i.key,
-                    name: i.name,
-                    value: i.valueDisplay,
-                    description: i.remark,
-                  };
-                }),
-              customProperties: [],
-              customConfigurations: [],
-              directDependencies: [],
-              baseUpcastResources: [],
-            };
-          }),
-
-        ],
+        resourceListInfo: resourceListInfo,
       },
     });
   }
@@ -171,62 +178,67 @@ function UploadFile({ dispatch, resourceCreatorBatchPage }: UploadFileProps) {
 
     // console.log(result, 'result saedifojsdlkfjlksdjflkjlkj');
 
+    let resourceListInfo = [
+      ...resourceCreatorBatchPage.resourceListInfo,
+      ...data_objs.map((f) => {
+        // const str: string = f.objectName.replace(new RegExp(/\.[\w-]+$/), '');
+        // console.log(str, 'str sfdjlkfjlksdjflkjsdlkfjlksdjlfjlkj');
+        const name: string = data_ResourceNames[getARightName(f.objectName)].resourceNewNames[0];
+        const successFile = result.find((file) => {
+          return f.sha1 === file.sha1;
+        });
+        return {
+          fileUID: f.objectId,
+          fileName: f.objectName,
+          sha1: f.sha1,
+          cover: '',
+          resourceName: name,
+          resourceNameError: '',
+          resourceTitle: f.objectName.substring(0, 100),
+          resourceTitleError: '',
+          resourceLabels: [],
+          resourcePolicies: [],
+          showMore: false,
+          rawProperties: (successFile?.info || [])
+            .filter((i) => {
+              return i.insertMode === 1;
+            })
+            .map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((i) => {
+              return {
+                key: i.key,
+                name: i.name,
+                value: i.valueDisplay,
+                description: i.remark,
+              };
+            }),
+          additionalProperties: (successFile?.info || [])
+            .filter((i) => {
+              return i.insertMode === 2;
+            })
+            .map<ResourceVersionCreatorPageModelState['additionalProperties'][number]>((i) => {
+              return {
+                key: i.key,
+                name: i.name,
+                value: i.valueDisplay,
+                description: i.remark,
+              };
+            }),
+          customProperties: [],
+          customConfigurations: [],
+          directDependencies: [],
+          baseUpcastResources: [],
+        };
+      }),
+    ];
+    if (resourceListInfo.length > 20) {
+      fMessage('上传不能超过20个文件', 'warning');
+      resourceListInfo = resourceListInfo.slice(0, 20);
+    }
     dispatch<ChangeAction>({
       type: 'resourceCreatorBatchPage/change',
       payload: {
         showPage: 'resourceList',
-        resourceListInfo: [
-          ...resourceCreatorBatchPage.resourceListInfo,
-          ...data_objs.map((f) => {
-            // const str: string = f.objectName.replace(new RegExp(/\.[\w-]+$/), '');
-            // console.log(str, 'str sfdjlkfjlksdjflkjsdlkfjlksdjlfjlkj');
-            const name: string = data_ResourceNames[getARightName(f.objectName)].resourceNewNames[0];
-            const successFile = result.find((file) => {
-              return f.sha1 === file.sha1;
-            });
-            return {
-              fileUID: f.objectId,
-              fileName: f.objectName,
-              sha1: f.sha1,
-              cover: '',
-              resourceName: name,
-              resourceNameError: '',
-              resourceTitle: f.objectName.substring(0, 100),
-              resourceTitleError: '',
-              resourceLabels: [],
-              resourcePolicies: [],
-              showMore: false,
-              rawProperties: (successFile?.info || [])
-                .filter((i) => {
-                  return i.insertMode === 1;
-                })
-                .map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((i) => {
-                  return {
-                    key: i.key,
-                    name: i.name,
-                    value: i.valueDisplay,
-                    description: i.remark,
-                  };
-                }),
-              additionalProperties: (successFile?.info || [])
-                .filter((i) => {
-                  return i.insertMode === 2;
-                })
-                .map<ResourceVersionCreatorPageModelState['additionalProperties'][number]>((i) => {
-                  return {
-                    key: i.key,
-                    name: i.name,
-                    value: i.valueDisplay,
-                    description: i.remark,
-                  };
-                }),
-              customProperties: [],
-              customConfigurations: [],
-              directDependencies: [],
-              baseUpcastResources: [],
-            };
-          }),
-        ],
+        resourceListInfo: resourceListInfo,
       },
     });
   }
