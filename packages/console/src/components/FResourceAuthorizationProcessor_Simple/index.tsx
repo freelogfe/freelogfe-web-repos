@@ -443,6 +443,7 @@ function FResourceAuthorizationProcessor_Simple({
     resourceName: string;
     policyIDs: string[];
   }[]> {
+    // console.log(get_targetInfos_CheckedPolicies(), 'get_targetInfos_CheckedPolicies sdfasdfsdlfk');
     return get_targetInfos()
       // .filter((t) => {
       //   return t.targetType === 'resource';
@@ -451,13 +452,16 @@ function FResourceAuthorizationProcessor_Simple({
         return {
           resourceID: t.targetID,
           resourceName: t.targetName,
-          policyIDs: t.enabledPolicies
-            .filter((ep) => {
-              return ep.checked;
-            })
-            .map((ep) => {
-              return ep.policyFullInfo.policyId;
-            }),
+          policyIDs: get_targetInfos_CheckedPolicies()[t.targetID].map((pol) => {
+            return pol.policyID;
+          }),
+          // policyIDs: t.enabledPolicies
+          //   .filter((ep) => {
+          //     return ep.checked;
+          //   })
+          //   .map((ep) => {
+          //     return ep.policyFullInfo.policyId;
+          //   }),
         };
       });
   }
