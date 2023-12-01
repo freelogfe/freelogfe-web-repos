@@ -430,6 +430,35 @@ function ResourceList({ dispatch, resourceCreatorBatchPage }: ResourceListProps)
                     });
                   }
                 }}
+                onClickApplyLabels={(resourceCreatorBatchPage.resourceListInfo.length <= 1 || r.resourceLabels.length === 0) ? undefined : async () => {
+
+                  let confirm: boolean = await fPromiseModalConfirm({
+                    title: '提示',
+                    description: '是否将本次修改应用于此处发行的所有资源？',
+                    cancelText: '不，仅应用于当前资源',
+                    okText: '是，应用于所有资源',
+                  });
+
+                  if (!confirm) {
+                    return;
+                  }
+
+                  dispatch<ChangeAction>({
+                    type: 'resourceCreatorBatchPage/change',
+                    payload: {
+                      resourceListInfo: resourceCreatorBatchPage.resourceListInfo.map((rli) => {
+                        if (r.fileUID === rli.fileUID) {
+                          return rli;
+                        }
+                        const resourceLabels: string[] = Array.from(new Set([...rli.resourceLabels, ...r.resourceLabels])).slice(0, 20);
+                        return {
+                          ...rli,
+                          resourceLabels: resourceLabels,
+                        };
+                      }),
+                    },
+                  });
+                }}
               />
             </React.Fragment>);
           })

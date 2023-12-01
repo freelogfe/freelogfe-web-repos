@@ -9,9 +9,11 @@ interface FResourceLabelEditor2Props {
   value: string[];
 
   onChange?(value: string[]): void;
+
+  onClickApply?(): void;
 }
 
-function FResourceLabelEditor2({ value, onChange }: FResourceLabelEditor2Props) {
+function FResourceLabelEditor2({ value, onChange, onClickApply }: FResourceLabelEditor2Props) {
   const refDiv = React.useRef<HTMLDivElement>(null);
   const inputRef = React.useRef<InputRef>(null);
   const [$showInput, set$showInput, get$showInput] = FUtil.Hook.useGetState<boolean>(false);
@@ -102,11 +104,29 @@ function FResourceLabelEditor2({ value, onChange }: FResourceLabelEditor2Props) 
 
     </div>
     {
-      $inputError !== '' && (<>
+      ($inputError !== '' || !!onClickApply) && (<>
         <div style={{ height: 5 }} />
-        <div style={{ color: '#EE4040', fontSize: 12 }}>{$inputError}</div>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div style={{
+            color: '#EE4040',
+            fontSize: 12,
+            visibility: $inputError !== '' ? 'visible' : 'hidden',
+          }}>{$inputError}</div>
+
+          {
+            true && (<FComponentsLib.FTextBtn
+              style={{ fontSize: 12 }}
+              type={'primary'}
+              onClick={() => {
+                onClickApply && onClickApply();
+              }}
+            >应用于所有资源</FComponentsLib.FTextBtn>)
+          }
+
+        </div>
       </>)
     }
+
   </div>);
 }
 

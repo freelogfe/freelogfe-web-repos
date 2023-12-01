@@ -81,9 +81,11 @@ interface CardProps {
   onDelete?(): void;
 
   onAddPolicy?(): void;
+
+  onClickApplyLabels?(): void;
 }
 
-function Card({ order, username, info, resourceType, onChange, onDelete, onAddPolicy }: CardProps) {
+function Card({ order, username, info, resourceType, onChange, onDelete, onAddPolicy, onClickApplyLabels }: CardProps) {
   const ref = React.useRef(null);
   const size = AHooks.useSize(ref);
   const [$showMore, set$showMore, get$showMore] = FUtil.Hook.useGetState<boolean>(false);
@@ -241,6 +243,7 @@ function Card({ order, username, info, resourceType, onChange, onDelete, onAddPo
                 resourceLabels: value,
               });
             }}
+            onClickApply={onClickApplyLabels}
           />
         </div>
 
