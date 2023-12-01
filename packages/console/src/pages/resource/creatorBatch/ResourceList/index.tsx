@@ -12,7 +12,7 @@ import fPolicyBuilder from '@/components/fPolicyBuilder';
 import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import * as AHooks from 'ahooks';
-import { getProcessor } from '@/components/FResourceAuthorizationProcessor';
+// import { getProcessor } from '@/components/FResourceAuthorizationProcessor';
 import { getProcessor_simple } from '@/components/FResourceAuthorizationProcessor_Simple';
 import fMessage from '@/components/fMessage';
 
@@ -254,7 +254,6 @@ function ResourceList({ dispatch, resourceCreatorBatchPage }: ResourceListProps)
 
     const params: Parameters<typeof FServiceAPI.Resource.createBatch>[0] = {
       resourceTypeCode: resourceCreatorBatchPage.selectedResourceType?.value || '',
-      // @ts-ignore
       createResourceObjects: createResourceObjects,
     };
     const { data } = await FServiceAPI.Resource.createBatch(params);
@@ -359,42 +358,29 @@ function ResourceList({ dispatch, resourceCreatorBatchPage }: ResourceListProps)
                   });
                 }}
                 onAddPolicy={async () => {
-                  // const parmas: Parameters<typeof fPolicyBuilder>[0] = {
-                  //   targetType: 'resource',
-                  //   alreadyUsedTexts: resourceCreatorPage.step3_policies.map<string>((ip) => {
-                  //     return ip.policyText;
-                  //   }),
-                  //   alreadyUsedTitles: resourceCreatorPage.step3_policies.map((ip) => {
-                  //     return ip.policyName;
-                  //   }),
-                  //   defaultValue: payload.defaultValue,
-                  // };
                   const result: null | { title: string; text: string; } = await fPolicyBuilder({
                     targetType: 'resource',
                   });
                   if (!result) {
                     return;
                   }
-                  const confirm: boolean = await fPromiseModalConfirm({
-                    title: '提示',
-                    description: '是否将本次修改应用于此处发行的所有资源？',
-                    cancelText: '不，仅应用于当前资源',
-                    okText: '是，应用于所有资源',
-                  });
-                  console.log(confirm, 'confirm sdifjlsdkjflkjlkj');
-                  // fConfirmModal({
-                  //   message: '是否将本次修改应用于此处发行的所有资源？',
-                  //   cancelText: '不，仅应用于当前资源',
-                  //   okText: '是，应用于所有资源',
-                  // });
+
+                  let confirm: boolean = false;
+
+                  if (resourceCreatorBatchPage.resourceListInfo.length > 1) {
+                    confirm = await fPromiseModalConfirm({
+                      title: '提示',
+                      description: '是否将本次修改应用于此处发行的所有资源？',
+                      cancelText: '不，仅应用于当前资源',
+                      okText: '是，应用于所有资源',
+                    });
+                  }
+
                   if (confirm) {
                     dispatch<ChangeAction>({
                       type: 'resourceCreatorBatchPage/change',
                       payload: {
                         resourceListInfo: resourceCreatorBatchPage.resourceListInfo.map((rli) => {
-                          // if (r.fileUID !== rli.fileUID) {
-                          //   return rli;
-                          // }
                           if (rli.resourcePolicies.some((p) => {
                             return p.text === result.text || p.title === result.title;
                           })) {
