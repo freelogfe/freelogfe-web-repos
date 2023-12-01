@@ -63,6 +63,18 @@ function FResourceLabelEditor2({ value, onChange }: FResourceLabelEditor2Props) 
         onBlur={() => {
           set$input('');
         }}
+        onKeyUp={(event) => {
+          if (event.key === 'Escape') {
+            // set_input('');
+            // set_errorText('');
+            // $setState({
+            //   input: '',
+            //   inputError: '',
+            // });
+            inputRef.current?.blur();
+            set$showInput(false);
+          }
+        }}
       />)
     }
 
