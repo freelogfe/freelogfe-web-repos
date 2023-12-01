@@ -12,7 +12,7 @@ import * as AHooks from 'ahooks';
 import { Dispatch } from 'redux';
 import { ChangeAction } from '@/models/resourceCreatorBatchPage';
 import { getFilesSha1Info } from '@/utils/service';
-import fObjectSelectorDrawer from '@/components/fObjectSelectorDrawer';
+// import fObjectSelectorDrawer from '@/components/fObjectSelectorDrawer';
 import fObjectsSelectorDrawer from '@/components/fObjectsSelectorDrawer';
 import fMessage from '@/components/fMessage';
 
