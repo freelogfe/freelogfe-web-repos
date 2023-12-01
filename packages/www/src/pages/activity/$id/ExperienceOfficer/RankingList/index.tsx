@@ -112,9 +112,9 @@ function RankingList({ deadline }: RankingListProps) {
         <FComponentsLib.FContentText text={'积分排行榜'} type={'additional2'} />
         <div />
         <div>
-          <FComponentsLib.FTextBtn type={'primary'} style={{ fontSize: 12 }} onClick={() => {
-            set$modalOpen(true);
-          }}>查看完整榜单</FComponentsLib.FTextBtn>
+          {/*<FComponentsLib.FTextBtn type={'primary'} style={{ fontSize: 12 }} onClick={() => {*/}
+          {/*  set$modalOpen(true);*/}
+          {/*}}>查看完整榜单</FComponentsLib.FTextBtn>*/}
         </div>
       </div>
 

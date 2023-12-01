@@ -170,7 +170,7 @@ function ExperienceOfficer({ activityDetailsPage }: ExperienceOfficerProps) {
 
         {
           // activityDetailsPage.announceTime?.isBefore(moment()) ?
-          false ?
+          true ?
             (<>
               <div style={{ height: 60 }} />
               <RankingList
@@ -198,7 +198,7 @@ function ExperienceOfficer({ activityDetailsPage }: ExperienceOfficerProps) {
         <img style={{ width: 560 }} src={img_award2} alt={''} />
         {
           // activityDetailsPage.announceTime?.isBefore(moment()) ?
-          false ?
+          true ?
             (<>
               <div style={{ height: 60 }} />
               <LuckyPrize />
