@@ -34,14 +34,6 @@ function Success({ match, dispatch }: SuccessProps) {
     });
   });
 
-
-  // function goto() {
-  //   // self._czc?.push(['_trackEvent', '资源创建成功页', '创建新版本', '', 1]);
-  //   history.replace(FUtil.LinkTo.resourceVersionInfo({
-  //     resourceID: match.params.id,
-  //   }));
-  // }
-
   return (<div className={styles.Success}>
     <div style={{ flexGrow: 2 }} />
     <FComponentsLib.FIcons.FCheck style={{ fontSize: 76 }} />
@@ -70,7 +62,7 @@ function Success({ match, dispatch }: SuccessProps) {
       <FComponentsLib.FTextBtn
         type={'primary'}
         onClick={() => {
-          history.replace(FUtil.LinkTo.resourceDetails({
+          self.open(FUtil.LinkTo.resourceDetails({
             resourceID: match.params.id,
           }));
         }}
@@ -78,7 +70,7 @@ function Success({ match, dispatch }: SuccessProps) {
       <FComponentsLib.FTextBtn
         type={'primary'}
         onClick={() => {
-          history.replace(FUtil.LinkTo.resourceVersionInfo({
+          self.open(FUtil.LinkTo.resourceVersionInfo({
             resourceID: match.params.id,
             version: get$resourceInfo()?.version,
           }));
@@ -87,7 +79,7 @@ function Success({ match, dispatch }: SuccessProps) {
       <FComponentsLib.FTextBtn
         type={'primary'}
         onClick={() => {
-          history.replace(FUtil.LinkTo.resourceCreator());
+          self.open(FUtil.LinkTo.resourceCreator());
         }}
       >继续创建资源</FComponentsLib.FTextBtn>
     </div>

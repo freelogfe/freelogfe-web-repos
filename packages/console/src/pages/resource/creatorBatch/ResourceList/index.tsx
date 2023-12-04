@@ -308,7 +308,7 @@ function ResourceList({ dispatch, resourceCreatorBatchPage }: ResourceListProps)
         history.push(locationHref);
       }}
     />
-    
+
     <div className={styles.container3}>
       <div style={{ width: 920 }}>
         <div style={{ height: 35 }} />
