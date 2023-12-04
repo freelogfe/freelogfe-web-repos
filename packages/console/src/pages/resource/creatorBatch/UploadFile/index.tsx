@@ -45,6 +45,23 @@ function UploadFile({ dispatch, resourceCreatorBatchPage }: UploadFileProps) {
   });
 
   async function localUploadGotoList() {
+    const namesMap: Map<string, number> = new Map<string, number>();
+
+    for (const resource of resourceCreatorBatchPage.resourceListInfo) {
+      if (resource.resourceName === '') {
+        continue;
+      }
+      namesMap.set(resource.resourceName, (namesMap.get(resource.resourceName) || 0) + 1);
+    }
+
+    for (const resource of get$successFiles()) {
+      if (resource.name === '') {
+        continue;
+      }
+      const name: string = getARightName(resource.name);
+      namesMap.set(name, (namesMap.get(name) || 0) + 1);
+    }
+
     const { data: data_ResourceNames }: {
       data: {
         [k: string]: {
@@ -53,15 +70,27 @@ function UploadFile({ dispatch, resourceCreatorBatchPage }: UploadFileProps) {
         };
       }
     } = await FServiceAPI.Resource.generateResourceNames({
-      data: get$successFiles().map((f) => {
-        // console.log(f.name, getARightName(f.name), ' f.name sdfijsd;lkfjlk;sdjflksjdlkfjsdlkj');
+      data: Array.from(namesMap.entries()).map(([key, value]) => {
         return {
-          name: getARightName(f.name),
-          num: 1,
+          name: key,
+          num: value,
         };
       }),
+      // data: get$successFiles().map((f) => {
+      //   // console.log(f.name, getARightName(f.name), ' f.name sdfijsd;lkfjlk;sdjflksjdlkfjsdlkj');
+      //   return {
+      //     name: getARightName(f.name),
+      //     num: 1,
+      //   };
+      // }),
     });
 
+    const copyData_ResourceNames: {
+      [k: string]: {
+        resourceNewNames: string[];
+        status: 1 | 2;
+      }
+    } = JSON.parse(JSON.stringify(data_ResourceNames));
 
     const { result } = await getFilesSha1Info({
       sha1: get$successFiles().map((f) => {
@@ -74,9 +103,12 @@ function UploadFile({ dispatch, resourceCreatorBatchPage }: UploadFileProps) {
     // console.log(data_ResourceNames, 'data_ResourceNames sidfjlsdkjflksdjlfkjlkdsjlk');
 
     let resourceListInfo = [
-      ...resourceCreatorBatchPage.resourceListInfo,
+      ...resourceCreatorBatchPage.resourceListInfo.map((resource) => {
+        const name: string = copyData_ResourceNames[getARightName(resource.resourceName)].resourceNewNames.shift() || getARightName(resource.resourceName);
+        return resource;
+      }),
       ...get$successFiles().map((f) => {
-        const name: string = data_ResourceNames[getARightName(f.name)].resourceNewNames[0];
+        const name: string = copyData_ResourceNames[getARightName(f.name)].resourceNewNames.shift() || getARightName(f.name);
         const successFile = result.find((file) => {
           return f.sha1 === file.sha1;
         });

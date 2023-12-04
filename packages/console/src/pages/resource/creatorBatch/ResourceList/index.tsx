@@ -8,11 +8,9 @@ import Card from './Card';
 import { Dispatch } from 'redux';
 import { ChangeAction } from '@/models/resourceCreatorBatchPage';
 import fPolicyBuilder from '@/components/fPolicyBuilder';
-// import fConfirmModal from '@/components/fConfirmModal';
 import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import * as AHooks from 'ahooks';
-// import { getProcessor } from '@/components/FResourceAuthorizationProcessor';
 import { getProcessor_simple } from '@/components/FResourceAuthorizationProcessor_Simple';
 import fMessage from '@/components/fMessage';
 
