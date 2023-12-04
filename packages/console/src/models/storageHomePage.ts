@@ -7,6 +7,7 @@ import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 import { history } from 'umi';
 import { listStateAndListMore } from '@/components/FListFooter';
 import fResourceTypeInputDrawer from '@/components/fResourceTypeInputDrawer';
+import fCenterMessage from '@/components/fCenterMessage';
 
 export interface StorageHomePageModelState {
   bucketList: {
@@ -416,6 +417,7 @@ const Model: StorageHomePageModelType = {
       yield put<FetchBucketsAction>({
         type: 'fetchBuckets',
       });
+      yield call(fCenterMessage, { message: '对象已删除' });
     },
     * onBatchUpdateObjects({}: OnBatchUpdateObjectsAction, { select, call, put }: EffectsCommandMap) {
       const { storageHomePage }: ConnectState = yield select(({ storageHomePage }: ConnectState) => ({
@@ -458,6 +460,7 @@ const Model: StorageHomePageModelType = {
           }),
         },
       });
+      yield call(fCenterMessage, { message: '资源类型设置成功' });
     },
   },
   reducers: {

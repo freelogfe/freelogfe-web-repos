@@ -17,6 +17,7 @@ import useUrlState from '@ahooksjs/use-url-state';
 import { FUtil, FI18n } from '@freelog/tools-lib';
 import fCreateBucket from '@/components/fCreateBucket';
 import * as AHooks from 'ahooks';
+import { Modal } from 'antd';
 
 interface StorageProps extends RouteComponentProps<{}> {
   dispatch: Dispatch;
@@ -102,6 +103,8 @@ function Storage({ match, history, storageHomePage, dispatch }: StorageProps) {
         <Content />
       </div>
     </div>
+
+
   </div>);
 }
 

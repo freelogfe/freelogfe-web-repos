@@ -28,6 +28,7 @@ import fReadLocalFiles from '@/components/fReadLocalFiles';
 import FStorageUploadTasksPanel, { getStorageUploadTasksPanel } from '@/components/FStorageUploadTasksPanel';
 import * as AHooks from 'ahooks';
 import Details from './Details';
+import fCenterMessage from '@/components/fCenterMessage';
 
 interface ContentProps {
   dispatch: Dispatch;
@@ -256,6 +257,7 @@ function Content({ storageHomePage, dispatch }: ContentProps) {
             disabled={storageHomePage.checkedObjectIDs.length === 0}
             type={'primary'}
             onClick={() => {
+
               dispatch<OnBatchUpdateObjectsAction>({
                 type: 'storageHomePage/onBatchUpdateObjects',
               });
@@ -321,7 +323,7 @@ function Content({ storageHomePage, dispatch }: ContentProps) {
       }}
     />
 
-    <Details/>
+    <Details />
   </div>);
 }
 
