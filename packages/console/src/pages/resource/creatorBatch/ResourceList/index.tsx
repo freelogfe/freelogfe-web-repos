@@ -51,35 +51,28 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
     }
   }, [resourceCreatorBatchPage.resourceListInfo.length]);
 
-  AHooks.useDebounceEffect(() => {
-    const map: Map<string, number> = new Map<string, number>();
-
-    for (const info of resourceCreatorBatchPage.resourceListInfo) {
-      map.set(info.resourceName, (map.get(info.resourceName) || 0) + 1);
-    }
-
-    // console.log(map, 'map sdifjsdlkfjlsdjflkjflsdjlfkj');
-
-    if (Array.from(map.values()).some((v) => {
-      return v !== 0;
-    })) {
-      dispatch<ChangeAction>({
-        type: 'resourceCreatorBatchPage/change',
-        payload: {
-          resourceListInfo: resourceCreatorBatchPage.resourceListInfo.map((info) => {
-            return {
-              ...info,
-              resourceNameError: (info.resourceNameError !== '' && info.resourceNameError !== '不能重复')
-                ? info.resourceNameError
-                : ((map.get(info.resourceName) || 0) > 1 ? '不能重复' : ''),
-            };
-          }),
-        },
-      });
-    }
-  }, [resourceCreatorBatchPage.resourceListInfo], {
-    wait: 30,
-  });
+  // function very() {
+  //   const map: Map<string, number> = new Map<string, number>();
+  //
+  //   // console.log(resourceCreatorBatchPage.resourceListInfo, 'resourceCreatorBatchPage.resourceListInfo sdiofjlsdkjlk');
+  //   for (const info of resourceCreatorBatchPage.resourceListInfo) {
+  //     map.set(info.resourceName, (map.get(info.resourceName) || 0) + 1);
+  //   }
+  //
+  //   dispatch<ChangeAction>({
+  //     type: 'resourceCreatorBatchPage/change',
+  //     payload: {
+  //       resourceListInfo: resourceCreatorBatchPage.resourceListInfo.map((info) => {
+  //         return {
+  //           ...info,
+  //           resourceNameError: (info.resourceNameError !== '' && info.resourceNameError !== '不能重复')
+  //             ? info.resourceNameError
+  //             : ((map.get(info.resourceName) || 0) > 1 ? '不能重复' : ''),
+  //         };
+  //       }),
+  //     },
+  //   });
+  // }
 
   async function onClickRelease() {
     const createResourceObjects: {
@@ -294,7 +287,7 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
         failReason: d.message || '',
       };
     });
-    console.log(list, 'sdiofj;sldkjflksdjfolijsdolfjlksdjlkj');
+    // console.log(list, 'sdiofj;sldkjflksdjfolijsdolfjlksdjlkj');
     dispatch<ChangeAction>({
       type: 'resourceCreatorBatchPage/change',
       payload: {
@@ -352,27 +345,71 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
                 username={$username}
                 info={r}
                 onChange={(value) => {
+                  const resourceListInfo = resourceCreatorBatchPage.resourceListInfo.map((rli) => {
+                    if (value.fileUID !== rli.fileUID) {
+                      return rli;
+                    }
+                    return value;
+                  });
+                  const map: Map<string, number> = new Map<string, number>();
+
+                  // console.log(resourceCreatorBatchPage.resourceListInfo, 'resourceCreatorBatchPage.resourceListInfo sdiofjlsdkjlk');
+                  for (const info of resourceListInfo) {
+                    map.set(info.resourceName, (map.get(info.resourceName) || 0) + 1);
+                  }
+
                   dispatch<ChangeAction>({
                     type: 'resourceCreatorBatchPage/change',
                     payload: {
-                      resourceListInfo: resourceCreatorBatchPage.resourceListInfo.map((rli) => {
-                        if (value.fileUID !== rli.fileUID) {
-                          return rli;
-                        }
-                        return value;
+                      resourceListInfo: resourceListInfo.map((info) => {
+                        return {
+                          ...info,
+                          resourceNameError: (info.resourceNameError !== '' && info.resourceNameError !== '不能重复')
+                            ? info.resourceNameError
+                            : ((map.get(info.resourceName) || 0) > 1 ? '不能重复' : ''),
+                        };
                       }),
                     },
                   });
+                  // dispatch<ChangeAction>({
+                  //   type: 'resourceCreatorBatchPage/change',
+                  //   payload: {
+                  //
+                  //   },
+                  // });
                 }}
                 onDelete={() => {
+                  const resourceListInfo = resourceCreatorBatchPage.resourceListInfo.filter((rli) => {
+                    return rli.fileUID !== r.fileUID;
+                  });
+
+                  const map: Map<string, number> = new Map<string, number>();
+
+                  // console.log(resourceCreatorBatchPage.resourceListInfo, 'resourceCreatorBatchPage.resourceListInfo sdiofjlsdkjlk');
+                  for (const info of resourceListInfo) {
+                    map.set(info.resourceName, (map.get(info.resourceName) || 0) + 1);
+                  }
+
                   dispatch<ChangeAction>({
                     type: 'resourceCreatorBatchPage/change',
                     payload: {
-                      resourceListInfo: resourceCreatorBatchPage.resourceListInfo.filter((rli) => {
-                        return rli.fileUID !== r.fileUID;
+                      resourceListInfo: resourceListInfo.map((info) => {
+                        return {
+                          ...info,
+                          resourceNameError: (info.resourceNameError !== '' && info.resourceNameError !== '不能重复')
+                            ? info.resourceNameError
+                            : ((map.get(info.resourceName) || 0) > 1 ? '不能重复' : ''),
+                        };
                       }),
                     },
                   });
+
+                  // dispatch<ChangeAction>({
+                  //   type: 'resourceCreatorBatchPage/change',
+                  //   payload: {
+                  //
+                  //   },
+                  // });
                 }}
                 onAddPolicy={async () => {
                   const result: null | { title: string; text: string; } = await fPolicyBuilder({
