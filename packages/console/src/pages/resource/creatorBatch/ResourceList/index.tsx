@@ -13,6 +13,8 @@ import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import * as AHooks from 'ahooks';
 import { getProcessor_simple } from '@/components/FResourceAuthorizationProcessor_Simple';
 import fMessage from '@/components/fMessage';
+import { history } from '@@/core/history';
+import FPrompt from '@/components/FPrompt';
 
 interface ResourceListProps {
   dispatch: Dispatch;
@@ -298,6 +300,15 @@ function ResourceList({ dispatch, resourceCreatorBatchPage }: ResourceListProps)
   }
 
   return (<>
+
+    <FPrompt
+      watch={resourceCreatorBatchPage.resourceListInfo.length > 0}
+      messageText={'还没有保存，现在离开会导致信息丢失'}
+      onOk={(locationHref) => {
+        history.push(locationHref);
+      }}
+    />
+    
     <div className={styles.container3}>
       <div style={{ width: 920 }}>
         <div style={{ height: 35 }} />

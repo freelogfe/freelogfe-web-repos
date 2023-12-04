@@ -33,13 +33,6 @@ function CreatorBatch({ dispatch, resourceCreatorBatchPage }: CreatorBatchProps)
   });
 
   return (<>
-    <FPrompt
-      watch={resourceCreatorBatchPage.resourceListInfo.length > 0}
-      messageText={'还没有保存，现在离开会导致信息丢失'}
-      onOk={(locationHref) => {
-        history.push(locationHref);
-      }}
-    />
 
     {
       resourceCreatorBatchPage.showPage === 'resourceType' && (<ResourceType />)
