@@ -254,9 +254,12 @@ function Content({ storageHomePage, dispatch }: ContentProps) {
         <div className={styles.handled}>
           <FComponentsLib.FContentText type={'additional2'} style={{ fontSize: 14 }} text={'选择对象后可执行批量操作:'} />
           <FComponentsLib.FTextBtn
-            disabled={storageHomePage.checkedObjectIDs.length === 0}
+            // disabled={storageHomePage.checkedObjectIDs.length === 0}
             type={'primary'}
             onClick={() => {
+              if (storageHomePage.checkedObjectIDs.length === 0) {
+                return fCenterMessage({ message: '请选择要执行操作的对象' });
+              }
               dispatch<OnBatchUpdateObjectsAction>({
                 type: 'storageHomePage/onBatchUpdateObjects',
               });
@@ -268,9 +271,12 @@ function Content({ storageHomePage, dispatch }: ContentProps) {
 
           <FComponentsLib.FTextBtn
             type={'danger'}
-            disabled={storageHomePage.checkedObjectIDs.length === 0}
+            // disabled={storageHomePage.checkedObjectIDs.length === 0}
             onClick={() => {
               // console.log('(*YOIOIUY*(OUOIJLKJLkj');
+              if (storageHomePage.checkedObjectIDs.length === 0) {
+                return fCenterMessage({ message: '请选择要执行操作的对象' });
+              }
               dispatch<OnBatchDeleteObjectsAction>({
                 type: 'storageHomePage/onBatchDeleteObjects',
               });
