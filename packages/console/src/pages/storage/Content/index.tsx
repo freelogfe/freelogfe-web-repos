@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import { Checkbox, Space } from 'antd';
+import { Checkbox, Modal, Space } from 'antd';
 import FTable from '@/components/FTable';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
@@ -257,7 +257,6 @@ function Content({ storageHomePage, dispatch }: ContentProps) {
             disabled={storageHomePage.checkedObjectIDs.length === 0}
             type={'primary'}
             onClick={() => {
-
               dispatch<OnBatchUpdateObjectsAction>({
                 type: 'storageHomePage/onBatchUpdateObjects',
               });
