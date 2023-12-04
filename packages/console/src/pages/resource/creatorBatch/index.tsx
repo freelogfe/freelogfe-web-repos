@@ -103,7 +103,7 @@ function CreatorBatch({ dispatch, resourceCreatorBatchPage }: CreatorBatchProps)
       }
     } = JSON.parse(JSON.stringify(data_ResourceNames));
 
-    console.log(copyData_ResourceNames, 'copyData_ResourceNames sdifjokwejlfjlwjflsdj');
+    // console.log(copyData_ResourceNames, 'copyData_ResourceNames sdifjokwejlfjlwjflsdj');
 
     const { result } = await getFilesSha1Info({
       sha1: get$successFiles().map((f) => {
@@ -119,7 +119,12 @@ function CreatorBatch({ dispatch, resourceCreatorBatchPage }: CreatorBatchProps)
         return resource;
       }),
       ...get$successFiles().map((f) => {
-        const name: string = copyData_ResourceNames[getARightName(f.name)].resourceNewNames.shift() || getARightName(f.name);
+        let resourceName: string = '';
+        const key: string = getARightName(f.name);
+        if (key !== '') {
+          resourceName = copyData_ResourceNames[getARightName(f.name)].resourceNewNames.shift() || '';
+        }
+        const resourceTitle: string = f.name.replace(new RegExp(/\.[\w-]+$/), '').substring(0, 100);
         // console.log(f.name, 'f.name sidfjlksdjflkjsdlkjl');
         // console.log(name, 'name sidfjlksdjflkjsdlkjl');
         const successFile = result.find((file) => {
@@ -130,9 +135,9 @@ function CreatorBatch({ dispatch, resourceCreatorBatchPage }: CreatorBatchProps)
           fileName: f.name,
           sha1: f.sha1,
           cover: '',
-          resourceName: name,
-          resourceNameError: '',
-          resourceTitle: f.name.replace(new RegExp(/\.[\w-]+$/), '').substring(0, 100),
+          resourceName: resourceName,
+          resourceNameError: resourceName === '' ? '请输入资源授权标识' : '',
+          resourceTitle: resourceTitle === '' ? '': '',
           resourceTitleError: '',
           resourceLabels: [],
           resourcePolicies: [],
@@ -316,7 +321,7 @@ function CreatorBatch({ dispatch, resourceCreatorBatchPage }: CreatorBatchProps)
       return;
     }
 
-    console.log(files, 'files 09wie3ojrflsikdjflsdjlfkjlkjlk');
+    // console.log(files, 'files 09wie3ojrflsikdjflsdjlfkjlkjlk');
     set$files(files);
   }
 
@@ -401,5 +406,5 @@ function getARightName(name: string) {
   const newName: string = name.replace(new RegExp(/\.[\w-]+$/), '')
     .substring(0, 50)
     .replace(new RegExp(/[\\|\/|:|\*|\?|"|<|>|\||\s|@|\$|#]/g), '_');
-  return newName || name;
+  return newName;
 }
