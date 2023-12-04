@@ -112,7 +112,7 @@ function CreatorBatch({ dispatch, resourceCreatorBatchPage }: CreatorBatchProps)
       resourceTypeCode: resourceCreatorBatchPage.selectedResourceType?.value || '',
     });
 
-    console.log(result, 'result sdifj;lsdkjfljl');
+    // console.log(result, 'result sdifj;lsdkjfljl');
     let resourceListInfo = [
       ...resourceCreatorBatchPage.resourceListInfo.map((resource) => {
         copyData_ResourceNames[resource.resourceName].resourceNewNames.shift();
@@ -120,8 +120,8 @@ function CreatorBatch({ dispatch, resourceCreatorBatchPage }: CreatorBatchProps)
       }),
       ...get$successFiles().map((f) => {
         const name: string = copyData_ResourceNames[getARightName(f.name)].resourceNewNames.shift() || getARightName(f.name);
-        console.log(f.name, 'f.name sidfjlksdjflkjsdlkjl');
-        console.log(name, 'name sidfjlksdjflkjsdlkjl');
+        // console.log(f.name, 'f.name sidfjlksdjflkjsdlkjl');
+        // console.log(name, 'name sidfjlksdjflkjsdlkjl');
         const successFile = result.find((file) => {
           return f.sha1 === file.sha1;
         });
