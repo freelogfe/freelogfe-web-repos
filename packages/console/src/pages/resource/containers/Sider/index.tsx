@@ -163,7 +163,7 @@ function Sider({ resourceSider, dispatch }: SilderProps) {
           target={'_blank'}
           className={styles.resourceName}
         >
-          {resourceSider.resourceTitle || resourceSider.resourceName}
+          {resourceSider.resourceTitle || resourceSider.resourceName.split('/')[1]}
         </FLink>
         <div style={{ height: 10 }} />
         <label className={styles.label}>

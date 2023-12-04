@@ -351,6 +351,7 @@ function Resources({ dispatch, resourceListPage }: ResourceProps) {
                   checked={resourceListPage.checkedResourceIDs.includes(i.id)}
                   disabled={i.status === 2}
                   key={i.id}
+                  title={i.title || i.name.split('/')[1]}
                   cover={i.cover}
                   latestVersion={i.version}
                   resourceType={i.type.join('/')}

@@ -7,6 +7,7 @@ import FResourceStatusBadge from '@/components/FResourceStatusBadge';
 
 interface FResourceCard_AbleCheck_Props {
   checked: boolean;
+  title: string;
   disabled?: boolean;
   cover: string;
   resourceType: string;
@@ -21,6 +22,7 @@ function FResourceCard_AbleCheck({
                                    checked,
                                    disabled = false,
                                    cover,
+                                   title,
                                    resourceType,
                                    latestVersion,
                                    policies,
@@ -48,6 +50,13 @@ function FResourceCard_AbleCheck({
         src={cover}
         width={280}
         style={{ display: 'block' }}
+      />
+      <div style={{ height: 10 }} />
+      <FComponentsLib.FContentText
+        text={title}
+        type={'highlight'}
+        style={{ maxWidth: 280 }}
+        singleRow
       />
       <div style={{ height: 10 }} />
       <div className={styles.ableCheckCardInfo}>

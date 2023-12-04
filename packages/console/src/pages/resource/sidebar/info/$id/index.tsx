@@ -187,7 +187,7 @@ function Info({ dispatch, resourceInfoPage, match }: InfoProps) {
                 style={{ width: '100%' }}
                 // placeholder={FI18n.i18nNext.t('输入资源授权标识')}
                 // placeholder={FI18n.i18nNext.t('rqr_input_resourceauthid_hint')}
-                placeholder={resourceInfoPage.resourceInfo.resourceName || FI18n.i18nNext.t('rqr_input_resourceauthid_hint')}
+                placeholder={resourceInfoPage.resourceInfo.resourceName.split('/')[1] || FI18n.i18nNext.t('rqr_input_resourceauthid_hint')}
                 onChange={(e) => {
                   dispatch<OnChange_TitleInput_Action>({
                     type: 'resourceInfoPage/onChange_TitleInput',
@@ -199,7 +199,7 @@ function Info({ dispatch, resourceInfoPage, match }: InfoProps) {
               />)
               : (<div className={styles.resourceTitle}>
                 <FComponentsLib.FContentText
-                  text={resourceInfoPage.resourceInfo.resourceTitle || resourceInfoPage.resourceInfo.resourceName || ''}
+                  text={resourceInfoPage.resourceInfo.resourceTitle || resourceInfoPage.resourceInfo.resourceName.split('/')[1] || ''}
                   type={'normal'}
                 />
               </div>)

@@ -106,7 +106,7 @@ function FResourceCard({
         <div style={{ height: '12px' }} />
         <FComponentsLib.FContentText
           singleRow={true}
-          text={resource.title || resource.name}
+          text={resource.title || resource.name.split('/')[1]}
         />
         <div style={{ height: '6px' }} />
         <div className={styles.MetaInfo}>
@@ -116,7 +116,7 @@ function FResourceCard({
           />
           <FComponentsLib.FContentText
             singleRow
-            style={{maxWidth: 120}}
+            style={{ maxWidth: 120 }}
             type='additional1'
             text={resource.version ? (FI18n.i18nNext.t('latest_version') + ' ' + resource.version) : '暂无版本'}
           />
