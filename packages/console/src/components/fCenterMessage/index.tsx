@@ -45,7 +45,7 @@ function FCenterMessage({ message, width = 'fit-content', onClose }: FCenterMess
 
   AHooks.useTimeout(() => {
     set$open(false);
-  }, 2000);
+  }, 1500);
 
   return (<Modal
     open={$open}

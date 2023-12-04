@@ -4,6 +4,7 @@ import { DvaReducer } from './shared';
 import { ConnectState } from '@/models/connect';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import { listStateAndListMore } from '@/components/FListFooter';
+import fCenterMessage from '@/components/fCenterMessage';
 
 export interface ResourceListPageModelState {
   resourceTypeCodes: {
@@ -364,7 +365,24 @@ const Model: ResourceListPageModelType = {
           };
         }
       } = yield call(FServiceAPI.Resource.batchUpdate, parmas);
-      // console.log(data, 'asdfiojlkewjl;fkjsdlkfjlksdjlkj');
+      console.log(data, 'asdfiojlkewjl;fkjsdlkfjlksdjlkj');
+
+      if (Object.values(data).every((d) => {
+        return d.status === 1;
+      })) {
+        let msg: string = '';
+
+        if (payload.addPolicies !== undefined) {
+          msg = '策略添加成功';
+        } else if (payload.status === 1) {
+          msg = '上架成功';
+        } else if (payload.status === 4) {
+          msg = '下架成功';
+        }
+        yield call(fCenterMessage({ message: msg }));
+        return;
+      }
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
