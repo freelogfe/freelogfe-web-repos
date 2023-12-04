@@ -218,9 +218,13 @@ function Resources({ dispatch, resourceListPage }: ResourceProps) {
                       dispatch<ChangeAction>({
                         type: 'resourceListPage/change',
                         payload: {
-                          checkedResourceIDs: resourceListPage.resource_List.map((o) => {
-                            return o.id;
-                          }),
+                          checkedResourceIDs: resourceListPage.resource_List
+                            .filter((o) => {
+                              return o.status !== 2;
+                            })
+                            .map((o) => {
+                              return o.id;
+                            }),
                         },
                       });
                     } else {
@@ -308,6 +312,7 @@ function Resources({ dispatch, resourceListPage }: ResourceProps) {
                       type: 'resourceListPage/change',
                       payload: {
                         isBatchManagement: false,
+                        checkedResourceIDs: [],
                       },
                     });
                   }}
