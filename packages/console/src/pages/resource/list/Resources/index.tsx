@@ -22,7 +22,7 @@ import FResourceTypeFilter from '@/components/FResourceTypeFilter';
 import FComponentsLib from '@freelog/components-lib';
 import FMenu from '@/components/FMenu';
 import { Checkbox, Modal, Space } from 'antd';
-import { history } from 'umi';
+// import { history } from 'umi';
 import FResourceCard from '@/components/FResourceCard';
 import FListFooter from '@/components/FListFooter';
 import FResourceCard_AbleCheck from '@/components/FResourceCard_AbleCheck';
