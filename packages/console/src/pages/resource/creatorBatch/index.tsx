@@ -54,8 +54,9 @@ function CreatorBatch({ dispatch, resourceCreatorBatchPage }: CreatorBatchProps)
   });
 
   AHooks.useDebounceEffect(() => {
-    if ($files.length > 0 && ($successFiles.length + $failFiles.length === $files.length)) {
+    if (get$files().length > 0 && (get$successFiles().length + get$failFiles().length === get$files().length)) {
       localUploadGotoList();
+
     }
   }, [$files, $successFiles, $failFiles], {
     wait: 300,
@@ -102,6 +103,8 @@ function CreatorBatch({ dispatch, resourceCreatorBatchPage }: CreatorBatchProps)
       }
     } = JSON.parse(JSON.stringify(data_ResourceNames));
 
+    console.log(copyData_ResourceNames, 'copyData_ResourceNames sdifjokwejlfjlwjflsdj');
+
     const { result } = await getFilesSha1Info({
       sha1: get$successFiles().map((f) => {
         return f.sha1;
@@ -109,9 +112,10 @@ function CreatorBatch({ dispatch, resourceCreatorBatchPage }: CreatorBatchProps)
       resourceTypeCode: resourceCreatorBatchPage.selectedResourceType?.value || '',
     });
 
+    console.log(result, 'result sdifj;lsdkjfljl');
     let resourceListInfo = [
       ...resourceCreatorBatchPage.resourceListInfo.map((resource) => {
-        const name: string = copyData_ResourceNames[getARightName(resource.resourceName)].resourceNewNames.shift() || getARightName(resource.resourceName);
+        copyData_ResourceNames[resource.resourceName].resourceNewNames.shift();
         return resource;
       }),
       ...get$successFiles().map((f) => {
@@ -176,7 +180,11 @@ function CreatorBatch({ dispatch, resourceCreatorBatchPage }: CreatorBatchProps)
         resourceListInfo: resourceListInfo,
       },
     });
+
     set$files([]);
+    set$successFiles([]);
+    set$failFiles([]);
+
   }
 
   async function storageSpaceGotoList(objIDs: string[]) {
@@ -280,6 +288,10 @@ function CreatorBatch({ dispatch, resourceCreatorBatchPage }: CreatorBatchProps)
         resourceListInfo: resourceListInfo,
       },
     });
+
+    // console.log('******************************************');
+
+
   }
 
   async function onLocalUpload() {
@@ -304,7 +316,7 @@ function CreatorBatch({ dispatch, resourceCreatorBatchPage }: CreatorBatchProps)
       return;
     }
 
-    // console.log(files, 'files 09wie3ojrflsikdjflsdjlfkjlkjlk');
+    console.log(files, 'files 09wie3ojrflsikdjflsdjlfkjlkjlk');
     set$files(files);
   }
 
@@ -334,13 +346,16 @@ function CreatorBatch({ dispatch, resourceCreatorBatchPage }: CreatorBatchProps)
     }
 
     {
-      resourceCreatorBatchPage.showPage === 'resourceList' && (<ResourceList />)
+      resourceCreatorBatchPage.showPage === 'resourceList' && (<ResourceList
+        onImportStorage={onImportStorage}
+        onLocalUpload={onLocalUpload}
+      />)
     }
 
     {
       resourceCreatorBatchPage.showPage === 'finish' && (<Finish />)
     }
-
+    {/*{console.log($files, '$files sdolikfjsdlkjflkjlk')}*/}
     <Modal
       open={$files.length > 0}
       title={null}

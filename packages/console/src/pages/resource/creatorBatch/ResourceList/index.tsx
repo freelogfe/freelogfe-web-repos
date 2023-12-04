@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import { Space } from 'antd';
+import { Popover, Space } from 'antd';
 import FComponentsLib from '@freelog/components-lib';
 import { connect } from 'dva';
 import { ConnectState, ResourceCreatorBatchPageState } from '@/models/connect';
@@ -15,13 +15,18 @@ import { getProcessor_simple } from '@/components/FResourceAuthorizationProcesso
 import fMessage from '@/components/fMessage';
 import { history } from '@@/core/history';
 import FPrompt from '@/components/FPrompt';
+import FPopover from '@/components/FPopover';
 
 interface ResourceListProps {
   dispatch: Dispatch;
   resourceCreatorBatchPage: ResourceCreatorBatchPageState;
+
+  onLocalUpload?(): void;
+
+  onImportStorage?(): void;
 }
 
-function ResourceList({ dispatch, resourceCreatorBatchPage }: ResourceListProps) {
+function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImportStorage }: ResourceListProps) {
 
   const [$username, set$username, get$username] = FUtil.Hook.useGetState<string>('');
 
@@ -485,17 +490,61 @@ function ResourceList({ dispatch, resourceCreatorBatchPage }: ResourceListProps)
           &nbsp;已添加授权策略的资源将会自动上架
         </div>
         <Space size={20}>
-          <FComponentsLib.FRectBtn
-            disabled={resourceCreatorBatchPage.resourceListInfo.length >= 20}
-            onClick={() => {
-              dispatch<ChangeAction>({
-                type: 'resourceCreatorBatchPage/change',
-                payload: {
-                  showPage: 'uploadFile',
-                },
-              });
-            }}
-          >继续添加</FComponentsLib.FRectBtn>
+          <FPopover
+            // open={true}
+            title={null}
+            overlayInnerStyle={{ padding: 0 }}
+            overlayStyle={{ padding: 0 }}
+            style={{ padding: 0 }}
+            content={<div style={{ padding: '3px 0', display: 'flex', alignItems: 'center', gap: 15 }}>
+              <div
+                style={{
+                  width: 100,
+                  height: 100,
+                  backgroundColor: 'gray',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 10,
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                }}
+                onClick={onLocalUpload}
+              >
+                <FComponentsLib.FIcons.FLocalUpload style={{ fontSize: 60 }} />
+                <div>本地上传</div>
+              </div>
+              <div
+                style={{
+                  width: 100,
+                  height: 100,
+                  backgroundColor: 'blueviolet',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 10,
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                }}
+                onClick={onImportStorage}
+              >
+                <FComponentsLib.FIcons.FStorageSpace style={{ fontSize: 60 }} />
+                <div>存储空间导入</div>
+              </div>
+            </div>}
+          >
+            <div><FComponentsLib.FRectBtn
+              disabled={resourceCreatorBatchPage.resourceListInfo.length >= 20}
+              onClick={() => {
+                // dispatch<ChangeAction>({
+                //   type: 'resourceCreatorBatchPage/change',
+                //   payload: {
+                //     showPage: 'uploadFile',
+                //   },
+                // });
+              }}
+            >继续添加</FComponentsLib.FRectBtn></div>
+          </FPopover>
           <FComponentsLib.FRectBtn
             disabled={resourceCreatorBatchPage.resourceListInfo.some((r) => {
               return r.resourceNameError !== '' || r.resourceTitleError !== '';
