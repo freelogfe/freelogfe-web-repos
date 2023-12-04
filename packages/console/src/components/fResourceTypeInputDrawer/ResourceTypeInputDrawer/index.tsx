@@ -58,7 +58,7 @@ function ResourceTypeInputDrawer({ onOk, onClose }: ResourceTypeInputDrawerProps
     />
     <div style={{ height: 20 }} />
     <div className={styles.footer}>
-      <div><FComponentsLib.FIcons.FInfo style={{ fontSize: 14 }} />&nbsp;批量发行适用于一次性发行多个同类型资源，目前仅针对部分资源类型开放。</div>
+      <div><FComponentsLib.FIcons.FInfo style={{ fontSize: 14 }} />&nbsp;当前操作将覆盖原有设置</div>
     </div>
   </FDrawer>);
 }
