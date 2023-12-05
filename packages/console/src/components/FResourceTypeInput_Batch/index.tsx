@@ -173,7 +173,7 @@ function FResourceTypeInput_Batch({ value, onChange }: FResourceTypeInput_Batch_
     >
       {
         value === null
-          ? (<span>{FI18n.i18nNext.t('createresource_selectresourcetype_input_hint')}</span>)
+          ? (<span>{FI18n.i18nNext.t('brr_selectresourcetype_input_resourcetype_hint')}</span>)
           : (<FComponentsLib.FContentText
             text={(value.labels).join(' / ')}
             type={'normal'}
