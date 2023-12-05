@@ -129,7 +129,8 @@ function Card({ order, username, info, resourceType, onChange, onDelete, onAddPo
   return (<div className={styles.resourceContainer}>
     <div className={styles.resourceOrder}>
       <FComponentsLib.FContentText
-        text={`资源${order}`}
+        // text={`资源${order}`}
+        text={FI18n.i18nNext.t('brr_resourcelisting_item_no')}
         type={'highlight'}
         style={{ fontSize: 12 }}
       />
@@ -141,7 +142,7 @@ function Card({ order, username, info, resourceType, onChange, onDelete, onAddPo
         }}
       >
         <FComponentsLib.FIcons.FDelete style={{ fontSize: 12 }} />
-        &nbsp;删除
+        &nbsp;{FI18n.i18nNext.t('brr_resourcelisting_item_btn_deleteitem')}
       </FComponentsLib.FTextBtn>
     </div>
     <div style={{ height: 5 }} />
@@ -165,12 +166,15 @@ function Card({ order, username, info, resourceType, onChange, onDelete, onAddPo
           }}
         >
           <FComponentsLib.FTextBtn
-            type={'primary'}>上传封面</FComponentsLib.FTextBtn>
+            type={'primary'}>{FI18n.i18nNext.t('brr_resourcelisting_item_btn_uplaodimage')}</FComponentsLib.FTextBtn>
         </FUploadCover>
       </div>
       <div className={styles.whiteCardRight}>
         <div className={styles.whiteCardRightRow}>
-          <FComponentsLib.FContentText text={'文件名'} type={'negative'} />
+          <FComponentsLib.FContentText
+            text={FI18n.i18nNext.t('brr_resourcelisting_item_filename')}
+            type={'negative'}
+          />
           <FComponentsLib.FContentText
             text={info.fileName}
             type={'normal'}
@@ -179,7 +183,10 @@ function Card({ order, username, info, resourceType, onChange, onDelete, onAddPo
         </div>
         <div style={{ height: 15 }} />
         <div className={styles.whiteCardRightRow}>
-          <FComponentsLib.FContentText text={'授权标识'} type={'negative'} />
+          <FComponentsLib.FContentText
+            text={FI18n.i18nNext.t('brr_resourcelisting_item_authid')}
+            type={'negative'}
+          />
           <FResourceNameInput
             userName={username}
             value={info.resourceName}
@@ -201,7 +208,7 @@ function Card({ order, username, info, resourceType, onChange, onDelete, onAddPo
 
         <div className={styles.whiteCardRightRow}>
           <FComponentsLib.FContentText
-            text={'资源标题'}
+            text={FI18n.i18nNext.t('brr_resourcelisting_item_title')}
             type={'negative'}
           />
           <FComponentsLib.FInput.FSingleLine
@@ -234,7 +241,10 @@ function Card({ order, username, info, resourceType, onChange, onDelete, onAddPo
         <div style={{ height: 15 }} />
 
         <div className={styles.whiteCardRightRow}>
-          <FComponentsLib.FContentText text={'资源标签'} type={'negative'} />
+          <FComponentsLib.FContentText
+            text={FI18n.i18nNext.t('brr_resourcelisting_item_tag')}
+            type={'negative'}
+          />
           <FResourceLabelEditor2
             value={info.resourceLabels}
             onChange={(value) => {
@@ -251,7 +261,10 @@ function Card({ order, username, info, resourceType, onChange, onDelete, onAddPo
         <div style={{ height: 15 }} />
 
         <div className={styles.whiteCardRightRow} style={{ alignItems: 'flex-start' }}>
-          <FComponentsLib.FContentText text={'资源策略'} type={'negative'} />
+          <FComponentsLib.FContentText
+            text={FI18n.i18nNext.t('brr_resourcelisting_item_authplan')}
+            type={'negative'}
+          />
           <div style={{ width: 540 }}>
             <Space
               size={5}
@@ -260,7 +273,7 @@ function Card({ order, username, info, resourceType, onChange, onDelete, onAddPo
               }}
             >
               <FComponentsLib.FTextBtn><FComponentsLib.FIcons.FAdd /></FComponentsLib.FTextBtn>
-              <FComponentsLib.FTextBtn>添加策略</FComponentsLib.FTextBtn>
+              <FComponentsLib.FTextBtn>{FI18n.i18nNext.t('brr_resourcelisting_item_btn_addauthplan')}</FComponentsLib.FTextBtn>
             </Space>
 
             {
@@ -299,8 +312,13 @@ function Card({ order, username, info, resourceType, onChange, onDelete, onAddPo
         onClick={() => {
           set$showMore(!get$showMore());
         }}
-      >{$showMore ? '收起更多设置' : '更多设置'}</FComponentsLib.FTextBtn>
-      <FComponentsLib.FContentText text={'可以为资源文件添加属性，或进行依赖资源的声明'} type={'negative'} />
+      >{$showMore
+        ? FI18n.i18nNext.t('brr_resourcelisting_item_btn_showlesssetting')
+        : FI18n.i18nNext.t('brr_resourcelisting_item_btn_moresetting')}</FComponentsLib.FTextBtn>
+      <FComponentsLib.FContentText
+        text={FI18n.i18nNext.t('brr_resourcelisting_item_btn_moresetting_msg')}
+        type={'negative'}
+      />
     </Space>
 
     {

@@ -9,7 +9,7 @@ import { Dispatch } from 'redux';
 import { ChangeAction } from '@/models/resourceCreatorBatchPage';
 import fPolicyBuilder from '@/components/fPolicyBuilder';
 import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
-import { FServiceAPI, FUtil } from '@freelog/tools-lib';
+import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
 import * as AHooks from 'ahooks';
 import { getProcessor_simple } from '@/components/FResourceAuthorizationProcessor_Simple';
 import fMessage from '@/components/fMessage';
@@ -311,16 +311,19 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
       <div style={{ width: 920 }}>
         <div style={{ height: 35 }} />
         <div className={styles.nav}>
-          <div className={styles.left}>批量发行资源</div>
+          <div className={styles.left}>{FI18n.i18nNext.t('brr_title_bulkreleaseresource')}</div>
           <div style={{ width: 10 }} />
           <div className={styles.other}>{'>'}</div>
           <div style={{ width: 7 }} />
-          <div className={styles.other}>完善资源信息</div>
+          <div className={styles.other}>{FI18n.i18nNext.t('brr_resourcelisting_title')}</div>
         </div>
         <div style={{ height: 35 }} />
         <div className={styles.header}>
           <Space size={10}>
-            <FComponentsLib.FContentText text={'资源类型'} type={'additional2'} />
+            <FComponentsLib.FContentText
+              text={FI18n.i18nNext.t('brr_resourcelisting_label_resourcetype')}
+              type={'additional2'}
+            />
             <FComponentsLib.FContentText
               text={resourceCreatorBatchPage.selectedResourceType?.labels.join('/')}
               type={'highlight'}
@@ -329,7 +332,8 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
           </Space>
 
           <FComponentsLib.FContentText
-            text={`共 ${resourceCreatorBatchPage.resourceListInfo.length} 个资源`}
+            // text={`共 ${resourceCreatorBatchPage.resourceListInfo.length} 个资源`}
+            text={FI18n.i18nNext.t('brr_resourcelisting_label_resourceqty')}
             type={'additional2'}
           />
 
@@ -423,10 +427,10 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
 
                   if (resourceCreatorBatchPage.resourceListInfo.length > 1) {
                     confirm = await fPromiseModalConfirm({
-                      title: '提示',
-                      description: '是否将本次修改应用于此处发行的所有资源？',
-                      cancelText: '不，仅应用于当前资源',
-                      okText: '是，应用于所有资源',
+                      title: FI18n.i18nNext.t('brr_resourcelisting_confirmation_bulkaddauthplan_title'),
+                      description: FI18n.i18nNext.t('是否将本次修改应用于此处发行的所有资源？'),
+                      cancelText: FI18n.i18nNext.t('brr_resourcelisting_confirmation_bulkaddauthplan_btn_no'),
+                      okText: FI18n.i18nNext.t('brr_resourcelisting_confirmation_bulkaddauthplan_yes'),
                     });
                   }
 

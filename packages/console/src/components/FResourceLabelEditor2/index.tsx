@@ -3,7 +3,7 @@ import styles from './index.less';
 import FComponentsLib from '@freelog/components-lib';
 import { Input, InputRef } from 'antd';
 import * as AHooks from 'ahooks';
-import { FUtil } from '@freelog/tools-lib';
+import { FI18n, FUtil } from '@freelog/tools-lib';
 
 interface FResourceLabelEditor2Props {
   value: string[];
@@ -58,7 +58,7 @@ function FResourceLabelEditor2({ value, onChange, onClickApply }: FResourceLabel
           ref={inputRef}
           value={$input}
           className={styles.input}
-          placeholder={'输入标签后按回车添加'}
+          placeholder={FI18n.i18nNext.t('brr_resourcelisting_item_tag_msg')}
           onChange={(e) => {
             set$input(e.target.value);
 
@@ -114,13 +114,13 @@ function FResourceLabelEditor2({ value, onChange, onClickApply }: FResourceLabel
           }}>{$inputError}</div>
 
           {
-            true && (<FComponentsLib.FTextBtn
+            value.length > 0 && (<FComponentsLib.FTextBtn
               style={{ fontSize: 12 }}
               type={'primary'}
               onClick={() => {
                 onClickApply && onClickApply();
               }}
-            >应用于所有资源</FComponentsLib.FTextBtn>)
+            >{FI18n.i18nNext.t('brr_resourcelisting_item_btn_bulkaddtag')}</FComponentsLib.FTextBtn>)
           }
 
         </div>
