@@ -18,6 +18,7 @@ import FConfiguration from './FConfiguration';
 import FContent from './FContent';
 import FContract from './FContract';
 import FCopy from './FCopy';
+import FCreate from './FCreate';
 import FDecrease from './FDecrease';
 import FDelete from './FDelete';
 import FDoubleDown from './FDoubleDown';
@@ -103,6 +104,7 @@ const FIcons = {
     FContent,
     FContract,
     FCopy,
+    FCreate,
     FDecrease,
     FDelete,
     FDoubleDown,
