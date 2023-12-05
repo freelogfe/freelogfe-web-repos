@@ -536,37 +536,54 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
             content={<div style={{ padding: '3px 0', display: 'flex', alignItems: 'center', gap: 15 }}>
               <div
                 style={{
-                  width: 100,
-                  height: 100,
-                  backgroundColor: 'gray',
+                  width: 120,
+                  height: 106,
+
                   display: 'flex',
                   alignItems: 'center',
                   gap: 10,
                   flexDirection: 'column',
                   justifyContent: 'center',
                   cursor: 'pointer',
+                  backgroundColor: '#FAFBFC',
+                  borderRadius: 6,
                 }}
                 onClick={onLocalUpload}
               >
-                <FComponentsLib.FIcons.FLocalUpload style={{ fontSize: 60 }} />
-                <div>本地上传</div>
+                <FComponentsLib.FIcons.FLocalUpload style={{ fontSize: 48, color: '#666' }} />
+                <div style={{
+                  fontSize: 12,
+                  fontWeight: 600,
+                  color: '#666',
+                  lineHeight: '18px',
+                }}>本地上传
+                </div>
               </div>
               <div
                 style={{
-                  width: 100,
-                  height: 100,
-                  backgroundColor: 'blueviolet',
+                  width: 120,
+                  height: 106,
                   display: 'flex',
                   alignItems: 'center',
                   gap: 10,
                   flexDirection: 'column',
                   justifyContent: 'center',
                   cursor: 'pointer',
+                  backgroundColor: '#EDF6FF',
+                  borderRadius: 6,
                 }}
                 onClick={onImportStorage}
               >
-                <FComponentsLib.FIcons.FStorageSpace style={{ fontSize: 60 }} />
-                <div>存储空间导入</div>
+                <FComponentsLib.FIcons.FStorageSpace style={{ fontSize: 48, color: '#2784FF' }} />
+                <div
+                  style={{
+                    fontSize: 12,
+                    fontWeight: 600,
+                    color: '#2784FF',
+                    lineHeight: '18px',
+                  }}
+                >存储空间导入
+                </div>
               </div>
             </div>}
           >
