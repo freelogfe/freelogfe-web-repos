@@ -201,7 +201,7 @@ function Card({ order, username, info, resourceType, onChange, onDelete, onAddPo
         {
           info.resourceNameError !== '' && info.resourceNameError !== '###***' && (<>
             <div style={{ height: 5 }} />
-            <div style={{ color: '#EE4040' }}>{info.resourceNameError}</div>
+            <div style={{ color: '#EE4040', fontSize: 12 }}>{info.resourceNameError}</div>
           </>)
         }
         <div style={{ height: 15 }} />
@@ -234,16 +234,19 @@ function Card({ order, username, info, resourceType, onChange, onDelete, onAddPo
         {
           info.resourceTitleError !== '' && (<>
             <div style={{ height: 5 }} />
-            <div style={{ color: '#EE4040' }}>{info.resourceTitleError}</div>
+            <div style={{ color: '#EE4040', fontSize: 12 }}>{info.resourceTitleError}</div>
           </>)
         }
 
         <div style={{ height: 15 }} />
 
-        <div className={styles.whiteCardRightRow}>
+        <div className={styles.whiteCardRightRow} style={{ alignItems: 'flex-start' }}>
           <FComponentsLib.FContentText
             text={FI18n.i18nNext.t('brr_resourcelisting_item_tag')}
             type={'negative'}
+            style={{
+              transform: 'translateY(8px)',
+            }}
           />
           <FResourceLabelEditor2
             value={info.resourceLabels}
