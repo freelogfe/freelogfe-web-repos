@@ -655,7 +655,10 @@ function ResultModal({ type, dataSource, onClose }: ResultModalProps) {
                     style={{ borderRadius: 4 }}
                   />
                   <div>
-                    <FComponentsLib.FContentText type={'highlight'} text={v.resourceTitle || v.resourceName} />
+                    <FComponentsLib.FContentText
+                      type={'highlight'}
+                      text={v.resourceTitle || v.resourceName.split('/')[1]}
+                    />
                     <div style={{ height: 10 }} />
                     <FComponentsLib.FContentText type={'additional2'} text={v.resourceType} />
                   </div>
