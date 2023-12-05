@@ -251,50 +251,54 @@ function Content({ storageHomePage, dispatch }: ContentProps) {
     {
       storageHomePage.object_ListState === 'loaded' && (<>
 
-        <div className={styles.handled}>
-          <FComponentsLib.FContentText
-            type={'additional2'}
-            style={{ fontSize: 14 }}
-            // text={'已选择2个对象，可进行操作:'}
-            text={FI18n.i18nNext.t('storage_bulkaction_label_selectedqty')}
-          />
-          <FComponentsLib.FTextBtn
-            // disabled={storageHomePage.checkedObjectIDs.length === 0}
-            type={'primary'}
-            onClick={() => {
-              if (storageHomePage.checkedObjectIDs.length === 0) {
-                return fCenterMessage({ message: '请选择要执行操作的对象' });
-              }
-              dispatch<OnBatchUpdateObjectsAction>({
-                type: 'storageHomePage/onBatchUpdateObjects',
-              });
-            }}
-          >
-            <FComponentsLib.FIcons.FConfiguration style={{ fontSize: 14 }} />
-            &nbsp;{FI18n.i18nNext.t('storage_bulkaction_btn_settype')}
-          </FComponentsLib.FTextBtn>
+        {
+          storageHomePage.checkedObjectIDs.length > 0 && (<>
+            <div className={styles.handled}>
+              <FComponentsLib.FContentText
+                type={'additional2'}
+                style={{ fontSize: 14 }}
+                // text={'已选择2个对象，可进行操作:'}
+                text={FI18n.i18nNext.t('storage_bulkaction_label_selectedqty')}
+              />
+              <FComponentsLib.FTextBtn
+                // disabled={storageHomePage.checkedObjectIDs.length === 0}
+                type={'primary'}
+                onClick={() => {
+                  if (storageHomePage.checkedObjectIDs.length === 0) {
+                    return fCenterMessage({ message: '请选择要执行操作的对象' });
+                  }
+                  dispatch<OnBatchUpdateObjectsAction>({
+                    type: 'storageHomePage/onBatchUpdateObjects',
+                  });
+                }}
+              >
+                <FComponentsLib.FIcons.FConfiguration style={{ fontSize: 14 }} />
+                &nbsp;{FI18n.i18nNext.t('storage_bulkaction_btn_settype')}
+              </FComponentsLib.FTextBtn>
 
-          <FComponentsLib.FTextBtn
-            type={'danger'}
-            // disabled={storageHomePage.checkedObjectIDs.length === 0}
-            onClick={() => {
-              // console.log('(*YOIOIUY*(OUOIJLKJLkj');
-              if (storageHomePage.checkedObjectIDs.length === 0) {
-                return fCenterMessage({ message: '请选择要执行操作的对象' });
-              }
-              dispatch<OnBatchDeleteObjectsAction>({
-                type: 'storageHomePage/onBatchDeleteObjects',
-              });
-            }}
-          >
-            <FComponentsLib.FIcons.FDelete
-              style={{ fontSize: 14 }}
-            />
-            &nbsp;{FI18n.i18nNext.t('storage_bulkaction_btn_deleteobject')}
-          </FComponentsLib.FTextBtn>
-        </div>
+              <FComponentsLib.FTextBtn
+                type={'danger'}
+                // disabled={storageHomePage.checkedObjectIDs.length === 0}
+                onClick={() => {
+                  // console.log('(*YOIOIUY*(OUOIJLKJLkj');
+                  if (storageHomePage.checkedObjectIDs.length === 0) {
+                    return fCenterMessage({ message: '请选择要执行操作的对象' });
+                  }
+                  dispatch<OnBatchDeleteObjectsAction>({
+                    type: 'storageHomePage/onBatchDeleteObjects',
+                  });
+                }}
+              >
+                <FComponentsLib.FIcons.FDelete
+                  style={{ fontSize: 14 }}
+                />
+                &nbsp;{FI18n.i18nNext.t('storage_bulkaction_btn_deleteobject')}
+              </FComponentsLib.FTextBtn>
+            </div>
+            <div style={{ height: 30 }} />
+          </>)
+        }
 
-        <div style={{ height: 20 }} />
 
         <div className={styles.body}>
           <FTable
