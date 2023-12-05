@@ -10,7 +10,7 @@ interface FSettingProps {
 }
 
 function FSetting({className, ...props}: FSettingProps) {
-    return (<i className={['freelog', 'fl-icon-qiehuan', className].join(' ')} {...props}/>);
+    return (<i className={['freelog', 'fl-icon-chilun_kongxin', className].join(' ')} {...props}/>);
 }
 
 export default FSetting;
