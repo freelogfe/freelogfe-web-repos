@@ -12,7 +12,7 @@ interface CreatorEntryProps {
 function creatorEntry({}: CreatorEntryProps) {
   return (<div className={styles.creatorEntry}>
     <div className={styles.card}>
-      <FComponentsLib.FIcons.FPolicy className={styles.icon} />
+      <FComponentsLib.FIcons.FResourceFile className={styles.icon} />
       <FComponentsLib.FContentText
         type={'additional2'}
         text={FI18n.i18nNext.t('addnewresource_option_single_msg')}
@@ -25,9 +25,9 @@ function creatorEntry({}: CreatorEntryProps) {
     </div>
     <div className={styles.card}>
       <Space size={15}>
-        <FComponentsLib.FIcons.FPolicy className={styles.icon} />
-        <FComponentsLib.FIcons.FPolicy className={styles.icon} />
-        <FComponentsLib.FIcons.FPolicy className={styles.icon} />
+        <FComponentsLib.FIcons.FResourceFile className={styles.icon} />
+        <FComponentsLib.FIcons.FResourceFile className={styles.icon} />
+        <FComponentsLib.FIcons.FResourceFile className={styles.icon} />
       </Space>
       <FComponentsLib.FContentText
         type={'additional2'}

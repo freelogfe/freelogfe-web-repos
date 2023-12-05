@@ -275,7 +275,7 @@ function Card({ order, username, info, resourceType, onChange, onDelete, onAddPo
                 onAddPolicy && onAddPolicy();
               }}
             >
-              <FComponentsLib.FTextBtn><FComponentsLib.FIcons.FAdd /></FComponentsLib.FTextBtn>
+              <FComponentsLib.FTextBtn><FComponentsLib.FIcons.FCreate /></FComponentsLib.FTextBtn>
               <FComponentsLib.FTextBtn>{FI18n.i18nNext.t('brr_resourcelisting_item_btn_addauthplan')}</FComponentsLib.FTextBtn>
             </Space>
 
