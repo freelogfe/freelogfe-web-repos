@@ -167,7 +167,7 @@ function Resources({ dispatch, resourceListPage }: ResourceProps) {
               }}
             >
               <FComponentsLib.FIcons.FConfiguration style={{ fontSize: 14 }} />
-              &nbsp;批量管理
+              &nbsp;{FI18n.i18nNext.t('myresources_btn_bulkaction')}
             </FComponentsLib.FTextBtn>
           </>)
         }
@@ -243,10 +243,14 @@ function Resources({ dispatch, resourceListPage }: ResourceProps) {
                   }}
                 />
                 <div style={{ width: 10 }} />
-                <FComponentsLib.FContentText text={'全选'} type={'normal'} />
+                <FComponentsLib.FContentText
+                  text={FI18n.i18nNext.t('myresources_bulkaction_checkbox_selectall')}
+                  type={'normal'}
+                />
                 <div style={{ width: 30 }} />
                 <FComponentsLib.FContentText
-                  text={`已选择${resourceListPage.checkedResourceIDs.length}个资源`}
+                  // text={`已选择${resourceListPage.checkedResourceIDs.length}个资源`}
+                  text={FI18n.i18nNext.t('myresources_bulkaction_label_selectedqty')}
                   type={'additional2'}
                   style={{ fontSize: 14 }}
                 />
@@ -266,7 +270,7 @@ function Resources({ dispatch, resourceListPage }: ResourceProps) {
                   }}
                 >
                   <FComponentsLib.FIcons.FUpcast style={{ fontSize: 14 }} />
-                  &nbsp;上架
+                  &nbsp;{FI18n.i18nNext.t('myresources_bulkaction_btn_availabletoauth')}
                 </FComponentsLib.FTextBtn>
 
                 <FComponentsLib.FTextBtn
@@ -282,7 +286,7 @@ function Resources({ dispatch, resourceListPage }: ResourceProps) {
                   }}
                 >
                   <FComponentsLib.FIcons.FUpcast style={{ fontSize: 14, transform: 'rotate(180deg)' }} />
-                  &nbsp;下架
+                  &nbsp;{FI18n.i18nNext.t('myresources_bulkaction_removefromauth')}
                 </FComponentsLib.FTextBtn>
 
                 <FComponentsLib.FTextBtn
@@ -307,7 +311,7 @@ function Resources({ dispatch, resourceListPage }: ResourceProps) {
                   }}
                 >
                   <FComponentsLib.FIcons.FPolicy style={{ fontSize: 14 }} />
-                  &nbsp;添加授权策略
+                  &nbsp;{FI18n.i18nNext.t('myresources_bulkaction_btn_addauthplan')}
                 </FComponentsLib.FTextBtn>
 
                 <FComponentsLib.FTextBtn
@@ -323,7 +327,7 @@ function Resources({ dispatch, resourceListPage }: ResourceProps) {
                   }}
                 >
                   <FComponentsLib.FIcons.FExit style={{ fontSize: 14 }} />
-                  &nbsp;退出批量管理
+                  &nbsp;{FI18n.i18nNext.t('myresources_bulkaction_btn_quit')}
                 </FComponentsLib.FTextBtn>
               </div>
 
@@ -569,7 +573,8 @@ function ResultModal({ type, dataSource, onClose }: ResultModalProps) {
                 color: '#42C28C',
               }}
             />
-            <div>成功上架{$succeedCount}个资源</div>
+            {/*<div>成功上架{$succeedCount}个资源</div>*/}
+            <div>{FI18n.i18nNext.t('myresources_bulkaction_msg_availabletoauth_done')}</div>
           </>)
         }
 
@@ -594,7 +599,8 @@ function ResultModal({ type, dataSource, onClose }: ResultModalProps) {
                 color: '#42C28C',
               }}
             />
-            <div>新授权策略已经添加至{$succeedCount}个资源</div>
+            {/*<div>新授权策略已经添加至{$succeedCount}个资源</div>*/}
+            <div>{FI18n.i18nNext.t('myresources_bulkaction_msg_addauthplan_done')}</div>
           </>)
         }
 
@@ -606,7 +612,11 @@ function ResultModal({ type, dataSource, onClose }: ResultModalProps) {
       $failedList.length > 0 && (<>
         <div style={{ height: 50 }} />
         {
-          type === 'online' && (<FComponentsLib.FContentText type={'negative'} text={'以下资源上架失败：'} />)
+          type === 'online' && (<FComponentsLib.FContentText
+            type={'negative'}
+            // text={'以下资源上架失败：'}
+            text={FI18n.i18nNext.t('myresources_bulkaction_msg_availabletoauth_failure')}
+          />)
         }
 
         {
@@ -614,7 +624,10 @@ function ResultModal({ type, dataSource, onClose }: ResultModalProps) {
         }
 
         {
-          type === 'addPolicy' && (<FComponentsLib.FContentText type={'negative'} text={'以下资源因授权策略重复或重命名无法添加：'} />)
+          type === 'addPolicy' && (<FComponentsLib.FContentText
+            type={'negative'}
+            text={FI18n.i18nNext.t('myresources_bulkaction_msg_addauthplan_failure')}
+          />)
         }
 
         <div style={{ height: 20 }} />
@@ -683,7 +696,7 @@ function ResultModal({ type, dataSource, onClose }: ResultModalProps) {
         onClick={() => {
           onClose && onClose();
         }}
-      >知道了</FComponentsLib.FRectBtn>
+      >{FI18n.i18nNext.t('myresources_bulkaction_btn_ok')}</FComponentsLib.FRectBtn>
     </div>
 
   </Modal>);
