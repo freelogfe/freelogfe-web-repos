@@ -365,7 +365,7 @@ const Model: ResourceListPageModelType = {
           };
         }
       } = yield call(FServiceAPI.Resource.batchUpdate, parmas);
-      console.log(data, 'asdfiojlkewjl;fkjsdlkfjlksdjlkj');
+      // console.log(data, 'asdfiojlkewjl;fkjsdlkfjlksdjlkj');
 
       if (Object.values(data).every((d) => {
         return d.status === 1;
@@ -379,47 +379,49 @@ const Model: ResourceListPageModelType = {
         } else if (payload.status === 4) {
           msg = '下架成功';
         }
-        yield call(fCenterMessage({ message: msg }));
-        return;
-      }
-
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          updateResourceResult: data,
-        },
-      });
-
-      if (payload.addPolicies !== undefined) {
-        yield put<ChangeAction>({
-          type: 'change',
-          payload: {
-            updateResourceResultType: 'addPolicy',
-          },
-        });
-      } else if (payload.status === 1) {
-        yield put<ChangeAction>({
-          type: 'change',
-          payload: {
-            updateResourceResultType: 'online',
-          },
-        });
-      } else if (payload.status === 4) {
-        yield put<ChangeAction>({
-          type: 'change',
-          payload: {
-            updateResourceResultType: 'offline',
-          },
-        });
+        // console.log('DFSDFSDFSDFSDFSDFSD');
+        fCenterMessage({ message: msg });
+        // console.log(' fCenterMessage sdf ');
+        // return;
       } else {
         yield put<ChangeAction>({
           type: 'change',
           payload: {
-            updateResourceResultType: '',
+            updateResourceResult: data,
           },
         });
-      }
 
+        if (payload.addPolicies !== undefined) {
+          yield put<ChangeAction>({
+            type: 'change',
+            payload: {
+              updateResourceResultType: 'addPolicy',
+            },
+          });
+        } else if (payload.status === 1) {
+          yield put<ChangeAction>({
+            type: 'change',
+            payload: {
+              updateResourceResultType: 'online',
+            },
+          });
+        } else if (payload.status === 4) {
+          yield put<ChangeAction>({
+            type: 'change',
+            payload: {
+              updateResourceResultType: 'offline',
+            },
+          });
+        } else {
+          yield put<ChangeAction>({
+            type: 'change',
+            payload: {
+              updateResourceResultType: '',
+            },
+          });
+        }
+      }
+      // console.log(data, ' dsfasdfdata sdkfj;lksdjflkajslkdfjlksdjlkfj');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
