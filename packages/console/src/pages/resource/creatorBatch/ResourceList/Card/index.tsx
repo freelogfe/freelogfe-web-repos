@@ -312,6 +312,7 @@ function Card({ order, username, info, resourceType, onChange, onDelete, onAddPo
     <div style={{ height: 10 }} />
     <Space size={10}>
       <FComponentsLib.FTextBtn
+        style={{ fontSize: 12 }}
         onClick={() => {
           set$showMore(!get$showMore());
         }}
@@ -321,6 +322,7 @@ function Card({ order, username, info, resourceType, onChange, onDelete, onAddPo
       <FComponentsLib.FContentText
         text={FI18n.i18nNext.t('brr_resourcelisting_item_btn_moresetting_msg')}
         type={'negative'}
+        style={{ fontSize: 12 }}
       />
     </Space>
 
