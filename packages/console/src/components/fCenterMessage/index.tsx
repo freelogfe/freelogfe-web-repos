@@ -63,7 +63,7 @@ function FCenterMessage({ message, width = 'fit-content', onClose }: FCenterMess
       color: 'white',
       padding: '30px 60px',
     }}
-    style={{ backgroundColor: 'transparent' }}
+    style={{ backgroundColor: 'transparent', borderRadius: 10, overflow: 'hidden' }}
     mask={false}
     centered={true}
     closable={false}
