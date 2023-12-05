@@ -488,10 +488,10 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
                 onClickApplyLabels={(resourceCreatorBatchPage.resourceListInfo.length <= 1 || r.resourceLabels.length === 0) ? undefined : async () => {
 
                   let confirm: boolean = await fPromiseModalConfirm({
-                    title: '提示',
-                    description: '是否将本次修改应用于此处发行的所有资源？',
-                    cancelText: '不，仅应用于当前资源',
-                    okText: '是，应用于所有资源',
+                    title: FI18n.i18nNext.t('brr_resourcelisting_confirmation_bulkaddtags_title'),
+                    description: FI18n.i18nNext.t('是否将标签应用于此处发行的所有资源？'),
+                    cancelText: FI18n.i18nNext.t('brr_resourcelisting_confirmation_bulkaddtags_btn_no'),
+                    okText: FI18n.i18nNext.t('brr_resourcelisting_confirmation_bulkaddtags_btn_yes'),
                   });
 
                   if (!confirm) {
@@ -528,7 +528,7 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
       <div>
         <div>
           <FComponentsLib.FIcons.FInfo style={{ fontSize: 12 }} />
-          &nbsp;已添加授权策略的资源将会自动上架
+          &nbsp;{FI18n.i18nNext.t('brr_resourcelisting_toggles_availabletoauth')}
         </div>
         <Space size={20}>
           <FPopover
@@ -560,7 +560,7 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
                   fontWeight: 600,
                   color: '#666',
                   lineHeight: '18px',
-                }}>本地上传
+                }}>{FI18n.i18nNext.t('brr_submitresource_btn_uploadfromlocal')}
                 </div>
               </div>
               <div
@@ -586,22 +586,15 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
                     color: '#2784FF',
                     lineHeight: '18px',
                   }}
-                >存储空间导入
+                >{FI18n.i18nNext.t('brr_submitresource_btn_importfromstorage')}
                 </div>
               </div>
             </div>}
           >
-            <div><FComponentsLib.FRectBtn
+            <div>
+              <FComponentsLib.FRectBtn
               disabled={resourceCreatorBatchPage.resourceListInfo.length >= 20}
-              onClick={() => {
-                // dispatch<ChangeAction>({
-                //   type: 'resourceCreatorBatchPage/change',
-                //   payload: {
-                //     showPage: 'uploadFile',
-                //   },
-                // });
-              }}
-            >继续添加</FComponentsLib.FRectBtn></div>
+            >{FI18n.i18nNext.t('brr_resourcelisting_btn_moretoupload')}</FComponentsLib.FRectBtn></div>
           </FPopover>
           <FComponentsLib.FRectBtn
             disabled={resourceCreatorBatchPage.resourceListInfo.some((r) => {
@@ -610,7 +603,7 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
             onClick={() => {
               onClickRelease();
             }}
-          >现在发行</FComponentsLib.FRectBtn>
+          >{FI18n.i18nNext.t('brr_resourcelisting_btn_completerelease')}</FComponentsLib.FRectBtn>
         </Space>
 
       </div>
