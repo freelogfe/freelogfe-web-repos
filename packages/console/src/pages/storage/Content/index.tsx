@@ -252,7 +252,12 @@ function Content({ storageHomePage, dispatch }: ContentProps) {
       storageHomePage.object_ListState === 'loaded' && (<>
 
         <div className={styles.handled}>
-          <FComponentsLib.FContentText type={'additional2'} style={{ fontSize: 14 }} text={'选择对象后可执行批量操作:'} />
+          <FComponentsLib.FContentText
+            type={'additional2'}
+            style={{ fontSize: 14 }}
+            // text={'已选择2个对象，可进行操作:'}
+            text={FI18n.i18nNext.t('storage_bulkaction_label_selectedqty')}
+          />
           <FComponentsLib.FTextBtn
             // disabled={storageHomePage.checkedObjectIDs.length === 0}
             type={'primary'}
@@ -266,7 +271,7 @@ function Content({ storageHomePage, dispatch }: ContentProps) {
             }}
           >
             <FComponentsLib.FIcons.FConfiguration style={{ fontSize: 14 }} />
-            &nbsp;设置资源类型
+            &nbsp;{FI18n.i18nNext.t('storage_bulkaction_btn_settype')}
           </FComponentsLib.FTextBtn>
 
           <FComponentsLib.FTextBtn
@@ -285,7 +290,7 @@ function Content({ storageHomePage, dispatch }: ContentProps) {
             <FComponentsLib.FIcons.FDelete
               style={{ fontSize: 14 }}
             />
-            &nbsp;删除对象
+            &nbsp;{FI18n.i18nNext.t('storage_bulkaction_btn_deleteobject')}
           </FComponentsLib.FTextBtn>
         </div>
 

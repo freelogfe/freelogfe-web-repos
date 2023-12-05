@@ -24,7 +24,7 @@ function ResourceTypeInputDrawer({ onOk, onClose }: ResourceTypeInputDrawerProps
   const [$value, set$value, get$value] = FUtil.Hook.useGetState<ValueType>(null);
 
   return (<FDrawer
-    title={'设置资源类型'}
+    title={FI18n.i18nNext.t('storage_bulkaction_settype_title')}
     open={$open}
     topRight={<Space size={30}>
       <FComponentsLib.FTextBtn
@@ -48,7 +48,10 @@ function ResourceTypeInputDrawer({ onOk, onClose }: ResourceTypeInputDrawerProps
       }
     }}
   >
-    <FComponentsLib.FContentText text={'资源类型'} type={'highlight'} />
+    <FComponentsLib.FContentText
+      text={FI18n.i18nNext.t('storage_bulkaction_settype_input_type')}
+      type={'highlight'}
+    />
     <div style={{ height: 5 }} />
     <FResourceTypeInput
       value={$value}
@@ -58,7 +61,8 @@ function ResourceTypeInputDrawer({ onOk, onClose }: ResourceTypeInputDrawerProps
     />
     <div style={{ height: 20 }} />
     <div className={styles.footer}>
-      <div><FComponentsLib.FIcons.FInfo style={{ fontSize: 14 }} />&nbsp;当前操作将覆盖原有设置</div>
+      <div><FComponentsLib.FIcons.FInfo
+        style={{ fontSize: 14 }} />&nbsp;{FI18n.i18nNext.t('storage_bulkaction_settype_input_type_msg')}</div>
     </div>
   </FDrawer>);
 }

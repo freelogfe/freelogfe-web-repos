@@ -417,7 +417,7 @@ const Model: StorageHomePageModelType = {
       yield put<FetchBucketsAction>({
         type: 'fetchBuckets',
       });
-      yield call(fCenterMessage, { message: '对象已删除' });
+      yield call(fCenterMessage, { message: FI18n.i18nNext.t('storage_bulkaction_deleteobject_msg_done') });
     },
     * onBatchUpdateObjects({}: OnBatchUpdateObjectsAction, { select, call, put }: EffectsCommandMap) {
       const { storageHomePage }: ConnectState = yield select(({ storageHomePage }: ConnectState) => ({
@@ -460,7 +460,7 @@ const Model: StorageHomePageModelType = {
           }),
         },
       });
-      yield call(fCenterMessage, { message: '资源类型设置成功' });
+      yield call(fCenterMessage, { message: FI18n.i18nNext.t('storage_bulkaction_settype_msg_done') });
     },
   },
   reducers: {
