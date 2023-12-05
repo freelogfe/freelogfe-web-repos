@@ -137,7 +137,7 @@ function CreatorBatch({ dispatch, resourceCreatorBatchPage }: CreatorBatchProps)
           cover: '',
           resourceName: resourceName,
           resourceNameError: resourceName === '' ? '请输入资源授权标识' : '',
-          resourceTitle: resourceTitle === '' ? '': '',
+          resourceTitle: resourceTitle,
           resourceTitleError: '',
           resourceLabels: [],
           resourcePolicies: [],
