@@ -211,8 +211,13 @@ function Resources({ dispatch, resourceListPage }: ResourceProps) {
             <div className={styles.batchHandle}>
               <div className={styles.batchHandleLeft}>
                 <Checkbox
-                  checked={resourceListPage.checkedResourceIDs.length === resourceListPage.resource_List.length}
-                  indeterminate={resourceListPage.checkedResourceIDs.length !== 0 && resourceListPage.checkedResourceIDs.length !== resourceListPage.resource_List.length}
+                  checked={resourceListPage.checkedResourceIDs.length === resourceListPage.resource_List.filter((r) => {
+                    return r.status !== 2;
+                  }).length}
+                  indeterminate={resourceListPage.checkedResourceIDs.length !== 0
+                  && resourceListPage.checkedResourceIDs.length !== resourceListPage.resource_List.filter((r) => {
+                    return r.status !== 2;
+                  }).length}
                   onChange={(e) => {
                     if (e.target.checked) {
                       dispatch<ChangeAction>({
