@@ -224,7 +224,8 @@ function Card({ order, username, info, resourceType, onChange, onDelete, onAddPo
               const value: string = e.target.value;
               onChange && onChange({
                 ...info,
-                resourceTitle: value.length > 100 ? '不超过100个字符' : '',
+                resourceTitle: value,
+                resourceTitleError: value.length > 100 ? '不超过100个字符' : '',
               });
             }}
             placeholder={info.resourceName}

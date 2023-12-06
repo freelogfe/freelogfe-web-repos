@@ -114,7 +114,7 @@ function FResourceLabelEditor2({ value, onChange, onClickApply }: FResourceLabel
           }}>{$inputError}</div>
 
           {
-            value.length > 0 && (<FComponentsLib.FTextBtn
+            onClickApply && (<FComponentsLib.FTextBtn
               style={{ fontSize: 12 }}
               type={'primary'}
               onClick={() => {

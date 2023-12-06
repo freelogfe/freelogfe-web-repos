@@ -375,12 +375,6 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
                       }),
                     },
                   });
-                  // dispatch<ChangeAction>({
-                  //   type: 'resourceCreatorBatchPage/change',
-                  //   payload: {
-                  //
-                  //   },
-                  // });
                 }}
                 onDelete={() => {
                   const resourceListInfo = resourceCreatorBatchPage.resourceListInfo.filter((rli) => {
@@ -407,13 +401,6 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
                       }),
                     },
                   });
-
-                  // dispatch<ChangeAction>({
-                  //   type: 'resourceCreatorBatchPage/change',
-                  //   payload: {
-                  //
-                  //   },
-                  // });
                 }}
                 onAddPolicy={async () => {
                   const result: null | { title: string; text: string; } = await fPolicyBuilder({
