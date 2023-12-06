@@ -164,6 +164,7 @@ function FResourceTypeInput_Batch({ value, onChange }: FResourceTypeInput_Batch_
           })
         }
       </div>
+      <div style={{ height: 10 }} />
     </div>)}
   >
     <div
