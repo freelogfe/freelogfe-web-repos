@@ -557,6 +557,7 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
           </FPopover>
           <FComponentsLib.FRectBtn
             disabled={resourceCreatorBatchPage.resourceListInfo.some((r) => {
+              // console.log(r, 'RRRRRRRrrrrrrrr');
               return r.resourceNameError !== '' || r.resourceTitleError !== '';
             })}
             onClick={() => {

@@ -28,6 +28,10 @@ function FPrompt($prop: FPromptProps) {
     }
   }, [$prop.watch]);
 
+  AHooks.useUnmount(() => {
+    window.onbeforeunload = null;
+  });
+
   return (<Prompt
     // when={$state.promptLeavePath === '' && $prop.watch}
     when={true}
