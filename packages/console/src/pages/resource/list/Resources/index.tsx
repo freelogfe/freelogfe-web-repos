@@ -70,10 +70,14 @@ function Resources({ dispatch, resourceListPage }: ResourceProps) {
   });
 
   AHooks.useDebounceEffect(() => {
-    const allIDs: string[] = resourceListPage.resource_List.map((ol) => {
-      return ol.id;
-    });
-
+    const allIDs: string[] = resourceListPage.resource_List
+      .filter((ol) => {
+        return ol.status !== 2;
+      })
+      .map((ol) => {
+        return ol.id;
+      });
+    // console.log('allIDs sdifjlsdkjflksdjflkjlkj');
     dispatch<ChangeAction>({
       type: 'resourceListPage/change',
       payload: {
