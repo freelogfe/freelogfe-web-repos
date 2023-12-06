@@ -195,7 +195,7 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
             status: 1,
           };
         }),
-        coverImages: [item.cover],
+        coverImages: item.cover === '' ? [] : [item.cover],
         intro: '',
         tags: item.resourceLabels,
         version: '1.0.0',
