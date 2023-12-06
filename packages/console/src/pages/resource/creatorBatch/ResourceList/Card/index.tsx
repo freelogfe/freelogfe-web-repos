@@ -97,10 +97,10 @@ function Card({ order, username, info, resourceType, onChange, onDelete, onAddPo
   });
 
   async function onVerifyResourceName() {
-    onChange && onChange({
-      ...info,
-      resourceNameError: '###***',
-    });
+    // onChange && onChange({
+    //   ...info,
+    //   resourceNameError: '###***',
+    // });
 
     let nameErrorText: string = '';
     if (info.resourceName === '') {
