@@ -518,33 +518,34 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
           &nbsp;{FI18n.i18nNext.t('brr_resourcelisting_toggles_availabletoauth')}
         </div>
         <Space size={20}>
-          <FPopover
-            // open={true}
-            title={null}
-            overlayInnerStyle={{ padding: 0 }}
-            overlayStyle={{ padding: 0 }}
-            style={{ padding: 0 }}
-            content={<div className={styles.continue}>
-              <div onClick={onLocalUpload}>
-                <FComponentsLib.FIcons.FLocalUpload />
-                <div>{FI18n.i18nNext.t('brr_submitresource_btn_uploadfromlocal')}
+          {
+            resourceCreatorBatchPage.resourceListInfo.length < 20 && (<FPopover
+              // open={true}
+              title={null}
+              overlayInnerStyle={{ padding: 0 }}
+              overlayStyle={{ padding: 0 }}
+              style={{ padding: 0 }}
+              content={<div className={styles.continue}>
+                <div onClick={onLocalUpload}>
+                  <FComponentsLib.FIcons.FLocalUpload />
+                  <div>{FI18n.i18nNext.t('brr_submitresource_btn_uploadfromlocal')}
+                  </div>
                 </div>
-              </div>
-              <div onClick={onImportStorage}>
-                <FComponentsLib.FIcons.FStorageSpace />
-                <div>{FI18n.i18nNext.t('brr_submitresource_btn_importfromstorage')}
+                <div onClick={onImportStorage}>
+                  <FComponentsLib.FIcons.FStorageSpace />
+                  <div>{FI18n.i18nNext.t('brr_submitresource_btn_importfromstorage')}
+                  </div>
                 </div>
-              </div>
-            </div>}
-          >
-            <div>
-              <FComponentsLib.FRectBtn
-                disabled={resourceCreatorBatchPage.resourceListInfo.length >= 20}
-              >{FI18n.i18nNext.t('brr_resourcelisting_btn_moretoupload')}</FComponentsLib.FRectBtn></div>
-          </FPopover>
+              </div>}
+            >
+              <div>
+                <FComponentsLib.FRectBtn
+                >{FI18n.i18nNext.t('brr_resourcelisting_btn_moretoupload')}</FComponentsLib.FRectBtn></div>
+            </FPopover>)
+          }
+
           <FComponentsLib.FRectBtn
             disabled={resourceCreatorBatchPage.resourceListInfo.some((r) => {
-              // console.log(r, 'RRRRRRRrrrrrrrr');
               return r.resourceNameError !== '' || r.resourceTitleError !== '';
             })}
             onClick={() => {
