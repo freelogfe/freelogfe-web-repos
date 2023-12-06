@@ -24,7 +24,7 @@ import LocalUpload from './LocalUpload';
 import StorageSpace from './StorageSpace';
 import MarkdownEditor from './MarkdownEditor';
 import CartoonEditor from './CartoonEditor';
-import { Space } from 'antd';
+import { Progress, Space } from 'antd';
 import { useGetState } from '@/utils/hooks';
 import fResourceOptionEditor from '@/components/fResourceOptionEditor';
 import FResourceOptions from '@/components/FResourceOptions';
@@ -32,7 +32,6 @@ import FResourceAuthorizationProcessor, { getProcessor } from '@/components/FRes
 import fAddDependencies from '@/components/fAddDependencies';
 import * as AHooks from 'ahooks';
 import FSkeletonNode from '@/components/FSkeletonNode';
-// import { ChangeAction } from '@/models/resourceVersionCreatorPage';
 import FMicroApp_MarkdownEditorDrawer from '@/components/FMicroApp_MarkdownEditorDrawer';
 import fMessage from '@/components/fMessage';
 import { getFilesSha1Info } from '@/utils/service';
@@ -48,6 +47,11 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
   const size = AHooks.useSize(ref);
 
   const [$showMore, set$ShowMore, get$ShowMore] = useGetState<boolean>(false);
+  const [$uploadingInfo, set$uploadingInfo, get$uploadingInfo] = useGetState<null | {
+    name: string;
+    percent: number;
+    cancelHandler: any;
+  }>(null);
 
   AHooks.useDebounceEffect(() => {
     // console.log(resourceCreatorPage.step2_dataIsDirty_count, 'resourceCreatorPage.step2_dataIsDirty_count wieosfjlskdjflk');
@@ -66,12 +70,57 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
     && (resourceCreatorPage.step1_createdResourceInfo?.resourceType[2] === '条漫'
       || resourceCreatorPage.step1_createdResourceInfo?.resourceType[2] === '页漫');
 
-  // if (!resourceCreatorPage.step2_fileInfo) {
-  //   return ();
-  // }
-
   return (<>
-    <div style={{ display: !resourceCreatorPage.step2_fileInfo ? 'block' : 'none' }}>
+    <div style={{ display: !resourceCreatorPage.step2_fileInfo && !!$uploadingInfo ? 'block' : 'none' }}>
+      <div style={{ height: 40 }} />
+      <div className={styles.fileInfo}>
+        <div className={styles.card}>
+          <img src={img} className={styles.img} alt='' />
+          <div style={{ width: 20 }} />
+          <div>
+            <FComponentsLib.FContentText
+              type='highlight'
+              text={$uploadingInfo?.name || ''}
+              style={{ maxWidth: 600 }}
+              singleRow
+            />
+            <div style={{ height: 18 }} />
+            <div className={styles.info}>
+              <FComponentsLib.FContentText
+                className={styles.infoSize}
+                type='additional1'
+                text={'本地上传'}
+              />
+            </div>
+          </div>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', width: 270 }}>
+          <FComponentsLib.FContentText
+            text={`${$uploadingInfo?.percent || 0}%`}
+            type={'additional1'}
+            style={{ color: '#222' }}
+          />
+          <div style={{ width: 10 }} />
+          <Progress
+            percent={$uploadingInfo?.percent || 0}
+            showInfo={false}
+            style={{ width: 140 }}
+          />
+          <div style={{ width: 20 }} />
+          <FComponentsLib.FTextBtn
+            style={{ fontSize: 12 }}
+            type={'danger'}
+            onClick={() => {
+              const uploadingInfo = get$uploadingInfo();
+              uploadingInfo && uploadingInfo.cancelHandler();
+              set$uploadingInfo(null);
+            }}
+          >取消上传</FComponentsLib.FTextBtn>
+        </div>
+      </div>
+    </div>
+
+    <div style={{ display: !resourceCreatorPage.step2_fileInfo && !$uploadingInfo ? 'block' : 'none' }}>
       <div style={{ height: 40 }} />
       <div className={styles.styles}>
         {
@@ -87,6 +136,9 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
                   sha1: value.sha1,
                 },
               });
+            }}
+            onChange_uploadingInfo={(value) => {
+              set$uploadingInfo(value);
             }}
           />)
         }

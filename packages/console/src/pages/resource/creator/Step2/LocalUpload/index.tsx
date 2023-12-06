@@ -17,6 +17,12 @@ interface LocalUploadProps {
   style?: React.CSSProperties;
 
   onSucceed?(value: { sha1: string; fileName: string }): void;
+
+  onChange_uploadingInfo?(value: null | {
+    name: string;
+    percent: number;
+    cancelHandler: any;
+  }): void;
 }
 
 interface LocalUploadStates {
@@ -50,7 +56,7 @@ const initStates: LocalUploadStates = {
   $uploadingProgress: null,
 };
 
-function LocalUpload({ style, resourceTypeCode, resourceType, onSucceed }: LocalUploadProps) {
+function LocalUpload({ style, resourceTypeCode, resourceType, onSucceed, onChange_uploadingInfo }: LocalUploadProps) {
 
   const uploadCancelHandler = React.useRef<any>();
   const [$accept, set$accept, get$accept] = useGetState<LocalUploadStates['$accept']>(initStates['$accept']);
@@ -173,23 +179,39 @@ function LocalUpload({ style, resourceTypeCode, resourceType, onSucceed }: Local
               });
             }
           } else {
-            set$uploadingProgress(0);
+            // set$uploadingProgress(0);
+            // onChange_uploadingInfo && onChange_uploadingInfo({
+            //   name: files[0].name,
+            //   percent: 0,
+            //   cancelHandler: null,
+            // });
             const [promise, cancel] = await FServiceAPI.Storage.uploadFile({
               file: files[0],
               // resourceType: resourceVersionCreatorPage.resourceType,
             }, {
               onUploadProgress(progressEvent: any) {
-                set$uploadingProgress(Math.floor(progressEvent.loaded / progressEvent.total * 100));
+                // set$uploadingProgress(Math.floor(progressEvent.loaded / progressEvent.total * 100));
+                onChange_uploadingInfo && onChange_uploadingInfo({
+                  name: files[0].name,
+                  percent: Math.floor(progressEvent.loaded / progressEvent.total * 100),
+                  cancelHandler: cancel,
+                });
               },
             }, true);
-            uploadCancelHandler.current = cancel;
+            // uploadCancelHandler.current = cancel;
+            onChange_uploadingInfo && onChange_uploadingInfo({
+              name: files[0].name,
+              percent: 0,
+              cancelHandler: cancel,
+            });
             const { data, ret, errCode, msg } = await promise;
             if (ret !== 0 || errCode !== 0) {
               return fMessage(msg, 'error');
             }
-            uploadCancelHandler.current = null;
+            // uploadCancelHandler.current = null;
             await FUtil.Tool.promiseSleep(1000);
-            set$uploadingProgress(null);
+            // set$uploadingProgress(null);
+            onChange_uploadingInfo && onChange_uploadingInfo(null);
             onSucceed && onSucceed({
               sha1: sha1,
               fileName: files[0].name,
@@ -346,40 +368,40 @@ function LocalUpload({ style, resourceTypeCode, resourceType, onSucceed }: Local
       />
     </FModal>
 
-    <FModal
-      closable={false}
-      open={$uploadingProgress !== null}
-      width={300}
-      title={null}
-      footer={null}
-    >
-      <div className={styles.progressBox}>
-        <Progress
-          // strokeColor={'#2784ff'}
-          type='circle'
-          // strokeColor={{
-          //   '0%': '#108ee9',
-          //   '100%': '#87d068',
-          // }}
-          percent={$uploadingProgress || 0}
-          success={{
-            strokeColor: '#52c41a'
-          }}
-        />
-        <div style={{ height: 20 }} />
-        {
-          $uploadingProgress !== 100
-            ? (<FComponentsLib.FTextBtn
-              type={'default'}
-              onClick={() => {
-                set$uploadingProgress(null);
-                uploadCancelHandler.current && uploadCancelHandler.current();
-              }}
-            >取消上传</FComponentsLib.FTextBtn>)
-            : (<FComponentsLib.FContentText text={'上传成功'} type={'highlight'} />)
-        }
-      </div>
-    </FModal>
+    {/*<FModal*/}
+    {/*  closable={false}*/}
+    {/*  open={$uploadingProgress !== null}*/}
+    {/*  width={300}*/}
+    {/*  title={null}*/}
+    {/*  footer={null}*/}
+    {/*>*/}
+    {/*  <div className={styles.progressBox}>*/}
+    {/*    <Progress*/}
+    {/*      // strokeColor={'#2784ff'}*/}
+    {/*      type='circle'*/}
+    {/*      // strokeColor={{*/}
+    {/*      //   '0%': '#108ee9',*/}
+    {/*      //   '100%': '#87d068',*/}
+    {/*      // }}*/}
+    {/*      percent={$uploadingProgress || 0}*/}
+    {/*      success={{*/}
+    {/*        strokeColor: '#52c41a',*/}
+    {/*      }}*/}
+    {/*    />*/}
+    {/*    <div style={{ height: 20 }} />*/}
+    {/*    {*/}
+    {/*      $uploadingProgress !== 100*/}
+    {/*        ? (<FComponentsLib.FTextBtn*/}
+    {/*          type={'default'}*/}
+    {/*          onClick={() => {*/}
+    {/*            set$uploadingProgress(null);*/}
+    {/*            uploadCancelHandler.current && uploadCancelHandler.current();*/}
+    {/*          }}*/}
+    {/*        >取消上传</FComponentsLib.FTextBtn>)*/}
+    {/*        : (<FComponentsLib.FContentText text={'上传成功'} type={'highlight'} />)*/}
+    {/*    }*/}
+    {/*  </div>*/}
+    {/*</FModal>*/}
   </>);
 }
 
