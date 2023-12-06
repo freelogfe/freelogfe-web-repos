@@ -110,6 +110,7 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
           <FComponentsLib.FTextBtn
             style={{ fontSize: 12 }}
             type={'danger'}
+            disabled={$uploadingInfo?.percent === 100}
             onClick={() => {
               const uploadingInfo = get$uploadingInfo();
               uploadingInfo && uploadingInfo.cancelHandler();

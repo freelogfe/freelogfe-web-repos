@@ -10,7 +10,7 @@ import img from '@/assets/file-object.svg';
 import FTooltip from '@/components/FTooltip';
 import fResourcePropertyEditor from '@/components/fResourcePropertyEditor';
 import FResourceProperties from '@/components/FResourceProperties';
-import { Drawer, Space } from 'antd';
+import { Drawer, Progress, Space } from 'antd';
 import fResourceOptionEditor from '@/components/fResourceOptionEditor';
 import FResourceOptions from '@/components/FResourceOptions';
 import FResourceAuthorizationProcessor, { getProcessor } from '@/components/FResourceAuthorizationProcessor';
@@ -63,12 +63,17 @@ interface VersionCreatorProps extends RouteComponentProps<{ id: string }> {
 
 function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: VersionCreatorProps) {
 
-  // console.log(match.params, 'match sdiofjsld;kjflksdjfj')
   const ref = React.useRef(null);
   const size = AHooks.useSize(ref);
   const [$showMore, set$ShowMore, get$ShowMore] = useGetState<boolean>(false);
   const [$versionInputHasError, set$versionInputHasError] = React.useState<boolean>(false);
   const [isMarkdownEditorDirty, set_isMarkdownEditorDirty] = React.useState<boolean>(false);
+
+  const [$uploadingInfo, set$uploadingInfo, get$uploadingInfo] = useGetState<null | {
+    name: string;
+    percent: number;
+    cancelHandler: any;
+  }>(null);
 
   AHooks.useMount(() => {
     dispatch<OnMountPageAction>({
@@ -134,13 +139,6 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
         isOpenMarkdown: true,
       },
     });
-    // await fResourceMarkdownEditor({
-    //   resourceID: resourceVersionCreatorPage.resourceInfo?.resourceID || '',
-    //   async onChange_Saved(saved: boolean) {
-    //     set_isMarkdownEditorDirty(!saved);
-    //   },
-    // });
-
   }
 
   async function onClose_EditMarkdown() {
@@ -168,8 +166,11 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
     resourceVersionCreatorPage.rawPropertiesState !== 'success';
 
   return (<>
-    <div className={styles.noSelectedFileInfo}
-         style={{ display: !resourceVersionCreatorPage.selectedFileInfo ? 'flex' : 'none' }}>
+
+    <div
+      className={styles.noSelectedFileInfo}
+      style={{ display: !resourceVersionCreatorPage.selectedFileInfo ? 'flex' : 'none' }}
+    >
       <div style={{ height: 40 }} />
       <div style={{ display: 'flex', alignItems: 'center', width: 920 }}>
         <a onClick={() => {
@@ -205,78 +206,135 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
         <FComponentsLib.FTitleText text={'新建版本'} type={'h1'} />
       </div>
       <div style={{ height: 100 }} />
-      <div className={styles.styles}>
-        {
-          !isCartoon && (<LocalUpload
-            resourceType={resourceVersionCreatorPage.resourceInfo?.resourceType || []}
-            style={{ width: '100%', flexGrow: 1 }}
-            resourceTypeCode={resourceVersionCreatorPage.resourceInfo?.resourceTypeCode || ''}
-            onSucceed={(value) => {
-              dispatch<OnSucceed_UploadFile_Action>({
-                type: 'resourceVersionCreatorPage/onSucceed_UploadFile',
-                payload: {
-                  name: value.fileName,
-                  sha1: value.sha1,
-                },
-              });
-            }}
-          />)
-        }
+      {
+        !!$uploadingInfo && (<div style={{ width: 920 }}>
+          <div className={styles.fileInfo}>
+            <div className={styles.card}>
+              <img src={img} className={styles.img} alt='' />
+              <div style={{ width: 20 }} />
+              <div>
+                <FComponentsLib.FContentText
+                  type='highlight'
+                  text={$uploadingInfo?.name || ''}
+                  style={{ maxWidth: 600 }}
+                  singleRow
+                />
+                <div style={{ height: 18 }} />
+                <div className={styles.info}>
+                  <FComponentsLib.FContentText
+                    className={styles.infoSize}
+                    type='additional1'
+                    text={'本地上传'}
+                  />
+                </div>
+              </div>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', width: 270 }}>
+              <FComponentsLib.FContentText
+                text={`${$uploadingInfo?.percent || 0}%`}
+                type={'additional1'}
+                style={{ color: '#222' }}
+              />
+              <div style={{ width: 10 }} />
+              <Progress
+                percent={$uploadingInfo?.percent || 0}
+                showInfo={false}
+                style={{ width: 140 }}
+              />
+              <div style={{ width: 20 }} />
+              <FComponentsLib.FTextBtn
+                style={{ fontSize: 12 }}
+                type={'danger'}
+                disabled={$uploadingInfo?.percent === 100}
+                onClick={() => {
+                  const uploadingInfo = get$uploadingInfo();
+                  uploadingInfo && uploadingInfo.cancelHandler();
+                  set$uploadingInfo(null);
+                }}
+              >取消上传</FComponentsLib.FTextBtn>
+            </div>
+          </div>
+        </div>)
+      }
 
-        {
-          !isCartoon && (<StorageSpace
-            style={{ width: '100%', flexGrow: 1 }}
-            resourceTypeCode={resourceVersionCreatorPage.resourceInfo?.resourceTypeCode || ''}
-            onSucceed={(value) => {
-              dispatch<OnSucceed_ImportObject_Action>({
-                type: 'resourceVersionCreatorPage/onSucceed_ImportObject',
-                payload: {
-                  name: value.objectName,
-                  sha1: value.sha1,
-                  objID: value.objectID,
-                },
-              });
-            }}
-          />)
-        }
+      {
+        !$uploadingInfo && (<div className={styles.styles}>
+          {
+            !isCartoon && (<LocalUpload
+              resourceType={resourceVersionCreatorPage.resourceInfo?.resourceType || []}
+              style={{ width: '100%', flexGrow: 1 }}
+              resourceTypeCode={resourceVersionCreatorPage.resourceInfo?.resourceTypeCode || ''}
+              onSucceed={(value) => {
+                dispatch<OnSucceed_UploadFile_Action>({
+                  type: 'resourceVersionCreatorPage/onSucceed_UploadFile',
+                  payload: {
+                    name: value.fileName,
+                    sha1: value.sha1,
+                  },
+                });
+              }}
+              onChange_uploadingInfo={(value) => {
+                set$uploadingInfo(value);
+              }}
+            />)
+          }
+
+          {
+            !isCartoon && (<StorageSpace
+              style={{ width: '100%', flexGrow: 1 }}
+              resourceTypeCode={resourceVersionCreatorPage.resourceInfo?.resourceTypeCode || ''}
+              onSucceed={(value) => {
+                dispatch<OnSucceed_ImportObject_Action>({
+                  type: 'resourceVersionCreatorPage/onSucceed_ImportObject',
+                  payload: {
+                    name: value.objectName,
+                    sha1: value.sha1,
+                    objID: value.objectID,
+                  },
+                });
+              }}
+            />)
+          }
 
 
-        {
-          !isCartoon && resourceVersionCreatorPage.resourceInfo?.resourceType[0] === '阅读'
-          && resourceVersionCreatorPage.resourceInfo?.resourceType[1] === '文章'
-          && (<MarkdownEditor
-            style={{ width: '100%', flexGrow: 1 }}
-            onClickBtn={() => {
-              // dispatch<OnClick_step2_editMarkdownBtn_Action>({
-              //   type: 'resourceCreatorPage/onClick_step2_editMarkdownBtn',
-              // });
-              onClick_EditMarkdownBtn();
+          {
+            !isCartoon && resourceVersionCreatorPage.resourceInfo?.resourceType[0] === '阅读'
+            && resourceVersionCreatorPage.resourceInfo?.resourceType[1] === '文章'
+            && (<MarkdownEditor
+              style={{ width: '100%', flexGrow: 1 }}
+              onClickBtn={() => {
+                // dispatch<OnClick_step2_editMarkdownBtn_Action>({
+                //   type: 'resourceCreatorPage/onClick_step2_editMarkdownBtn',
+                // });
+                onClick_EditMarkdownBtn();
 
-              // dispatch<ChangeAction>({
-              //   type: 'resourceVersionCreatorPage/change',
-              //   payload: {
-              //     isOpenMarkdown: true,
-              //   },
-              // });
-            }}
-          />)
-        }
+                // dispatch<ChangeAction>({
+                //   type: 'resourceVersionCreatorPage/change',
+                //   payload: {
+                //     isOpenMarkdown: true,
+                //   },
+                // });
+              }}
+            />)
+          }
 
-        {
-          isCartoon && (<CartoonEditor
-            style={{ width: '100%', flexGrow: 1 }}
-            onClickBtn={() => {
-              // dispatch<OnClick_step2_editCartoonBtn_Action>({
-              //   type: 'resourceCreatorPage/onClick_step2_editCartoonBtn',
-              // });
-              dispatch<OnClick_OpenCartoonBtn_Action>({
-                type: 'resourceVersionCreatorPage/onClick_OpenCartoonBtn',
-              });
-            }}
-          />)
-        }
+          {
+            isCartoon && (<CartoonEditor
+              style={{ width: '100%', flexGrow: 1 }}
+              onClickBtn={() => {
+                // dispatch<OnClick_step2_editCartoonBtn_Action>({
+                //   type: 'resourceCreatorPage/onClick_step2_editCartoonBtn',
+                // });
+                dispatch<OnClick_OpenCartoonBtn_Action>({
+                  type: 'resourceVersionCreatorPage/onClick_OpenCartoonBtn',
+                });
+              }}
+            />)
+          }
 
-      </div>
+        </div>)
+      }
+
 
       <div style={{ height: 100 }} />
 
@@ -302,44 +360,6 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
           });
         }}
       />
-
-      {/*<FMicroApp_MarkdownEditorDrawer*/}
-      {/*  open={resourceVersionCreatorPage.isOpenMarkdown}*/}
-      {/*  resourceID={resourceVersionCreatorPage.resourceInfo?.resourceID || ''}*/}
-      {/*  onChange_Saved={(saved) => {*/}
-      {/*    dispatch<ChangeAction>({*/}
-      {/*      type: 'resourceVersionCreatorPage/change',*/}
-      {/*      payload: {*/}
-      {/*        isDirtyMarkdownEditor: !saved,*/}
-      {/*      },*/}
-      {/*    });*/}
-      {/*  }}*/}
-      {/*  onClose={() => {*/}
-      {/*    // dispatch<ChangeAction>({*/}
-      {/*    //   type: 'resourceVersionCreatorPage/change',*/}
-      {/*    //   payload: {*/}
-      {/*    //     isOpenMarkdown: false,*/}
-      {/*    //   },*/}
-      {/*    // });*/}
-      {/*    onClose_EditMarkdown();*/}
-      {/*  }}*/}
-      {/*/>*/}
-      {/*<Drawer open={false} width={'100%'} title={null} footer={null} closable={false}>*/}
-      {/*  <MicroApp*/}
-      {/*    name='markdownEditor'*/}
-      {/*    resourceID={match.params.id}*/}
-      {/*    onChange_Saved={(saved: boolean) => {*/}
-      {/*      // onChange_Saved && onChange_Saved(saved);*/}
-      {/*    }}*/}
-      {/*    onClose={() => {*/}
-      {/*      // set_visible(false);*/}
-      {/*      // setTimeout(() => {*/}
-      {/*      //   // onClose && onClose();*/}
-      {/*      // }, 300);*/}
-      {/*    }}*/}
-      {/*  />*/}
-      {/*</Drawer>*/}
-
     </div>
     <FPrompt
       watch={resourceVersionCreatorPage.dataIsDirty || isMarkdownEditorDirty || resourceVersionCreatorPage.isDirtyCartoonEditor}
@@ -358,8 +378,10 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
       }}
     />
 
-    <div className={styles.selectedFileInfo}
-         style={{ display: resourceVersionCreatorPage.selectedFileInfo ? 'flex' : 'none' }}>
+    <div
+      className={styles.selectedFileInfo}
+      style={{ display: resourceVersionCreatorPage.selectedFileInfo ? 'flex' : 'none' }}
+    >
       <div style={{ width: 920 }}>
         <div style={{ height: 40 }} />
         <div style={{ display: 'flex', alignItems: 'center', width: 920 }}>
