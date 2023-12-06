@@ -242,16 +242,23 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
                 style={{ width: 140 }}
               />
               <div style={{ width: 20 }} />
-              <FComponentsLib.FTextBtn
-                style={{ fontSize: 12 }}
-                type={'danger'}
-                disabled={$uploadingInfo?.percent === 100}
-                onClick={() => {
-                  const uploadingInfo = get$uploadingInfo();
-                  uploadingInfo && uploadingInfo.cancelHandler();
-                  set$uploadingInfo(null);
-                }}
-              >取消上传</FComponentsLib.FTextBtn>
+              {
+                $uploadingInfo?.percent === 100
+                  ? (<FComponentsLib.FTextBtn
+                    style={{ fontSize: 12 }}
+                    type={'primary'}
+                  >正在解析</FComponentsLib.FTextBtn>)
+                  : (<FComponentsLib.FTextBtn
+                    style={{ fontSize: 12 }}
+                    type={'danger'}
+                    onClick={() => {
+                      const uploadingInfo = get$uploadingInfo();
+                      uploadingInfo && uploadingInfo.cancelHandler();
+                      set$uploadingInfo(null);
+                    }}
+                  >取消上传</FComponentsLib.FTextBtn>)
+              }
+
             </div>
           </div>
         </div>)
