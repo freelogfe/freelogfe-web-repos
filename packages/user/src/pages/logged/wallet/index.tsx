@@ -4,7 +4,7 @@ import FTable from '@/components/FTable';
 import { ColumnsType } from 'antd/lib/table';
 import { Modal, Space, Radio, message, DatePicker } from 'antd';
 import FInput from '@/components/FInput';
-import CoinActivity from './_components/activity';
+// import CoinActivity from './_components/activity';
 
 import * as AHooks from 'ahooks';
 import { connect } from 'dva';
@@ -307,42 +307,42 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
               {FI18n.i18nNext.t('btn_activate_feather_account_now')}
             </FComponentsLib.FRectBtn>
           </div>
-          {moment(FI18n.i18nNext.t('event_contest_eventperiod_end') === 'event_contest_eventperiod_end'
-            ? FI18n.i18nNext.t('event_contest_eventperiod_end')
-            : undefined).add(1, 'day').isAfter(moment()) && (
-            <CoinActivity
-              inActive={true}
-              goActive={async () => {
-                const { email, mobile } = await userPermission.getUserInfo();
-                if (email === '' && mobile === '') {
-                  fConfirmModal({
-                    message: FI18n.i18nNext.t(
-                      'activatefethaccount_err_connectwithmobileoremail',
-                    ),
-                    okText: FI18n.i18nNext.t(
-                      'activatefethaccount_btn_connectnow',
-                    ),
-                    cancelText: FI18n.i18nNext.t(
-                      'activatefethaccount_btn_later',
-                    ),
-                    onOk() {
-                      history.push(FUtil.LinkTo.setting());
-                      dispatch<ChangeAction>({
-                        type: 'settingPage/change',
-                        payload: {
-                          showPage: 'security',
-                        },
-                      });
-                    },
-                  });
-                  return;
-                }
-                dispatch<OnClick_Activate_AccountBtn_Action>({
-                  type: 'walletPage/onClick_Activate_AccountBtn',
-                });
-              }}
-            />
-          )}
+          {/*{moment(FI18n.i18nNext.t('event_contest_eventperiod_end') === 'event_contest_eventperiod_end'*/}
+          {/*  ? FI18n.i18nNext.t('event_contest_eventperiod_end')*/}
+          {/*  : undefined).add(1, 'day').isAfter(moment()) && (*/}
+          {/*  <CoinActivity*/}
+          {/*    inActive={true}*/}
+          {/*    goActive={async () => {*/}
+          {/*      const { email, mobile } = await userPermission.getUserInfo();*/}
+          {/*      if (email === '' && mobile === '') {*/}
+          {/*        fConfirmModal({*/}
+          {/*          message: FI18n.i18nNext.t(*/}
+          {/*            'activatefethaccount_err_connectwithmobileoremail',*/}
+          {/*          ),*/}
+          {/*          okText: FI18n.i18nNext.t(*/}
+          {/*            'activatefethaccount_btn_connectnow',*/}
+          {/*          ),*/}
+          {/*          cancelText: FI18n.i18nNext.t(*/}
+          {/*            'activatefethaccount_btn_later',*/}
+          {/*          ),*/}
+          {/*          onOk() {*/}
+          {/*            history.push(FUtil.LinkTo.setting());*/}
+          {/*            dispatch<ChangeAction>({*/}
+          {/*              type: 'settingPage/change',*/}
+          {/*              payload: {*/}
+          {/*                showPage: 'security',*/}
+          {/*              },*/}
+          {/*            });*/}
+          {/*          },*/}
+          {/*        });*/}
+          {/*        return;*/}
+          {/*      }*/}
+          {/*      dispatch<OnClick_Activate_AccountBtn_Action>({*/}
+          {/*        type: 'walletPage/onClick_Activate_AccountBtn',*/}
+          {/*      });*/}
+          {/*    }}*/}
+          {/*  />*/}
+          {/*)}*/}
         </>
       ) : (
         <>
@@ -368,23 +368,23 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
             </div>
           </div>
           {/*{console.log(moment(FI18n.i18nNext.t('event_contest_eventperiod_end')).isBefore(moment()), '898888sdfsdf')}*/}
-          {moment(FI18n.i18nNext.t('event_contest_eventperiod_end') === 'event_contest_eventperiod_end'
-            ? FI18n.i18nNext.t('event_contest_eventperiod_end')
-            : undefined).add(1, 'day').isAfter(moment()) && (
-            <CoinActivity
-              inActive={false}
-              signSuccess={() => {
-                dispatch<OnMountPageAction>({
-                  type: 'walletPage/onMountPage',
-                });
-              }}
-              goActive={() => {
-                dispatch<OnClick_ChangingPasswordBtn_Action>({
-                  type: 'walletPage/onClick_ChangingPasswordBtn',
-                });
-              }}
-            />
-          )}
+          {/*{moment(FI18n.i18nNext.t('event_contest_eventperiod_end') === 'event_contest_eventperiod_end'*/}
+          {/*  ? FI18n.i18nNext.t('event_contest_eventperiod_end')*/}
+          {/*  : undefined).add(1, 'day').isAfter(moment()) && (*/}
+          {/*  <CoinActivity*/}
+          {/*    inActive={false}*/}
+          {/*    signSuccess={() => {*/}
+          {/*      dispatch<OnMountPageAction>({*/}
+          {/*        type: 'walletPage/onMountPage',*/}
+          {/*      });*/}
+          {/*    }}*/}
+          {/*    goActive={() => {*/}
+          {/*      dispatch<OnClick_ChangingPasswordBtn_Action>({*/}
+          {/*        type: 'walletPage/onClick_ChangingPasswordBtn',*/}
+          {/*      });*/}
+          {/*    }}*/}
+          {/*  />*/}
+          {/*)}*/}
           <div style={{ height: 40 }} />
           <FComponentsLib.FTitleText
             type='h1'

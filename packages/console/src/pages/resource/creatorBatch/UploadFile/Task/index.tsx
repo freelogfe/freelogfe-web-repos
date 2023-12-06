@@ -8,6 +8,7 @@ import { CheckCircleFilled, CloseOutlined, RedoOutlined } from '@ant-design/icon
 import * as AHooks from 'ahooks';
 import { getFilesSha1Info } from '@/utils/service';
 import { Canceler } from 'axios';
+import UploadCancel from '@/components/FStorageUploadTasksPanel/UploadCancel';
 
 interface TaskProps {
   file: RcFile;
@@ -28,7 +29,7 @@ interface TaskProps {
 
 function Task({ file, resourceTypeCode, onSuccess, onFail }: TaskProps) {
   const canceler = React.useRef<Canceler | null>(null);
-  const [$taskState, set$taskState, get$taskState] = FUtil.Hook.useGetState<'loading' | 'uploading' | 'parsing' | 'success' | 'failed'>('loading');
+  const [$taskState, set$taskState, get$taskState] = FUtil.Hook.useGetState<'loading' | 'uploading' | 'parsing' | 'success' | 'failed' >('loading');
   const [$progress, set$progress, get$progress] = FUtil.Hook.useGetState<number>(0);
 
   AHooks.useMount(async () => {
@@ -139,8 +140,15 @@ function Task({ file, resourceTypeCode, onSuccess, onFail }: TaskProps) {
         <div className={styles.action}>
           <FComponentsLib.FTextBtn
             type='default'
-            onClick={() => {
-              // cancel && cancel();
+            onClick={async () => {
+              set$taskState('failed');
+              canceler.current && canceler.current();
+              // const fileSha1: string = await FUtil.Tool.getSHA1Hash(file);
+              // onFail && onFail({
+              //   uid: file.uid,
+              //   name: file.name,
+              //   sha1: fileSha1,
+              // });
             }}
             disabled={$progress === 100}
           >
@@ -159,10 +167,10 @@ function Task({ file, resourceTypeCode, onSuccess, onFail }: TaskProps) {
       </div>)
     }
     {/*{*/}
-    {/*  taskState === 'canceled' && (<UploadCancel*/}
+    {/*  $taskState === 'canceled' && (<UploadCancel*/}
     {/*    onClick={async () => {*/}
-    {/*      console.log('的尺寸的方式打发士大夫');*/}
-    {/*      await verifySameName();*/}
+    {/*      // console.log('的尺寸的方式打发士大夫');*/}
+    {/*      // await verifySameName();*/}
     {/*    }}*/}
     {/*  />)*/}
     {/*}*/}
@@ -184,13 +192,13 @@ function Task({ file, resourceTypeCode, onSuccess, onFail }: TaskProps) {
     {
       $taskState === 'failed' && (<div className={styles.UploadFailed}>
         <span>上传失败</span>
-        <FComponentsLib.FTextBtn
-          type='primary'
-          onClick={() => {
+        {/*<FComponentsLib.FTextBtn*/}
+        {/*  type='primary'*/}
+        {/*  onClick={() => {*/}
 
-          }}>
-          <RedoOutlined />
-        </FComponentsLib.FTextBtn>
+        {/*  }}>*/}
+        {/*  <RedoOutlined />*/}
+        {/*</FComponentsLib.FTextBtn>*/}
       </div>)
     }
   </div>);

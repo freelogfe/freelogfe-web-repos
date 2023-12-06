@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import FComponentsLib from '@freelog/components-lib';
-import { FI18n } from '../../../../../../@freelog/tools-lib';
+import { FI18n } from '@freelog/tools-lib';
 
 interface UploadFileProps {
   onLocalUpload?(): void;

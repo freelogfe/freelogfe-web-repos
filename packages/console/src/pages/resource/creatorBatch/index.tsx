@@ -56,7 +56,10 @@ function CreatorBatch({ dispatch, resourceCreatorBatchPage }: CreatorBatchProps)
   AHooks.useDebounceEffect(() => {
     if (get$files().length > 0 && (get$successFiles().length + get$failFiles().length === get$files().length)) {
       localUploadGotoList();
+    }
 
+    if (get$files().length > 0 && get$failFiles().length === get$files().length) {
+      set$files([]);
     }
   }, [$files, $successFiles, $failFiles], {
     wait: 300,
@@ -379,10 +382,12 @@ function CreatorBatch({ dispatch, resourceCreatorBatchPage }: CreatorBatchProps)
             key={file.uid}
             file={file}
             onFail={(value) => {
+              console.log(value, 'value sdifjsdlkjflksdjflkjl');
               set$failFiles([
                 ...get$failFiles(),
                 value,
               ]);
+              console.log(get$failFiles(), 'get$failFiles() sdjflksdjlfkjlkjl');
             }}
             onSuccess={(value) => {
               // console.log(value, 'value sdifjsldkfjlksdjfklsdjlkfjlkj');
