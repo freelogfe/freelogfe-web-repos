@@ -537,64 +537,23 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
             overlayInnerStyle={{ padding: 0 }}
             overlayStyle={{ padding: 0 }}
             style={{ padding: 0 }}
-            content={<div style={{ padding: '3px 0', display: 'flex', alignItems: 'center', gap: 15 }}>
-              <div
-                style={{
-                  width: 120,
-                  height: 106,
-
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 10,
-                  flexDirection: 'column',
-                  justifyContent: 'center',
-                  cursor: 'pointer',
-                  backgroundColor: '#FAFBFC',
-                  borderRadius: 6,
-                }}
-                onClick={onLocalUpload}
-              >
-                <FComponentsLib.FIcons.FLocalUpload style={{ fontSize: 48, color: '#666' }} />
-                <div style={{
-                  fontSize: 12,
-                  fontWeight: 600,
-                  color: '#666',
-                  lineHeight: '18px',
-                }}>{FI18n.i18nNext.t('brr_submitresource_btn_uploadfromlocal')}
+            content={<div className={styles.continue}>
+              <div onClick={onLocalUpload}>
+                <FComponentsLib.FIcons.FLocalUpload />
+                <div>{FI18n.i18nNext.t('brr_submitresource_btn_uploadfromlocal')}
                 </div>
               </div>
-              <div
-                style={{
-                  width: 120,
-                  height: 106,
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 10,
-                  flexDirection: 'column',
-                  justifyContent: 'center',
-                  cursor: 'pointer',
-                  backgroundColor: '#EDF6FF',
-                  borderRadius: 6,
-                }}
-                onClick={onImportStorage}
-              >
-                <FComponentsLib.FIcons.FStorageSpace style={{ fontSize: 48, color: '#2784FF' }} />
-                <div
-                  style={{
-                    fontSize: 12,
-                    fontWeight: 600,
-                    color: '#2784FF',
-                    lineHeight: '18px',
-                  }}
-                >{FI18n.i18nNext.t('brr_submitresource_btn_importfromstorage')}
+              <div onClick={onImportStorage}>
+                <FComponentsLib.FIcons.FStorageSpace />
+                <div>{FI18n.i18nNext.t('brr_submitresource_btn_importfromstorage')}
                 </div>
               </div>
             </div>}
           >
             <div>
               <FComponentsLib.FRectBtn
-              disabled={resourceCreatorBatchPage.resourceListInfo.length >= 20}
-            >{FI18n.i18nNext.t('brr_resourcelisting_btn_moretoupload')}</FComponentsLib.FRectBtn></div>
+                disabled={resourceCreatorBatchPage.resourceListInfo.length >= 20}
+              >{FI18n.i18nNext.t('brr_resourcelisting_btn_moretoupload')}</FComponentsLib.FRectBtn></div>
           </FPopover>
           <FComponentsLib.FRectBtn
             disabled={resourceCreatorBatchPage.resourceListInfo.some((r) => {
