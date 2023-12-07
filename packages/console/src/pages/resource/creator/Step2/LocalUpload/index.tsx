@@ -9,7 +9,7 @@ import fMessage from '@/components/fMessage';
 import FModal from '@/components/FModal';
 import FTable from '@/components/FTable';
 import * as AHooks from 'ahooks';
-import { Progress } from 'antd';
+// import { Progress } from 'antd';
 
 interface LocalUploadProps {
   resourceTypeCode: string;

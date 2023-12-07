@@ -421,27 +421,79 @@ const Model: ResourceListPageModelType = {
           });
         }
       }
+
+      const failedResourceIDs: string[] = Object.entries(data)
+        .filter((d) => {
+          return d[1].status === 2;
+        })
+        .map((d) => {
+          return d[0];
+        });
+      let data_failResources: {
+        resourceId: string;
+        policies: {
+          policyId: string;
+          policyName: string;
+          status: 0 | 1;
+        }[];
+        status: 1 | 2 | 3 | 4;
+      }[] = [];
+      if (failedResourceIDs.length > 0) {
+        const params = {
+          resourceIds: failedResourceIDs.join(','),
+        };
+        const { data }: {
+          data: {
+            resourceId: string;
+            policies: {
+              policyId: string;
+              policyName: string;
+              status: 0 | 1;
+            }[];
+            status: 1 | 2 | 3 | 4;
+          }[];
+        } = yield call(FServiceAPI.Resource.batchInfo, params);
+        data_failResources = data;
+      }
+      // console.log(data_failResources, 'data_failResources sdiofjsdl;kfjlskdjfkljl');
       // console.log(data, ' dsfasdfdata sdkfj;lksdjflkajslkdfjlksdjlkfj');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          resource_List: resourceListPage.resource_List.map((rl) => {
-            if (data[rl.id] && data[rl.id].status === 1) {
-              return {
-                ...rl,
-                // ...(data[rl.id].data || {}),
-                policy: data[rl.id].data.policies
-                  .filter((l: any) => {
-                    return l.status === 1;
-                  })
-                  .map((l: any) => {
-                    return l.policyName;
-                  }),
-                status: data[rl.id].data.status,
-              };
-            }
-            return rl;
-          }),
+          resource_List: resourceListPage.resource_List
+            .map((rl) => {
+              if (data[rl.id] && data[rl.id].status === 1) {
+                return {
+                  ...rl,
+                  // ...(data[rl.id].data || {}),
+                  policy: data[rl.id].data.policies
+                    .filter((l: any) => {
+                      return l.status === 1;
+                    })
+                    .map((l: any) => {
+                      return l.policyName;
+                    }),
+                  status: data[rl.id].data.status,
+                };
+              }
+
+              const failResource = data_failResources.find((fr) => {
+                return fr.resourceId === rl.id;
+              });
+              // console.log(failResource, 'failResource dsifjsldkfjlksdjflkjsdlkjflkjl');
+              if (!!failResource) {
+                return {
+                  ...rl,
+                  policy: failResource.policies
+                    .filter((l: any) => {
+                      return l.status === 1;
+                    })
+                    .map((l: any) => l.policyName),
+                  status: failResource.status,
+                };
+              }
+              return rl;
+            }),
         },
       });
     },
