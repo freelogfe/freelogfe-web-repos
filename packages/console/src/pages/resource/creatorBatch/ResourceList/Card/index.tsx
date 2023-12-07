@@ -18,6 +18,9 @@ import FResourceAuthorizationProcessor_Simple, { getProcessor_simple } from '@/c
 // import { OnChange_step4_resourceCover_Action } from '@/models/resourceCreatorPage';
 import fMessage from '@/components/fMessage';
 import FUploadCover from '@/components/FUploadCover';
+import fPolicyBuilder from '@/components/fPolicyBuilder';
+import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
+import { ChangeAction } from '@/models/resourceCreatorBatchPage';
 
 interface CardProps {
   order: number;
@@ -80,12 +83,24 @@ interface CardProps {
 
   onDelete?(): void;
 
-  onAddPolicy?(): void;
+  // onAddPolicy?(): void;
 
   onClickApplyLabels?(): void;
+
+  onClickApplyPolicies?(): void;
 }
 
-function Card({ order, username, info, resourceType, onChange, onDelete, onAddPolicy, onClickApplyLabels }: CardProps) {
+function Card({
+                order,
+                username,
+                info,
+                resourceType,
+                onChange,
+                onDelete,
+                // onAddPolicy,
+                onClickApplyLabels,
+                onClickApplyPolicies,
+              }: CardProps) {
   const ref = React.useRef(null);
   const size = AHooks.useSize(ref);
   const [$showMore, set$showMore, get$showMore] = FUtil.Hook.useGetState<boolean>(false);
@@ -270,16 +285,46 @@ function Card({ order, username, info, resourceType, onChange, onDelete, onAddPo
             type={'negative'}
           />
           <div style={{ width: 540 }}>
-            <Space
-              size={5}
-              onClick={() => {
-                onAddPolicy && onAddPolicy();
-              }}
-            >
-              <FComponentsLib.FTextBtn><FComponentsLib.FIcons.FCreate /></FComponentsLib.FTextBtn>
-              <FComponentsLib.FTextBtn>{FI18n.i18nNext.t('brr_resourcelisting_item_btn_addauthplan')}</FComponentsLib.FTextBtn>
-            </Space>
+            <Space size={15}>
+              <Space
+                size={5}
+                onClick={async () => {
+                  // onAddPolicy && onAddPolicy();
 
+                  const result: null | { title: string; text: string; } = await fPolicyBuilder({
+                    targetType: 'resource',
+                    alreadyUsedTexts: info.resourcePolicies.map((p) => {
+                      return p.text;
+                    }),
+                    alreadyUsedTitles: info.resourcePolicies.map((p) => {
+                      return p.title;
+                    }),
+                  });
+                  if (!result) {
+                    return;
+                  }
+                  onChange && onChange({
+                    ...info,
+                    resourcePolicies: [
+                      ...info.resourcePolicies,
+                      result,
+                    ],
+                  });
+                }}
+              >
+                <FComponentsLib.FTextBtn><FComponentsLib.FIcons.FCreate /></FComponentsLib.FTextBtn>
+                <FComponentsLib.FTextBtn>{FI18n.i18nNext.t('brr_resourcelisting_item_btn_addauthplan')}</FComponentsLib.FTextBtn>
+              </Space>
+              {
+                onClickApplyPolicies && (<FComponentsLib.FTextBtn
+                  style={{ fontSize: 12 }}
+                  type={'primary'}
+                  onClick={() => {
+                    onClickApplyPolicies();
+                  }}
+                >应用于所有资源</FComponentsLib.FTextBtn>)
+              }
+            </Space>
             {
               info.resourcePolicies.length > 0 && (<>
                 <div style={{ height: 15 }} />

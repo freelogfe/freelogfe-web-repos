@@ -402,81 +402,58 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
                     },
                   });
                 }}
-                onAddPolicy={async () => {
-                  const result: null | { title: string; text: string; } = await fPolicyBuilder({
-                    targetType: 'resource',
-                  });
-                  if (!result) {
-                    return;
-                  }
-
-                  let confirm: boolean = false;
-
-                  if (resourceCreatorBatchPage.resourceListInfo.length > 1) {
-                    confirm = await fPromiseModalConfirm({
-                      title: FI18n.i18nNext.t('brr_resourcelisting_confirmation_bulkaddauthplan_title'),
-                      description: FI18n.i18nNext.t('是否将本次修改应用于此处发行的所有资源？'),
-                      cancelText: FI18n.i18nNext.t('brr_resourcelisting_confirmation_bulkaddauthplan_btn_no'),
-                      okText: FI18n.i18nNext.t('brr_resourcelisting_confirmation_bulkaddauthplan_yes'),
-                    });
-                  }
-
-                  if (confirm) {
-                    dispatch<ChangeAction>({
-                      type: 'resourceCreatorBatchPage/change',
-                      payload: {
-                        resourceListInfo: resourceCreatorBatchPage.resourceListInfo.map((rli) => {
-                          if (rli.resourcePolicies.some((p) => {
-                            return p.text === result.text || p.title === result.title;
-                          })) {
-                            return rli;
-                          }
-                          return {
-                            ...rli,
-                            resourcePolicies: [
-                              ...rli.resourcePolicies,
-                              {
-                                title: result.title,
-                                text: result.text,
-                              },
-                            ],
-                          };
-                        }),
-                      },
-                    });
-                  } else {
-                    dispatch<ChangeAction>({
-                      type: 'resourceCreatorBatchPage/change',
-                      payload: {
-                        resourceListInfo: resourceCreatorBatchPage.resourceListInfo.map((rli) => {
-                          if (r.fileUID !== rli.fileUID) {
-                            return rli;
-                          }
-                          if (rli.resourcePolicies.some((p) => {
-                            return p.text === result.text || p.title === result.title;
-                          })) {
-                            return rli;
-                          }
-                          return {
-                            ...rli,
-                            resourcePolicies: [
-                              ...rli.resourcePolicies,
-                              {
-                                title: result.title,
-                                text: result.text,
-                              },
-                            ],
-                          };
-                        }),
-                      },
-                    });
-                  }
-                }}
-                onClickApplyLabels={(resourceCreatorBatchPage.resourceListInfo.length <= 1 || r.resourceLabels.length === 0) ? undefined : async () => {
+                // onAddPolicy={async () => {
+                //
+                // }}
+                onClickApplyPolicies={(resourceCreatorBatchPage.resourceListInfo.length <= 1 || r.resourcePolicies.length === 0) ? undefined : async () => {
 
                   let confirm: boolean = await fPromiseModalConfirm({
                     title: FI18n.i18nNext.t('brr_resourcelisting_confirmation_bulkaddtags_title'),
                     description: FI18n.i18nNext.t('是否将标签应用于此处发行的所有资源？'),
+                    cancelText: FI18n.i18nNext.t('brr_resourcelisting_confirmation_bulkaddtags_btn_no'),
+                    okText: FI18n.i18nNext.t('brr_resourcelisting_confirmation_bulkaddtags_btn_yes'),
+                  });
+
+                  if (!confirm) {
+                    return;
+                  }
+
+                  dispatch<ChangeAction>({
+                    type: 'resourceCreatorBatchPage/change',
+                    payload: {
+                      resourceListInfo: resourceCreatorBatchPage.resourceListInfo.map((rli) => {
+                        if (r.fileUID === rli.fileUID) {
+                          return rli;
+                        }
+                        // const resourceLabels: string[] = Array.from(new Set([...rli.resourceLabels, ...r.resourceLabels])).slice(0, 20);
+                        const usedText: string[] = rli.resourcePolicies.map((p) => {
+                          return p.text;
+                        });
+                        const usedTile: string[] = rli.resourcePolicies.map((p) => {
+                          return p.title;
+                        });
+                        const policies: {
+                          title: string;
+                          text: string;
+                        }[] = r.resourcePolicies.filter((p) => {
+                          return !usedText.includes(p.text) && !usedTile.includes(p.title);
+                        });
+                        // console.log(policies, 'policiesisdlfkjasdlkfjlkj');
+                        return {
+                          ...rli,
+                          resourcePolicies: [
+                            ...rli.resourcePolicies,
+                            ...policies,
+                          ],
+                        };
+                      }),
+                    },
+                  });
+                }}
+                onClickApplyLabels={(resourceCreatorBatchPage.resourceListInfo.length <= 1 || r.resourceLabels.length === 0) ? undefined : async () => {
+                  let confirm: boolean = await fPromiseModalConfirm({
+                    title: FI18n.i18nNext.t('brr_resourcelisting_confirmation_bulkaddtags_title'),
+                    description: FI18n.i18nNext.t('是否将策略应用于此处发行的所有资源？'),
                     cancelText: FI18n.i18nNext.t('brr_resourcelisting_confirmation_bulkaddtags_btn_no'),
                     okText: FI18n.i18nNext.t('brr_resourcelisting_confirmation_bulkaddtags_btn_yes'),
                   });
