@@ -79,11 +79,15 @@ function Finish({ dispatch, resourceCreatorBatchPage }: FinishProps) {
                 <FComponentsLib.FContentText
                   text={result.resourceTitle}
                   type={'highlight'}
+                  singleRow
+                  style={{maxWidth: 400}}
                 />
                 <div style={{ height: 10 }} />
                 <FComponentsLib.FContentText
                   text={result.resourceName}
                   type={'additional2'}
+                  singleRow
+                  style={{maxWidth: 400}}
                 />
                 <div style={{ height: 10 }} />
                 <div className={styles.MetaFooter}>
