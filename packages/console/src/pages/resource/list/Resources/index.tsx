@@ -680,13 +680,23 @@ function ResultModal({ type, dataSource, onClose }: ResultModalProps) {
                     <FComponentsLib.FContentText
                       type={'highlight'}
                       text={v.resourceTitle || v.resourceName.split('/')[1]}
+                      singleRow
+                      style={{maxWidth: 400}}
                     />
                     <div style={{ height: 10 }} />
-                    <FComponentsLib.FContentText type={'additional2'} text={v.resourceType} />
+                    <FComponentsLib.FContentText
+                      type={'additional2'}
+                      text={v.resourceType}
+                      singleRow
+                      style={{maxWidth: 400}}
+                    />
                   </div>
                 </Space>
 
-                <FComponentsLib.FContentText type={'additional2'} text={v.failedReason} />
+                <FComponentsLib.FContentText
+                  type={'additional2'}
+                  text={v.failedReason}
+                />
               </div>);
             })
           }
