@@ -409,7 +409,7 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
 
                   let confirm: boolean = await fPromiseModalConfirm({
                     title: FI18n.i18nNext.t('brr_resourcelisting_confirmation_bulkaddtags_title'),
-                    description: FI18n.i18nNext.t('是否将标签应用于此处发行的所有资源？'),
+                    description: FI18n.i18nNext.t('是否将策略应用于此处发行的所有资源？'),
                     cancelText: FI18n.i18nNext.t('brr_resourcelisting_confirmation_bulkaddtags_btn_no'),
                     okText: FI18n.i18nNext.t('brr_resourcelisting_confirmation_bulkaddtags_btn_yes'),
                   });
@@ -453,7 +453,7 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
                 onClickApplyLabels={(resourceCreatorBatchPage.resourceListInfo.length <= 1 || r.resourceLabels.length === 0) ? undefined : async () => {
                   let confirm: boolean = await fPromiseModalConfirm({
                     title: FI18n.i18nNext.t('brr_resourcelisting_confirmation_bulkaddtags_title'),
-                    description: FI18n.i18nNext.t('是否将策略应用于此处发行的所有资源？'),
+                    description: FI18n.i18nNext.t('是否将标签应用于此处发行的所有资源？'),
                     cancelText: FI18n.i18nNext.t('brr_resourcelisting_confirmation_bulkaddtags_btn_no'),
                     okText: FI18n.i18nNext.t('brr_resourcelisting_confirmation_bulkaddtags_btn_yes'),
                   });
