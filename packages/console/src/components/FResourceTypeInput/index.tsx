@@ -573,6 +573,7 @@ function FResourceTypeInput($prop: FResourceTypeInputProps) {
           })
         }
       </div>
+      <div style={{ height: 10 }} />
     </div>)}
   >
     <div

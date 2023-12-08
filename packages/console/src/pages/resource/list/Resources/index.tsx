@@ -537,8 +537,6 @@ function ResultModal({ type, dataSource, onClose }: ResultModalProps) {
         };
       }));
     }
-
-
   }
 
   return (<Modal

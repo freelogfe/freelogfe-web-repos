@@ -9,7 +9,8 @@ import { Dispatch } from 'redux';
 import {
   OnChange_step1_resourceName_Action,
   OnChange_step1_resourceType_Action,
-  OnClick_step1_createBtn_Action, OnVerify_step1_resourceName_Action,
+  OnClick_step1_createBtn_Action,
+  OnVerify_step1_resourceName_Action,
 } from '@/models/resourceCreatorPage';
 import * as AHooks from 'ahooks';
 
