@@ -263,19 +263,21 @@ function CreatorBatch({ dispatch, resourceCreatorBatchPage }: CreatorBatchProps)
     let resourceListInfo = [
       // ...resourceCreatorBatchPage.resourceListInfo,
       ...resourceCreatorBatchPage.resourceListInfo.map((resource) => {
+        // console.log(copyData_ResourceNames, resource.resourceName, 'copyData_ResourceNamessdifjlsdkjlk111111');
         const resourceName = copyData_ResourceNames[resource.resourceName].resourceNewNames.shift() || '';
+        // console.log(copyData_ResourceNames, resource.resourceName, 'copyData_ResourceNamessdifjlsdkjlk2222222');
         return {
           ...resource,
           resourceName,
         };
       }),
-      ...data_objs.map((obj) => {
+      ...data_objs.map((obj, obj_index) => {
         // const name: string = data_ResourceNames[getARightName(f.objectName)].resourceNewNames[0];
 
         let resourceName: string = '';
         const key: string = getARightName(obj.objectName);
         if (key !== '') {
-          resourceName = copyData_ResourceNames[getARightName(obj.objectName)].resourceNewNames.shift() || '';
+          resourceName = copyData_ResourceNames[key].resourceNewNames.shift() || '';
         }
         const resourceTitle: string = obj.objectName.replace(new RegExp(/\.[\w-]+$/), '').substring(0, 100);
 
@@ -283,7 +285,7 @@ function CreatorBatch({ dispatch, resourceCreatorBatchPage }: CreatorBatchProps)
           return obj.sha1 === file.sha1;
         });
         return {
-          fileUID: obj.objectId,
+          fileUID: String(resourceCreatorBatchPage.resourceListInfo.length + obj_index),
           fileName: obj.objectName,
           sha1: obj.sha1,
           cover: '',
