@@ -53,6 +53,12 @@ function ReadFiles({ multiple, accept, onRead, onClose }: ReadFilesProps) {
     refDiv.current.click();
   });
 
+  function close() {
+    setTimeout(() => {
+      onClose && onClose();
+    }, 300);
+  }
+
   return (<div style={{ width: 0, height: 0, overflow: 'hidden' }}>
     <Upload
       multiple={multiple}
@@ -61,6 +67,7 @@ function ReadFiles({ multiple, accept, onRead, onClose }: ReadFilesProps) {
       beforeUpload={(file: RcFile, fileList: RcFile[]) => {
         // console.log(fileList, 'fildiosdfjhlksdjflksdjflsdjflkdsjflkjsdlkfjlksdjflsdjflkjkkkkkkkkj');
         onRead && onRead(fileList);
+        close();
         return false;
       }}
       openFileDialogOnClick
@@ -71,9 +78,7 @@ function ReadFiles({ multiple, accept, onRead, onClose }: ReadFilesProps) {
           self.addEventListener(
             'focus',
             () => {
-              setTimeout(() => {
-                onClose && onClose();
-              }, 300);
+              close();
             },
             { once: true },
           );
