@@ -33,17 +33,21 @@ function Notice({}: NoticeProps) {
       place: 1,
     });
     // console.log(data, '#2309i3oj3####');
-    set_notices(data.dataList.map((d: any) => {
-      // console.log(d, 'd0932iojsdifjsdalkf');
-      return {
-        id: d._id,
-        title: d.title,
-        href: d.linkActivityId
-          ? (FUtil.Format.completeUrlByDomain('www') + FUtil.LinkTo.activity({ activityID: d.linkActivityId }))
-          : d.link,
-        date: '0000-00-00',
-      };
-    }));
+    set_notices(data.dataList
+      .filter((d: any) => {
+        return d.status === 1 || d.status === 2;
+      })
+      .map((d: any) => {
+        // console.log(d, 'd0932iojsdifjsdalkf');
+        return {
+          id: d._id,
+          title: d.title,
+          href: d.linkActivityId
+            ? (FUtil.Format.completeUrlByDomain('www') + FUtil.LinkTo.activity({ activityID: d.linkActivityId }))
+            : d.link,
+          date: '0000-00-00',
+        };
+      }));
 
     await FServiceAPI.Activity.eventTrackingAdsVisit({ _id: data.dataList[0]._id });
   });
