@@ -13,10 +13,9 @@ function creatorEntry({}: CreatorEntryProps) {
   return (<div className={styles.creatorEntry}>
     <div className={styles.card}>
       <FComponentsLib.FIcons.FResourceFile className={styles.icon} />
-      <FComponentsLib.FContentText
-        type={'additional2'}
-        text={FI18n.i18nNext.t('addnewresource_option_single_msg')}
-      />
+      <div className={styles.cardText}>
+        {FI18n.i18nNext.t('addnewresource_option_single_msg')}
+      </div>
       <FComponentsLib.FRectBtn
         onClick={() => {
           history.push(FUtil.LinkTo.resourceCreator());
@@ -29,10 +28,9 @@ function creatorEntry({}: CreatorEntryProps) {
         <FComponentsLib.FIcons.FResourceFile className={styles.icon} />
         <FComponentsLib.FIcons.FResourceFile className={styles.icon} />
       </Space>
-      <FComponentsLib.FContentText
-        type={'additional2'}
-        text={FI18n.i18nNext.t('addnewresource_option_bulk_msg')}
-      />
+      <div className={styles.cardText}>
+        {FI18n.i18nNext.t('addnewresource_option_bulk_msg')}
+      </div>
       <FComponentsLib.FRectBtn
         onClick={() => {
           history.push(FUtil.LinkTo.resourceCreatorBatch());
