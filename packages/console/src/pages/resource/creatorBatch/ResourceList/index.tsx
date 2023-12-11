@@ -410,7 +410,8 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
                 onClickApplyPolicies={(resourceCreatorBatchPage.resourceListInfo.length <= 1 || r.resourcePolicies.length === 0) ? undefined : async () => {
 
                   let confirm: boolean = await fPromiseModalConfirm({
-                    title: FI18n.i18nNext.t('brr_resourcelisting_confirmation_bulkaddtags_title'),
+                    // title: FI18n.i18nNext.t('brr_resourcelisting_confirmation_bulkaddtags_title'),
+                    title: '添加策略到其它资源',
                     description: FI18n.i18nNext.t('是否将策略应用于此处发行的所有资源？'),
                     cancelText: FI18n.i18nNext.t('brr_resourcelisting_confirmation_bulkaddtags_btn_no'),
                     okText: FI18n.i18nNext.t('brr_resourcelisting_confirmation_bulkaddtags_btn_yes'),
