@@ -333,7 +333,9 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
 
           <FComponentsLib.FContentText
             // text={`共 ${resourceCreatorBatchPage.resourceListInfo.length} 个资源`}
-            text={FI18n.i18nNext.t('brr_resourcelisting_label_resourceqty')}
+            text={FI18n.i18nNext.t('brr_resourcelisting_label_resourceqty' ,{
+              ResourceQty: resourceCreatorBatchPage.resourceListInfo.length,
+            })}
             type={'additional2'}
           />
 

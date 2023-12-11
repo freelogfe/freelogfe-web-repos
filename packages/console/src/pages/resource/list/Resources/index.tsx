@@ -254,7 +254,9 @@ function Resources({ dispatch, resourceListPage }: ResourceProps) {
                 <div style={{ width: 30 }} />
                 <FComponentsLib.FContentText
                   // text={`已选择${resourceListPage.checkedResourceIDs.length}个资源`}
-                  text={FI18n.i18nNext.t('myresources_bulkaction_label_selectedqty')}
+                  text={FI18n.i18nNext.t('myresources_bulkaction_label_selectedqty', {
+                    Qty: resourceListPage.checkedResourceIDs.length,
+                  })}
                   type={'additional2'}
                   style={{ fontSize: 14 }}
                 />
@@ -679,14 +681,14 @@ function ResultModal({ type, dataSource, onClose }: ResultModalProps) {
                       type={'highlight'}
                       text={v.resourceTitle || v.resourceName.split('/')[1]}
                       singleRow
-                      style={{maxWidth: 400}}
+                      style={{ maxWidth: 400 }}
                     />
                     <div style={{ height: 10 }} />
                     <FComponentsLib.FContentText
                       type={'additional2'}
                       text={v.resourceType}
                       singleRow
-                      style={{maxWidth: 400}}
+                      style={{ maxWidth: 400 }}
                     />
                   </div>
                 </Space>

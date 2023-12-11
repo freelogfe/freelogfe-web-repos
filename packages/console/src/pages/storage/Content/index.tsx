@@ -258,7 +258,9 @@ function Content({ storageHomePage, dispatch }: ContentProps) {
                 type={'additional2'}
                 style={{ fontSize: 14 }}
                 // text={'已选择2个对象，可进行操作:'}
-                text={FI18n.i18nNext.t('storage_bulkaction_label_selectedqty')}
+                text={FI18n.i18nNext.t('storage_bulkaction_label_selectedqty', {
+                  ObjectQty: storageHomePage.checkedObjectIDs.length,
+                })}
               />
               <FComponentsLib.FTextBtn
                 // disabled={storageHomePage.checkedObjectIDs.length === 0}

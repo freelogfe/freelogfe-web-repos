@@ -11,16 +11,12 @@ import fResourcePropertyEditor from '@/components/fResourcePropertyEditor';
 import FResourceProperties from '@/components/FResourceProperties';
 import fResourceOptionEditor from '@/components/fResourceOptionEditor';
 import FResourceOptions from '@/components/FResourceOptions';
-// import FResourceAuthorizationProcessor, { getProcessor } from '@/components/FResourceAuthorizationProcessor';
 import fAddDependencies from '@/components/fAddDependencies';
 import * as AHooks from 'ahooks';
 import FResourceAuthorizationProcessor_Simple, { getProcessor_simple } from '@/components/FResourceAuthorizationProcessor_Simple';
-// import { OnChange_step4_resourceCover_Action } from '@/models/resourceCreatorPage';
 import fMessage from '@/components/fMessage';
 import FUploadCover from '@/components/FUploadCover';
 import fPolicyBuilder from '@/components/fPolicyBuilder';
-import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
-import { ChangeAction } from '@/models/resourceCreatorBatchPage';
 
 interface CardProps {
   order: number;
@@ -145,7 +141,9 @@ function Card({
     <div className={styles.resourceOrder}>
       <FComponentsLib.FContentText
         // text={`资源${order}`}
-        text={FI18n.i18nNext.t('brr_resourcelisting_item_no')}
+        text={FI18n.i18nNext.t('brr_resourcelisting_item_no', {
+          ResourceNO: order,
+        })}
         type={'highlight'}
         style={{ fontSize: 12 }}
       />
