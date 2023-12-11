@@ -202,144 +202,126 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
 
     <Notice />
 
-    <div className={styles.title}>
-      <div style={{ height: 50 }} />
-      <div className={styles.title1}>
-        <span>萌新任务，完成即领20元现金奖励！</span>
-        <FPopover
-          placement='bottomRight'
-          content={<div>
-            <div style={{ display: 'flex' }}>
-              <i
-                style={{
-                  width: 3,
-                  height: 3,
-                  borderRadius: '50%',
-                  marginTop: 8,
-                  marginRight: 5,
-                  backgroundColor: '#666',
-                  flexShrink: 0,
-                }}
-              />
-              <FComponentsLib.FContentText
-                text={'内测活动时间：' + FI18n.i18nNext.t('event_newbie_eventperiod')}
-                type='normal'
-              />
-            </div>
-            {/*<div style={{ height: 15 }} />*/}
-            {/*<div style={{ display: 'flex' }}>*/}
-            {/*  <i*/}
-            {/*    style={{*/}
-            {/*      width: 3,*/}
-            {/*      height: 3,*/}
-            {/*      borderRadius: '50%',*/}
-            {/*      marginTop: 8,*/}
-            {/*      marginRight: 5,*/}
-            {/*      backgroundColor: '#666',*/}
-            {/*      flexShrink: 0,*/}
-            {/*    }}*/}
-            {/*  />*/}
-            {/*  <FComponentsLib.FContentText*/}
-            {/*    text={'「基础任务」中的邀请1位好友奖励和「邀请好友」活动中的奖励可重复领取。'}*/}
-            {/*    type='normal'*/}
-            {/*  />*/}
-            {/*</div>*/}
-            <div style={{ height: 15 }} />
-            <div style={{ display: 'flex' }}>
-              <i
-                style={{
-                  width: 3,
-                  height: 3,
-                  borderRadius: '50%',
-                  marginTop: 8,
-                  marginRight: 5,
-                  backgroundColor: '#666',
-                  flexShrink: 0,
-                }}
-              />
-              <FComponentsLib.FContentText
-                text={'分别完成下方的基础任务、资源任务和节点任务，即可领取对应的现金奖励。'}
-                type='normal'
-              />
-            </div>
-            <div style={{ height: 15 }} />
-            <div style={{ display: 'flex' }}>
-              <i
-                style={{
-                  width: 3,
-                  height: 3,
-                  borderRadius: '50%',
-                  marginTop: 8,
-                  marginRight: 5,
-                  backgroundColor: '#666',
-                }}
-              />
-              <FComponentsLib.FContentText
-                text={'完成【基础任务】中的【查看Freelog使用教程】【 Freelog社区签到】两个小任务，可额外各获得一个邀请名额'}
-                type='normal'
-              />
-            </div>
-            <div style={{ height: 15 }} />
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5 }}>
-              <i
-                style={{
-                  width: 3,
-                  height: 3,
-                  borderRadius: '50%',
-                  marginTop: 8,
-                  // marginRight: 5,
-                  backgroundColor: '#666',
-                  flexShrink: 0,
-                }}
-              />
-              <FComponentsLib.FContentText
-                text={'可通过'}
-                type='normal'
-              />
-              <FComponentsLib.FTextBtn onClick={() => {
-                self.open(FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.reward());
-              }}>【个人中心】—【活动奖励】</FComponentsLib.FTextBtn>
-              <FComponentsLib.FContentText
-                text={'，将内测期间获取的现金奖励提现至微信钱包。'}
-                type='normal'
-              />
-            </div>
-            <div style={{ height: 15 }} />
-            <div style={{ display: 'flex' }}>
-              <i
-                style={{
-                  width: 3,
-                  height: 3,
-                  borderRadius: '50%',
-                  marginTop: 8,
-                  marginRight: 5,
-                  backgroundColor: '#666',
-                  flexShrink: 0,
-                }}
-              />
-              <FComponentsLib.FContentText
-                text={'活动的最终解释权归Freelog所有。'}
-                type='normal'
-              />
-            </div>
-          </div>}
-        ><span>
-          <FComponentsLib.FTextBtn>
-            <FComponentsLib.FIcons.FInfo />
-            <span style={{ display: 'inline-block', paddingLeft: 5 }}>活动说明</span>
-          </FComponentsLib.FTextBtn>
-        </span></FPopover>
+    {/*<div className={styles.title}>*/}
+    {/*  <div style={{ height: 50 }} />*/}
+    {/*  <div className={styles.title1}>*/}
+    {/*    <span>萌新任务，完成即领20元现金奖励！</span>*/}
+    {/*    <FPopover*/}
+    {/*      placement='bottomRight'*/}
+    {/*      content={<div>*/}
+    {/*        <div style={{ display: 'flex' }}>*/}
+    {/*          <i*/}
+    {/*            style={{*/}
+    {/*              width: 3,*/}
+    {/*              height: 3,*/}
+    {/*              borderRadius: '50%',*/}
+    {/*              marginTop: 8,*/}
+    {/*              marginRight: 5,*/}
+    {/*              backgroundColor: '#666',*/}
+    {/*              flexShrink: 0,*/}
+    {/*            }}*/}
+    {/*          />*/}
+    {/*          <FComponentsLib.FContentText*/}
+    {/*            text={'内测活动时间：' + FI18n.i18nNext.t('event_newbie_eventperiod')}*/}
+    {/*            type='normal'*/}
+    {/*          />*/}
+    {/*        </div>*/}
+    {/*        <div style={{ height: 15 }} />*/}
+    {/*        <div style={{ display: 'flex' }}>*/}
+    {/*          <i*/}
+    {/*            style={{*/}
+    {/*              width: 3,*/}
+    {/*              height: 3,*/}
+    {/*              borderRadius: '50%',*/}
+    {/*              marginTop: 8,*/}
+    {/*              marginRight: 5,*/}
+    {/*              backgroundColor: '#666',*/}
+    {/*              flexShrink: 0,*/}
+    {/*            }}*/}
+    {/*          />*/}
+    {/*          <FComponentsLib.FContentText*/}
+    {/*            text={'分别完成下方的基础任务、资源任务和节点任务，即可领取对应的现金奖励。'}*/}
+    {/*            type='normal'*/}
+    {/*          />*/}
+    {/*        </div>*/}
+    {/*        <div style={{ height: 15 }} />*/}
+    {/*        <div style={{ display: 'flex' }}>*/}
+    {/*          <i*/}
+    {/*            style={{*/}
+    {/*              width: 3,*/}
+    {/*              height: 3,*/}
+    {/*              borderRadius: '50%',*/}
+    {/*              marginTop: 8,*/}
+    {/*              marginRight: 5,*/}
+    {/*              backgroundColor: '#666',*/}
+    {/*            }}*/}
+    {/*          />*/}
+    {/*          <FComponentsLib.FContentText*/}
+    {/*            text={'完成【基础任务】中的【查看Freelog使用教程】【 Freelog社区签到】两个小任务，可额外各获得一个邀请名额'}*/}
+    {/*            type='normal'*/}
+    {/*          />*/}
+    {/*        </div>*/}
+    {/*        <div style={{ height: 15 }} />*/}
+    {/*        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5 }}>*/}
+    {/*          <i*/}
+    {/*            style={{*/}
+    {/*              width: 3,*/}
+    {/*              height: 3,*/}
+    {/*              borderRadius: '50%',*/}
+    {/*              marginTop: 8,*/}
+    {/*              // marginRight: 5,*/}
+    {/*              backgroundColor: '#666',*/}
+    {/*              flexShrink: 0,*/}
+    {/*            }}*/}
+    {/*          />*/}
+    {/*          <FComponentsLib.FContentText*/}
+    {/*            text={'可通过'}*/}
+    {/*            type='normal'*/}
+    {/*          />*/}
+    {/*          <FComponentsLib.FTextBtn onClick={() => {*/}
+    {/*            self.open(FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.reward());*/}
+    {/*          }}>【个人中心】—【活动奖励】</FComponentsLib.FTextBtn>*/}
+    {/*          <FComponentsLib.FContentText*/}
+    {/*            text={'，将内测期间获取的现金奖励提现至微信钱包。'}*/}
+    {/*            type='normal'*/}
+    {/*          />*/}
+    {/*        </div>*/}
+    {/*        <div style={{ height: 15 }} />*/}
+    {/*        <div style={{ display: 'flex' }}>*/}
+    {/*          <i*/}
+    {/*            style={{*/}
+    {/*              width: 3,*/}
+    {/*              height: 3,*/}
+    {/*              borderRadius: '50%',*/}
+    {/*              marginTop: 8,*/}
+    {/*              marginRight: 5,*/}
+    {/*              backgroundColor: '#666',*/}
+    {/*              flexShrink: 0,*/}
+    {/*            }}*/}
+    {/*          />*/}
+    {/*          <FComponentsLib.FContentText*/}
+    {/*            text={'活动的最终解释权归Freelog所有。'}*/}
+    {/*            type='normal'*/}
+    {/*          />*/}
+    {/*        </div>*/}
+    {/*      </div>}*/}
+    {/*    ><span>*/}
+    {/*      <FComponentsLib.FTextBtn>*/}
+    {/*        <FComponentsLib.FIcons.FInfo />*/}
+    {/*        <span style={{ display: 'inline-block', paddingLeft: 5 }}>活动说明</span>*/}
+    {/*      </FComponentsLib.FTextBtn>*/}
+    {/*    </span></FPopover>*/}
 
-      </div>
-      <div style={{ height: 20 }} />
-      <div className={styles.title2}>
-        完成下列萌新任务，不仅可以快速了解“如何创建资源、如何通过Freelog对资源进行推广及变现”，还能领取20元现金奖励！<br />
-        完成全部任务仅需9分钟，快开始萌新之旅吧~
-      </div>
-      <div style={{ height: 30 }} />
-      <BoardCard />
-      <div style={{ height: 50 }} />
-    </div>
+    {/*  </div>*/}
+    {/*  <div style={{ height: 20 }} />*/}
+    {/*  <div className={styles.title2}>*/}
+    {/*    完成下列萌新任务，不仅可以快速了解“如何创建资源、如何通过Freelog对资源进行推广及变现”，还能领取20元现金奖励！<br />*/}
+    {/*    完成全部任务仅需9分钟，快开始萌新之旅吧~*/}
+    {/*  </div>*/}
+    {/*  <div style={{ height: 30 }} />*/}
+    {/*  <BoardCard />*/}
+    {/*  <div style={{ height: 50 }} />*/}
+    {/*</div>*/}
 
     <div style={{ height: 40 }} />
     <div className={styles.statistics}>
