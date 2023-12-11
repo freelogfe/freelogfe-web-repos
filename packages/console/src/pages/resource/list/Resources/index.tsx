@@ -201,7 +201,7 @@ function Resources({ dispatch, resourceListPage }: ResourceProps) {
         tipText={'没有符合条件的资源'}
         btnText={'创建资源'}
         onClick={() => {
-          self.open(FUtil.LinkTo.resourceCreator());
+          self.open(FUtil.LinkTo.resourceCreatorEntry());
         }}
       />)
     }
