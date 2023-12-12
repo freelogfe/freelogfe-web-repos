@@ -16,6 +16,7 @@ import {
 import FCoverImage from '@/components/FCoverImage';
 import { Modal } from 'antd';
 import FInProcessModal from '@/components/FInProcessModal';
+import { history } from '@@/core/history';
 
 interface Step4Props {
   dispatch: Dispatch;
@@ -118,7 +119,16 @@ function Step4({ dispatch, resourceCreatorPage }: Step4Props) {
 
     <div className={styles.btn}>
 
-      {/*{FI18n.i18nNext.t('rqr_step4_btn_back')}*/}
+      <FComponentsLib.FTextBtn
+        type={'default'}
+        onClick={() => {
+          history.push(FUtil.LinkTo.resourceVersionInfo({
+            resourceID: resourceCreatorPage.step1_createdResourceInfo?.resourceID || '',
+            version: '1.0.0',
+          }));
+        }}
+      >{FI18n.i18nNext.t('rqr_step3_btn_later')}</FComponentsLib.FTextBtn>
+
       <FComponentsLib.FTextBtn
         type={'default'}
         onClick={() => {
@@ -128,7 +138,6 @@ function Step4({ dispatch, resourceCreatorPage }: Step4Props) {
         }}
       >{FI18n.i18nNext.t('rqr_step4_btn_back')}</FComponentsLib.FTextBtn>
 
-      {/*{FI18n.i18nNext.t('rqr_step4_btn_release')}*/}
       <FComponentsLib.FRectBtn
         disabled={resourceCreatorPage.step4_resourceTitle.length > 100}
         type={'primary'}

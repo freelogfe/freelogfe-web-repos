@@ -122,7 +122,6 @@ function Step3({ dispatch, resourceCreatorPage }: Step3Props) {
             resourceID: resourceCreatorPage.step1_createdResourceInfo?.resourceID || '',
             version: '1.0.0',
           }));
-          // history.push(FUtil.LinkTo.myResources());
         }}
       >{FI18n.i18nNext.t('rqr_step3_btn_later')}</FComponentsLib.FTextBtn>
 

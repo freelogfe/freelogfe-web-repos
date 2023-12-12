@@ -578,7 +578,9 @@ function ResultModal({ type, dataSource, onClose }: ResultModalProps) {
               }}
             />
             {/*<div>成功上架{$succeedCount}个资源</div>*/}
-            <div>{FI18n.i18nNext.t('myresources_bulkaction_msg_availabletoauth_done')}</div>
+            <div>{FI18n.i18nNext.t('myresources_bulkaction_msg_availabletoauth_done', {
+              Qty: $succeedCount,
+            })}</div>
           </>)
         }
 
@@ -604,7 +606,9 @@ function ResultModal({ type, dataSource, onClose }: ResultModalProps) {
               }}
             />
             {/*<div>新授权策略已经添加至{$succeedCount}个资源</div>*/}
-            <div>{FI18n.i18nNext.t('myresources_bulkaction_msg_addauthplan_done')}</div>
+            <div>{FI18n.i18nNext.t('myresources_bulkaction_msg_addauthplan_done', {
+              Qty: $succeedCount,
+            })}</div>
           </>)
         }
 

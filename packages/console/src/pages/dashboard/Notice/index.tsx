@@ -49,7 +49,9 @@ function Notice({}: NoticeProps) {
         };
       }));
 
-    await FServiceAPI.Activity.eventTrackingAdsVisit({ _id: data.dataList[0]._id });
+    if (data.dataList.length > 0) {
+      await FServiceAPI.Activity.eventTrackingAdsVisit({ _id: data.dataList[0]._id });
+    }
   });
 
   AHooks.useUnmount(() => {
