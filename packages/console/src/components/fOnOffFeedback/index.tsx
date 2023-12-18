@@ -12,10 +12,8 @@ interface fOnOffFeedbackProps {
 }
 
 export function fOnOffFeedback({ ...props }: fOnOffFeedbackProps): void {
-  // const root = ReactDOM.createRoot(document.getElementById('modal-root') as HTMLDivElement);
-
-  const divRoot = document.getElementById('modal-root') as HTMLDivElement;
-  const div = document.createElement('div') as HTMLDivElement;
+  const divRoot = self.document.getElementById('modal-root') as HTMLDivElement;
+  const div = self.document.createElement('div') as HTMLDivElement;
   divRoot.appendChild(div);
   const root = ReactDOM.createRoot(div);
 
