@@ -289,9 +289,10 @@ function Resources({ dispatch, resourceListPage }: ResourceProps) {
                       title: FI18n.i18nNext.t('remove_resource_from_auth_confirmation_title'),
                       description: FI18n.i18nNext.t('confirm_msg_remove_resource_from_auth'),
                       okText: FI18n.i18nNext.t('remove_resource_from_auth_btn_remve'),
+                      promptKey_localStorage: FI18n.i18nNext.t('remove_resource_from_auth_confirmation_title') || '',
                     });
 
-                    if (bool){
+                    if (bool) {
                       dispatch<OnBatchUpdateAction>({
                         type: 'resourceListPage/onBatchUpdate',
                         payload: {
