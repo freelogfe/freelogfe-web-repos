@@ -14,7 +14,6 @@ function FProcessing({ open, message }: FProcessingProps) {
     title={null}
     footer={null}
     width={312}
-    // style={{ backgroundColor: 'rgba(0,0,0,.2)' }}
     bodyStyle={{
       backgroundColor: 'white',
       borderRadius: 6,
@@ -23,7 +22,6 @@ function FProcessing({ open, message }: FProcessingProps) {
       alignItems: 'center',
       justifyContent: 'center',
       color: '#2784FF',
-      // padding: '30px 60px',
       height: 200,
       fontSize: 16,
       lineHeight: '22px',
@@ -33,7 +31,6 @@ function FProcessing({ open, message }: FProcessingProps) {
     centered={true}
     closable={false}
     afterClose={() => {
-      // onClose && onClose();
     }}
     focusTriggerAfterClose={false}
   >

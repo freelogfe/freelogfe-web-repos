@@ -1,67 +1,69 @@
 @import '../../config.less';
 
-.resultModal {
-  position: fixed;
-  inset: 0;
-  background-color: rgba(0, 0, 0, 0.4);
+//.resultModal {
+//  position: fixed;
+//  inset: 0;
+//  background-color: rgba(0, 0, 0, 0.4);
+//  display: flex;
+//  align-items: center;
+//  justify-content: center;
+//  animation: fade 0.2s ease;
+//  z-index: @f-zIndex-modal;
+//
+//  .resultPopup {
+//    width: 312px;
+//    height: 200px;
+//    background: #ffffff;
+//    border-radius: 6px;
+//    display: flex;
+//    align-items: center;
+//    justify-content: center;
+//    animation: scale 0.2s ease;
+//
+//    .loader {
+//      display: flex;
+//      align-items: center;
+//      color: #2784ff;
+//
+//      .loaderIcon {
+//        font-size: 16px;
+//      }
+//
+//      .loaderText {
+//        font-size: 16px;
+//        line-height: 22px;
+//        margin-left: 10px;
+//      }
+//    }
+//
+//
+//  }
+//}
+
+.result {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  animation: fade 0.2s ease;
-  z-index: @f-zIndex-modal;
 
-  .resultPopup {
-    width: 312px;
-    height: 200px;
-    background: #ffffff;
-    border-radius: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    animation: scale 0.2s ease;
+  .resultIcon {
+    font-size: 76px;
 
-    .loader {
-      display: flex;
-      align-items: center;
-      color: #2784ff;
-
-      .loaderIcon {
-        font-size: 16px;
-      }
-
-      .loaderText {
-        font-size: 16px;
-        line-height: 22px;
-        margin-left: 10px;
-      }
+    &.up {
+      color: #42c28c;
     }
 
-    .result {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-
-      .resultIcon {
-        font-size: 76px;
-
-        &.up {
-          color: #42c28c;
-        }
-
-        &.down {
-          color: #e9a923;
-          transform: rotate(180deg);
-        }
-      }
-
-      .result-text {
-        font-size: 18px;
-        //font-family: PingFangSC-Regular, PingFang SC;
-        font-weight: 400;
-        color: #222;
-        line-height: 24px;
-        margin-top: 20px;
-      }
+    &.down {
+      color: #e9a923;
+      transform: rotate(180deg);
     }
+  }
+
+  .result-text {
+    font-size: 18px;
+    //font-family: PingFangSC-Regular, PingFang SC;
+    font-weight: 400;
+    color: #222;
+    line-height: 24px;
+    margin-top: 20px;
   }
 }
