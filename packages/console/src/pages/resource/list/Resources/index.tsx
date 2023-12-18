@@ -29,6 +29,7 @@ import FResourceCard_AbleCheck from '@/components/FResourceCard_AbleCheck';
 import fPolicyBuilder from '@/components/fPolicyBuilder';
 import FResourceFeedback from '@/components/FResourceFeedback';
 import FCoverImage from '@/components/FCoverImage';
+import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
 
 interface ResourceProps {
   dispatch: Dispatch;
@@ -282,13 +283,23 @@ function Resources({ dispatch, resourceListPage }: ResourceProps) {
                 <FComponentsLib.FTextBtn
                   disabled={resourceListPage.checkedResourceIDs.length === 0}
                   type={'primary'}
-                  onClick={() => {
-                    dispatch<OnBatchUpdateAction>({
-                      type: 'resourceListPage/onBatchUpdate',
-                      payload: {
-                        status: 4,
-                      },
+                  onClick={async () => {
+
+                    const bool: boolean = await fPromiseModalConfirm({
+                      title: FI18n.i18nNext.t('remove_resource_from_auth_confirmation_title'),
+                      description: FI18n.i18nNext.t('confirm_msg_remove_resource_from_auth'),
+                      okText: FI18n.i18nNext.t('remove_resource_from_auth_btn_remve'),
                     });
+
+                    if (bool){
+                      dispatch<OnBatchUpdateAction>({
+                        type: 'resourceListPage/onBatchUpdate',
+                        payload: {
+                          status: 4,
+                        },
+                      });
+                    }
+
                   }}
                 >
                   <FComponentsLib.FIcons.FUpcast style={{ fontSize: 14, transform: 'rotate(180deg)' }} />
