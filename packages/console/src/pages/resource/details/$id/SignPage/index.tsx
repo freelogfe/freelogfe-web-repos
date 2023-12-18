@@ -100,7 +100,8 @@ function Sign({ dispatch, resourceDetailPage, nodes }: SignProps) {
         </FFormLayout.FBlock>
 
         <FFormLayout.FBlock
-          title={'输入展品名称'}
+          // title={'输入展品名称'}
+          title={FI18n.i18nNext.t('title_enter_exhibit_name')}
           subtitle={<FComponentsLib.FContentText
             type='additional2'
             className={styles.yellow}
