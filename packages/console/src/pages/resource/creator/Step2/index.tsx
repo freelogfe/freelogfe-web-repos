@@ -19,7 +19,7 @@ import {
   OnSucceed_step2_storageSpace_Action, OnTrigger_step2_SaveDraft_Action,
 } from '@/models/resourceCreatorPage';
 import FResourceProperties from '@/components/FResourceProperties';
-import { history } from 'umi';
+import { history, MicroApp } from 'umi';
 import LocalUpload from './LocalUpload';
 import StorageSpace from './StorageSpace';
 import MarkdownEditor from './MarkdownEditor';
@@ -750,16 +750,24 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
             {
               size && size.height > 0 && (<div style={{ height: 20 }} />)
             }
-            <div ref={ref}>
-              <FResourceAuthorizationProcessor
-                width={860}
-                height={600}
-                resourceID={resourceCreatorPage.step1_createdResourceInfo?.resourceID || ''}
-                processorIdentifier={'resourceCreatorStep2'}
-                onChanged={() => {
-                }}
-              />
-            </div>
+
+            {
+              resourceCreatorPage.step1_createdResourceInfo && (<MicroApp
+                name={'Authorization'}
+                resourceID={resourceCreatorPage.step1_createdResourceInfo.resourceID}
+              />)
+            }
+
+            {/*<div ref={ref}>*/}
+              {/*<FResourceAuthorizationProcessor*/}
+              {/*  width={860}*/}
+              {/*  height={600}*/}
+              {/*  resourceID={resourceCreatorPage.step1_createdResourceInfo?.resourceID || ''}*/}
+              {/*  processorIdentifier={'resourceCreatorStep2'}*/}
+              {/*  onChanged={() => {*/}
+              {/*  }}*/}
+              {/*/>*/}
+            {/* */}
           </>
         </div>
       </div>

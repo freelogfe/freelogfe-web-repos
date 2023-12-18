@@ -55,6 +55,13 @@ export default defineConfig({
           // entry: '//192.168.2.28:8080', // html entry
           // credentials: true,
         },
+
+        {
+          name: 'Authorization', // 唯一 id
+          entry: '//dependencies-declarator.testfreelog.com/', // html entry
+          // entry: '//192.168.2.28:8080', // html entry
+          // credentials: true,
+        },
       ],
     },
   },

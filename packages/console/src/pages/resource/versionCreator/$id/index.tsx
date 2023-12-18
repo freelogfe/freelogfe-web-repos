@@ -55,6 +55,7 @@ import { withRouter, history } from 'umi';
 import FMicroApp_MarkdownEditorDrawer from '@/components/FMicroApp_MarkdownEditorDrawer';
 import { getFilesSha1Info } from '@/utils/service';
 import fMessage from '@/components/fMessage';
+import { MicroApp } from '@@/plugin-qiankun/MicroApp';
 
 interface VersionCreatorProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -1128,43 +1129,58 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
                 }
               </Space>
             </div>
-
+            <div>11111</div>
             {
-              size && size.height === 0 && (<>
-                <div style={{ height: 10 }} />
-                <div
-                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
-                  {
-                    FI18n.i18nNext.t('claim_rely_list_empty').split('\n').map((i, j) => {
-                      return (<FComponentsLib.FContentText key={j} text={i} type={'additional2'} />);
-                    })
-                  }
-                </div>
-                <div style={{ height: 20 }} />
-              </>)
+              resourceVersionCreatorPage.resourceInfo && (<MicroApp
+                name={'Authorization'}
+                // resourceID={}
+                licenseeId={resourceVersionCreatorPage.resourceInfo.resourceID}
+                mainAppType={'resourceInVersionUpdate'}
+                depList={[]}
+                upcastList={[]}
+                update={() => {
+                }}
+              />)
             }
 
-            <>
-              {
-                size && size.height > 0 && (<div style={{ height: 20 }} />)
-              }
-              <div ref={ref}>
-                <FResourceAuthorizationProcessor
-                  width={860}
-                  height={600}
-                  resourceID={resourceVersionCreatorPage.resourceInfo?.resourceID || ''}
-                  processorIdentifier={'resourceVersionCreator'}
-                  onChanged={() => {
-                    dispatch<OnChange_DataIsDirty_Action>({
-                      type: 'resourceVersionCreatorPage/onChange_DataIsDirty',
-                      payload: {
-                        value: true,
-                      },
-                    });
-                  }}
-                />
-              </div>
-            </>
+            {/*{*/}
+            {/*  size && size.height === 0 && (<>*/}
+            {/*    <div style={{ height: 10 }} />*/}
+            {/*    <div*/}
+            {/*      style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>*/}
+            {/*      {*/}
+            {/*        FI18n.i18nNext.t('claim_rely_list_empty').split('\n').map((i, j) => {*/}
+            {/*          return (<FComponentsLib.FContentText key={j} text={i} type={'additional2'} />);*/}
+            {/*        })*/}
+            {/*      }*/}
+            {/*    </div>*/}
+            {/*    <div style={{ height: 20 }} />*/}
+            {/*  </>)*/}
+            {/*}*/}
+
+            {/*<>*/}
+            {/*  {*/}
+            {/*    size && size.height > 0 && (<div style={{ height: 20 }} />)*/}
+            {/*  }*/}
+
+
+            {/*<div ref={ref}>*/}
+            {/*<FResourceAuthorizationProcessor*/}
+            {/*  width={860}*/}
+            {/*  height={600}*/}
+            {/*  resourceID={resourceVersionCreatorPage.resourceInfo?.resourceID || ''}*/}
+            {/*  processorIdentifier={'resourceVersionCreator'}*/}
+            {/*  onChanged={() => {*/}
+            {/*    dispatch<OnChange_DataIsDirty_Action>({*/}
+            {/*      type: 'resourceVersionCreatorPage/onChange_DataIsDirty',*/}
+            {/*      payload: {*/}
+            {/*        value: true,*/}
+            {/*      },*/}
+            {/*    });*/}
+            {/*  }}*/}
+            {/*/>*/}
+            {/*</div>*/}
+            {/*</>*/}
           </div>
         </div>
 
