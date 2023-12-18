@@ -5,6 +5,7 @@ import { ConnectState } from '@/models/connect';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import { listStateAndListMore } from '@/components/FListFooter';
 import fCenterMessage from '@/components/fCenterMessage';
+import { fOnOffFeedback } from '@/components/fOnOffFeedback';
 
 export interface ResourceListPageModelState {
   resourceTypeCodes: {
@@ -373,14 +374,17 @@ const Model: ResourceListPageModelType = {
         let msg: string = '';
 
         if (payload.addPolicies !== undefined) {
-          msg = '策略添加成功';
+          // msg = '';
+          fCenterMessage({ message: '策略添加成功' });
         } else if (payload.status === 1) {
-          msg = '上架成功';
+          msg = '';
+          fOnOffFeedback({ state: 'on', message: '上架成功' });
         } else if (payload.status === 4) {
-          msg = '下架成功';
+          // msg = '下架成功';
+          fOnOffFeedback({ state: 'off', message: '下架成功' });
         }
         // console.log('DFSDFSDFSDFSDFSDFSD');
-        fCenterMessage({ message: msg });
+        //
         // console.log(' fCenterMessage sdf ');
         // return;
       } else {
