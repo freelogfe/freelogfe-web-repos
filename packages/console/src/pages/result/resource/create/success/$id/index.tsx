@@ -79,7 +79,7 @@ function Success({ match, dispatch }: SuccessProps) {
       <FComponentsLib.FTextBtn
         type={'primary'}
         onClick={() => {
-          self.open(FUtil.LinkTo.resourceCreator());
+          self.open(FUtil.LinkTo.resourceCreatorEntry());
         }}
       >继续创建资源</FComponentsLib.FTextBtn>
     </div>

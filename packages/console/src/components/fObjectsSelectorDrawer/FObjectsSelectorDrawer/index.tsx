@@ -76,13 +76,6 @@ function FObjectsSelectorDrawer({ resourceTypeCode, onSelect, onClose }: FObject
       return allIDs.includes(id);
     }));
 
-    // dispatch<ChangeAction>({
-    //   type: 'storageHomePage/change',
-    //   payload: {
-    //     checkedObjectIDs: ,
-    //   },
-    // });
-
   }, [objList], {
     wait: 30,
   });
@@ -222,38 +215,28 @@ function FObjectsSelectorDrawer({ resourceTypeCode, onSelect, onClose }: FObject
     </div>
     {
       objList.map((obj) => {
-        return (<div key={obj.objID} className={styles.bucket}>
+        return (<div
+          key={obj.objID}
+          className={styles.bucket}
+          onClick={() => {
+            // console.log(get$checkedObjectIDs(), obj.objID, '************************');
+            if (!get$checkedObjectIDs().includes(obj.objID)) {
+              set$checkedObjectIDs([
+                ...get$checkedObjectIDs(),
+                obj.objID,
+              ]);
+            } else {
+              set$checkedObjectIDs(get$checkedObjectIDs().filter((id) => {
+                return id !== obj.objID;
+              }));
+            }
+          }}
+        >
           <Space size={20}>
             <Checkbox
               checked={$checkedObjectIDs.includes(obj.objID)}
               onChange={(e) => {
-                if (e.target.checked) {
-                  set$checkedObjectIDs([
-                    ...get$checkedObjectIDs(),
-                    obj.objID,
-                  ]);
-                  // dispatch<ChangeAction>({
-                  //   type: 'storageHomePage/change',
-                  //   payload: {
-                  //     checkedObjectIDs: [
-                  //       ...storageHomePage.checkedObjectIDs,
-                  //       record.id,
-                  //     ],
-                  //   },
-                  // });
-                } else {
-                  set$checkedObjectIDs(get$checkedObjectIDs().filter((id) => {
-                    return id !== obj.objID;
-                  }));
-                  // dispatch<ChangeAction>({
-                  //   type: 'storageHomePage/change',
-                  //   payload: {
-                  //     checkedObjectIDs: storageHomePage.checkedObjectIDs.filter((id) => {
-                  //       return id !== record.id;
-                  //     }),
-                  //   },
-                  // });
-                }
+
               }}
             />
             <div>

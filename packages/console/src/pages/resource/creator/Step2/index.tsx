@@ -751,12 +751,12 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
               size && size.height > 0 && (<div style={{ height: 20 }} />)
             }
 
-            {
-              resourceCreatorPage.step1_createdResourceInfo && (<MicroApp
-                name={'Authorization'}
-                resourceID={resourceCreatorPage.step1_createdResourceInfo.resourceID}
-              />)
-            }
+            {/*{*/}
+            {/*  resourceCreatorPage.step1_createdResourceInfo && (<MicroApp*/}
+            {/*    name={'Authorization'}*/}
+            {/*    resourceID={resourceCreatorPage.step1_createdResourceInfo.resourceID}*/}
+            {/*  />)*/}
+            {/*}*/}
 
             {/*<div ref={ref}>*/}
               {/*<FResourceAuthorizationProcessor*/}
