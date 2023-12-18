@@ -68,7 +68,7 @@ function FResourceCard_AbleCheck({
         />
 
         <FComponentsLib.FContentText
-          text={`最新版本 ${latestVersion}`}
+          text={latestVersion === '' ? '暂无版本' : `最新版本 ${latestVersion}`}
           type={'additional2'}
           style={{ maxWidth: 120 }}
           singleRow
