@@ -25,6 +25,7 @@ import {
 } from '@/models/resourceSider';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
 import { fOnOffFeedback } from '@/components/fOnOffFeedback';
+import FProcessing from '@/components/FProcessing';
 
 interface SilderProps {
   dispatch: Dispatch;
@@ -41,9 +42,10 @@ function Sider({ resourceSider, dispatch }: SilderProps) {
   );
 
   // const [inactiveDialogShow, setInactiveDialogShow] = React.useState(false);
-  const [resultPopupType, setResultPopupType] = React.useState<null | 0 | 1>(null);
-  const [loading, setLoading] = React.useState(false);
+  // const [resultPopupType, setResultPopupType] = React.useState<null | 0 | 1>(null);
+  // const [loading, setLoading] = React.useState(false);
   // const [noLonger, setNoLonger] = React.useState(false);
+  const [$processing, set$processing, get$processing] = FUtil.Hook.useGetState<string>('');
 
   AHooks.useUnmount(() => {
     dispatch<OnUnmount_Page_Action>({
@@ -54,14 +56,15 @@ function Sider({ resourceSider, dispatch }: SilderProps) {
   /** 上下架 */
   async function changeStatus(value: boolean) {
     if (value) {
-      setLoading(true);
+      // setLoading(true);
+      set$processing(FI18n.i18nNext.t('set_resource_available_for_auth_msg_processing'))
       // const onlineSuccess = await resourceOnline(match.params.id);
       const onlineSuccess = await resourceOnline(resourceSider.resourceID);
       if (onlineSuccess) {
         // setActiveDialogShow(true);
         // setResultPopupType(1);
         setTimeout(() => {
-          setLoading(false);
+          set$processing('');
           fOnOffFeedback({
             state: 'on',
             message: FI18n.i18nNext.t('set_resource_available_for_auth_msg_done'),
@@ -76,7 +79,7 @@ function Sider({ resourceSider, dispatch }: SilderProps) {
           type: 'resourceAuthPage/fetchResourceInfo',
         });
       } else {
-        setLoading(false);
+        set$processing('');
       }
     } else {
       // 下架
@@ -114,9 +117,8 @@ function Sider({ resourceSider, dispatch }: SilderProps) {
 
   /** 资源上下架 */
   async function operateResource(data: any) {
-    // TODO: setActiveDialogShow(false);
     // setInactiveDialogShow(false);
-    setLoading(true);
+    set$processing(FI18n.i18nNext.t('remove_resource_from_auth_msg_processing'));
     // setResultPopupType(data.status);
 
     const { ret, errCode, msg } = await FServiceAPI.Resource.update({
@@ -126,12 +128,12 @@ function Sider({ resourceSider, dispatch }: SilderProps) {
 
     if (ret !== 0 && errCode !== 0) {
       fMessage(msg, 'error');
-      setLoading(false);
+      set$processing('');
       // setResultPopupType(null);
       return;
     }
     setTimeout(() => {
-      setLoading(false);
+      set$processing('');
       // setTimeout(() => {
       //   setResultPopupType(null);
       // }, 1000);
@@ -167,7 +169,8 @@ function Sider({ resourceSider, dispatch }: SilderProps) {
             changeStatus(checked);
           }}
           checked={resourceSider.resourceState === 'online'}
-          loading={loading}
+          // loading={loading}
+          loading={$processing !== ''}
         />
       </div>
       <div style={{ height: 30 }} />
@@ -284,28 +287,33 @@ function Sider({ resourceSider, dispatch }: SilderProps) {
       {/*  }*/}
       {/*/>*/}
 
-      {
-        loading && (
-          <div className={styles['result-modal']}>
-            <div className={styles['result-popup']}>
-              <div className={styles['loader']}>
-                <LoadingOutlined className={styles['loader-icon']} />
-                <div className={styles['loader-text']}>
-                  {/*正在{resultPopupType === 1 ? '上架' : '下架'}*/}
-                  {
-                    resultPopupType === 1
-                    ? FI18n.i18nNext.t(
-                      'set_resource_available_for_auth_msg_processing',
-                    )
-                    : FI18n.i18nNext.t(
-                      'remove_resource_from_auth_msg_processing',
-                    )
-                  }
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
+      {/*{*/}
+      {/*  loading && (*/}
+      {/*    <div className={styles['result-modal']}>*/}
+      {/*      <div className={styles['result-popup']}>*/}
+      {/*        <div className={styles['loader']}>*/}
+      {/*          <LoadingOutlined className={styles['loader-icon']} />*/}
+      {/*          <div className={styles['loader-text']}>*/}
+      {/*            /!*正在{resultPopupType === 1 ? '上架' : '下架'}*!/*/}
+      {/*            {*/}
+      {/*              resultPopupType === 1*/}
+      {/*                ? FI18n.i18nNext.t(*/}
+      {/*                  'set_resource_available_for_auth_msg_processing',*/}
+      {/*                )*/}
+      {/*                : FI18n.i18nNext.t(*/}
+      {/*                  'remove_resource_from_auth_msg_processing',*/}
+      {/*                )*/}
+      {/*            }*/}
+      {/*          </div>*/}
+      {/*        </div>*/}
+      {/*      </div>*/}
+      {/*    </div>*/}
+      {/*  )}*/}
+
+      <FProcessing
+        open={$processing !== ''}
+        message={$processing}
+      />
     </div>
   );
 }
