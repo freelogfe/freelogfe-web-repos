@@ -36,13 +36,20 @@ function Poster({}: PosterProps) {
     }));
   });
 
-  return (<div className={styles.poster}>
-    {
-      poster.map((p) => {
-        return (<Advertisement key={p.id} ad={p} />);
-      })
-    }
-  </div>);
+  if (poster.length === 0) {
+    return null;
+  }
+
+  return (<>
+    <div style={{ height: 20 }} />
+    <div className={styles.poster}>
+      {
+        poster.map((p) => {
+          return (<Advertisement key={p.id} ad={p} />);
+        })
+      }
+    </div>
+  </>);
 }
 
 export default Poster;

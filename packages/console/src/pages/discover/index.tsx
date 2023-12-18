@@ -44,7 +44,6 @@ function Discover({ dispatch, discoverPage, match }: DiscoverProps) {
 
   return (<div>
     <div className={styles.top}>
-      <div style={{ height: 20 }} />
       <Poster />
       <div style={{ height: 10 }} />
       <FNavTabs
