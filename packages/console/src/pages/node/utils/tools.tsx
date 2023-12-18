@@ -4,7 +4,7 @@ import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
 import fPolicyBuilder from '@/components/fPolicyBuilder';
 import fPolicyOperator from '@/components/fPolicyOperator';
 import { message } from 'antd';
-import { fOnOffFeedback } from '@/components/FOnOffFeedback';
+import { fOnOffFeedback } from '@/components/fOnOffFeedback';
 
 
 export async function onlineExhibit(exhibit_ID: string): Promise<boolean> {

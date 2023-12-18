@@ -8,7 +8,7 @@ import moment, { Moment } from 'moment';
 import { onlineExhibit } from '@/pages/node/utils/tools';
 import { message } from 'antd';
 import fMessage from '@/components/fMessage';
-import { fOnOffFeedback } from '@/components/FOnOffFeedback';
+import { fOnOffFeedback } from '@/components/fOnOffFeedback';
 
 type Authorize_Status = 'terminated' | 'exception' | 'authorized' | 'testAuthorized' | 'unauthorized';
 

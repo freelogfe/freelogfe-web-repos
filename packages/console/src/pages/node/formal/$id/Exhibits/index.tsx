@@ -34,7 +34,7 @@ import FComponentsLib from '@freelog/components-lib';
 import FResourceTypeFilter from '@/components/FResourceTypeFilter';
 import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
 
-// import { fOnOffFeedback } from '@/components/FOnOffFeedback';
+// import { fOnOffFeedback } from '@/components/fOnOffFeedback';
 
 interface ExhibitsProps {
   dispatch: Dispatch;

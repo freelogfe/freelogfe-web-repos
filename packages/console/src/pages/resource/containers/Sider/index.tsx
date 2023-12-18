@@ -24,7 +24,7 @@ import {
   OnUpdate_Data_Action,
 } from '@/models/resourceSider';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
-import { fOnOffFeedback } from '@/components/FOnOffFeedback';
+import { fOnOffFeedback } from '@/components/fOnOffFeedback';
 
 interface SilderProps {
   dispatch: Dispatch;

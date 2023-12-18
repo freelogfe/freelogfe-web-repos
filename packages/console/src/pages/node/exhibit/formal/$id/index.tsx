@@ -25,7 +25,7 @@ import FComponentsLib from '@freelog/components-lib';
 import useUrlState from '@ahooksjs/use-url-state';
 import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
 import { onlineExhibit } from '@/pages/node/utils/tools';
-import { fOnOffFeedback } from '@/components/FOnOffFeedback';
+import { fOnOffFeedback } from '@/components/fOnOffFeedback';
 
 interface PresentableProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
