@@ -24,6 +24,7 @@ import {
   OnUpdate_Data_Action,
 } from '@/models/resourceSider';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
+import { fOnOffFeedback } from '@/components/FOnOffFeedback';
 
 interface SilderProps {
   dispatch: Dispatch;
@@ -58,13 +59,15 @@ function Sider({ resourceSider, dispatch }: SilderProps) {
       const onlineSuccess = await resourceOnline(resourceSider.resourceID);
       if (onlineSuccess) {
         // setActiveDialogShow(true);
-        setResultPopupType(1);
+        // setResultPopupType(1);
         setTimeout(() => {
           setLoading(false);
-          setTimeout(() => {
-            setResultPopupType(null);
-          }, 1000);
+          fOnOffFeedback({
+            state: 'on',
+            message: FI18n.i18nNext.t('set_resource_available_for_auth_msg_done'),
+          });
         }, 1000);
+
         dispatch<OnUpdate_Data_Action>({
           type: 'resourceSider/onUpdate_Data',
         });
@@ -103,9 +106,9 @@ function Sider({ resourceSider, dispatch }: SilderProps) {
 
   /** 下架 */
   // const inactiveResource = () => {
-    // if (inactiveDialogShow && noLonger) {
-    //   self.localStorage.setItem('resourceNoTip', 'true');
-    // }
+  // if (inactiveDialogShow && noLonger) {
+  //   self.localStorage.setItem('resourceNoTip', 'true');
+  // }
 
   // };
 
@@ -114,7 +117,7 @@ function Sider({ resourceSider, dispatch }: SilderProps) {
     // TODO: setActiveDialogShow(false);
     // setInactiveDialogShow(false);
     setLoading(true);
-    setResultPopupType(data.status);
+    // setResultPopupType(data.status);
 
     const { ret, errCode, msg } = await FServiceAPI.Resource.update({
       resourceId: resourceSider.resourceID,
@@ -124,14 +127,19 @@ function Sider({ resourceSider, dispatch }: SilderProps) {
     if (ret !== 0 && errCode !== 0) {
       fMessage(msg, 'error');
       setLoading(false);
-      setResultPopupType(null);
+      // setResultPopupType(null);
       return;
     }
     setTimeout(() => {
       setLoading(false);
-      setTimeout(() => {
-        setResultPopupType(null);
-      }, 1000);
+      // setTimeout(() => {
+      //   setResultPopupType(null);
+      // }, 1000);
+
+      fOnOffFeedback({
+        state: 'on',
+        message: FI18n.i18nNext.t('remove_resource_from_auth_msg_done'),
+      });
     }, 1000);
     dispatch<OnUpdate_Data_Action>({
       type: 'resourceSider/onUpdate_Data',
@@ -276,42 +284,28 @@ function Sider({ resourceSider, dispatch }: SilderProps) {
       {/*  }*/}
       {/*/>*/}
 
-      {resultPopupType !== null && (
-        <div className={styles['result-modal']}>
-          <div className={styles['result-popup']}>
-            {loading ? (
+      {
+        loading && (
+          <div className={styles['result-modal']}>
+            <div className={styles['result-popup']}>
               <div className={styles['loader']}>
                 <LoadingOutlined className={styles['loader-icon']} />
                 <div className={styles['loader-text']}>
                   {/*正在{resultPopupType === 1 ? '上架' : '下架'}*/}
-                  {resultPopupType === 1
+                  {
+                    resultPopupType === 1
                     ? FI18n.i18nNext.t(
                       'set_resource_available_for_auth_msg_processing',
                     )
                     : FI18n.i18nNext.t(
                       'remove_resource_from_auth_msg_processing',
-                    )}
-                </div>
-              </div>
-            ) : (
-              <div className={styles['result']}>
-                <i
-                  className={`freelog fl-icon-shangpao ${
-                    styles['result-icon']
-                  } ${styles[resultPopupType === 1 ? 'up' : 'down']}`}
-                />
-                <div className={styles['result-text']}>
-                  {resultPopupType === 1
-                    ? FI18n.i18nNext.t(
-                      'set_resource_available_for_auth_msg_done',
                     )
-                    : FI18n.i18nNext.t('remove_resource_from_auth_msg_done')}
+                  }
                 </div>
               </div>
-            )}
+            </div>
           </div>
-        </div>
-      )}
+        )}
     </div>
   );
 }

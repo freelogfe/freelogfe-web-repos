@@ -1,16 +1,12 @@
 import * as React from 'react';
 import styles from './index.less';
 import * as ReactDOM from 'react-dom/client';
-import FNoviceGuider from '@/components/FNoviceGuider';
-// import { LoadingOutlined } from '@ant-design/icons';
-// import { FI18n } from '@freelog/tools-lib';
 interface fOnOffFeedbackProps {
   state: 'on' | 'off';
   message: string;
 }
 
 export function fOnOffFeedback({ ...props }: fOnOffFeedbackProps): void {
-  // return new Promise<boolean>((resolve) => {
   const root = ReactDOM.createRoot(document.getElementById('drawer-root') as HTMLDivElement);
   setTimeout(() => {
     root.unmount();
@@ -19,7 +15,6 @@ export function fOnOffFeedback({ ...props }: fOnOffFeedbackProps): void {
   return root.render(<FOnOffFeedback
     {...props}
   />);
-  // });
 }
 
 
