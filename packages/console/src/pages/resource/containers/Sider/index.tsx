@@ -39,10 +39,10 @@ function Sider({ resourceSider, dispatch }: SilderProps) {
     },
   );
 
-  const [inactiveDialogShow, setInactiveDialogShow] = React.useState(false);
+  // const [inactiveDialogShow, setInactiveDialogShow] = React.useState(false);
   const [resultPopupType, setResultPopupType] = React.useState<null | 0 | 1>(null);
   const [loading, setLoading] = React.useState(false);
-  const [noLonger, setNoLonger] = React.useState(false);
+  // const [noLonger, setNoLonger] = React.useState(false);
 
   AHooks.useUnmount(() => {
     dispatch<OnUnmount_Page_Action>({
@@ -77,29 +77,42 @@ function Sider({ resourceSider, dispatch }: SilderProps) {
       }
     } else {
       // 下架
-      const resourceNoTip = self.localStorage.getItem('resourceNoTip') || false;
-      if (resourceNoTip) {
-        inactiveResource();
-      } else {
-        setNoLonger(false);
-        setInactiveDialogShow(true);
+      // const resourceNoTip = self.localStorage.getItem('resourceNoTip') || false;
+      const bool: boolean = await fPromiseModalConfirm({
+        // title: '资源待上架',
+        // description: '将资源上架到资源市场开放授权，为你带来更多收益',
+        // okText: '立即上架',
+        // cancelText: '暂不上架',
+        title: FI18n.i18nNext.t('remove_resource_from_auth_confirmation_title'),
+        description: FI18n.i18nNext.t('confirm_msg_remove_resource_from_auth'),
+        okText: FI18n.i18nNext.t('remove_resource_from_auth_btn_remve'),
+      });
+
+      if (bool) {
+        // inactiveResource();
+
+        const data = { status: 4 };
+        operateResource(data);
       }
+      // else {
+      //     // setNoLonger(false);
+      //     // setInactiveDialogShow(true);
+      //   }
     }
   }
 
   /** 下架 */
   const inactiveResource = () => {
-    if (inactiveDialogShow && noLonger) {
-      self.localStorage.setItem('resourceNoTip', 'true');
-    }
-    const data = { status: 4 };
-    operateResource(data);
+    // if (inactiveDialogShow && noLonger) {
+    //   self.localStorage.setItem('resourceNoTip', 'true');
+    // }
+
   };
 
   /** 资源上下架 */
   async function operateResource(data: any) {
     // TODO: setActiveDialogShow(false);
-    setInactiveDialogShow(false);
+    // setInactiveDialogShow(false);
     setLoading(true);
     setResultPopupType(data.status);
 
@@ -242,26 +255,26 @@ function Sider({ resourceSider, dispatch }: SilderProps) {
       </div>
       <div style={{ height: 40 }} />
 
-      <FDialog
-        show={inactiveDialogShow}
-        title={FI18n.i18nNext.t('remove_resource_from_auth_confirmation_title')}
-        desc={FI18n.i18nNext.t('confirm_msg_remove_resource_from_auth')}
-        sureText={FI18n.i18nNext.t('remove_resource_from_auth_btn_remve')}
-        cancel={() => {
-          setInactiveDialogShow(false);
-        }}
-        sure={inactiveResource}
-        loading={loading}
-        footer={
-          <Checkbox
-            className={styles['no-longer']}
-            checked={noLonger}
-            onChange={(e) => setNoLonger(e.target.checked)}
-          >
-            {FI18n.i18nNext.t('checkbox_dontaskmeagain')}
-          </Checkbox>
-        }
-      />
+      {/*<FDialog*/}
+      {/*  show={inactiveDialogShow}*/}
+      {/*  title={FI18n.i18nNext.t('remove_resource_from_auth_confirmation_title')}*/}
+      {/*  desc={FI18n.i18nNext.t('confirm_msg_remove_resource_from_auth')}*/}
+      {/*  sureText={FI18n.i18nNext.t('remove_resource_from_auth_btn_remve')}*/}
+      {/*  cancel={() => {*/}
+      {/*    setInactiveDialogShow(false);*/}
+      {/*  }}*/}
+      {/*  sure={inactiveResource}*/}
+      {/*  loading={loading}*/}
+      {/*  footer={*/}
+      {/*    <Checkbox*/}
+      {/*      className={styles['no-longer']}*/}
+      {/*      checked={noLonger}*/}
+      {/*      onChange={(e) => setNoLonger(e.target.checked)}*/}
+      {/*    >*/}
+      {/*      {FI18n.i18nNext.t('checkbox_dontaskmeagain')}*/}
+      {/*    </Checkbox>*/}
+      {/*  }*/}
+      {/*/>*/}
 
       {resultPopupType !== null && (
         <div className={styles['result-modal']}>
