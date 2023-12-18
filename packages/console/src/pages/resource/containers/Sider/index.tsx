@@ -102,12 +102,12 @@ function Sider({ resourceSider, dispatch }: SilderProps) {
   }
 
   /** 下架 */
-  const inactiveResource = () => {
+  // const inactiveResource = () => {
     // if (inactiveDialogShow && noLonger) {
     //   self.localStorage.setItem('resourceNoTip', 'true');
     // }
 
-  };
+  // };
 
   /** 资源上下架 */
   async function operateResource(data: any) {
