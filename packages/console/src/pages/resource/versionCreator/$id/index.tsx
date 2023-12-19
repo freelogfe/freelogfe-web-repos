@@ -65,8 +65,8 @@ interface VersionCreatorProps extends RouteComponentProps<{ id: string }> {
 
 function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: VersionCreatorProps) {
 
-  const ref = React.useRef(null);
-  const size = AHooks.useSize(ref);
+  // const ref = React.useRef(null);
+  // const size = AHooks.useSize(ref);
   const [$showMore, set$ShowMore, get$ShowMore] = useGetState<boolean>(false);
   const [$versionInputHasError, set$versionInputHasError] = React.useState<boolean>(false);
   const [isMarkdownEditorDirty, set_isMarkdownEditorDirty] = React.useState<boolean>(false);
@@ -1061,88 +1061,6 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
             }
 
             <div className={styles.block}>
-              {/*<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>*/}
-              {/*  /!*{FI18n.i18nNext.t('claim_rely_title')}*!/*/}
-              {/*  <FComponentsLib.FContentText text={FI18n.i18nNext.t('claim_rely_title')} type={'highlight'} />*/}
-              {/*  <Space size={10}>*/}
-              {/*    /!*<FTooltip title={FI18n.i18nNext.t('resourceinfo_add_btn_info')}>*!/*/}
-              {/*    <FTooltip title={FI18n.i18nNext.t('info_versionrely')}>*/}
-              {/*      <div>*/}
-              {/*        <FComponentsLib.FTextBtn*/}
-              {/*          style={{ fontSize: 12, display: 'flex', alignItems: 'center', gap: 5 }}*/}
-              {/*          type='primary'*/}
-              {/*          onClick={async () => {*/}
-              {/*            const p = await getProcessor('resourceVersionCreator');*/}
-              {/*            // console.log(p, 'psoidfjlskdjflsdjlkj');*/}
-              {/*            await fAddDependencies({*/}
-              {/*              // resourceTypeCode: resourceVersionCreatorPage.resourceInfo?.resourceTypeCode || '',*/}
-              {/*              existingResources: (await p.getAllTargets()).map((t) => {*/}
-              {/*                return {*/}
-              {/*                  resourceID: t.id,*/}
-              {/*                  resourceNme: t.name,*/}
-              {/*                };*/}
-              {/*              }),*/}
-              {/*              baseUpcastResources: resourceVersionCreatorPage.resourceInfo?.baseUpcastResources.map((r) => {*/}
-              {/*                return {*/}
-              {/*                  resourceID: r.resourceID,*/}
-              {/*                  resourceName: r.resourceName,*/}
-              {/*                };*/}
-              {/*              }) || [],*/}
-              {/*              async onSelect_Resource({ resourceID, resourceName }) {*/}
-              {/*                // console.log('8***********8sdflksdjlkj');*/}
-              {/*                // const p = await getProcessor('resourceVersionCreator');*/}
-              {/*                // console.log(p, 'asdiolfj;lksdjflkdsjflkjdslkfjlksdjlkf');*/}
-              {/*                await p.addTargets([{*/}
-              {/*                  id: resourceID,*/}
-              {/*                  name: resourceName,*/}
-              {/*                  type: 'resource',*/}
-              {/*                  // versionRange: '^0.1.0',*/}
-              {/*                }]);*/}
-              {/*                await dispatch<OnChange_DataIsDirty_Action>({*/}
-              {/*                  type: 'resourceVersionCreatorPage/onChange_DataIsDirty',*/}
-              {/*                  payload: {*/}
-              {/*                    value: true,*/}
-              {/*                  },*/}
-              {/*                });*/}
-              {/*              },*/}
-              {/*              async onDeselect_Resource({ resourceID, resourceName }) {*/}
-              {/*                // const p = await getProcessor('resourceVersionCreator');*/}
-              {/*                await p.removeTarget({*/}
-              {/*                  id: resourceID,*/}
-              {/*                  name: resourceName,*/}
-              {/*                  type: 'resource',*/}
-              {/*                });*/}
-              {/*                await dispatch<OnChange_DataIsDirty_Action>({*/}
-              {/*                  type: 'resourceVersionCreatorPage/onChange_DataIsDirty',*/}
-              {/*                  payload: {*/}
-              {/*                    value: true,*/}
-              {/*                  },*/}
-              {/*                });*/}
-              {/*              },*/}
-              {/*            });*/}
-              {/*          }}*/}
-              {/*        >*/}
-              {/*          <FComponentsLib.FIcons.FConfiguration style={{ fontSize: 14 }} />*/}
-              {/*          <span>{FI18n.i18nNext.t('claim_rely_add_btn')}</span>*/}
-              {/*        </FComponentsLib.FTextBtn>*/}
-              {/*      </div>*/}
-              {/*    </FTooltip>*/}
-
-              {/*    {*/}
-              {/*      resourceVersionCreatorPage.preVersionDirectDependencies.length !== 0 &&*/}
-              {/*      <FComponentsLib.FTextBtn*/}
-              {/*        style={{ fontSize: 12, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 5 }}*/}
-              {/*        type='primary'*/}
-              {/*        onClick={async () => {*/}
-              {/*          dispatch<OnClick_ImportLastVersionDependents_Btn_Action>({*/}
-              {/*            type: 'resourceVersionCreatorPage/onClick_ImportLastVersionDependents_Btn',*/}
-              {/*          });*/}
-              {/*        }}*/}
-              {/*      >{FI18n.i18nNext.t('import_from_previous_version')}</FComponentsLib.FTextBtn>*/}
-              {/*    }*/}
-              {/*  </Space>*/}
-              {/*</div>*/}
-              {/*<div>11111</div>*/}
               {
                 resourceVersionCreatorPage.resourceInfo && (<MicroApp
                   name={'Authorization'}
@@ -1164,45 +1082,6 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
                   }}
                 />)
               }
-
-              {/*{*/}
-              {/*  size && size.height === 0 && (<>*/}
-              {/*    <div style={{ height: 10 }} />*/}
-              {/*    <div*/}
-              {/*      style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>*/}
-              {/*      {*/}
-              {/*        FI18n.i18nNext.t('claim_rely_list_empty').split('\n').map((i, j) => {*/}
-              {/*          return (<FComponentsLib.FContentText key={j} text={i} type={'additional2'} />);*/}
-              {/*        })*/}
-              {/*      }*/}
-              {/*    </div>*/}
-              {/*    <div style={{ height: 20 }} />*/}
-              {/*  </>)*/}
-              {/*}*/}
-
-              {/*<>*/}
-              {/*  {*/}
-              {/*    size && size.height > 0 && (<div style={{ height: 20 }} />)*/}
-              {/*  }*/}
-
-
-              {/*<div ref={ref}>*/}
-              {/*<FResourceAuthorizationProcessor*/}
-              {/*  width={860}*/}
-              {/*  height={600}*/}
-              {/*  resourceID={resourceVersionCreatorPage.resourceInfo?.resourceID || ''}*/}
-              {/*  processorIdentifier={'resourceVersionCreator'}*/}
-              {/*  onChanged={() => {*/}
-              {/*    dispatch<OnChange_DataIsDirty_Action>({*/}
-              {/*      type: 'resourceVersionCreatorPage/onChange_DataIsDirty',*/}
-              {/*      payload: {*/}
-              {/*        value: true,*/}
-              {/*      },*/}
-              {/*    });*/}
-              {/*  }}*/}
-              {/*/>*/}
-              {/*</div>*/}
-              {/*</>*/}
             </div>
           </div>)
         }
