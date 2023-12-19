@@ -420,7 +420,7 @@ const Model: ResourceVersionCreatorModelType = {
       let preVersion_additionalProperties: ResourceVersionCreatorPageModelState['preVersion_additionalProperties'] = [];
       let preVersion_customProperties: ResourceVersionCreatorPageModelState['preVersion_customProperties'] = [];
       let preVersion_customConfigurations: ResourceVersionCreatorPageModelState['preVersion_customConfigurations'] = [];
-      // let preVersionDirectDependencies: ResourceVersionCreatorPageModelState['preVersionDirectDependencies'] = [];
+      let preVersionDirectDependencies: ResourceVersionCreatorPageModelState['directDependencies'] = [];
       if (data_resourceInfo.latestVersion) {
         const params2: Parameters<typeof FServiceAPI.Resource.resourceVersionInfo1>[0] = {
           resourceId: data_resourceInfo.resourceId,
@@ -485,14 +485,14 @@ const Model: ResourceVersionCreatorModelType = {
               select: cpd.candidateItems,
             };
           });
-        // preVersionDirectDependencies = data_resourceVersionInfo.dependencies.map((d) => {
-        //   return {
-        //     id: d.resourceId,
-        //     name: d.resourceName,
-        //     type: 'resource',
-        //     versionRange: d.versionRange,
-        //   };
-        // });
+        preVersionDirectDependencies = data_resourceVersionInfo.dependencies.map((d) => {
+          return {
+            id: d.resourceId,
+            name: d.resourceName,
+            type: 'resource',
+            versionRange: d.versionRange,
+          };
+        });
       }
 
       yield put<ChangeAction>({
@@ -502,7 +502,7 @@ const Model: ResourceVersionCreatorModelType = {
           preVersion_additionalProperties,
           preVersion_customProperties,
           preVersion_customConfigurations,
-          // preVersionDirectDependencies,
+          directDependencies: preVersionDirectDependencies,
           descriptionEditorState,
         },
       });
@@ -627,7 +627,7 @@ const Model: ResourceVersionCreatorModelType = {
               versionRange: r.versionRange || '',
             };
           }),
-        resolveResources: [],
+        resolveResources: resourceVersionCreatorPage.resolveResources,
         inputAttrs: resourceVersionCreatorPage.additionalProperties
           .filter((ap) => {
             return ap.value !== '';
