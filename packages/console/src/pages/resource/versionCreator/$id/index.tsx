@@ -48,7 +48,7 @@ import { ComicTool } from '@/components/fComicTool/FComicToolModal';
 import FReleaseTip from '@/components/FReleaseTip';
 import fAddFileBaseProps from '@/components/fAddFileBaseProps';
 import fAddCustomOptions from '@/components/fAddCustomOptions';
-import VersionInput from '@/pages/resource/version/creator/$id/VersionInput';
+import FVersionInput from '@/components/FVersionInput';
 import FPrompt from '@/components/FPrompt';
 import FSkeletonNode from '@/components/FSkeletonNode';
 import { withRouter, history } from 'umi';
@@ -420,7 +420,7 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
           <FComponentsLib.FTitleText text={'新建版本'} type={'h1'} />
         </div>
         <div style={{ height: 30 }} />
-        <VersionInput
+        <FVersionInput
           value={resourceVersionCreatorPage.versionInput}
           resourceLatestVersion={resourceVersionCreatorPage.resourceInfo?.latestVersion || '1.0.0'}
           onChange={(value) => {
