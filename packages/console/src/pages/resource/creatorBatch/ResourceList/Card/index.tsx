@@ -79,8 +79,6 @@ interface CardProps {
 
   onDelete?(): void;
 
-  // onAddPolicy?(): void;
-
   onClickApplyLabels?(): void;
 
   onClickApplyPolicies?(): void;
@@ -93,7 +91,6 @@ function Card({
                 resourceType,
                 onChange,
                 onDelete,
-                // onAddPolicy,
                 onClickApplyLabels,
                 onClickApplyPolicies,
               }: CardProps) {
@@ -108,11 +105,6 @@ function Card({
   });
 
   async function onVerifyResourceName() {
-    // onChange && onChange({
-    //   ...info,
-    //   resourceNameError: '###***',
-    // });
-
     let nameErrorText: string = '';
     if (info.resourceName === '') {
       nameErrorText = '请输入资源授权标识';
