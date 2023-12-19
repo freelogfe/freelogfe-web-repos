@@ -44,8 +44,8 @@ import {
 } from '@/models/resourceVersionCreatorPage';
 // import fResourceMarkdownEditor from '@/components/fResourceMarkdownEditor';
 import { ComicTool } from '@/components/fComicTool/FComicToolModal';
-import { ReleaseTip } from '@/pages/resource/version/creator/$id';
-import fConfirmModal from '@/components/fConfirmModal';
+// import FReleaseTip from '@/';
+import FReleaseTip from '@/components/FReleaseTip';
 import fAddFileBaseProps from '@/components/fAddFileBaseProps';
 import fAddCustomOptions from '@/components/fAddCustomOptions';
 import VersionInput from '@/pages/resource/version/creator/$id/VersionInput';
@@ -347,7 +347,7 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
 
       <div style={{ height: 100 }} />
 
-      <ReleaseTip
+      <FReleaseTip
         visible={resourceVersionCreatorPage.releaseTipVisible}
       />
 
