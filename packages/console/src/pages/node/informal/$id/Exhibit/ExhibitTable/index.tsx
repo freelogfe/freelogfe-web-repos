@@ -20,6 +20,7 @@ import fConfirmModal from '@/components/fConfirmModal';
 import { LoadingOutlined, MinusOutlined } from '@ant-design/icons';
 import { FDialog } from '@/components/FDialog';
 import FComponentsLib from '@freelog/components-lib';
+import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
 
 interface ExhibitTableProps {
   dispatch: Dispatch;
@@ -354,13 +355,21 @@ function Actions({ onEdit, onSearch, onDelete }: ActionsProps) {
 
       {
         onDelete && (<FComponentsLib.FTextBtn
-          onClick={() => {
-            fConfirmModal({
-              message: '一旦删除则无法恢复，确认删除吗？',
-              onOk() {
-                onDelete();
-              },
+          onClick={async () => {
+            const bool: boolean = await fPromiseModalConfirm({
+              title: '提示',
+              description: '一旦删除则无法恢复，确认删除吗？',
             });
+
+            if (bool) {
+              onDelete();
+            }
+            // fConfirmModal({
+            //   message: '一旦删除则无法恢复，确认删除吗？',
+            //   onOk() {
+            //     onDelete();
+            //   },
+            // });
           }}
           className={styles.Delete}><FComponentsLib.FIcons.FDelete /></FComponentsLib.FTextBtn>)
       }

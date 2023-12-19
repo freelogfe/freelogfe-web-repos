@@ -29,6 +29,7 @@ import FStorageUploadTasksPanel, { getStorageUploadTasksPanel } from '@/componen
 import * as AHooks from 'ahooks';
 import Details from './Details';
 import fCenterMessage from '@/components/fCenterMessage';
+import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
 
 interface ContentProps {
   dispatch: Dispatch;
@@ -149,15 +150,25 @@ function Content({ storageHomePage, dispatch }: ContentProps) {
             showDelete={!isUserDataBucket}
             showEdit={!isUserDataBucket}
             onClickDownload={() => FServiceAPI.Storage.downloadObject({ objectIdOrName: record.id })}
-            onClickDelete={() => {
-              fConfirmModal({
-                message: FI18n.i18nNext.t('msg_delete_object_confirm'),
+            onClickDelete={async () => {
+              const bool: boolean = await fPromiseModalConfirm({
+                title: '提示',
+                description: FI18n.i18nNext.t('msg_delete_object_confirm'),
                 cancelText: FI18n.i18nNext.t('btn_cancel'),
                 okText: FI18n.i18nNext.t('btn_delete_object'),
-                onOk() {
-                  onClickDelete(record);
-                },
-              });
+              })
+
+              if (bool) {
+                onClickDelete(record);
+              }
+              // fConfirmModal({
+              //   message: FI18n.i18nNext.t('msg_delete_object_confirm'),
+              //   cancelText: FI18n.i18nNext.t('btn_cancel'),
+              //   okText: FI18n.i18nNext.t('btn_delete_object'),
+              //   onOk() {
+              //
+              //   },
+              // });
             }}
           />
         </div>);
@@ -281,23 +292,33 @@ function Content({ storageHomePage, dispatch }: ContentProps) {
               <FComponentsLib.FTextBtn
                 type={'danger'}
                 // disabled={storageHomePage.checkedObjectIDs.length === 0}
-                onClick={() => {
+                onClick={async () => {
                   // console.log('(*YOIOIUY*(OUOIJLKJLkj');
                   if (storageHomePage.checkedObjectIDs.length === 0) {
                     return fCenterMessage({ message: '请选择要执行操作的对象' });
                   }
 
-                  fConfirmModal({
-                    message: FI18n.i18nNext.t('msg_delete_object_confirm'),
+                  const bool: boolean = await fPromiseModalConfirm({
+                    title: '提示',
+                    description: FI18n.i18nNext.t('msg_delete_object_confirm'),
                     cancelText: FI18n.i18nNext.t('btn_cancel'),
                     okText: FI18n.i18nNext.t('btn_delete_object'),
-                    onOk() {
-                      // onClickDelete(record);
-                      dispatch<OnBatchDeleteObjectsAction>({
-                        type: 'storageHomePage/onBatchDeleteObjects',
-                      });
-                    },
                   });
+
+                  if (bool) {
+                    dispatch<OnBatchDeleteObjectsAction>({
+                      type: 'storageHomePage/onBatchDeleteObjects',
+                    });
+                  }
+                  // fConfirmModal({
+                  //   message: FI18n.i18nNext.t('msg_delete_object_confirm'),
+                  //   cancelText: FI18n.i18nNext.t('btn_cancel'),
+                  //   okText: FI18n.i18nNext.t('btn_delete_object'),
+                  //   onOk() {
+                  //     // onClickDelete(record);
+                  //
+                  //   },
+                  // });
                 }}
               >
                 <FComponentsLib.FIcons.FDelete

@@ -28,6 +28,7 @@ import FSelect from '@/components/FSelect';
 import fConfirmModal from '@/components/fConfirmModal';
 import FComponentsLib from '@freelog/components-lib';
 import FOverflowTooltip from '@/components/FOverflowTooltip';
+import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
 
 interface SettingProps {
   dispatch: Dispatch;
@@ -212,18 +213,30 @@ function Setting({ dispatch, informExhibitInfoPage }: SettingProps) {
               ><FComponentsLib.FIcons.FEdit /></FComponentsLib.FTextBtn>
               <FComponentsLib.FIcons.FDelete
                 style={{ color: '#EE4040', cursor: 'pointer' }}
-                onClick={() => {
-                  fConfirmModal({
-                    message: '一旦删除则无法恢复，确认删除吗？',
-                    onOk() {
-                      dispatch<OnClick_Side_Exhibit_EditDeleteAttr_DeleteBtn_Action>({
-                        type: 'informExhibitInfoPage/onClick_Side_Exhibit_EditDeleteAttr_DeleteBtn',
-                        payload: {
-                          theKey: pc.theKey,
-                        },
-                      });
-                    },
+                onClick={async () => {
+                  const bool: boolean = await fPromiseModalConfirm({
+                    title: '提示',
+                    description: '一旦删除则无法恢复，确认删除吗？',
                   });
+                  if (bool) {
+                    dispatch<OnClick_Side_Exhibit_EditDeleteAttr_DeleteBtn_Action>({
+                      type: 'informExhibitInfoPage/onClick_Side_Exhibit_EditDeleteAttr_DeleteBtn',
+                      payload: {
+                        theKey: pc.theKey,
+                      },
+                    });
+                  }
+                  // fConfirmModal({
+                  //   message: '一旦删除则无法恢复，确认删除吗？',
+                  //   onOk() {
+                  //     dispatch<OnClick_Side_Exhibit_EditDeleteAttr_DeleteBtn_Action>({
+                  //       type: 'informExhibitInfoPage/onClick_Side_Exhibit_EditDeleteAttr_DeleteBtn',
+                  //       payload: {
+                  //         theKey: pc.theKey,
+                  //       },
+                  //     });
+                  //   },
+                  // });
                 }}
               />
             </Space>

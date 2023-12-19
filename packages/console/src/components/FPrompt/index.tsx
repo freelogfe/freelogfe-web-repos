@@ -4,6 +4,7 @@ import fConfirmModal from '@/components/fConfirmModal';
 import { Prompt, history } from 'umi';
 import * as AHooks from 'ahooks';
 import { FI18n } from '@freelog/tools-lib';
+import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
 
 interface FPromptProps {
   watch: boolean;
@@ -32,6 +33,49 @@ function FPrompt($prop: FPromptProps) {
     window.onbeforeunload = null;
   });
 
+  async function handle(locationHref: string) {
+
+    const bool: boolean = await fPromiseModalConfirm({
+      title: '提示',
+      description: $prop.messageText,
+      okText: $prop.okText || FI18n.i18nNext.t('btn_leave'),
+      cancelText: $prop.cancelText || FI18n.i18nNext.t('btn_cancel'),
+    });
+
+    if (bool) {
+      if ($prop.onOk) {
+        $prop.onOk(locationHref);
+      } else {
+        history.push(locationHref);
+      }
+    } else {
+      if ($prop.onCancel) {
+        $prop.onCancel(locationHref);
+      }
+    }
+    prompting.current = false;
+
+    // fConfirmModal({
+    //   message: $prop.messageText,
+    //   okText: $prop.okText || FI18n.i18nNext.t('btn_leave'),
+    //   cancelText: $prop.cancelText || FI18n.i18nNext.t('btn_cancel'),
+    //   onOk() {
+    //     if ($prop.onOk) {
+    //       $prop.onOk(locationHref);
+    //     } else {
+    //       history.push(locationHref);
+    //     }
+    //     prompting.current = false;
+    //   },
+    //   onCancel() {
+    //     if ($prop.onCancel) {
+    //       $prop.onCancel(locationHref);
+    //     }
+    //     prompting.current = false;
+    //   },
+    // });
+  }
+
   return (<Prompt
     // when={$state.promptLeavePath === '' && $prop.watch}
     when={true}
@@ -40,25 +84,7 @@ function FPrompt($prop: FPromptProps) {
       if ($prop.watch && !prompting.current) {
         prompting.current = true;
         const locationHref: string = location.pathname + location.search + location.hash;
-        fConfirmModal({
-          message: $prop.messageText,
-          okText: $prop.okText || FI18n.i18nNext.t('btn_leave'),
-          cancelText: $prop.cancelText || FI18n.i18nNext.t('btn_cancel'),
-          onOk() {
-            if ($prop.onOk) {
-              $prop.onOk(locationHref);
-            } else {
-              history.push(locationHref);
-            }
-            prompting.current = false;
-          },
-          onCancel() {
-            if ($prop.onCancel) {
-              $prop.onCancel(locationHref);
-            }
-            prompting.current = false;
-          },
-        });
+        handle(locationHref);
         return false;
       } else {
         return true;

@@ -14,6 +14,7 @@ import FLink from '@/components/FLink';
 import { FUtil, FI18n } from '@freelog/tools-lib';
 import { history } from 'umi';
 import FComponentsLib from '@freelog/components-lib';
+import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
 
 interface SiderProps {
   dispatch: Dispatch;
@@ -102,22 +103,34 @@ function Sider({ storageHomePage, dispatch }: SiderProps) {
                       getPopupContainer={() => siderRef.current}
                     >
                       <FComponentsLib.FIcons.FDelete
-                        onClick={(e) => {
+                        onClick={async (e) => {
                           e.stopPropagation();
                           e.preventDefault();
                           // console.log('@#@#$dsiofud890saufoisdajfl;sd');
                           if (b.totalFileQuantity === 0) {
-                            fConfirmModal({
-                              message: FI18n.i18nNext.t('msg_delete_object_confirm'),
+                            const bool: boolean = await fPromiseModalConfirm({
+                              title: '提示',
+                              description: FI18n.i18nNext.t('msg_delete_object_confirm'),
                               okText: FI18n.i18nNext.t('btn_delete_object'),
                               cancelText: FI18n.i18nNext.t('btn_cancel'),
-                              onOk() {
-                                dispatch<DeleteBucketByNameAction>({
-                                  type: 'storageHomePage/deleteBucketByName',
-                                  payload: b.bucketName,
-                                });
-                              },
                             });
+                            if (bool) {
+                              dispatch<DeleteBucketByNameAction>({
+                                type: 'storageHomePage/deleteBucketByName',
+                                payload: b.bucketName,
+                              });
+                            }
+                            // fConfirmModal({
+                            //   message: FI18n.i18nNext.t('msg_delete_object_confirm'),
+                            //   okText: FI18n.i18nNext.t('btn_delete_object'),
+                            //   cancelText: FI18n.i18nNext.t('btn_cancel'),
+                            //   onOk() {
+                            //     dispatch<DeleteBucketByNameAction>({
+                            //       type: 'storageHomePage/deleteBucketByName',
+                            //       payload: b.bucketName,
+                            //     });
+                            //   },
+                            // });
                           } else {
                             fMessage('该存储空间内还有未删除模拟资源', 'warning');
                           }

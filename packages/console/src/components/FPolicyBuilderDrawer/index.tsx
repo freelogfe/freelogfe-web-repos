@@ -14,6 +14,7 @@ import * as AHooks from 'ahooks';
 import FAddingEventDrawer from '@/components/FPolicyBuilderDrawer/AddingEventDrawer';
 import FComponentsLib from '@freelog/components-lib';
 import { Base64 } from 'js-base64';
+import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
 // import FI18nParser from '@/components/FI18nParser';
 
 const FDatePicker: any = DatePicker;
@@ -243,14 +244,24 @@ function FPolicyBuilder({
     if (!code_IsDirty || code_InputErrors.length === 0) {
       return setEditMode('composition');
     }
-    fConfirmModal({
-      message: FI18n.i18nNext.t('alarm_switchto_visualeditor'),
-      onOk() {
-        setEditMode('composition');
-      },
+    const bool: boolean = await fPromiseModalConfirm({
+      title: '提示',
+      description: FI18n.i18nNext.t('alarm_switchto_visualeditor'),
       okText: FI18n.i18nNext.t('btn_switch'),
       cancelText: FI18n.i18nNext.t('btn_cancel'),
     });
+
+    if (bool) {
+      setEditMode('composition');
+    }
+    // fConfirmModal({
+    //   message: FI18n.i18nNext.t('alarm_switchto_visualeditor'),
+    //   onOk() {
+    //     setEditMode('composition');
+    //   },
+    //   okText: FI18n.i18nNext.t('btn_switch'),
+    //   cancelText: FI18n.i18nNext.t('btn_cancel'),
+    // });
   }
 
   function onChange_Code_Input(value: string) {

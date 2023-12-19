@@ -46,6 +46,7 @@ import { Helmet } from 'react-helmet';
 import FComponentsLib from '@freelog/components-lib';
 import FPrompt from '@/components/FPrompt';
 import fReadLocalFiles from '@/components/fReadLocalFiles';
+import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
 
 interface MappingRuleProps {
   dispatch: Dispatch;
@@ -170,21 +171,35 @@ function MappingRule({ dispatch, informalNodeManagerPage }: MappingRuleProps) {
       {
         informalNodeManagerPage.rule_PageStatus === 'coding'
         && (<FComponentsLib.FTextBtn
-          onClick={() => {
+          onClick={async () => {
             if (informalNodeManagerPage.rule_CodeIsDirty) {
-              fConfirmModal({
-                message: '编辑后的映射规则尚未保存，现在离开会导致信息丢失',
-                onOk() {
-                  dispatch<OnClick_Rule_ExitCoding_ConfirmBtn_Action>({
-                    type: 'informalNodeManagerPage/onClick_Rule_ExitCoding_ConfirmBtn',
-                  });
-                },
-                onCancel() {
-                  dispatch<OnClick_Rule_ExitCoding_CancelBtn_Action>({
-                    type: 'informalNodeManagerPage/onClick_Rule_ExitCoding_CancelBtn',
-                  });
-                },
+              const bool: boolean = await fPromiseModalConfirm({
+                title: '提示',
+                description: '编辑后的映射规则尚未保存，现在离开会导致信息丢失',
               });
+
+              if (bool) {
+                dispatch<OnClick_Rule_ExitCoding_ConfirmBtn_Action>({
+                  type: 'informalNodeManagerPage/onClick_Rule_ExitCoding_ConfirmBtn',
+                });
+              } else {
+                dispatch<OnClick_Rule_ExitCoding_CancelBtn_Action>({
+                  type: 'informalNodeManagerPage/onClick_Rule_ExitCoding_CancelBtn',
+                });
+              }
+              // fConfirmModal({
+              //   message: '编辑后的映射规则尚未保存，现在离开会导致信息丢失',
+              //   onOk() {
+              //     dispatch<OnClick_Rule_ExitCoding_ConfirmBtn_Action>({
+              //       type: 'informalNodeManagerPage/onClick_Rule_ExitCoding_ConfirmBtn',
+              //     });
+              //   },
+              //   onCancel() {
+              //     dispatch<OnClick_Rule_ExitCoding_CancelBtn_Action>({
+              //       type: 'informalNodeManagerPage/onClick_Rule_ExitCoding_CancelBtn',
+              //     });
+              //   },
+              // });
               return;
             }
             dispatch<OnClick_Rule_ExitCodingBtn_Action>({

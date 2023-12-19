@@ -27,6 +27,7 @@ import FComponentsLib from '@freelog/components-lib';
 import FOverflowTooltip from '@/components/FOverflowTooltip';
 import fResourceOptionEditor from '@/components/fResourceOptionEditor';
 import FResourcePropertyAndOptionTipPopover from '@/components/FResourcePropertyAndOptionTipPopover';
+import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
 
 interface SettingProps {
   dispatch: Dispatch;
@@ -396,18 +397,30 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
                       <div>
                         <FComponentsLib.FIcons.FDelete
                           style={{ color: '#EE4040', cursor: 'pointer' }}
-                          onClick={() => {
-                            fConfirmModal({
-                              message: '一旦删除则无法恢复，确认删除吗？',
-                              onOk() {
-                                dispatch<OnClick_Side_CustomOptions_DeleteBtn_Action>({
-                                  type: 'exhibitInfoPage/onClick_Side_CustomOptions_DeleteBtn',
-                                  payload: {
-                                    index: index,
-                                  },
-                                });
-                              },
+                          onClick={async () => {
+                            const bool: boolean = await fPromiseModalConfirm({
+                              title: '提示',
+                              description: '一旦删除则无法恢复，确认删除吗？',
                             });
+                            if (bool) {
+                              dispatch<OnClick_Side_CustomOptions_DeleteBtn_Action>({
+                                type: 'exhibitInfoPage/onClick_Side_CustomOptions_DeleteBtn',
+                                payload: {
+                                  index: index,
+                                },
+                              });
+                            }
+                            // fConfirmModal({
+                            //   message: '一旦删除则无法恢复，确认删除吗？',
+                            //   onOk() {
+                            //     dispatch<OnClick_Side_CustomOptions_DeleteBtn_Action>({
+                            //       type: 'exhibitInfoPage/onClick_Side_CustomOptions_DeleteBtn',
+                            //       payload: {
+                            //         index: index,
+                            //       },
+                            //     });
+                            //   },
+                            // });
                           }}
                         />
                       </div>

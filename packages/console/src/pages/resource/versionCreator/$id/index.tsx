@@ -56,6 +56,7 @@ import FMicroApp_MarkdownEditorDrawer from '@/components/FMicroApp_MarkdownEdito
 import { getFilesSha1Info } from '@/utils/service';
 import fMessage from '@/components/fMessage';
 import { MicroApp } from '@@/plugin-qiankun/MicroApp';
+import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
 
 interface VersionCreatorProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -524,16 +525,27 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
               // disabled={$prop.disabledOperations?.includes('remove')}
               onClick={async () => {
                 if (resourceVersionCreatorPage.customProperties.length > 0 || resourceVersionCreatorPage.customConfigurations.length > 0) {
-                  fConfirmModal({
-                    message: FI18n.i18nNext.t('createversion_remove_file_confirmation'),
+                  const bool: boolean = await fPromiseModalConfirm({
+                    title: '提示',
+                    description: FI18n.i18nNext.t('createversion_remove_file_confirmation'),
                     okText: FI18n.i18nNext.t('createversion_remove_file_btn_remove'),
                     cancelText: FI18n.i18nNext.t('btn_cancel'),
-                    onOk() {
-                      dispatch<OnDelete_ObjectFile_Action>({
-                        type: 'resourceVersionCreatorPage/onDelete_ObjectFile',
-                      });
-                    },
                   });
+                  if (bool) {
+                    dispatch<OnDelete_ObjectFile_Action>({
+                      type: 'resourceVersionCreatorPage/onDelete_ObjectFile',
+                    });
+                  }
+                  // fConfirmModal({
+                  //   message: FI18n.i18nNext.t('createversion_remove_file_confirmation'),
+                  //   okText: FI18n.i18nNext.t('createversion_remove_file_btn_remove'),
+                  //   cancelText: FI18n.i18nNext.t('btn_cancel'),
+                  //   onOk() {
+                  //     dispatch<OnDelete_ObjectFile_Action>({
+                  //       type: 'resourceVersionCreatorPage/onDelete_ObjectFile',
+                  //     });
+                  //   },
+                  // });
                 } else {
                   dispatch<OnDelete_ObjectFile_Action>({
                     type: 'resourceVersionCreatorPage/onDelete_ObjectFile',
