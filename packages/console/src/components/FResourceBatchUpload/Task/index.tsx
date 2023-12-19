@@ -8,7 +8,7 @@ import { CheckCircleFilled, CloseOutlined, RedoOutlined } from '@ant-design/icon
 import * as AHooks from 'ahooks';
 import { getFilesSha1Info } from '@/utils/service';
 import { Canceler } from 'axios';
-import UploadCancel from '@/components/FStorageUploadTasksPanel/UploadCancel';
+// import UploadCancel from '@/components/FStorageUploadTasksPanel/UploadCancel';
 
 interface TaskProps {
   file: RcFile;
