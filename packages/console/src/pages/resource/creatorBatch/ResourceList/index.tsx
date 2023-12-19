@@ -3,7 +3,7 @@ import styles from './index.less';
 import { Popover, Space } from 'antd';
 import FComponentsLib from '@freelog/components-lib';
 import { connect } from 'dva';
-import { ConnectState, ResourceCreatorBatchPageState } from '@/models/connect';
+import { ConnectState, ResourceCreatorBatchPageState, ResourceVersionCreatorPageModelState } from '@/models/connect';
 import Card from './Card';
 import { Dispatch } from 'redux';
 import { ChangeAction } from '@/models/resourceCreatorBatchPage';
@@ -16,6 +16,8 @@ import fMessage from '@/components/fMessage';
 import { history } from '@@/core/history';
 import FPrompt from '@/components/FPrompt';
 import FPopover from '@/components/FPopover';
+import FResourceBatchUpload from '@/components/FResourceBatchUpload';
+import { getFilesSha1Info } from '@/utils/service';
 
 interface ResourceListProps {
   dispatch: Dispatch;
@@ -45,7 +47,7 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
       dispatch<ChangeAction>({
         type: 'resourceCreatorBatchPage/change',
         payload: {
-          showPage: 'uploadFile',
+          // showPage: 'uploadFile',
         },
       });
     }
@@ -297,6 +299,143 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
     });
   }
 
+  async function localUploadGotoList(successFiles: {
+    uid: string;
+    name: string;
+    sha1: string;
+  }[]) {
+    const namesMap: Map<string, number> = new Map<string, number>();
+
+    for (const resource of resourceCreatorBatchPage.resourceListInfo) {
+      if (resource.resourceName === '') {
+        continue;
+      }
+      namesMap.set(resource.resourceName, (namesMap.get(resource.resourceName) || 0) + 1);
+    }
+
+    for (const resource of successFiles) {
+      if (resource.name === '') {
+        continue;
+      }
+      const name: string = getARightName(resource.name);
+      namesMap.set(name, (namesMap.get(name) || 0) + 1);
+    }
+
+    const { data: data_ResourceNames }: {
+      data: {
+        [k: string]: {
+          resourceNewNames: string[];
+          status: 1 | 2;
+        };
+      }
+    } = await FServiceAPI.Resource.generateResourceNames({
+      data: Array.from(namesMap.entries()).map(([key, value]) => {
+        return {
+          name: key,
+          num: value,
+        };
+      }),
+    });
+
+    const copyData_ResourceNames: {
+      [k: string]: {
+        resourceNewNames: string[];
+        status: 1 | 2;
+      }
+    } = JSON.parse(JSON.stringify(data_ResourceNames));
+
+    // console.log(copyData_ResourceNames, 'copyData_ResourceNames sdifjokwejlfjlwjflsdj');
+
+    const { result } = await getFilesSha1Info({
+      sha1: successFiles.map((f) => {
+        return f.sha1;
+      }),
+      resourceTypeCode: resourceCreatorBatchPage.selectedResourceType?.value || '',
+    });
+
+    // console.log(result, 'result sdifj;lsdkjfljl');
+    let resourceListInfo = [
+      ...resourceCreatorBatchPage.resourceListInfo.map((resource) => {
+        const resourceName = copyData_ResourceNames[resource.resourceName].resourceNewNames.shift() || '';
+        return {
+          ...resource,
+          resourceName,
+        };
+      }),
+      ...successFiles.map((f) => {
+        let resourceName: string = '';
+        const key: string = getARightName(f.name);
+        if (key !== '') {
+          resourceName = copyData_ResourceNames[getARightName(f.name)].resourceNewNames.shift() || '';
+        }
+        const resourceTitle: string = f.name.replace(new RegExp(/\.[\w-]+$/), '').substring(0, 100);
+        // console.log(f.name, 'f.name sidfjlksdjflkjsdlkjl');
+        // console.log(name, 'name sidfjlksdjflkjsdlkjl');
+        const successFile = result.find((file) => {
+          return f.sha1 === file.sha1;
+        });
+        return {
+          fileUID: f.uid,
+          fileName: f.name,
+          sha1: f.sha1,
+          cover: '',
+          resourceName: resourceName,
+          resourceNameError: resourceName === '' ? '请输入资源授权标识' : '',
+          resourceTitle: resourceTitle,
+          resourceTitleError: '',
+          resourceLabels: [],
+          resourcePolicies: [],
+          showMore: false,
+          rawProperties: (successFile?.info || [])
+            .filter((i) => {
+              return i.insertMode === 1;
+            })
+            .map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((i) => {
+              return {
+                key: i.key,
+                name: i.name,
+                value: i.valueDisplay,
+                description: i.remark,
+              };
+            }),
+          additionalProperties: (successFile?.info || [])
+            .filter((i) => {
+              return i.insertMode === 2;
+            })
+            .map<ResourceVersionCreatorPageModelState['additionalProperties'][number]>((i) => {
+              return {
+                key: i.key,
+                name: i.name,
+                value: i.valueDisplay,
+                description: i.remark,
+              };
+            }),
+          customProperties: [],
+          customConfigurations: [],
+          directDependencies: [],
+          baseUpcastResources: [],
+        };
+      }),
+    ];
+
+    if (resourceListInfo.length > 20) {
+      fMessage('上传不能超过20个文件', 'warning');
+      resourceListInfo = resourceListInfo.slice(0, 20);
+    }
+    dispatch<ChangeAction>({
+      type: 'resourceCreatorBatchPage/change',
+      payload: {
+        // showPage: 'resourceList',
+        resourceListInfo: resourceListInfo,
+      },
+    });
+
+    // set$files([]);
+    // set$successFiles([]);
+    // set$failFiles([]);
+
+  }
+
   return (<>
 
     <FPrompt
@@ -333,7 +472,7 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
 
           <FComponentsLib.FContentText
             // text={`共 ${resourceCreatorBatchPage.resourceListInfo.length} 个资源`}
-            text={FI18n.i18nNext.t('brr_resourcelisting_label_resourceqty' ,{
+            text={FI18n.i18nNext.t('brr_resourcelisting_label_resourceqty', {
               ResourceQty: resourceCreatorBatchPage.resourceListInfo.length,
             })}
             type={'additional2'}
@@ -486,6 +625,10 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
           })
         }
 
+        <FResourceBatchUpload
+          resourceTypeCode={resourceCreatorBatchPage.selectedResourceType?.value || ''}
+          onSuccess={localUploadGotoList}
+        />
         <div style={{ height: 100 }} />
       </div>
 
@@ -542,3 +685,10 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
 export default connect(({ resourceCreatorBatchPage }: ConnectState) => ({
   resourceCreatorBatchPage: resourceCreatorBatchPage,
 }))(ResourceList);
+
+function getARightName(name: string) {
+  const newName: string = name.replace(new RegExp(/\.[\w-]+$/), '')
+    .substring(0, 50)
+    .replace(new RegExp(/[\\|\/|:|\*|\?|"|<|>|\||\s|@|\$|#]/g), '_');
+  return newName;
+}

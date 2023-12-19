@@ -7,6 +7,12 @@ import * as AHooks from 'ahooks';
 
 interface FResourceBatchUploadProps {
   resourceTypeCode: string;
+
+  onSuccess?(successFiles: {
+    uid: string;
+    name: string;
+    sha1: string;
+  }[]): void;
 }
 
 interface TaskHandler {
@@ -15,7 +21,7 @@ interface TaskHandler {
 
 let taskHandler: TaskHandler | null = null;
 
-function FResourceBatchUpload({ resourceTypeCode }: FResourceBatchUploadProps) {
+function FResourceBatchUpload({ resourceTypeCode, onSuccess }: FResourceBatchUploadProps) {
 
   const [$files, set$files, get$files] = FUtil.Hook.useGetState<RcFile[]>([]);
 
@@ -37,20 +43,28 @@ function FResourceBatchUpload({ resourceTypeCode }: FResourceBatchUploadProps) {
     taskHandler = panel;
   });
 
-  // AHooks.useDebounceEffect(() => {
-  //   if (files.length > 0 && (get$successFiles().length + get$failFiles().length === files.length)) {
-  //     localUploadGotoList();
-  //   }
-  //
-  //   if (files.length > 0 && get$failFiles().length === files.length) {
-  //     set$files([]);
-  //   }
-  // }, [$successFiles, $failFiles], {
-  //   wait: 300,
-  // });
+  AHooks.useDebounceEffect(() => {
+    if (get$files().length > 0 && (get$successFiles().length + get$failFiles().length === get$files().length)) {
+      onSuccess && onSuccess(get$successFiles());
+      set$files([]);
+      set$failFiles([]);
+      set$successFiles([]);
+    }
+
+    if (get$files().length > 0 && get$failFiles().length === get$files().length) {
+      set$files([]);
+      set$failFiles([]);
+      set$successFiles([]);
+    }
+  }, [$files, $successFiles, $failFiles], {
+    wait: 300,
+  });
 
   function addTask(files: RcFile[]) {
-
+    set$files([
+      ...get$files(),
+      ...files,
+    ]);
   }
 
   return (<div>
@@ -84,7 +98,7 @@ function FResourceBatchUpload({ resourceTypeCode }: FResourceBatchUploadProps) {
 
 export default FResourceBatchUpload;
 
-export async function getStorageUploadTasksPanel(): Promise<TaskHandler> {
+export async function getTaskHandler(): Promise<TaskHandler> {
   while (true) {
     if (taskHandler) {
       return taskHandler;
