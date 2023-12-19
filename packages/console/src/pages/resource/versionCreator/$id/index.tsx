@@ -1061,6 +1061,8 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
             }
 
             <div className={styles.block}>
+              {/*{console.log(resourceVersionCreatorPage.directDependencies, 'resourceVersionCreatorPage.directDependencies')}*/}
+              {/*{console.log(resourceVersionCreatorPage.baseUpcastResources, 'resourceVersionCreatorPage.baseUpcastResources')}*/}
               {
                 resourceVersionCreatorPage.resourceInfo && (<MicroApp
                   name={'Authorization'}
@@ -1068,7 +1070,7 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
                   licenseeId={resourceVersionCreatorPage.resourceInfo.resourceID}
                   mainAppType={'resourceInVersionUpdate'}
                   depList={resourceVersionCreatorPage.directDependencies}
-                  upcastList={resourceVersionCreatorPage.baseUpcastResources}
+                  upcastList={resourceVersionCreatorPage.baseUpcastResources || []}
                   update={(data: any) => {
                     // console.log(data, 'data sdifjsldkjflksdjklfjklsdjl');
                     dispatch<ChangeAction>({
@@ -1076,7 +1078,8 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
                       payload: {
                         directDependencies: data.depList,
                         resolveResources: data.resolveResources,
-                        baseUpcastResources: data.baseUpcastResources,
+                        baseUpcastResources: data.upcastList,
+                        dataIsDirty: true,
                       },
                     });
                   }}
