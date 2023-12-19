@@ -42,16 +42,16 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
     set$username(data.username);
   });
 
-  React.useEffect(() => {
-    if (resourceCreatorBatchPage.resourceListInfo.length === 0) {
-      dispatch<ChangeAction>({
-        type: 'resourceCreatorBatchPage/change',
-        payload: {
-          // showPage: 'uploadFile',
-        },
-      });
-    }
-  }, [resourceCreatorBatchPage.resourceListInfo.length]);
+  // React.useEffect(() => {
+  //   if (resourceCreatorBatchPage.resourceListInfo.length === 0) {
+  //     dispatch<ChangeAction>({
+  //       type: 'resourceCreatorBatchPage/change',
+  //       payload: {
+  //         // showPage: 'uploadFile',
+  //       },
+  //     });
+  //   }
+  // }, [resourceCreatorBatchPage.resourceListInfo.length]);
 
   // function very() {
   //   const map: Map<string, number> = new Map<string, number>();
@@ -521,6 +521,18 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
                   const resourceListInfo = resourceCreatorBatchPage.resourceListInfo.filter((rli) => {
                     return rli.fileUID !== r.fileUID;
                   });
+
+                  if (resourceListInfo.length === 0) {
+                    //   if (resourceCreatorBatchPage.resourceListInfo.length === 0) {
+                    dispatch<ChangeAction>({
+                      type: 'resourceCreatorBatchPage/change',
+                      payload: {
+                        showPage: 'uploadFile',
+                      },
+                    });
+                    return;
+                    //   }
+                  }
 
                   const map: Map<string, number> = new Map<string, number>();
 
