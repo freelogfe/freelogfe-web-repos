@@ -9,7 +9,7 @@ import * as semver from 'semver';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import { getFilesSha1Info } from '@/utils/service';
 import { IResourceCreateVersionDraftType } from '@/type/resourceTypes';
-import { getProcessor } from '@/components/FResourceAuthorizationProcessor';
+// import { getProcessor } from '@/components/FResourceAuthorizationProcessor';
 import { IBaseUpcastResource } from '@/components/FResourceAuthorizationProcessor/types';
 import moment from 'moment';
 import { OnChange_Draft_Action } from '@/models/resourceSider';
@@ -47,7 +47,6 @@ export interface ResourceVersionCreatorPageModelState {
     resourceVersion: string;
     url: string;
   }[];
-
   rawProperties: {
     key: string;
     name: string;
@@ -79,6 +78,24 @@ export interface ResourceVersionCreatorPageModelState {
     select: string[];
   }[];
 
+  directDependencies: {
+    id: string;
+    name: string;
+    type: 'resource' | 'object';
+    versionRange?: string;
+  }[];
+  baseUpcastResources: {
+    resourceID: string;
+    resourceName: string;
+  }[];
+  resolveResources: {
+    resourceId: string;
+    contracts: {
+      policyId: string;
+    }[];
+  }[];
+  isCompleteAuthorization: boolean;
+
   descriptionEditorState: EditorState;
 
   preVersion_additionalProperties: {
@@ -103,13 +120,13 @@ export interface ResourceVersionCreatorPageModelState {
     select: string[];
   }[];
 
-  preVersionDirectDependencies: {
-    id: string;
-    name: string;
-    type: 'resource' | 'object';
-
-    versionRange?: string;
-  }[];
+  // preVersionDirectDependencies: {
+  //   id: string;
+  //   name: string;
+  //   type: 'resource' | 'object';
+  //
+  //   versionRange?: string;
+  // }[];
 
   // promptLeavePath: string;
   releaseTipVisible: boolean;
@@ -220,9 +237,9 @@ export interface OnChange_CustomConfigurations_Action extends AnyAction {
   };
 }
 
-export interface OnClick_ImportLastVersionDependents_Btn_Action extends AnyAction {
-  type: 'resourceVersionCreatorPage/onClick_ImportLastVersionDependents_Btn';
-}
+// export interface OnClick_ImportLastVersionDependents_Btn_Action extends AnyAction {
+//   type: 'resourceVersionCreatorPage/onClick_ImportLastVersionDependents_Btn';
+// }
 
 export interface OnChange_DescriptionEditorState_Action extends AnyAction {
   type: 'resourceVersionCreatorPage/onChange_DescriptionEditorState';
@@ -279,7 +296,7 @@ export interface ResourceVersionCreatorModelType {
     onChange_AdditionalProperties: (action: OnChange_AdditionalProperties_Action, effects: EffectsCommandMap) => void;
     onChange_CustomProperties: (action: OnChange_CustomProperties_Action, effects: EffectsCommandMap) => void;
     onChange_CustomConfigurations: (action: OnChange_CustomConfigurations_Action, effects: EffectsCommandMap) => void;
-    onClick_ImportLastVersionDependents_Btn: (action: OnClick_ImportLastVersionDependents_Btn_Action, effects: EffectsCommandMap) => void;
+    // onClick_ImportLastVersionDependents_Btn: (action: OnClick_ImportLastVersionDependents_Btn_Action, effects: EffectsCommandMap) => void;
     onChange_DescriptionEditorState: (action: OnChange_DescriptionEditorState_Action, effects: EffectsCommandMap) => void;
     onChange_IsOpenCartoon: (action: OnChange_IsOpenCartoon_Action, effects: EffectsCommandMap) => void;
 
@@ -318,12 +335,17 @@ const initStates: ResourceVersionCreatorPageModelState = {
   // customOptionsDataVisible: false,
   customConfigurations: [],
 
+  directDependencies: [],
+  baseUpcastResources: [],
+  resolveResources: [],
+  isCompleteAuthorization: true,
+
   descriptionEditorState: BraftEditor.createEditorState(''),
 
   preVersion_additionalProperties: [],
   preVersion_customProperties: [],
   preVersion_customConfigurations: [],
-  preVersionDirectDependencies: [],
+  // preVersionDirectDependencies: [],
 
   releaseTipVisible: false,
 
@@ -398,7 +420,7 @@ const Model: ResourceVersionCreatorModelType = {
       let preVersion_additionalProperties: ResourceVersionCreatorPageModelState['preVersion_additionalProperties'] = [];
       let preVersion_customProperties: ResourceVersionCreatorPageModelState['preVersion_customProperties'] = [];
       let preVersion_customConfigurations: ResourceVersionCreatorPageModelState['preVersion_customConfigurations'] = [];
-      let preVersionDirectDependencies: ResourceVersionCreatorPageModelState['preVersionDirectDependencies'] = [];
+      // let preVersionDirectDependencies: ResourceVersionCreatorPageModelState['preVersionDirectDependencies'] = [];
       if (data_resourceInfo.latestVersion) {
         const params2: Parameters<typeof FServiceAPI.Resource.resourceVersionInfo1>[0] = {
           resourceId: data_resourceInfo.resourceId,
@@ -463,14 +485,14 @@ const Model: ResourceVersionCreatorModelType = {
               select: cpd.candidateItems,
             };
           });
-        preVersionDirectDependencies = data_resourceVersionInfo.dependencies.map((d) => {
-          return {
-            id: d.resourceId,
-            name: d.resourceName,
-            type: 'resource',
-            versionRange: d.versionRange,
-          };
-        });
+        // preVersionDirectDependencies = data_resourceVersionInfo.dependencies.map((d) => {
+        //   return {
+        //     id: d.resourceId,
+        //     name: d.resourceName,
+        //     type: 'resource',
+        //     versionRange: d.versionRange,
+        //   };
+        // });
       }
 
       yield put<ChangeAction>({
@@ -480,7 +502,7 @@ const Model: ResourceVersionCreatorModelType = {
           preVersion_additionalProperties,
           preVersion_customProperties,
           preVersion_customConfigurations,
-          preVersionDirectDependencies,
+          // preVersionDirectDependencies,
           descriptionEditorState,
         },
       });
@@ -523,71 +545,71 @@ const Model: ResourceVersionCreatorModelType = {
           dataIsDirty: false,
         },
       });
-      const p: {
-        getAllTargets(): void;
-        getAllResourcesWithContracts(): void;
-        isCompleteAuthorization(): void;
-        getBaseUpcastResources(): { resourceID: string; resourceName: string; }[];
-      } = yield call(getProcessor, 'resourceVersionCreator');
+      // const p: {
+      //   getAllTargets(): void;
+      //   getAllResourcesWithContracts(): void;
+      //   isCompleteAuthorization(): void;
+      //   getBaseUpcastResources(): { resourceID: string; resourceName: string; }[];
+      // } = yield call(getProcessor, 'resourceVersionCreator');
+      //
+      // const isCompleteAuthorization: boolean = yield call(p.isCompleteAuthorization);
 
-      const isCompleteAuthorization: boolean = yield call(p.isCompleteAuthorization);
-
-      if (!isCompleteAuthorization) {
+      if (!resourceVersionCreatorPage.isCompleteAuthorization) {
         fMessage('依赖中存在未获取授权的资源', 'error');
         return;
       }
 
-      const dependentAllResourcesWithContracts: {
-        resourceID: string;
-        resourceName: string;
-        contracts: {
-          policyID: string;
-          contractID: string;
-        }[];
-      }[] = yield call(p.getAllResourcesWithContracts);
-      const dependentAllTargets: {
-        id: string;
-        name: string;
-        type: 'resource' | 'object';
-        versionRange?: string;
-      }[] = yield call(p.getAllTargets);
+      // const dependentAllResourcesWithContracts: {
+      //   resourceID: string;
+      //   resourceName: string;
+      //   contracts: {
+      //     policyID: string;
+      //     contractID: string;
+      //   }[];
+      // }[] = yield call(p.getAllResourcesWithContracts);
+      // const dependentAllTargets: {
+      //   id: string;
+      //   name: string;
+      //   type: 'resource' | 'object';
+      //   versionRange?: string;
+      // }[] = yield call(p.getAllTargets);
+      //
+      // const baseUpcastResources: {
+      //   resourceID: string;
+      //   resourceName: string;
+      // }[] = yield call(p.getBaseUpcastResources);
 
-      const baseUpcastResources: {
-        resourceID: string;
-        resourceName: string;
-      }[] = yield call(p.getBaseUpcastResources);
-
-      const dependencies: {
-        resourceId: string;
-        versionRange: string;
-      }[] = dependentAllTargets
-        .map((r) => {
-          return {
-            resourceId: r.id,
-            versionRange: r.versionRange || '',
-          };
-        });
-      const resolveResources: {
-        resourceId: string;
-        contracts: {
-          policyId: string;
-        }[];
-      }[] = dependentAllResourcesWithContracts
-        .filter((r) => {
-          return r.contracts.length > 0 && baseUpcastResources.every((b) => {
-            return b.resourceID !== r.resourceID;
-          });
-        })
-        .map((r) => {
-          return {
-            resourceId: r.resourceID,
-            contracts: r.contracts.map((c) => {
-              return {
-                policyId: c.policyID,
-              };
-            }),
-          };
-        });
+      // const dependencies: {
+      //   resourceId: string;
+      //   versionRange: string;
+      // }[] = dependentAllTargets
+      //   .map((r) => {
+      //     return {
+      //       resourceId: r.id,
+      //       versionRange: r.versionRange || '',
+      //     };
+      //   });
+      // const resolveResources: {
+      //   resourceId: string;
+      //   contracts: {
+      //     policyId: string;
+      //   }[];
+      // }[] = dependentAllResourcesWithContracts
+      //   .filter((r) => {
+      //     return r.contracts.length > 0 && baseUpcastResources.every((b) => {
+      //       return b.resourceID !== r.resourceID;
+      //     });
+      //   })
+      //   .map((r) => {
+      //     return {
+      //       resourceId: r.resourceID,
+      //       contracts: r.contracts.map((c) => {
+      //         return {
+      //           policyId: c.policyID,
+      //         };
+      //       }),
+      //     };
+      //   });
 
 
       const params: Parameters<typeof FServiceAPI.Resource.createVersion>[0] = {
@@ -595,11 +617,17 @@ const Model: ResourceVersionCreatorModelType = {
         version: resourceVersionCreatorPage.versionInput,
         fileSha1: resourceVersionCreatorPage.selectedFileInfo.sha1,
         filename: resourceVersionCreatorPage.selectedFileInfo.name,
-        baseUpcastResources: baseUpcastResources.map((r) => {
+        baseUpcastResources: resourceVersionCreatorPage.baseUpcastResources.map((r) => {
           return { resourceId: r.resourceID };
         }),
-        dependencies: dependencies,
-        resolveResources: resolveResources,
+        dependencies: resourceVersionCreatorPage.directDependencies
+          .map((r) => {
+            return {
+              resourceId: r.id,
+              versionRange: r.versionRange || '',
+            };
+          }),
+        resolveResources: [],
         inputAttrs: resourceVersionCreatorPage.additionalProperties
           .filter((ap) => {
             return ap.value !== '';
@@ -856,11 +884,20 @@ const Model: ResourceVersionCreatorModelType = {
         });
       }
 
-      const processor: { addTargets(targets: any[]): void } = yield call(getProcessor, 'resourceVersionCreator');
-      yield call(processor.addTargets, [
-        ...addR,
-        ...addO,
-      ]);
+      // const processor: { addTargets(targets: any[]): void } = yield call(getProcessor, 'resourceVersionCreator');
+      // yield call(processor.addTargets, [
+      //   ...addR,
+      //   ...addO,
+      // ]);
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          directDependencies: [
+            ...addR,
+            ...addO,
+          ],
+        },
+      });
 
       yield put<_FetchRawPropsAction>({
         type: '_FetchRawProps',
@@ -991,27 +1028,27 @@ const Model: ResourceVersionCreatorModelType = {
         },
       });
     },
-    * onClick_ImportLastVersionDependents_Btn({ payload }: OnClick_ImportLastVersionDependents_Btn_Action, {
-      call,
-      select,
-      put,
-    }: EffectsCommandMap) {
-      const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
-        resourceVersionCreatorPage,
-      }));
-      const p: {
-        addTargets(value: any): void;
-        clear(): void;
-      } = yield call(getProcessor, 'resourceVersionCreator');
-      yield call(p.clear);
-      yield call(p.addTargets, resourceVersionCreatorPage.preVersionDirectDependencies);
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          dataIsDirty: true,
-        },
-      });
-    },
+    // * onClick_ImportLastVersionDependents_Btn({ payload }: OnClick_ImportLastVersionDependents_Btn_Action, {
+    //   call,
+    //   select,
+    //   put,
+    // }: EffectsCommandMap) {
+    //   const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
+    //     resourceVersionCreatorPage,
+    //   }));
+    //   const p: {
+    //     addTargets(value: any): void;
+    //     clear(): void;
+    //   } = yield call(getProcessor, 'resourceVersionCreator');
+    //   yield call(p.clear);
+    //   yield call(p.addTargets, resourceVersionCreatorPage.preVersionDirectDependencies);
+    //   yield put<ChangeAction>({
+    //     type: 'change',
+    //     payload: {
+    //       dataIsDirty: true,
+    //     },
+    //   });
+    // },
     * onChange_DescriptionEditorState({ payload }: OnChange_DescriptionEditorState_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
@@ -1093,16 +1130,20 @@ const Model: ResourceVersionCreatorModelType = {
           payload: {
             versionInput: draftData.versionInput,
             selectedFileInfo: draftData.selectedFileInfo,
-            additionalProperties: draftData.additionalProperties?.map((p) => {
+            additionalProperties: draftData.additionalProperties.map((p) => {
               return {
                 key: p.key,
                 name: '',
                 value: p.value,
                 description: '',
               };
-            }) || [],
-            customProperties: draftData.customProperties || [],
-            customConfigurations: draftData.customConfigurations || [],
+            }),
+            customProperties: draftData.customProperties,
+            customConfigurations: draftData.customConfigurations,
+
+            directDependencies: draftData.directDependencies,
+            baseUpcastResources: draftData.baseUpcastResources,
+
             descriptionEditorState: BraftEditor.createEditorState(draftData.descriptionEditorInput),
             draftSaveTime: moment(data_draft.updateDate).format('YYYY-MM-DD hh:mm:ss'),
             // draftSaveTime: FUtil.Format.formatDateTime(data_draft.updateDate, true),
@@ -1110,15 +1151,23 @@ const Model: ResourceVersionCreatorModelType = {
         });
 
         // console.log(draftData, 'draftDataoisdjflksdjflksdjflkj');
-        const p: {
-          addTargets(value: any): void;
-          clear(): void;
-          setBaseUpcastResources(value: IBaseUpcastResource[]): void;
-        } = yield call(getProcessor, 'resourceVersionCreator');
-        yield call(p.clear);
-        yield call(p.addTargets, draftData.directDependencies);
+        // const p: {
+        //   addTargets(value: any): void;
+        //   clear(): void;
+        //   setBaseUpcastResources(value: IBaseUpcastResource[]): void;
+        // } = yield call(getProcessor, 'resourceVersionCreator');
+        // yield call(p.clear);
+        // yield call(p.addTargets, draftData.directDependencies);
+        // yield call(p.setBaseUpcastResources, draftData?.baseUpcastResources || []);
+        // yield put<ChangeAction>({
+        //   type: 'change',
+        //   payload: {
+        //     directDependencies: draftData.directDependencies,
+        //     baseUpcastResources: draftData?.baseUpcastResources || [],
+        //   }
+        // })
         yield call(FUtil.Tool.promiseSleep);
-        yield call(p.setBaseUpcastResources, draftData?.baseUpcastResources || []);
+
         if (draftData.selectedFileInfo) {
           yield put<_FetchRawPropsAction>({
             type: '_FetchRawProps',
@@ -1150,19 +1199,19 @@ const Model: ResourceVersionCreatorModelType = {
         return;
       }
 
-      let directDependencies: any[] = [];
-      let baseUpcastResources: {
-        resourceID: string;
-        resourceName: string;
-      }[] = [];
+      // let directDependencies: any[] = [];
+      // let baseUpcastResources: {
+      //   resourceID: string;
+      //   resourceName: string;
+      // }[] = [];
 
       // if (resourceVersionCreatorPage.selectedFileInfo) {
-        const p: { getAllTargets(): void; getBaseUpcastResources(): { resourceID: string; resourceName: string; }[] } = yield call(getProcessor, 'resourceVersionCreator');
-        directDependencies = yield call(p.getAllTargets);
-        baseUpcastResources = yield call(p.getBaseUpcastResources);
+      // const p: { getAllTargets(): void; getBaseUpcastResources(): { resourceID: string; resourceName: string; }[] } = yield call(getProcessor, 'resourceVersionCreator');
+      // directDependencies = yield call(p.getAllTargets);
+      // baseUpcastResources = yield call(p.getBaseUpcastResources);
       // }
-      console.log(directDependencies, 'directDependenciesewfdsfsdfsd ');
-      console.log(baseUpcastResources, 'baseUpcastResourcesoisjdlkfjlsdkjflsdjfljsl');
+      // console.log(directDependencies, 'directDependenciesewfdsfsdfsd ');
+      // console.log(baseUpcastResources, 'baseUpcastResourcesoisjdlkfjlsdkjflsdjfljsl');
 
       const draftData: IResourceCreateVersionDraftType = {
         versionInput: resourceVersionCreatorPage.versionInput,
@@ -1175,9 +1224,9 @@ const Model: ResourceVersionCreatorModelType = {
         }),
         customProperties: resourceVersionCreatorPage.customProperties,
         customConfigurations: resourceVersionCreatorPage.customConfigurations,
-        directDependencies: directDependencies,
+        directDependencies: resourceVersionCreatorPage.directDependencies,
+        baseUpcastResources: resourceVersionCreatorPage.baseUpcastResources,
         descriptionEditorInput: resourceVersionCreatorPage.descriptionEditorState.toHTML(),
-        baseUpcastResources: baseUpcastResources,
       };
 
       const params: Parameters<typeof FServiceAPI.Resource.saveVersionsDraft>[0] = {

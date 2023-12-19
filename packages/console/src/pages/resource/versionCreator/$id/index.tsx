@@ -27,11 +27,11 @@ import {
   OnChange_AdditionalProperties_Action,
   OnChange_CustomConfigurations_Action,
   OnChange_CustomProperties_Action,
-  OnChange_DataIsDirty_Action,
+  // OnChange_DataIsDirty_Action,
   OnChange_IsOpenCartoon_Action,
   OnChange_VersionInput_Action,
   OnClick_CreateVersionBtn_Action,
-  OnClick_ImportLastVersionDependents_Btn_Action,
+  // OnClick_ImportLastVersionDependents_Btn_Action,
   OnClick_OpenCartoonBtn_Action,
   OnClose_CartoonEditor_Action,
   OnClose_MarkdownEditor_Action,
@@ -862,339 +862,351 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
         }
 
 
-        <div style={{ display: $showMore ? 'block' : 'none' }}>
-          {/*<div style={{ display: 'block' }}>*/}
-          <div style={{ height: 10 }} />
+        {
+          $showMore && (<div>
+            {/*<div style={{ display: 'block' }}>*/}
+            <div style={{ height: 10 }} />
 
-          {
-            (resourceVersionCreatorPage.resourceInfo?.resourceType.includes('插件')
-              || resourceVersionCreatorPage.resourceInfo?.resourceType.includes('主题'))
-            && (<>
-              <div className={styles.block}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <FComponentsLib.FContentText text={FI18n.i18nNext.t('resourceoptions_title')} type={'highlight'} />
+            {
+              (resourceVersionCreatorPage.resourceInfo?.resourceType.includes('插件')
+                || resourceVersionCreatorPage.resourceInfo?.resourceType.includes('主题'))
+              && (<>
+                <div className={styles.block}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <FComponentsLib.FContentText text={FI18n.i18nNext.t('resourceoptions_title')} type={'highlight'} />
+
+                    {
+                      resourceVersionCreatorPage.customConfigurations.length < 30 && (<Space size={10}>
+                        <FTooltip title={FI18n.i18nNext.t('info_versionoptions')}>
+                          <div>
+                            <FComponentsLib.FTextBtn
+                              style={{ fontSize: 12, display: 'flex', alignItems: 'center', gap: 5 }}
+                              type='primary'
+                              onClick={async () => {
+                                const dataSource: {
+                                  key: string;
+                                  name: string;
+                                  type: 'input' | 'select';
+                                  input: string;
+                                  select: string[];
+                                  description: string;
+                                } | null = await fResourceOptionEditor({
+                                  disabledKeys: [
+                                    ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
+                                    ...resourceVersionCreatorPage.additionalProperties.map<string>((rp) => rp.key),
+                                    ...resourceVersionCreatorPage.customProperties.map<string>((bp) => bp.key),
+                                    ...resourceVersionCreatorPage.customConfigurations.map<string>((pp) => pp.key),
+                                  ],
+                                  disabledNames: [
+                                    ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.name),
+                                    ...resourceVersionCreatorPage.additionalProperties.map<string>((rp) => rp.name),
+                                    ...resourceVersionCreatorPage.customProperties.map<string>((bp) => bp.name),
+                                    ...resourceVersionCreatorPage.customConfigurations.map<string>((pp) => pp.name),
+                                  ],
+                                });
+
+                                if (!dataSource) {
+                                  return;
+                                }
+
+                                await dispatch<OnChange_CustomConfigurations_Action>({
+                                  type: 'resourceVersionCreatorPage/onChange_CustomConfigurations',
+                                  payload: {
+                                    value: [
+                                      ...resourceVersionCreatorPage.customConfigurations,
+                                      dataSource,
+                                    ],
+                                  },
+                                });
+                              }}
+                            >
+                              <FComponentsLib.FIcons.FConfiguration style={{ fontSize: 14 }} />
+                              <span>{FI18n.i18nNext.t('resourceoptions_add_btn')}</span>
+                            </FComponentsLib.FTextBtn>
+                          </div>
+                        </FTooltip>
+
+                        {
+                          resourceVersionCreatorPage.preVersion_customConfigurations.length > 0 && (
+                            <FComponentsLib.FTextBtn
+                              type='primary'
+                              style={{ fontSize: 12 }}
+                              onClick={async () => {
+                                const data: {
+                                  key: string;
+                                  name: string;
+                                  description: string;
+                                  type: 'input' | 'select';
+                                  input: string;
+                                  select: string[];
+                                }[] | null = await fAddCustomOptions({
+                                  disabledKeys: [
+                                    ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
+                                    ...resourceVersionCreatorPage.additionalProperties.map<string>((pp) => pp.key),
+                                    ...resourceVersionCreatorPage.customProperties.map<string>((pp) => pp.key),
+                                    ...resourceVersionCreatorPage.customConfigurations.map<string>((cod) => cod.key),
+                                  ],
+                                  disabledNames: [
+                                    ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.name),
+                                    ...resourceVersionCreatorPage.additionalProperties.map<string>((rp) => rp.name),
+                                    ...resourceVersionCreatorPage.customProperties.map<string>((pp) => pp.name),
+                                    ...resourceVersionCreatorPage.customConfigurations.map<string>((cod) => cod.name),
+                                  ],
+                                  defaultData: resourceVersionCreatorPage.preVersion_customConfigurations,
+                                });
+                                // console.log(data, 'data09weeisojfsdlkfjsldkjflk');
+                                if (!data) {
+                                  return;
+                                }
+
+                                await dispatch<OnChange_CustomConfigurations_Action>({
+                                  type: 'resourceVersionCreatorPage/onChange_CustomConfigurations',
+                                  payload: {
+                                    value: [
+                                      ...resourceVersionCreatorPage.customConfigurations,
+                                      ...data,
+                                    ],
+                                  },
+                                });
+                              }}
+                            >从上个版本导入</FComponentsLib.FTextBtn>)
+                        }
+                      </Space>)
+                    }
+                  </div>
 
                   {
-                    resourceVersionCreatorPage.customConfigurations.length < 30 && (<Space size={10}>
-                      <FTooltip title={FI18n.i18nNext.t('info_versionoptions')}>
-                        <div>
-                          <FComponentsLib.FTextBtn
-                            style={{ fontSize: 12, display: 'flex', alignItems: 'center', gap: 5 }}
-                            type='primary'
-                            onClick={async () => {
-                              const dataSource: {
-                                key: string;
-                                name: string;
-                                type: 'input' | 'select';
-                                input: string;
-                                select: string[];
-                                description: string;
-                              } | null = await fResourceOptionEditor({
-                                disabledKeys: [
-                                  ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
-                                  ...resourceVersionCreatorPage.additionalProperties.map<string>((rp) => rp.key),
-                                  ...resourceVersionCreatorPage.customProperties.map<string>((bp) => bp.key),
-                                  ...resourceVersionCreatorPage.customConfigurations.map<string>((pp) => pp.key),
-                                ],
-                                disabledNames: [
-                                  ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.name),
-                                  ...resourceVersionCreatorPage.additionalProperties.map<string>((rp) => rp.name),
-                                  ...resourceVersionCreatorPage.customProperties.map<string>((bp) => bp.name),
-                                  ...resourceVersionCreatorPage.customConfigurations.map<string>((pp) => pp.name),
-                                ],
-                              });
-
-                              if (!dataSource) {
-                                return;
-                              }
-
-                              await dispatch<OnChange_CustomConfigurations_Action>({
-                                type: 'resourceVersionCreatorPage/onChange_CustomConfigurations',
-                                payload: {
-                                  value: [
-                                    ...resourceVersionCreatorPage.customConfigurations,
-                                    dataSource,
-                                  ],
-                                },
-                              });
-                            }}
-                          >
-                            <FComponentsLib.FIcons.FConfiguration style={{ fontSize: 14 }} />
-                            <span>{FI18n.i18nNext.t('resourceoptions_add_btn')}</span>
-                          </FComponentsLib.FTextBtn>
-                        </div>
-                      </FTooltip>
-
-                      {
-                        resourceVersionCreatorPage.preVersion_customConfigurations.length > 0 && (
-                          <FComponentsLib.FTextBtn
-                            type='primary'
-                            style={{ fontSize: 12 }}
-                            onClick={async () => {
-                              const data: {
-                                key: string;
-                                name: string;
-                                description: string;
-                                type: 'input' | 'select';
-                                input: string;
-                                select: string[];
-                              }[] | null = await fAddCustomOptions({
-                                disabledKeys: [
-                                  ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
-                                  ...resourceVersionCreatorPage.additionalProperties.map<string>((pp) => pp.key),
-                                  ...resourceVersionCreatorPage.customProperties.map<string>((pp) => pp.key),
-                                  ...resourceVersionCreatorPage.customConfigurations.map<string>((cod) => cod.key),
-                                ],
-                                disabledNames: [
-                                  ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.name),
-                                  ...resourceVersionCreatorPage.additionalProperties.map<string>((rp) => rp.name),
-                                  ...resourceVersionCreatorPage.customProperties.map<string>((pp) => pp.name),
-                                  ...resourceVersionCreatorPage.customConfigurations.map<string>((cod) => cod.name),
-                                ],
-                                defaultData: resourceVersionCreatorPage.preVersion_customConfigurations,
-                              });
-                              // console.log(data, 'data09weeisojfsdlkfjsldkjflk');
-                              if (!data) {
-                                return;
-                              }
-
-                              await dispatch<OnChange_CustomConfigurations_Action>({
-                                type: 'resourceVersionCreatorPage/onChange_CustomConfigurations',
-                                payload: {
-                                  value: [
-                                    ...resourceVersionCreatorPage.customConfigurations,
-                                    ...data,
-                                  ],
-                                },
-                              });
-                            }}
-                          >从上个版本导入</FComponentsLib.FTextBtn>)
-                      }
-                    </Space>)
+                    resourceVersionCreatorPage.customConfigurations.length === 0 && (<>
+                      <div style={{ height: 10 }} />
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        {/*<span>{FI18n.i18nNext.t('resourceoptions_list_empty')}</span>*/}
+                        <FComponentsLib.FContentText
+                          text={FI18n.i18nNext.t('resourceoptions_list_empty')}
+                          type={'additional2'}
+                        />
+                      </div>
+                      <div style={{ height: 20 }} />
+                    </>)
                   }
+
+                  {
+                    resourceVersionCreatorPage.customConfigurations.length > 0 && (<>
+                      <div style={{ height: 20 }} />
+                      <FResourceOptions
+                        theme={'dark'}
+                        // dataSource={resourceVersionCreatorPage.customOptionsData}
+                        dataSource={resourceVersionCreatorPage.customConfigurations}
+                        onEdit={async (value) => {
+                          const index: number = resourceVersionCreatorPage.customConfigurations.findIndex((p) => {
+                            return p === value;
+                          });
+
+                          const dataSource: {
+                            key: string;
+                            name: string;
+                            type: 'input' | 'select';
+                            input: string;
+                            select: string[];
+                            description: string;
+                          } | null = await fResourceOptionEditor({
+                            disabledKeys: [
+                              ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
+                              ...resourceVersionCreatorPage.additionalProperties.map<string>((rp) => rp.key),
+                              ...resourceVersionCreatorPage.customProperties.map<string>((bp) => bp.key),
+                              ...resourceVersionCreatorPage.customConfigurations.map<string>((pp) => pp.key),
+                            ],
+                            disabledNames: [
+                              ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.name),
+                              ...resourceVersionCreatorPage.additionalProperties.map<string>((rp) => rp.name),
+                              ...resourceVersionCreatorPage.customProperties.map<string>((bp) => bp.name),
+                              ...resourceVersionCreatorPage.customConfigurations.map<string>((pp) => pp.name),
+                            ],
+                            defaultData: value,
+                          });
+
+                          if (!dataSource) {
+                            return;
+                          }
+
+                          await dispatch<OnChange_CustomConfigurations_Action>({
+                            type: 'resourceVersionCreatorPage/onChange_CustomConfigurations',
+                            payload: {
+                              value: resourceVersionCreatorPage.customConfigurations.map((a, b) => {
+                                if (b !== index) {
+                                  return a;
+                                }
+                                return dataSource;
+                              }),
+                            },
+                          });
+                        }}
+                        onDelete={async (value) => {
+                          await dispatch<OnChange_CustomConfigurations_Action>({
+                            type: 'resourceVersionCreatorPage/onChange_CustomConfigurations',
+                            payload: {
+                              value: resourceVersionCreatorPage.customConfigurations.filter((a) => {
+                                return a.key !== value.key && a.name !== value.name;
+                              }),
+                            },
+                          });
+                        }}
+                      />
+                    </>)
+                  }
+
                 </div>
 
-                {
-                  resourceVersionCreatorPage.customConfigurations.length === 0 && (<>
-                    <div style={{ height: 10 }} />
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      {/*<span>{FI18n.i18nNext.t('resourceoptions_list_empty')}</span>*/}
-                      <FComponentsLib.FContentText
-                        text={FI18n.i18nNext.t('resourceoptions_list_empty')}
-                        type={'additional2'}
-                      />
-                    </div>
-                    <div style={{ height: 20 }} />
-                  </>)
-                }
-
-                {
-                  resourceVersionCreatorPage.customConfigurations.length > 0 && (<>
-                    <div style={{ height: 20 }} />
-                    <FResourceOptions
-                      theme={'dark'}
-                      // dataSource={resourceVersionCreatorPage.customOptionsData}
-                      dataSource={resourceVersionCreatorPage.customConfigurations}
-                      onEdit={async (value) => {
-                        const index: number = resourceVersionCreatorPage.customConfigurations.findIndex((p) => {
-                          return p === value;
-                        });
-
-                        const dataSource: {
-                          key: string;
-                          name: string;
-                          type: 'input' | 'select';
-                          input: string;
-                          select: string[];
-                          description: string;
-                        } | null = await fResourceOptionEditor({
-                          disabledKeys: [
-                            ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
-                            ...resourceVersionCreatorPage.additionalProperties.map<string>((rp) => rp.key),
-                            ...resourceVersionCreatorPage.customProperties.map<string>((bp) => bp.key),
-                            ...resourceVersionCreatorPage.customConfigurations.map<string>((pp) => pp.key),
-                          ],
-                          disabledNames: [
-                            ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.name),
-                            ...resourceVersionCreatorPage.additionalProperties.map<string>((rp) => rp.name),
-                            ...resourceVersionCreatorPage.customProperties.map<string>((bp) => bp.name),
-                            ...resourceVersionCreatorPage.customConfigurations.map<string>((pp) => pp.name),
-                          ],
-                          defaultData: value,
-                        });
-
-                        if (!dataSource) {
-                          return;
-                        }
-
-                        await dispatch<OnChange_CustomConfigurations_Action>({
-                          type: 'resourceVersionCreatorPage/onChange_CustomConfigurations',
-                          payload: {
-                            value: resourceVersionCreatorPage.customConfigurations.map((a, b) => {
-                              if (b !== index) {
-                                return a;
-                              }
-                              return dataSource;
-                            }),
-                          },
-                        });
-                      }}
-                      onDelete={async (value) => {
-                        await dispatch<OnChange_CustomConfigurations_Action>({
-                          type: 'resourceVersionCreatorPage/onChange_CustomConfigurations',
-                          payload: {
-                            value: resourceVersionCreatorPage.customConfigurations.filter((a) => {
-                              return a.key !== value.key && a.name !== value.name;
-                            }),
-                          },
-                        });
-                      }}
-                    />
-                  </>)
-                }
-
-              </div>
-
-              <div style={{ height: 5 }} />
-            </>)
-          }
-
-          <div className={styles.block}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              {/*{FI18n.i18nNext.t('claim_rely_title')}*/}
-              <FComponentsLib.FContentText text={FI18n.i18nNext.t('claim_rely_title')} type={'highlight'} />
-              <Space size={10}>
-                {/*<FTooltip title={FI18n.i18nNext.t('resourceinfo_add_btn_info')}>*/}
-                <FTooltip title={FI18n.i18nNext.t('info_versionrely')}>
-                  <div>
-                    <FComponentsLib.FTextBtn
-                      style={{ fontSize: 12, display: 'flex', alignItems: 'center', gap: 5 }}
-                      type='primary'
-                      onClick={async () => {
-                        const p = await getProcessor('resourceVersionCreator');
-                        // console.log(p, 'psoidfjlskdjflsdjlkj');
-                        await fAddDependencies({
-                          // resourceTypeCode: resourceVersionCreatorPage.resourceInfo?.resourceTypeCode || '',
-                          existingResources: (await p.getAllTargets()).map((t) => {
-                            return {
-                              resourceID: t.id,
-                              resourceNme: t.name,
-                            };
-                          }),
-                          baseUpcastResources: resourceVersionCreatorPage.resourceInfo?.baseUpcastResources.map((r) => {
-                            return {
-                              resourceID: r.resourceID,
-                              resourceName: r.resourceName,
-                            };
-                          }) || [],
-                          async onSelect_Resource({ resourceID, resourceName }) {
-                            // console.log('8***********8sdflksdjlkj');
-                            // const p = await getProcessor('resourceVersionCreator');
-                            // console.log(p, 'asdiolfj;lksdjflkdsjflkjdslkfjlksdjlkf');
-                            await p.addTargets([{
-                              id: resourceID,
-                              name: resourceName,
-                              type: 'resource',
-                              // versionRange: '^0.1.0',
-                            }]);
-                            await dispatch<OnChange_DataIsDirty_Action>({
-                              type: 'resourceVersionCreatorPage/onChange_DataIsDirty',
-                              payload: {
-                                value: true,
-                              },
-                            });
-                          },
-                          async onDeselect_Resource({ resourceID, resourceName }) {
-                            // const p = await getProcessor('resourceVersionCreator');
-                            await p.removeTarget({
-                              id: resourceID,
-                              name: resourceName,
-                              type: 'resource',
-                            });
-                            await dispatch<OnChange_DataIsDirty_Action>({
-                              type: 'resourceVersionCreatorPage/onChange_DataIsDirty',
-                              payload: {
-                                value: true,
-                              },
-                            });
-                          },
-                        });
-                      }}
-                    >
-                      <FComponentsLib.FIcons.FConfiguration style={{ fontSize: 14 }} />
-                      <span>{FI18n.i18nNext.t('claim_rely_add_btn')}</span>
-                    </FComponentsLib.FTextBtn>
-                  </div>
-                </FTooltip>
-
-                {
-                  resourceVersionCreatorPage.preVersionDirectDependencies.length !== 0 &&
-                  <FComponentsLib.FTextBtn
-                    style={{ fontSize: 12, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 5 }}
-                    type='primary'
-                    onClick={async () => {
-                      dispatch<OnClick_ImportLastVersionDependents_Btn_Action>({
-                        type: 'resourceVersionCreatorPage/onClick_ImportLastVersionDependents_Btn',
-                      });
-                    }}
-                  >{FI18n.i18nNext.t('import_from_previous_version')}</FComponentsLib.FTextBtn>
-                }
-              </Space>
-            </div>
-            <div>11111</div>
-            {
-              resourceVersionCreatorPage.resourceInfo && (<MicroApp
-                name={'Authorization'}
-                // resourceID={}
-                licenseeId={resourceVersionCreatorPage.resourceInfo.resourceID}
-                mainAppType={'resourceInVersionUpdate'}
-                depList={[]}
-                upcastList={[]}
-                update={() => {
-                }}
-              />)
+                <div style={{ height: 5 }} />
+              </>)
             }
 
-            {/*{*/}
-            {/*  size && size.height === 0 && (<>*/}
-            {/*    <div style={{ height: 10 }} />*/}
-            {/*    <div*/}
-            {/*      style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>*/}
-            {/*      {*/}
-            {/*        FI18n.i18nNext.t('claim_rely_list_empty').split('\n').map((i, j) => {*/}
-            {/*          return (<FComponentsLib.FContentText key={j} text={i} type={'additional2'} />);*/}
-            {/*        })*/}
-            {/*      }*/}
-            {/*    </div>*/}
-            {/*    <div style={{ height: 20 }} />*/}
-            {/*  </>)*/}
-            {/*}*/}
+            <div className={styles.block}>
+              {/*<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>*/}
+              {/*  /!*{FI18n.i18nNext.t('claim_rely_title')}*!/*/}
+              {/*  <FComponentsLib.FContentText text={FI18n.i18nNext.t('claim_rely_title')} type={'highlight'} />*/}
+              {/*  <Space size={10}>*/}
+              {/*    /!*<FTooltip title={FI18n.i18nNext.t('resourceinfo_add_btn_info')}>*!/*/}
+              {/*    <FTooltip title={FI18n.i18nNext.t('info_versionrely')}>*/}
+              {/*      <div>*/}
+              {/*        <FComponentsLib.FTextBtn*/}
+              {/*          style={{ fontSize: 12, display: 'flex', alignItems: 'center', gap: 5 }}*/}
+              {/*          type='primary'*/}
+              {/*          onClick={async () => {*/}
+              {/*            const p = await getProcessor('resourceVersionCreator');*/}
+              {/*            // console.log(p, 'psoidfjlskdjflsdjlkj');*/}
+              {/*            await fAddDependencies({*/}
+              {/*              // resourceTypeCode: resourceVersionCreatorPage.resourceInfo?.resourceTypeCode || '',*/}
+              {/*              existingResources: (await p.getAllTargets()).map((t) => {*/}
+              {/*                return {*/}
+              {/*                  resourceID: t.id,*/}
+              {/*                  resourceNme: t.name,*/}
+              {/*                };*/}
+              {/*              }),*/}
+              {/*              baseUpcastResources: resourceVersionCreatorPage.resourceInfo?.baseUpcastResources.map((r) => {*/}
+              {/*                return {*/}
+              {/*                  resourceID: r.resourceID,*/}
+              {/*                  resourceName: r.resourceName,*/}
+              {/*                };*/}
+              {/*              }) || [],*/}
+              {/*              async onSelect_Resource({ resourceID, resourceName }) {*/}
+              {/*                // console.log('8***********8sdflksdjlkj');*/}
+              {/*                // const p = await getProcessor('resourceVersionCreator');*/}
+              {/*                // console.log(p, 'asdiolfj;lksdjflkdsjflkjdslkfjlksdjlkf');*/}
+              {/*                await p.addTargets([{*/}
+              {/*                  id: resourceID,*/}
+              {/*                  name: resourceName,*/}
+              {/*                  type: 'resource',*/}
+              {/*                  // versionRange: '^0.1.0',*/}
+              {/*                }]);*/}
+              {/*                await dispatch<OnChange_DataIsDirty_Action>({*/}
+              {/*                  type: 'resourceVersionCreatorPage/onChange_DataIsDirty',*/}
+              {/*                  payload: {*/}
+              {/*                    value: true,*/}
+              {/*                  },*/}
+              {/*                });*/}
+              {/*              },*/}
+              {/*              async onDeselect_Resource({ resourceID, resourceName }) {*/}
+              {/*                // const p = await getProcessor('resourceVersionCreator');*/}
+              {/*                await p.removeTarget({*/}
+              {/*                  id: resourceID,*/}
+              {/*                  name: resourceName,*/}
+              {/*                  type: 'resource',*/}
+              {/*                });*/}
+              {/*                await dispatch<OnChange_DataIsDirty_Action>({*/}
+              {/*                  type: 'resourceVersionCreatorPage/onChange_DataIsDirty',*/}
+              {/*                  payload: {*/}
+              {/*                    value: true,*/}
+              {/*                  },*/}
+              {/*                });*/}
+              {/*              },*/}
+              {/*            });*/}
+              {/*          }}*/}
+              {/*        >*/}
+              {/*          <FComponentsLib.FIcons.FConfiguration style={{ fontSize: 14 }} />*/}
+              {/*          <span>{FI18n.i18nNext.t('claim_rely_add_btn')}</span>*/}
+              {/*        </FComponentsLib.FTextBtn>*/}
+              {/*      </div>*/}
+              {/*    </FTooltip>*/}
 
-            {/*<>*/}
-            {/*  {*/}
-            {/*    size && size.height > 0 && (<div style={{ height: 20 }} />)*/}
-            {/*  }*/}
+              {/*    {*/}
+              {/*      resourceVersionCreatorPage.preVersionDirectDependencies.length !== 0 &&*/}
+              {/*      <FComponentsLib.FTextBtn*/}
+              {/*        style={{ fontSize: 12, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 5 }}*/}
+              {/*        type='primary'*/}
+              {/*        onClick={async () => {*/}
+              {/*          dispatch<OnClick_ImportLastVersionDependents_Btn_Action>({*/}
+              {/*            type: 'resourceVersionCreatorPage/onClick_ImportLastVersionDependents_Btn',*/}
+              {/*          });*/}
+              {/*        }}*/}
+              {/*      >{FI18n.i18nNext.t('import_from_previous_version')}</FComponentsLib.FTextBtn>*/}
+              {/*    }*/}
+              {/*  </Space>*/}
+              {/*</div>*/}
+              {/*<div>11111</div>*/}
+              {
+                resourceVersionCreatorPage.resourceInfo && (<MicroApp
+                  name={'Authorization'}
+                  // resourceID={}
+                  licenseeId={resourceVersionCreatorPage.resourceInfo.resourceID}
+                  mainAppType={'resourceInVersionUpdate'}
+                  depList={resourceVersionCreatorPage.directDependencies}
+                  upcastList={resourceVersionCreatorPage.baseUpcastResources}
+                  update={(data: any) => {
+                    // console.log(data, 'data sdifjsldkjflksdjklfjklsdjl');
+                    dispatch<ChangeAction>({
+                      type: 'resourceVersionCreatorPage/change',
+                      payload: {
+                        directDependencies: data.depList,
+                        resolveResources: data.resolveResources,
+                        baseUpcastResources: data.baseUpcastResources,
+                      },
+                    });
+                  }}
+                />)
+              }
+
+              {/*{*/}
+              {/*  size && size.height === 0 && (<>*/}
+              {/*    <div style={{ height: 10 }} />*/}
+              {/*    <div*/}
+              {/*      style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>*/}
+              {/*      {*/}
+              {/*        FI18n.i18nNext.t('claim_rely_list_empty').split('\n').map((i, j) => {*/}
+              {/*          return (<FComponentsLib.FContentText key={j} text={i} type={'additional2'} />);*/}
+              {/*        })*/}
+              {/*      }*/}
+              {/*    </div>*/}
+              {/*    <div style={{ height: 20 }} />*/}
+              {/*  </>)*/}
+              {/*}*/}
+
+              {/*<>*/}
+              {/*  {*/}
+              {/*    size && size.height > 0 && (<div style={{ height: 20 }} />)*/}
+              {/*  }*/}
 
 
-            {/*<div ref={ref}>*/}
-            {/*<FResourceAuthorizationProcessor*/}
-            {/*  width={860}*/}
-            {/*  height={600}*/}
-            {/*  resourceID={resourceVersionCreatorPage.resourceInfo?.resourceID || ''}*/}
-            {/*  processorIdentifier={'resourceVersionCreator'}*/}
-            {/*  onChanged={() => {*/}
-            {/*    dispatch<OnChange_DataIsDirty_Action>({*/}
-            {/*      type: 'resourceVersionCreatorPage/onChange_DataIsDirty',*/}
-            {/*      payload: {*/}
-            {/*        value: true,*/}
-            {/*      },*/}
-            {/*    });*/}
-            {/*  }}*/}
-            {/*/>*/}
-            {/*</div>*/}
-            {/*</>*/}
-          </div>
-        </div>
+              {/*<div ref={ref}>*/}
+              {/*<FResourceAuthorizationProcessor*/}
+              {/*  width={860}*/}
+              {/*  height={600}*/}
+              {/*  resourceID={resourceVersionCreatorPage.resourceInfo?.resourceID || ''}*/}
+              {/*  processorIdentifier={'resourceVersionCreator'}*/}
+              {/*  onChanged={() => {*/}
+              {/*    dispatch<OnChange_DataIsDirty_Action>({*/}
+              {/*      type: 'resourceVersionCreatorPage/onChange_DataIsDirty',*/}
+              {/*      payload: {*/}
+              {/*        value: true,*/}
+              {/*      },*/}
+              {/*    });*/}
+              {/*  }}*/}
+              {/*/>*/}
+              {/*</div>*/}
+              {/*</>*/}
+            </div>
+          </div>)
+        }
+
 
         <div style={{ height: 30 }} />
 
