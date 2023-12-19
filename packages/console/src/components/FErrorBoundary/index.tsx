@@ -42,6 +42,7 @@ class FErrorBoundary extends React.Component<FErrorBoundaryProps, FErrorBoundary
       </div>);
     }
     // Normally, just render children
+    // @ts-ignore
     return this.props.children;
   }
 }
