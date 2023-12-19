@@ -27,16 +27,16 @@ function CreatorBatch({ dispatch, resourceCreatorBatchPage }: CreatorBatchProps)
 
   const [$files, set$files, get$files] = FUtil.Hook.useGetState<RcFile[]>([]);
 
-  const [$successFiles, set$successFiles, get$successFiles] = FUtil.Hook.useGetState<{
-    uid: string;
-    name: string;
-    sha1: string;
-  }[]>([]);
-  const [$failFiles, set$failFiles, get$failFiles] = FUtil.Hook.useGetState<{
-    uid: string;
-    name: string;
-    sha1: string;
-  }[]>([]);
+  // const [$successFiles, set$successFiles, get$successFiles] = FUtil.Hook.useGetState<{
+  //   uid: string;
+  //   name: string;
+  //   sha1: string;
+  // }[]>([]);
+  // const [$failFiles, set$failFiles, get$failFiles] = FUtil.Hook.useGetState<{
+  //   uid: string;
+  //   name: string;
+  //   sha1: string;
+  // }[]>([]);
 
   AHooks.useMount(() => {
     dispatch<OnMount_Page_Action>({
@@ -50,17 +50,17 @@ function CreatorBatch({ dispatch, resourceCreatorBatchPage }: CreatorBatchProps)
     });
   });
 
-  AHooks.useDebounceEffect(() => {
-    if (get$files().length > 0 && (get$successFiles().length + get$failFiles().length === get$files().length)) {
-      localUploadGotoList();
-    }
-
-    if (get$files().length > 0 && get$failFiles().length === get$files().length) {
-      set$files([]);
-    }
-  }, [$files, $successFiles, $failFiles], {
-    wait: 300,
-  });
+  // AHooks.useDebounceEffect(() => {
+  //   if (get$files().length > 0 && (get$successFiles().length + get$failFiles().length === get$files().length)) {
+  //     localUploadGotoList();
+  //   }
+  //
+  //   if (get$files().length > 0 && get$failFiles().length === get$files().length) {
+  //     set$files([]);
+  //   }
+  // }, [$files, $successFiles, $failFiles], {
+  //   wait: 300,
+  // });
 
   async function localUploadGotoList() {
     const namesMap: Map<string, number> = new Map<string, number>();
@@ -447,4 +447,65 @@ function getARightName(name: string) {
     .substring(0, 50)
     .replace(new RegExp(/[\\|\/|:|\*|\?|"|<|>|\||\s|@|\$|#]/g), '_');
   return newName;
+}
+
+interface TasksProps {
+  files: RcFile[];
+  resourceTypeCode: string;
+}
+
+function Tasks({ files, resourceTypeCode }: TasksProps) {
+
+  const [$files, set$files, get$files] = FUtil.Hook.useGetState<RcFile[]>([]);
+
+  const [$successFiles, set$successFiles, get$successFiles] = FUtil.Hook.useGetState<{
+    uid: string;
+    name: string;
+    sha1: string;
+  }[]>([]);
+  const [$failFiles, set$failFiles, get$failFiles] = FUtil.Hook.useGetState<{
+    uid: string;
+    name: string;
+    sha1: string;
+  }[]>([]);
+
+  // AHooks.useDebounceEffect(() => {
+  //   if (files.length > 0 && (get$successFiles().length + get$failFiles().length === files.length)) {
+  //     localUploadGotoList();
+  //   }
+  //
+  //   if (files.length > 0 && get$failFiles().length === files.length) {
+  //     set$files([]);
+  //   }
+  // }, [$successFiles, $failFiles], {
+  //   wait: 300,
+  // });
+
+  return (<div>
+    {
+      files.map((file) => {
+        // console.log(file, 'sdFSDFSDFSDFSAFsdfsdalkjflkjl');
+        return (<Task
+          resourceTypeCode={resourceTypeCode}
+          key={file.uid}
+          file={file}
+          onFail={(value) => {
+            // console.log(value, 'value sdifjsdlkjflksdjflkjl');
+            set$failFiles([
+              ...get$failFiles(),
+              value,
+            ]);
+            // console.log(get$failFiles(), 'get$failFiles() sdjflksdjlfkjlkjl');
+          }}
+          onSuccess={(value) => {
+            // console.log(value, 'value sdifjsldkfjlksdjfklsdjlkfjlkj');
+            set$successFiles([
+              ...get$successFiles(),
+              value,
+            ]);
+          }}
+        />);
+      })
+    }
+  </div>);
 }
