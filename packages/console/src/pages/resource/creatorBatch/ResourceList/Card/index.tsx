@@ -11,13 +11,13 @@ import fResourcePropertyEditor from '@/components/fResourcePropertyEditor';
 import FResourceProperties from '@/components/FResourceProperties';
 import fResourceOptionEditor from '@/components/fResourceOptionEditor';
 import FResourceOptions from '@/components/FResourceOptions';
-import fAddDependencies from '@/components/fAddDependencies';
+// import fAddDependencies from '@/components/fAddDependencies';
 import * as AHooks from 'ahooks';
-import FResourceAuthorizationProcessor_Simple, { getProcessor_simple } from '@/components/FResourceAuthorizationProcessor_Simple';
+// import FResourceAuthorizationProcessor_Simple, { getProcessor_simple } from '@/components/FResourceAuthorizationProcessor_Simple';
 import fMessage from '@/components/fMessage';
 import FUploadCover from '@/components/FUploadCover';
 import fPolicyBuilder from '@/components/fPolicyBuilder';
-import { ChangeAction } from '@/models/resourceCreatorPage';
+// import { ChangeAction } from '@/models/resourceCreatorPage';
 import { MicroApp } from '@@/plugin-qiankun/MicroApp';
 
 interface CardProps {

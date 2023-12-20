@@ -10,7 +10,7 @@ import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import { getFilesSha1Info } from '@/utils/service';
 import { IResourceCreateVersionDraftType } from '@/type/resourceTypes';
 // import { getProcessor } from '@/components/FResourceAuthorizationProcessor';
-import { IBaseUpcastResource } from '@/components/FResourceAuthorizationProcessor/types';
+// import { IBaseUpcastResource } from '@/components/FResourceAuthorizationProcessor/types';
 import moment from 'moment';
 import { OnChange_Draft_Action } from '@/models/resourceSider';
 
