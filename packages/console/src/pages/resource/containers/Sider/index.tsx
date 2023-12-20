@@ -56,13 +56,9 @@ function Sider({ resourceSider, dispatch }: SilderProps) {
   /** 上下架 */
   async function changeStatus(value: boolean) {
     if (value) {
-      // setLoading(true);
       set$processing(FI18n.i18nNext.t('set_resource_available_for_auth_msg_processing'))
-      // const onlineSuccess = await resourceOnline(match.params.id);
       const onlineSuccess = await resourceOnline(resourceSider.resourceID);
       if (onlineSuccess) {
-        // setActiveDialogShow(true);
-        // setResultPopupType(1);
         setTimeout(() => {
           set$processing('');
           fOnOffFeedback({
@@ -96,15 +92,9 @@ function Sider({ resourceSider, dispatch }: SilderProps) {
       });
 
       if (bool) {
-        // inactiveResource();
-
         const data = { status: 4 };
         operateResource(data);
       }
-      // else {
-      //     // setNoLonger(false);
-      //     // setInactiveDialogShow(true);
-      //   }
     }
   }
 
@@ -135,12 +125,8 @@ function Sider({ resourceSider, dispatch }: SilderProps) {
     }
     setTimeout(() => {
       set$processing('');
-      // setTimeout(() => {
-      //   setResultPopupType(null);
-      // }, 1000);
-
       fOnOffFeedback({
-        state: 'on',
+        state: 'off',
         message: FI18n.i18nNext.t('remove_resource_from_auth_msg_done'),
       });
     }, 1000);
@@ -266,50 +252,6 @@ function Sider({ resourceSider, dispatch }: SilderProps) {
         </FLink>
       </div>
       <div style={{ height: 40 }} />
-
-      {/*<FDialog*/}
-      {/*  show={inactiveDialogShow}*/}
-      {/*  title={FI18n.i18nNext.t('remove_resource_from_auth_confirmation_title')}*/}
-      {/*  desc={FI18n.i18nNext.t('confirm_msg_remove_resource_from_auth')}*/}
-      {/*  sureText={FI18n.i18nNext.t('remove_resource_from_auth_btn_remve')}*/}
-      {/*  cancel={() => {*/}
-      {/*    setInactiveDialogShow(false);*/}
-      {/*  }}*/}
-      {/*  sure={inactiveResource}*/}
-      {/*  loading={loading}*/}
-      {/*  footer={*/}
-      {/*    <Checkbox*/}
-      {/*      className={styles['no-longer']}*/}
-      {/*      checked={noLonger}*/}
-      {/*      onChange={(e) => setNoLonger(e.target.checked)}*/}
-      {/*    >*/}
-      {/*      {FI18n.i18nNext.t('checkbox_dontaskmeagain')}*/}
-      {/*    </Checkbox>*/}
-      {/*  }*/}
-      {/*/>*/}
-
-      {/*{*/}
-      {/*  loading && (*/}
-      {/*    <div className={styles['result-modal']}>*/}
-      {/*      <div className={styles['result-popup']}>*/}
-      {/*        <div className={styles['loader']}>*/}
-      {/*          <LoadingOutlined className={styles['loader-icon']} />*/}
-      {/*          <div className={styles['loader-text']}>*/}
-      {/*            /!*正在{resultPopupType === 1 ? '上架' : '下架'}*!/*/}
-      {/*            {*/}
-      {/*              resultPopupType === 1*/}
-      {/*                ? FI18n.i18nNext.t(*/}
-      {/*                  'set_resource_available_for_auth_msg_processing',*/}
-      {/*                )*/}
-      {/*                : FI18n.i18nNext.t(*/}
-      {/*                  'remove_resource_from_auth_msg_processing',*/}
-      {/*                )*/}
-      {/*            }*/}
-      {/*          </div>*/}
-      {/*        </div>*/}
-      {/*      </div>*/}
-      {/*    </div>*/}
-      {/*  )}*/}
 
       <FProcessing
         open={$processing !== ''}
