@@ -1067,6 +1067,9 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
                 resourceVersionCreatorPage.resourceInfo && (<MicroApp
                   name={'Authorization'}
                   // resourceID={}
+                  // sandbox={{
+                  //   strictStyleIsolation: true,
+                  // }}
                   licenseeId={resourceVersionCreatorPage.resourceInfo.resourceID}
                   mainAppType={'resourceInVersionUpdate'}
                   depList={resourceVersionCreatorPage.directDependencies}

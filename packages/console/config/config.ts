@@ -21,7 +21,7 @@ export default defineConfig({
       changeOrigin: true,
       headers: {},
       pathRewrite: {
-        "^/api": 'https://api.testfreelog.com',
+        '^/api': 'https://api.testfreelog.com',
       },
     },
     '/v2': {
@@ -61,8 +61,14 @@ export default defineConfig({
           entry: '//dependencies-declarator.testfreelog.com/', // html entry
           // entry: '//192.168.2.28:8080', // html entry
           // credentials: true,
+          // sandbox: {
+          //   strictStyleIsolation: true,
+          // },
         },
       ],
+      // sandbox: {
+      //   strictStyleIsolation: true,
+      // },
     },
   },
 });

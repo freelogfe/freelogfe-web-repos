@@ -90,7 +90,7 @@ export const ObjectItem = (props: Props) => {
   };
 
   return (
-    <div className="object-item-wrapper" key={data.objectId}>
+    <div className="object-item-wrapper1" key={data.objectId}>
       {!data.uploadStatus || data.uploadStatus === 'success' ? (
         <div className="info-area">
           <div
