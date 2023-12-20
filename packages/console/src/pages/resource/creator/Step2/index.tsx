@@ -36,6 +36,7 @@ import FSkeletonNode from '@/components/FSkeletonNode';
 import FMicroApp_MarkdownEditorDrawer from '@/components/FMicroApp_MarkdownEditorDrawer';
 import fMessage from '@/components/fMessage';
 import { getFilesSha1Info } from '@/utils/service';
+
 // import { ChangeAction } from '@/models/resourceVersionCreatorPage';
 
 interface Step2Props {
@@ -45,8 +46,8 @@ interface Step2Props {
 
 function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
 
-  const ref = React.useRef(null);
-  const size = AHooks.useSize(ref);
+  // const ref = React.useRef(null);
+  // const size = AHooks.useSize(ref);
 
   const [$showMore, set$ShowMore, get$ShowMore] = useGetState<boolean>(false);
   const [$uploadingInfo, set$uploadingInfo, get$uploadingInfo] = useGetState<null | {
@@ -57,12 +58,11 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
 
   AHooks.useDebounceEffect(() => {
     // console.log(resourceCreatorPage.step2_dataIsDirty_count, 'resourceCreatorPage.step2_dataIsDirty_count wieosfjlskdjflk');
-    if (resourceCreatorPage.step2_dataIsDirty_count === 0) {
-      return;
+    if (resourceCreatorPage.step2_dataIsDirty_count !== 0) {
+      dispatch<OnTrigger_step2_SaveDraft_Action>({
+        type: 'resourceCreatorPage/onTrigger_step2_SaveDraft',
+      });
     }
-    dispatch<OnTrigger_step2_SaveDraft_Action>({
-      type: 'resourceCreatorPage/onTrigger_step2_SaveDraft',
-    });
   }, [resourceCreatorPage.step2_dataIsDirty_count], {
     wait: 300,
   });
@@ -699,6 +699,7 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
               depList={[]}
               upcastList={[]}
               update={(data: any) => {
+                console.log(data, 'datasidjflksdjflkjsdlkjlkj');
                 dispatch<ChangeAction>({
                   type: 'resourceCreatorPage/change',
                   payload: {
@@ -706,7 +707,7 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
                     step2_resolveResources: data.resolveResources,
                     step2_baseUpcastResources: data.upcastList,
                     step2_isCompleteAuthorization: true,
-                    // step2_dataIsDirty_count: resourceCreatorPage.step2_dataIsDirty_count + 1,
+                    step2_dataIsDirty_count: resourceCreatorPage.step2_dataIsDirty_count + 1,
                   },
                 });
               }}
@@ -782,16 +783,16 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
           {/*    />)*/}
           {/*  }*/}
 
-            {/*<div ref={ref}>*/}
-              {/*<FResourceAuthorizationProcessor*/}
-              {/*  width={860}*/}
-              {/*  height={600}*/}
-              {/*  resourceID={resourceCreatorPage.step1_createdResourceInfo?.resourceID || ''}*/}
-              {/*  processorIdentifier={'resourceCreatorStep2'}*/}
-              {/*  onChanged={() => {*/}
-              {/*  }}*/}
-              {/*/>*/}
-            {/* */}
+          {/*<div ref={ref}>*/}
+          {/*<FResourceAuthorizationProcessor*/}
+          {/*  width={860}*/}
+          {/*  height={600}*/}
+          {/*  resourceID={resourceCreatorPage.step1_createdResourceInfo?.resourceID || ''}*/}
+          {/*  processorIdentifier={'resourceCreatorStep2'}*/}
+          {/*  onChanged={() => {*/}
+          {/*  }}*/}
+          {/*/>*/}
+          {/* */}
           {/*</>*/}
         </div>
       </div>
