@@ -1067,7 +1067,7 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
                   licenseeId={resourceVersionCreatorPage.resourceInfo.resourceID}
                   mainAppType={'resourceInVersionUpdate'}
                   depList={resourceVersionCreatorPage.directDependencies}
-                  upcastList={resourceVersionCreatorPage.baseUpcastResources || []}
+                  upcastList={resourceVersionCreatorPage.baseUpcastResources}
                   update={(data: any) => {
                     dispatch<ChangeAction>({
                       type: 'resourceVersionCreatorPage/change',
