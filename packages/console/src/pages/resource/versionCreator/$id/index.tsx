@@ -1061,21 +1061,14 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
             }
 
             <div className={styles.block}>
-              {/*{console.log(resourceVersionCreatorPage.directDependencies, 'resourceVersionCreatorPage.directDependencies')}*/}
-              {/*{console.log(resourceVersionCreatorPage.baseUpcastResources, 'resourceVersionCreatorPage.baseUpcastResources')}*/}
               {
                 resourceVersionCreatorPage.resourceInfo && (<MicroApp
                   name={'Authorization'}
-                  // resourceID={}
-                  // sandbox={{
-                  //   strictStyleIsolation: true,
-                  // }}
                   licenseeId={resourceVersionCreatorPage.resourceInfo.resourceID}
                   mainAppType={'resourceInVersionUpdate'}
                   depList={resourceVersionCreatorPage.directDependencies}
                   upcastList={resourceVersionCreatorPage.baseUpcastResources || []}
                   update={(data: any) => {
-                    // console.log(data, 'data sdifjsldkjflksdjklfjklsdjl');
                     dispatch<ChangeAction>({
                       type: 'resourceVersionCreatorPage/change',
                       payload: {

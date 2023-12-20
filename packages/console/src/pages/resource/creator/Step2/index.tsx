@@ -17,6 +17,7 @@ import {
   OnRemove_step2_file_Action,
   OnSucceed_step2_localUpload_Action,
   OnSucceed_step2_storageSpace_Action, OnTrigger_step2_SaveDraft_Action,
+  ChangeAction,
 } from '@/models/resourceCreatorPage';
 import FResourceProperties from '@/components/FResourceProperties';
 import { history, MicroApp } from 'umi';
@@ -35,6 +36,7 @@ import FSkeletonNode from '@/components/FSkeletonNode';
 import FMicroApp_MarkdownEditorDrawer from '@/components/FMicroApp_MarkdownEditorDrawer';
 import fMessage from '@/components/fMessage';
 import { getFilesSha1Info } from '@/utils/service';
+// import { ChangeAction } from '@/models/resourceVersionCreatorPage';
 
 interface Step2Props {
   dispatch: Dispatch;
@@ -689,74 +691,96 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
 
 
         <div className={styles.block}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <FComponentsLib.FContentText text={FI18n.i18nNext.t('claim_rely_title')} type={'highlight'} />
-            <FTooltip title={FI18n.i18nNext.t('info_versionrely')}>
-              <div>
-                <FComponentsLib.FTextBtn
-                  style={{ fontSize: 12, display: 'flex', alignItems: 'center', gap: 5 }}
-                  type='primary'
-                  onClick={async () => {
-                    const p = await getProcessor('resourceCreatorStep2');
-                    const baseUpcastResources: Awaited<ReturnType<typeof p.getBaseUpcastResources>> = await p.getBaseUpcastResources();
-                    await fAddDependencies({
-                      existingResources: (await p.getAllTargets()).map((t) => {
-                        return {
-                          resourceID: t.id,
-                          resourceNme: t.name,
-                        };
-                      }),
-                      baseUpcastResources: baseUpcastResources,
-                      async onSelect_Resource({ resourceID, resourceName }) {
-                        await p.addTargets([{
-                          id: resourceID,
-                          name: resourceName,
-                          type: 'resource',
-                        }]);
-                      },
-                      async onDeselect_Resource({ resourceID, resourceName }) {
-                        // const p = await getProcessor('resourceCreatorStep2');
-                        await p.removeTarget({
-                          id: resourceID,
-                          name: resourceName,
-                          type: 'resource',
-                        });
-                      },
-                    });
-                  }}
-                >
-                  <FComponentsLib.FIcons.FConfiguration style={{ fontSize: 14 }} />
-                  <span>{FI18n.i18nNext.t('claim_rely_add_btn')}</span>
-                </FComponentsLib.FTextBtn>
-              </div>
-            </FTooltip>
-          </div>
-
           {
-            size && size.height === 0 && (<>
-              <div style={{ height: 10 }} />
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
-                {
-                  FI18n.i18nNext.t('claim_rely_list_empty').split('\n').map((i, j) => {
-                    return (<FComponentsLib.FContentText key={j} text={i} type={'additional2'} />);
-                  })
-                }
-              </div>
-              <div style={{ height: 20 }} />
-            </>)
+            resourceCreatorPage.step1_createdResourceInfo && (<MicroApp
+              name={'Authorization'}
+              licenseeId={resourceCreatorPage.step1_createdResourceInfo.resourceID}
+              mainAppType={'resourceInVersionUpdate'}
+              depList={[]}
+              upcastList={[]}
+              update={(data: any) => {
+                dispatch<ChangeAction>({
+                  type: 'resourceCreatorPage/change',
+                  payload: {
+                    step2_directDependencies: data.depList,
+                    step2_resolveResources: data.resolveResources,
+                    step2_baseUpcastResources: data.upcastList,
+                    step2_isCompleteAuthorization: true,
+                    // step2_dataIsDirty_count: resourceCreatorPage.step2_dataIsDirty_count + 1,
+                  },
+                });
+              }}
+            />)
           }
 
-          <>
-            {
-              size && size.height > 0 && (<div style={{ height: 20 }} />)
-            }
+          {/*<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>*/}
+          {/*  <FComponentsLib.FContentText text={FI18n.i18nNext.t('claim_rely_title')} type={'highlight'} />*/}
+          {/*  <FTooltip title={FI18n.i18nNext.t('info_versionrely')}>*/}
+          {/*    <div>*/}
+          {/*      <FComponentsLib.FTextBtn*/}
+          {/*        style={{ fontSize: 12, display: 'flex', alignItems: 'center', gap: 5 }}*/}
+          {/*        type='primary'*/}
+          {/*        onClick={async () => {*/}
+          {/*          const p = await getProcessor('resourceCreatorStep2');*/}
+          {/*          const baseUpcastResources: Awaited<ReturnType<typeof p.getBaseUpcastResources>> = await p.getBaseUpcastResources();*/}
+          {/*          await fAddDependencies({*/}
+          {/*            existingResources: (await p.getAllTargets()).map((t) => {*/}
+          {/*              return {*/}
+          {/*                resourceID: t.id,*/}
+          {/*                resourceNme: t.name,*/}
+          {/*              };*/}
+          {/*            }),*/}
+          {/*            baseUpcastResources: baseUpcastResources,*/}
+          {/*            async onSelect_Resource({ resourceID, resourceName }) {*/}
+          {/*              await p.addTargets([{*/}
+          {/*                id: resourceID,*/}
+          {/*                name: resourceName,*/}
+          {/*                type: 'resource',*/}
+          {/*              }]);*/}
+          {/*            },*/}
+          {/*            async onDeselect_Resource({ resourceID, resourceName }) {*/}
+          {/*              // const p = await getProcessor('resourceCreatorStep2');*/}
+          {/*              await p.removeTarget({*/}
+          {/*                id: resourceID,*/}
+          {/*                name: resourceName,*/}
+          {/*                type: 'resource',*/}
+          {/*              });*/}
+          {/*            },*/}
+          {/*          });*/}
+          {/*        }}*/}
+          {/*      >*/}
+          {/*        <FComponentsLib.FIcons.FConfiguration style={{ fontSize: 14 }} />*/}
+          {/*        <span>{FI18n.i18nNext.t('claim_rely_add_btn')}</span>*/}
+          {/*      </FComponentsLib.FTextBtn>*/}
+          {/*    </div>*/}
+          {/*  </FTooltip>*/}
+          {/*</div>*/}
 
-            {/*{*/}
-            {/*  resourceCreatorPage.step1_createdResourceInfo && (<MicroApp*/}
-            {/*    name={'Authorization'}*/}
-            {/*    resourceID={resourceCreatorPage.step1_createdResourceInfo.resourceID}*/}
-            {/*  />)*/}
-            {/*}*/}
+          {/*{*/}
+          {/*  size && size.height === 0 && (<>*/}
+          {/*    <div style={{ height: 10 }} />*/}
+          {/*    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>*/}
+          {/*      {*/}
+          {/*        FI18n.i18nNext.t('claim_rely_list_empty').split('\n').map((i, j) => {*/}
+          {/*          return (<FComponentsLib.FContentText key={j} text={i} type={'additional2'} />);*/}
+          {/*        })*/}
+          {/*      }*/}
+          {/*    </div>*/}
+          {/*    <div style={{ height: 20 }} />*/}
+          {/*  </>)*/}
+          {/*}*/}
+
+          {/*<>*/}
+          {/*  {*/}
+          {/*    size && size.height > 0 && (<div style={{ height: 20 }} />)*/}
+          {/*  }*/}
+
+          {/*  {*/}
+          {/*    resourceCreatorPage.step1_createdResourceInfo && (<MicroApp*/}
+          {/*      name={'Authorization'}*/}
+          {/*      resourceID={resourceCreatorPage.step1_createdResourceInfo.resourceID}*/}
+          {/*    />)*/}
+          {/*  }*/}
 
             {/*<div ref={ref}>*/}
               {/*<FResourceAuthorizationProcessor*/}
@@ -768,7 +792,7 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
               {/*  }}*/}
               {/*/>*/}
             {/* */}
-          </>
+          {/*</>*/}
         </div>
       </div>
 

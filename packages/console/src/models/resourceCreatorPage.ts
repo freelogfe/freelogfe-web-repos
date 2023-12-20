@@ -72,6 +72,25 @@ export interface ResourceCreatorPageModelState {
     input: string;
     select: string[];
   }[];
+
+  step2_directDependencies: {
+    id: string;
+    name: string;
+    type: 'resource' | 'object';
+    versionRange?: string;
+  }[];
+  step2_baseUpcastResources: {
+    resourceID: string;
+    resourceName: string;
+  }[];
+  step2_resolveResources: {
+    resourceId: string;
+    contracts: {
+      policyId: string;
+    }[];
+  }[];
+  step2_isCompleteAuthorization: boolean;
+
   step2_isOpenMarkdown: boolean;
   step2_dataIsDirty_count: number;
 
@@ -276,6 +295,12 @@ export const initStates: ResourceCreatorPageModelState = {
   step2_additionalProperties: [],
   step2_customProperties: [],
   step2_customConfigurations: [],
+
+  step2_directDependencies: [],
+  step2_baseUpcastResources: [],
+  step2_resolveResources: [],
+  step2_isCompleteAuthorization: true,
+
   step2_dataIsDirty_count: 0,
   step2_isOpenMarkdown: false,
 
