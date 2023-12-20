@@ -12,7 +12,7 @@ import { history } from 'umi';
 import { IResourceCreateVersionDraftType } from '@/type/resourceTypes';
 // import fResourceMarkdownEditor from '@/components/fResourceMarkdownEditor';
 import fComicTool from '@/components/fComicTool';
-import { getProcessor } from '@/components/FResourceAuthorizationProcessor';
+// import { getProcessor } from '@/components/FResourceAuthorizationProcessor';
 
 // import moment from 'moment';
 
@@ -1023,82 +1023,93 @@ const Model: ResourceCreatorPageModelType = {
         return;
       }
 
-      const p: {
-        getAllTargets(): void;
-        getAllResourcesWithContracts(): void;
-        isCompleteAuthorization(): void;
-        getBaseUpcastResources(): { resourceID: string; resourceName: string; }[];
-      } = yield call(getProcessor, 'resourceCreatorStep2');
+      // const p: {
+      //   getAllTargets(): void;
+      //   getAllResourcesWithContracts(): void;
+      //   isCompleteAuthorization(): void;
+      //   getBaseUpcastResources(): { resourceID: string; resourceName: string; }[];
+      // } = yield call(getProcessor, 'resourceCreatorStep2');
 
-      const isCompleteAuthorization: boolean = yield call(p.isCompleteAuthorization);
+      // const isCompleteAuthorization: boolean = yield call(p.isCompleteAuthorization);
 
-      if (!isCompleteAuthorization) {
+      if (!resourceCreatorPage.step2_isCompleteAuthorization) {
         fMessage('依赖中存在未获取授权的资源', 'error');
         return;
       }
 
-      const dependentAllResourcesWithContracts: {
-        resourceID: string;
-        resourceName: string;
-        contracts: {
-          policyID: string;
-          contractID: string;
-        }[];
-      }[] = yield call(p.getAllResourcesWithContracts);
-      const dependentAllTargets: {
-        id: string;
-        name: string;
-        type: 'resource' | 'object';
-        versionRange?: string;
-      }[] = yield call(p.getAllTargets);
-
-      const baseUpcastResources: {
-        resourceID: string;
-        resourceName: string;
-      }[] = yield call(p.getBaseUpcastResources);
-
-      const dependencies: {
-        resourceId: string;
-        versionRange: string;
-      }[] = dependentAllTargets
-        .map((r) => {
-          return {
-            resourceId: r.id,
-            versionRange: r.versionRange || '',
-          };
-        });
-      const resolveResources: {
-        resourceId: string;
-        contracts: {
-          policyId: string;
-        }[];
-      }[] = dependentAllResourcesWithContracts
-        .filter((r) => {
-          return r.contracts.length > 0 && baseUpcastResources.every((b) => {
-            return b.resourceID !== r.resourceID;
-          });
-        })
-        .map((r) => {
-          return {
-            resourceId: r.resourceID,
-            contracts: r.contracts.map((c) => {
-              return {
-                policyId: c.policyID,
-              };
-            }),
-          };
-        });
+      // const dependentAllResourcesWithContracts: {
+      //   resourceID: string;
+      //   resourceName: string;
+      //   contracts: {
+      //     policyID: string;
+      //     contractID: string;
+      //   }[];
+      // }[] = yield call(p.getAllResourcesWithContracts);
+      // const dependentAllTargets: {
+      //   id: string;
+      //   name: string;
+      //   type: 'resource' | 'object';
+      //   versionRange?: string;
+      // }[] = yield call(p.getAllTargets);
+      //
+      // const baseUpcastResources: {
+      //   resourceID: string;
+      //   resourceName: string;
+      // }[] = yield call(p.getBaseUpcastResources);
+      //
+      // const dependencies: {
+      //   resourceId: string;
+      //   versionRange: string;
+      // }[] = dependentAllTargets
+      //   .map((r) => {
+      //     return {
+      //       resourceId: r.id,
+      //       versionRange: r.versionRange || '',
+      //     };
+      //   });
+      // const resolveResources: {
+      //   resourceId: string;
+      //   contracts: {
+      //     policyId: string;
+      //   }[];
+      // }[] = dependentAllResourcesWithContracts
+      //   .filter((r) => {
+      //     return r.contracts.length > 0 && baseUpcastResources.every((b) => {
+      //       return b.resourceID !== r.resourceID;
+      //     });
+      //   })
+      //   .map((r) => {
+      //     return {
+      //       resourceId: r.resourceID,
+      //       contracts: r.contracts.map((c) => {
+      //         return {
+      //           policyId: c.policyID,
+      //         };
+      //       }),
+      //     };
+      //   });
 
       const params: Parameters<typeof FServiceAPI.Resource.createVersion>[0] = {
         resourceId: resourceCreatorPage.step1_createdResourceInfo.resourceID,
         version: '1.0.0',
         fileSha1: resourceCreatorPage.step2_fileInfo.sha1,
         filename: resourceCreatorPage.step2_fileInfo.name,
-        baseUpcastResources: baseUpcastResources.map((r) => {
+        // baseUpcastResources: baseUpcastResources.map((r) => {
+        //   return { resourceId: r.resourceID };
+        // }),
+        // dependencies: dependencies,
+        // resolveResources: resolveResources,
+        baseUpcastResources: resourceCreatorPage.step2_baseUpcastResources.map((r) => {
           return { resourceId: r.resourceID };
         }),
-        dependencies: dependencies,
-        resolveResources: resolveResources,
+        dependencies: resourceCreatorPage.step2_directDependencies
+          .map((r) => {
+            return {
+              resourceId: r.id,
+              versionRange: r.versionRange || '',
+            };
+          }),
+        resolveResources: resourceCreatorPage.step2_resolveResources,
         inputAttrs: resourceCreatorPage.step2_additionalProperties
           .filter((ap) => {
             return ap.value !== '';
@@ -1171,18 +1182,18 @@ const Model: ResourceCreatorPageModelType = {
       }
 
       // console.log(resourceCreatorPage.step1_createdResourceInfo, 'resourceCreatorPage.step1_createdResourceInfosiodjflksdjfl sdflksdjlk');
-      let directDependencies: any[] = [];
-      let baseUpcastResources: {
-        resourceID: string;
-        resourceName: string;
-      }[] = [];
-      // console.log(resourceCreatorPage.step2_fileInfo, 'resourceCreatorPage.step2_fileInfoisdjf;lksdjlfkjl');
-      if (resourceCreatorPage.step2_fileInfo) {
-        const p: { getAllTargets(): void; getBaseUpcastResources(): { resourceID: string; resourceName: string; }[] } = yield call(getProcessor, 'resourceCreatorStep2');
-        // console.log(p, 'poisdjflksdjflkjdsklfjlksdjlk');
-        directDependencies = yield call(p.getAllTargets);
-        baseUpcastResources = yield call(p.getBaseUpcastResources);
-      }
+      // let directDependencies: any[] = [];
+      // let baseUpcastResources: {
+      //   resourceID: string;
+      //   resourceName: string;
+      // }[] = [];
+      // // console.log(resourceCreatorPage.step2_fileInfo, 'resourceCreatorPage.step2_fileInfoisdjf;lksdjlfkjl');
+      // if (resourceCreatorPage.step2_fileInfo) {
+      //   const p: { getAllTargets(): void; getBaseUpcastResources(): { resourceID: string; resourceName: string; }[] } = yield call(getProcessor, 'resourceCreatorStep2');
+      //   // console.log(p, 'poisdjflksdjflkjdsklfjlksdjlk');
+      //   directDependencies = yield call(p.getAllTargets);
+      //   baseUpcastResources = yield call(p.getBaseUpcastResources);
+      // }
       // console.log(baseUpcastResources, 'baseUpcastResources oisjdlkfjlsdkjflsdjfljsl');
       // console.log(directDependencies, 'directDependencies urcesoisjdlkfjlsdkjflsdjfljsl');
 
@@ -1197,9 +1208,11 @@ const Model: ResourceCreatorPageModelType = {
         }),
         customProperties: resourceCreatorPage.step2_customProperties,
         customConfigurations: resourceCreatorPage.step2_customConfigurations,
-        directDependencies: directDependencies,
+        // directDependencies: directDependencies,
+        // baseUpcastResources: baseUpcastResources,
+        directDependencies: resourceCreatorPage.step2_directDependencies,
+        baseUpcastResources: resourceCreatorPage.step2_baseUpcastResources,
         descriptionEditorInput: '',
-        baseUpcastResources: baseUpcastResources,
       };
 
       const params: Parameters<typeof FServiceAPI.Resource.saveVersionsDraft>[0] = {
