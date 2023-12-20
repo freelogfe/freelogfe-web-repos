@@ -11,7 +11,7 @@ import fPolicyBuilder from '@/components/fPolicyBuilder';
 import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
 import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
 import * as AHooks from 'ahooks';
-import { getProcessor_simple } from '@/components/FResourceAuthorizationProcessor_Simple';
+// import { getProcessor_simple } from '@/components/FResourceAuthorizationProcessor_Simple';
 import fMessage from '@/components/fMessage';
 import { history } from '@@/core/history';
 import FPrompt from '@/components/FPrompt';
@@ -121,71 +121,71 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
     }[] = [];
 
     for (const item of resourceCreatorBatchPage.resourceListInfo) {
-      const p: {
-        getAllTargets(): Promise<{
-          id: string;
-          name: string;
-          type: 'resource' | 'object';
-          versionRange?: string;
-        }[]>;
-        getAllResourcesWithPolicies(): Promise<{
-          resourceID: string;
-          resourceName: string;
-          policyIDs: string[];
-        }[]>;
-        isCompleteAuthorization(): Promise<boolean>;
-        getBaseUpcastResources(): Promise<{ resourceID: string; resourceName: string; }[]>;
-      } = await getProcessor_simple(item.fileUID);
+      // const p: {
+      //   getAllTargets(): Promise<{
+      //     id: string;
+      //     name: string;
+      //     type: 'resource' | 'object';
+      //     versionRange?: string;
+      //   }[]>;
+      //   getAllResourcesWithPolicies(): Promise<{
+      //     resourceID: string;
+      //     resourceName: string;
+      //     policyIDs: string[];
+      //   }[]>;
+      //   isCompleteAuthorization(): Promise<boolean>;
+      //   getBaseUpcastResources(): Promise<{ resourceID: string; resourceName: string; }[]>;
+      // } = await getProcessor_simple(item.fileUID);
       // console.log(p, 'sdifsldkflsdkfjlkdsjlkjflksdjl');
 
-      const isCompleteAuthorization: boolean = await p.isCompleteAuthorization();
+      // const isCompleteAuthorization: boolean = await p.isCompleteAuthorization();
 
       // console.log(isCompleteAuthorization, 'isCompleteAuthorization sdijf;lksdjflkjsdlkfjlkj');
       // console.log(await p.getAllResourcesWithPolicies(), 'getAllResourcesWithPolicies sdijf;getAllResourcesWithPolicies');
 
-      if (!isCompleteAuthorization) {
+      if (!item.isCompleteAuthorization) {
         fMessage('依赖中存在未获取授权的资源', 'error');
         return;
       }
 
-      const dependentAllResourcesWithPolicies: {
-        resourceID: string;
-        resourceName: string;
-        policyIDs: string[];
-      }[] = await p.getAllResourcesWithPolicies();
+      // const dependentAllResourcesWithPolicies: {
+      //   resourceID: string;
+      //   resourceName: string;
+      //   policyIDs: string[];
+      // }[] = await p.getAllResourcesWithPolicies();
 
-      const dependentAllTargets: {
-        id: string;
-        name: string;
-        type: 'resource' | 'object';
-        versionRange?: string;
-      }[] = await p.getAllTargets();
-      const baseUpcastResources: {
-        resourceID: string;
-        resourceName: string;
-      }[] = await p.getBaseUpcastResources();
+      // const dependentAllTargets: {
+      //   id: string;
+      //   name: string;
+      //   type: 'resource' | 'object';
+      //   versionRange?: string;
+      // }[] = await p.getAllTargets();
+      // const baseUpcastResources: {
+      //   resourceID: string;
+      //   resourceName: string;
+      // }[] = await p.getBaseUpcastResources();
 
-      const resolveResources: {
-        resourceId: string;
-        contracts: {
-          policyId: string;
-        }[];
-      }[] = dependentAllResourcesWithPolicies
-        .filter((r) => {
-          return r.policyIDs.length > 0 && baseUpcastResources.every((b) => {
-            return b.resourceID !== r.resourceID;
-          });
-        })
-        .map((r) => {
-          return {
-            resourceId: r.resourceID,
-            contracts: r.policyIDs.map((policyID) => {
-              return {
-                policyId: policyID,
-              };
-            }),
-          };
-        });
+      // const resolveResources: {
+      //   resourceId: string;
+      //   contracts: {
+      //     policyId: string;
+      //   }[];
+      // }[] = dependentAllResourcesWithPolicies
+      //   .filter((r) => {
+      //     return r.policyIDs.length > 0 && baseUpcastResources.every((b) => {
+      //       return b.resourceID !== r.resourceID;
+      //     });
+      //   })
+      //   .map((r) => {
+      //     return {
+      //       resourceId: r.resourceID,
+      //       contracts: r.policyIDs.map((policyID) => {
+      //         return {
+      //           policyId: policyID,
+      //         };
+      //       }),
+      //     };
+      //   });
 
       createResourceObjects.push({
         name: item.resourceName,
@@ -204,13 +204,6 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
         fileSha1: item.sha1,
         filename: item.fileName,
         description: '',
-        dependencies: dependentAllTargets
-          .map((r) => {
-            return {
-              resourceId: r.id,
-              versionRange: r.versionRange || '',
-            };
-          }),
         customPropertyDescriptors: [
           ...item.customProperties
             .map<NonNullable<Parameters<typeof FServiceAPI.Resource.createVersion>[0]['customPropertyDescriptors']>[number]>
@@ -238,10 +231,28 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
               };
             }),
         ],
-        baseUpcastResources: baseUpcastResources.map((r) => {
+        // dependencies: dependentAllTargets
+        //   .map((r) => {
+        //     return {
+        //       resourceId: r.id,
+        //       versionRange: r.versionRange || '',
+        //     };
+        //   }),
+        // baseUpcastResources: baseUpcastResources.map((r) => {
+        //   return { resourceId: r.resourceID };
+        // }),
+        // resolveResources: resolveResources,
+        baseUpcastResources: item.baseUpcastResources.map((r) => {
           return { resourceId: r.resourceID };
         }),
-        resolveResources: resolveResources,
+        dependencies: item.directDependencies
+          .map((r) => {
+            return {
+              resourceId: r.id,
+              versionRange: r.versionRange || '',
+            };
+          }),
+        resolveResources: item.resolveResources,
         inputAttrs: item.additionalProperties
           .filter((ap) => {
             return ap.value !== '';
