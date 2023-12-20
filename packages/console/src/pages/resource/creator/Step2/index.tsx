@@ -699,7 +699,7 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
               depList={[]}
               upcastList={[]}
               update={(data: any) => {
-                console.log(data, 'datasidjflksdjflkjsdlkjlkj');
+                // console.log(data, 'datasidjflksdjflkjsdlkjlkj');
                 dispatch<ChangeAction>({
                   type: 'resourceCreatorPage/change',
                   payload: {

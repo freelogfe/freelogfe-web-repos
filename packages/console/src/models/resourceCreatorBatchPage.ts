@@ -61,6 +61,13 @@ export type ResourceCreatorBatchPageState = {
       resourceID: string;
       resourceName: string;
     }[];
+    resolveResources: {
+      resourceId: string;
+      contracts: {
+        policyId: string;
+      }[];
+    }[];
+    isCompleteAuthorization: boolean;
   }[];
 
   resultList: {

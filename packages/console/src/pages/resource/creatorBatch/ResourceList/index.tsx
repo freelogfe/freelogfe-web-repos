@@ -414,6 +414,8 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
           customConfigurations: [],
           directDependencies: [],
           baseUpcastResources: [],
+          resolveResources: [],
+          isCompleteAuthorization: true,
         };
       }),
     ];

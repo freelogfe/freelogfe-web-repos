@@ -17,6 +17,8 @@ import FResourceAuthorizationProcessor_Simple, { getProcessor_simple } from '@/c
 import fMessage from '@/components/fMessage';
 import FUploadCover from '@/components/FUploadCover';
 import fPolicyBuilder from '@/components/fPolicyBuilder';
+import { ChangeAction } from '@/models/resourceCreatorPage';
+import { MicroApp } from '@@/plugin-qiankun/MicroApp';
 
 interface CardProps {
   order: number;
@@ -73,6 +75,13 @@ interface CardProps {
       resourceID: string;
       resourceName: string;
     }[];
+    resolveResources: {
+      resourceId: string;
+      contracts: {
+        policyId: string;
+      }[];
+    }[];
+    isCompleteAuthorization: boolean;
   };
 
   onChange?(value: CardProps['info']): void;
@@ -500,17 +509,6 @@ function Card({
                 return;
               }
 
-              // await dispatch<OnChange_step2_customProperties_Action>({
-              //   type: 'resourceCreatorPage/onChange_step2_customProperties',
-              //   payload: {
-              //     value: resourceCreatorPage.step2_customProperties.map((v, i) => {
-              //       if (i !== index) {
-              //         return v;
-              //       }
-              //       return dataSource;
-              //     }),
-              //   },
-              // });
               onChange && onChange({
                 ...info,
                 customProperties: info.customProperties.map((v, i) => {
@@ -522,15 +520,6 @@ function Card({
               });
             }}
             onDelete_alterableData={async (value) => {
-              // console.log(value, 'AAAAAAsdofijsdflksdjfldsjlkj');
-              // await dispatch<OnChange_step2_customProperties_Action>({
-              //   type: 'resourceCreatorPage/onChange_step2_customProperties',
-              //   payload: {
-              //     value: resourceCreatorPage.step2_customProperties.filter((v, i) => {
-              //       return v.key !== value.key && v.name !== value.name;
-              //     }),
-              //   },
-              // });
               onChange && onChange({
                 ...info,
                 customProperties: info.customProperties.filter((v, i) => {
@@ -583,15 +572,6 @@ function Card({
                               return;
                             }
 
-                            //   await dispatch<OnChange_step2_customConfigurations_Action>({
-                            //   type: 'resourceCreatorPage/onChange_step2_customConfigurations',
-                            //   payload: {
-                            //   value: [
-                            //   ...info.customConfigurations,
-                            //   dataSource,
-                            //   ],
-                            // },
-                            // });
                             onChange && onChange({
                               ...info,
                               customConfigurations: [
@@ -663,18 +643,6 @@ function Card({
                         return;
                       }
 
-                      //   await dispatch<OnChange_step2_customConfigurations_Action>({
-                      //   type: 'resourceCreatorPage/onChange_step2_customConfigurations',
-                      //   payload: {
-                      //   value: resourceCreatorPage.step2_customConfigurations.map((a, b) => {
-                      //   if (b !== index) {
-                      //   return a;
-                      // }
-                      //   return dataSource;
-                      // }),
-                      // },
-                      // });
-
                       onChange && onChange({
                         ...info,
                         customConfigurations: info.customConfigurations.map((a, b) => {
@@ -686,15 +654,6 @@ function Card({
                       });
                     }}
                     onDelete={async (value) => {
-                      //   await dispatch<OnChange_step2_customConfigurations_Action>({
-                      //   type: 'resourceCreatorPage/onChange_step2_customConfigurations',
-                      //   payload: {
-                      //   value: resourceCreatorPage.step2_customConfigurations.filter((a) => {
-                      //   return a.key !== value.key && a.name !== value.name;
-                      // }),
-                      // },
-                      // });
-
                       onChange && onChange({
                         ...info,
                         customConfigurations: info.customConfigurations.filter((a) => {
@@ -715,78 +674,95 @@ function Card({
     {/*<div style={{height: 5}}/>*/}
 
     <div className={styles.block} style={{ display: $showMore ? 'block' : 'none' }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <FComponentsLib.FContentText text={FI18n.i18nNext.t('claim_rely_title')} type={'highlight'} />
-        <FTooltip title={FI18n.i18nNext.t('info_versionrely')}>
-          <div>
-            <FComponentsLib.FTextBtn
-              style={{ fontSize: 12, display: 'flex', alignItems: 'center', gap: 5 }}
-              type='primary'
-              onClick={async () => {
-                const p = await getProcessor_simple(info.fileUID);
-                const baseUpcastResources: Awaited<ReturnType<typeof p.getBaseUpcastResources>> = await p.getBaseUpcastResources();
-                await fAddDependencies({
-                  existingResources: (await p.getAllTargets()).map((t) => {
-                    return {
-                      resourceID: t.id,
-                      resourceNme: t.name,
-                    };
-                  }),
-                  baseUpcastResources: baseUpcastResources,
-                  async onSelect_Resource({ resourceID, resourceName }) {
-                    await p.addTargets([{
-                      id: resourceID,
-                      name: resourceName,
-                      type: 'resource',
-                    }]);
-                  },
-                  async onDeselect_Resource({ resourceID, resourceName }) {
-                    // const p = await getProcessor('resourceCreatorStep2');
-                    await p.removeTarget({
-                      id: resourceID,
-                      name: resourceName,
-                      type: 'resource',
-                    });
-                  },
-                });
-              }}
-            >
-              <FComponentsLib.FIcons.FConfiguration style={{ fontSize: 14 }} />
-              <span>{FI18n.i18nNext.t('claim_rely_add_btn')}</span>
-            </FComponentsLib.FTextBtn>
-          </div>
-        </FTooltip>
-      </div>
 
-      {
-        size && size.height === 0 && (<>
-          <div style={{ height: 10 }} />
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
-            {
-              FI18n.i18nNext.t('claim_rely_list_empty').split('\n').map((i, j) => {
-                return (<FComponentsLib.FContentText key={j} text={i} type={'additional2'} />);
-              })
-            }
-          </div>
-          <div style={{ height: 20 }} />
-        </>)
-      }
+      <MicroApp
+        name={'Authorization'}
+        licenseeId={''}
+        mainAppType={'resourceInBatchPublish'}
+        depList={[]}
+        upcastList={[]}
+        update={(data: any) => {
+          onChange && onChange({
+            ...info,
+            directDependencies: data.depList,
+            resolveResources: data.resolveResources,
+            baseUpcastResources: data.upcastList,
+            isCompleteAuthorization: true,
+          });
+        }}
+      />
+      {/*<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>*/}
+      {/*  <FComponentsLib.FContentText text={FI18n.i18nNext.t('claim_rely_title')} type={'highlight'} />*/}
+      {/*  <FTooltip title={FI18n.i18nNext.t('info_versionrely')}>*/}
+      {/*    <div>*/}
+      {/*      <FComponentsLib.FTextBtn*/}
+      {/*        style={{ fontSize: 12, display: 'flex', alignItems: 'center', gap: 5 }}*/}
+      {/*        type='primary'*/}
+      {/*        onClick={async () => {*/}
+      {/*          const p = await getProcessor_simple(info.fileUID);*/}
+      {/*          const baseUpcastResources: Awaited<ReturnType<typeof p.getBaseUpcastResources>> = await p.getBaseUpcastResources();*/}
+      {/*          await fAddDependencies({*/}
+      {/*            existingResources: (await p.getAllTargets()).map((t) => {*/}
+      {/*              return {*/}
+      {/*                resourceID: t.id,*/}
+      {/*                resourceNme: t.name,*/}
+      {/*              };*/}
+      {/*            }),*/}
+      {/*            baseUpcastResources: baseUpcastResources,*/}
+      {/*            async onSelect_Resource({ resourceID, resourceName }) {*/}
+      {/*              await p.addTargets([{*/}
+      {/*                id: resourceID,*/}
+      {/*                name: resourceName,*/}
+      {/*                type: 'resource',*/}
+      {/*              }]);*/}
+      {/*            },*/}
+      {/*            async onDeselect_Resource({ resourceID, resourceName }) {*/}
+      {/*              // const p = await getProcessor('resourceCreatorStep2');*/}
+      {/*              await p.removeTarget({*/}
+      {/*                id: resourceID,*/}
+      {/*                name: resourceName,*/}
+      {/*                type: 'resource',*/}
+      {/*              });*/}
+      {/*            },*/}
+      {/*          });*/}
+      {/*        }}*/}
+      {/*      >*/}
+      {/*        <FComponentsLib.FIcons.FConfiguration style={{ fontSize: 14 }} />*/}
+      {/*        <span>{FI18n.i18nNext.t('claim_rely_add_btn')}</span>*/}
+      {/*      </FComponentsLib.FTextBtn>*/}
+      {/*    </div>*/}
+      {/*  </FTooltip>*/}
+      {/*</div>*/}
 
-      <>
-        {
-          size && size.height > 0 && (<div style={{ height: 20 }} />)
-        }
-        <div ref={ref}>
-          <FResourceAuthorizationProcessor_Simple
-            width={860}
-            height={600}
-            // resourceID={'655f068d5ecea7002f400b59'}
-            processorIdentifier={info.fileUID}
-            onChanged={() => {
-            }}
-          />
-        </div>
-      </>
+      {/*{*/}
+      {/*  size && size.height === 0 && (<>*/}
+      {/*    <div style={{ height: 10 }} />*/}
+      {/*    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>*/}
+      {/*      {*/}
+      {/*        FI18n.i18nNext.t('claim_rely_list_empty').split('\n').map((i, j) => {*/}
+      {/*          return (<FComponentsLib.FContentText key={j} text={i} type={'additional2'} />);*/}
+      {/*        })*/}
+      {/*      }*/}
+      {/*    </div>*/}
+      {/*    <div style={{ height: 20 }} />*/}
+      {/*  </>)*/}
+      {/*}*/}
+
+      {/*<>*/}
+      {/*  {*/}
+      {/*    size && size.height > 0 && (<div style={{ height: 20 }} />)*/}
+      {/*  }*/}
+      {/*  <div ref={ref}>*/}
+      {/*    <FResourceAuthorizationProcessor_Simple*/}
+      {/*      width={860}*/}
+      {/*      height={600}*/}
+      {/*      // resourceID={'655f068d5ecea7002f400b59'}*/}
+      {/*      processorIdentifier={info.fileUID}*/}
+      {/*      onChanged={() => {*/}
+      {/*      }}*/}
+      {/*    />*/}
+      {/*  </div>*/}
+      {/*</>*/}
     </div>
   </div>);
 }
