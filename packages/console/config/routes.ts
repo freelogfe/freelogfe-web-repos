@@ -71,24 +71,24 @@ export default [
             ]
           },
           { exact: true, path: 'versionCreator/:id', component: '../pages/resource/versionCreator/$id', title: '版本创建 - Freelog' },
-          {
-            path: 'version',
-            routes: [
-              {
-                exact: true,
-                path: 'creator/:id',
-                component: '../pages/resource/version/creator/$id',
-                title: '版本创建 - Freelog',
-              },
-              {
-                exact: true,
-                path: 'info/:id',
-                component: '../pages/resource/version/info/$id',
-                title: '版本信息 - Freelog',
-              },
-              { component: '../pages/exception/404' },
-            ],
-          },
+          // {
+          //   path: 'version',
+          //   routes: [
+          //     {
+          //       exact: true,
+          //       path: 'creator/:id',
+          //       component: '../pages/resource/version/creator/$id',
+          //       title: '版本创建 - Freelog',
+          //     },
+          //     {
+          //       exact: true,
+          //       path: 'info/:id',
+          //       component: '../pages/resource/version/info/$id',
+          //       title: '版本信息 - Freelog',
+          //     },
+          //     { component: '../pages/exception/404' },
+          //   ],
+          // },
           { component: '../pages/exception/404' },
         ],
       },
