@@ -1069,6 +1069,7 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
                   depList={resourceVersionCreatorPage.directDependencies}
                   upcastList={resourceVersionCreatorPage.baseUpcastResources}
                   update={(data: any) => {
+                    console.log(data, 'resourceInVersionUpdate ____________________ data sdifjlskdfjlkjlk');
                     dispatch<ChangeAction>({
                       type: 'resourceVersionCreatorPage/change',
                       payload: {

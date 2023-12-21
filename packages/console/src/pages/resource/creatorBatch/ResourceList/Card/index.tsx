@@ -682,6 +682,7 @@ function Card({
         depList={[]}
         upcastList={[]}
         update={(data: any) => {
+          console.log(data, 'resourceInBatchPublish ____________________ data sdifjlskdfjlkjlk');
           onChange && onChange({
             ...info,
             directDependencies: data.depList,

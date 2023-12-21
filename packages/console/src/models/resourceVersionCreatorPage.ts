@@ -545,72 +545,11 @@ const Model: ResourceVersionCreatorModelType = {
           dataIsDirty: false,
         },
       });
-      // const p: {
-      //   getAllTargets(): void;
-      //   getAllResourcesWithContracts(): void;
-      //   isCompleteAuthorization(): void;
-      //   getBaseUpcastResources(): { resourceID: string; resourceName: string; }[];
-      // } = yield call(getProcessor, 'resourceVersionCreator');
-      //
-      // const isCompleteAuthorization: boolean = yield call(p.isCompleteAuthorization);
 
       if (!resourceVersionCreatorPage.isCompleteAuthorization) {
         fMessage('依赖中存在未获取授权的资源', 'error');
         return;
       }
-
-      // const dependentAllResourcesWithContracts: {
-      //   resourceID: string;
-      //   resourceName: string;
-      //   contracts: {
-      //     policyID: string;
-      //     contractID: string;
-      //   }[];
-      // }[] = yield call(p.getAllResourcesWithContracts);
-      // const dependentAllTargets: {
-      //   id: string;
-      //   name: string;
-      //   type: 'resource' | 'object';
-      //   versionRange?: string;
-      // }[] = yield call(p.getAllTargets);
-      //
-      // const baseUpcastResources: {
-      //   resourceID: string;
-      //   resourceName: string;
-      // }[] = yield call(p.getBaseUpcastResources);
-
-      // const dependencies: {
-      //   resourceId: string;
-      //   versionRange: string;
-      // }[] = dependentAllTargets
-      //   .map((r) => {
-      //     return {
-      //       resourceId: r.id,
-      //       versionRange: r.versionRange || '',
-      //     };
-      //   });
-      // const resolveResources: {
-      //   resourceId: string;
-      //   contracts: {
-      //     policyId: string;
-      //   }[];
-      // }[] = dependentAllResourcesWithContracts
-      //   .filter((r) => {
-      //     return r.contracts.length > 0 && baseUpcastResources.every((b) => {
-      //       return b.resourceID !== r.resourceID;
-      //     });
-      //   })
-      //   .map((r) => {
-      //     return {
-      //       resourceId: r.resourceID,
-      //       contracts: r.contracts.map((c) => {
-      //         return {
-      //           policyId: c.policyID,
-      //         };
-      //       }),
-      //     };
-      //   });
-
 
       const params: Parameters<typeof FServiceAPI.Resource.createVersion>[0] = {
         resourceId: resourceVersionCreatorPage.resourceInfo.resourceID,
