@@ -359,6 +359,17 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
       }),
     ];
 
+    if (resourceListInfo.length === 0) {
+      dispatch<ChangeAction>({
+        type: 'resourceCreatorBatchPage/change',
+        payload: {
+          showPage: 'uploadFile',
+          // resourceListInfo: resourceListInfo,
+        },
+      });
+      return;
+    }
+
     if (resourceListInfo.length > 20) {
       fMessage('上传不能超过20个文件', 'warning');
       resourceListInfo = resourceListInfo.slice(0, 20);
