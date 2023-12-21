@@ -29,7 +29,7 @@ interface TaskProps {
 
 function Task({ file, resourceTypeCode, onSuccess, onFail }: TaskProps) {
   const canceler = React.useRef<Canceler | null>(null);
-  const [$taskState, set$taskState, get$taskState] = FUtil.Hook.useGetState<'loading' | 'uploading' | 'parsing' | 'success' | 'failed' >('loading');
+  const [$taskState, set$taskState, get$taskState] = FUtil.Hook.useGetState<'loading' | 'uploading' | 'parsing' | 'success' | 'failed' | 'canceled' >('loading');
   const [$progress, set$progress, get$progress] = FUtil.Hook.useGetState<number>(0);
 
   AHooks.useMount(async () => {
@@ -141,7 +141,7 @@ function Task({ file, resourceTypeCode, onSuccess, onFail }: TaskProps) {
           <FComponentsLib.FTextBtn
             type='default'
             onClick={async () => {
-              set$taskState('failed');
+              set$taskState('canceled');
               canceler.current && canceler.current();
               // const fileSha1: string = await FUtil.Tool.getSHA1Hash(file);
               // onFail && onFail({
@@ -174,6 +174,18 @@ function Task({ file, resourceTypeCode, onSuccess, onFail }: TaskProps) {
     {/*    }}*/}
     {/*  />)*/}
     {/*}*/}
+    {
+      $taskState === 'canceled' && (<div className={styles.UploadFailed}>
+        <span>取消上传</span>
+        {/*<FComponentsLib.FTextBtn*/}
+        {/*  type='primary'*/}
+        {/*  onClick={() => {*/}
+
+        {/*  }}>*/}
+        {/*  <RedoOutlined />*/}
+        {/*</FComponentsLib.FTextBtn>*/}
+      </div>)
+    }
     {/*{*/}
     {/*  taskState === 'sameName' && (<UploadSameName*/}
     {/*    onClick={async () => {*/}

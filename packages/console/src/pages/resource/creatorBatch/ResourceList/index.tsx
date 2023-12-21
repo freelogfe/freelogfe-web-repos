@@ -121,71 +121,10 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
     }[] = [];
 
     for (const item of resourceCreatorBatchPage.resourceListInfo) {
-      // const p: {
-      //   getAllTargets(): Promise<{
-      //     id: string;
-      //     name: string;
-      //     type: 'resource' | 'object';
-      //     versionRange?: string;
-      //   }[]>;
-      //   getAllResourcesWithPolicies(): Promise<{
-      //     resourceID: string;
-      //     resourceName: string;
-      //     policyIDs: string[];
-      //   }[]>;
-      //   isCompleteAuthorization(): Promise<boolean>;
-      //   getBaseUpcastResources(): Promise<{ resourceID: string; resourceName: string; }[]>;
-      // } = await getProcessor_simple(item.fileUID);
-      // console.log(p, 'sdifsldkflsdkfjlkdsjlkjflksdjl');
-
-      // const isCompleteAuthorization: boolean = await p.isCompleteAuthorization();
-
-      // console.log(isCompleteAuthorization, 'isCompleteAuthorization sdijf;lksdjflkjsdlkfjlkj');
-      // console.log(await p.getAllResourcesWithPolicies(), 'getAllResourcesWithPolicies sdijf;getAllResourcesWithPolicies');
-
       if (!item.isCompleteAuthorization) {
         fMessage('依赖中存在未获取授权的资源', 'error');
         return;
       }
-
-      // const dependentAllResourcesWithPolicies: {
-      //   resourceID: string;
-      //   resourceName: string;
-      //   policyIDs: string[];
-      // }[] = await p.getAllResourcesWithPolicies();
-
-      // const dependentAllTargets: {
-      //   id: string;
-      //   name: string;
-      //   type: 'resource' | 'object';
-      //   versionRange?: string;
-      // }[] = await p.getAllTargets();
-      // const baseUpcastResources: {
-      //   resourceID: string;
-      //   resourceName: string;
-      // }[] = await p.getBaseUpcastResources();
-
-      // const resolveResources: {
-      //   resourceId: string;
-      //   contracts: {
-      //     policyId: string;
-      //   }[];
-      // }[] = dependentAllResourcesWithPolicies
-      //   .filter((r) => {
-      //     return r.policyIDs.length > 0 && baseUpcastResources.every((b) => {
-      //       return b.resourceID !== r.resourceID;
-      //     });
-      //   })
-      //   .map((r) => {
-      //     return {
-      //       resourceId: r.resourceID,
-      //       contracts: r.policyIDs.map((policyID) => {
-      //         return {
-      //           policyId: policyID,
-      //         };
-      //       }),
-      //     };
-      //   });
 
       createResourceObjects.push({
         name: item.resourceName,
@@ -231,17 +170,6 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
               };
             }),
         ],
-        // dependencies: dependentAllTargets
-        //   .map((r) => {
-        //     return {
-        //       resourceId: r.id,
-        //       versionRange: r.versionRange || '',
-        //     };
-        //   }),
-        // baseUpcastResources: baseUpcastResources.map((r) => {
-        //   return { resourceId: r.resourceID };
-        // }),
-        // resolveResources: resolveResources,
         baseUpcastResources: item.baseUpcastResources.map((r) => {
           return { resourceId: r.resourceID };
         }),
@@ -442,11 +370,6 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
         resourceListInfo: resourceListInfo,
       },
     });
-
-    // set$files([]);
-    // set$successFiles([]);
-    // set$failFiles([]);
-
   }
 
   return (<>
