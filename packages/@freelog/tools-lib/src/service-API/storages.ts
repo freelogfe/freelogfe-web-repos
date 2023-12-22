@@ -258,6 +258,20 @@ export function uploadImage(params: UploadImageParamsType, config?: AxiosRequest
   });
 }
 
+// 处理图片文件
+interface HandleImageParamsType {
+  sha1: string;
+}
+
+export function handleImage(params: HandleImageParamsType) {
+  return FUtil.Request({
+    method: 'POST',
+    url: `/v2/storages/files/imageHandle`,
+    data: params,
+    // ...config,
+  });
+}
+
 // 更新存储对象属性
 interface UpdateObjectParamsType {
   objectIdOrName: string;
