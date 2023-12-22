@@ -263,6 +263,25 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
       resourceTypeCode: resourceCreatorBatchPage.selectedResourceType?.value || '',
     });
 
+    let covers: string[] = [];
+    if (resourceCreatorBatchPage.selectedResourceType?.labels.includes('图片')) {
+      // console.error(info, 'info 89weijufoliksjdlfkjsdlkfjlkdsjflksdjlfkj');
+      const coverPromise = successFiles.map((o) => {
+        return FServiceAPI.Storage.handleImage({
+          sha1: o.sha1,
+        });
+      });
+      const res: { ret: number, errCode: number, data: { url: string } }[] = await Promise.all(coverPromise);
+
+      // console.error(res, 'res sdflksdjflksjdlkfjlksdjflsdjlfjlskdjlk');
+      covers = res.map(({ ret, errCode, data }) => {
+        if (ret === 0 && errCode === 0) {
+          return data.url || '';
+        }
+        return '';
+      });
+    }
+
     // console.log(result, 'result sdifj;lsdkjfljl');
     let resourceListInfo = [
       ...resourceCreatorBatchPage.resourceListInfo.map((resource) => {
@@ -272,7 +291,7 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
           resourceName,
         };
       }),
-      ...successFiles.map((f) => {
+      ...successFiles.map((f, f_index) => {
         let resourceName: string = '';
         const key: string = getARightName(f.name);
         if (key !== '') {
@@ -288,7 +307,7 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
           fileUID: f.uid,
           fileName: f.name,
           sha1: f.sha1,
-          cover: '',
+          cover: covers[f_index] || '',
           resourceName: resourceName,
           resourceNameError: resourceName === '' ? '请输入资源授权标识' : '',
           resourceTitle: resourceTitle,
@@ -424,17 +443,19 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
                     map.set(info.resourceName, (map.get(info.resourceName) || 0) + 1);
                   }
 
+                  const dataSource = resourceListInfo.map((info) => {
+                    return {
+                      ...info,
+                      resourceNameError: (info.resourceNameError !== '' && info.resourceNameError !== '不能重复')
+                        ? info.resourceNameError
+                        : ((map.get(info.resourceName) || 0) > 1 ? '不能重复' : ''),
+                    };
+                  });
+                  set$dataSource(dataSource);
                   dispatch<ChangeAction>({
                     type: 'resourceCreatorBatchPage/change',
                     payload: {
-                      resourceListInfo: resourceListInfo.map((info) => {
-                        return {
-                          ...info,
-                          resourceNameError: (info.resourceNameError !== '' && info.resourceNameError !== '不能重复')
-                            ? info.resourceNameError
-                            : ((map.get(info.resourceName) || 0) > 1 ? '不能重复' : ''),
-                        };
-                      }),
+                      resourceListInfo: dataSource,
                     },
                   });
                 }}

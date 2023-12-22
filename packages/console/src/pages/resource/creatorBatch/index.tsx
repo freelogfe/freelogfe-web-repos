@@ -9,8 +9,8 @@ import Finish from './Finish';
 import * as AHooks from 'ahooks';
 import { Dispatch } from 'redux';
 import { ChangeAction, OnMount_Page_Action, OnUnmount_Page_Action } from '@/models/resourceCreatorBatchPage';
-import Task from '@/pages/resource/creatorBatch/UploadFile/Task';
-import { Modal } from 'antd';
+// import Task from '@/pages/resource/creatorBatch/UploadFile/Task';
+// import { Modal } from 'antd';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import { RcFile } from 'antd/lib/upload/interface';
 import { getFilesSha1Info } from '@/utils/service';
@@ -18,6 +18,8 @@ import fMessage from '@/components/fMessage';
 import fReadLocalFiles from '@/components/fReadLocalFiles';
 import fObjectsSelectorDrawer from '@/components/fObjectsSelectorDrawer';
 import { getTaskHandler } from '@/components/FResourceBatchUpload';
+
+// import { createBatch } from '../../../../../@freelog/tools-lib/dist/service-API/resources';
 
 interface CreatorBatchProps {
   dispatch: Dispatch;
@@ -100,6 +102,25 @@ function CreatorBatch({ dispatch, resourceCreatorBatchPage }: CreatorBatchProps)
       resourceTypeCode: resourceCreatorBatchPage.selectedResourceType?.value || '',
     });
 
+    let covers: string[] = [];
+    if (resourceCreatorBatchPage.selectedResourceType?.labels.includes('图片')) {
+      // console.error(info, 'info 89weijufoliksjdlfkjsdlkfjlkdsjflksdjlfkj');
+      const coverPromise = data_objs.map((o) => {
+        return FServiceAPI.Storage.handleImage({
+          sha1: o.sha1,
+        });
+      });
+      const res: { ret: number, errCode: number, data: { url: string } }[] = await Promise.all(coverPromise);
+
+      // console.error(res, 'res sdflksdjflksjdlkfjlksdjflsdjlfjlskdjlk');
+      covers = res.map(({ ret, errCode, data }) => {
+        if (ret === 0 && errCode === 0) {
+          return data.url || '';
+        }
+        return '';
+      });
+    }
+
     let resourceListInfo = [
       ...resourceCreatorBatchPage.resourceListInfo.map((resource) => {
         const resourceName = copyData_ResourceNames[resource.resourceName].resourceNewNames.shift() || '';
@@ -123,7 +144,7 @@ function CreatorBatch({ dispatch, resourceCreatorBatchPage }: CreatorBatchProps)
           fileUID: String(resourceCreatorBatchPage.resourceListInfo.length + obj_index),
           fileName: obj.objectName,
           sha1: obj.sha1,
-          cover: '',
+          cover: covers[obj_index] || '',
           resourceName: resourceName,
           resourceNameError: '',
           resourceTitle: resourceTitle,

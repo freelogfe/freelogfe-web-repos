@@ -108,6 +108,12 @@ function Card({
   const [$showMore, set$showMore, get$showMore] = FUtil.Hook.useGetState<boolean>(false);
   const [$dataSource, set$dataSource, get$dataSource] = FUtil.Hook.useGetState<CardProps['info']>(info);
 
+  // AHooks.useMount(async () => {
+  //
+  //
+  //
+  // });
+
   React.useEffect(() => {
     set$dataSource(info);
   }, [info]);
