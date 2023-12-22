@@ -55,8 +55,9 @@ import { withRouter, history } from 'umi';
 import FMicroApp_MarkdownEditorDrawer from '@/components/FMicroApp_MarkdownEditorDrawer';
 import { getFilesSha1Info } from '@/utils/service';
 import fMessage from '@/components/fMessage';
-import { MicroApp } from '@@/plugin-qiankun/MicroApp';
+import { MicroApp } from 'umi';
 import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
+import FMicroAPP_Authorization from '@/components/FMicroAPP_Authorization';
 
 interface VersionCreatorProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -1062,8 +1063,8 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
 
             <div className={styles.block}>
               {
-                resourceVersionCreatorPage.resourceInfo && (<MicroApp
-                  name={'Authorization'}
+                resourceVersionCreatorPage.resourceInfo && (<FMicroAPP_Authorization
+                  // name={'Authorization'}
                   licenseeId={resourceVersionCreatorPage.resourceInfo.resourceID}
                   mainAppType={'resourceInVersionUpdate'}
                   depList={resourceVersionCreatorPage.directDependencies}

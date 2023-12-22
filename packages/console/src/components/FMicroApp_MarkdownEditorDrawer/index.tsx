@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import { MicroApp } from '@@/plugin-qiankun/MicroApp';
+import { MicroApp } from 'umi';
 import { Drawer } from 'antd';
 
 interface FMicroApp_MarkdownEditorDrawer_Props {

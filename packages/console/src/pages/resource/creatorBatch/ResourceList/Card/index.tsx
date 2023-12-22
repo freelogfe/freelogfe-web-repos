@@ -18,7 +18,8 @@ import fMessage from '@/components/fMessage';
 import FUploadCover from '@/components/FUploadCover';
 import fPolicyBuilder from '@/components/fPolicyBuilder';
 // import { ChangeAction } from '@/models/resourceCreatorPage';
-import { MicroApp } from '@@/plugin-qiankun/MicroApp';
+import { MicroApp } from 'umi';
+import FMicroAPP_Authorization from '@/components/FMicroAPP_Authorization';
 
 interface CardProps {
   order: number;
@@ -680,8 +681,8 @@ function Card({
 
     {
       $showMore && (<div className={styles.block}>
-        <MicroApp
-          name={'Authorization'}
+        <FMicroAPP_Authorization
+          // name={'Authorization'}
           licenseeId={''}
           mainAppType={'resourceInBatchPublish'}
           depList={[]}
