@@ -31,6 +31,11 @@ interface ResourceListProps {
 function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImportStorage }: ResourceListProps) {
 
   const [$username, set$username, get$username] = FUtil.Hook.useGetState<string>('');
+  const [$dataSource, set$dataSource, get$dataSource] = FUtil.Hook.useGetState<typeof resourceCreatorBatchPage.resourceListInfo>(resourceCreatorBatchPage.resourceListInfo);
+
+  React.useEffect(() => {
+    set$dataSource(resourceCreatorBatchPage.resourceListInfo);
+  }, [resourceCreatorBatchPage.resourceListInfo]);
 
   AHooks.useMount(async () => {
     const { data }: {
@@ -41,40 +46,6 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
     // console.log(data, 'data sdifjals;dkfjl;ksdjlfkjlskdjflkjl');
     set$username(data.username);
   });
-
-  // React.useEffect(() => {
-  //   if (resourceCreatorBatchPage.resourceListInfo.length === 0) {
-  //     dispatch<ChangeAction>({
-  //       type: 'resourceCreatorBatchPage/change',
-  //       payload: {
-  //         // showPage: 'uploadFile',
-  //       },
-  //     });
-  //   }
-  // }, [resourceCreatorBatchPage.resourceListInfo.length]);
-
-  // function very() {
-  //   const map: Map<string, number> = new Map<string, number>();
-  //
-  //   // console.log(resourceCreatorBatchPage.resourceListInfo, 'resourceCreatorBatchPage.resourceListInfo sdiofjlsdkjlk');
-  //   for (const info of resourceCreatorBatchPage.resourceListInfo) {
-  //     map.set(info.resourceName, (map.get(info.resourceName) || 0) + 1);
-  //   }
-  //
-  //   dispatch<ChangeAction>({
-  //     type: 'resourceCreatorBatchPage/change',
-  //     payload: {
-  //       resourceListInfo: resourceCreatorBatchPage.resourceListInfo.map((info) => {
-  //         return {
-  //           ...info,
-  //           resourceNameError: (info.resourceNameError !== '' && info.resourceNameError !== '不能重复')
-  //             ? info.resourceNameError
-  //             : ((map.get(info.resourceName) || 0) > 1 ? '不能重复' : ''),
-  //         };
-  //       }),
-  //     },
-  //   });
-  // }
 
   async function onClickRelease() {
     const createResourceObjects: {
@@ -426,7 +397,7 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
           />
 
         </div>
-
+        {/*{console.log(resourceCreatorBatchPage.resourceListInfo, 'resourceCreatorBatchPage.resourceListInfo sdflkjsdlfjlsdjflkj +++++++++++++++++++++++++++++++++++')}*/}
         {
           resourceCreatorBatchPage.resourceListInfo.map((r, ri) => {
             return (<React.Fragment key={r.fileUID}>
@@ -437,12 +408,15 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
                 username={$username}
                 info={r}
                 onChange={(value) => {
-                  const resourceListInfo = resourceCreatorBatchPage.resourceListInfo.map((rli) => {
+                  // console.error(value, 'VVVVVVVVVVVVVVVVVVVVVV*******************************');
+                  // const resourceListInfo = resourceCreatorBatchPage.resourceListInfo.map((rli) => {
+                  const resourceListInfo = get$dataSource().map((rli) => {
                     if (value.fileUID !== rli.fileUID) {
                       return rli;
                     }
                     return value;
                   });
+                  // console.log(resourceListInfo, 'resourceListInfo sdifjlksdjflkjlksj------------------');
                   const map: Map<string, number> = new Map<string, number>();
 
                   // console.log(resourceCreatorBatchPage.resourceListInfo, 'resourceCreatorBatchPage.resourceListInfo sdiofjlsdkjlk');
@@ -502,9 +476,6 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
                     },
                   });
                 }}
-                // onAddPolicy={async () => {
-                //
-                // }}
                 onClickApplyPolicies={(resourceCreatorBatchPage.resourceListInfo.length <= 1 || r.resourcePolicies.length === 0) ? undefined : async () => {
 
                   let confirm: boolean = await fPromiseModalConfirm({

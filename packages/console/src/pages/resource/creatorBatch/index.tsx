@@ -209,7 +209,7 @@ function CreatorBatch({ dispatch, resourceCreatorBatchPage }: CreatorBatchProps)
     });
 
     const handler = await getTaskHandler();
-    console.log(handler, 'handler sdifjlskdjflksdjlkfjlk');
+    // console.log(handler, 'handler sdifjlskdjflksdjlkfjlk');
 
     handler.addTask(files);
 
