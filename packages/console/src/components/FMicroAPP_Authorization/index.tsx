@@ -32,9 +32,6 @@ function FMicroAPP_Authorization({
   });
 
   return (<>
-    <Button onClick={() => {
-      console.log(microAppRef.current, 'microAppRef.current.unmount sdifjlskdjflksdjlkfjdslkfjlkj');
-    }}>1111</Button>
     <MicroApp
       ref={microAppRef}
       name={'Authorization'}
