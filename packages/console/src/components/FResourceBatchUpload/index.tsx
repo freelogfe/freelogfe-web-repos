@@ -43,6 +43,10 @@ function FResourceBatchUpload({ resourceTypeCode, onSuccess }: FResourceBatchUpl
     taskHandler = panel;
   });
 
+  AHooks.useUnmount(() => {
+    taskHandler = null;
+  });
+
   AHooks.useDebounceEffect(() => {
     if (get$files().length > 0 && (get$successFiles().length + get$failFiles().length === get$files().length)) {
       onSuccess && onSuccess(get$successFiles());
