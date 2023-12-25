@@ -50,10 +50,10 @@ function FMicroAPP_Authorization({
   });
 
   return (<>
-    <Button
-      onClick={() => {
-        console.info(microAppRef, 'onClickv');
-      }}>11111</Button>
+    {/*<Button*/}
+    {/*  onClick={() => {*/}
+    {/*    console.info(microAppRef, 'onClickv');*/}
+    {/*  }}>11111</Button>*/}
     <MicroApp
       ref={microAppRef}
       name={'Authorization'}
