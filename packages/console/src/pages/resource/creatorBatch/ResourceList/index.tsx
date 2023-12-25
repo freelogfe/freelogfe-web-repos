@@ -622,7 +622,7 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
 
           <FComponentsLib.FRectBtn
             disabled={resourceCreatorBatchPage.resourceListInfo.some((r) => {
-              return r.resourceNameError !== '' || r.resourceTitleError !== '';
+              return r.resourceNameError !== '' || r.resourceTitleError !== '' || !r.isCompleteAuthorization;
             })}
             onClick={() => {
               onClickRelease();
