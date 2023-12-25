@@ -19,6 +19,7 @@ import FUploadCover from '@/components/FUploadCover';
 import fPolicyBuilder from '@/components/fPolicyBuilder';
 // import { ChangeAction } from '@/models/resourceCreatorPage';
 import { MicroApp } from 'umi';
+import FMicroAPP_Authorization from '@/components/FMicroAPP_Authorization';
 // import FMicroAPP_Authorization from '@/components/FMicroAPP_Authorization';
 
 interface CardProps {
@@ -679,15 +680,15 @@ function Card({
     }
 
     {/*<div style={{height: 5}}/>*/}
-
     {
       $showMore && (<div className={styles.block}>
+        {/*<FMicroAPP_Authorization*/}
         <MicroApp
           name={'Authorization_' + info.order}
           licenseeId={''}
           mainAppType={'resourceInBatchPublish'}
-          depList={[]}
-          upcastList={[]}
+          depList={info.directDependencies}
+          upcastList={info.baseUpcastResources}
           update={(data: any) => {
             // console.error(get$dataSource(), '@#################################');
             // console.info(data, '############################################@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');

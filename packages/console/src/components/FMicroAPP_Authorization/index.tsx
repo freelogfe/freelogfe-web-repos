@@ -2,7 +2,8 @@ import * as React from 'react';
 import styles from './index.less';
 import { MicroApp } from 'umi';
 import * as AHooks from 'ahooks';
-import { Button } from 'antd';
+// import { Button } from 'antd';
+import { FUtil } from '@freelog/tools-lib';
 
 interface FMicroAPP_Authorization_Props {
   licenseeId: string;
@@ -13,7 +14,8 @@ interface FMicroAPP_Authorization_Props {
   update(data: any): void;
 }
 
-let microAppUnmount: any = null;
+// let microAppUnmount: any = null;
+let order: number = 0;
 
 function FMicroAPP_Authorization({
                                    licenseeId,
@@ -23,47 +25,26 @@ function FMicroAPP_Authorization({
                                    update,
                                  }: FMicroAPP_Authorization_Props) {
 
-  const [arr, setArr] = React.useState([]);
-  // console.log(arr, 'arri sdjlkfjsdlkfjlkdsjlkfjl');
-
-  // const microAppRef = React.useRef<any>();
-  const microAppRef = React.useRef<any>(null);
-
-  AHooks.useTimeout(() => {
-    // console.log(microAppRef, 'microAppRef sdfoliksdjflkjdsklfjdsklfjlkjlk');
-    setArr([]);
-  }, 10);
-
-  AHooks.useTimeout(() => {
-    microAppUnmount = microAppRef.current.unmount;
-    // console.log(microAppRef, 'microAppRef sdfoliksdjflkjdsklfjdsklfjlkjlk');
-    // setArr([]);
-  }, 100);
-
-  AHooks.useUnmount(() => {
-    microAppUnmount && microAppUnmount();
-    microAppUnmount = null;
-    // console.info(microAppUnmount, 'useUnmount +++++++++++++++++++++++++++++');
-    // microAppRef.current?.mountPromise.then(() => {
-    //   console.log('app1 mount');
-    // });
+  const [$appOrder, set$appOrder, get$appOrder] = FUtil.Hook.useGetState<number>(0);
+  // const appOrder = ++order;
+  console.log($appOrder, order, 'appOrder (((((((((((((*******************KLJjdlksjfljsdljl');
+  AHooks.useMount(() => {
+    order++;
+    set$appOrder(order);
   });
 
-  return (<>
-    {/*<Button*/}
-    {/*  onClick={() => {*/}
-    {/*    console.info(microAppRef, 'onClickv');*/}
-    {/*  }}>11111</Button>*/}
-    <MicroApp
-      ref={microAppRef}
-      name={'Authorization'}
-      licenseeId={licenseeId}
-      mainAppType={mainAppType}
-      depList={depList}
-      upcastList={upcastList}
-      update={update}
-    />
-  </>);
+  if ($appOrder === 0) {
+    return null;
+  }
+
+  return (<MicroApp
+    name={'Authorization_' + ($appOrder)}
+    licenseeId={licenseeId}
+    mainAppType={mainAppType}
+    depList={depList}
+    upcastList={upcastList}
+    update={update}
+  />);
 }
 
 export default FMicroAPP_Authorization;
