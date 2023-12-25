@@ -70,6 +70,7 @@ export type ResourceCreatorBatchPageState = {
     }[];
     isCompleteAuthorization: boolean;
   }[];
+  latestListIndex: number;
 
   resultList: {
     resourceID: string;
@@ -121,6 +122,7 @@ const initStates: ResourceCreatorBatchPageState = {
   selectedResourceType: null,
 
   resourceListInfo: [],
+  latestListIndex: 0,
 
   resultList: [],
 };

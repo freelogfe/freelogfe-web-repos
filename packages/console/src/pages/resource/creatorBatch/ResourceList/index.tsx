@@ -283,7 +283,7 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
     }
 
     // console.log(result, 'result sdifj;lsdkjfljl');
-    let resourceListInfo = [
+    let resourceListInfo: ResourceCreatorBatchPageState['resourceListInfo'] = [
       ...resourceCreatorBatchPage.resourceListInfo.map((resource) => {
         const resourceName = copyData_ResourceNames[resource.resourceName].resourceNewNames.shift() || '';
         return {
@@ -304,7 +304,7 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
           return f.sha1 === file.sha1;
         });
         return {
-          order: f_index + 1,
+          order: resourceCreatorBatchPage.latestListIndex + f_index + 1,
           fileUID: f.uid,
           fileName: f.name,
           sha1: f.sha1,
@@ -370,6 +370,7 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
       payload: {
         // showPage: 'resourceList',
         resourceListInfo: resourceListInfo,
+        latestListIndex: resourceListInfo[resourceListInfo.length - 1].order,
       },
     });
   }

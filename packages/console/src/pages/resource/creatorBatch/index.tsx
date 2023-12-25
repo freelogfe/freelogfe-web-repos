@@ -137,7 +137,7 @@ function CreatorBatch({ dispatch, resourceCreatorBatchPage }: CreatorBatchProps)
           return obj.sha1 === file.sha1;
         });
         return {
-          order: obj_index + 1,
+          order: resourceCreatorBatchPage.latestListIndex + obj_index + 1,
           fileUID: String(resourceCreatorBatchPage.resourceListInfo.length + obj_index),
           fileName: obj.objectName,
           sha1: obj.sha1,
@@ -191,6 +191,7 @@ function CreatorBatch({ dispatch, resourceCreatorBatchPage }: CreatorBatchProps)
       payload: {
         showPage: 'resourceList',
         resourceListInfo: resourceListInfo,
+        latestListIndex: resourceListInfo[resourceListInfo.length - 1].order,
       },
     });
   }
