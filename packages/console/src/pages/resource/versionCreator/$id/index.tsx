@@ -192,6 +192,10 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
           <FComponentsLib.FContentText
             text={resourceVersionCreatorPage.resourceInfo?.resourceName || ''}
             type={'highlight'}
+            style={{
+              maxWidth: 600,
+              overflowWrap: 'break-word',
+            }}
           />
         </a>
         <div style={{ width: 5 }} />
