@@ -304,6 +304,7 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
           return f.sha1 === file.sha1;
         });
         return {
+          order: f_index + 1,
           fileUID: f.uid,
           fileName: f.name,
           sha1: f.sha1,

@@ -19,13 +19,14 @@ import FUploadCover from '@/components/FUploadCover';
 import fPolicyBuilder from '@/components/fPolicyBuilder';
 // import { ChangeAction } from '@/models/resourceCreatorPage';
 import { MicroApp } from 'umi';
-import FMicroAPP_Authorization from '@/components/FMicroAPP_Authorization';
+// import FMicroAPP_Authorization from '@/components/FMicroAPP_Authorization';
 
 interface CardProps {
   order: number;
   username: string;
   resourceType: string[];
   info: {
+    order: number;
     fileUID: string;
     fileName: string;
     sha1: string;
@@ -681,8 +682,8 @@ function Card({
 
     {
       $showMore && (<div className={styles.block}>
-        <FMicroAPP_Authorization
-          // name={'Authorization'}
+        <MicroApp
+          name={'Authorization_' + info.order}
           licenseeId={''}
           mainAppType={'resourceInBatchPublish'}
           depList={[]}

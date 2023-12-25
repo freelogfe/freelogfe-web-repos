@@ -9,8 +9,6 @@ import Finish from './Finish';
 import * as AHooks from 'ahooks';
 import { Dispatch } from 'redux';
 import { ChangeAction, OnMount_Page_Action, OnUnmount_Page_Action } from '@/models/resourceCreatorBatchPage';
-// import Task from '@/pages/resource/creatorBatch/UploadFile/Task';
-// import { Modal } from 'antd';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import { RcFile } from 'antd/lib/upload/interface';
 import { getFilesSha1Info } from '@/utils/service';
@@ -18,8 +16,6 @@ import fMessage from '@/components/fMessage';
 import fReadLocalFiles from '@/components/fReadLocalFiles';
 import fObjectsSelectorDrawer from '@/components/fObjectsSelectorDrawer';
 import { getTaskHandler } from '@/components/FResourceBatchUpload';
-
-// import { createBatch } from '../../../../../@freelog/tools-lib/dist/service-API/resources';
 
 interface CreatorBatchProps {
   dispatch: Dispatch;
@@ -141,6 +137,7 @@ function CreatorBatch({ dispatch, resourceCreatorBatchPage }: CreatorBatchProps)
           return obj.sha1 === file.sha1;
         });
         return {
+          order: obj_index + 1,
           fileUID: String(resourceCreatorBatchPage.resourceListInfo.length + obj_index),
           fileName: obj.objectName,
           sha1: obj.sha1,

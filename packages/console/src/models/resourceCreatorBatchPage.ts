@@ -11,6 +11,7 @@ export type ResourceCreatorBatchPageState = {
   } | null;
 
   resourceListInfo: {
+    order: number;
     fileUID: string;
     fileName: string;
     sha1: string;

@@ -55,16 +55,16 @@ export default defineConfig({
           // entry: '//192.168.2.28:8080', // html entry
           // credentials: true,
         },
-
         {
           name: 'Authorization', // 唯一 id
           entry: '//dependencies-declarator.testfreelog.com/', // html entry
-          // entry: '//192.168.2.28:8080', // html entry
-          // credentials: true,
-          // sandbox: {
-          //   strictStyleIsolation: true,
-          // },
         },
+        ...Array(50).fill(null).map((i, j) => {
+          return {
+            name: 'Authorization_' + (j + 1), // 唯一 id
+            entry: '//dependencies-declarator.testfreelog.com/', // html entry
+          };
+        }),
       ],
       // sandbox: {
       //   strictStyleIsolation: true,
