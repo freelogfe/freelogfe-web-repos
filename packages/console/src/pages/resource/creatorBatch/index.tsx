@@ -138,7 +138,8 @@ function CreatorBatch({ dispatch, resourceCreatorBatchPage }: CreatorBatchProps)
         });
         return {
           order: resourceCreatorBatchPage.latestListIndex + obj_index + 1,
-          fileUID: String(resourceCreatorBatchPage.resourceListInfo.length + obj_index),
+          // fileUID: String(resourceCreatorBatchPage.resourceListInfo.length + obj_index),
+          fileUID: String(resourceCreatorBatchPage.latestListIndex + obj_index + 1),
           fileName: obj.objectName,
           sha1: obj.sha1,
           cover: covers[obj_index] || '',
