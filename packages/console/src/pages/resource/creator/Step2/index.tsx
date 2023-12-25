@@ -699,14 +699,14 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
               depList={[]}
               upcastList={[]}
               update={(data: any) => {
-                console.log(data, 'resourceInVersionUpdate _____________ datasidjflksdjflkjsdlkjlkj');
+                // console.log(data, 'resourceInVersionUpdate _____________ datasidjflksdjflkjsdlkjlkj');
                 dispatch<ChangeAction>({
                   type: 'resourceCreatorPage/change',
                   payload: {
                     step2_directDependencies: data.depList,
                     step2_resolveResources: data.resolveResources,
                     step2_baseUpcastResources: data.upcastList,
-                    step2_isCompleteAuthorization: true,
+                    step2_isCompleteAuthorization: data.isAllAuthComplete,
                     step2_dataIsDirty_count: resourceCreatorPage.step2_dataIsDirty_count + 1,
                   },
                 });
@@ -812,7 +812,7 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
         >{FI18n.i18nNext.t('rqr_step2_btn_later')}</FComponentsLib.FTextBtn>
 
         <FComponentsLib.FRectBtn
-          disabled={!resourceCreatorPage.step2_fileInfo}
+          disabled={!resourceCreatorPage.step2_fileInfo || !resourceCreatorPage.step2_isCompleteAuthorization}
           type={'primary'}
           onClick={() => {
             dispatch<OnClick_step2_submitBtn_Action>({

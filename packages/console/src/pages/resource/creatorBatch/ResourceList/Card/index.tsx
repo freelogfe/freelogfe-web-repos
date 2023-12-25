@@ -690,14 +690,14 @@ function Card({
           upcastList={[]}
           update={(data: any) => {
             // console.error(get$dataSource(), '@#################################');
-            // change(data);
+            // console.info(data, '############################################@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
             // console.error(info, data, 'resourceInBatchPublish ____________________ data sdifjlskdfjlkjlk');
             onChange && onChange({
               ...get$dataSource(),
               directDependencies: data.depList,
               resolveResources: data.resolveResources,
               baseUpcastResources: data.upcastList,
-              isCompleteAuthorization: true,
+              isCompleteAuthorization: data.isAllAuthComplete,
             });
           }}
         />

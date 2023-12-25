@@ -166,7 +166,8 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
     $versionInputHasError ||
     !resourceVersionCreatorPage.selectedFileInfo ||
     resourceVersionCreatorPage.selectedFile_UsedResources.length > 0 ||
-    resourceVersionCreatorPage.rawPropertiesState !== 'success';
+    resourceVersionCreatorPage.rawPropertiesState !== 'success' ||
+    !resourceVersionCreatorPage.isCompleteAuthorization;
 
   return (<>
 
@@ -1077,6 +1078,7 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
                         directDependencies: data.depList,
                         resolveResources: data.resolveResources,
                         baseUpcastResources: data.upcastList,
+                        isCompleteAuthorization: data.isAllAuthComplete,
                         dataIsDirty: true,
                       },
                     });
