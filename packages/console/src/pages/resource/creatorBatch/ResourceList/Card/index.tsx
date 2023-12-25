@@ -691,7 +691,7 @@ function Card({
           upcastList={info.baseUpcastResources}
           update={(data: any) => {
             // console.error(get$dataSource(), '@#################################');
-            // console.info(data, '############################################@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
+            console.info(data, '############################################@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
             // console.error(info, data, 'resourceInBatchPublish ____________________ data sdifjlskdfjlkjlk');
             onChange && onChange({
               ...get$dataSource(),
