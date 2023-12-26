@@ -699,7 +699,7 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
               depList={[]}
               upcastList={[]}
               update={(data: any) => {
-                // console.log(data, 'resourceInVersionUpdate _____________ datasidjflksdjflkjsdlkjlkj');
+                console.log(data, 'resourceInVersionUpdate _____________ datasidjflksdjflkjsdlkjlkj');
                 dispatch<ChangeAction>({
                   type: 'resourceCreatorPage/change',
                   payload: {
@@ -713,87 +713,6 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
               }}
             />)
           }
-
-          {/*<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>*/}
-          {/*  <FComponentsLib.FContentText text={FI18n.i18nNext.t('claim_rely_title')} type={'highlight'} />*/}
-          {/*  <FTooltip title={FI18n.i18nNext.t('info_versionrely')}>*/}
-          {/*    <div>*/}
-          {/*      <FComponentsLib.FTextBtn*/}
-          {/*        style={{ fontSize: 12, display: 'flex', alignItems: 'center', gap: 5 }}*/}
-          {/*        type='primary'*/}
-          {/*        onClick={async () => {*/}
-          {/*          const p = await getProcessor('resourceCreatorStep2');*/}
-          {/*          const baseUpcastResources: Awaited<ReturnType<typeof p.getBaseUpcastResources>> = await p.getBaseUpcastResources();*/}
-          {/*          await fAddDependencies({*/}
-          {/*            existingResources: (await p.getAllTargets()).map((t) => {*/}
-          {/*              return {*/}
-          {/*                resourceID: t.id,*/}
-          {/*                resourceNme: t.name,*/}
-          {/*              };*/}
-          {/*            }),*/}
-          {/*            baseUpcastResources: baseUpcastResources,*/}
-          {/*            async onSelect_Resource({ resourceID, resourceName }) {*/}
-          {/*              await p.addTargets([{*/}
-          {/*                id: resourceID,*/}
-          {/*                name: resourceName,*/}
-          {/*                type: 'resource',*/}
-          {/*              }]);*/}
-          {/*            },*/}
-          {/*            async onDeselect_Resource({ resourceID, resourceName }) {*/}
-          {/*              // const p = await getProcessor('resourceCreatorStep2');*/}
-          {/*              await p.removeTarget({*/}
-          {/*                id: resourceID,*/}
-          {/*                name: resourceName,*/}
-          {/*                type: 'resource',*/}
-          {/*              });*/}
-          {/*            },*/}
-          {/*          });*/}
-          {/*        }}*/}
-          {/*      >*/}
-          {/*        <FComponentsLib.FIcons.FConfiguration style={{ fontSize: 14 }} />*/}
-          {/*        <span>{FI18n.i18nNext.t('claim_rely_add_btn')}</span>*/}
-          {/*      </FComponentsLib.FTextBtn>*/}
-          {/*    </div>*/}
-          {/*  </FTooltip>*/}
-          {/*</div>*/}
-
-          {/*{*/}
-          {/*  size && size.height === 0 && (<>*/}
-          {/*    <div style={{ height: 10 }} />*/}
-          {/*    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>*/}
-          {/*      {*/}
-          {/*        FI18n.i18nNext.t('claim_rely_list_empty').split('\n').map((i, j) => {*/}
-          {/*          return (<FComponentsLib.FContentText key={j} text={i} type={'additional2'} />);*/}
-          {/*        })*/}
-          {/*      }*/}
-          {/*    </div>*/}
-          {/*    <div style={{ height: 20 }} />*/}
-          {/*  </>)*/}
-          {/*}*/}
-
-          {/*<>*/}
-          {/*  {*/}
-          {/*    size && size.height > 0 && (<div style={{ height: 20 }} />)*/}
-          {/*  }*/}
-
-          {/*  {*/}
-          {/*    resourceCreatorPage.step1_createdResourceInfo && (<MicroApp*/}
-          {/*      name={'Authorization'}*/}
-          {/*      resourceID={resourceCreatorPage.step1_createdResourceInfo.resourceID}*/}
-          {/*    />)*/}
-          {/*  }*/}
-
-          {/*<div ref={ref}>*/}
-          {/*<FResourceAuthorizationProcessor*/}
-          {/*  width={860}*/}
-          {/*  height={600}*/}
-          {/*  resourceID={resourceCreatorPage.step1_createdResourceInfo?.resourceID || ''}*/}
-          {/*  processorIdentifier={'resourceCreatorStep2'}*/}
-          {/*  onChanged={() => {*/}
-          {/*  }}*/}
-          {/*/>*/}
-          {/* */}
-          {/*</>*/}
         </div>
       </div>
 
