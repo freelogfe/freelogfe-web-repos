@@ -37,7 +37,8 @@ function FMicroAPP_Authorization({
   });
 
   React.useEffect(() => {
-    set$appOrder(0)
+    // console.log('0000000000000000000000000000000000000000000008888888888888888888888888888888888888888');
+    set$appOrder(0);
   }, [reload]);
 
   AHooks.useDebounceEffect(() => {
@@ -52,7 +53,7 @@ function FMicroAPP_Authorization({
   }
 
   return (<MicroApp
-    name={'Authorization_' + ($appOrder)}
+    name={(self.location.host.endsWith('.testfreelog.com') ? 'Authorization_test_' : 'Authorization_') + ($appOrder)}
     licenseeId={licenseeId}
     mainAppType={mainAppType}
     depList={depList}

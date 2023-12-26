@@ -59,10 +59,16 @@ export default defineConfig({
           name: 'Authorization', // 唯一 id
           entry: '//dependencies-declarator.testfreelog.com/', // html entry
         },
-        ...Array(500).fill(null).map((i, j) => {
+        ...Array(5000).fill(null).map((i, j) => {
+          return {
+            name: 'Authorization_test_' + (j + 1), // 唯一 id
+            entry: '//dependencies-declarator.testfreelog.com/', // html entry
+          };
+        }),
+        ...Array(5000).fill(null).map((i, j) => {
           return {
             name: 'Authorization_' + (j + 1), // 唯一 id
-            entry: '//dependencies-declarator.testfreelog.com/', // html entry
+            entry: '//dependencies-declarator.freelog.com/', // html entry
           };
         }),
       ],

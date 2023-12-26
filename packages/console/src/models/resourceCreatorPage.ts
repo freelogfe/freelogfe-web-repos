@@ -91,7 +91,7 @@ export interface ResourceCreatorPageModelState {
     }[];
   }[];
   step2_isCompleteAuthorization: boolean;
-  step2_authReload: number,
+  step2_authReload: number;
 
   step2_isOpenMarkdown: boolean;
   step2_dataIsDirty_count: number;
@@ -766,11 +766,11 @@ const Model: ResourceCreatorPageModelType = {
         return;
       }
 
-      const params3: Parameters<typeof FServiceAPI.Resource.getResourceBySha1>[0] = {
-        fileSha1: data_draft2.draftData.selectedFileInfo.sha1,
-      };
-
-      const { data: data_ResourcesBySha1 }: { data: any[] } = yield call(FServiceAPI.Resource.getResourceBySha1, params3);
+      // const params3: Parameters<typeof FServiceAPI.Resource.getResourceBySha1>[0] = {
+      //   fileSha1: data_draft2.draftData.selectedFileInfo.sha1,
+      // };
+      //
+      // const { data: data_ResourcesBySha1 }: { data: any[] } = yield call(FServiceAPI.Resource.getResourceBySha1, params3);
 
       const params4: Parameters<typeof getFilesSha1Info>[0] = {
         sha1: [data_draft2.draftData.selectedFileInfo.sha1],
@@ -780,7 +780,7 @@ const Model: ResourceCreatorPageModelType = {
         result,
         error,
       }: Awaited<ReturnType<typeof getFilesSha1Info>> = yield call(getFilesSha1Info, params4);
-
+      // console.log('@@@@@@@@@@@@@@@@@@@@@@@#33333333333333333333333333333333333');
       yield put<ChangeAction>({
         type: 'change',
         payload: {

@@ -1069,8 +1069,9 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
             <div className={styles.block}>
               {
                 // resourceVersionCreatorPage.resourceInfo && (<FMicroAPP_Authorization
-                resourceVersionCreatorPage.resourceInfo && (<MicroApp
-                  name={'Authorization'}
+                resourceVersionCreatorPage.resourceInfo && (<FMicroAPP_Authorization
+                  // name={'Authorization'}
+                  reload={resourceVersionCreatorPage.authReload}
                   licenseeId={resourceVersionCreatorPage.resourceInfo.resourceID}
                   mainAppType={'resourceInVersionUpdate'}
                   depList={resourceVersionCreatorPage.directDependencies}

@@ -95,6 +95,7 @@ export interface ResourceVersionCreatorPageModelState {
     }[];
   }[];
   isCompleteAuthorization: boolean;
+  authReload: number;
 
   descriptionEditorState: EditorState;
 
@@ -339,6 +340,7 @@ const initStates: ResourceVersionCreatorPageModelState = {
   baseUpcastResources: [],
   resolveResources: [],
   isCompleteAuthorization: true,
+  authReload: 0,
 
   descriptionEditorState: BraftEditor.createEditorState(''),
 
@@ -1082,6 +1084,7 @@ const Model: ResourceVersionCreatorModelType = {
 
             directDependencies: draftData.directDependencies,
             baseUpcastResources: draftData.baseUpcastResources,
+            authReload: resourceVersionCreatorPage.authReload + 1,
 
             descriptionEditorState: BraftEditor.createEditorState(draftData.descriptionEditorInput),
             draftSaveTime: moment(data_draft.updateDate).format('YYYY-MM-DD hh:mm:ss'),

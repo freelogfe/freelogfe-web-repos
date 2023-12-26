@@ -757,6 +757,7 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
           // });
         }}
         onClose={() => {
+          // console.log('777777777777777777777777&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&');
           dispatch<OnClose_step2_editMarkdown>({
             type: 'resourceCreatorPage/onClose_step2_editMarkdown',
           });
