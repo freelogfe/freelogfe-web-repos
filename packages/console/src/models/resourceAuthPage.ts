@@ -613,10 +613,10 @@ const Model: ResourceAuthPageModelType = {
       const { resourceAuthPage }: ConnectState = yield select(({ resourceAuthPage }: ConnectState) => ({
         resourceAuthPage,
       }));
-      // yield put<FetchDataSourceAction>({
-      //   type: 'resourceInfo/fetchDataSource',
-      //   payload: resourceAuthPage.resourceID,
-      // });
+      yield put<OnUpdate_Data_Action>({
+        type: 'resourceSider/onUpdate_Data',
+        // payload: resourceAuthPage.resourceID,
+      });
       yield put<FetchAuthorizedAction>({
         type: 'fetchAuthorized',
         payload: {
