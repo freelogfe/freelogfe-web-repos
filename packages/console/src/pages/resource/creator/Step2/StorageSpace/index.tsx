@@ -239,6 +239,9 @@ function StorageSpace({ style = {}, resourceTypeCode, onSucceed }: StorageSpaceP
       onCancel={() => {
         set$otherUsedResource([]);
       }}
+      onOk={() => {
+        set$otherUsedResource([]);
+      }}
       okText={'关闭'}
       // cancelText={'取消'}
       cancelButtonProps={{
