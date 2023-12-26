@@ -6,6 +6,7 @@ import * as AHooks from 'ahooks';
 import { FUtil } from '@freelog/tools-lib';
 
 interface FMicroAPP_Authorization_Props {
+  reload?: number;
   licenseeId: string;
   mainAppType: string;
   depList: any[];
@@ -23,14 +24,27 @@ function FMicroAPP_Authorization({
                                    depList,
                                    upcastList,
                                    update,
+                                   reload = 0,
                                  }: FMicroAPP_Authorization_Props) {
 
   const [$appOrder, set$appOrder, get$appOrder] = FUtil.Hook.useGetState<number>(0);
   // const appOrder = ++order;
   // console.log($appOrder, order, 'appOrder (((((((((((((*******************KLJjdlksjfljsdljl');
+
   AHooks.useMount(() => {
     order++;
     set$appOrder(order);
+  });
+
+  React.useEffect(() => {
+    set$appOrder(0)
+  }, [reload]);
+
+  AHooks.useDebounceEffect(() => {
+    order++;
+    set$appOrder(order);
+  }, [reload], {
+    wait: 300,
   });
 
   if ($appOrder === 0) {

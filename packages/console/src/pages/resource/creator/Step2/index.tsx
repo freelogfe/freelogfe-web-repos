@@ -36,6 +36,7 @@ import FSkeletonNode from '@/components/FSkeletonNode';
 import FMicroApp_MarkdownEditorDrawer from '@/components/FMicroApp_MarkdownEditorDrawer';
 import fMessage from '@/components/fMessage';
 import { getFilesSha1Info } from '@/utils/service';
+import FMicroAPP_Authorization from '@/components/FMicroAPP_Authorization';
 
 // import { ChangeAction } from '@/models/resourceVersionCreatorPage';
 
@@ -692,14 +693,15 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
 
         <div className={styles.block}>
           {
-            resourceCreatorPage.step1_createdResourceInfo && (<MicroApp
-              name={'Authorization'}
+            resourceCreatorPage.step1_createdResourceInfo && (<FMicroAPP_Authorization
+              // name={'Authorization'}
+              reload={resourceCreatorPage.step2_authReload}
               licenseeId={resourceCreatorPage.step1_createdResourceInfo.resourceID}
               mainAppType={'resourceInVersionUpdate'}
-              depList={[]}
-              upcastList={[]}
+              depList={resourceCreatorPage.step2_directDependencies}
+              upcastList={resourceCreatorPage.step2_baseUpcastResources}
               update={(data: any) => {
-                console.log(data, 'resourceInVersionUpdate _____________ datasidjflksdjflkjsdlkjlkj');
+                // console.log(data, 'resourceInVersionUpdate _____________ datasidjflksdjflkjsdlkjlkj');
                 dispatch<ChangeAction>({
                   type: 'resourceCreatorPage/change',
                   payload: {

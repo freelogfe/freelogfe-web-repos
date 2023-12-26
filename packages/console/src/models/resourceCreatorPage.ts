@@ -12,6 +12,7 @@ import { history } from 'umi';
 import { IResourceCreateVersionDraftType } from '@/type/resourceTypes';
 // import fResourceMarkdownEditor from '@/components/fResourceMarkdownEditor';
 import fComicTool from '@/components/fComicTool';
+import data from '@/utils/category';
 // import { getProcessor } from '@/components/FResourceAuthorizationProcessor';
 
 // import moment from 'moment';
@@ -90,6 +91,7 @@ export interface ResourceCreatorPageModelState {
     }[];
   }[];
   step2_isCompleteAuthorization: boolean;
+  step2_authReload: number,
 
   step2_isOpenMarkdown: boolean;
   step2_dataIsDirty_count: number;
@@ -300,6 +302,7 @@ export const initStates: ResourceCreatorPageModelState = {
   step2_baseUpcastResources: [],
   step2_resolveResources: [],
   step2_isCompleteAuthorization: true,
+  step2_authReload: 0,
 
   step2_dataIsDirty_count: 0,
   step2_isOpenMarkdown: false,
@@ -814,6 +817,9 @@ const Model: ResourceCreatorPageModelType = {
             }),
           step2_customProperties: data_draft2.draftData.customProperties,
           step2_customConfigurations: data_draft2.draftData.customConfigurations,
+          step2_directDependencies: data_draft2.draftData.directDependencies,
+          step2_baseUpcastResources: data_draft2.draftData.baseUpcastResources,
+          step2_authReload: resourceCreatorPage.step2_authReload + 1,
         },
       });
     },
