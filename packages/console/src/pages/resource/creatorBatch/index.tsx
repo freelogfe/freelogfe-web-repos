@@ -24,6 +24,12 @@ interface CreatorBatchProps {
 
 function CreatorBatch({ dispatch, resourceCreatorBatchPage }: CreatorBatchProps) {
 
+  const [$dataSource, set$dataSource, get$dataSource] = FUtil.Hook.useGetState<ResourceCreatorBatchPageState['resourceListInfo']>(resourceCreatorBatchPage.resourceListInfo);
+
+  React.useEffect(() => {
+    set$dataSource(resourceCreatorBatchPage.resourceListInfo);
+  }, [resourceCreatorBatchPage.resourceListInfo]);
+
   AHooks.useMount(() => {
     dispatch<OnMount_Page_Action>({
       type: 'resourceCreatorBatchPage/onMount_Page',
@@ -53,7 +59,7 @@ function CreatorBatch({ dispatch, resourceCreatorBatchPage }: CreatorBatchProps)
 
     const namesMap: Map<string, number> = new Map<string, number>();
 
-    for (const resource of resourceCreatorBatchPage.resourceListInfo) {
+    for (const resource of get$dataSource()) {
       if (resource.resourceName === '') {
         continue;
       }
@@ -118,7 +124,7 @@ function CreatorBatch({ dispatch, resourceCreatorBatchPage }: CreatorBatchProps)
     }
 
     let resourceListInfo = [
-      ...resourceCreatorBatchPage.resourceListInfo.map((resource) => {
+      ...get$dataSource().map((resource) => {
         const resourceName = copyData_ResourceNames[resource.resourceName].resourceNewNames.shift() || '';
         return {
           ...resource,

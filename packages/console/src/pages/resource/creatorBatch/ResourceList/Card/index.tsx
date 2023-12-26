@@ -20,6 +20,7 @@ import fPolicyBuilder from '@/components/fPolicyBuilder';
 // import { ChangeAction } from '@/models/resourceCreatorPage';
 import { MicroApp } from 'umi';
 import FMicroAPP_Authorization from '@/components/FMicroAPP_Authorization';
+
 // import FMicroAPP_Authorization from '@/components/FMicroAPP_Authorization';
 
 interface CardProps {
@@ -680,30 +681,27 @@ function Card({
     }
 
     {/*<div style={{height: 5}}/>*/}
-    {
-      $showMore && (<div className={styles.block}>
-        {/*<FMicroAPP_Authorization*/}
-        <MicroApp
-          name={'Authorization_' + info.order}
-          licenseeId={''}
-          mainAppType={'resourceInBatchPublish'}
-          depList={info.directDependencies}
-          upcastList={info.baseUpcastResources}
-          update={(data: any) => {
-            // console.error(get$dataSource(), '@#################################');
-            console.info(data, '############################################@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
-            // console.error(info, data, 'resourceInBatchPublish ____________________ data sdifjlskdfjlkjlk');
-            onChange && onChange({
-              ...get$dataSource(),
-              directDependencies: data.depList,
-              resolveResources: data.resolveResources,
-              baseUpcastResources: data.upcastList,
-              isCompleteAuthorization: data.isAllAuthComplete,
-            });
-          }}
-        />
-      </div>)
-    }
+    <div className={styles.block} style={{ display: $showMore ? 'block' : 'none' }}>
+      <FMicroAPP_Authorization
+        // name={'Authorization_' + info.order}
+        licenseeId={''}
+        mainAppType={'resourceInBatchPublish'}
+        depList={info.directDependencies}
+        upcastList={info.baseUpcastResources}
+        update={(data: any) => {
+          // console.error(get$dataSource(), '@#################################');
+          console.info(data, '############################################@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
+          // console.error(info, data, 'resourceInBatchPublish ____________________ data sdifjlskdfjlkjlk');
+          onChange && onChange({
+            ...get$dataSource(),
+            directDependencies: data.depList,
+            resolveResources: data.resolveResources,
+            baseUpcastResources: data.upcastList,
+            isCompleteAuthorization: data.isAllAuthComplete,
+          });
+        }}
+      />
+    </div>
 
   </div>);
 }

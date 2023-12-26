@@ -27,7 +27,7 @@ function FMicroAPP_Authorization({
 
   const [$appOrder, set$appOrder, get$appOrder] = FUtil.Hook.useGetState<number>(0);
   // const appOrder = ++order;
-  console.log($appOrder, order, 'appOrder (((((((((((((*******************KLJjdlksjfljsdljl');
+  // console.log($appOrder, order, 'appOrder (((((((((((((*******************KLJjdlksjfljsdljl');
   AHooks.useMount(() => {
     order++;
     set$appOrder(order);

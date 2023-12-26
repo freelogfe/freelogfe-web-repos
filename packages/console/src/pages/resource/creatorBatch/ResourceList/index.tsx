@@ -91,11 +91,11 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
       }[];
     }[] = [];
 
-    for (const item of resourceCreatorBatchPage.resourceListInfo) {
-      if (!item.isCompleteAuthorization) {
-        fMessage('依赖中存在未获取授权的资源', 'error');
-        return;
-      }
+    for (const item of get$dataSource()) {
+      // if (!item.isCompleteAuthorization) {
+      //   fMessage('依赖中存在未获取授权的资源', 'error');
+      //   return;
+      // }
 
       createResourceObjects.push({
         name: item.resourceName,
@@ -216,7 +216,7 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
   }[]) {
     const namesMap: Map<string, number> = new Map<string, number>();
 
-    for (const resource of resourceCreatorBatchPage.resourceListInfo) {
+    for (const resource of get$dataSource()) {
       if (resource.resourceName === '') {
         continue;
       }
@@ -281,10 +281,10 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
         return '';
       });
     }
-
+    // console.log(get$dataSource(), 'get$dataSource() sdiofjldskjflkdsjlkfjlksdjlfkj )))))))))))))))))))))))))))))))))))))))))');
     // console.log(result, 'result sdifj;lsdkjfljl');
     let resourceListInfo: ResourceCreatorBatchPageState['resourceListInfo'] = [
-      ...resourceCreatorBatchPage.resourceListInfo.map((resource) => {
+      ...get$dataSource().map((resource) => {
         const resourceName = copyData_ResourceNames[resource.resourceName].resourceNewNames.shift() || '';
         return {
           ...resource,
@@ -349,6 +349,9 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
         };
       }),
     ];
+
+    // console.log(resourceListInfo, 'resourceListInfo sdfsiojf;lksejflkewjfoe(((((((((((((((((((((((((((((((((((((((((((((((')
+
 
     if (resourceListInfo.length === 0) {
       dispatch<ChangeAction>({
@@ -462,7 +465,7 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
                   });
                 }}
                 onDelete={() => {
-                  const resourceListInfo = resourceCreatorBatchPage.resourceListInfo.filter((rli) => {
+                  const resourceListInfo = get$dataSource().filter((rli) => {
                     return rli.fileUID !== r.fileUID;
                   });
 
@@ -472,6 +475,7 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
                       type: 'resourceCreatorBatchPage/change',
                       payload: {
                         showPage: 'uploadFile',
+                        resourceListInfo,
                       },
                     });
                     return;
@@ -516,7 +520,7 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
                   dispatch<ChangeAction>({
                     type: 'resourceCreatorBatchPage/change',
                     payload: {
-                      resourceListInfo: resourceCreatorBatchPage.resourceListInfo.map((rli) => {
+                      resourceListInfo: get$dataSource().map((rli) => {
                         if (r.fileUID === rli.fileUID) {
                           return rli;
                         }
@@ -560,7 +564,7 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
                   dispatch<ChangeAction>({
                     type: 'resourceCreatorBatchPage/change',
                     payload: {
-                      resourceListInfo: resourceCreatorBatchPage.resourceListInfo.map((rli) => {
+                      resourceListInfo: get$dataSource().map((rli) => {
                         if (r.fileUID === rli.fileUID) {
                           return rli;
                         }
