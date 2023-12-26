@@ -7,6 +7,7 @@ import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
 import FListFooter, { listStateAndListMore } from '@/components/FListFooter';
 import * as AHooks from 'ahooks';
 import { Checkbox, Space } from 'antd';
+import { BorderOutlined, CheckSquareOutlined } from '@ant-design/icons';
 
 interface FObjectsSelectorDrawerProps {
   resourceTypeCode: string;
@@ -230,25 +231,31 @@ function FObjectsSelectorDrawer({ resourceTypeCode, onSelect, onClose }: FObject
           }}
         >
           <Space size={20}>
-            <Checkbox
-              checked={$checkedObjectIDs.includes(obj.objID)}
-              onClick={(e) => {
-                e.stopPropagation();
-                if (!get$checkedObjectIDs().includes(obj.objID)) {
-                  set$checkedObjectIDs([
-                    ...get$checkedObjectIDs(),
-                    obj.objID,
-                  ]);
-                } else {
-                  set$checkedObjectIDs(get$checkedObjectIDs().filter((id) => {
-                    return id !== obj.objID;
-                  }));
-                }
-              }}
-              // onClick={(e) => {
-              //
-              // }}
-            />
+            {/*<Checkbox*/}
+            {/*  checked={$checkedObjectIDs.includes(obj.objID)}*/}
+            {/*  onClick={(e) => {*/}
+            {/*    e.stopPropagation();*/}
+            {/*    if (!get$checkedObjectIDs().includes(obj.objID)) {*/}
+            {/*      set$checkedObjectIDs([*/}
+            {/*        ...get$checkedObjectIDs(),*/}
+            {/*        obj.objID,*/}
+            {/*      ]);*/}
+            {/*    } else {*/}
+            {/*      set$checkedObjectIDs(get$checkedObjectIDs().filter((id) => {*/}
+            {/*        return id !== obj.objID;*/}
+            {/*      }));*/}
+            {/*    }*/}
+            {/*  }}*/}
+            {/*  // onClick={(e) => {*/}
+            {/*  //*/}
+            {/*  // }}*/}
+            {/*/>*/}
+            {
+              $checkedObjectIDs.includes(obj.objID)
+                ? (<CheckSquareOutlined style={{ color: '#2784FF' }} />)
+                : (<BorderOutlined />)
+            }
+
             <div>
               <div className={styles.title}>
                 <div>
