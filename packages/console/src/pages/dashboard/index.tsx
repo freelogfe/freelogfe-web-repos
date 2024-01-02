@@ -5,7 +5,7 @@ import FFormLayout from '@/components/FFormLayout';
 import FComponentsLib from '@freelog/components-lib';
 import FCoverImage from '@/components/FCoverImage';
 import FCoverFooterButtons from '@/components/FCoverFooterButtons';
-import BoardCard from './BoardCard';
+// import BoardCard from './BoardCard';
 import * as AHooks from 'ahooks';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
@@ -14,7 +14,7 @@ import { OnMount_Page_Action, OnUnmount_Page_Action } from '@/models/dashboardPa
 import { FI18n, FUtil } from '@freelog/tools-lib';
 import Sider from './Sider';
 import Notice from './Notice';
-import FPopover from '@/components/FPopover';
+// import FPopover from '@/components/FPopover';
 import fNoviceGuide, {
   getNoviceGuide_LocalStorage_Content,
   setNoviceGuide_LocalStorage_Content,

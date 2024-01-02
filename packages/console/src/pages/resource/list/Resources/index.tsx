@@ -416,17 +416,14 @@ function Resources({ dispatch, resourceListPage }: ResourceProps) {
                   className={styles.FResourceCard}
                   // onBoomJuice={() => onBoomJuice && onBoomJuice(i.id, i, j)}
                   onClickDetails={() => {
-                    window.open(
+                    self.open(
                       FUtil.LinkTo.resourceDetails({
                         resourceID: i.id,
                       }),
                     );
                   }}
                   onClickEditing={() => {
-                    window.open(
-                      // FUtil.LinkTo.resourceInfo({
-                      //   resourceID: i.id,
-                      // }),
+                    self.open(
                       FUtil.LinkTo.resourceVersionInfo({
                         resourceID: i.id,
                         version: i.version || undefined,
@@ -434,7 +431,7 @@ function Resources({ dispatch, resourceListPage }: ResourceProps) {
                     );
                   }}
                   onClickRevision={() => {
-                    window.open(
+                    self.open(
                       FUtil.LinkTo.resourceVersionCreator({
                         resourceID: i.id,
                       }),

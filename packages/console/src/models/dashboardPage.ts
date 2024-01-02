@@ -139,8 +139,26 @@ const Model: DashboardPageModelType = {
         isSelf: 1,
         sort: 'createDate:-1',
       };
-      const { data: data_ResourceList } = yield call(FServiceAPI.Resource.list, params5);
-      // console.log(data_ResourceList, 'data_ResourceList 0392iojklsdf');
+      const { data: data_ResourceList }: {
+        data: {
+          limit: number;
+          skip: number;
+          totalItem: number;
+          dataList: {
+            resourceId: string;
+            resourceName: string;
+            latestVersion: string;
+            coverImages: string[];
+            resourceType: string[];
+            policies: {
+              policyName: string;
+              status: 0 | 1;
+            }[];
+            createDate: string;
+          }[];
+        }
+      } = yield call(FServiceAPI.Resource.list, params5);
+      console.log(data_ResourceList, 'data_ResourceList 0392iojklsdf');
 
       const params6: Parameters<typeof FServiceAPI.Node.nodes>[0] = {
         limit: FUtil.Predefined.pageSize,
@@ -180,22 +198,26 @@ const Model: DashboardPageModelType = {
             lastWeekProfit: data_Resource_LastWeek_Amount,
             lastWeekContract: data_Resource_LastWeek_SingCount[0].count,
           },
-          latestResources: (data_ResourceList.dataList as any[]).map<DashboardPageModelState['latestResources'][number]>((r) => {
+          latestResources: (data_ResourceList.dataList).map<DashboardPageModelState['latestResources'][number]>((r) => {
             return {
               resourceID: r.resourceId,
               resourceName: r.resourceName,
               cover: r.coverImages[0] || '',
               type: r.resourceType,
               policies: r.policies
-                .filter((p: any) => {
+                .filter((p) => {
                   return p.status === 1;
                 })
-                .map((p: any) => {
+                .map((p) => {
                   return p.policyName;
                 }),
               dataTime: FUtil.Format.formatDateTime(r.createDate, true),
               detailUrl: FUtil.LinkTo.resourceDetails({ resourceID: r.resourceId }),
-              editUrl: FUtil.LinkTo.resourceInfo({ resourceID: r.resourceId }),
+              // editUrl: FUtil.LinkTo.resourceInfo({ resourceID: r.resourceId }),
+              editUrl: FUtil.LinkTo.resourceVersionInfo({
+                resourceID: r.resourceId,
+                version: r.latestVersion || undefined,
+              }),
               updateUrl: FUtil.LinkTo.resourceVersionCreator({ resourceID: r.resourceId }),
             };
           }),
