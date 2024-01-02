@@ -1087,7 +1087,7 @@ const Model: ResourceVersionCreatorModelType = {
             authReload: resourceVersionCreatorPage.authReload + 1,
 
             descriptionEditorState: BraftEditor.createEditorState(draftData.descriptionEditorInput),
-            draftSaveTime: moment(data_draft.updateDate).format('YYYY-MM-DD hh:mm:ss'),
+            draftSaveTime: moment(data_draft.updateDate).format('YYYY-MM-DD HH:mm:ss'),
             // draftSaveTime: FUtil.Format.formatDateTime(data_draft.updateDate, true),
           },
         });
@@ -1196,7 +1196,7 @@ const Model: ResourceVersionCreatorModelType = {
         type: 'change',
         payload: {
           // draftSaveTime: FUtil.Format.formatDateTime(Date(), true),
-          draftSaveTime: moment(data_draft.updateDate).format('YYYY-MM-DD hh:mm:ss'),
+          draftSaveTime: moment(data_draft.updateDate).format('YYYY-MM-DD HH:mm:ss'),
           dataIsDirty: false,
         },
       });

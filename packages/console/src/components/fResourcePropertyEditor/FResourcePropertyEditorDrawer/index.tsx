@@ -278,12 +278,12 @@ function FResourcePropertyEditorDrawer({
         // valueInput: '',
         valueInputError: '',
       });
-    } else if (startDate && moment(valueInput, formatString).isBefore(moment(startDate + ' 00:00:00', 'YYYY-MM-DD hh:mm:ss'))) {
+    } else if (startDate && moment(valueInput, formatString).isBefore(moment(startDate + ' 00:00:00', 'YYYY-MM-DD HH:mm:ss'))) {
       $setState({
         // valueInput: valueInput,
         valueInputError: `时间不能早于 ${startDate}`,
       });
-    } else if (limitDate && moment(valueInput, formatString).isAfter(moment(limitDate + ' 23:59:59', 'YYYY-MM-DD hh:mm:ss'))) {
+    } else if (limitDate && moment(valueInput, formatString).isAfter(moment(limitDate + ' 23:59:59', 'YYYY-MM-DD HH:mm:ss'))) {
       $setState({
         // valueInput: valueInput,
         valueInputError: `时间不能晚于 ${limitDate}`,
@@ -300,7 +300,7 @@ function FResourcePropertyEditorDrawer({
     // const timeRegex: RegExp = new RegExp(/^((([0-9]{3}[1-9]|[0-9]{2}[1-9][0-9]{1}|[0-9]{1}[1-9][0-9]{2}|[1-9][0-9]{3})-(((0[13578]|1[02])-(0[1-9]|[12][0-9]|3[01]))|((0[469]|11)-(0[1-9]|[12][0-9]|30))|(02-(0[1-9]|[1][0-9]|2[0-8]))))|((([0-9]{2})(0[48]|[2468][048]|[13579][26])|((0[48]|[2468][048]|[3579][26])00))-02-29))\\s+([0-1]?[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$/);
     const timeRegex: RegExp = new RegExp(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/);
     const valueInput = get$valueInput();
-    const formatString = 'YYYY-MM-DD hh:mm:ss';
+    const formatString = 'YYYY-MM-DD HH:mm:ss';
     const valueFormat = get$valueFormat();
     // console.log(valueInput, timeRegex, 'valueInputsdifjsdlkfjl ');
     if (valueInput === '' || !timeRegex.test(valueInput)) {
@@ -650,12 +650,12 @@ function FResourcePropertyEditorDrawer({
                 const valueFormat = get$valueFormat();
                 if (valueFormat?.startDate) {
                   const startDate = valueFormat.startDate.split(' ')[0];
-                  result = currentDate.isBefore(moment(startDate + ' 00:00:00', 'YYYY-MM-DD hh:mm:ss'));
+                  result = currentDate.isBefore(moment(startDate + ' 00:00:00', 'YYYY-MM-DD HH:mm:ss'));
                 }
 
                 if (!result && valueFormat?.limitDate) {
                   const limitDate = valueFormat.limitDate.split(' ')[0];
-                  result = currentDate.isAfter(moment(limitDate + ' 23:59:59', 'YYYY-MM-DD hh:mm:ss'));
+                  result = currentDate.isAfter(moment(limitDate + ' 23:59:59', 'YYYY-MM-DD HH:mm:ss'));
                 }
                 return result;
               }}
@@ -666,7 +666,7 @@ function FResourcePropertyEditorDrawer({
           }
           {
             $valueFormat?.format === 'dataTime' && (<DatePicker
-              value={$valueInput ? moment($valueInput, 'YYYY-MM-DD hh:mm:ss') : null}
+              value={$valueInput ? moment($valueInput, 'YYYY-MM-DD HH:mm:ss') : null}
               showTime={true}
               disabled={noneEditableFields.includes('value')}
               style={{ width: 450, height: 38 }}
@@ -678,11 +678,11 @@ function FResourcePropertyEditorDrawer({
                 let result: boolean = false;
                 const valueFormat = get$valueFormat();
                 if (valueFormat?.startDateTime) {
-                  result = currentDate.isBefore(moment(valueFormat.startDateTime, 'YYYY-MM-DD hh:mm:ss'));
+                  result = currentDate.isBefore(moment(valueFormat.startDateTime, 'YYYY-MM-DD HH:mm:ss'));
                 }
 
                 if (!result && valueFormat?.limitDateTime) {
-                  result = currentDate.isAfter(moment(valueFormat.limitDateTime, 'YYYY-MM-DD hh:mm:ss'));
+                  result = currentDate.isAfter(moment(valueFormat.limitDateTime, 'YYYY-MM-DD HH:mm:ss'));
                 }
                 return result;
               }}
