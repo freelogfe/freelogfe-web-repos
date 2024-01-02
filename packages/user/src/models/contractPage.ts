@@ -380,14 +380,6 @@ const Model: ContractPageModelType = {
         type: 'change',
         payload,
       });
-      // console.log('#@#$@#$!!!!!!!');
-      // yield put<Fetch_Authorize_List_Action>({
-      //   type: 'fetch_Authorize_List',
-      // });
-      //
-      // yield put<Fetch_Authorized_List_Action>({
-      //   type: 'fetch_Authorized_List',
-      // });
     },
     * onUnmountPage({}: OnUnmountPageAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({

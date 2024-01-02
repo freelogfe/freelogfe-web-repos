@@ -71,8 +71,10 @@ function Contract({ dispatch, contractPage }: ContractProps) {
         showPage: urlParams.identityType === '2' ? 'authorized' : 'authorize',
         authorize_authorizeInput: urlParams.identityType === '1' ? urlParams.licensorName : '',
         authorize_authorizedInput: urlParams.identityType === '1' ? urlParams.licenseeName : '',
+        authorize_Status: urlParams.identityType === '1' ? (urlParams.status === '1' ? 'terminated' : 'all') : 'all',
         authorized_authorizeInput: urlParams.identityType === '2' ? urlParams.licensorName : '',
         authorized_authorizedInput: urlParams.identityType === '2' ? urlParams.licenseeName : '',
+        authorized_Status: urlParams.identityType === '2' ? (urlParams.status === '1' ? 'terminated' : 'all') : 'all',
       },
     });
 
