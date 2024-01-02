@@ -211,79 +211,106 @@ function FObjectsSelectorDrawer({ resourceTypeCode, onSelect, onClose }: FObject
         }}
       />
     </div>
-    {
-      objList.map((obj) => {
-        return (<div
-          key={obj.objID}
-          className={styles.bucket}
-          onClick={() => {
-            // console.log(get$checkedObjectIDs(), obj.objID, '************************');
-            if (!get$checkedObjectIDs().includes(obj.objID)) {
-              set$checkedObjectIDs([
-                ...get$checkedObjectIDs(),
-                obj.objID,
-              ]);
-            } else {
-              set$checkedObjectIDs(get$checkedObjectIDs().filter((id) => {
-                return id !== obj.objID;
-              }));
-            }
-          }}
-        >
-          <Space size={20}>
-            {/*<Checkbox*/}
-            {/*  checked={$checkedObjectIDs.includes(obj.objID)}*/}
-            {/*  onClick={(e) => {*/}
-            {/*    e.stopPropagation();*/}
-            {/*    if (!get$checkedObjectIDs().includes(obj.objID)) {*/}
-            {/*      set$checkedObjectIDs([*/}
-            {/*        ...get$checkedObjectIDs(),*/}
-            {/*        obj.objID,*/}
-            {/*      ]);*/}
-            {/*    } else {*/}
-            {/*      set$checkedObjectIDs(get$checkedObjectIDs().filter((id) => {*/}
-            {/*        return id !== obj.objID;*/}
-            {/*      }));*/}
-            {/*    }*/}
-            {/*  }}*/}
-            {/*  // onClick={(e) => {*/}
-            {/*  //*/}
-            {/*  // }}*/}
-            {/*/>*/}
+    <div style={{ height: 30 }} />
+    <div className={styles.objList}>
+      {
+        objList.map((obj) => {
+          return (<div
+            className={styles.objListItem}
+            key={obj.objID}
+            onClick={() => {
+              if (!get$checkedObjectIDs().includes(obj.objID)) {
+                set$checkedObjectIDs([
+                  ...get$checkedObjectIDs(),
+                  obj.objID,
+                ]);
+              } else {
+                set$checkedObjectIDs(get$checkedObjectIDs().filter((id) => {
+                  return id !== obj.objID;
+                }));
+              }
+            }}
+          >
+            <FComponentsLib.FContentText
+              type={'highlight'}
+              text={obj.objName}
+            />
             {
-              $checkedObjectIDs.includes(obj.objID)
-                ? (<CheckSquareOutlined style={{ color: '#2784FF' }} />)
-                : (<BorderOutlined />)
+              $checkedObjectIDs.includes(obj.objID) && (<label className={styles.checkedLabel}>
+                <FComponentsLib.FIcons.FCheck style={{ color: '#42C28C', fontSize: 12 }} />
+                <span>已添加</span>
+              </label>)
             }
 
-            <div>
-              <div className={styles.title}>
-                <div>
-                  <FComponentsLib.FContentText
-                    singleRow={true}
-                    text={obj.objName}
-                  />
-                </div>
-              </div>
-              <div style={{ height: 2 }} />
-              <FComponentsLib.FContentText
-                type={'additional2'}
-                text={(obj.resourceType.length > 0 ? `资源类型 ${FUtil.Format.resourceTypeKeyArrToResourceType(obj.resourceType)}` : '未设置类型') + ` | 更新时间 ${obj.updateTime}`}
-              />
-            </div>
-          </Space>
-          <div />
-          {/*<FComponentsLib.FRectBtn*/}
-          {/*  type='secondary'*/}
-          {/*  size='small'*/}
-          {/*  onClick={() => {*/}
-          {/*    onSelect && onSelect([]);*/}
-          {/*    set_visible(false);*/}
-          {/*  }}*/}
-          {/*>选择</FComponentsLib.FRectBtn>*/}
-        </div>);
-      })
-    }
+          </div>);
+        })
+      }
+
+
+      {/*<div className={styles.objListItem}>*/}
+      {/*  <FComponentsLib.FContentText type={'highlight'} text={'bucketname/对象001'} />*/}
+
+      {/*  <label className={styles.checkedLabel}>*/}
+      {/*    <FComponentsLib.FIcons.FCheck style={{ color: '#42C28C', fontSize: 12 }} />*/}
+      {/*    <span>已添加</span>*/}
+      {/*  </label>*/}
+      {/*</div>*/}
+    </div>
+
+    {/*{*/}
+    {/*  objList.map((obj) => {*/}
+    {/*    return (<div*/}
+    {/*      key={obj.objID}*/}
+    {/*      className={styles.bucket}*/}
+    {/*      onClick={() => {*/}
+    {/*        // console.log(get$checkedObjectIDs(), obj.objID, '************************');*/}
+    {/*        if (!get$checkedObjectIDs().includes(obj.objID)) {*/}
+    {/*          set$checkedObjectIDs([*/}
+    {/*            ...get$checkedObjectIDs(),*/}
+    {/*            obj.objID,*/}
+    {/*          ]);*/}
+    {/*        } else {*/}
+    {/*          set$checkedObjectIDs(get$checkedObjectIDs().filter((id) => {*/}
+    {/*            return id !== obj.objID;*/}
+    {/*          }));*/}
+    {/*        }*/}
+    {/*      }}*/}
+    {/*    >*/}
+    {/*      <Space size={20}>*/}
+    {/*        {*/}
+    {/*          $checkedObjectIDs.includes(obj.objID)*/}
+    {/*            ? (<CheckSquareOutlined style={{ color: '#2784FF' }} />)*/}
+    {/*            : (<BorderOutlined />)*/}
+    {/*        }*/}
+
+    {/*        <div>*/}
+    {/*          <div className={styles.title}>*/}
+    {/*            <div>*/}
+    {/*              <FComponentsLib.FContentText*/}
+    {/*                singleRow={true}*/}
+    {/*                text={obj.objName}*/}
+    {/*              />*/}
+    {/*            </div>*/}
+    {/*          </div>*/}
+    {/*          <div style={{ height: 2 }} />*/}
+    {/*          <FComponentsLib.FContentText*/}
+    {/*            type={'additional2'}*/}
+    {/*            text={(obj.resourceType.length > 0 ? `资源类型 ${FUtil.Format.resourceTypeKeyArrToResourceType(obj.resourceType)}` : '未设置类型') + ` | 更新时间 ${obj.updateTime}`}*/}
+    {/*          />*/}
+    {/*        </div>*/}
+    {/*      </Space>*/}
+    {/*      <div />*/}
+    {/*      /!*<FComponentsLib.FRectBtn*!/*/}
+    {/*      /!*  type='secondary'*!/*/}
+    {/*      /!*  size='small'*!/*/}
+    {/*      /!*  onClick={() => {*!/*/}
+    {/*      /!*    onSelect && onSelect([]);*!/*/}
+    {/*      /!*    set_visible(false);*!/*/}
+    {/*      /!*  }}*!/*/}
+    {/*      /!*>选择</FComponentsLib.FRectBtn>*!/*/}
+    {/*    </div>);*/}
+    {/*  })*/}
+    {/*}*/}
     <FListFooter
       state={objListMore}
       onClickLoadMore={() => {
