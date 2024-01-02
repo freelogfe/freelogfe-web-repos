@@ -53,7 +53,6 @@ function Sider({ resourceSider, dispatch }: SilderProps) {
     });
   });
 
-  /** 上下架 */
   async function changeStatus(value: boolean) {
     if (value) {
       // set$processing(FI18n.i18nNext.t('set_resource_available_for_auth_msg_processing'));
