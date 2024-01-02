@@ -6,8 +6,9 @@ import FComponentsLib from '@freelog/components-lib';
 import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
 import FListFooter, { listStateAndListMore } from '@/components/FListFooter';
 import * as AHooks from 'ahooks';
-import { Checkbox, Space } from 'antd';
+import { Checkbox, Select, Space } from 'antd';
 import { BorderOutlined, CheckSquareOutlined } from '@ant-design/icons';
+import FSelect from '@/components/FSelect';
 
 interface FObjectsSelectorDrawerProps {
   resourceTypeCode: string;
@@ -191,17 +192,30 @@ function FObjectsSelectorDrawer({ resourceTypeCode, onSelect, onClose }: FObject
     </Space>}
   >
     <div className={styles.filter}>
-      <FDropdownMenu
-        options={selectOptions}
+      {/*<FDropdownMenu*/}
+      {/*  options={selectOptions}*/}
+      {/*  onChange={(value) => {*/}
+      {/*    set_selected((prevState) => {*/}
+      {/*      return value;*/}
+      {/*    });*/}
+      {/*  }}*/}
+      {/*>*/}
+      {/*  <a>{(selectOptions.find((rs) => rs.value === selected) as any).text}*/}
+      {/*    <FComponentsLib.FIcons.FDown style={{ marginLeft: 8, fontSize: 12 }} /></a>*/}
+      {/*</FDropdownMenu>*/}
+      <Select
+        dropdownMatchSelectWidth={false}
+        value={selected}
+        options={selectOptions.map((o) => {
+          return {
+            label: o.text,
+            value: o.value,
+          };
+        })}
         onChange={(value) => {
-          set_selected((prevState) => {
-            return value;
-          });
+          set_selected(value);
         }}
-      >
-        <a>{(selectOptions.find((rs) => rs.value === selected) as any).text}
-          <FComponentsLib.FIcons.FDown style={{ marginLeft: 8, fontSize: 12 }} /></a>
-      </FDropdownMenu>
+      />
       <FComponentsLib.FInput.FSearch
         // theme='dark'
         // debounce={300}
