@@ -56,7 +56,7 @@ function Sider({ resourceSider, dispatch }: SilderProps) {
   /** 上下架 */
   async function changeStatus(value: boolean) {
     if (value) {
-      set$processing(FI18n.i18nNext.t('set_resource_available_for_auth_msg_processing'))
+      set$processing(FI18n.i18nNext.t('set_resource_available_for_auth_msg_processing'));
       const onlineSuccess = await resourceOnline(resourceSider.resourceID);
       if (onlineSuccess) {
         setTimeout(() => {
@@ -193,7 +193,7 @@ function Sider({ resourceSider, dispatch }: SilderProps) {
             version: resourceSider.resourceVersions[resourceSider.resourceVersions.length - 1] || '',
           })}
         >
-          版本列表
+          {FI18n.i18nNext.t('edit_resource_tab_versions')}
         </FLink>
         <FLink
           className={[
@@ -204,7 +204,7 @@ function Sider({ resourceSider, dispatch }: SilderProps) {
             resourceID: resourceSider.resourceID,
           })}
         >
-          {FI18n.i18nNext.t('resource_information')}
+          {FI18n.i18nNext.t('edit_resource_tab_articleinfo')}
         </FLink>
         <FLink
           className={[
@@ -215,7 +215,7 @@ function Sider({ resourceSider, dispatch }: SilderProps) {
             resourceID: resourceSider.resourceID,
           })}
         >
-          <span>授权策略</span>
+          <span>{FI18n.i18nNext.t('edit_resource_tab_authplans')}</span>
           {resourceSider.policies.length === 0 &&
           !$resourceAuthShownArray[resourceSider.resourceID] && (
             <div className={styles.redDot} />
@@ -230,7 +230,7 @@ function Sider({ resourceSider, dispatch }: SilderProps) {
             resourceID: resourceSider.resourceID,
           })}
         >
-          授权合约
+          {FI18n.i18nNext.t('edit_resource_tab_licenceecontracts')}
         </FLink>
         <FLink
           className={[
@@ -242,7 +242,7 @@ function Sider({ resourceSider, dispatch }: SilderProps) {
           })}
         >
           <Space size={10}>
-            <span>依赖授权管理</span>
+            <span>{FI18n.i18nNext.t('edit_resource_tab_relynauth')}</span>
             {resourceSider.hasAuthProblem && (
               <FTooltip title={'存在授权问题'}>
                 <FComponentsLib.FIcons.FWarning style={{ fontSize: 16 }} />
