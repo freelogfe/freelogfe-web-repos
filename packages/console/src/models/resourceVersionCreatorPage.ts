@@ -1091,23 +1091,6 @@ const Model: ResourceVersionCreatorModelType = {
             // draftSaveTime: FUtil.Format.formatDateTime(data_draft.updateDate, true),
           },
         });
-
-        // console.log(draftData, 'draftDataoisdjflksdjflksdjflkj');
-        // const p: {
-        //   addTargets(value: any): void;
-        //   clear(): void;
-        //   setBaseUpcastResources(value: IBaseUpcastResource[]): void;
-        // } = yield call(getProcessor, 'resourceVersionCreator');
-        // yield call(p.clear);
-        // yield call(p.addTargets, draftData.directDependencies);
-        // yield call(p.setBaseUpcastResources, draftData?.baseUpcastResources || []);
-        // yield put<ChangeAction>({
-        //   type: 'change',
-        //   payload: {
-        //     directDependencies: draftData.directDependencies,
-        //     baseUpcastResources: draftData?.baseUpcastResources || [],
-        //   }
-        // })
         yield call(FUtil.Tool.promiseSleep);
 
         if (draftData.selectedFileInfo) {
