@@ -26,7 +26,7 @@
     "@ant-design/pro-layout": "^6.38.22",
     "@antv/g6": "^4.8.13",
     "@antv/g6-react-node": "^1.4.5",
-    "@freelog/components-lib": "^0.1.31",
+    "@freelog/components-lib": "^0.1.32",
     "@freelog/nmr_translator": "^5.1.4",
     "@freelog/resource-policy-lang": "^1.5.3",
     "@freelog/tools-lib": "^0.1.160",

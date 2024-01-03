@@ -22,7 +22,7 @@
   "dependencies": {
     "@ahooksjs/use-url-state": "^3.5.0",
     "@ant-design/icons": "^4.7.0",
-    "@freelog/components-lib": "^0.1.31",
+    "@freelog/components-lib": "^0.1.32",
     "@freelog/tools-lib": "^0.1.160",
     "animate.css": "^4.1.1",
     "antd": "^4.24.12",

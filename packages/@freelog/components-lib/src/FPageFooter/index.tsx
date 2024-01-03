@@ -86,7 +86,12 @@ function FPageFooter({PopoverPatch, style = {}}: FPageFooterProps): React.ReactE
                         <FIcons.FWeChat/>
                     </a>
                 </FPopover>
-                <a href={'https://weibo.com/u/7762454686'} target={'_blank'} className={styles.footerLeft_Link}>
+                <a
+                    // href={'https://weibo.com/u/7762454686'}
+                    href={FI18n.i18nNext.t('nav_weibologo_link')}
+                    target={'_blank'}
+                    className={styles.footerLeft_Link}
+                >
                     <FIcons.FSina/>
                 </a>
             </Space>
