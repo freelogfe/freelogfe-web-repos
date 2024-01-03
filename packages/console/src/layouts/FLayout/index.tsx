@@ -216,14 +216,16 @@ function FLayout({
             {
               id: 'community',
               text: FI18n.i18nNext.t('nav_communitiy'),
-              href: 'https://forum.freelog.com/',
+              // href: 'https://forum.freelog.com/',
+              href: FI18n.i18nNext.t('nav_communitiy_link'),
               target: '_blank',
               items: [],
             },
             {
               id: 'help',
               text: FI18n.i18nNext.t('nav_docs'),
-              href: 'https://freelog3.freelog.com/',
+              // href: 'https://freelog3.freelog.com/',
+              href: FI18n.i18nNext.t('nav_docs_link'),
               target: '_blank',
               items: [],
             },
