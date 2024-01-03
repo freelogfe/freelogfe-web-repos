@@ -248,6 +248,8 @@ function FObjectsSelectorDrawer({ resourceTypeCode, onSelect, onClose }: FObject
             <FComponentsLib.FContentText
               type={'highlight'}
               text={obj.objName}
+              singleRow
+              style={{ maxWidth: 600 }}
             />
             {
               $checkedObjectIDs.includes(obj.objID) && (<label className={styles.checkedLabel}>
