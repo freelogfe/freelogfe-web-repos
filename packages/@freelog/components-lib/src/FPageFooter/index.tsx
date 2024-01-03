@@ -26,27 +26,30 @@ function FPageFooter({PopoverPatch, style = {}}: FPageFooterProps): React.ReactE
                 </a>
                 <div className={styles.Divider}/>
                 <a
-                    href={'https://freelog4.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62cf872542afc0002f1d8b0c'}
+                    // href={'https://freelog4.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62cf872542afc0002f1d8b0c'}
+                    href={FI18n.i18nNext.t('nav_ProductDevActivities_link')}
                     target="_blank"
                     className={styles.footerLeft_Link}
                 >{FI18n.i18nNext.t('nav_ProductDevActivities')}</a>
                 <div className={styles.Divider}/>
                 <a
                     className={styles.footerLeft_Link}
-                    href={'https://freelog2.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62cce8f2456ff0002e328eb2'}
+                    // href={'https://freelog2.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62cce8f2456ff0002e328eb2'}
+                    href={FI18n.i18nNext.t('nav_TermsPrivacy_link')}
                     target="_blank"
                 >{FI18n.i18nNext.t('nav_TermsPrivacy')}</a>
                 <div className={styles.Divider}/>
                 <a
                     className={styles.footerLeft_Link}
-                    href={'https://freelog4.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62d0d202456ff0002e3295ab'}
+                    // href={'https://freelog4.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62d0d202456ff0002e3295ab'}
+                    href={FI18n.i18nNext.t('nav_AboutUs_link')}
                     target="_blank"
                 >{FI18n.i18nNext.t('nav_AboutUs')}</a>
                 <div className={styles.Divider}/>
                 <a
                     className={styles.footerLeft_Link}
                     // href={'https://freelog4.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62d0d202456ff0002e3295ab'}
-                    href={'https://freelog4.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62d0d58042afc0002f1d9282'}
+                    href={FI18n.i18nNext.t('nav_ContactUs_link')}
                     target="_blank"
                 >{FI18n.i18nNext.t('nav_ContactUs')}</a>
                 <div className={styles.Divider}/>
@@ -92,7 +95,8 @@ function FPageFooter({PopoverPatch, style = {}}: FPageFooterProps): React.ReactE
         <div className={styles.footerRight}>
             <a
                 className={styles.footerRightText}
-                href={'https://beian.miit.gov.cn/'}
+                // href={'https://beian.miit.gov.cn/'}
+                href={FI18n.i18nNext.t('nav_copyright_link')}
                 target={'_blank'}
             >{window.location.origin.includes('.freelog.com') ? '粤ICP备17085716号-1' : '粤ICP备17085716号-2'}</a>
             <div style={{width: 20}}/>
