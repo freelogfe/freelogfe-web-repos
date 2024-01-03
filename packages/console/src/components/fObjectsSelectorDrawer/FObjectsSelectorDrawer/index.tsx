@@ -1,14 +1,14 @@
 import * as React from 'react';
 import styles from './index.less';
 import FDrawer from '@/components/FDrawer';
-import FDropdownMenu from '@/components/FDropdownMenu';
+// import FDropdownMenu from '@/components/FDropdownMenu';
 import FComponentsLib from '@freelog/components-lib';
 import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
 import FListFooter, { listStateAndListMore } from '@/components/FListFooter';
 import * as AHooks from 'ahooks';
-import { Checkbox, Select, Space } from 'antd';
-import { BorderOutlined, CheckSquareOutlined } from '@ant-design/icons';
-import FSelect from '@/components/FSelect';
+import { Select, Space } from 'antd';
+// import { BorderOutlined, CheckSquareOutlined } from '@ant-design/icons';
+// import FSelect from '@/components/FSelect';
 
 interface FObjectsSelectorDrawerProps {
   resourceTypeCode: string;
