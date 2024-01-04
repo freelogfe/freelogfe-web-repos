@@ -19,7 +19,7 @@ import {
   OnClick_Setting_CancelEditBtn_Action,
   OnClick_Setting_EditBtn_Action,
   OnClick_Setting_SaveEditBtn_Action,
-  OnMount_SettingPage_Action,
+  OnMount_SettingPage_Action, OnUnmount_SettingPage_Action,
 } from '@/models/nodeManagerPage';
 import fMessage from '@/components/fMessage';
 import FUploadNodeCover from '@/components/FUploadNodeCover';
@@ -40,7 +40,9 @@ function Setting({ dispatch, nodeManagerPage }: SettingProps) {
   });
 
   AHooks.useUnmount(() => {
-
+    dispatch<OnUnmount_SettingPage_Action>({
+      type: 'nodeManagerPage/onUnmount_SettingPage',
+    });
   });
 
   return (<>

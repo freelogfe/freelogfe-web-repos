@@ -694,8 +694,13 @@ const Model: NodeManagerModelType = {
       });
 
     },
-    * onUnmount_SettingPage({}: OnUnmount_SettingPage_Action, {}: EffectsCommandMap) {
-
+    * onUnmount_SettingPage({}: OnUnmount_SettingPage_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          ...settingInitStates,
+        },
+      });
     },
 
     * onChange_Exhibit_SelectedType({ payload }: OnChange_Exhibit_SelectedType_Action, { put }: EffectsCommandMap) {
