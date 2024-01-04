@@ -4,7 +4,7 @@ import { connect } from 'dva';
 import { ConnectState, NodeManagerModelState } from '@/models/connect';
 import { Helmet } from 'react-helmet';
 import { Dispatch } from 'redux';
-import Sider from '@/pages/node/formal/$id/Sider';
+import Sider from '../Sider';
 import FSiderContentLayout from '@/layouts/FSiderContentLayout';
 import FComponentsLib from '@freelog/components-lib';
 import { Radio, Space } from 'antd';
