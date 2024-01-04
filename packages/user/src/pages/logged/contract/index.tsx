@@ -622,15 +622,15 @@ function Contract({ dispatch, contractPage }: ContractProps) {
                     >{contractPage.authorize_moreFilterShow ? '收起筛选条件' : '更多筛选条件'}</FComponentsLib.FTextBtn>
                   </Space>
                   <FComponentsLib.FInput.FSearch
-                    lengthLimit={-1}
+                    lengthLimit={100}
                     value={keywordsInput1}
                     className={styles.filterInput}
                     // wrapClassName={styles.filterInput}
                     // theme='dark'
                     // debounce={300}
-                    onChange={(e) => {
+                    onChange={(value) => {
 
-                      set_keywordsInput1(e.target.value);
+                      set_keywordsInput1(value);
                     }}
                     // placeholder={FI18n.i18nNext.t('mycontracts_search_contracts_hint')}
                     placeholder={FI18n.i18nNext.t('contractmngt_search_hint')}
@@ -838,13 +838,14 @@ function Contract({ dispatch, contractPage }: ContractProps) {
                   </Space>
                   <FComponentsLib.FInput.FSearch
                     value={keywordsInput2}
-                    lengthLimit={-1}
+                    lengthLimit={100}
                     className={styles.filterInput}
                     // wrapClassName={styles.filterInput}
                     // theme='dark'
                     // debounce={300}
-                    onChange={(e) => {
-                      set_keywordsInput2(e.target.value);
+                    onChange={(value) => {
+                      // console.log(value, '********');
+                      set_keywordsInput2(value);
                     }}
                     // placeholder={FI18n.i18nNext.t('contractmngt_search_hint')}
                     placeholder={FI18n.i18nNext.t('contractmngt_search_hint')}
