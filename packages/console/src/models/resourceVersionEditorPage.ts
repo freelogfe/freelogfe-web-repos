@@ -59,6 +59,8 @@ export interface ResourceVersionEditorPageModelState {
     input: string;
     select: string[];
   }[];
+
+
 }
 
 export interface ChangeAction extends AnyAction {

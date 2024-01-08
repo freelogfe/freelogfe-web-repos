@@ -5,12 +5,32 @@ import * as AHooks from 'ahooks';
 // import { Button } from 'antd';
 import { FUtil } from '@freelog/tools-lib';
 
+
+// directDependencies: {
+//   id: string;
+//   name: string;
+//   type: 'resource' | 'object';
+//   versionRange?: string;
+// }[];
+// baseUpcastResources: {
+//   resourceID: string;
+//   resourceName: string;
+// }[];
+
 interface FMicroAPP_Authorization_Props {
   reload?: number;
   licenseeId: string;
   mainAppType: string;
-  depList: any[];
-  upcastList: any[];
+  depList: {
+    id: string;
+    name: string;
+    type: 'resource' | 'object';
+    versionRange?: string;
+  }[];
+  upcastList: {
+    resourceID: string;
+    resourceName: string;
+  }[];
 
   update(data: any): void;
 }

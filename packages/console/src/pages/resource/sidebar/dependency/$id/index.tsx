@@ -12,6 +12,7 @@ import FComponentsLib from '@freelog/components-lib';
 import { FI18n, FUtil } from '@freelog/tools-lib';
 import FAuthPanel from '@/pages/resource/auth/$id/FAuthPanel';
 import FBasicUpcastCard from '@/components/FBasicUpcastCard';
+import FMicroAPP_Authorization from '@/components/FMicroAPP_Authorization';
 
 interface DependencyProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -44,44 +45,53 @@ function Dependency({ dispatch, resourceAuthPage, match }: DependencyProps) {
   return (<>
     <div>
       <div style={{ height: 40 }} />
-      <div className={styles.block}>
-        <FComponentsLib.FContentText text={'依赖授权管理'} type={'highlight'} />
+      <FMicroAPP_Authorization
+        licenseeId={resourceAuthPage.resourceID}
+        mainAppType={'resourceDepAuth'}
+        depList={[]}
+        upcastList={[]}
+        update={(value) => {
 
-        {
-          resourceAuthPage.contractsAuthorized.length === 0 && resourceAuthPage.baseUastResources.length === 0 && (<>
-            <div style={{ height: 10 }} />
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-              <FComponentsLib.FContentText text={'暂无合约'} type={'additional2'} />
-            </div>
-          </>)
-        }
+        }}
+      />
+      {/*<div className={styles.block}>*/}
+      {/*<FComponentsLib.FContentText text={'依赖授权管理'} type={'highlight'} />*/}
 
-        {
-          resourceAuthPage.baseUastResources.length > 0 && (<>
-            <div style={{ height: 20 }} />
-            <FBasicUpcastCard
-              dataSource={resourceAuthPage.baseUastResources.map((bur) => {
-                return {
-                  resourceID: bur.resourceId,
-                  resourceName: bur.resourceName,
-                };
-              })}
-              onClick={(resourceID) => {
-                window.open(FUtil.LinkTo.resourceDetails({
-                  resourceID: resourceID,
-                }));
-              }}
-            />
-          </>)
-        }
+      {/*{*/}
+      {/*  resourceAuthPage.contractsAuthorized.length === 0 && resourceAuthPage.baseUastResources.length === 0 && (<>*/}
+      {/*    <div style={{ height: 10 }} />*/}
+      {/*    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>*/}
+      {/*      <FComponentsLib.FContentText text={'暂无合约'} type={'additional2'} />*/}
+      {/*    </div>*/}
+      {/*  </>)*/}
+      {/*}*/}
 
-        {
-          resourceAuthPage.contractsAuthorized.length > 0 && (<>
-            <div style={{ height: 20 }} />
-            <FAuthPanel />
-          </>)
-        }
-      </div>
+      {/*{*/}
+      {/*  resourceAuthPage.baseUastResources.length > 0 && (<>*/}
+      {/*    <div style={{ height: 20 }} />*/}
+      {/*    <FBasicUpcastCard*/}
+      {/*      dataSource={resourceAuthPage.baseUastResources.map((bur) => {*/}
+      {/*        return {*/}
+      {/*          resourceID: bur.resourceId,*/}
+      {/*          resourceName: bur.resourceName,*/}
+      {/*        };*/}
+      {/*      })}*/}
+      {/*      onClick={(resourceID) => {*/}
+      {/*        window.open(FUtil.LinkTo.resourceDetails({*/}
+      {/*          resourceID: resourceID,*/}
+      {/*        }));*/}
+      {/*      }}*/}
+      {/*    />*/}
+      {/*  </>)*/}
+      {/*}*/}
+
+      {/*{*/}
+      {/*  resourceAuthPage.contractsAuthorized.length > 0 && (<>*/}
+      {/*    <div style={{ height: 20 }} />*/}
+      {/*    <FAuthPanel />*/}
+      {/*  </>)*/}
+      {/*}*/}
+      {/*</div>*/}
       <div style={{ height: 100 }} />
     </div>
   </>);
