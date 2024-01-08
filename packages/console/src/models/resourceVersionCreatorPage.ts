@@ -505,6 +505,12 @@ const Model: ResourceVersionCreatorModelType = {
           preVersion_customProperties,
           preVersion_customConfigurations,
           directDependencies: preVersionDirectDependencies,
+          baseUpcastResources: data_resourceInfo.baseUpcastResources.map((b) => {
+            return {
+              resourceID: b.resourceId,
+              resourceName: b.resourceName,
+            };
+          }),
           descriptionEditorState,
         },
       });
