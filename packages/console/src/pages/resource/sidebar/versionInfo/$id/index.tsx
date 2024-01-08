@@ -29,6 +29,7 @@ import BraftEditor, { EditorState } from 'braft-editor';
 import FMenu from '@/components/FMenu';
 import FViewportCards_Resource from '@/components/FAntvG6/FViewportCards_Resource';
 import { OnMount_PolicyPage_Action } from '@/models/resourceAuthPage';
+import FMicroAPP_Authorization from '@/components/FMicroAPP_Authorization';
 
 interface VersionInfoProps extends RouteComponentProps<{ id: string; }> {
   dispatch: Dispatch;
@@ -496,6 +497,24 @@ function VersionInfo({ dispatch, resourceVersionEditorPage, match }: VersionInfo
           </div>
         </>)
       }
+
+      {
+        resourceVersionEditorPage.directDependencies.length > 0 && (<>
+          <div style={{ height: 5 }} />
+          <div className={styles.block}>
+            <FMicroAPP_Authorization
+              licenseeId={resourceVersionEditorPage.resourceID}
+              mainAppType={'resourceInfo'}
+              depList={resourceVersionEditorPage.directDependencies}
+              upcastList={resourceVersionEditorPage.baseUpcastResources}
+              update={(value) => {
+
+              }}
+            />
+          </div>
+        </>)
+      }
+
     </div>
   </>);
 }

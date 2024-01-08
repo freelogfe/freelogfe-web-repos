@@ -60,6 +60,16 @@ export interface ResourceVersionEditorPageModelState {
     select: string[];
   }[];
 
+  directDependencies: {
+    id: string;
+    name: string;
+    type: 'resource' | 'object';
+    versionRange?: string;
+  }[];
+  baseUpcastResources: {
+    resourceID: string;
+    resourceName: string;
+  }[];
 
 }
 
@@ -119,6 +129,9 @@ const Model: ResourceVersionEditorModelType = {
     customProperties: [],
 
     customConfigurations: [],
+
+    directDependencies: [],
+    baseUpcastResources: [],
   },
 
   effects: {
@@ -147,9 +160,13 @@ const Model: ResourceVersionEditorModelType = {
           coverImages: string[];
           resourceType: string[];
           policies: PolicyFullInfo_Type[];
+          baseUpcastResources: {
+            resourceId: string;
+            resourceName: string;
+          }[];
         };
       } = yield call(FServiceAPI.Resource.info, params1);
-      // console.log(resourceVersionEditorPage.resourceID, resourceVersionEditorPage.version, 'sdfsdfasefewrfw4eagtfrtef[09gijopredslkfj');
+      // console.log(data_resourceInfo, 'sdfsdfasefewrfw4eagtfrtef[09gijopredslkfj');
 
       const params3: Parameters<typeof FServiceAPI.Resource.lookDraft>[0] = {
         resourceId: resourceVersionEditorPage.resourceID,
@@ -199,6 +216,29 @@ const Model: ResourceVersionEditorModelType = {
       const base = data_versionInfo.customPropertyDescriptors.filter((i) => i.type === 'readonlyText');
       const opt = data_versionInfo.customPropertyDescriptors.filter((i) => i.type === 'editableText' || i.type === 'select');
       // console.log('@#$@#$@#$@#$$#@$@#$1111111111');
+
+
+      const params4: Parameters<typeof FServiceAPI.Resource.resolveResources>[0] = {
+        resourceId: resourceVersionEditorPage.resourceID,
+      };
+      const { data: data_resolveResources }: {
+        data: {
+          resourceId: string;
+          resourceName: string;
+          versions: {
+            version: string;
+            versionId: string;
+            contracts: {
+              policyId: string;
+              contractId: string;
+            }[];
+          }[];
+        }[];
+      } = yield call(FServiceAPI.Resource.resolveResources, params4);
+
+      // console.log(data_resolveResources, 'data_resolveResources sdifjsd;lkfjlksdjflkjsdlkfjlkj');
+
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -260,6 +300,21 @@ const Model: ResourceVersionEditorModelType = {
             input: i.defaultValue,
             select: i.candidateItems,
           })),
+
+          directDependencies: data_resolveResources.map((r) => {
+            return {
+              id: r.resourceId,
+              name: r.resourceName,
+              type: 'resource',
+              // versionRange?: string;
+            };
+          }),
+          baseUpcastResources: data_resourceInfo.baseUpcastResources.map((b) => {
+            return {
+              resourceID: b.resourceId,
+              resourceName: b.resourceName,
+            };
+          }),
         },
       });
     },

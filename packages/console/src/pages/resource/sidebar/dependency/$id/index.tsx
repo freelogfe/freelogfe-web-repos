@@ -8,10 +8,6 @@ import * as AHooks from 'ahooks';
 import { withRouter } from 'umi';
 import { connect } from 'dva';
 import { ConnectState } from '@/models/connect';
-import FComponentsLib from '@freelog/components-lib';
-import { FI18n, FUtil } from '@freelog/tools-lib';
-import FAuthPanel from '@/pages/resource/auth/$id/FAuthPanel';
-import FBasicUpcastCard from '@/components/FBasicUpcastCard';
 import FMicroAPP_Authorization from '@/components/FMicroAPP_Authorization';
 
 interface DependencyProps extends RouteComponentProps<{ id: string }> {
