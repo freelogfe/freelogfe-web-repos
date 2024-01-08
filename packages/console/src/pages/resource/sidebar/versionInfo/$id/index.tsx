@@ -95,16 +95,6 @@ function VersionInfo({ dispatch, resourceVersionEditorPage, match }: VersionInfo
     });
   }
 
-  // if (resourceVersionEditorPage.version === '') {
-  //   return (<FNoDataTip
-  //     height={'calc(100vh - 70px)'}
-  //     tipText={'上传资源，开启授权之旅'}
-  //     btnText={'上传资源'}
-  //     onClick={() => {
-  //       self.open(FUtil.LinkTo.resourceVersionCreator({ resourceID: match.params.id }));
-  //     }}
-  //   />);
-  // }
   if (resourceVersionEditorPage.version === '') {
     return (<div
       className={styles.noData}
@@ -507,6 +497,7 @@ function VersionInfo({ dispatch, resourceVersionEditorPage, match }: VersionInfo
               mainAppType={'resourceInfo'}
               depList={resourceVersionEditorPage.directDependencies}
               upcastList={resourceVersionEditorPage.baseUpcastResources}
+              reload={resourceVersionEditorPage.reload}
               update={(value) => {
 
               }}
@@ -516,6 +507,8 @@ function VersionInfo({ dispatch, resourceVersionEditorPage, match }: VersionInfo
       }
 
     </div>
+
+    <div style={{ height: 100 }} />
   </>);
 }
 

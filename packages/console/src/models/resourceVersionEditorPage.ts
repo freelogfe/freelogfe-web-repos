@@ -70,7 +70,7 @@ export interface ResourceVersionEditorPageModelState {
     resourceID: string;
     resourceName: string;
   }[];
-
+  reload: number;
 }
 
 export interface ChangeAction extends AnyAction {
@@ -132,6 +132,7 @@ const Model: ResourceVersionEditorModelType = {
 
     directDependencies: [],
     baseUpcastResources: [],
+    reload: 0,
   },
 
   effects: {
@@ -205,6 +206,11 @@ const Model: ResourceVersionEditorModelType = {
             valueUnit: string;
             insertMode: 1 | 2;
           }[];
+          dependencies: {
+            resourceId: string;
+            resourceName: string;
+            versionRange: string;
+          }[];
         }
       } = yield call(FServiceAPI.Resource.resourceVersionInfo1, params);
       // console.log(data_versionInfo, 'data902q3jrlkasdfasdf');
@@ -218,23 +224,23 @@ const Model: ResourceVersionEditorModelType = {
       // console.log('@#$@#$@#$@#$$#@$@#$1111111111');
 
 
-      const params4: Parameters<typeof FServiceAPI.Resource.resolveResources>[0] = {
-        resourceId: resourceVersionEditorPage.resourceID,
-      };
-      const { data: data_resolveResources }: {
-        data: {
-          resourceId: string;
-          resourceName: string;
-          versions: {
-            version: string;
-            versionId: string;
-            contracts: {
-              policyId: string;
-              contractId: string;
-            }[];
-          }[];
-        }[];
-      } = yield call(FServiceAPI.Resource.resolveResources, params4);
+      // const params4: Parameters<typeof FServiceAPI.Resource.resolveResources>[0] = {
+      //   resourceId: resourceVersionEditorPage.resourceID,
+      // };
+      // const { data: data_resolveResources }: {
+      //   data: {
+      //     resourceId: string;
+      //     resourceName: string;
+      //     versions: {
+      //       version: string;
+      //       versionId: string;
+      //       contracts: {
+      //         policyId: string;
+      //         contractId: string;
+      //       }[];
+      //     }[];
+      //   }[];
+      // } = yield call(FServiceAPI.Resource.resolveResources, params4);
 
       // console.log(data_resolveResources, 'data_resolveResources sdifjsd;lkfjlksdjflkjsdlkfjlkj');
 
@@ -301,12 +307,12 @@ const Model: ResourceVersionEditorModelType = {
             select: i.candidateItems,
           })),
 
-          directDependencies: data_resolveResources.map((r) => {
+          directDependencies: data_versionInfo.dependencies.map((r) => {
             return {
               id: r.resourceId,
               name: r.resourceName,
               type: 'resource',
-              // versionRange?: string;
+              versionRange: r.versionRange,
             };
           }),
           baseUpcastResources: data_resourceInfo.baseUpcastResources.map((b) => {
@@ -315,6 +321,7 @@ const Model: ResourceVersionEditorModelType = {
               resourceName: b.resourceName,
             };
           }),
+          reload: resourceVersionEditorPage.reload + 1,
         },
       });
     },
