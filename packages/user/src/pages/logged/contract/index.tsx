@@ -75,6 +75,7 @@ function Contract({ dispatch, contractPage }: ContractProps) {
         authorized_authorizeInput: urlParams.identityType === '2' ? urlParams.licensorName : '',
         authorized_authorizedInput: urlParams.identityType === '2' ? urlParams.licenseeName : '',
         authorized_Status: urlParams.identityType === '2' ? (urlParams.status === '1' ? 'terminated' : 'all') : 'all',
+        authorized_moreFilterShow: urlParams.identityType === '2' && (urlParams.licensorName !== '' || urlParams.licenseeName !== ''),
       },
     });
 
@@ -95,8 +96,6 @@ function Contract({ dispatch, contractPage }: ContractProps) {
       });
     }
   });
-
-  // dispatch<>
 
   AHooks.useUnmount(() => {
     dispatch<OnUnmountPageAction>({
@@ -700,19 +699,6 @@ function Contract({ dispatch, contractPage }: ContractProps) {
                             });
                           }}
                         />
-                        {/*<AutoComplete*/}
-                        {/*  value={contractPage.authorize_authorizedInput}*/}
-                        {/*  style={{ width: 340, height: 38 }}*/}
-                        {/*  options={contractPage.authorize_authorizedOptions}*/}
-                        {/*  onChange={(value) => {*/}
-                        {/*    dispatch<OnChange_Authorize_AuthorizedInput_Action>({*/}
-                        {/*      type: 'contractPage/onChange_Authorize_AuthorizedInput',*/}
-                        {/*      payload: {*/}
-                        {/*        value: value,*/}
-                        {/*      },*/}
-                        {/*    });*/}
-                        {/*  }}*/}
-                        {/*/>*/}
                       </div>
 
                     </div>

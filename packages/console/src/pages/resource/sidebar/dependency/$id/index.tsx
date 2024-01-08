@@ -3,7 +3,7 @@ import styles from './index.less';
 import { OnChange_Page_Action, OnMount_Page_Action as OnMount_Sidebar_Action } from '@/models/resourceSider';
 import { RouteComponentProps } from 'react-router/index';
 import { Dispatch } from 'redux';
-import { OnMount_DependencyPage_Action, ResourceAuthPageModelState } from '@/models/resourceAuthPage';
+// import { OnMount_DependencyPage_Action, ResourceAuthPageModelState } from '@/models/resourceAuthPage';
 import * as AHooks from 'ahooks';
 import { withRouter } from 'umi';
 import { connect } from 'dva';
