@@ -23,6 +23,7 @@ import { DashboardPageModelState } from './dashboardPage';
 import { NodeCreatorPageModelState } from './nodeCreatorPage';
 import { ResourceSiderModelState } from './resourceSider';
 import { ResourceCreatorBatchPageState } from './resourceCreatorBatchPage';
+import { ResourceDependencyPageState } from './resourceDependencyPage';
 
 export {
   GlobalSearchingModelState,
@@ -49,7 +50,8 @@ export {
   DashboardPageModelState,
   NodeCreatorPageModelState,
   ResourceSiderModelState,
-  ResourceCreatorBatchPageState
+  ResourceCreatorBatchPageState,
+  ResourceDependencyPageState,
 };
 
 export interface ConnectState {
@@ -80,4 +82,5 @@ export interface ConnectState {
   nodeCreatorPage: NodeCreatorPageModelState;
   resourceSider: ResourceSiderModelState;
   resourceCreatorBatchPage: ResourceCreatorBatchPageState;
+  resourceDependencyPage: ResourceDependencyPageState;
 }

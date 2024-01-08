@@ -9,13 +9,14 @@ import { withRouter } from 'umi';
 import { connect } from 'dva';
 import { ConnectState } from '@/models/connect';
 import FMicroAPP_Authorization from '@/components/FMicroAPP_Authorization';
+import { OnMount_Page_Action, ResourceDependencyPageState } from '@/models/resourceDependencyPage';
 
 interface DependencyProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
-  resourceAuthPage: ResourceAuthPageModelState;
+  resourceDependencyPage: ResourceDependencyPageState;
 }
 
-function Dependency({ dispatch, resourceAuthPage, match }: DependencyProps) {
+function Dependency({ dispatch, resourceDependencyPage, match }: DependencyProps) {
 
   AHooks.useMount(async () => {
     dispatch<OnMount_Sidebar_Action>({
@@ -30,8 +31,8 @@ function Dependency({ dispatch, resourceAuthPage, match }: DependencyProps) {
         page: 'dependency',
       },
     });
-    dispatch<OnMount_DependencyPage_Action>({
-      type: 'resourceAuthPage/onMount_DependencyPage',
+    dispatch<OnMount_Page_Action>({
+      type: 'resourceDependencyPage/onMount_Page',
       payload: {
         resourceID: match.params.id,
       },
@@ -41,15 +42,21 @@ function Dependency({ dispatch, resourceAuthPage, match }: DependencyProps) {
   return (<>
     <div>
       <div style={{ height: 40 }} />
-      <FMicroAPP_Authorization
-        licenseeId={resourceAuthPage.resourceID}
-        mainAppType={'resourceDepAuth'}
-        depList={[]}
-        upcastList={[]}
-        update={(value) => {
+      {
+        resourceDependencyPage.directDependencies.length > 0 && (<div className={styles.block}>
+          <FMicroAPP_Authorization
+            licenseeId={resourceDependencyPage.resourceID}
+            mainAppType={'resourceDepAuth'}
+            depList={resourceDependencyPage.directDependencies}
+            upcastList={resourceDependencyPage.baseUpcastResources}
+            // applyVersions={[]}
+            update={(value) => {
 
-        }}
-      />
+            }}
+          />
+        </div>)
+      }
+
       {/*<div className={styles.block}>*/}
       {/*<FComponentsLib.FContentText text={'依赖授权管理'} type={'highlight'} />*/}
 
@@ -93,6 +100,6 @@ function Dependency({ dispatch, resourceAuthPage, match }: DependencyProps) {
   </>);
 }
 
-export default withRouter(connect(({ resourceAuthPage }: ConnectState) => ({
-  resourceAuthPage: resourceAuthPage,
+export default withRouter(connect(({ resourceDependencyPage }: ConnectState) => ({
+  resourceDependencyPage: resourceDependencyPage,
 }))(Dependency));
