@@ -16,6 +16,12 @@ import fMessage from '@/components/fMessage';
 import FUploadCover from '@/components/FUploadCover';
 import fPolicyBuilder from '@/components/fPolicyBuilder';
 import FMicroAPP_Authorization from '@/components/FMicroAPP_Authorization';
+import img from '@/assets/file-object.svg';
+import { getFilesSha1Info } from '@/utils/service';
+import {
+  OnClick_step2_editCartoonBtn_Action,
+  OnClick_step2_editMarkdownBtn_Action, OnRemove_step2_file_Action,
+} from '@/models/resourceCreatorPage';
 
 interface CardProps {
   order: number;
@@ -138,6 +144,59 @@ function Card({
       ...info,
       resourceNameError: nameErrorText,
     });
+  }
+
+  if (info.error !== '') {
+    return (<div className={styles.resourceContainer}>
+      <div className={styles.resourceOrder}>
+        <FComponentsLib.FContentText
+          text={FI18n.i18nNext.t('brr_resourcelisting_item_no', {
+            ResourceNO: order,
+          })}
+          type={'highlight'}
+          style={{ fontSize: 12 }}
+        />
+        <FComponentsLib.FTextBtn
+          style={{ fontSize: 12 }}
+          type={'danger'}
+          onClick={() => {
+            onDelete && onDelete();
+          }}
+        >
+          <FComponentsLib.FIcons.FDelete style={{ fontSize: 12 }} />
+          &nbsp;{FI18n.i18nNext.t('brr_resourcelisting_item_btn_deleteitem')}
+        </FComponentsLib.FTextBtn>
+      </div>
+      <div style={{ height: 5 }} />
+      <div className={styles.fileInfo}>
+        <div className={styles.card}>
+          <img src={img} className={styles.img} alt='' />
+          <div style={{ width: 20 }} />
+          <div>
+            <FComponentsLib.FContentText
+              type='highlight'
+              text={info.fileName}
+              style={{ maxWidth: 600 }}
+              singleRow
+            />
+            <div style={{ height: 18 }} />
+            <div className={styles.info}>
+              <FComponentsLib.FContentText
+                className={styles.infoSize}
+                type='additional1'
+                text={'本地上传'}
+              />
+            </div>
+          </div>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <FComponentsLib.FTextBtn
+            type='danger'
+            style={{ fontSize: 12, display: 'flex', alignItems: 'center', gap: 5 }}
+          >{info.error}</FComponentsLib.FTextBtn>
+        </div>
+      </div>
+    </div>);
   }
 
   return (<div className={styles.resourceContainer}>

@@ -9,7 +9,6 @@ import fMessage from '@/components/fMessage';
 import FModal from '@/components/FModal';
 import FTable from '@/components/FTable';
 import * as AHooks from 'ahooks';
-// import { Progress } from 'antd';
 
 interface LocalUploadProps {
   resourceTypeCode: string;
@@ -58,12 +57,12 @@ const initStates: LocalUploadStates = {
 
 function LocalUpload({ style, resourceTypeCode, resourceType, onSucceed, onChange_uploadingInfo }: LocalUploadProps) {
 
-  const uploadCancelHandler = React.useRef<any>();
+  // const uploadCancelHandler = React.useRef<any>();
   const [$accept, set$accept, get$accept] = useGetState<LocalUploadStates['$accept']>(initStates['$accept']);
   const [$fileInfo, set$fileInfo, get$fileInfo] = useGetState<LocalUploadStates['$fileInfo']>(initStates['$fileInfo']);
   const [$selfUsedResource, set$selfUsedResource, get$selfUsedResource] = useGetState<LocalUploadStates['$selfUsedResource']>(initStates['$selfUsedResource']);
   const [$otherUsedResource, set$otherUsedResource, get$otherUsedResource] = useGetState<LocalUploadStates['$otherUsedResource']>(initStates['$otherUsedResource']);
-  const [$uploadingProgress, set$uploadingProgress, get$uploadingProgress] = useGetState<LocalUploadStates['$uploadingProgress']>(initStates['$uploadingProgress']);
+  // const [$uploadingProgress, set$uploadingProgress, get$uploadingProgress] = useGetState<LocalUploadStates['$uploadingProgress']>(initStates['$uploadingProgress']);
 
   AHooks.useMount(async () => {
     const { data }: {

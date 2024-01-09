@@ -71,8 +71,7 @@ function Task({ file, resourceTypeCode,resourceType, onSuccess, onFail }: TaskPr
     };
     const { data: data_fileIsExist } = await FServiceAPI.Storage.fileIsExist(params0);
 
-    if (!data_fileIsExist[0].isExisting) {
-
+    if (data_fileIsExist[0].isExisting) {
       const params3: Parameters<typeof FServiceAPI.Resource.getResourceBySha1>[0] = {
         fileSha1: fileSha1,
       };
@@ -99,7 +98,7 @@ function Task({ file, resourceTypeCode,resourceType, onSuccess, onFail }: TaskPr
         });
         return;
       }
-
+    } else {
       const params: Parameters<typeof FServiceAPI.Storage.uploadFile>[0] = {
         file: file,
       };
