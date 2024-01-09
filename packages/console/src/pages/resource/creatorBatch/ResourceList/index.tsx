@@ -7,7 +7,7 @@ import { ConnectState, ResourceCreatorBatchPageState, ResourceVersionCreatorPage
 import Card from './Card';
 import { Dispatch } from 'redux';
 import { ChangeAction } from '@/models/resourceCreatorBatchPage';
-import fPolicyBuilder from '@/components/fPolicyBuilder';
+// import fPolicyBuilder from '@/components/fPolicyBuilder';
 import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
 import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
 import * as AHooks from 'ahooks';
