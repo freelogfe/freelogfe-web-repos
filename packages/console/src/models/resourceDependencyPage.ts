@@ -89,23 +89,10 @@ const Model: ResourceDependencyPageType = {
 
       const params0: Parameters<typeof FServiceAPI.Resource.info>[0] = {
         resourceIdOrName: resourceDependencyPage.resourceID,
-        // isLoadPolicyInfo: 1,
-        // isTranslate: 1,
       };
       // console.log(params, 'params9iosdj;flkjlk lksdajf;lkjl');
       const { data: data_resourceInfo }: {
         data: {
-          // userId: number;
-          // status: number;
-          // resourceId: string;
-          // resourceName: string;
-          // resourceVersions: {
-          //   version: string;
-          // }[];
-          // latestVersion: string;
-          // coverImages: string[];
-          // resourceType: string[];
-          // policies: PolicyFullInfo_Type[];
           baseUpcastResources: {
             resourceId: string;
             resourceName: string;
@@ -130,7 +117,7 @@ const Model: ResourceDependencyPageType = {
           }[];
         }[];
       } = yield call(FServiceAPI.Resource.resolveResources, params1);
-
+      console.log(data_resolveResources, 'data_resolveResources datasiodfjlsdkjflk');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -140,6 +127,9 @@ const Model: ResourceDependencyPageType = {
               name: r.resourceName,
               type: 'resource',
               // versionRange?: string;
+              applyVersions: r.versions.map((v) => {
+                return v.version;
+              }),
             };
           }),
           baseUpcastResources: data_resourceInfo.baseUpcastResources.map((b) => {
