@@ -1,6 +1,10 @@
 import * as React from 'react';
 import styles from './index.less';
-import { OnChange_Page_Action, OnMount_Page_Action as OnMount_Sidebar_Action } from '@/models/resourceSider';
+import {
+  OnChange_Page_Action,
+  OnMount_Page_Action as OnMount_Sidebar_Action,
+  OnUpdate_Data_Action,
+} from '@/models/resourceSider';
 import { RouteComponentProps } from 'react-router/index';
 import { Dispatch } from 'redux';
 import * as AHooks from 'ahooks';
@@ -50,7 +54,10 @@ function Dependency({ dispatch, resourceDependencyPage, match }: DependencyProps
             upcastList={resourceDependencyPage.baseUpcastResources}
             // applyVersions={[]}
             update={(value) => {
-
+              dispatch<OnUpdate_Data_Action>({
+                type: 'resourceSider/onUpdate_Data',
+                // payload: resourceAuthPage.resourceID,
+              });
             }}
           />
         </div>)
