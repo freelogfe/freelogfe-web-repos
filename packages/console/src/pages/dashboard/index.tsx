@@ -365,7 +365,7 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
                 extra={<Space size={25}>
                   <FComponentsLib.FTextBtn
                     onClick={() => {
-                      self.open(FUtil.LinkTo.resourceCreator());
+                      self.open(FUtil.LinkTo.resourceCreatorEntry());
                     }}
                     type='default'>
                     <FComponentsLib.FIcons.FAdd style={{ fontSize: 16 }} />
