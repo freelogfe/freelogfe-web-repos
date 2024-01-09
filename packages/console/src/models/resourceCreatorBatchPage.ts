@@ -69,6 +69,7 @@ export type ResourceCreatorBatchPageState = {
       }[];
     }[];
     isCompleteAuthorization: boolean;
+    error: string;
   }[];
   latestListIndex: number;
 

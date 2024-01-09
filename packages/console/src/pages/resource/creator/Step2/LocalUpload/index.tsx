@@ -367,41 +367,6 @@ function LocalUpload({ style, resourceTypeCode, resourceType, onSucceed, onChang
         })}
       />
     </FModal>
-
-    {/*<FModal*/}
-    {/*  closable={false}*/}
-    {/*  open={$uploadingProgress !== null}*/}
-    {/*  width={300}*/}
-    {/*  title={null}*/}
-    {/*  footer={null}*/}
-    {/*>*/}
-    {/*  <div className={styles.progressBox}>*/}
-    {/*    <Progress*/}
-    {/*      // strokeColor={'#2784ff'}*/}
-    {/*      type='circle'*/}
-    {/*      // strokeColor={{*/}
-    {/*      //   '0%': '#108ee9',*/}
-    {/*      //   '100%': '#87d068',*/}
-    {/*      // }}*/}
-    {/*      percent={$uploadingProgress || 0}*/}
-    {/*      success={{*/}
-    {/*        strokeColor: '#52c41a',*/}
-    {/*      }}*/}
-    {/*    />*/}
-    {/*    <div style={{ height: 20 }} />*/}
-    {/*    {*/}
-    {/*      $uploadingProgress !== 100*/}
-    {/*        ? (<FComponentsLib.FTextBtn*/}
-    {/*          type={'default'}*/}
-    {/*          onClick={() => {*/}
-    {/*            set$uploadingProgress(null);*/}
-    {/*            uploadCancelHandler.current && uploadCancelHandler.current();*/}
-    {/*          }}*/}
-    {/*        >取消上传</FComponentsLib.FTextBtn>)*/}
-    {/*        : (<FComponentsLib.FContentText text={'上传成功'} type={'highlight'} />)*/}
-    {/*    }*/}
-    {/*  </div>*/}
-    {/*</FModal>*/}
   </>);
 }
 

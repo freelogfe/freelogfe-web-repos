@@ -80,6 +80,7 @@ interface CardProps {
       }[];
     }[];
     isCompleteAuthorization: boolean;
+    error: string;
   };
 
   onChange?(value: CardProps['info']): void;
@@ -101,16 +102,8 @@ function Card({
                 onClickApplyLabels,
                 onClickApplyPolicies,
               }: CardProps) {
-  // const ref = React.useRef(null);
-  // const size = AHooks.useSize(ref);
   const [$showMore, set$showMore, get$showMore] = FUtil.Hook.useGetState<boolean>(false);
   const [$dataSource, set$dataSource, get$dataSource] = FUtil.Hook.useGetState<CardProps['info']>(info);
-
-  // AHooks.useMount(async () => {
-  //
-  //
-  //
-  // });
 
   React.useEffect(() => {
     set$dataSource(info);
@@ -147,15 +140,9 @@ function Card({
     });
   }
 
-  // function change({ depList, resolveResources, upcastList }: any) {
-  //   console.error(info, '(((((((((((((((((((((((((IIIIIIIIIIIIIIIIIIIIIIII');
-  //
-  // }
-
   return (<div className={styles.resourceContainer}>
     <div className={styles.resourceOrder}>
       <FComponentsLib.FContentText
-        // text={`资源${order}`}
         text={FI18n.i18nNext.t('brr_resourcelisting_item_no', {
           ResourceNO: order,
         })}

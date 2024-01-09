@@ -1,17 +1,15 @@
 import * as React from 'react';
 import styles from './index.less';
-import { Popover, Space } from 'antd';
+import { Space } from 'antd';
 import FComponentsLib from '@freelog/components-lib';
 import { connect } from 'dva';
 import { ConnectState, ResourceCreatorBatchPageState, ResourceVersionCreatorPageModelState } from '@/models/connect';
 import Card from './Card';
 import { Dispatch } from 'redux';
 import { ChangeAction } from '@/models/resourceCreatorBatchPage';
-// import fPolicyBuilder from '@/components/fPolicyBuilder';
 import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
 import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
 import * as AHooks from 'ahooks';
-// import { getProcessor_simple } from '@/components/FResourceAuthorizationProcessor_Simple';
 import fMessage from '@/components/fMessage';
 import { history } from '@@/core/history';
 import FPrompt from '@/components/FPrompt';
@@ -213,6 +211,7 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
     uid: string;
     name: string;
     sha1: string;
+    error: string;
   }[]) {
     const namesMap: Map<string, number> = new Map<string, number>();
 
@@ -346,6 +345,7 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
           baseUpcastResources: [],
           resolveResources: [],
           isCompleteAuthorization: true,
+          error: f.error,
         };
       }),
     ];
@@ -421,7 +421,6 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
           />
 
         </div>
-        {/*{console.log(resourceCreatorBatchPage.resourceListInfo, 'resourceCreatorBatchPage.resourceListInfo sdflkjsdlfjlsdjflkj +++++++++++++++++++++++++++++++++++')}*/}
         {
           resourceCreatorBatchPage.resourceListInfo.map((r, ri) => {
             return (<React.Fragment key={r.fileUID}>
@@ -432,18 +431,13 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
                 username={$username}
                 info={r}
                 onChange={(value) => {
-                  // console.error(value, 'VVVVVVVVVVVVVVVVVVVVVV*******************************');
-                  // const resourceListInfo = resourceCreatorBatchPage.resourceListInfo.map((rli) => {
                   const resourceListInfo = get$dataSource().map((rli) => {
                     if (value.fileUID !== rli.fileUID) {
                       return rli;
                     }
                     return value;
                   });
-                  // console.log(resourceListInfo, 'resourceListInfo sdifjlksdjflkjlksj------------------');
                   const map: Map<string, number> = new Map<string, number>();
-
-                  // console.log(resourceCreatorBatchPage.resourceListInfo, 'resourceCreatorBatchPage.resourceListInfo sdiofjlsdkjlk');
                   for (const info of resourceListInfo) {
                     map.set(info.resourceName, (map.get(info.resourceName) || 0) + 1);
                   }
@@ -470,7 +464,6 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
                   });
 
                   if (resourceListInfo.length === 0) {
-                    //   if (resourceCreatorBatchPage.resourceListInfo.length === 0) {
                     dispatch<ChangeAction>({
                       type: 'resourceCreatorBatchPage/change',
                       payload: {
@@ -479,12 +472,10 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
                       },
                     });
                     return;
-                    //   }
                   }
 
                   const map: Map<string, number> = new Map<string, number>();
 
-                  // console.log(resourceCreatorBatchPage.resourceListInfo, 'resourceCreatorBatchPage.resourceListInfo sdiofjlsdkjlk');
                   for (const info of resourceListInfo) {
                     map.set(info.resourceName, (map.get(info.resourceName) || 0) + 1);
                   }
@@ -506,7 +497,6 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
                 onClickApplyPolicies={(resourceCreatorBatchPage.resourceListInfo.length <= 1 || r.resourcePolicies.length === 0) ? undefined : async () => {
 
                   let confirm: boolean = await fPromiseModalConfirm({
-                    // title: FI18n.i18nNext.t('brr_resourcelisting_confirmation_bulkaddtags_title'),
                     title: '添加策略到其它资源',
                     description: FI18n.i18nNext.t('是否将策略应用于此处发行的所有资源？'),
                     cancelText: FI18n.i18nNext.t('brr_resourcelisting_confirmation_bulkaddtags_btn_no'),
@@ -524,7 +514,6 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
                         if (r.fileUID === rli.fileUID) {
                           return rli;
                         }
-                        // const resourceLabels: string[] = Array.from(new Set([...rli.resourceLabels, ...r.resourceLabels])).slice(0, 20);
                         const usedText: string[] = rli.resourcePolicies.map((p) => {
                           return p.text;
                         });
@@ -537,7 +526,6 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
                         }[] = r.resourcePolicies.filter((p) => {
                           return !usedText.includes(p.text) && !usedTile.includes(p.title);
                         });
-                        // console.log(policies, 'policiesisdlfkjasdlkfjlkj');
                         return {
                           ...rli,
                           resourcePolicies: [
@@ -584,7 +572,8 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
 
         <FResourceBatchUpload
           resourceTypeCode={resourceCreatorBatchPage.selectedResourceType?.value || ''}
-          onSuccess={localUploadGotoList}
+          resourceType={resourceCreatorBatchPage.selectedResourceType?.labels || []}
+          onFinish={localUploadGotoList}
         />
         <div style={{ height: 100 }} />
       </div>
