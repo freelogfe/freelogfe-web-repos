@@ -1,6 +1,10 @@
 import * as React from 'react';
 import styles from './index.less';
-import { OnChange_Page_Action, OnMount_Page_Action as OnMount_Sidebar_Action } from '@/models/resourceSider';
+import {
+  FetchInfoAction,
+  OnChange_Page_Action,
+  OnMount_Page_Action as OnMount_Sidebar_Action, OnUpdate_Data_Action,
+} from '@/models/resourceSider';
 import { withRouter } from 'umi';
 import { connect } from 'dva';
 import { ConnectState, ResourceVersionEditorPageModelState } from '@/models/connect';
@@ -499,7 +503,10 @@ function VersionInfo({ dispatch, resourceVersionEditorPage, match }: VersionInfo
               upcastList={resourceVersionEditorPage.baseUpcastResources}
               reload={resourceVersionEditorPage.reload}
               update={(value) => {
-
+                dispatch<OnUpdate_Data_Action>({
+                  type: 'resourceSider/onUpdate_Data',
+                  // payload: resourceAuthPage.resourceID,
+                });
               }}
             />
           </div>
