@@ -45,23 +45,21 @@ function Dependency({ dispatch, resourceDependencyPage, match }: DependencyProps
   return (<>
     <div>
       <div style={{ height: 40 }} />
-      {
-        resourceDependencyPage.directDependencies.length > 0 && (<div className={styles.block}>
-          <FMicroAPP_Authorization
-            licenseeId={resourceDependencyPage.resourceID}
-            mainAppType={'resourceDepAuth'}
-            depList={resourceDependencyPage.directDependencies}
-            upcastList={resourceDependencyPage.baseUpcastResources}
-            // applyVersions={[]}
-            update={(value) => {
-              dispatch<OnUpdate_Data_Action>({
-                type: 'resourceSider/onUpdate_Data',
-                // payload: resourceAuthPage.resourceID,
-              });
-            }}
-          />
-        </div>)
-      }
+      <div className={styles.block}>
+        <FMicroAPP_Authorization
+          licenseeId={resourceDependencyPage.resourceID}
+          mainAppType={'resourceDepAuth'}
+          depList={resourceDependencyPage.directDependencies}
+          upcastList={resourceDependencyPage.baseUpcastResources}
+          // applyVersions={[]}
+          update={(value) => {
+            dispatch<OnUpdate_Data_Action>({
+              type: 'resourceSider/onUpdate_Data',
+              // payload: resourceAuthPage.resourceID,
+            });
+          }}
+        />
+      </div>
 
       {/*<div className={styles.block}>*/}
       {/*<FComponentsLib.FContentText text={'依赖授权管理'} type={'highlight'} />*/}

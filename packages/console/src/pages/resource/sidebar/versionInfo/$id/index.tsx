@@ -492,26 +492,24 @@ function VersionInfo({ dispatch, resourceVersionEditorPage, match }: VersionInfo
         </>)
       }
 
-      {
-        resourceVersionEditorPage.directDependencies.length > 0 && (<>
-          <div style={{ height: 5 }} />
-          <div className={styles.block}>
-            <FMicroAPP_Authorization
-              licenseeId={resourceVersionEditorPage.resourceID}
-              mainAppType={'resourceInfo'}
-              depList={resourceVersionEditorPage.directDependencies}
-              upcastList={resourceVersionEditorPage.baseUpcastResources}
-              reload={resourceVersionEditorPage.reload}
-              update={(value) => {
-                dispatch<OnUpdate_Data_Action>({
-                  type: 'resourceSider/onUpdate_Data',
-                  // payload: resourceAuthPage.resourceID,
-                });
-              }}
-            />
-          </div>
-        </>)
-      }
+
+      <div style={{ height: 5 }} />
+      <div className={styles.block}>
+        <FMicroAPP_Authorization
+          licenseeId={resourceVersionEditorPage.resourceID}
+          mainAppType={'resourceInfo'}
+          depList={resourceVersionEditorPage.directDependencies}
+          upcastList={resourceVersionEditorPage.baseUpcastResources}
+          reload={resourceVersionEditorPage.reload}
+          update={(value) => {
+            dispatch<OnUpdate_Data_Action>({
+              type: 'resourceSider/onUpdate_Data',
+              // payload: resourceAuthPage.resourceID,
+            });
+          }}
+        />
+      </div>
+
 
     </div>
 
