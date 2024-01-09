@@ -44,7 +44,7 @@ function Freeze({ match }: FreezeProps) {
       return;
     }
 
-    set_resourceName(data.resourceName);
+    set_resourceName(data.resourceTitle);
     set_freezeReason(data.freezeReason || '其他违法违规');
     set_isOwner(data.userId === FUtil.Tool.getUserIDByCookies());
   }
