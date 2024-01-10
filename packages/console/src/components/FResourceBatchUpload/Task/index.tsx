@@ -4,18 +4,18 @@ import { RcFile } from 'antd/lib/upload/interface';
 import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
 import FComponentsLib from '@freelog/components-lib';
 import { Progress, Space } from 'antd';
-import { CheckCircleFilled, CloseOutlined, RedoOutlined } from '@ant-design/icons';
+// import { CheckCircleFilled, CloseOutlined, RedoOutlined } from '@ant-design/icons';
 import * as AHooks from 'ahooks';
 import { getFilesSha1Info } from '@/utils/service';
 import { Canceler } from 'axios';
 import img from '@/assets/file-object.svg';
-import fMessage from '@/components/fMessage';
-import {
-  OnClick_step2_editCartoonBtn_Action,
-  OnClick_step2_editMarkdownBtn_Action, OnRemove_step2_file_Action,
-} from '@/models/resourceCreatorPage';
-
-// import UploadCancel from '@/components/FStorageUploadTasksPanel/UploadCancel';
+// import fMessage from '@/components/fMessage';
+// import {
+//   OnClick_step2_editCartoonBtn_Action,
+//   OnClick_step2_editMarkdownBtn_Action, OnRemove_step2_file_Action,
+// } from '@/models/resourceCreatorPage';
+//
+// // import UploadCancel from '@/components/FStorageUploadTasksPanel/UploadCancel';
 
 interface TaskProps {
   file: RcFile;
