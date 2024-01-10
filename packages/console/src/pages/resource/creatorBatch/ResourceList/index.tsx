@@ -90,11 +90,6 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
     }[] = [];
 
     for (const item of get$dataSource()) {
-      // if (!item.isCompleteAuthorization) {
-      //   fMessage('依赖中存在未获取授权的资源', 'error');
-      //   return;
-      // }
-
       createResourceObjects.push({
         name: item.resourceName,
         resourceTitle: item.resourceTitle,

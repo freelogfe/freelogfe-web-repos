@@ -36,7 +36,7 @@ interface TaskProps {
   }): void;
 }
 
-function Task({ file, resourceTypeCode,resourceType, onSuccess, onFail }: TaskProps) {
+function Task({ file, resourceTypeCode, resourceType, onSuccess, onFail }: TaskProps) {
   const canceler = React.useRef<Canceler | null>(null);
   const [$taskState, set$taskState, get$taskState] = FUtil.Hook.useGetState<'loading' | 'uploading' | 'parsing' | 'success' | 'failed' | 'canceled'>('loading');
   const [$progress, set$progress, get$progress] = FUtil.Hook.useGetState<number>(0);
@@ -111,17 +111,17 @@ function Task({ file, resourceTypeCode,resourceType, onSuccess, onFail }: TaskPr
 
       canceler.current = cancel;
 
-      // try {
-      //   const { data } = await promise;
-      // } catch (e) {
-      //   onFail && onFail({
-      //     uid: file.uid,
-      //     name: file.name,
-      //     sha1: fileSha1,
-      //
-      //   });
-      //   return;
-      // }
+      try {
+        const { data } = await promise;
+      } catch (e) {
+        // onFail && onFail({
+        //   uid: file.uid,
+        //   name: file.name,
+        //   sha1: fileSha1,
+        //
+        // });
+        return;
+      }
     }
 
     set$taskState('parsing');
@@ -129,6 +129,7 @@ function Task({ file, resourceTypeCode,resourceType, onSuccess, onFail }: TaskPr
       sha1: [fileSha1],
       resourceTypeCode: resourceTypeCode,
     });
+    console.log(result, 'result sdjf;lsdjfl;kjsdlkfjksldjfklj');
 
     if (result[0].state === 'success') {
       set$taskState('success');

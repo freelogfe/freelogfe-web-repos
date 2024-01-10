@@ -123,7 +123,7 @@ function CreatorBatch({ dispatch, resourceCreatorBatchPage }: CreatorBatchProps)
       });
     }
 
-    let resourceListInfo = [
+    let resourceListInfo: ResourceCreatorBatchPageState['resourceListInfo'] = [
       ...get$dataSource().map((resource) => {
         const resourceName = copyData_ResourceNames[resource.resourceName].resourceNewNames.shift() || '';
         return {
@@ -186,6 +186,8 @@ function CreatorBatch({ dispatch, resourceCreatorBatchPage }: CreatorBatchProps)
           baseUpcastResources: [],
           resolveResources: [],
           isCompleteAuthorization: true,
+          error: '',
+          from: '存储空间',
         };
       }),
     ];
