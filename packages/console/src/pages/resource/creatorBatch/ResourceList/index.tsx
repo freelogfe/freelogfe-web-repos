@@ -577,6 +577,7 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
           &nbsp;{FI18n.i18nNext.t('brr_resourcelisting_toggles_availabletoauth')}
         </div>
         <Space size={20}>
+
           {
             resourceCreatorBatchPage.resourceListInfo.length < 20 && (<FPopover
               // open={true}
@@ -602,7 +603,6 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
                 >{FI18n.i18nNext.t('brr_resourcelisting_btn_moretoupload')}</FComponentsLib.FRectBtn></div>
             </FPopover>)
           }
-          {console.log(resourceCreatorBatchPage.resourceListInfo, 'resourceCreatorBatchPage.resourceListInfo sdifjdslkfjlkjl')}
           <FComponentsLib.FRectBtn
             disabled={resourceCreatorBatchPage.resourceListInfo
               .filter((r) => {
