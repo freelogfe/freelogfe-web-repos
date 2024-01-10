@@ -123,6 +123,9 @@ function CreatorBatch({ dispatch, resourceCreatorBatchPage }: CreatorBatchProps)
       });
     }
 
+    const data_isOccupied: { [k: string]: boolean } = await isOccupied(data_objs.map((o) => {
+      return o.sha1;
+    }));
     let resourceListInfo: ResourceCreatorBatchPageState['resourceListInfo'] = [
       ...get$dataSource().map((resource) => {
         const resourceName = copyData_ResourceNames[resource.resourceName].resourceNewNames.shift() || '';
@@ -186,7 +189,7 @@ function CreatorBatch({ dispatch, resourceCreatorBatchPage }: CreatorBatchProps)
           baseUpcastResources: [],
           resolveResources: [],
           isCompleteAuthorization: true,
-          error: '',
+          error: data_isOccupied[obj.sha1] ? '被他人占用' : '',
           from: '存储空间',
         };
       }),
@@ -290,4 +293,30 @@ function getARightName(name: string) {
     .substring(0, 50)
     .replace(new RegExp(/[\\|\/|:|\*|\?|"|<|>|\||\s|@|\$|#]/g), '_');
   return newName;
+}
+
+async function isOccupied(sha1s: string[]): Promise<{ [k: string]: boolean }> {
+  const result: { [k: string]: boolean } = {};
+  for (const sha1 of sha1s) {
+    const params3: Parameters<typeof FServiceAPI.Resource.getResourceBySha1>[0] = {
+      fileSha1: sha1,
+    };
+
+    const { data: data_ResourcesBySha1 }: {
+      data: {
+        userId: number;
+        resourceId: string;
+        resourceName: string;
+        resourceType: string[];
+        version: string;
+        resourceVersions: {
+          version: string;
+        }[];
+      }[];
+    } = await FServiceAPI.Resource.getResourceBySha1(params3);
+
+    result[sha1] = data_ResourcesBySha1.length > 0 && data_ResourcesBySha1[0].userId !== FUtil.Tool.getUserIDByCookies();
+  }
+
+  return result;
 }
