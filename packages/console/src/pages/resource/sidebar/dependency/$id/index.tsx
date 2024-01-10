@@ -60,45 +60,6 @@ function Dependency({ dispatch, resourceDependencyPage, match }: DependencyProps
           }}
         />
       </div>
-
-      {/*<div className={styles.block}>*/}
-      {/*<FComponentsLib.FContentText text={'依赖授权管理'} type={'highlight'} />*/}
-
-      {/*{*/}
-      {/*  resourceAuthPage.contractsAuthorized.length === 0 && resourceAuthPage.baseUastResources.length === 0 && (<>*/}
-      {/*    <div style={{ height: 10 }} />*/}
-      {/*    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>*/}
-      {/*      <FComponentsLib.FContentText text={'暂无合约'} type={'additional2'} />*/}
-      {/*    </div>*/}
-      {/*  </>)*/}
-      {/*}*/}
-
-      {/*{*/}
-      {/*  resourceAuthPage.baseUastResources.length > 0 && (<>*/}
-      {/*    <div style={{ height: 20 }} />*/}
-      {/*    <FBasicUpcastCard*/}
-      {/*      dataSource={resourceAuthPage.baseUastResources.map((bur) => {*/}
-      {/*        return {*/}
-      {/*          resourceID: bur.resourceId,*/}
-      {/*          resourceName: bur.resourceName,*/}
-      {/*        };*/}
-      {/*      })}*/}
-      {/*      onClick={(resourceID) => {*/}
-      {/*        window.open(FUtil.LinkTo.resourceDetails({*/}
-      {/*          resourceID: resourceID,*/}
-      {/*        }));*/}
-      {/*      }}*/}
-      {/*    />*/}
-      {/*  </>)*/}
-      {/*}*/}
-
-      {/*{*/}
-      {/*  resourceAuthPage.contractsAuthorized.length > 0 && (<>*/}
-      {/*    <div style={{ height: 20 }} />*/}
-      {/*    <FAuthPanel />*/}
-      {/*  </>)*/}
-      {/*}*/}
-      {/*</div>*/}
       <div style={{ height: 100 }} />
     </div>
   </>);
