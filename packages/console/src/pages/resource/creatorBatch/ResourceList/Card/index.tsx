@@ -17,11 +17,11 @@ import FUploadCover from '@/components/FUploadCover';
 import fPolicyBuilder from '@/components/fPolicyBuilder';
 import FMicroAPP_Authorization from '@/components/FMicroAPP_Authorization';
 import img from '@/assets/file-object.svg';
-import { getFilesSha1Info } from '@/utils/service';
-import {
-  OnClick_step2_editCartoonBtn_Action,
-  OnClick_step2_editMarkdownBtn_Action, OnRemove_step2_file_Action,
-} from '@/models/resourceCreatorPage';
+// import { getFilesSha1Info } from '@/utils/service';
+// import {
+//   OnClick_step2_editCartoonBtn_Action,
+//   OnClick_step2_editMarkdownBtn_Action, OnRemove_step2_file_Action,
+// } from '@/models/resourceCreatorPage';
 
 interface CardProps {
   order: number;
@@ -86,6 +86,7 @@ interface CardProps {
       }[];
     }[];
     isCompleteAuthorization: boolean;
+    from: string;
     error: string;
   };
 
@@ -184,7 +185,7 @@ function Card({
               <FComponentsLib.FContentText
                 className={styles.infoSize}
                 type='additional1'
-                text={'本地上传'}
+                text={info.from}
               />
             </div>
           </div>

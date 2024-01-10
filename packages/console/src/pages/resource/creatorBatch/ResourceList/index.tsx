@@ -253,8 +253,6 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
       }
     } = JSON.parse(JSON.stringify(data_ResourceNames));
 
-    // console.log(copyData_ResourceNames, 'copyData_ResourceNames sdifjokwejlfjlwjflsdj');
-
     const { result } = await getFilesSha1Info({
       sha1: successFiles.map((f) => {
         return f.sha1;
@@ -264,15 +262,12 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
 
     let covers: string[] = [];
     if (resourceCreatorBatchPage.selectedResourceType?.labels.includes('图片')) {
-      // console.error(info, 'info 89weijufoliksjdlfkjsdlkfjlkdsjflksdjlfkj');
       const coverPromise = successFiles.map((o) => {
         return FServiceAPI.Storage.handleImage({
           sha1: o.sha1,
         });
       });
       const res: { ret: number, errCode: number, data: { url: string } }[] = await Promise.all(coverPromise);
-
-      // console.error(res, 'res sdflksdjflksjdlkfjlksdjflsdjlfjlskdjlk');
       covers = res.map(({ ret, errCode, data }) => {
         if (ret === 0 && errCode === 0) {
           return data.url || '';
@@ -280,8 +275,6 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
         return '';
       });
     }
-    // console.log(get$dataSource(), 'get$dataSource() sdiofjldskjflkdsjlkfjlksdjlfkj )))))))))))))))))))))))))))))))))))))))))');
-    // console.log(result, 'result sdifj;lsdkjfljl');
     let resourceListInfo: ResourceCreatorBatchPageState['resourceListInfo'] = [
       ...get$dataSource().map((resource) => {
         const resourceName = copyData_ResourceNames[resource.resourceName].resourceNewNames.shift() || '';
@@ -297,8 +290,6 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
           resourceName = copyData_ResourceNames[getARightName(f.name)].resourceNewNames.shift() || '';
         }
         const resourceTitle: string = f.name.replace(new RegExp(/\.[\w-]+$/), '').substring(0, 100);
-        // console.log(f.name, 'f.name sidfjlksdjflkjsdlkjl');
-        // console.log(name, 'name sidfjlksdjflkjsdlkjl');
         const successFile = result.find((file) => {
           return f.sha1 === file.sha1;
         });
@@ -346,12 +337,10 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
           resolveResources: [],
           isCompleteAuthorization: true,
           error: f.error,
+          from: '本地上传',
         };
       }),
     ];
-
-    // console.log(resourceListInfo, 'resourceListInfo sdfsiojf;lksejflkewjfoe(((((((((((((((((((((((((((((((((((((((((((((((')
-
 
     if (resourceListInfo.length === 0) {
       dispatch<ChangeAction>({
