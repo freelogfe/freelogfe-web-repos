@@ -89,7 +89,9 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
       }[];
     }[] = [];
 
-    for (const item of get$dataSource()) {
+    for (const item of get$dataSource().filter((ds) => {
+      return ds.error === '';
+    })) {
       createResourceObjects.push({
         name: item.resourceName,
         resourceTitle: item.resourceTitle,
@@ -415,18 +417,22 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
                 username={$username}
                 info={r}
                 onChange={(value) => {
-                  const resourceListInfo = get$dataSource().map((rli) => {
-                    if (value.fileUID !== rli.fileUID) {
-                      return rli;
-                    }
-                    return value;
-                  });
+                  const resourceListInfo = get$dataSource()
+                    .filter((rli) => {
+                      return rli.error === '';
+                    })
+                    .map((rli) => {
+                      if (value.fileUID !== rli.fileUID) {
+                        return rli;
+                      }
+                      return value;
+                    });
                   const map: Map<string, number> = new Map<string, number>();
                   for (const info of resourceListInfo) {
                     map.set(info.resourceName, (map.get(info.resourceName) || 0) + 1);
                   }
 
-                  const dataSource = resourceListInfo.map((info) => {
+                  const dataSource = get$dataSource().map((info) => {
                     return {
                       ...info,
                       resourceNameError: (info.resourceNameError !== '' && info.resourceNameError !== '不能重复')
@@ -596,11 +602,19 @@ function ResourceList({ dispatch, resourceCreatorBatchPage, onLocalUpload, onImp
                 >{FI18n.i18nNext.t('brr_resourcelisting_btn_moretoupload')}</FComponentsLib.FRectBtn></div>
             </FPopover>)
           }
-
+          {console.log(resourceCreatorBatchPage.resourceListInfo, 'resourceCreatorBatchPage.resourceListInfo sdifjdslkfjlkjl')}
           <FComponentsLib.FRectBtn
-            disabled={resourceCreatorBatchPage.resourceListInfo.some((r) => {
-              return r.resourceNameError !== '' || r.resourceTitleError !== '' || !r.isCompleteAuthorization;
-            })}
+            disabled={resourceCreatorBatchPage.resourceListInfo
+              .filter((r) => {
+                return r.error === '';
+              }).length === 0
+            || resourceCreatorBatchPage.resourceListInfo
+              .filter((r) => {
+                return r.error === '';
+              })
+              .some((r) => {
+                return r.resourceNameError !== '' || r.resourceTitleError !== '' || !r.isCompleteAuthorization;
+              })}
             onClick={() => {
               onClickRelease();
             }}

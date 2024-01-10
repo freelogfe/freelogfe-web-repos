@@ -141,7 +141,6 @@ function CreatorBatch({ dispatch, resourceCreatorBatchPage }: CreatorBatchProps)
           resourceName = copyData_ResourceNames[key].resourceNewNames.shift() || '';
         }
         const resourceTitle: string = obj.objectName.replace(new RegExp(/\.[\w-]+$/), '').substring(0, 100);
-
         const successFile = result.find((file) => {
           return obj.sha1 === file.sha1;
         });
