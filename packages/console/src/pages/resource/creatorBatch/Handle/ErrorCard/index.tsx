@@ -6,6 +6,7 @@ import img from '@/assets/file-object.svg';
 import { RcFile } from 'antd/lib/upload/interface';
 
 interface ErrorCardProps {
+  order: number;
   errorInfo: {
     uid: string;
     file: RcFile | null;
@@ -13,14 +14,16 @@ interface ErrorCardProps {
     from: string;
     errorText: string;
   };
+
+  onDelete?(): void;
 }
 
-function ErrorCard({errorInfo}: ErrorCardProps) {
+function ErrorCard({ order, errorInfo, onDelete }: ErrorCardProps) {
   return (<div className={styles.resourceContainer}>
     <div className={styles.resourceOrder}>
       <FComponentsLib.FContentText
         text={FI18n.i18nNext.t('brr_resourcelisting_item_no', {
-          ResourceNO: ri + 1,
+          ResourceNO: order,
         })}
         type={'highlight'}
         style={{ fontSize: 12 }}
@@ -29,11 +32,12 @@ function ErrorCard({errorInfo}: ErrorCardProps) {
         style={{ fontSize: 12 }}
         type={'danger'}
         onClick={() => {
-          const dataSource: HandleStates['dataSource'] = get$dataSource()
-            .filter((rli) => {
-              return rli.uid !== r.uid;
-            });
-          set$dataSource(dataSource);
+          onDelete && onDelete();
+          // const dataSource: HandleStates['dataSource'] = get$dataSource()
+          //   .filter((rli) => {
+          //     return rli.uid !== r.uid;
+          //   });
+          // set$dataSource(dataSource);
         }}
       >
         <FComponentsLib.FIcons.FDelete style={{ fontSize: 12 }} />
@@ -48,7 +52,7 @@ function ErrorCard({errorInfo}: ErrorCardProps) {
         <div>
           <FComponentsLib.FContentText
             type='highlight'
-            text={r.errorInfo.fileName}
+            text={errorInfo.fileName}
             style={{ maxWidth: 600 }}
             singleRow
           />
@@ -57,7 +61,7 @@ function ErrorCard({errorInfo}: ErrorCardProps) {
             <FComponentsLib.FContentText
               className={styles.infoSize}
               type='additional1'
-              text={r.errorInfo.from}
+              text={errorInfo.from}
             />
           </div>
         </div>
@@ -66,7 +70,7 @@ function ErrorCard({errorInfo}: ErrorCardProps) {
         <FComponentsLib.FTextBtn
           type='danger'
           style={{ fontSize: 12, display: 'flex', alignItems: 'center', gap: 5 }}
-        >{r.errorInfo.errorText}</FComponentsLib.FTextBtn>
+        >{errorInfo.errorText}</FComponentsLib.FTextBtn>
       </div>
     </div>
   </div>);

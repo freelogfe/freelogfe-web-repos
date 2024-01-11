@@ -1,1 +1,71 @@
 @import '../../../../../config.less';
+
+.resourceContainer {
+  .resourceOrder {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .whiteCard {
+    background: #FFF;
+    border-radius: 6px;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    .whiteCardLeft {
+      width: 240px;
+    }
+
+    .whiteCardRight {
+      width: 610px;
+
+      .whiteCardRightRow {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+    }
+  }
+}
+
+.fileInfo {
+  display: flex;
+  align-items: center;
+  background-color: white;
+  justify-content: space-between;
+  padding-right: 20px;
+
+  .card {
+    display: flex;
+    padding: 0 20px;
+    height: 88px;
+
+    border-radius: 6px;
+    align-items: center;
+    width: fit-content;
+
+    .img {
+      width: 56px;
+      height: 58px;
+    }
+
+    .info {
+      display: flex;
+      align-items: center;
+      width: max-content;
+      justify-content: space-between;
+
+      .infoSize {
+        flex-shrink: 0;
+      }
+
+      .Progress {
+        display: block;
+        width: 100px;
+      }
+    }
+  }
+}
