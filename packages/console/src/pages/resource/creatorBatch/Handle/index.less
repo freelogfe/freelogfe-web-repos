@@ -1,0 +1,128 @@
+@import '../../../../config.less';
+
+.container3 {
+  height: calc(100vh - 70px - 70px);
+  background-color: #FAFBFC;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  overflow-y: auto;
+
+  .nav {
+    display: flex;
+    align-items: center;
+    width: 920px;
+
+    .left {
+      font-size: 24px;
+      font-weight: 600;
+      color: #999;
+      line-height: 30px;
+    }
+
+    .other {
+      font-size: 24px;
+      font-weight: 600;
+      color: #222;
+      line-height: 30px;
+    }
+  }
+
+  .header {
+    width: 920px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+}
+
+.submit {
+  height: 70px;
+  background: #FFFFFF;
+  box-shadow: 0px -1px 4px 0px rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+
+  & > div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 920px;
+
+    & > div {
+      font-size: 12px;
+      font-weight: 400;
+      color: #C4C4C4;
+      line-height: 18px;
+    }
+  }
+}
+
+.continue {
+  padding: 3px 0;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+
+  & > div {
+    width: 120px;
+    height: 106px;
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-direction: column;
+    justify-content: center;
+    cursor: pointer;
+    background-color: #FAFBFC;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #666;
+    line-height: 18px;
+
+    & > i {
+      font-size: 48px;
+      //color: #666;
+    }
+
+    &:hover {
+      background-color: #EDF6FF;
+      color: #2784FF;
+    }
+  }
+}
+
+//.resourceContainer {
+//  .resourceOrder {
+//    display: flex;
+//    align-items: center;
+//    justify-content: space-between;
+//  }
+//
+//  .whiteCard {
+//    background: #FFF;
+//    border-radius: 6px;
+//    padding: 20px;
+//    display: flex;
+//    justify-content: space-between;
+//    align-items: flex-start;
+//
+//    .whiteCardLeft {
+//      width: 240px;
+//    }
+//
+//    .whiteCardRight {
+//      width: 610px;
+//
+//      .whiteCardRightRow {
+//        display: flex;
+//        align-items: center;
+//        justify-content: space-between;
+//      }
+//    }
+//  }
+//}

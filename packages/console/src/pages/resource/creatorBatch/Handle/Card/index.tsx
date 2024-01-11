@@ -28,8 +28,8 @@ interface CardProps {
   username: string;
   resourceType: string[];
   info: {
-    order: number;
-    fileUID: string;
+    // order: number;
+    uid: string;
     fileName: string;
     sha1: string;
     cover: string;
@@ -86,8 +86,8 @@ interface CardProps {
       }[];
     }[];
     isCompleteAuthorization: boolean;
-    from: string;
-    error: string;
+    // from: string;
+    // error: string;
   };
 
   onChange?(value: CardProps['info']): void;
@@ -147,58 +147,7 @@ function Card({
     });
   }
 
-  if (info.error !== '') {
-    return (<div className={styles.resourceContainer}>
-      <div className={styles.resourceOrder}>
-        <FComponentsLib.FContentText
-          text={FI18n.i18nNext.t('brr_resourcelisting_item_no', {
-            ResourceNO: order,
-          })}
-          type={'highlight'}
-          style={{ fontSize: 12 }}
-        />
-        <FComponentsLib.FTextBtn
-          style={{ fontSize: 12 }}
-          type={'danger'}
-          onClick={() => {
-            onDelete && onDelete();
-          }}
-        >
-          <FComponentsLib.FIcons.FDelete style={{ fontSize: 12 }} />
-          &nbsp;{FI18n.i18nNext.t('brr_resourcelisting_item_btn_deleteitem')}
-        </FComponentsLib.FTextBtn>
-      </div>
-      <div style={{ height: 5 }} />
-      <div className={styles.fileInfo}>
-        <div className={styles.card}>
-          <img src={img} className={styles.img} alt='' />
-          <div style={{ width: 20 }} />
-          <div>
-            <FComponentsLib.FContentText
-              type='highlight'
-              text={info.fileName}
-              style={{ maxWidth: 600 }}
-              singleRow
-            />
-            <div style={{ height: 18 }} />
-            <div className={styles.info}>
-              <FComponentsLib.FContentText
-                className={styles.infoSize}
-                type='additional1'
-                text={info.from}
-              />
-            </div>
-          </div>
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <FComponentsLib.FTextBtn
-            type='danger'
-            style={{ fontSize: 12, display: 'flex', alignItems: 'center', gap: 5 }}
-          >{info.error}</FComponentsLib.FTextBtn>
-        </div>
-      </div>
-    </div>);
-  }
+
 
   return (<div className={styles.resourceContainer}>
     <div className={styles.resourceOrder}>

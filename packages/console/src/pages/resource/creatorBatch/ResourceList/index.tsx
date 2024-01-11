@@ -4,7 +4,7 @@ import { Space } from 'antd';
 import FComponentsLib from '@freelog/components-lib';
 import { connect } from 'dva';
 import { ConnectState, ResourceCreatorBatchPageState, ResourceVersionCreatorPageModelState } from '@/models/connect';
-import Card from './Card';
+import Card from '../Handle/Card';
 import { Dispatch } from 'redux';
 import { ChangeAction } from '@/models/resourceCreatorBatchPage';
 import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
