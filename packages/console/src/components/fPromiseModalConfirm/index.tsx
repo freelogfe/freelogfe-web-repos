@@ -107,7 +107,7 @@ function Middleware({
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      padding: '30px 15px 15px',
+      padding: '30px 70px',
       // color: '#2784FF',
       // height: 200,
       // fontSize: 16,
@@ -116,9 +116,13 @@ function Middleware({
     style={{ borderRadius: 6, overflow: 'hidden' }}
   >
     <div className={styles.modelContent}>
-      <FComponentsLib.FTitleText type={'popup'} text={title} />
+      <FComponentsLib.FTitleText type={'popup'} text={title} style={{ color: '#222' }} />
       <div className={styles.title2}>
-        <FComponentsLib.FTipText text={description} type={'second'} />
+        <FComponentsLib.FTipText
+          text={description}
+          type={'second'}
+          // style={{ textAlign: 'center' }}
+        />
       </div>
       <div className={styles.btn}>
         <FComponentsLib.FTextBtn
