@@ -359,7 +359,7 @@ function Handle({ dispatch, resourceCreatorBatchPage }: HandleProps) {
           <FComponentsLib.FContentText
             // text={`共 ${resourceCreatorBatchPage.resourceListInfo.length} 个资源`}
             text={FI18n.i18nNext.t('brr_resourcelisting_label_resourceqty', {
-              ResourceQty: resourceCreatorBatchPage.resourceListInfo.length,
+              ResourceQty: $dataSource.length,
             })}
             type={'additional2'}
           />
