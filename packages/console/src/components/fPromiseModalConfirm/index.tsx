@@ -3,7 +3,7 @@ import styles from './index.less';
 import { Checkbox, Modal, Space } from 'antd';
 import FComponentsLib from '@freelog/components-lib';
 import * as ReactDOM from 'react-dom/client';
-import { FUtil } from '../../../../@freelog/tools-lib';
+import { FUtil } from '@freelog/tools-lib';
 
 interface fPromiseModalConfirmProps {
   title: string;
