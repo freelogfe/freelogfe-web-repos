@@ -12,7 +12,11 @@ import { withRouter } from 'umi';
 import { connect } from 'dva';
 import { ConnectState } from '@/models/connect';
 import FMicroAPP_Authorization from '@/components/FMicroAPP_Authorization';
-import { OnMount_Page_Action, ResourceDependencyPageState } from '@/models/resourceDependencyPage';
+import {
+  OnMount_Page_Action,
+  OnUnmount_Page_Action,
+  ResourceDependencyPageState,
+} from '@/models/resourceDependencyPage';
 
 interface DependencyProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -42,23 +46,33 @@ function Dependency({ dispatch, resourceDependencyPage, match }: DependencyProps
     });
   });
 
+  AHooks.useUnmount(() => {
+    dispatch<OnUnmount_Page_Action>({
+      type: 'resourceDependencyPage/onUnmount_Page',
+    });
+  });
+
   return (<>
     <div>
       <div style={{ height: 40 }} />
       <div className={styles.block}>
-        <FMicroAPP_Authorization
-          licenseeId={resourceDependencyPage.resourceID}
-          mainAppType={'resourceDepAuth'}
-          depList={resourceDependencyPage.directDependencies}
-          upcastList={resourceDependencyPage.baseUpcastResources}
-          // applyVersions={[]}
-          update={(value) => {
-            dispatch<OnUpdate_Data_Action>({
-              type: 'resourceSider/onUpdate_Data',
-              // payload: resourceAuthPage.resourceID,
-            });
-          }}
-        />
+        {
+          resourceDependencyPage.reload !== 0 && (<FMicroAPP_Authorization
+            licenseeId={resourceDependencyPage.resourceID}
+            mainAppType={'resourceDepAuth'}
+            depList={resourceDependencyPage.directDependencies}
+            upcastList={resourceDependencyPage.baseUpcastResources}
+            reload={resourceDependencyPage.reload}
+            // applyVersions={[]}
+            update={(value) => {
+              dispatch<OnUpdate_Data_Action>({
+                type: 'resourceSider/onUpdate_Data',
+                // payload: resourceAuthPage.resourceID,
+              });
+            }}
+          />)
+        }
+
       </div>
       <div style={{ height: 100 }} />
     </div>

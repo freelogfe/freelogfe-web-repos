@@ -17,6 +17,7 @@ export interface ResourceDependencyPageState {
     resourceID: string;
     resourceName: string;
   }[];
+  reload: number;
 }
 
 export interface ChangeAction extends AnyAction {
@@ -59,6 +60,7 @@ const initStates: ResourceDependencyPageState = {
   resourceID: '',
   directDependencies: [],
   baseUpcastResources: [],
+  reload: 0,
 };
 
 const Model: ResourceDependencyPageType = {
@@ -117,7 +119,7 @@ const Model: ResourceDependencyPageType = {
           }[];
         }[];
       } = yield call(FServiceAPI.Resource.resolveResources, params1);
-      console.log(data_resolveResources, 'data_resolveResources datasiodfjlsdkjflk');
+      // console.log(data_resolveResources, 'data_resolveResources datasiodfjlsdkjflk');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -138,6 +140,7 @@ const Model: ResourceDependencyPageType = {
               resourceName: b.resourceName,
             };
           }),
+          reload: resourceDependencyPage.reload + 1,
         },
       });
     },
