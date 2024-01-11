@@ -368,10 +368,10 @@ function Handle({ dispatch, resourceCreatorBatchPage }: HandleProps) {
         {
           $dataSource.map((r, ri) => {
 
-            if (r.state === 'list' && !!r.listInfo) {
-              return (<React.Fragment key={r.listInfo?.uid || ri}>
-                <div style={{ height: 40 }} />
-                <Card
+            return (<React.Fragment key={r.listInfo?.uid || ri}>
+              <div style={{ height: 40 }} />
+              {
+                r.state === 'list' && !!r.listInfo && (<Card
                   resourceType={resourceCreatorBatchPage.selectedResourceType?.labels || []}
                   order={ri + 1}
                   username={'$username'}
@@ -408,25 +408,25 @@ function Handle({ dispatch, resourceCreatorBatchPage }: HandleProps) {
                     set$dataSource(dataSource);
                   }}
                   onDelete={() => {
-                    const resourceListInfo = get$dataSource()
+                    let dataSource: HandleStates['dataSource'] = get$dataSource()
                       .filter((rli) => {
                         return rli.uid !== r.uid;
-                      })
-                      .filter((rli) => {
-                        return rli.state === 'list' && rli.listInfo;
-                      })
-                      .map((rli) => {
-                        return rli.listInfo;
                       });
+                    // .filter((rli) => {
+                    //   return rli.state === 'list' && rli.listInfo;
+                    // })
+                    // .map((rli) => {
+                    //   return rli.listInfo;
+                    // });
 
                     const map: Map<string, number> = new Map<string, number>();
-                    for (const info of resourceListInfo) {
-                      if (info) {
-                        map.set(info.resourceName, (map.get(info.resourceName) || 0) + 1);
+                    for (const info of dataSource) {
+                      if (info.state === 'list' && info.listInfo) {
+                        map.set(info.listInfo.resourceName, (map.get(info.listInfo.resourceName) || 0) + 1);
                       }
                     }
 
-                    const dataSource = get$dataSource().map((info) => {
+                    dataSource = dataSource.map((info) => {
                       if (info.state === 'list' && info.listInfo) {
                         return {
                           ...info,
@@ -512,14 +512,11 @@ function Handle({ dispatch, resourceCreatorBatchPage }: HandleProps) {
                     });
                     set$dataSource(dataSource);
                   }}
-                />
-              </React.Fragment>);
-            }
+                />)
+              }
 
-            if (r.state === 'error' && !!r.errorInfo) {
-              return (<React.Fragment key={r.listInfo?.uid || ri}>
-                <div style={{ height: 40 }} />
-                <ErrorCard
+              {
+                r.state === 'error' && !!r.errorInfo && (<ErrorCard
                   order={ri + 1}
                   errorInfo={r.errorInfo}
                   onDelete={() => {
@@ -529,65 +526,73 @@ function Handle({ dispatch, resourceCreatorBatchPage }: HandleProps) {
                       });
                     set$dataSource(dataSource);
                   }}
-                />
-              </React.Fragment>);
-              // return (<div className={styles.resourceContainer}>
-              //   <div className={styles.resourceOrder}>
-              //     <FComponentsLib.FContentText
-              //       text={FI18n.i18nNext.t('brr_resourcelisting_item_no', {
-              //         ResourceNO: ri + 1,
-              //       })}
-              //       type={'highlight'}
-              //       style={{ fontSize: 12 }}
-              //     />
-              //     <FComponentsLib.FTextBtn
-              //       style={{ fontSize: 12 }}
-              //       type={'danger'}
-              //       onClick={() => {
-              //         const dataSource: HandleStates['dataSource'] = get$dataSource()
-              //           .filter((rli) => {
-              //             return rli.uid !== r.uid;
-              //           });
-              //         set$dataSource(dataSource);
-              //       }}
-              //     >
-              //       <FComponentsLib.FIcons.FDelete style={{ fontSize: 12 }} />
-              //       &nbsp;{FI18n.i18nNext.t('brr_resourcelisting_item_btn_deleteitem')}
-              //     </FComponentsLib.FTextBtn>
-              //   </div>
-              //   <div style={{ height: 5 }} />
-              //   <div className={styles.fileInfo}>
-              //     <div className={styles.card}>
-              //       <img src={img} className={styles.img} alt='' />
-              //       <div style={{ width: 20 }} />
-              //       <div>
-              //         <FComponentsLib.FContentText
-              //           type='highlight'
-              //           text={r.errorInfo.fileName}
-              //           style={{ maxWidth: 600 }}
-              //           singleRow
-              //         />
-              //         <div style={{ height: 18 }} />
-              //         <div className={styles.info}>
-              //           <FComponentsLib.FContentText
-              //             className={styles.infoSize}
-              //             type='additional1'
-              //             text={r.errorInfo.from}
-              //           />
-              //         </div>
-              //       </div>
-              //     </div>
-              //     <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-              //       <FComponentsLib.FTextBtn
-              //         type='danger'
-              //         style={{ fontSize: 12, display: 'flex', alignItems: 'center', gap: 5 }}
-              //       >{r.errorInfo.errorText}</FComponentsLib.FTextBtn>
-              //     </div>
-              //   </div>
-              // </div>);
-            }
+                />)
+              }
 
-            return (<div />);
+            </React.Fragment>);
+
+            // if (r.state === 'error' && !!r.errorInfo) {
+            //   return (<React.Fragment key={r.listInfo?.uid || ri}>
+            //     <div style={{ height: 40 }} />
+            //
+            //   </React.Fragment>);
+            //   // return (<div className={styles.resourceContainer}>
+            //   //   <div className={styles.resourceOrder}>
+            //   //     <FComponentsLib.FContentText
+            //   //       text={FI18n.i18nNext.t('brr_resourcelisting_item_no', {
+            //   //         ResourceNO: ri + 1,
+            //   //       })}
+            //   //       type={'highlight'}
+            //   //       style={{ fontSize: 12 }}
+            //   //     />
+            //   //     <FComponentsLib.FTextBtn
+            //   //       style={{ fontSize: 12 }}
+            //   //       type={'danger'}
+            //   //       onClick={() => {
+            //   //         const dataSource: HandleStates['dataSource'] = get$dataSource()
+            //   //           .filter((rli) => {
+            //   //             return rli.uid !== r.uid;
+            //   //           });
+            //   //         set$dataSource(dataSource);
+            //   //       }}
+            //   //     >
+            //   //       <FComponentsLib.FIcons.FDelete style={{ fontSize: 12 }} />
+            //   //       &nbsp;{FI18n.i18nNext.t('brr_resourcelisting_item_btn_deleteitem')}
+            //   //     </FComponentsLib.FTextBtn>
+            //   //   </div>
+            //   //   <div style={{ height: 5 }} />
+            //   //   <div className={styles.fileInfo}>
+            //   //     <div className={styles.card}>
+            //   //       <img src={img} className={styles.img} alt='' />
+            //   //       <div style={{ width: 20 }} />
+            //   //       <div>
+            //   //         <FComponentsLib.FContentText
+            //   //           type='highlight'
+            //   //           text={r.errorInfo.fileName}
+            //   //           style={{ maxWidth: 600 }}
+            //   //           singleRow
+            //   //         />
+            //   //         <div style={{ height: 18 }} />
+            //   //         <div className={styles.info}>
+            //   //           <FComponentsLib.FContentText
+            //   //             className={styles.infoSize}
+            //   //             type='additional1'
+            //   //             text={r.errorInfo.from}
+            //   //           />
+            //   //         </div>
+            //   //       </div>
+            //   //     </div>
+            //   //     <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            //   //       <FComponentsLib.FTextBtn
+            //   //         type='danger'
+            //   //         style={{ fontSize: 12, display: 'flex', alignItems: 'center', gap: 5 }}
+            //   //       >{r.errorInfo.errorText}</FComponentsLib.FTextBtn>
+            //   //     </div>
+            //   //   </div>
+            //   // </div>);
+            // }
+            //
+            // return (<div />);
 
           })
         }
