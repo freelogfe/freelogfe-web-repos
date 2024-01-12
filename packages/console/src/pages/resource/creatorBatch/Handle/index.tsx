@@ -3,7 +3,7 @@ import styles from './index.less';
 import { Dispatch } from 'redux';
 import { ChangeAction, ResourceCreatorBatchPageState } from '@/models/resourceCreatorBatchPage';
 import { connect } from 'dva';
-import { ConnectState } from '@/models/connect';
+import { ConnectState, ResourceVersionCreatorPageModelState } from '@/models/connect';
 import { RcFile } from 'antd/lib/upload/interface';
 import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
 import { history } from '@@/core/history';
@@ -119,8 +119,8 @@ function Handle({ dispatch, resourceCreatorBatchPage }: HandleProps) {
   const [$tempLocalSuccess, set$tempLocalSuccess, get$tempLocalSuccess] = FUtil.Hook.useGetState<HandleStates['tempLocalSuccess']>(initStates['tempLocalSuccess']);
 
   AHooks.useDebounceEffect(() => {
-
-    if (get$dataSource().filter((d) => {
+    console.log(get$dataSource(), get$tempLocalSuccess(), 'get$dataSource(), get$tempLocalSuccess() 色打发士大夫');
+    if (get$tempLocalSuccess().length > 0 && get$dataSource().filter((d) => {
       return d.state === 'localUpload' && d.localUploadInfo;
     }).length === get$tempLocalSuccess().length) {
       handleLocalUploadSuccess();
@@ -131,7 +131,156 @@ function Handle({ dispatch, resourceCreatorBatchPage }: HandleProps) {
   });
 
   async function handleLocalUploadSuccess() {
+    const namesMap: Map<string, number> = new Map<string, number>();
 
+    for (const resource of get$dataSource()) {
+      if (resource.state !== 'list' || !resource.listInfo || resource.listInfo.resourceName === '') {
+        continue;
+      }
+      namesMap.set(resource.listInfo.resourceName, (namesMap.get(resource.listInfo.resourceName) || 0) + 1);
+    }
+
+    for (const s of get$tempLocalSuccess()) {
+      if (s.name === '') {
+        continue;
+      }
+      const name: string = getARightName(s.name);
+      namesMap.set(name, (namesMap.get(name) || 0) + 1);
+    }
+
+    const { data: data_ResourceNames }: {
+      data: {
+        [k: string]: {
+          resourceNewNames: string[];
+          status: 1 | 2;
+        };
+      }
+    } = await FServiceAPI.Resource.generateResourceNames({
+      data: Array.from(namesMap.entries()).map(([key, value]) => {
+        return {
+          name: key,
+          num: value,
+        };
+      }),
+    });
+
+    const copyData_ResourceNames: {
+      [k: string]: {
+        resourceNewNames: string[];
+        status: 1 | 2;
+      }
+    } = JSON.parse(JSON.stringify(data_ResourceNames));
+
+    const { result } = await getFilesSha1Info({
+      sha1: get$tempLocalSuccess().map((f) => {
+        return f.sha1;
+      }),
+      resourceTypeCode: resourceCreatorBatchPage.selectedResourceType?.value || '',
+    });
+
+    let covers: string[] = [];
+    if (resourceCreatorBatchPage.selectedResourceType?.labels.includes('图片')) {
+      const coverPromise = get$tempLocalSuccess().map((o) => {
+        return FServiceAPI.Storage.handleImage({
+          sha1: o.sha1,
+        });
+      });
+      const res: { ret: number, errCode: number, data: { url: string } }[] = await Promise.all(coverPromise);
+      covers = res.map(({ ret, errCode, data }) => {
+        if (ret === 0 && errCode === 0) {
+          return data.url || '';
+        }
+        return '';
+      });
+    }
+    let dataSource: HandleStates['dataSource'] = get$dataSource().map((resource) => {
+      if (resource.state !== 'list' || !resource.listInfo || resource.listInfo.resourceName === '') {
+        return resource;
+      }
+      const resourceName = copyData_ResourceNames[resource.listInfo.resourceName].resourceNewNames.shift() || '';
+      return {
+        ...resource,
+        resourceName,
+      };
+    });
+
+    const newDataSource: HandleStates['dataSource'] = get$tempLocalSuccess().map((f, f_index) => {
+      let resourceName: string = '';
+      const key: string = getARightName(f.name);
+      if (key !== '') {
+        resourceName = copyData_ResourceNames[getARightName(f.name)].resourceNewNames.shift() || '';
+      }
+      const resourceTitle: string = f.name.replace(new RegExp(/\.[\w-]+$/), '').substring(0, 100);
+      const successFile = result.find((file) => {
+        return f.sha1 === file.sha1;
+      });
+      return {
+        uid: f.uid,
+        state: 'list',
+        listInfo: {
+          uid: f.uid,
+          fileName: f.name,
+          sha1: f.sha1,
+          cover: covers[f_index] || '',
+          resourceName: resourceName,
+          resourceNameError: resourceName === '' ? '请输入资源授权标识' : '',
+          resourceTitle: resourceTitle,
+          resourceTitleError: '',
+          resourceLabels: [],
+          resourcePolicies: [],
+          showMore: false,
+          rawProperties: (successFile?.info || [])
+            .filter((i) => {
+              return i.insertMode === 1;
+            })
+            .map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((i) => {
+              return {
+                key: i.key,
+                name: i.name,
+                value: i.valueDisplay,
+                description: i.remark,
+              };
+            }),
+          additionalProperties: (successFile?.info || [])
+            .filter((i) => {
+              return i.insertMode === 2;
+            })
+            .map<ResourceVersionCreatorPageModelState['additionalProperties'][number]>((i) => {
+              return {
+                key: i.key,
+                name: i.name,
+                value: i.valueDisplay,
+                description: i.remark,
+              };
+            }),
+          customProperties: [],
+          customConfigurations: [],
+          directDependencies: [],
+          baseUpcastResources: [],
+          resolveResources: [],
+          isCompleteAuthorization: true,
+        },
+        localUploadInfo: null,
+        errorInfo: null,
+      };
+    });
+
+    dataSource = dataSource.map((d) => {
+      const data = newDataSource.find((nds) => {
+        return nds.uid === d.uid;
+      });
+      if (!data) {
+        return d;
+      }
+      return data;
+    });
+
+    set$dataSource(dataSource);
+    set$tempLocalSuccess([]);
+    // let dataSource: HandleStates['dataSource'] = [
+    //   ...oldDataSource,
+    //   ...newDataSource,
+    // ];
   }
 
   async function onLocalUpload() {
