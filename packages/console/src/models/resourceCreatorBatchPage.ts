@@ -10,70 +10,70 @@ export type ResourceCreatorBatchPageState = {
     labels: string[];
   } | null;
 
-  resourceListInfo: {
-    order: number;
-    fileUID: string;
-    fileName: string;
-    sha1: string;
-    cover: string;
-    resourceName: string;
-    resourceNameError: string;
-    resourceTitle: string;
-    resourceTitleError: string;
-    resourceLabels: string[];
-    resourcePolicies: {
-      title: string;
-      text: string;
-    }[];
-    showMore: boolean;
-    rawProperties: {
-      key: string;
-      name: string;
-      value: string;
-      description: string;
-    }[];
-    additionalProperties: {
-      key: string;
-      name: string;
-      value: string;
-      description: string;
-    }[];
-    customProperties: {
-      key: string;
-      name: string;
-      value: string;
-      description: string;
-    }[];
-    customConfigurations: {
-      key: string;
-      name: string;
-      description: string;
-      type: 'input' | 'select';
-      input: string;
-      select: string[];
-    }[];
-    directDependencies: {
-      id: string;
-      name: string;
-      type: 'resource' | 'object';
-      versionRange?: string;
-    }[];
-    baseUpcastResources: {
-      resourceID: string;
-      resourceName: string;
-    }[];
-    resolveResources: {
-      resourceId: string;
-      contracts: {
-        policyId: string;
-      }[];
-    }[];
-    isCompleteAuthorization: boolean;
-    error: string;
-    from: string;
-  }[];
-  latestListIndex: number;
-
+  // resourceListInfo: {
+  //   order: number;
+  //   fileUID: string;
+  //   fileName: string;
+  //   sha1: string;
+  //   cover: string;
+  //   resourceName: string;
+  //   resourceNameError: string;
+  //   resourceTitle: string;
+  //   resourceTitleError: string;
+  //   resourceLabels: string[];
+  //   resourcePolicies: {
+  //     title: string;
+  //     text: string;
+  //   }[];
+  //   showMore: boolean;
+  //   rawProperties: {
+  //     key: string;
+  //     name: string;
+  //     value: string;
+  //     description: string;
+  //   }[];
+  //   additionalProperties: {
+  //     key: string;
+  //     name: string;
+  //     value: string;
+  //     description: string;
+  //   }[];
+  //   customProperties: {
+  //     key: string;
+  //     name: string;
+  //     value: string;
+  //     description: string;
+  //   }[];
+  //   customConfigurations: {
+  //     key: string;
+  //     name: string;
+  //     description: string;
+  //     type: 'input' | 'select';
+  //     input: string;
+  //     select: string[];
+  //   }[];
+  //   directDependencies: {
+  //     id: string;
+  //     name: string;
+  //     type: 'resource' | 'object';
+  //     versionRange?: string;
+  //   }[];
+  //   baseUpcastResources: {
+  //     resourceID: string;
+  //     resourceName: string;
+  //   }[];
+  //   resolveResources: {
+  //     resourceId: string;
+  //     contracts: {
+  //       policyId: string;
+  //     }[];
+  //   }[];
+  //   isCompleteAuthorization: boolean;
+  //   error: string;
+  //   from: string;
+  // }[];
+  // latestListIndex: number;
+  //
   resultList: {
     resourceID: string;
     resourceName: string;
@@ -123,8 +123,8 @@ const initStates: ResourceCreatorBatchPageState = {
 
   selectedResourceType: null,
 
-  resourceListInfo: [],
-  latestListIndex: 0,
+  // resourceListInfo: [],
+  // latestListIndex: 0,
 
   resultList: [],
 };

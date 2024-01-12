@@ -675,42 +675,16 @@ function Handle({ dispatch, resourceCreatorBatchPage }: HandleProps) {
                     run();
                   }}
                   onDelete={() => {
-                    let dataSource: HandleStates['dataSource'] = get$dataSource()
+                    const dataSource: HandleStates['dataSource'] = get$dataSource()
                       .filter((rli) => {
                         return rli.uid !== r.uid;
                       });
-                    // .filter((rli) => {
-                    //   return rli.state === 'list' && rli.listInfo;
-                    // })
-                    // .map((rli) => {
-                    //   return rli.listInfo;
-                    // });
-
-                    // const map: Map<string, number> = new Map<string, number>();
-                    // for (const info of dataSource) {
-                    //   if (info.state === 'list' && info.listInfo) {
-                    //     map.set(info.listInfo.resourceName, (map.get(info.listInfo.resourceName) || 0) + 1);
-                    //   }
-                    // }
-                    //
-                    // dataSource = dataSource.map((info) => {
-                    //   if (info.state === 'list' && info.listInfo) {
-                    //     return {
-                    //       ...info,
-                    //       listInfo: {
-                    //         ...info.listInfo,
-                    //         resourceNameError: (info.listInfo.resourceNameError !== '' && info.listInfo.resourceNameError !== '不能重复')
-                    //           ? info.listInfo.resourceNameError
-                    //           : ((map.get(info.listInfo.resourceName) || 0) > 1 ? '不能重复' : ''),
-                    //       },
-                    //     };
-                    //   }
-                    //   return info;
-                    // });
                     set$dataSource(dataSource);
                     run();
                   }}
-                  onClickApplyPolicies={(resourceCreatorBatchPage.resourceListInfo.length <= 1 || r.listInfo.resourcePolicies.length === 0) ? undefined : async () => {
+                  onClickApplyPolicies={($dataSource.filter((ds) => {
+                    return ds.state === 'list' && ds.listInfo;
+                  }).length <= 1 || r.listInfo.resourcePolicies.length === 0) ? undefined : async () => {
 
                     let confirm: boolean = await fPromiseModalConfirm({
                       title: '添加策略到其它资源',
@@ -753,7 +727,9 @@ function Handle({ dispatch, resourceCreatorBatchPage }: HandleProps) {
 
                     set$dataSource(dataSource);
                   }}
-                  onClickApplyLabels={(resourceCreatorBatchPage.resourceListInfo.length <= 1 || r.listInfo.resourceLabels.length === 0) ? undefined : async () => {
+                  onClickApplyLabels={($dataSource.filter((ds) => {
+                    return ds.state === 'list' && ds.listInfo;
+                  }).length <= 1 || r.listInfo.resourceLabels.length === 0) ? undefined : async () => {
                     let confirm: boolean = await fPromiseModalConfirm({
                       title: FI18n.i18nNext.t('brr_resourcelisting_confirmation_bulkaddtags_title'),
                       description: FI18n.i18nNext.t('是否将标签应用于此处发行的所有资源？'),
@@ -814,7 +790,7 @@ function Handle({ dispatch, resourceCreatorBatchPage }: HandleProps) {
         <Space size={20}>
 
           {
-            resourceCreatorBatchPage.resourceListInfo.length < 20 && (<FPopover
+            $dataSource.length < 20 && (<FPopover
               // open={true}
               title={null}
               overlayInnerStyle={{ padding: 0 }}
@@ -843,17 +819,17 @@ function Handle({ dispatch, resourceCreatorBatchPage }: HandleProps) {
             </FPopover>)
           }
           <FComponentsLib.FRectBtn
-            disabled={resourceCreatorBatchPage.resourceListInfo
-              .filter((r) => {
-                return r.error === '';
+            disabled={$dataSource
+              .filter((ds) => {
+                return ds.state === 'list' && ds.listInfo;
               }).length === 0
-            || resourceCreatorBatchPage.resourceListInfo
-              .filter((r) => {
-                return r.error === '';
-              })
-              .some((r) => {
-                return r.resourceNameError !== '' || r.resourceTitleError !== '' || !r.isCompleteAuthorization;
-              })}
+            || $dataSource.some((r) => {
+              return r.state === 'list'
+                && r.listInfo
+                && (r.listInfo.resourceNameError !== ''
+                  || r.listInfo.resourceTitleError !== ''
+                  || !r.listInfo.isCompleteAuthorization);
+            })}
             onClick={() => {
               // onClickRelease();
             }}
