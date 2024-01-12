@@ -3,25 +3,22 @@ import styles from './index.less';
 import { Dispatch } from 'redux';
 import { ChangeAction, ResourceCreatorBatchPageState } from '@/models/resourceCreatorBatchPage';
 import { connect } from 'dva';
-import { ConnectState, ResourceVersionCreatorPageModelState } from '@/models/connect';
+import { ConnectState } from '@/models/connect';
 import { RcFile } from 'antd/lib/upload/interface';
 import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
-import UploadFile from '@/pages/resource/creatorBatch/Handle/NoDate';
 import { history } from '@@/core/history';
 import FPrompt from '@/components/FPrompt';
 import { Space } from 'antd';
 import FComponentsLib from '@freelog/components-lib';
-import Card from '@/pages/resource/creatorBatch/Handle/Card';
 import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
-// import FResourceBatchUpload from '@/components/FResourceBatchUpload';
 import FPopover from '@/components/FPopover';
-import img from '@/assets/file-object.svg';
 import { getFilesSha1Info } from '@/utils/service';
 import fMessage from '@/components/fMessage';
 import fObjectsSelectorDrawer from '@/components/fObjectsSelectorDrawer';
-import ErrorCard from '@/pages/resource/creatorBatch/Handle/ErrorCard';
-// import { Simulate } from 'react-dom/test-utils';
-// import error = Simulate.error;
+import UploadFile from './NoDate';
+import Card from './Card';
+import ErrorCard from './ErrorCard';
+import Task from './Task';
 
 interface HandleProps {
   dispatch: Dispatch;
@@ -268,7 +265,7 @@ function Handle({ dispatch, resourceCreatorBatchPage }: HandleProps) {
               .filter((i) => {
                 return i.insertMode === 1;
               })
-              .map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((i) => {
+              .map<NonNullable<HandleStates['dataSource'][number]['listInfo']>['rawProperties'][number]>((i) => {
                 return {
                   key: i.key,
                   name: i.name,
@@ -280,7 +277,7 @@ function Handle({ dispatch, resourceCreatorBatchPage }: HandleProps) {
               .filter((i) => {
                 return i.insertMode === 2;
               })
-              .map<ResourceVersionCreatorPageModelState['additionalProperties'][number]>((i) => {
+              .map<NonNullable<HandleStates['dataSource'][number]['listInfo']>['additionalProperties'][number]>((i) => {
                 return {
                   key: i.key,
                   name: i.name,
@@ -370,6 +367,14 @@ function Handle({ dispatch, resourceCreatorBatchPage }: HandleProps) {
 
             return (<React.Fragment key={r.listInfo?.uid || ri}>
               <div style={{ height: 40 }} />
+              {
+                r.state === 'localUpload' && r.localUploadInfo && (<Task
+                  order={ri + 1}
+                  file={r.localUploadInfo.file}
+                  resourceTypeCode={resourceCreatorBatchPage.selectedResourceType?.value || ''}
+                  resourceType={resourceCreatorBatchPage.selectedResourceType?.labels || []}
+                />)
+              }
               {
                 r.state === 'list' && !!r.listInfo && (<Card
                   resourceType={resourceCreatorBatchPage.selectedResourceType?.labels || []}
