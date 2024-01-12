@@ -560,6 +560,166 @@ function Handle({ dispatch, resourceCreatorBatchPage }: HandleProps) {
     set$dataSource(dataSource);
   }
 
+  async function onClickRelease() {
+    const createResourceObjects: {
+      name: string;
+      resourceTitle?: string;
+      policies?: {
+        policyName: string;
+        policyText: string;
+        status?: 1 | 0;
+      }[];
+      coverImages?: string[];
+      intro?: string;
+      tags?: string[];
+
+      version: string;
+      fileSha1: string;
+      filename: string;
+      description?: string;
+      dependencies?: {
+        resourceId: string;
+        versionRange: string;
+      }[];
+      customPropertyDescriptors?: {
+        key: string;
+        name: string;
+        defaultValue: string;
+        type: 'editableText' | 'readonlyText' | 'radio' | 'checkbox' | 'select';
+        candidateItems?: string[];
+        remark?: string;
+      }[];
+      baseUpcastResources?: {
+        resourceId: string;
+      }[];
+      resolveResources: {
+        resourceId: string;
+        contracts: {
+          policyId: string;
+        }[];
+      }[];
+      inputAttrs?: {
+        key: string;
+        value: string;
+      }[];
+    }[] = [];
+
+    for (const data of get$dataSource()) {
+      if (data.state === 'list' && data.listInfo) {
+        const item = data.listInfo;
+        createResourceObjects.push({
+          name: item.resourceName,
+          resourceTitle: item.resourceTitle,
+          policies: item.resourcePolicies.map((p) => {
+            return {
+              policyName: p.title,
+              policyText: p.text,
+              status: 1,
+            };
+          }),
+          coverImages: item.cover === '' ? [] : [item.cover],
+          intro: '',
+          tags: item.resourceLabels,
+          version: '1.0.0',
+          fileSha1: item.sha1,
+          filename: item.fileName,
+          description: '',
+          customPropertyDescriptors: [
+            ...item.customProperties
+              .map<NonNullable<Parameters<typeof FServiceAPI.Resource.createVersion>[0]['customPropertyDescriptors']>[number]>
+              ((i) => {
+                return {
+                  type: 'readonlyText',
+                  key: i.key,
+                  name: i.name,
+                  remark: i.description,
+                  defaultValue: i.value,
+                };
+              }),
+            ...item.customConfigurations
+              .map<NonNullable<Parameters<typeof FServiceAPI.Resource.createVersion>[0]['customPropertyDescriptors']>[number]>((i) => {
+                const isInput: boolean = i.type === 'input';
+                const options: string[] = i.select;
+                return {
+                  type: isInput ? 'editableText' : 'select',
+                  key: i.key,
+                  name: i.name,
+                  remark: i.description,
+                  defaultValue: isInput ? i.input : options[0],
+                  // defaultValue: isInput ? i.input : '',
+                  candidateItems: isInput ? undefined : options,
+                };
+              }),
+          ],
+          baseUpcastResources: item.baseUpcastResources.map((r) => {
+            return { resourceId: r.resourceID };
+          }),
+          dependencies: item.directDependencies
+            .map((r) => {
+              return {
+                resourceId: r.id,
+                versionRange: r.versionRange || '',
+              };
+            }),
+          resolveResources: item.resolveResources,
+          inputAttrs: item.additionalProperties
+            .filter((ap) => {
+              return ap.value !== '';
+            })
+            .map((ap) => {
+              return {
+                key: ap.key,
+                value: ap.value,
+              };
+            }),
+        });
+      }
+    }
+
+    const params: Parameters<typeof FServiceAPI.Resource.createBatch>[0] = {
+      resourceTypeCode: resourceCreatorBatchPage.selectedResourceType?.value || '',
+      createResourceObjects: createResourceObjects,
+    };
+    const { data } = await FServiceAPI.Resource.createBatch(params);
+    // console.log(data, 'data isdjflksjdlkfjslkdjflkjsolikfjewsoijlkj');
+    const list: {
+      resourceID: string;
+      resourceName: string;
+      resourceTitle: string;
+      cover: string;
+      status: 'online' | 'offline' | 'unreleased' | 'freeze';
+      policies: string[];
+      failReason: string;
+    }[] = Object.values(data).map((d: any) => {
+      const data = d.data;
+      return {
+        resourceID: data.resourceId,
+        resourceName: data.resourceName,
+        resourceTitle: data.resourceTitle,
+        cover: data.coverImages,
+        status: data.status === 2
+          ? 'freeze'
+          : data.status === 1
+            ? 'online'
+            : data.status === 0
+              ? 'unreleased'
+              : 'offline',
+        policies: data.policies.map((p: any) => {
+          return p.policyName;
+        }),
+        failReason: d.message || '',
+      };
+    });
+    // console.log(list, 'sdiofj;sldkjflksdjfolijsdolfjlksdjlkj');
+    dispatch<ChangeAction>({
+      type: 'resourceCreatorBatchPage/change',
+      payload: {
+        showPage: 'finish',
+        resultList: list,
+      },
+    });
+  }
+
   if ($dataSource.length === 0) {
     return (<UploadFile
       onLocalUpload={onLocalUpload}
@@ -826,8 +986,7 @@ function Handle({ dispatch, resourceCreatorBatchPage }: HandleProps) {
             || $dataSource.some((ds) => {
               return ds.state !== 'list' || !ds.listInfo;
             })
-            ||
-            $dataSource.some((r) => {
+            || $dataSource.some((r) => {
               return r.state === 'list'
                 && r.listInfo
                 && (r.listInfo.resourceNameError !== ''
@@ -835,7 +994,7 @@ function Handle({ dispatch, resourceCreatorBatchPage }: HandleProps) {
                   || !r.listInfo.isCompleteAuthorization);
             })}
             onClick={() => {
-              // onClickRelease();
+              onClickRelease();
             }}
           >{FI18n.i18nNext.t('brr_resourcelisting_btn_completerelease')}</FComponentsLib.FRectBtn>
         </Space>
