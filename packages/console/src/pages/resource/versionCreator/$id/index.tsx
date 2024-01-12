@@ -357,24 +357,24 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
         visible={resourceVersionCreatorPage.releaseTipVisible}
       />
 
-      <ComicTool
-        resourceId={resourceVersionCreatorPage.resourceInfo?.resourceID || ''}
-        show={resourceVersionCreatorPage.isOpenCartoon}
-        setSaved={(saved) => {
-          // set_isfComicToolDirty(!saved);
-          dispatch<ChangeAction>({
-            type: 'resourceVersionCreatorPage/change',
-            payload: {
-              isDirtyCartoonEditor: !saved,
-            },
-          });
-        }}
-        close={() => {
-          dispatch<OnClose_CartoonEditor_Action>({
-            type: 'resourceVersionCreatorPage/onClose_CartoonEditor',
-          });
-        }}
-      />
+      {/*<ComicTool*/}
+      {/*  resourceId={resourceVersionCreatorPage.resourceInfo?.resourceID || ''}*/}
+      {/*  show={resourceVersionCreatorPage.isOpenCartoon}*/}
+      {/*  setSaved={(saved) => {*/}
+      {/*    // set_isfComicToolDirty(!saved);*/}
+      {/*    dispatch<ChangeAction>({*/}
+      {/*      type: 'resourceVersionCreatorPage/change',*/}
+      {/*      payload: {*/}
+      {/*        isDirtyCartoonEditor: !saved,*/}
+      {/*      },*/}
+      {/*    });*/}
+      {/*  }}*/}
+      {/*  close={() => {*/}
+      {/*    dispatch<OnClose_CartoonEditor_Action>({*/}
+      {/*      type: 'resourceVersionCreatorPage/onClose_CartoonEditor',*/}
+      {/*    });*/}
+      {/*  }}*/}
+      {/*/>*/}
     </div>
     <FPrompt
       watch={resourceVersionCreatorPage.dataIsDirty || isMarkdownEditorDirty || resourceVersionCreatorPage.isDirtyCartoonEditor}
