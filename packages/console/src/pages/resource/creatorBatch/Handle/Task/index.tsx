@@ -27,11 +27,13 @@ interface TaskProps {
     sha1: string;
     reason: string;
   }): void;
+
+  onCancel?(): void;
 }
 
-function Task({ order, file, resourceTypeCode, resourceType, onSuccess, onFail }: TaskProps) {
+function Task({ order, file, resourceTypeCode, resourceType, onSuccess, onFail, onCancel }: TaskProps) {
   const canceler = React.useRef<Canceler | null>(null);
-  const [$taskState, set$taskState, get$taskState] = FUtil.Hook.useGetState<'loading' | 'uploading' | 'parsing' | 'success' | 'failed' | 'canceled'>('loading');
+  // const [$taskState, set$taskState, get$taskState] = FUtil.Hook.useGetState<'loading' | 'uploading' | 'parsing' | 'success' | 'failed' | 'canceled'>('loading');
   const [$progress, set$progress, get$progress] = FUtil.Hook.useGetState<number>(0);
 
   AHooks.useMount(async () => {
@@ -68,7 +70,6 @@ function Task({ order, file, resourceTypeCode, resourceType, onSuccess, onFail }
       const params3: Parameters<typeof FServiceAPI.Resource.getResourceBySha1>[0] = {
         fileSha1: fileSha1,
       };
-
       const { data: data_ResourcesBySha1 }: {
         data: {
           userId: number;
@@ -95,7 +96,7 @@ function Task({ order, file, resourceTypeCode, resourceType, onSuccess, onFail }
       const params: Parameters<typeof FServiceAPI.Storage.uploadFile>[0] = {
         file: file,
       };
-      set$taskState('uploading');
+      // set$taskState('uploading');
       const [promise, cancel]: any = FServiceAPI.Storage.uploadFile(params, {
         onUploadProgress(progressEvent) {
           set$progress(Math.floor(progressEvent.loaded / progressEvent.total * 100));
@@ -117,7 +118,9 @@ function Task({ order, file, resourceTypeCode, resourceType, onSuccess, onFail }
       }
     }
 
-    set$taskState('parsing');
+    set$progress(100);
+
+    // set$taskState('parsing');
     const { result } = await getFilesSha1Info({
       sha1: [fileSha1],
       resourceTypeCode: resourceTypeCode,
@@ -125,7 +128,7 @@ function Task({ order, file, resourceTypeCode, resourceType, onSuccess, onFail }
     // console.log(result, 'result sdjf;lsdjfl;kjsdlkfjksldjfklj');
 
     if (result[0].state === 'success') {
-      set$taskState('success');
+      // set$taskState('success');
       onSuccess && onSuccess({
         uid: file.uid,
         name: file.name,
@@ -133,7 +136,7 @@ function Task({ order, file, resourceTypeCode, resourceType, onSuccess, onFail }
       });
       return;
     }
-    set$taskState('failed');
+    // set$taskState('failed');
     onFail && onFail({
       uid: file.uid,
       name: file.name,
@@ -146,9 +149,9 @@ function Task({ order, file, resourceTypeCode, resourceType, onSuccess, onFail }
 
   });
 
-  if ($taskState === 'canceled') {
-    return null;
-  }
+  // if ($taskState === 'canceled') {
+  //   return null;
+  // }
 
   return (<div>
     <FComponentsLib.FContentText
@@ -192,21 +195,32 @@ function Task({ order, file, resourceTypeCode, resourceType, onSuccess, onFail }
           style={{ width: 140 }}
         />
         <div style={{ width: 20 }} />
-        <FComponentsLib.FTextBtn
-          style={{ fontSize: 12 }}
-          type={'danger'}
-          onClick={() => {
-            canceler.current && canceler.current();
-            set$taskState('canceled');
-            // set_progress(0);
-            onFail && onFail({
-              uid: file.uid,
-              name: file.name,
-              sha1: '',
-              reason: '取消上传',
-            });
-          }}
-        >取消上传</FComponentsLib.FTextBtn>
+        {
+          $progress < 100 && (<FComponentsLib.FTextBtn
+            style={{ fontSize: 12 }}
+            type={'danger'}
+            onClick={() => {
+              canceler.current && canceler.current();
+              onCancel && onCancel();
+              // set$taskState('canceled');
+              // set_progress(0);
+              // onFail && onFail({
+              //   uid: file.uid,
+              //   name: file.name,
+              //   sha1: '',
+              //   reason: '取消上传',
+              // });
+            }}
+          >取消上传</FComponentsLib.FTextBtn>)
+        }
+
+        {
+          $progress === 100 && (<FComponentsLib.FContentText
+            type={'additional1'}
+            // className={styles.delete}
+          >正在解析...</FComponentsLib.FContentText>)
+        }
+
       </div>
     </div>
   </div>);

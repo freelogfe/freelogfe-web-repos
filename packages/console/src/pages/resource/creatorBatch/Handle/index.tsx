@@ -19,6 +19,7 @@ import UploadFile from './NoDate';
 import Card from './Card';
 import ErrorCard from './ErrorCard';
 import Task from './Task';
+import fReadLocalFiles from '@/components/fReadLocalFiles';
 
 interface HandleProps {
   dispatch: Dispatch;
@@ -100,17 +101,62 @@ interface HandleStates {
       errorText: string;
     } | null;
   }[];
+  tempLocalSuccess: HandleStates['dataSource'];
 }
 
 const initStates: HandleStates = {
   dataSource: [],
+  tempLocalSuccess: [],
 };
 
 function Handle({ dispatch, resourceCreatorBatchPage }: HandleProps) {
   const [$dataSource, set$dataSource, get$dataSource] = FUtil.Hook.useGetState<HandleStates['dataSource']>(initStates['dataSource']);
+  const [$tempLocalSuccess, set$tempLocalSuccess, get$tempLocalSuccess] = FUtil.Hook.useGetState<HandleStates['tempLocalSuccess']>(initStates['tempLocalSuccess']);
 
-  function onLocalUpload() {
+  async function onLocalUpload() {
+    const { data: data_acceptResourceType }: {
+      data: {
+        formats: string[];
+      }
+    } = await FServiceAPI.Resource.getResourceTypeInfoByCode({
+      code: resourceCreatorBatchPage.selectedResourceType?.value || '',
+    });
+    if (!data_acceptResourceType) {
+      return;
+    }
 
+    // set$accept();
+    const files: RcFile[] | null = await fReadLocalFiles({
+      accept: data_acceptResourceType.formats.join(','),
+      multiple: true,
+    });
+
+    if (!files) {
+      return;
+    }
+
+    const localDataSource: HandleStates['dataSource'] = files.map((f) => {
+      return {
+        uid: f.uid,
+        state: 'localUpload',
+        localUploadInfo: {
+          uid: f.uid,
+          file: f,
+        },
+        listInfo: null,
+        errorInfo: null,
+      };
+    });
+
+    let dataSource: HandleStates['dataSource'] = [
+      ...get$dataSource(),
+      ...localDataSource,
+    ];
+    if (dataSource.length > 20) {
+      fMessage('上传不能超过20个文件', 'warning');
+      dataSource = dataSource.slice(0, 20);
+    }
+    set$dataSource(dataSource);
   }
 
   async function onImportStorage() {
@@ -373,6 +419,10 @@ function Handle({ dispatch, resourceCreatorBatchPage }: HandleProps) {
                   file={r.localUploadInfo.file}
                   resourceTypeCode={resourceCreatorBatchPage.selectedResourceType?.value || ''}
                   resourceType={resourceCreatorBatchPage.selectedResourceType?.labels || []}
+                  onSuccess={() => {
+                  }}
+                  onFail={() => {
+                  }}
                 />)
               }
               {
