@@ -28,7 +28,7 @@ interface TaskProps {
     reason: string;
   }): void;
 
-  onCancel?(): void;
+  onCancel?(value: { uid: string }): void;
 }
 
 function Task({ order, file, resourceTypeCode, resourceType, onSuccess, onFail, onCancel }: TaskProps) {
@@ -201,7 +201,7 @@ function Task({ order, file, resourceTypeCode, resourceType, onSuccess, onFail, 
             type={'danger'}
             onClick={() => {
               canceler.current && canceler.current();
-              onCancel && onCancel();
+              onCancel && onCancel({ uid: file.uid });
               // set$taskState('canceled');
               // set_progress(0);
               // onFail && onFail({

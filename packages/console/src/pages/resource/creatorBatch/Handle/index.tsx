@@ -20,6 +20,7 @@ import Card from './Card';
 import ErrorCard from './ErrorCard';
 import Task from './Task';
 import fReadLocalFiles from '@/components/fReadLocalFiles';
+import * as AHooks from 'ahooks';
 
 interface HandleProps {
   dispatch: Dispatch;
@@ -101,7 +102,11 @@ interface HandleStates {
       errorText: string;
     } | null;
   }[];
-  tempLocalSuccess: HandleStates['dataSource'];
+  tempLocalSuccess: {
+    uid: string;
+    name: string;
+    sha1: string;
+  }[];
 }
 
 const initStates: HandleStates = {
@@ -112,6 +117,22 @@ const initStates: HandleStates = {
 function Handle({ dispatch, resourceCreatorBatchPage }: HandleProps) {
   const [$dataSource, set$dataSource, get$dataSource] = FUtil.Hook.useGetState<HandleStates['dataSource']>(initStates['dataSource']);
   const [$tempLocalSuccess, set$tempLocalSuccess, get$tempLocalSuccess] = FUtil.Hook.useGetState<HandleStates['tempLocalSuccess']>(initStates['tempLocalSuccess']);
+
+  AHooks.useDebounceEffect(() => {
+
+    if (get$dataSource().filter((d) => {
+      return d.state === 'localUpload' && d.localUploadInfo;
+    }).length === get$tempLocalSuccess().length) {
+      handleLocalUploadSuccess();
+    }
+
+  }, [$dataSource, $tempLocalSuccess], {
+    wait: 300,
+  });
+
+  async function handleLocalUploadSuccess() {
+
+  }
 
   async function onLocalUpload() {
     const { data: data_acceptResourceType }: {
@@ -349,14 +370,6 @@ function Handle({ dispatch, resourceCreatorBatchPage }: HandleProps) {
       dataSource = dataSource.slice(0, 20);
     }
     set$dataSource(dataSource);
-    // dispatch<ChangeAction>({
-    //   type: 'resourceCreatorBatchPage/change',
-    //   payload: {
-    //     showPage: 'resourceList',
-    //     resourceListInfo: resourceListInfo,
-    //     latestListIndex: resourceListInfo[resourceListInfo.length - 1].order,
-    //   },
-    // });
   }
 
   if ($dataSource.length === 0) {
@@ -419,9 +432,36 @@ function Handle({ dispatch, resourceCreatorBatchPage }: HandleProps) {
                   file={r.localUploadInfo.file}
                   resourceTypeCode={resourceCreatorBatchPage.selectedResourceType?.value || ''}
                   resourceType={resourceCreatorBatchPage.selectedResourceType?.labels || []}
-                  onSuccess={() => {
+                  onSuccess={(value) => {
+                    set$tempLocalSuccess([
+                      ...get$tempLocalSuccess(),
+                      value,
+                    ]);
                   }}
-                  onFail={() => {
+                  onFail={(value) => {
+                    set$dataSource(get$dataSource().map((d) => {
+                      if (d.uid !== value.uid) {
+                        return d;
+                      }
+                      return {
+                        uid: d.uid,
+                        state: 'error',
+                        errorInfo: {
+                          uid: d.uid,
+                          file: null,
+                          fileName: value.name,
+                          from: '本地上传',
+                          errorText: value.reason,
+                        },
+                        listInfo: null,
+                        localUploadInfo: null,
+                      };
+                    }));
+                  }}
+                  onCancel={(value) => {
+                    set$dataSource(get$dataSource().filter((d) => {
+                      return d.uid !== value.uid;
+                    }));
                   }}
                 />)
               }
