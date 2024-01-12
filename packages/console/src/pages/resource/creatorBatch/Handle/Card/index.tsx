@@ -16,19 +16,12 @@ import fMessage from '@/components/fMessage';
 import FUploadCover from '@/components/FUploadCover';
 import fPolicyBuilder from '@/components/fPolicyBuilder';
 import FMicroAPP_Authorization from '@/components/FMicroAPP_Authorization';
-import img from '@/assets/file-object.svg';
-// import { getFilesSha1Info } from '@/utils/service';
-// import {
-//   OnClick_step2_editCartoonBtn_Action,
-//   OnClick_step2_editMarkdownBtn_Action, OnRemove_step2_file_Action,
-// } from '@/models/resourceCreatorPage';
 
 interface CardProps {
   order: number;
   username: string;
   resourceType: string[];
   info: {
-    // order: number;
     uid: string;
     fileName: string;
     sha1: string;
@@ -86,8 +79,6 @@ interface CardProps {
       }[];
     }[];
     isCompleteAuthorization: boolean;
-    // from: string;
-    // error: string;
   };
 
   onChange?(value: CardProps['info']): void;
@@ -110,16 +101,23 @@ function Card({
                 onClickApplyPolicies,
               }: CardProps) {
   const [$showMore, set$showMore, get$showMore] = FUtil.Hook.useGetState<boolean>(false);
-  const [$dataSource, set$dataSource, get$dataSource] = FUtil.Hook.useGetState<CardProps['info']>(info);
+  const [$auth, set$auth, get$auth] = FUtil.Hook.useGetState<'block' | 'none'>('none');
+  // const [$dataSource, set$dataSource, get$dataSource] = FUtil.Hook.useGetState<CardProps['info']>(info);
 
-  React.useEffect(() => {
-    set$dataSource(info);
-  }, [info]);
+  // React.useEffect(() => {
+  //   set$dataSource(info);
+  // }, [info]);
 
   AHooks.useDebounceEffect(() => {
-    onVerifyResourceName();
+    // onVerifyResourceName();
   }, [info.resourceName], {
     wait: 300,
+  });
+
+  const { run } = AHooks.useDebounceFn(() => {
+    onVerifyResourceName();
+  }, {
+    wait: 100,
   });
 
   async function onVerifyResourceName() {
@@ -146,8 +144,6 @@ function Card({
       resourceNameError: nameErrorText,
     });
   }
-
-
 
   return (<div className={styles.resourceContainer}>
     <div className={styles.resourceOrder}>
@@ -219,6 +215,7 @@ function Card({
                 ...info,
                 resourceName: value,
               });
+              run();
             }}
           />
         </div>
@@ -369,7 +366,8 @@ function Card({
       <FComponentsLib.FTextBtn
         style={{ fontSize: 12 }}
         onClick={() => {
-          set$showMore(!get$showMore());
+          set$showMore(true);
+          set$auth(get$auth() === 'block' ? 'none' : 'block');
         }}
       >{$showMore
         ? FI18n.i18nNext.t('brr_resourcelisting_item_btn_showlesssetting')
@@ -666,32 +664,37 @@ function Card({
             </div>
           </>)
         }
-        <div style={{ height: 5 }} />
       </>)
     }
 
     {/*<div style={{height: 5}}/>*/}
-    <div className={styles.block} style={{ display: $showMore ? 'block' : 'none' }}>
-      <FMicroAPP_Authorization
-        // name={'Authorization_' + info.order}
-        licenseeId={''}
-        mainAppType={'resourceInBatchPublish'}
-        depList={info.directDependencies}
-        upcastList={info.baseUpcastResources}
-        update={(data: any) => {
-          // console.error(get$dataSource(), '@#################################');
-          // console.info(data, '############################################@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
-          // console.error(info, data, 'resourceInBatchPublish ____________________ data sdifjlskdfjlkjlk');
-          onChange && onChange({
-            ...get$dataSource(),
-            directDependencies: data.depList,
-            resolveResources: data.resolveResources,
-            baseUpcastResources: data.upcastList,
-            isCompleteAuthorization: data.isAllAuthComplete,
-          });
-        }}
-      />
-    </div>
+    {
+      $showMore && (<div style={{ display: $auth }}>
+        <div style={{ height: 5 }} />
+        <div className={styles.block}>
+          <FMicroAPP_Authorization
+            // name={'Authorization_' + info.order}
+            licenseeId={''}
+            mainAppType={'resourceInBatchPublish'}
+            depList={info.directDependencies}
+            upcastList={info.baseUpcastResources}
+            update={(data: any) => {
+              // console.error(get$dataSource(), '@#################################');
+              // console.info(data, '############################################@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
+              // console.error(info, data, 'resourceInBatchPublish ____________________ data sdifjlskdfjlkjlk');
+              onChange && onChange({
+                ...info,
+                directDependencies: data.depList,
+                resolveResources: data.resolveResources,
+                baseUpcastResources: data.upcastList,
+                isCompleteAuthorization: data.isAllAuthComplete,
+              });
+            }}
+          />
+        </div>
+      </div>)
+    }
+
 
   </div>);
 }

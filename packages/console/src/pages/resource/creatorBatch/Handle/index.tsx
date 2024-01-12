@@ -3,7 +3,7 @@ import styles from './index.less';
 import { Dispatch } from 'redux';
 import { ChangeAction, ResourceCreatorBatchPageState } from '@/models/resourceCreatorBatchPage';
 import { connect } from 'dva';
-import { ConnectState, ResourceVersionCreatorPageModelState } from '@/models/connect';
+import { ConnectState } from '@/models/connect';
 import { RcFile } from 'antd/lib/upload/interface';
 import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
 import { history } from '@@/core/history';
@@ -119,7 +119,7 @@ function Handle({ dispatch, resourceCreatorBatchPage }: HandleProps) {
   const [$tempLocalSuccess, set$tempLocalSuccess, get$tempLocalSuccess] = FUtil.Hook.useGetState<HandleStates['tempLocalSuccess']>(initStates['tempLocalSuccess']);
 
   AHooks.useDebounceEffect(() => {
-    console.log(get$dataSource(), get$tempLocalSuccess(), 'get$dataSource(), get$tempLocalSuccess() 色打发士大夫');
+    // console.log(get$dataSource(), get$tempLocalSuccess(), 'get$dataSource(), get$tempLocalSuccess() 色打发士大夫');
     if (get$tempLocalSuccess().length > 0 && get$dataSource().filter((d) => {
       return d.state === 'localUpload' && d.localUploadInfo;
     }).length === get$tempLocalSuccess().length) {
@@ -129,6 +129,44 @@ function Handle({ dispatch, resourceCreatorBatchPage }: HandleProps) {
   }, [$dataSource, $tempLocalSuccess], {
     wait: 300,
   });
+
+  const { run } = AHooks.useDebounceFn(() => {
+    verifyDuplicationResourceName();
+  }, {
+    wait: 200,
+  });
+
+  function verifyDuplicationResourceName() {
+    // let dataSource = get$dataSource()
+    //   .filter((rli) => {
+    //     return rli.state === 'list' && rli.listInfo;
+    //   })
+    //   .map((rli) => {
+    //     return rli.listInfo;
+    //   });
+    const map: Map<string, number> = new Map<string, number>();
+    for (const resource of get$dataSource()) {
+      if (resource.state === 'list' && resource.listInfo) {
+        map.set(resource.listInfo.resourceName, (map.get(resource.listInfo.resourceName) || 0) + 1);
+      }
+    }
+
+    const dataSource: HandleStates['dataSource'] = get$dataSource().map((info) => {
+      if (info.state === 'list' && info.listInfo) {
+        return {
+          ...info,
+          listInfo: {
+            ...info.listInfo,
+            resourceNameError: (info.listInfo.resourceNameError !== '' && info.listInfo.resourceNameError !== '不能重复')
+              ? info.listInfo.resourceNameError
+              : ((map.get(info.listInfo.resourceName) || 0) > 1 ? '不能重复' : ''),
+          },
+        };
+      }
+      return info;
+    });
+    set$dataSource(dataSource);
+  }
 
   async function handleLocalUploadSuccess() {
     const namesMap: Map<string, number> = new Map<string, number>();
@@ -233,7 +271,7 @@ function Handle({ dispatch, resourceCreatorBatchPage }: HandleProps) {
             .filter((i) => {
               return i.insertMode === 1;
             })
-            .map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((i) => {
+            .map<NonNullable<HandleStates['dataSource'][number]['listInfo']>['rawProperties'][number]>((i) => {
               return {
                 key: i.key,
                 name: i.name,
@@ -245,7 +283,7 @@ function Handle({ dispatch, resourceCreatorBatchPage }: HandleProps) {
             .filter((i) => {
               return i.insertMode === 2;
             })
-            .map<ResourceVersionCreatorPageModelState['additionalProperties'][number]>((i) => {
+            .map<NonNullable<HandleStates['dataSource'][number]['listInfo']>['additionalProperties'][number]>((i) => {
               return {
                 key: i.key,
                 name: i.name,
@@ -326,6 +364,7 @@ function Handle({ dispatch, resourceCreatorBatchPage }: HandleProps) {
       fMessage('上传不能超过20个文件', 'warning');
       dataSource = dataSource.slice(0, 20);
     }
+    // console.log(dataSource, 'onLocalUpload asdfsad;lfkjasdlfjlksdjflkjlkj');
     set$dataSource(dataSource);
   }
 
@@ -621,35 +660,19 @@ function Handle({ dispatch, resourceCreatorBatchPage }: HandleProps) {
                   username={'$username'}
                   info={r.listInfo}
                   onChange={(value) => {
-                    const resourceListInfo = get$dataSource()
-                      .filter((rli) => {
-                        return rli.state === 'list' && rli.listInfo;
-                      })
-                      .map((rli) => {
-                        return rli.listInfo;
-                      });
-                    const map: Map<string, number> = new Map<string, number>();
-                    for (const info of resourceListInfo) {
-                      if (info) {
-                        map.set(info.resourceName, (map.get(info.resourceName) || 0) + 1);
+                    console.log(value, 'onChange value sidjflksdjflkjsdlkfjlksdfjlksdjlfjlksdjflkjsdlkf');
+                    let dataSource: HandleStates['dataSource'] = get$dataSource().map((d) => {
+                      if (d.uid !== r.uid) {
+                        return d;
                       }
-                    }
-
-                    const dataSource = get$dataSource().map((info) => {
-                      if (info.state === 'list' && info.listInfo) {
-                        return {
-                          ...info,
-                          listInfo: {
-                            ...info.listInfo,
-                            resourceNameError: (info.listInfo.resourceNameError !== '' && info.listInfo.resourceNameError !== '不能重复')
-                              ? info.listInfo.resourceNameError
-                              : ((map.get(info.listInfo.resourceName) || 0) > 1 ? '不能重复' : ''),
-                          },
-                        };
-                      }
-                      return info;
+                      return {
+                        ...d,
+                        listInfo: value,
+                      };
                     });
+                    console.log(dataSource, 'onChange sdfjsdalkfjlksdjflksjdlfkjlkdsjflkj');
                     set$dataSource(dataSource);
+                    run();
                   }}
                   onDelete={() => {
                     let dataSource: HandleStates['dataSource'] = get$dataSource()
@@ -663,28 +686,29 @@ function Handle({ dispatch, resourceCreatorBatchPage }: HandleProps) {
                     //   return rli.listInfo;
                     // });
 
-                    const map: Map<string, number> = new Map<string, number>();
-                    for (const info of dataSource) {
-                      if (info.state === 'list' && info.listInfo) {
-                        map.set(info.listInfo.resourceName, (map.get(info.listInfo.resourceName) || 0) + 1);
-                      }
-                    }
-
-                    dataSource = dataSource.map((info) => {
-                      if (info.state === 'list' && info.listInfo) {
-                        return {
-                          ...info,
-                          listInfo: {
-                            ...info.listInfo,
-                            resourceNameError: (info.listInfo.resourceNameError !== '' && info.listInfo.resourceNameError !== '不能重复')
-                              ? info.listInfo.resourceNameError
-                              : ((map.get(info.listInfo.resourceName) || 0) > 1 ? '不能重复' : ''),
-                          },
-                        };
-                      }
-                      return info;
-                    });
+                    // const map: Map<string, number> = new Map<string, number>();
+                    // for (const info of dataSource) {
+                    //   if (info.state === 'list' && info.listInfo) {
+                    //     map.set(info.listInfo.resourceName, (map.get(info.listInfo.resourceName) || 0) + 1);
+                    //   }
+                    // }
+                    //
+                    // dataSource = dataSource.map((info) => {
+                    //   if (info.state === 'list' && info.listInfo) {
+                    //     return {
+                    //       ...info,
+                    //       listInfo: {
+                    //         ...info.listInfo,
+                    //         resourceNameError: (info.listInfo.resourceNameError !== '' && info.listInfo.resourceNameError !== '不能重复')
+                    //           ? info.listInfo.resourceNameError
+                    //           : ((map.get(info.listInfo.resourceName) || 0) > 1 ? '不能重复' : ''),
+                    //       },
+                    //     };
+                    //   }
+                    //   return info;
+                    // });
                     set$dataSource(dataSource);
+                    run();
                   }}
                   onClickApplyPolicies={(resourceCreatorBatchPage.resourceListInfo.length <= 1 || r.listInfo.resourcePolicies.length === 0) ? undefined : async () => {
 
@@ -774,78 +798,8 @@ function Handle({ dispatch, resourceCreatorBatchPage }: HandleProps) {
               }
 
             </React.Fragment>);
-
-            // if (r.state === 'error' && !!r.errorInfo) {
-            //   return (<React.Fragment key={r.listInfo?.uid || ri}>
-            //     <div style={{ height: 40 }} />
-            //
-            //   </React.Fragment>);
-            //   // return (<div className={styles.resourceContainer}>
-            //   //   <div className={styles.resourceOrder}>
-            //   //     <FComponentsLib.FContentText
-            //   //       text={FI18n.i18nNext.t('brr_resourcelisting_item_no', {
-            //   //         ResourceNO: ri + 1,
-            //   //       })}
-            //   //       type={'highlight'}
-            //   //       style={{ fontSize: 12 }}
-            //   //     />
-            //   //     <FComponentsLib.FTextBtn
-            //   //       style={{ fontSize: 12 }}
-            //   //       type={'danger'}
-            //   //       onClick={() => {
-            //   //         const dataSource: HandleStates['dataSource'] = get$dataSource()
-            //   //           .filter((rli) => {
-            //   //             return rli.uid !== r.uid;
-            //   //           });
-            //   //         set$dataSource(dataSource);
-            //   //       }}
-            //   //     >
-            //   //       <FComponentsLib.FIcons.FDelete style={{ fontSize: 12 }} />
-            //   //       &nbsp;{FI18n.i18nNext.t('brr_resourcelisting_item_btn_deleteitem')}
-            //   //     </FComponentsLib.FTextBtn>
-            //   //   </div>
-            //   //   <div style={{ height: 5 }} />
-            //   //   <div className={styles.fileInfo}>
-            //   //     <div className={styles.card}>
-            //   //       <img src={img} className={styles.img} alt='' />
-            //   //       <div style={{ width: 20 }} />
-            //   //       <div>
-            //   //         <FComponentsLib.FContentText
-            //   //           type='highlight'
-            //   //           text={r.errorInfo.fileName}
-            //   //           style={{ maxWidth: 600 }}
-            //   //           singleRow
-            //   //         />
-            //   //         <div style={{ height: 18 }} />
-            //   //         <div className={styles.info}>
-            //   //           <FComponentsLib.FContentText
-            //   //             className={styles.infoSize}
-            //   //             type='additional1'
-            //   //             text={r.errorInfo.from}
-            //   //           />
-            //   //         </div>
-            //   //       </div>
-            //   //     </div>
-            //   //     <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            //   //       <FComponentsLib.FTextBtn
-            //   //         type='danger'
-            //   //         style={{ fontSize: 12, display: 'flex', alignItems: 'center', gap: 5 }}
-            //   //       >{r.errorInfo.errorText}</FComponentsLib.FTextBtn>
-            //   //     </div>
-            //   //   </div>
-            //   // </div>);
-            // }
-            //
-            // return (<div />);
-
           })
         }
-
-        {/*<FResourceBatchUpload*/}
-        {/*  resourceTypeCode={resourceCreatorBatchPage.selectedResourceType?.value || ''}*/}
-        {/*  resourceType={resourceCreatorBatchPage.selectedResourceType?.labels || []}*/}
-        {/*  onFinish={localUploadGotoList}*/}
-        {/*/>*/}
         <div style={{ height: 100 }} />
       </div>
 
