@@ -23,6 +23,7 @@ import {
   FetchDataSourceAction,
   SyncAllPropertiesAction,
   UpdateDataSourceAction,
+  OnUnmount_Page_Action,
 } from '@/models/resourceVersionEditorPage';
 import fResourcePropertyEditor from '@/components/fResourcePropertyEditor';
 import FResourceProperties from '@/components/FResourceProperties';
@@ -67,6 +68,12 @@ function VersionInfo({ dispatch, resourceVersionEditorPage, match }: VersionInfo
       payload: {
         page: 'versionInfo',
       },
+    });
+  });
+
+  AHooks.useUnmount(() => {
+    dispatch<OnUnmount_Page_Action>({
+      type: 'resourceVersionEditorPage/onUnmount_Page',
     });
   });
 

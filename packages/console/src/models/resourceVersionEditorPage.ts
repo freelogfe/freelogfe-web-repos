@@ -8,6 +8,7 @@ import { history } from 'umi';
 import fMessage from '@/components/fMessage';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
 import { IResourceCreateVersionDraftType } from '@/type/resourceTypes';
+// import { TempModelState } from '@/models/__template';
 
 export interface ResourceVersionEditorPageModelState {
   resourceID: string;
@@ -78,6 +79,17 @@ export interface ChangeAction extends AnyAction {
   payload: Partial<ResourceVersionEditorPageModelState>;
 }
 
+export interface OnMount_Page_Action extends AnyAction {
+  type: 'resourceVersionEditorPage/onMount_Page';
+  payload: {
+    resourceID: string;
+  };
+}
+
+export interface OnUnmount_Page_Action extends AnyAction {
+  type: 'resourceVersionEditorPage/onUnmount_Page';
+}
+
 export interface FetchDataSourceAction extends AnyAction {
   type: 'resourceVersionEditorPage/fetchDataSource' | 'fetchDataSource';
 }
@@ -95,6 +107,8 @@ export interface ResourceVersionEditorModelType {
   namespace: 'resourceVersionEditorPage';
   state: ResourceVersionEditorPageModelState;
   effects: {
+    onMount_Page: (action: OnMount_Page_Action, effects: EffectsCommandMap) => void;
+    onUnmount_Page: (action: OnUnmount_Page_Action, effects: EffectsCommandMap) => void;
     fetchDataSource: (action: FetchDataSourceAction, effects: EffectsCommandMap) => void;
     updateDataSource: (action: UpdateDataSourceAction, effects: EffectsCommandMap) => void;
     syncAllProperties: (action: SyncAllPropertiesAction, effects: EffectsCommandMap) => void;
@@ -106,36 +120,47 @@ export interface ResourceVersionEditorModelType {
   subscriptions: { setup: Subscription };
 }
 
+const initStates: ResourceVersionEditorPageModelState = {
+  resourceID: '',
+  version: '',
+  versions: [],
+  // signingDate: '',
+  resourceInfo: null,
+  draft: null,
+  resourceVersionInfo: null,
+
+  descriptionFullScreen: false,
+  description: '',
+
+  graphShow: true,
+
+  rawProperties: [],
+  additionalProperties: [],
+  customProperties: [],
+
+  customConfigurations: [],
+
+  directDependencies: [],
+  baseUpcastResources: [],
+  reload: 0,
+};
+
 const Model: ResourceVersionEditorModelType = {
 
   namespace: 'resourceVersionEditorPage',
 
-  state: {
-    resourceID: '',
-    version: '',
-    versions: [],
-    // signingDate: '',
-    resourceInfo: null,
-    draft: null,
-    resourceVersionInfo: null,
-
-    descriptionFullScreen: false,
-    description: '',
-
-    graphShow: true,
-
-    rawProperties: [],
-    additionalProperties: [],
-    customProperties: [],
-
-    customConfigurations: [],
-
-    directDependencies: [],
-    baseUpcastResources: [],
-    reload: 0,
-  },
+  state: initStates,
 
   effects: {
+    * onMount_Page({}: OnMount_Page_Action, {}: EffectsCommandMap) {
+
+    },
+    * onUnmount_Page({}: OnUnmount_Page_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: initStates,
+      });
+    },
     * fetchDataSource({}: FetchDataSourceAction, { call, put, select }: EffectsCommandMap) {
       // const params: ResourceVersionInfoParamsType1 = action.payload;
       const { resourceVersionEditorPage }: ConnectState = yield select(({ resourceVersionEditorPage }: ConnectState) => ({
