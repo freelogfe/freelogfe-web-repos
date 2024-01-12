@@ -8,9 +8,11 @@ import { history } from 'umi';
 import fMessage from '@/components/fMessage';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
 import { IResourceCreateVersionDraftType } from '@/type/resourceTypes';
+
 // import { TempModelState } from '@/models/__template';
 
 export interface ResourceVersionEditorPageModelState {
+  pageState: 'loading' | 'loaded';
   resourceID: string;
   version: string;
   versions: string[];
@@ -83,6 +85,7 @@ export interface OnMount_Page_Action extends AnyAction {
   type: 'resourceVersionEditorPage/onMount_Page';
   payload: {
     resourceID: string;
+    version: string;
   };
 }
 
@@ -121,6 +124,7 @@ export interface ResourceVersionEditorModelType {
 }
 
 const initStates: ResourceVersionEditorPageModelState = {
+  pageState: 'loading',
   resourceID: '',
   version: '',
   versions: [],
@@ -246,29 +250,6 @@ const Model: ResourceVersionEditorModelType = {
 
       const base = data_versionInfo.customPropertyDescriptors.filter((i) => i.type === 'readonlyText');
       const opt = data_versionInfo.customPropertyDescriptors.filter((i) => i.type === 'editableText' || i.type === 'select');
-      // console.log('@#$@#$@#$@#$$#@$@#$1111111111');
-
-
-      // const params4: Parameters<typeof FServiceAPI.Resource.resolveResources>[0] = {
-      //   resourceId: resourceVersionEditorPage.resourceID,
-      // };
-      // const { data: data_resolveResources }: {
-      //   data: {
-      //     resourceId: string;
-      //     resourceName: string;
-      //     versions: {
-      //       version: string;
-      //       versionId: string;
-      //       contracts: {
-      //         policyId: string;
-      //         contractId: string;
-      //       }[];
-      //     }[];
-      //   }[];
-      // } = yield call(FServiceAPI.Resource.resolveResources, params4);
-
-      // console.log(data_resolveResources, 'data_resolveResources sdifjsd;lkfjlksdjflkjsdlkfjlkj');
-
 
       yield put<ChangeAction>({
         type: 'change',
@@ -347,6 +328,17 @@ const Model: ResourceVersionEditorModelType = {
             };
           }),
           reload: resourceVersionEditorPage.reload + 1,
+        },
+      });
+
+      console.log('******************************************************************');
+      yield call(FUtil.Tool.promiseSleep, 1000);
+      console.log('##############################################################');
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          pageState: 'loaded',
         },
       });
     },
