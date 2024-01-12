@@ -660,7 +660,7 @@ function Handle({ dispatch, resourceCreatorBatchPage }: HandleProps) {
                   username={'$username'}
                   info={r.listInfo}
                   onChange={(value) => {
-                    console.log(value, 'onChange value sidjflksdjflkjsdlkfjlksdfjlksdjlfjlksdjflkjsdlkf');
+                    // console.log(value, 'onChange value sidjflksdjflkjsdlkfjlksdfjlksdjlfjlksdjflkjsdlkf');
                     let dataSource: HandleStates['dataSource'] = get$dataSource().map((d) => {
                       if (d.uid !== r.uid) {
                         return d;
@@ -670,7 +670,7 @@ function Handle({ dispatch, resourceCreatorBatchPage }: HandleProps) {
                         listInfo: value,
                       };
                     });
-                    console.log(dataSource, 'onChange sdfjsdalkfjlksdjflksjdlfkjlkdsjflkj');
+                    // console.log(dataSource, 'onChange sdfjsdalkfjlksdjflksjdlfkjlkdsjflkj');
                     set$dataSource(dataSource);
                     run();
                   }}
