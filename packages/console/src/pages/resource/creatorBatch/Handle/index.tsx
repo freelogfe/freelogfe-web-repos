@@ -823,7 +823,11 @@ function Handle({ dispatch, resourceCreatorBatchPage }: HandleProps) {
               .filter((ds) => {
                 return ds.state === 'list' && ds.listInfo;
               }).length === 0
-            || $dataSource.some((r) => {
+            || $dataSource.some((ds) => {
+              return ds.state !== 'list' || !ds.listInfo;
+            })
+            ||
+            $dataSource.some((r) => {
               return r.state === 'list'
                 && r.listInfo
                 && (r.listInfo.resourceNameError !== ''
