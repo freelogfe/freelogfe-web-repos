@@ -772,7 +772,7 @@ function Handle({ dispatch, resourceCreatorBatchPage }: HandleProps) {
         {
           $dataSource.map((r, ri) => {
 
-            return (<React.Fragment key={r.listInfo?.uid || ri}>
+            return (<React.Fragment key={r.uid}>
               <div style={{ height: 40 }} />
               {
                 r.state === 'localUpload' && r.localUploadInfo && (<Task

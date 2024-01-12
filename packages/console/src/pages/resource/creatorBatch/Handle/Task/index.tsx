@@ -33,7 +33,7 @@ interface TaskProps {
 
 function Task({ order, file, resourceTypeCode, resourceType, onSuccess, onFail, onCancel }: TaskProps) {
   const canceler = React.useRef<Canceler | null>(null);
-  // const [$taskState, set$taskState, get$taskState] = FUtil.Hook.useGetState<'loading' | 'uploading' | 'parsing' | 'success' | 'failed' | 'canceled'>('loading');
+  const [$taskState, set$taskState, get$taskState] = FUtil.Hook.useGetState<'uploading' | 'canceled'>('uploading');
   const [$progress, set$progress, get$progress] = FUtil.Hook.useGetState<number>(0);
 
   AHooks.useMount(async () => {
@@ -129,11 +129,14 @@ function Task({ order, file, resourceTypeCode, resourceType, onSuccess, onFail, 
 
     if (result[0].state === 'success') {
       // set$taskState('success');
-      onSuccess && onSuccess({
-        uid: file.uid,
-        name: file.name,
-        sha1: fileSha1,
-      });
+      if (get$taskState() !== 'canceled') {
+        onSuccess && onSuccess({
+          uid: file.uid,
+          name: file.name,
+          sha1: fileSha1,
+        });
+      }
+
       return;
     }
     // set$taskState('failed');
@@ -200,15 +203,14 @@ function Task({ order, file, resourceTypeCode, resourceType, onSuccess, onFail, 
             style={{ fontSize: 12 }}
             type={'danger'}
             onClick={() => {
+              set$taskState('canceled');
               canceler.current && canceler.current();
               onCancel && onCancel({ uid: file.uid });
-              // set$taskState('canceled');
-              // set_progress(0);
               // onFail && onFail({
               //   uid: file.uid,
               //   name: file.name,
               //   sha1: '',
-              //   reason: '取消上传',
+              //   reason: '已经取消上传',
               // });
             }}
           >取消上传</FComponentsLib.FTextBtn>)
