@@ -61,8 +61,8 @@ function ResourceTypeInputDrawer({ onOk, onClose }: ResourceTypeInputDrawerProps
     />
     <div style={{ height: 20 }} />
     <div className={styles.footer}>
-      <div><FComponentsLib.FIcons.FInfo
-        style={{ fontSize: 14 }} />&nbsp;{FI18n.i18nNext.t('storage_bulkaction_settype_input_type_msg')}</div>
+      <div style={{ fontSize: 12, lineHeight: '18px', color: '#BEBEBE' }}><FComponentsLib.FIcons.FInfo
+        style={{ fontSize: 12 }} />&nbsp;{FI18n.i18nNext.t('storage_bulkaction_settype_input_type_msg')}</div>
     </div>
   </FDrawer>);
 }
