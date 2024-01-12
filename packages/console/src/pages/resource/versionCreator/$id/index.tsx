@@ -55,7 +55,7 @@ import { withRouter, history } from 'umi';
 import FMicroApp_MarkdownEditorDrawer from '@/components/FMicroApp_MarkdownEditorDrawer';
 import { getFilesSha1Info } from '@/utils/service';
 import fMessage from '@/components/fMessage';
-import { MicroApp } from 'umi';
+// import { MicroApp } from 'umi';
 import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
 import FMicroAPP_Authorization from '@/components/FMicroAPP_Authorization';
 
