@@ -55,64 +55,29 @@ function ReadFiles({ multiple, accept, onRead, onCancel }: ReadFilesProps) {
 
   AHooks.useMount(() => {
     refDiv.current.click();
-    // self.document.getElementById('read-file-root')
     uploaderContainer.current
       ?.querySelector('input[type=file]')
-      ?.addEventListener('cancel', (event: any) => {
-        // 处理取消事件的逻辑
-        // console.log('cancel cancel dfcancel');
+      ?.addEventListener('cancel', () => {
         onCancel && onCancel();
       });
   });
-
-  // AHooks.useTimeout(() => {
-  //   // console.log(uploader.current, '##############');
-  //
-  //   //   .addEventListener('cancel', (event: any) => {
-  //   //   // 处理取消事件的逻辑
-  //   //   console.log('cancel cancel dfcancel');
-  //   // });
-  //
-  //
-  //   // console.log(input, 'input w34098uijfosdkfjsdl;kjflkjlk');
-  // }, 1000);
-
-  // function close() {
-  //   setTimeout(() => {
-  //     onClose && onClose();
-  //   }, 1000);
-  // }
 
   return (<div
     style={{ width: 0, height: 0, overflow: 'hidden' }}
     ref={uploaderContainer}
   >
     <Upload
-      // openFileDialogOnClick={true}
-      // ref={uploaderContainer}
       multiple={multiple}
       accept={accept}
       showUploadList={false}
       beforeUpload={(file: RcFile, fileList: RcFile[]) => {
         // console.log(fileList, 'fildiosdfjhlksdjflksdjflsdjflkdsjflkjsdlkfjlksdjflsdjflkjkkkkkkkkj');
         onRead && onRead(fileList);
-        // close();
         return false;
       }}
       openFileDialogOnClick
     >
-      <div
-        ref={refDiv}
-        // onClick={() => {
-        //   self.addEventListener(
-        //     'focus',
-        //     () => {
-        //       close();
-        //     },
-        //     { once: true },
-        //   );
-        // }}
-      />
+      <div ref={refDiv} />
     </Upload>
   </div>);
 }
