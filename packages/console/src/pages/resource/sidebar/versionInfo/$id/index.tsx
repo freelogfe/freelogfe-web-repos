@@ -102,10 +102,15 @@ function VersionInfo({ dispatch, resourceVersionEditorPage, match }: VersionInfo
       resourceID: match.params.id,
       version: $urlState.version,
     });
-    // console.log('8******88888*)OIIIIII');
-    await dispatch<FetchDataSourceAction>({
-      type: 'resourceVersionEditorPage/fetchDataSource',
-    });
+    if ($urlState.version === '') {
+      onChange({
+        pageState: 'loaded',
+      });
+    } else {
+      await dispatch<FetchDataSourceAction>({
+        type: 'resourceVersionEditorPage/fetchDataSource',
+      });
+    }
   }
 
   async function onChange(payload: Partial<ResourceVersionEditorPageModelState>) {
