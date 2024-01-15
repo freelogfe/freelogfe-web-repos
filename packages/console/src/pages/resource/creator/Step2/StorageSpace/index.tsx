@@ -235,7 +235,6 @@ function StorageSpace({ style = {}, resourceTypeCode, onSucceed }: StorageSpaceP
       title={null}
       width={920}
       open={$otherUsedResource.length > 0}
-
       onCancel={() => {
         set$otherUsedResource([]);
       }}
@@ -252,7 +251,7 @@ function StorageSpace({ style = {}, resourceTypeCode, onSucceed }: StorageSpaceP
     >
       <FTable
         // rowClassName={styles.tableRowClassName}
-        scroll={{ y: $selfUsedResource.length > 5 ? 350 : undefined }}
+        scroll={{ y: $otherUsedResource.length > 5 ? 350 : undefined }}
         columns={[
           {
             title: '资源',

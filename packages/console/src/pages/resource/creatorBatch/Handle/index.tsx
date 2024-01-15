@@ -100,6 +100,13 @@ interface HandleStates {
       fileName: string;
       from: string;
       errorText: string;
+      occupancyResource?: {
+        resourceID: string;
+        resourceName: string;
+        resourceType: string[];
+        resourceVersion: string;
+        url: string;
+      }[]
     } | null;
   }[];
   tempLocalSuccess: {
@@ -137,13 +144,6 @@ function Handle({ dispatch, resourceCreatorBatchPage }: HandleProps) {
   });
 
   function verifyDuplicationResourceName() {
-    // let dataSource = get$dataSource()
-    //   .filter((rli) => {
-    //     return rli.state === 'list' && rli.listInfo;
-    //   })
-    //   .map((rli) => {
-    //     return rli.listInfo;
-    //   });
     const map: Map<string, number> = new Map<string, number>();
     for (const resource of get$dataSource()) {
       if (resource.state === 'list' && resource.listInfo) {
@@ -315,10 +315,6 @@ function Handle({ dispatch, resourceCreatorBatchPage }: HandleProps) {
 
     set$dataSource(dataSource);
     set$tempLocalSuccess([]);
-    // let dataSource: HandleStates['dataSource'] = [
-    //   ...oldDataSource,
-    //   ...newDataSource,
-    // ];
   }
 
   async function onLocalUpload() {
@@ -800,6 +796,7 @@ function Handle({ dispatch, resourceCreatorBatchPage }: HandleProps) {
                           fileName: value.name,
                           from: '本地上传',
                           errorText: value.reason,
+                          occupancyResource: value.occupancyResource,
                         },
                         listInfo: null,
                         localUploadInfo: null,

@@ -4,6 +4,9 @@ import FComponentsLib from '@freelog/components-lib';
 import { FI18n } from '@freelog/tools-lib';
 import img from '@/assets/file-object.svg';
 import { RcFile } from 'antd/lib/upload/interface';
+import FTable from '@/components/FTable';
+import FModal from '@/components/FModal';
+import { useGetState } from '@/utils/hooks';
 
 interface ErrorCardProps {
   order: number;
@@ -13,12 +16,27 @@ interface ErrorCardProps {
     fileName: string;
     from: string;
     errorText: string;
+    occupancyResource?: {
+      resourceID: string;
+      resourceName: string;
+      resourceType: string[];
+      resourceVersion: string;
+      url: string;
+    }[];
   };
 
   onDelete?(): void;
 }
 
 function ErrorCard({ order, errorInfo, onDelete }: ErrorCardProps) {
+  const [$otherUsedResource, set$otherUsedResource, get$otherUsedResource] = useGetState<{
+    resourceID: string;
+    resourceName: string;
+    resourceType: string[];
+    resourceVersion: string;
+    url: string;
+  }[]>([]);
+
   return (<div className={styles.resourceContainer}>
     <div className={styles.resourceOrder}>
       <FComponentsLib.FContentText
@@ -69,10 +87,93 @@ function ErrorCard({ order, errorInfo, onDelete }: ErrorCardProps) {
       <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
         <FComponentsLib.FTextBtn
           type='danger'
-          style={{ fontSize: 12, display: 'flex', alignItems: 'center', gap: 5 }}
+          style={{ fontSize: 12 }}
         >{errorInfo.errorText}</FComponentsLib.FTextBtn>
+
+        {
+          errorInfo.occupancyResource && (<FComponentsLib.FTextBtn
+            type='primary'
+            style={{ fontSize: 12 }}
+            onClick={() => {
+              set$otherUsedResource(errorInfo.occupancyResource || []);
+            }}
+          >查看</FComponentsLib.FTextBtn>)
+        }
+
       </div>
     </div>
+
+    <FModal
+      title={null}
+      width={920}
+      open={$otherUsedResource.length > 0}
+      onCancel={() => {
+        set$otherUsedResource([]);
+      }}
+      onOk={() => {
+        set$otherUsedResource([]);
+      }}
+      okText={'关闭'}
+      // cancelText={'取消'}
+      cancelButtonProps={{
+        style: {
+          display: 'none',
+        },
+      }}
+    >
+      <FTable
+        // rowClassName={styles.tableRowClassName}
+        scroll={{ y: $otherUsedResource.length > 5 ? 350 : undefined }}
+        columns={[
+          {
+            title: '资源',
+            dataIndex: 'resourceName',
+            width: 400,
+            render(value, record, index) {
+              return (<FComponentsLib.FContentText
+                text={record.resourceName}
+                style={{ maxWidth: 370 }}
+              />);
+            },
+          },
+          {
+            title: '类型',
+            dataIndex: 'resourceType',
+            width: 280,
+            render(value, record, index) {
+              return (<FComponentsLib.FContentText
+                text={record.resourceType.join(' / ')}
+              />);
+            },
+          },
+          {
+            title: '版本',
+            dataIndex: 'resourceVersion',
+            width: 160,
+            render(value, record, index) {
+              return (<FComponentsLib.FContentText
+                text={record.resourceVersion}
+              />);
+            },
+          },
+          {
+            title: '操作',
+            dataIndex: 'operation',
+            render(value, record, index) {
+              return (<FComponentsLib.FTextBtn onClick={() => {
+                window.open(record.url);
+              }}>查看</FComponentsLib.FTextBtn>);
+            },
+          },
+        ]}
+        dataSource={$otherUsedResource.map((sfur) => {
+          return {
+            key: sfur.url,
+            ...sfur,
+          };
+        })}
+      />
+    </FModal>
   </div>);
 }
 

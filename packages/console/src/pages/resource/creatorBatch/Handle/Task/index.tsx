@@ -26,6 +26,13 @@ interface TaskProps {
     name: string;
     sha1: string;
     reason: string;
+    occupancyResource?: {
+      resourceID: string;
+      resourceName: string;
+      resourceType: string[];
+      resourceVersion: string;
+      url: string;
+    }[];
   }): void;
 
   onCancel?(value: { uid: string }): void;
@@ -88,7 +95,21 @@ function Task({ order, file, resourceTypeCode, resourceType, onSuccess, onFail, 
           uid: file.uid,
           name: file.name,
           sha1: '',
-          reason: '资源被他人占用',
+          reason: FI18n.i18nNext.t('submitresource_err_resourceexist_otheruser'),
+          occupancyResource: data_ResourcesBySha1.map((d) => {
+            return d.resourceVersions.map((v: any) => {
+              return {
+                resourceID: d.resourceId,
+                resourceName: d.resourceName,
+                resourceType: d.resourceType,
+                resourceVersion: v.version,
+                url: FUtil.LinkTo.resourceDetails({
+                  resourceID: d.resourceId,
+                  version: v.version,
+                }),
+              };
+            });
+          }).flat(),
         });
         return;
       }
