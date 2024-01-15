@@ -22,10 +22,13 @@ function fReadLocalFiles({ multiple = false, accept }: FReadLocalFilesProps = {}
       multiple={multiple}
       accept={accept}
       onRead={(fileList: RcFile[]) => {
-        // console.log(fileList, 'fileListsdf3w2efesadrfas');
+        // console.log(fileList, 'fReadLocalFiles onReadonReadonReadonReadonReadonReadonRead');
         resolve(fileList);
+        root.unmount();
+        div.remove();
       }}
-      onClose={() => {
+      onCancel={() => {
+        // console.log('fReadLocalFiles onCancelonCancelonCancelonCancelonCancelonCancel');
         resolve(null);
         root.unmount();
         div.remove();
@@ -42,47 +45,73 @@ interface ReadFilesProps {
 
   onRead?(fileList: RcFile[]): void;
 
-  onClose?(): void;
+  onCancel?(): void;
 }
 
-function ReadFiles({ multiple, accept, onRead, onClose }: ReadFilesProps) {
+function ReadFiles({ multiple, accept, onRead, onCancel }: ReadFilesProps) {
 
   const refDiv = React.useRef<any>();
+  const uploaderContainer = React.useRef<any>();
 
   AHooks.useMount(() => {
     refDiv.current.click();
+    // self.document.getElementById('read-file-root')
+    uploaderContainer.current
+      ?.querySelector('input[type=file]')
+      ?.addEventListener('cancel', (event: any) => {
+        // 处理取消事件的逻辑
+        // console.log('cancel cancel dfcancel');
+        onCancel && onCancel();
+      });
   });
 
-  function close() {
-    setTimeout(() => {
-      onClose && onClose();
-    }, 300);
-  }
+  // AHooks.useTimeout(() => {
+  //   // console.log(uploader.current, '##############');
+  //
+  //   //   .addEventListener('cancel', (event: any) => {
+  //   //   // 处理取消事件的逻辑
+  //   //   console.log('cancel cancel dfcancel');
+  //   // });
+  //
+  //
+  //   // console.log(input, 'input w34098uijfosdkfjsdl;kjflkjlk');
+  // }, 1000);
 
-  return (<div style={{ width: 0, height: 0, overflow: 'hidden' }}>
+  // function close() {
+  //   setTimeout(() => {
+  //     onClose && onClose();
+  //   }, 1000);
+  // }
+
+  return (<div
+    style={{ width: 0, height: 0, overflow: 'hidden' }}
+    ref={uploaderContainer}
+  >
     <Upload
+      // openFileDialogOnClick={true}
+      // ref={uploaderContainer}
       multiple={multiple}
       accept={accept}
       showUploadList={false}
       beforeUpload={(file: RcFile, fileList: RcFile[]) => {
         // console.log(fileList, 'fildiosdfjhlksdjflksdjflsdjflkdsjflkjsdlkfjlksdjflsdjflkjkkkkkkkkj');
         onRead && onRead(fileList);
-        close();
+        // close();
         return false;
       }}
       openFileDialogOnClick
     >
       <div
         ref={refDiv}
-        onClick={() => {
-          self.addEventListener(
-            'focus',
-            () => {
-              close();
-            },
-            { once: true },
-          );
-        }}
+        // onClick={() => {
+        //   self.addEventListener(
+        //     'focus',
+        //     () => {
+        //       close();
+        //     },
+        //     { once: true },
+        //   );
+        // }}
       />
     </Upload>
   </div>);
