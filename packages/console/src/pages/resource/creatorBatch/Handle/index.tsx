@@ -453,7 +453,18 @@ function Handle({ dispatch, resourceCreatorBatchPage }: HandleProps) {
       });
     }
 
-    const data_isOccupied: { [sha1: string]: boolean } = await isOccupied(data_objs.map((o) => {
+    const data_isOccupied: {
+      [sha1: string]: {
+        userId: number;
+        resourceId: string;
+        resourceName: string;
+        resourceType: string[];
+        version: string;
+        resourceVersions: {
+          version: string;
+        }[];
+      }[];
+    } = await occupies(data_objs.map((o) => {
       return o.sha1;
     }));
     let dataSource: HandleStates['dataSource'] = [
@@ -478,7 +489,21 @@ function Handle({ dispatch, resourceCreatorBatchPage }: HandleProps) {
               file: null,
               fileName: obj.objectName,
               from: '存储空间',
-              errorText: '资源被他人占用',
+              errorText: FI18n.i18nNext.t('submitresource_err_resourceexist_otheruser'),
+              occupancyResource: data_isOccupied[obj.sha1].map((d) => {
+                return d.resourceVersions.map((v: any) => {
+                  return {
+                    resourceID: d.resourceId,
+                    resourceName: d.resourceName,
+                    resourceType: d.resourceType,
+                    resourceVersion: v.version,
+                    url: FUtil.LinkTo.resourceDetails({
+                      resourceID: d.resourceId,
+                      version: v.version,
+                    }),
+                  };
+                });
+              }).flat(),
             },
             listInfo: null,
             localUploadInfo: null,
@@ -1012,8 +1037,30 @@ function getARightName(name: string) {
   return newName;
 }
 
-async function isOccupied(sha1s: string[]): Promise<{ [sha1: string]: boolean }> {
-  const result: { [k: string]: boolean } = {};
+async function occupies(sha1s: string[]): Promise<{
+  [sha1: string]: {
+    userId: number;
+    resourceId: string;
+    resourceName: string;
+    resourceType: string[];
+    version: string;
+    resourceVersions: {
+      version: string;
+    }[];
+  }[];
+}> {
+  const result: {
+    [sha1: string]: {
+      userId: number;
+      resourceId: string;
+      resourceName: string;
+      resourceType: string[];
+      version: string;
+      resourceVersions: {
+        version: string;
+      }[];
+    }[];
+  } = {};
   for (const sha1 of sha1s) {
     const params3: Parameters<typeof FServiceAPI.Resource.getResourceBySha1>[0] = {
       fileSha1: sha1,
@@ -1032,8 +1079,9 @@ async function isOccupied(sha1s: string[]): Promise<{ [sha1: string]: boolean }>
       }[];
     } = await FServiceAPI.Resource.getResourceBySha1(params3);
 
-    result[sha1] = data_ResourcesBySha1.length > 0 && data_ResourcesBySha1[0].userId !== FUtil.Tool.getUserIDByCookies();
+    if (data_ResourcesBySha1.length > 0 && data_ResourcesBySha1[0].userId !== FUtil.Tool.getUserIDByCookies()) {
+      result[sha1] = data_ResourcesBySha1;
+    }
   }
-
   return result;
 }
