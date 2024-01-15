@@ -402,6 +402,27 @@ function VersionInfo({ dispatch, resourceVersionEditorPage, match }: VersionInfo
               </>)
             }
 
+            {
+              resourceVersionEditorPage.reload > 0 && (<>
+                <div style={{ height: 5 }} />
+                <div className={styles.block}>
+                  <FMicroAPP_Authorization
+                    licenseeId={resourceVersionEditorPage.resourceID}
+                    mainAppType={'resourceInfo'}
+                    depList={resourceVersionEditorPage.directDependencies}
+                    upcastList={resourceVersionEditorPage.baseUpcastResources}
+                    reload={resourceVersionEditorPage.reload}
+                    update={(value) => {
+                      dispatch<OnUpdate_Data_Action>({
+                        type: 'resourceSider/onUpdate_Data',
+                        // payload: resourceAuthPage.resourceID,
+                      });
+                    }}
+                  />
+                </div>
+              </>)
+            }
+
             <div style={{ height: 5 }} />
 
             <div className={styles.block}>
@@ -542,36 +563,13 @@ function VersionInfo({ dispatch, resourceVersionEditorPage, match }: VersionInfo
               </>)
             }
 
-            {
-              resourceVersionEditorPage.reload > 0 && (<>
-                <div style={{ height: 5 }} />
-                <div className={styles.block}>
-                  <FMicroAPP_Authorization
-                    licenseeId={resourceVersionEditorPage.resourceID}
-                    mainAppType={'resourceInfo'}
-                    depList={resourceVersionEditorPage.directDependencies}
-                    upcastList={resourceVersionEditorPage.baseUpcastResources}
-                    reload={resourceVersionEditorPage.reload}
-                    update={(value) => {
-                      dispatch<OnUpdate_Data_Action>({
-                        type: 'resourceSider/onUpdate_Data',
-                        // payload: resourceAuthPage.resourceID,
-                      });
-                    }}
-                  />
-                </div>
-              </>)
-            }
+
           </div>
           <div style={{ height: 100 }} />
         </div>)
     }
-
-
   </>);
 }
-
-// export default VersionInfo;
 
 export default withRouter(connect(({ resourceVersionEditorPage }: ConnectState) => ({
   resourceVersionEditorPage: resourceVersionEditorPage,
@@ -702,9 +700,6 @@ function Header({
               </div>
             </FTooltip>)
         }
-        {/*<FTooltip title={'下载'}>*/}
-
-        {/*</FTooltip>*/}
       </Space>
     </div>
   );
