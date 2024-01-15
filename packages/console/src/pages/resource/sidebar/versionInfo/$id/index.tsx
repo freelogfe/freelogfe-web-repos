@@ -120,10 +120,6 @@ function VersionInfo({ dispatch, resourceVersionEditorPage, match }: VersionInfo
     });
   }
 
-  // if (resourceVersionEditorPage.version === '') {
-  //   return ;
-  // }
-
   return (<>
     {
       resourceVersionEditorPage.pageState === 'loading' && (<div>
