@@ -23,6 +23,7 @@ const FPaymentPasswordInput = React.forwardRef(({
 
     return (<div className={styles.styles}>
         <input
+            autoComplete={'off'}
             autoFocus={autoFocus}
             type='password'
             minLength={6}
