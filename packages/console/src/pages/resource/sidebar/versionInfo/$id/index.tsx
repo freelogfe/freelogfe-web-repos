@@ -50,7 +50,7 @@ function VersionInfo({ dispatch, resourceVersionEditorPage, match }: VersionInfo
   const [editor, setEditor] = React.useState<EditorState>(BraftEditor.createEditorState(resourceVersionEditorPage.description));
   const [$customOptionsExpansion, set$customOptionsExpansion] = React.useState<boolean>(false);
 
-  const [$isSavingDescription, set$isSavingDescription] = FUtil.Hook.useGetState<boolean>(false);
+  // const [$isSavingDescription, set$isSavingDescription] = FUtil.Hook.useGetState<boolean>(false);
 
   AHooks.useMount(async () => {
     dispatch<OnMount_Sidebar_Action>({
@@ -71,13 +71,13 @@ function VersionInfo({ dispatch, resourceVersionEditorPage, match }: VersionInfo
         page: 'versionInfo',
       },
     });
-    // dispatch<OnMount_Page_Action>({
-    //   type: 'resourceVersionEditorPage/onMount_Page',
-    //   payload: {
-    //     resourceID: $urlState.version,
-    //     version: match.params.id,
-    //   },
-    // });
+    dispatch<OnMount_Page_Action>({
+      type: 'resourceVersionEditorPage/onMount_Page',
+      payload: {
+        resourceID: match.params.id,
+        version: $urlState.version,
+      },
+    });
   });
 
   AHooks.useUnmount(() => {
@@ -86,32 +86,32 @@ function VersionInfo({ dispatch, resourceVersionEditorPage, match }: VersionInfo
     });
   });
 
-  AHooks.useDebounceEffect(() => {
-    // console.log($urlState, '$urlState wsedf9iojsdlkfjsldkjlkjl');
-    init();
-  }, [$urlState.version, match.params.id], {
-    wait: 100,
-  });
+  // AHooks.useDebounceEffect(() => {
+  //   // console.log($urlState, '$urlState wsedf9iojsdlkfjsldkjlkjl');
+  //   init();
+  // }, [$urlState.version, match.params.id], {
+  //   wait: 100,
+  // });
 
   React.useEffect(() => {
     setEditor(BraftEditor.createEditorState(resourceVersionEditorPage.description));
   }, [resourceVersionEditorPage.description]);
 
-  async function init() {
-    await onChange({
-      resourceID: match.params.id,
-      version: $urlState.version,
-    });
-    if ($urlState.version === '') {
-      onChange({
-        pageState: 'loaded',
-      });
-    } else {
-      await dispatch<FetchDataSourceAction>({
-        type: 'resourceVersionEditorPage/fetchDataSource',
-      });
-    }
-  }
+  // async function init() {
+  //   await onChange({
+  //     resourceID: match.params.id,
+  //     version: $urlState.version,
+  //   });
+  //   if ($urlState.version === '') {
+  //     onChange({
+  //       pageState: 'loaded',
+  //     });
+  //   } else {
+  //     await dispatch<FetchDataSourceAction>({
+  //       type: 'resourceVersionEditorPage/fetchDataSource',
+  //     });
+  //   }
+  // }
 
   async function onChange(payload: Partial<ResourceVersionEditorPageModelState>) {
     await dispatch<ChangeAction>({

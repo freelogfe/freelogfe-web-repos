@@ -156,8 +156,17 @@ const Model: ResourceVersionEditorModelType = {
   state: initStates,
 
   effects: {
-    * onMount_Page({}: OnMount_Page_Action, {}: EffectsCommandMap) {
-
+    * onMount_Page({ payload }: OnMount_Page_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          resourceID: payload.resourceID,
+          version: payload.version,
+        },
+      });
+      yield put<FetchDataSourceAction>({
+        type: 'fetchDataSource',
+      });
     },
     * onUnmount_Page({}: OnUnmount_Page_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
@@ -171,12 +180,29 @@ const Model: ResourceVersionEditorModelType = {
         resourceVersionEditorPage,
       }));
 
+      // if (resourceVersionEditorPage.version === '') {
+      //   yield put<ChangeAction>({
+      //     type: 'change',
+      //     payload: {
+      //       pageState: 'loaded',
+      //     },
+      //   });
+      //   return;
+      // }
+
+      // yield put<ChangeAction>({
+      //   type: 'change',
+      //   payload: {
+      //     pageState: 'loading',
+      //   },
+      // });
+
       const params1: Parameters<typeof FServiceAPI.Resource.info>[0] = {
         resourceIdOrName: resourceVersionEditorPage.resourceID,
         isLoadPolicyInfo: 1,
         isTranslate: 1,
       };
-      // console.log(params, 'params9iosdj;flkjlk lksdajf;lkjl');
+      // console.log(params1, 'params 手动阀手动阀撒旦;flkjlk lksdajf;lkjl');
       const { data: data_resourceInfo }: {
         data: {
           userId: number;
@@ -196,18 +222,48 @@ const Model: ResourceVersionEditorModelType = {
           }[];
         };
       } = yield call(FServiceAPI.Resource.info, params1);
-      // console.log(data_resourceInfo, 'sdfsdfasefewrfw4eagtfrtef[09gijopredslkfj');
+      // console.log(data_resourceInfo, 'data_resourceInfo sdfsdfsdfsdfasefewrfw4eagtfrtef[09gijopredslkfj');
+
+      if (data_resourceInfo.latestVersion === '') {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            version: '',
+            pageState: 'loaded',
+          },
+        });
+        return;
+      } else if (resourceVersionEditorPage.version === '') {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            version: data_resourceInfo.latestVersion,
+          },
+        });
+      }
+
+
+      if (resourceVersionEditorPage.version === '') {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            pageState: 'loaded',
+          },
+        });
+        return;
+      }
 
       const params3: Parameters<typeof FServiceAPI.Resource.lookDraft>[0] = {
         resourceId: resourceVersionEditorPage.resourceID,
       };
       // console.log(params, 'params9iosdjflksjdflkjlk');
       const { data: data_draft } = yield call(FServiceAPI.Resource.lookDraft, params3);
-
+      // console.log(data_draft, 'data_draftewsdi9fojsdlikfjlsdjflksjdlkfjlskdjl');
       const params: Parameters<typeof FServiceAPI.Resource.resourceVersionInfo1>[0] = {
         resourceId: resourceVersionEditorPage.resourceID,
         version: resourceVersionEditorPage.version,
       };
+      // console.log(params, 'params siduofjlksdjflkjsdlkfjlksdjflkjdslkfjlksjdlkfjlksj');
       const { data: data_versionInfo }: {
         data: {
           resourceId: string;
@@ -254,6 +310,7 @@ const Model: ResourceVersionEditorModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
+          // pageState: 'loaded',
           versions: data_resourceInfo.resourceVersions.map((v) => {
             return v.version;
           }).reverse(),
