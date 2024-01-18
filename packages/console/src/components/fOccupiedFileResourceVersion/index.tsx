@@ -78,9 +78,10 @@ function M({ list, canOk, onOk, onCancel, afterClose }: MProps) {
       onOk();
       set$open(false);
     }}
-    okText={'关闭'}
+    okText={'继续上传'}
+    cancelText={'关闭'}
     // cancelText={'取消'}
-    cancelButtonProps={{
+    okButtonProps={{
       style: {
         display: canOk ? undefined : 'none',
       },
