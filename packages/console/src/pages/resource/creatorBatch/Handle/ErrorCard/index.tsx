@@ -97,8 +97,11 @@ function ErrorCard({ order, errorInfo, onDelete }: ErrorCardProps) {
             style={{ fontSize: 12 }}
             onClick={async () => {
               // set$otherUsedResource(errorInfo.occupancyResource || []);
+              if (!errorInfo.occupancyResource) {
+                return;
+              }
               await fOccupiedFileResourceVersion({
-                list: errorInfo.occupancyResource || [],
+                list: errorInfo.occupancyResource,
                 canOk: false,
               });
             }}
