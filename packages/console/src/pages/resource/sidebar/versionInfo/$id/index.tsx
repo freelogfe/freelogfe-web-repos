@@ -219,7 +219,7 @@ function VersionInfo({ dispatch, resourceVersionEditorPage, match }: VersionInfo
                     },
                   });
                 }
-                
+
               }}
             />
 
