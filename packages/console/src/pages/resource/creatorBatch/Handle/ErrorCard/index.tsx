@@ -7,6 +7,7 @@ import { RcFile } from 'antd/lib/upload/interface';
 import FTable from '@/components/FTable';
 import FModal from '@/components/FModal';
 import { useGetState } from '@/utils/hooks';
+import fOccupiedFileResourceVersion from '@/components/fOccupiedFileResourceVersion';
 
 interface ErrorCardProps {
   order: number;
@@ -29,13 +30,13 @@ interface ErrorCardProps {
 }
 
 function ErrorCard({ order, errorInfo, onDelete }: ErrorCardProps) {
-  const [$otherUsedResource, set$otherUsedResource, get$otherUsedResource] = useGetState<{
-    resourceID: string;
-    resourceName: string;
-    resourceType: string[];
-    resourceVersion: string;
-    url: string;
-  }[]>([]);
+  // const [$otherUsedResource, set$otherUsedResource, get$otherUsedResource] = useGetState<{
+  //   resourceID: string;
+  //   resourceName: string;
+  //   resourceType: string[];
+  //   resourceVersion: string;
+  //   url: string;
+  // }[]>([]);
 
   return (<div className={styles.resourceContainer}>
     <div className={styles.resourceOrder}>
@@ -94,8 +95,12 @@ function ErrorCard({ order, errorInfo, onDelete }: ErrorCardProps) {
           errorInfo.occupancyResource && (<FComponentsLib.FTextBtn
             type='primary'
             style={{ fontSize: 12 }}
-            onClick={() => {
-              set$otherUsedResource(errorInfo.occupancyResource || []);
+            onClick={async () => {
+              // set$otherUsedResource(errorInfo.occupancyResource || []);
+              await fOccupiedFileResourceVersion({
+                list: errorInfo.occupancyResource || [],
+                canOk: false,
+              });
             }}
           >查看</FComponentsLib.FTextBtn>)
         }
@@ -103,77 +108,77 @@ function ErrorCard({ order, errorInfo, onDelete }: ErrorCardProps) {
       </div>
     </div>
 
-    <FModal
-      title={null}
-      width={920}
-      open={$otherUsedResource.length > 0}
-      onCancel={() => {
-        set$otherUsedResource([]);
-      }}
-      onOk={() => {
-        set$otherUsedResource([]);
-      }}
-      okText={'关闭'}
-      // cancelText={'取消'}
-      cancelButtonProps={{
-        style: {
-          display: 'none',
-        },
-      }}
-    >
-      <FTable
-        // rowClassName={styles.tableRowClassName}
-        scroll={{ y: $otherUsedResource.length > 5 ? 350 : undefined }}
-        columns={[
-          {
-            title: '资源',
-            dataIndex: 'resourceName',
-            width: 400,
-            render(value, record, index) {
-              return (<FComponentsLib.FContentText
-                text={record.resourceName}
-                style={{ maxWidth: 370 }}
-              />);
-            },
-          },
-          {
-            title: '类型',
-            dataIndex: 'resourceType',
-            width: 280,
-            render(value, record, index) {
-              return (<FComponentsLib.FContentText
-                text={record.resourceType.join(' / ')}
-              />);
-            },
-          },
-          {
-            title: '版本',
-            dataIndex: 'resourceVersion',
-            width: 160,
-            render(value, record, index) {
-              return (<FComponentsLib.FContentText
-                text={record.resourceVersion}
-              />);
-            },
-          },
-          {
-            title: '操作',
-            dataIndex: 'operation',
-            render(value, record, index) {
-              return (<FComponentsLib.FTextBtn onClick={() => {
-                window.open(record.url);
-              }}>查看</FComponentsLib.FTextBtn>);
-            },
-          },
-        ]}
-        dataSource={$otherUsedResource.map((sfur) => {
-          return {
-            key: sfur.url,
-            ...sfur,
-          };
-        })}
-      />
-    </FModal>
+    {/*<FModal*/}
+    {/*  title={null}*/}
+    {/*  width={920}*/}
+    {/*  open={$otherUsedResource.length > 0}*/}
+    {/*  onCancel={() => {*/}
+    {/*    set$otherUsedResource([]);*/}
+    {/*  }}*/}
+    {/*  onOk={() => {*/}
+    {/*    set$otherUsedResource([]);*/}
+    {/*  }}*/}
+    {/*  okText={'关闭'}*/}
+    {/*  // cancelText={'取消'}*/}
+    {/*  cancelButtonProps={{*/}
+    {/*    style: {*/}
+    {/*      display: 'none',*/}
+    {/*    },*/}
+    {/*  }}*/}
+    {/*>*/}
+    {/*  <FTable*/}
+    {/*    // rowClassName={styles.tableRowClassName}*/}
+    {/*    scroll={{ y: $otherUsedResource.length > 5 ? 350 : undefined }}*/}
+    {/*    columns={[*/}
+    {/*      {*/}
+    {/*        title: '资源',*/}
+    {/*        dataIndex: 'resourceName',*/}
+    {/*        width: 400,*/}
+    {/*        render(value, record, index) {*/}
+    {/*          return (<FComponentsLib.FContentText*/}
+    {/*            text={record.resourceName}*/}
+    {/*            style={{ maxWidth: 370 }}*/}
+    {/*          />);*/}
+    {/*        },*/}
+    {/*      },*/}
+    {/*      {*/}
+    {/*        title: '类型',*/}
+    {/*        dataIndex: 'resourceType',*/}
+    {/*        width: 280,*/}
+    {/*        render(value, record, index) {*/}
+    {/*          return (<FComponentsLib.FContentText*/}
+    {/*            text={record.resourceType.join(' / ')}*/}
+    {/*          />);*/}
+    {/*        },*/}
+    {/*      },*/}
+    {/*      {*/}
+    {/*        title: '版本',*/}
+    {/*        dataIndex: 'resourceVersion',*/}
+    {/*        width: 160,*/}
+    {/*        render(value, record, index) {*/}
+    {/*          return (<FComponentsLib.FContentText*/}
+    {/*            text={record.resourceVersion}*/}
+    {/*          />);*/}
+    {/*        },*/}
+    {/*      },*/}
+    {/*      {*/}
+    {/*        title: '操作',*/}
+    {/*        dataIndex: 'operation',*/}
+    {/*        render(value, record, index) {*/}
+    {/*          return (<FComponentsLib.FTextBtn onClick={() => {*/}
+    {/*            window.open(record.url);*/}
+    {/*          }}>查看</FComponentsLib.FTextBtn>);*/}
+    {/*        },*/}
+    {/*      },*/}
+    {/*    ]}*/}
+    {/*    dataSource={$otherUsedResource.map((sfur) => {*/}
+    {/*      return {*/}
+    {/*        key: sfur.url,*/}
+    {/*        ...sfur,*/}
+    {/*      };*/}
+    {/*    })}*/}
+    {/*  />*/}
+    {/*</FModal>*/}
   </div>);
 }
 
