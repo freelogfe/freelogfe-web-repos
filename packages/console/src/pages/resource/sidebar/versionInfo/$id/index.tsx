@@ -24,7 +24,7 @@ import {
   SyncAllPropertiesAction,
   UpdateDataSourceAction,
   OnMount_Page_Action,
-  OnUnmount_Page_Action,
+  OnUnmount_Page_Action, OnChange_Version_Action,
 } from '@/models/resourceVersionEditorPage';
 import fResourcePropertyEditor from '@/components/fResourcePropertyEditor';
 import FResourceProperties from '@/components/FResourceProperties';
@@ -210,7 +210,16 @@ function VersionInfo({ dispatch, resourceVersionEditorPage, match }: VersionInfo
               }}
               onChangeVersion={(version) => {
                 // console.log(version, 'version 9ewiofjksdfjlsdkjflkdsjflkjl');
-                set$urlState({ version: version });
+                // set$urlState({ version: version });
+                if (version !== resourceVersionEditorPage.version) {
+                  dispatch<OnChange_Version_Action>({
+                    type: 'resourceVersionEditorPage/onChange_Version',
+                    payload: {
+                      version: version,
+                    },
+                  });
+                }
+                
               }}
             />
 

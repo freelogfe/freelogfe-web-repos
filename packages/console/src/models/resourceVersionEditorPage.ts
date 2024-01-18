@@ -97,6 +97,13 @@ export interface FetchDataSourceAction extends AnyAction {
   type: 'resourceVersionEditorPage/fetchDataSource' | 'fetchDataSource';
 }
 
+export interface OnChange_Version_Action extends AnyAction {
+  type: 'resourceVersionEditorPage/onChange_Version';
+  payload: {
+    version: string;
+  };
+}
+
 export interface UpdateDataSourceAction extends AnyAction {
   type: 'resourceVersionEditorPage/updateDataSource';
   payload: Partial<Parameters<typeof FServiceAPI.Resource.updateResourceVersionInfo>[0]>;
@@ -113,6 +120,7 @@ export interface ResourceVersionEditorModelType {
     onMount_Page: (action: OnMount_Page_Action, effects: EffectsCommandMap) => void;
     onUnmount_Page: (action: OnUnmount_Page_Action, effects: EffectsCommandMap) => void;
     fetchDataSource: (action: FetchDataSourceAction, effects: EffectsCommandMap) => void;
+    onChange_Version: (action: OnChange_Version_Action, effects: EffectsCommandMap) => void;
     updateDataSource: (action: UpdateDataSourceAction, effects: EffectsCommandMap) => void;
     syncAllProperties: (action: SyncAllPropertiesAction, effects: EffectsCommandMap) => void;
   };
@@ -397,6 +405,17 @@ const Model: ResourceVersionEditorModelType = {
         payload: {
           pageState: 'loaded',
         },
+      });
+    },
+    * onChange_Version({ payload }: OnChange_Version_Action, { put }: EffectsCommandMap) {
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          version: payload.version,
+        },
+      });
+      yield put<FetchDataSourceAction>({
+        type: 'fetchDataSource',
       });
     },
     * updateDataSource(action: UpdateDataSourceAction, { call, put, select }: EffectsCommandMap) {
