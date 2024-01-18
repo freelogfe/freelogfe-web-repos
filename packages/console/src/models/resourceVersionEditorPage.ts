@@ -188,23 +188,6 @@ const Model: ResourceVersionEditorModelType = {
         resourceVersionEditorPage,
       }));
 
-      // if (resourceVersionEditorPage.version === '') {
-      //   yield put<ChangeAction>({
-      //     type: 'change',
-      //     payload: {
-      //       pageState: 'loaded',
-      //     },
-      //   });
-      //   return;
-      // }
-
-      // yield put<ChangeAction>({
-      //   type: 'change',
-      //   payload: {
-      //     pageState: 'loading',
-      //   },
-      // });
-
       const params1: Parameters<typeof FServiceAPI.Resource.info>[0] = {
         resourceIdOrName: resourceVersionEditorPage.resourceID,
         isLoadPolicyInfo: 1,
@@ -230,32 +213,28 @@ const Model: ResourceVersionEditorModelType = {
           }[];
         };
       } = yield call(FServiceAPI.Resource.info, params1);
-      // console.log(data_resourceInfo, 'data_resourceInfo sdfsdfsdfsdfasefewrfw4eagtfrtef[09gijopredslkfj');
-
+      let resourceSelectedVersion: string = resourceVersionEditorPage.version;
       if (data_resourceInfo.latestVersion === '') {
-        yield put<ChangeAction>({
-          type: 'change',
-          payload: {
-            version: '',
-            pageState: 'loaded',
-          },
-        });
-        return;
-      } else if (resourceVersionEditorPage.version === '') {
-        yield put<ChangeAction>({
-          type: 'change',
-          payload: {
-            version: data_resourceInfo.latestVersion,
-          },
-        });
+        resourceSelectedVersion = '';
+      } else {
+        if (resourceSelectedVersion === '') {
+          resourceSelectedVersion = data_resourceInfo.latestVersion;
+        }
       }
-
-
-      if (resourceVersionEditorPage.version === '') {
+      // console.log(resourceSelectedVersion, 'resourceVersionEditorPage.version sdfjsdlkfjlkjl');
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          // pageState: 'loaded',
+          version: resourceSelectedVersion,
+        },
+      });
+      if (resourceSelectedVersion === '') {
         yield put<ChangeAction>({
           type: 'change',
           payload: {
             pageState: 'loaded',
+            // version: resourceSelectedVersion,
           },
         });
         return;
@@ -269,7 +248,8 @@ const Model: ResourceVersionEditorModelType = {
       // console.log(data_draft, 'data_draftewsdi9fojsdlikfjlsdjflksjdlkfjlskdjl');
       const params: Parameters<typeof FServiceAPI.Resource.resourceVersionInfo1>[0] = {
         resourceId: resourceVersionEditorPage.resourceID,
-        version: resourceVersionEditorPage.version,
+        // version: resourceVersionEditorPage.version,
+        version: resourceSelectedVersion,
       };
       // console.log(params, 'params siduofjlksdjflkjsdlkfjlksdjflkjdslkfjlksjdlkfjlksj');
       const { data: data_versionInfo }: {
@@ -306,7 +286,7 @@ const Model: ResourceVersionEditorModelType = {
           }[];
         }
       } = yield call(FServiceAPI.Resource.resourceVersionInfo1, params);
-      // console.log(data_versionInfo, 'data902q3jrlkasdfasdf');
+      // console.log(data_versionInfo, 'data_versionInfo data902q3jrlkasdfasdf');
       if (!data_versionInfo) {
         history.replace(FUtil.LinkTo.exception403({}));
         return;
