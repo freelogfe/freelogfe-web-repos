@@ -31,28 +31,28 @@ interface LocalUploadStates {
     sha1: string;
     fileName: string;
   } | null;
-  $selfUsedResource: {
-    resourceID: string;
-    resourceName: string;
-    resourceType: string[];
-    resourceVersion: string;
-    url: string;
-  }[];
-  $otherUsedResource: {
-    resourceID: string;
-    resourceName: string;
-    resourceType: string[];
-    resourceVersion: string;
-    url: string;
-  }[];
+  // $selfUsedResource: {
+  //   resourceID: string;
+  //   resourceName: string;
+  //   resourceType: string[];
+  //   resourceVersion: string;
+  //   url: string;
+  // }[];
+  // $otherUsedResource: {
+  //   resourceID: string;
+  //   resourceName: string;
+  //   resourceType: string[];
+  //   resourceVersion: string;
+  //   url: string;
+  // }[];
   $uploadingProgress: null | number;
 }
 
 const initStates: LocalUploadStates = {
   $accept: '',
   $fileInfo: null,
-  $selfUsedResource: [],
-  $otherUsedResource: [],
+  // $selfUsedResource: [],
+  // $otherUsedResource: [],
   $uploadingProgress: null,
 };
 
@@ -140,7 +140,7 @@ function LocalUpload({ style, resourceTypeCode, resourceType, onSucceed, onChang
 
             if (data_ResourcesBySha1.length > 0) {
               if (data_ResourcesBySha1[0].userId === FUtil.Tool.getUserIDByCookies()) {
-                const usedResources: LocalUploadStates['$selfUsedResource'] = data_ResourcesBySha1.map((d) => {
+                const usedResources= data_ResourcesBySha1.map((d) => {
                   return d.resourceVersions.map((v) => {
                     return {
                       resourceID: d.resourceId,
@@ -166,7 +166,7 @@ function LocalUpload({ style, resourceTypeCode, resourceType, onSucceed, onChang
                   }
                 }
               } else {
-                const usedResources: LocalUploadStates['$otherUsedResource'] = data_ResourcesBySha1.map((d) => {
+                const usedResources = data_ResourcesBySha1.map((d) => {
                   return d.resourceVersions.map((v: any) => {
                     return {
                       resourceID: d.resourceId,
