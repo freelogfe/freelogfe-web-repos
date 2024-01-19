@@ -995,12 +995,12 @@ function Handle({ dispatch, resourceCreatorBatchPage }: HandleProps) {
                   }}
                   onCorrect={(value) => {
                     // console.log(value, 'value sdaifj;lsdkjflksdjlfkjdslkfjlksdjl');
-                    let d: HandleStates['dataSource'] = JSON.parse(JSON.stringify(get$dataSource()));
-                    d = d.sort((a, b) => {
-                      return a.uid !== value.uid && b.uid === value.uid ? -1 : 0;
-                    });
+                    // let d: HandleStates['dataSource'] = JSON.parse(JSON.stringify(get$dataSource()));
+                    // d = d.sort((a, b) => {
+                    //   return a.uid !== value.uid && b.uid === value.uid ? -1 : 0;
+                    // });
                     // console.log(d, 'd sdflksdjfljsdlkfjlksdjflkj');
-                    set$dataSource(d);
+                    // set$dataSource(d);
                     set$tempLocalSuccess([
                       ...get$tempLocalSuccess(),
                       {
