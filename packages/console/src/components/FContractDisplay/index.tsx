@@ -4,7 +4,6 @@ import { FServiceAPI, FUtil, FI18n } from '@freelog/tools-lib';
 import { Space } from 'antd';
 import FModal from '../FModal';
 import fMessage from '../fMessage';
-// import { FUp } from '../FIcons';
 import { ContractStatus } from '@/type/contractTypes';
 import FComponentsLib from '@freelog/components-lib';
 
@@ -537,7 +536,8 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
 
 
             <div style={{ height: 20 }} />
-            <FComponentsLib.FPaymentPasswordInput
+            {/*<FComponentsLib.FPaymentPasswordInput*/}
+            <FComponentsLib.FInput.FPaymentPassword
               ref={inputEl}
               autoFocus={true}
               value={modal_Password}

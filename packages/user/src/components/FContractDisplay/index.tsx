@@ -534,7 +534,8 @@ function FContractDisplay({ contractID, onChangedEvent }: FContractDisplayProps)
 
 
             <div style={{ height: 20 }} />
-            <FComponentsLib.FPaymentPasswordInput
+            {/*<FComponentsLib.FPaymentPasswordInput*/}
+            <FComponentsLib.FInput.FPaymentPassword
               ref={inputEl}
               autoFocus={true}
               value={modal_Password}

@@ -318,7 +318,8 @@ function RetrievePayPassword({
                 <div>
                   <FComponentsLib.FTipText type='third' text={'支付密码'} />
                   <div style={{ height: 5 }} />
-                  <FComponentsLib.FPaymentPasswordInput
+                  {/*<FComponentsLib.FPaymentPasswordInput*/}
+                  <FComponentsLib.FInput.FPaymentPassword
                     autoFocus
                     value={retrievePayPasswordPage.paymentPassword_Password1Input}
                     onChange={(value) => {
@@ -340,7 +341,8 @@ function RetrievePayPassword({
                 <div>
                   <FComponentsLib.FTipText type='third' text={'验证支付密码'} />
                   <div style={{ height: 5 }} />
-                  <FComponentsLib.FPaymentPasswordInput
+                  {/*<FComponentsLib.FPaymentPasswordInput*/}
+                  <FComponentsLib.FInput.FPaymentPassword
                     value={
                       retrievePayPasswordPage.paymentPassword_Password2Input
                     }

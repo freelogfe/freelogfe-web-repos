@@ -7,7 +7,7 @@ import {FContentText, FTipText, FTitleText} from './FText';
 import FHeaderNavigation from './FHeaderNavigation';
 import FCodeFormatter from './FCodeFormatter';
 import FContractStatusBadge from './FContractStatusBadge';
-import FPaymentPasswordInput from './FPaymentPasswordInput';
+// import FPaymentPasswordInput from './FPaymentPasswordInput';
 import FCopyToClipboard from './FCopyToClipboard';
 import FHotspotTooltip, {setHotspotTooltipVisible} from './FHotspotTooltip';
 import FInput from './FInput';
@@ -26,7 +26,7 @@ const FComponentsLib = {
     FHeaderNavigation,
     FCodeFormatter,
     FContractStatusBadge,
-    FPaymentPasswordInput,
+    // FPaymentPasswordInput,
     FCopyToClipboard,
     FHotspotTooltip,
     fSetHotspotTooltipVisible: setHotspotTooltipVisible,

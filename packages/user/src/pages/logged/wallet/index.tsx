@@ -805,7 +805,8 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
             <div>
               <FComponentsLib.FTipText type='third' text={'支付密码'} />
               <div style={{ height: 5 }} />
-              <FComponentsLib.FPaymentPasswordInput
+              {/*<FComponentsLib.FPaymentPasswordInput*/}
+              <FComponentsLib.FInput.FPaymentPassword
                 // autoFocus
                 value={walletPage.activating_PasswordOne}
                 onChange={(value) => {
@@ -827,7 +828,8 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
             <div>
               <FComponentsLib.FTipText type='third' text={'验证支付密码'} />
               <div style={{ height: 5 }} />
-              <FComponentsLib.FPaymentPasswordInput
+              {/*<FComponentsLib.FPaymentPasswordInput*/}
+              <FComponentsLib.FInput.FPaymentPassword
                 value={walletPage.activating_PasswordTwo}
                 onChange={(value) => {
                   dispatch<OnChange_Activate_Password2_Action>({
@@ -1030,7 +1032,8 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
                 </FComponentsLib.FTextBtn>
               </div>
               <div style={{ height: 5 }} />
-              <FComponentsLib.FPaymentPasswordInput
+              {/*<FComponentsLib.FPaymentPasswordInput*/}
+              <FComponentsLib.FInput.FPaymentPassword
                 autoFocus
                 value={
                   walletPage.changingPassword_OldPasswordModal_PasswordInput
@@ -1089,7 +1092,8 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
             <div>
               <FComponentsLib.FTipText type='third' text={'新支付密码'} />
               <div style={{ height: 5 }} />
-              <FComponentsLib.FPaymentPasswordInput
+              {/*<FComponentsLib.FPaymentPasswordInput*/}
+              <FComponentsLib.FInput.FPaymentPassword
                 autoFocus
                 value={walletPage.changingPassword_NewPasswordModal_Password1}
                 onChange={(value) => {
@@ -1115,7 +1119,8 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
             <div>
               <FComponentsLib.FTipText type='third' text={'验证新支付密码'} />
               <div style={{ height: 5 }} />
-              <FComponentsLib.FPaymentPasswordInput
+              {/*<FComponentsLib.FPaymentPasswordInput*/}
+              <FComponentsLib.FInput.FPaymentPassword
                 value={walletPage.changingPassword_NewPasswordModal_Password2}
                 onChange={(value) => {
                   dispatch<OnChange_ChangingPassword_NewPasswordModal_Password2Input_Action>(
