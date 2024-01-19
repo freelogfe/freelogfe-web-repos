@@ -25,8 +25,22 @@ interface TaskProps {
     uid: string;
     name: string;
     sha1: string;
-    reason: string;
-    occupancyResource?: {
+    errorText: string;
+    // occupancyResource?: {
+    //   resourceID: string;
+    //   resourceName: string;
+    //   resourceType: string[];
+    //   resourceVersion: string;
+    //   url: string;
+    // }[];
+    selfUsedResourcesAndVersions?: {
+      resourceID: string;
+      resourceName: string;
+      resourceType: string[];
+      resourceVersion: string;
+      url: string;
+    }[]
+    otherUsedResourcesAndVersions?: {
       resourceID: string;
       resourceName: string;
       resourceType: string[];
@@ -51,7 +65,7 @@ function Task({ order, file, resourceTypeCode, resourceType, onSuccess, onFail, 
         uid: file.uid,
         name: file.name,
         sha1: '',
-        reason: '文件大小不能超过1GB',
+        errorText: '文件大小不能超过1GB',
       });
       return;
     }
@@ -62,7 +76,7 @@ function Task({ order, file, resourceTypeCode, resourceType, onSuccess, onFail, 
         uid: file.uid,
         name: file.name,
         sha1: '',
-        reason: '文件大小不能超过200MB',
+        errorText: '文件大小不能超过200MB',
       });
       return;
     }
@@ -94,10 +108,33 @@ function Task({ order, file, resourceTypeCode, resourceType, onSuccess, onFail, 
         onFail && onFail({
           uid: file.uid,
           name: file.name,
-          sha1: '',
-          reason: FI18n.i18nNext.t('submitresource_err_resourceexist_otheruser'),
-          occupancyResource: data_ResourcesBySha1.map((d) => {
-            return d.resourceVersions.map((v: any) => {
+          sha1: fileSha1,
+          errorText: FI18n.i18nNext.t('submitresource_err_resourceexist_otheruser'),
+          otherUsedResourcesAndVersions: data_ResourcesBySha1.map((d) => {
+            return d.resourceVersions.map((v) => {
+              return {
+                resourceID: d.resourceId,
+                resourceName: d.resourceName,
+                resourceType: d.resourceType,
+                resourceVersion: v.version,
+                url: FUtil.LinkTo.resourceDetails({
+                  resourceID: d.resourceId,
+                  version: v.version,
+                }),
+              };
+            });
+          }).flat(),
+        });
+        return;
+      }
+      if (data_ResourcesBySha1.length > 0 && data_ResourcesBySha1[0].userId === FUtil.Tool.getUserIDByCookies()) {
+        onFail && onFail({
+          uid: file.uid,
+          name: file.name,
+          sha1: fileSha1,
+          errorText: FI18n.i18nNext.t('submitresource_err_resourceexist_sameuser'),
+          selfUsedResourcesAndVersions: data_ResourcesBySha1.map((d) => {
+            return d.resourceVersions.map((v) => {
               return {
                 resourceID: d.resourceId,
                 resourceName: d.resourceName,
@@ -165,7 +202,7 @@ function Task({ order, file, resourceTypeCode, resourceType, onSuccess, onFail, 
       uid: file.uid,
       name: file.name,
       sha1: fileSha1,
-      reason: '未知',
+      errorText: '未知',
     });
   });
 

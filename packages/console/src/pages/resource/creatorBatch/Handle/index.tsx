@@ -96,17 +96,25 @@ interface HandleStates {
     } | null;
     errorInfo: {
       uid: string;
-      file: RcFile | null;
-      fileName: string;
+      name: string;
+      sha1: string;
+      // reason: string;
       from: string;
       errorText: string;
-      occupancyResource?: {
+      selfUsedResourcesAndVersions?: {
         resourceID: string;
         resourceName: string;
         resourceType: string[];
         resourceVersion: string;
         url: string;
       }[]
+      otherUsedResourcesAndVersions?: {
+        resourceID: string;
+        resourceName: string;
+        resourceType: string[];
+        resourceVersion: string;
+        url: string;
+      }[];
     } | null;
   }[];
   tempLocalSuccess: {
@@ -480,17 +488,47 @@ function Handle({ dispatch, resourceCreatorBatchPage }: HandleProps) {
       }),
       ...data_objs.map((obj, obj_index) => {
         const uid: string = String(Math.random());
-        if (data_isOccupied[obj.sha1]) {
+        if (data_isOccupied[obj.sha1] && data_isOccupied[obj.sha1].length > 0 && data_isOccupied[obj.sha1][0].userId !== FUtil.Tool.getUserIDByCookies()) {
           const errorInfo: NonNullable<HandleStates['dataSource'][number]> = {
             uid: uid,
             state: 'error',
             errorInfo: {
               uid: uid,
-              file: null,
-              fileName: obj.objectName,
+              sha1: obj.sha1,
+              name: obj.objectName,
               from: '存储空间',
               errorText: FI18n.i18nNext.t('submitresource_err_resourceexist_otheruser'),
-              occupancyResource: data_isOccupied[obj.sha1].map((d) => {
+              otherUsedResourcesAndVersions: data_isOccupied[obj.sha1].map((d) => {
+                return d.resourceVersions.map((v: any) => {
+                  return {
+                    resourceID: d.resourceId,
+                    resourceName: d.resourceName,
+                    resourceType: d.resourceType,
+                    resourceVersion: v.version,
+                    url: FUtil.LinkTo.resourceDetails({
+                      resourceID: d.resourceId,
+                      version: v.version,
+                    }),
+                  };
+                });
+              }).flat(),
+            },
+            listInfo: null,
+            localUploadInfo: null,
+          };
+          return errorInfo;
+        }
+        if (data_isOccupied[obj.sha1] && data_isOccupied[obj.sha1].length > 0 && data_isOccupied[obj.sha1][0].userId === FUtil.Tool.getUserIDByCookies()) {
+          const errorInfo: NonNullable<HandleStates['dataSource'][number]> = {
+            uid: uid,
+            state: 'error',
+            errorInfo: {
+              uid: uid,
+              sha1: obj.sha1,
+              name: obj.objectName,
+              from: '存储空间',
+              errorText: FI18n.i18nNext.t('submitresource_err_resourceexist_otheruser'),
+              selfUsedResourcesAndVersions: data_isOccupied[obj.sha1].map((d) => {
                 return d.resourceVersions.map((v: any) => {
                   return {
                     resourceID: d.resourceId,
@@ -813,15 +851,16 @@ function Handle({ dispatch, resourceCreatorBatchPage }: HandleProps) {
                         return d;
                       }
                       return {
-                        uid: d.uid,
+                        uid: value.uid,
                         state: 'error',
                         errorInfo: {
-                          uid: d.uid,
-                          file: null,
-                          fileName: value.name,
+                          uid: value.uid,
+                          sha1: value.sha1,
+                          name: value.name,
                           from: '本地上传',
-                          errorText: value.reason,
-                          occupancyResource: value.occupancyResource,
+                          errorText: value.errorText,
+                          otherUsedResourcesAndVersions: value.otherUsedResourcesAndVersions,
+                          selfUsedResourcesAndVersions: value.selfUsedResourcesAndVersions,
                         },
                         listInfo: null,
                         localUploadInfo: null,
@@ -951,6 +990,9 @@ function Handle({ dispatch, resourceCreatorBatchPage }: HandleProps) {
                         return rli.uid !== r.uid;
                       });
                     set$dataSource(dataSource);
+                  }}
+                  onCorrect={(value) => {
+                    console.log(value, 'value sdaifj;lsdkjflksdjlfkjdslkfjlksdjl');
                   }}
                 />)
               }

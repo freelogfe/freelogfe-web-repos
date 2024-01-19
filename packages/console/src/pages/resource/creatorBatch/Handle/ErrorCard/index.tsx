@@ -13,11 +13,18 @@ interface ErrorCardProps {
   order: number;
   errorInfo: {
     uid: string;
-    file: RcFile | null;
-    fileName: string;
+    sha1: string;
+    name: string;
     from: string;
     errorText: string;
-    occupancyResource?: {
+    selfUsedResourcesAndVersions?: {
+      resourceID: string;
+      resourceName: string;
+      resourceType: string[];
+      resourceVersion: string;
+      url: string;
+    }[]
+    otherUsedResourcesAndVersions?: {
       resourceID: string;
       resourceName: string;
       resourceType: string[];
@@ -27,9 +34,15 @@ interface ErrorCardProps {
   };
 
   onDelete?(): void;
+
+  onCorrect?(value: {
+    uid: string;
+    name: string;
+    sha1: string;
+  }): void;
 }
 
-function ErrorCard({ order, errorInfo, onDelete }: ErrorCardProps) {
+function ErrorCard({ order, errorInfo, onDelete, onCorrect }: ErrorCardProps) {
   // const [$otherUsedResource, set$otherUsedResource, get$otherUsedResource] = useGetState<{
   //   resourceID: string;
   //   resourceName: string;
@@ -71,7 +84,7 @@ function ErrorCard({ order, errorInfo, onDelete }: ErrorCardProps) {
         <div>
           <FComponentsLib.FContentText
             type='highlight'
-            text={errorInfo.fileName}
+            text={errorInfo.name}
             style={{ maxWidth: 600 }}
             singleRow
           />
@@ -92,18 +105,42 @@ function ErrorCard({ order, errorInfo, onDelete }: ErrorCardProps) {
         >{errorInfo.errorText}</FComponentsLib.FTextBtn>
 
         {
-          errorInfo.occupancyResource && (<FComponentsLib.FTextBtn
+          errorInfo.otherUsedResourcesAndVersions && (<FComponentsLib.FTextBtn
             type='primary'
             style={{ fontSize: 12 }}
             onClick={async () => {
               // set$otherUsedResource(errorInfo.occupancyResource || []);
-              if (!errorInfo.occupancyResource) {
+              if (!errorInfo.otherUsedResourcesAndVersions) {
                 return;
               }
               await fOccupiedFileResourceVersion({
-                list: errorInfo.occupancyResource,
+                list: errorInfo.otherUsedResourcesAndVersions,
                 canOk: false,
               });
+            }}
+          >查看</FComponentsLib.FTextBtn>)
+        }
+
+        {
+          errorInfo.selfUsedResourcesAndVersions && (<FComponentsLib.FTextBtn
+            type='primary'
+            style={{ fontSize: 12 }}
+            onClick={async () => {
+              // set$otherUsedResource(errorInfo.occupancyResource || []);
+              if (!errorInfo.selfUsedResourcesAndVersions) {
+                return;
+              }
+              const confirm = await fOccupiedFileResourceVersion({
+                list: errorInfo.selfUsedResourcesAndVersions,
+                canOk: true,
+              });
+              if (confirm) {
+                onCorrect && onCorrect({
+                  uid: errorInfo.uid,
+                  sha1: errorInfo.sha1,
+                  name: errorInfo.name,
+                });
+              }
             }}
           >查看</FComponentsLib.FTextBtn>)
         }
