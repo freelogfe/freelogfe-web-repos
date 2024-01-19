@@ -12,11 +12,11 @@ export interface FPaymentPasswordInputProps {
 }
 
 const FPaymentPasswordInput = React.forwardRef(({
-                                   value,
-                                   autoFocus = false,
-                                   onChange,
-                                   onBlur
-                               }: FPaymentPasswordInputProps, ref: any) => {
+                                                    value,
+                                                    autoFocus = false,
+                                                    onChange,
+                                                    onBlur
+                                                }: FPaymentPasswordInputProps, ref: any) => {
 
     const inputEl = React.useRef<any>(null);
     const [isFocus, setIsFocus] = React.useState<boolean>(false);
@@ -25,7 +25,8 @@ const FPaymentPasswordInput = React.forwardRef(({
         <input
             autoComplete={'off'}
             autoFocus={autoFocus}
-            type='password'
+            // type='password'
+            type={"text"}
             minLength={6}
             maxLength={6}
             ref={ref || inputEl}
