@@ -177,6 +177,7 @@ function Handle({ dispatch, resourceCreatorBatchPage }: HandleProps) {
   }
 
   async function handleLocalUploadSuccess() {
+    console.log(get$tempLocalSuccess(), 'handleLocalUploadSuccess sdfsdlkjflksdjfl handleLocalUploadSuccess');
     const namesMap: Map<string, number> = new Map<string, number>();
 
     for (const resource of get$dataSource()) {
@@ -993,7 +994,22 @@ function Handle({ dispatch, resourceCreatorBatchPage }: HandleProps) {
                     set$dataSource(dataSource);
                   }}
                   onCorrect={(value) => {
-                    console.log(value, 'value sdaifj;lsdkjflksdjlfkjdslkfjlksdjl');
+                    // console.log(value, 'value sdaifj;lsdkjflksdjlfkjdslkfjlksdjl');
+                    let d: HandleStates['dataSource'] = JSON.parse(JSON.stringify(get$dataSource()));
+                    d = d.sort((a, b) => {
+                      return a.uid !== value.uid && b.uid === value.uid ? -1 : 0;
+                    });
+                    // console.log(d, 'd sdflksdjfljsdlkfjlksdjflkj');
+                    set$dataSource(d);
+                    set$tempLocalSuccess([
+                      ...get$tempLocalSuccess(),
+                      {
+                        uid: value.uid,
+                        name: value.name,
+                        sha1: value.sha1,
+                      },
+                    ]);
+                    handleLocalUploadSuccess();
                   }}
                 />)
               }
