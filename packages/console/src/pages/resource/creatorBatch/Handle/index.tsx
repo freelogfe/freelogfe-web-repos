@@ -475,6 +475,7 @@ function Handle({ dispatch, resourceCreatorBatchPage }: HandleProps) {
     } = await occupies(data_objs.map((o) => {
       return o.sha1;
     }));
+    // console.log(data_isOccupied, 'data_isOccupied sdifj;lsdkfjlkdsjflkjsdlkfjlkj');
     let dataSource: HandleStates['dataSource'] = [
       ...get$dataSource().map((resource) => {
         if (!resource.listInfo) {
@@ -527,7 +528,7 @@ function Handle({ dispatch, resourceCreatorBatchPage }: HandleProps) {
               sha1: obj.sha1,
               name: obj.objectName,
               from: '存储空间',
-              errorText: FI18n.i18nNext.t('submitresource_err_resourceexist_otheruser'),
+              errorText: FI18n.i18nNext.t('submitresource_err_resourceexist_sameuser'),
               selfUsedResourcesAndVersions: data_isOccupied[obj.sha1].map((d) => {
                 return d.resourceVersions.map((v: any) => {
                   return {
@@ -1091,6 +1092,7 @@ async function occupies(sha1s: string[]): Promise<{
     }[];
   }[];
 }> {
+  // console.log(sha1s, 'sha1s sdifjlsdkjflkjsha1s sha1s sdfijsd;lkfjlksdjflkjlkj');
   const result: {
     [sha1: string]: {
       userId: number;
@@ -1121,7 +1123,7 @@ async function occupies(sha1s: string[]): Promise<{
       }[];
     } = await FServiceAPI.Resource.getResourceBySha1(params3);
 
-    if (data_ResourcesBySha1.length > 0 && data_ResourcesBySha1[0].userId !== FUtil.Tool.getUserIDByCookies()) {
+    if (data_ResourcesBySha1.length > 0) {
       result[sha1] = data_ResourcesBySha1;
     }
   }
