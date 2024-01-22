@@ -3,6 +3,7 @@ import styles from './index.less';
 import img_banner from '@/assets/activity/SpringFestival/banner@2x.png';
 import img_activityTimeCard from '@/assets/activity/SpringFestival/activityTimeCard@2x.png';
 import img_reward from '@/assets/activity/SpringFestival/reward@2x.png';
+import img_taskTitle from '@/assets/activity/SpringFestival/taskTitle@2x.png';
 import FComponentsLib from '@freelog/components-lib';
 import { Space } from 'antd';
 import { connect } from 'dva';
@@ -76,6 +77,11 @@ function SpringFestival({ activityDetailsPage }: SpringFestivalProps) {
 
     <div className={styles.h1}>完成新春任务，赢取多多奖励</div>
 
+    <div style={{ height: 40 }} />
+    <div className={styles.task}>
+      {/*<div style={{ height: 45 }} />*/}
+      <img src={img_taskTitle} style={{ width: 520 }} />
+    </div>
     <div style={{ height: 100 }} />
   </div>);
 }
