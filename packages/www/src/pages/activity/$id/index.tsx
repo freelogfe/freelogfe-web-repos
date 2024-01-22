@@ -17,7 +17,8 @@ import { IRouteComponentProps, withRouter } from 'umi';
 import FResultTip from '@/components/FResultTip';
 import { FUtil, FI18n } from '@freelog/tools-lib';
 import { Helmet } from 'react-helmet';
-import ExperienceOfficer from '@/pages/activity/$id/ExperienceOfficer';
+import ExperienceOfficer from './ExperienceOfficer';
+import SpringFestival from './SpringFestival';
 
 interface ActivityProps extends IRouteComponentProps {
   dispatch: Dispatch;
@@ -36,7 +37,8 @@ function Activity({
     'play-newer': (<PlayNewer />),
     'invite-friend': (<InviteFriend/>),
     'Questionnaire': (<Questionnaire/>),
-    'ExperienceOfficer': (<ExperienceOfficer/>)
+    'ExperienceOfficer': (<ExperienceOfficer/>),
+    'SpringFestival': (<SpringFestival/>)
   };
 
   AHooks.useMount(() => {
