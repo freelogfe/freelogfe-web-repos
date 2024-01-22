@@ -2,6 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import img_banner from '@/assets/activity/SpringFestival/banner@2x.png';
 import img_activityTimeCard from '@/assets/activity/SpringFestival/activityTimeCard@2x.png';
+import img_reward from '@/assets/activity/SpringFestival/reward@2x.png';
 import FComponentsLib from '@freelog/components-lib';
 import { Space } from 'antd';
 import { connect } from 'dva';
@@ -63,6 +64,17 @@ function SpringFestival({ activityDetailsPage }: SpringFestivalProps) {
         <a className={styles.button}>活动规则</a>
       </Space>
     </div>
+
+    <div style={{ height: 100 }} />
+
+    <div className={styles.h1}>新春奖励大放送</div>
+    <div style={{ height: 40 }} />
+    <img src={img_reward} style={{ width: 1060 }} />
+    <div style={{ height: 50 }} />
+    <a className={styles.button}>查看获奖公示</a>
+    <div style={{ height: 100 }} />
+
+    <div className={styles.h1}>完成新春任务，赢取多多奖励</div>
 
     <div style={{ height: 100 }} />
   </div>);
