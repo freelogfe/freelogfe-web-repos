@@ -44,7 +44,16 @@ function SpringFestival({ activityDetailsPage }: SpringFestivalProps) {
       </div>
     </div>
     <div style={{ height: 100 }} />
-    <div className={styles.h1}>参与方式</div>
+    <div className={styles.participation}>
+      <div className={styles.h1}>参与方式</div>
+
+      <Space size={25}>
+        <a className={styles.button}>立即报名</a>
+        <a className={styles.button}>查看操作教程</a>
+        <a className={styles.button}>活动规则</a>
+      </Space>
+    </div>
+
     <div style={{ height: 100 }} />
   </div>);
 }
