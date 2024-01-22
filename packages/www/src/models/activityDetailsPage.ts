@@ -9,7 +9,7 @@ export interface ActivityDetailsPageModelState {
   pageState: 'loading' | 'loaded' | 'noDate';
   activityID: string;
   pageTitle: string;
-  showActivity: '' | 'play-newer' | 'ResourceCompetition' | 'invite-friend' | 'Questionnaire' | 'ExperienceOfficer';
+  showActivity: '' | 'play-newer' | 'ResourceCompetition' | 'invite-friend' | 'Questionnaire' | 'ExperienceOfficer' | 'SpringFestival';
 
   startTime: Moment | null;
   endTime: Moment | null;
@@ -101,7 +101,8 @@ const Model: ActivityDetailsPageModelType = {
         && data.link !== 'ResourceCompetition'
         && data.link !== 'invite-friend'
         && data.link !== 'Questionnaire'
-        && data.link !== 'ExperienceOfficer') {
+        && data.link !== 'ExperienceOfficer'
+        && data.link !== 'SpringFestival') {
         self.location.replace(data.link);
         return;
       }
