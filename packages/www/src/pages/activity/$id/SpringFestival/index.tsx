@@ -81,6 +81,12 @@ function SpringFestival({ activityDetailsPage }: SpringFestivalProps) {
     <div className={styles.task}>
       {/*<div style={{ height: 45 }} />*/}
       <img src={img_taskTitle} style={{ width: 520 }} />
+      <div className={styles.Steps}>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
     </div>
     <div style={{ height: 100 }} />
   </div>);
