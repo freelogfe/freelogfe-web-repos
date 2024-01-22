@@ -1,6 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import img_banner from '@/assets/activity/SpringFestival/banner@2x.png';
+import img_activityTimeCard from '@/assets/activity/SpringFestival/activityTimeCard@2x.png';
 import FComponentsLib from '@freelog/components-lib';
 import { Space } from 'antd';
 import { connect } from 'dva';
@@ -17,7 +18,7 @@ function SpringFestival({ activityDetailsPage }: SpringFestivalProps) {
     <div className={styles.h1}>活动日程</div>
     <div style={{ height: 40 }} />
     <div className={styles.schedule}>
-      <div className={styles.activityTimeCard}>
+      <div className={styles.activityTimeCard} style={{ backgroundImage: `url(${img_activityTimeCard})` }}>
         <Space size={10}>
           <div className={styles.dot} style={{ backgroundColor: '#42C28C' }} />
           <div className={styles.text}>活动开启</div>
