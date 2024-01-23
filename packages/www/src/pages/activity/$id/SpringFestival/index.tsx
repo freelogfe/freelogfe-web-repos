@@ -85,7 +85,8 @@ function SpringFestival({ activityDetailsPage }: SpringFestivalProps) {
       <img src={img_taskTitle} style={{ width: 520, opacity: .95 }} />
       <div className={styles.Steps}>
         <div>
-          <img src={img_goldCoin} style={{ width: 65 }} />
+          {/*<img src={img_goldCoin} style={{ width: 65 }} />*/}
+          <FComponentsLib.FIcons.FCheck style={{ fontSize: 64, opacity: .3 }} />
         </div>
         <div>
           <img src={img_goldCoin} style={{ width: 65 }} />
@@ -131,6 +132,8 @@ function SpringFestival({ activityDetailsPage }: SpringFestivalProps) {
           <FComponentsLib.FContentText type={'normal'} text={'打卡天数 1/21 天'} />
         </div>
       </div>
+      <div style={{ height: 70 }} />
+
     </div>
     <div style={{ height: 100 }} />
   </div>);
