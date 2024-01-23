@@ -114,7 +114,7 @@ function SpringFestival({ activityDetailsPage }: SpringFestivalProps) {
       </div>
       <div style={{ height: 15 }} />
       <div>
-        <Steps21 step={7} />
+        <Steps21 step={12} />
       </div>
       <div style={{ height: 15 }} />
       <div className={styles.Steps}>

@@ -5,7 +5,7 @@ interface Steps21Props {
   step: number;
 }
 
-function Steps21({}: Steps21Props) {
+function Steps21({ step }: Steps21Props) {
   return (<div className={styles.Steps21}>
     <div className={styles.ProgressBarBg}>
       <div
@@ -19,7 +19,7 @@ function Steps21({}: Steps21Props) {
     <div className={styles.ProgressBar}>
       <div
         style={{
-          width: '20%',
+          width: (step / 21 * 100) + '%',
           height: 4,
           backgroundColor: '#DC443A',
         }}
@@ -27,9 +27,9 @@ function Steps21({}: Steps21Props) {
     </div>
     <div className={styles.ProgressCircle}>
       <div className={styles.red} />
-      <div />
-      <div />
-      <div />
+      <div className={step >= 7 ? styles.red : ''} />
+      <div className={step >= 14 ? styles.red : ''} />
+      <div className={step >= 21 ? styles.red : ''} />
     </div>
   </div>);
 }
