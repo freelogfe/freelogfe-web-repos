@@ -82,20 +82,20 @@ function SpringFestival({ activityDetailsPage }: SpringFestivalProps) {
     <div style={{ height: 40 }} />
     <div className={styles.task}>
       {/*<div style={{ height: 45 }} />*/}
-      <img src={img_taskTitle} style={{ width: 520, opacity: .95 }} />
+      <img src={img_taskTitle} style={{ width: 520, opacity: .95 }} alt={''} />
       <div className={styles.Steps}>
         <div>
           {/*<img src={img_goldCoin} style={{ width: 65 }} />*/}
           <FComponentsLib.FIcons.FCheck style={{ fontSize: 64, opacity: .3 }} />
         </div>
         <div>
-          <img src={img_goldCoin} style={{ width: 65 }} />
+          <img src={img_goldCoin} style={{ width: 65 }} alt={''} />
         </div>
         <div>
-          <img src={img_goldCoin} style={{ width: 65 }} />
+          <img src={img_goldCoin} style={{ width: 65 }} alt={''} />
         </div>
         <div>
-          <img src={img_goldCoin} style={{ width: 65 }} />
+          <img src={img_goldCoin} style={{ width: 65 }} alt={''} />
         </div>
       </div>
       <div style={{ height: 15 }} />
@@ -133,7 +133,39 @@ function SpringFestival({ activityDetailsPage }: SpringFestivalProps) {
         </div>
       </div>
       <div style={{ height: 70 }} />
-
+      <FComponentsLib.FTitleText type={'h1'} text={'今日打卡任务'} />
+      <div style={{ height: 20 }} />
+      <div style={{ borderBottom: '1px solid rgba(0,0,0,.1)', width: 760 }} />
+      <div className={styles.taskItem}>
+        <div>
+          <FComponentsLib.FTitleText type={'h3'} text={'发布一个原创资源（1/1）'} />
+          <div style={{ height: 10 }} />
+          <FComponentsLib.FContentText type={'additional2'} text={'别忘了为资源添加“新春召集令，freelog创作激励计划启动！”活动标签哦！'} />
+        </div>
+        <a className={[styles.button, styles.small, styles.disabled].join(' ')}>已完成</a>
+      </div>
+      <div style={{ borderBottom: '1px solid rgba(0,0,0,.1)' }} />
+      <div className={styles.taskItem}>
+        <FComponentsLib.FTitleText type={'h3'} text={'签约一个资源到节点（0/1）'} />
+        <a className={[styles.button, styles.small].join(' ')}>去完成</a>
+      </div>
+      <div style={{ borderBottom: '1px solid rgba(0,0,0,.1)' }} />
+      <div className={styles.taskItem}>
+        <FComponentsLib.FTitleText type={'h3'} text={'分享一次节点或展品（0/1）'} />
+        <a className={[styles.button, styles.small].join(' ')}>去完成</a>
+      </div>
+      <div style={{ borderBottom: '1px solid rgba(0,0,0,.1)' }} />
+      <div style={{ height: 70 }} />
+      <FComponentsLib.FTitleText type={'h1'} text={'重要通知'} />
+      <div style={{ height: 20 }} />
+      <FComponentsLib.FTitleText
+        type={'h3'}
+        text={'成功参与此次新春活动的用户，将有机会角逐首期编辑精选活动的大奖，优质资源作者或节点运营商将获得丰厚奖励，期待您的优质内容哦！'}
+        style={{ width: 760, textAlign: 'center' }}
+      />
+      <div style={{ height: 20 }} />
+      <FComponentsLib.FTextBtn type={'primary'}>前往查看</FComponentsLib.FTextBtn>
+      <div style={{ height: 60 }} />
     </div>
     <div style={{ height: 100 }} />
   </div>);

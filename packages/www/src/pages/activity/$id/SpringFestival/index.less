@@ -35,9 +35,16 @@
       background-image: linear-gradient(135deg, rgba(255, 141, 74, .8) 0%, rgba(195, 32, 32, .8) 100%);
     }
 
-    &:disabled {
+    &.disabled {
       background-color: #FFC8C8;
+      background-image: none;
+      cursor: not-allowed;
     }
+
+
+    //&:disabled {
+    //
+    //}
   }
 }
 
@@ -123,5 +130,13 @@
       align-items: center;
       flex-direction: column;
     }
+  }
+
+  .taskItem {
+    padding: 20px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 760px;
   }
 }
