@@ -4,12 +4,15 @@ import img_banner from '@/assets/activity/SpringFestival/banner@2x.png';
 import img_activityTimeCard from '@/assets/activity/SpringFestival/activityTimeCard@2x.png';
 import img_reward from '@/assets/activity/SpringFestival/reward@2x.png';
 import img_taskTitle from '@/assets/activity/SpringFestival/taskTitle@2x.png';
+import img_colleagueTitle from '@/assets/activity/SpringFestival/colleagueTitle@2x.png';
 import img_goldCoin from '@/assets/activity/SpringFestival/goldCoin@2x.png';
+import img_colleagueProcess from '@/assets/activity/SpringFestival/colleagueProcess@2x.png';
 import FComponentsLib from '@freelog/components-lib';
 import { Space, Steps } from 'antd';
 import { connect } from 'dva';
 import { ActivityDetailsPageModelState, ConnectState } from '@/models/connect';
-import Steps21 from '@/pages/activity/$id/SpringFestival/Steps21';
+import Steps21 from './Steps21';
+import Steps5 from './Steps5';
 
 interface SpringFestivalProps {
   activityDetailsPage: ActivityDetailsPageModelState;
@@ -80,22 +83,22 @@ function SpringFestival({ activityDetailsPage }: SpringFestivalProps) {
     <div className={styles.h1}>完成新春任务，赢取多多奖励</div>
 
     <div style={{ height: 40 }} />
-    <div className={styles.task}>
+    <div className={styles.registration}>
       {/*<div style={{ height: 45 }} />*/}
       <img src={img_taskTitle} style={{ width: 520, opacity: .95 }} alt={''} />
       <div className={styles.Steps}>
         <div>
           {/*<img src={img_goldCoin} style={{ width: 65 }} />*/}
-          <FComponentsLib.FIcons.FCheck style={{ fontSize: 64, opacity: .3 }} />
+          <FComponentsLib.FIcons.FCheck style={{ fontSize: 64, opacity: 1 }} />
         </div>
         <div>
-          <img src={img_goldCoin} style={{ width: 65 }} alt={''} />
+          <img src={img_goldCoin} style={{ width: 65, opacity: 1 }} alt={''} />
         </div>
         <div>
-          <img src={img_goldCoin} style={{ width: 65 }} alt={''} />
+          <img src={img_goldCoin} style={{ width: 65, opacity: .3 }} alt={''} />
         </div>
         <div>
-          <img src={img_goldCoin} style={{ width: 65 }} alt={''} />
+          <img src={img_goldCoin} style={{ width: 65, opacity: .3 }} alt={''} />
         </div>
       </div>
       <div style={{ height: 15 }} />
@@ -165,6 +168,54 @@ function SpringFestival({ activityDetailsPage }: SpringFestivalProps) {
       />
       <div style={{ height: 20 }} />
       <FComponentsLib.FTextBtn type={'primary'}>前往查看</FComponentsLib.FTextBtn>
+      <div style={{ height: 60 }} />
+    </div>
+    <div style={{ height: 50 }} />
+    <div className={styles.colleague}>
+      <img src={img_colleagueTitle} style={{ width: 432, opacity: .95 }} alt={''} />
+      <div className={styles.Steps}>
+        <div>
+          <img src={img_goldCoin} style={{ width: 65, opacity: 1 }} alt={''} />
+        </div>
+        <div>
+          <img src={img_goldCoin} style={{ width: 65, opacity: .3 }} alt={''} />
+        </div>
+        <div>
+          <img src={img_goldCoin} style={{ width: 65, opacity: .3 }} alt={''} />
+        </div>
+      </div>
+      <div style={{ height: 15 }} />
+      <div className={styles.Steps}>
+        <div>
+          <FComponentsLib.FContentText type={'normal'} text={'瓜分800元'} />
+        </div>
+        <div>
+          <FComponentsLib.FContentText type={'normal'} text={'再瓜分600元'} />
+        </div>
+        <div>
+          <FComponentsLib.FContentText type={'normal'} text={'再瓜分600元'} />
+        </div>
+      </div>
+      <div style={{ height: 15 }} />
+      <div>
+        <Steps5 step={3} />
+      </div>
+      <div style={{ height: 15 }} />
+      <div className={styles.Steps}>
+        <div>
+          <FComponentsLib.FContentText type={'normal'} text={'邀请 1 位'} />
+        </div>
+        <div>
+          <FComponentsLib.FContentText type={'normal'} text={'邀请 1/3 位'} />
+        </div>
+        <div>
+          <FComponentsLib.FContentText type={'normal'} text={'邀请 1/5 位'} />
+        </div>
+      </div>
+      <div style={{ height: 70 }} />
+      <FComponentsLib.FTitleText type={'h1'} text={'召唤好友  共赴全员瓜分盛宴'} />
+      <img src={img_colleagueProcess} style={{ width: 967, opacity: .95 }} alt={''} />
+      <a className={styles.button}>去召唤好友</a>
       <div style={{ height: 60 }} />
     </div>
     <div style={{ height: 100 }} />
