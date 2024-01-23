@@ -5,8 +5,10 @@ import img_activityTimeCard from '@/assets/activity/SpringFestival/activityTimeC
 import img_reward from '@/assets/activity/SpringFestival/reward@2x.png';
 import img_taskTitle from '@/assets/activity/SpringFestival/taskTitle@2x.png';
 import img_colleagueTitle from '@/assets/activity/SpringFestival/colleagueTitle@2x.png';
+import img_newcomerTitle from '@/assets/activity/SpringFestival/newcomerTitle@2x.png';
 import img_goldCoin from '@/assets/activity/SpringFestival/goldCoin@2x.png';
 import img_colleagueProcess from '@/assets/activity/SpringFestival/colleagueProcess@2x.png';
+import img_newcomerProcess from '@/assets/activity/SpringFestival/newcomerProcess@2x.png';
 import FComponentsLib from '@freelog/components-lib';
 import { Space, Steps } from 'antd';
 import { connect } from 'dva';
@@ -218,6 +220,27 @@ function SpringFestival({ activityDetailsPage }: SpringFestivalProps) {
       <a className={styles.button}>去召唤好友</a>
       <div style={{ height: 60 }} />
     </div>
+    <div style={{ height: 50 }} />
+    <div className={styles.newcomer}>
+      <img src={img_newcomerTitle} style={{ width: 432, opacity: .95 }} alt={''} />
+      <div className={styles.Steps}>
+        <div>
+          <img src={img_goldCoin} style={{ width: 65, opacity: 1 }} alt={''} />
+        </div>
+        <div>
+          <img src={img_goldCoin} style={{ width: 65, opacity: 1 }} alt={''} />
+        </div>
+      </div>
+      <div style={{ height: 30 }} />
+      <img src={img_newcomerProcess} style={{ width: 688, opacity: .95 }} alt={''} />
+      <div style={{ height: 50 }} />
+      <Space size={30}>
+        <FComponentsLib.FTitleText type={'h3'} text={'首次参与freelog活动，并完成1次“新春卷王打卡挑战”任务（0/1）'} />
+        <a className={[styles.button, styles.small].join(' ')}>去完成</a>
+      </Space>
+    </div>
+    <div style={{ height: 50 }} />
+
     <div style={{ height: 100 }} />
   </div>);
 }
