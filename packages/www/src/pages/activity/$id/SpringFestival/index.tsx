@@ -239,6 +239,7 @@ function SpringFestival({ activityDetailsPage }: SpringFestivalProps) {
         <FComponentsLib.FTitleText type={'h3'} text={'首次参与freelog活动，并完成1次“新春卷王打卡挑战”任务（0/1）'} />
         <a className={[styles.button, styles.small].join(' ')}>去完成</a>
       </Space>
+      <div style={{ height: 60 }} />
     </div>
     <div style={{ height: 50 }} />
     <div className={styles.koi}>
