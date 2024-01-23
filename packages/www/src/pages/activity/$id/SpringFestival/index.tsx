@@ -260,6 +260,12 @@ function SpringFestival({ activityDetailsPage }: SpringFestivalProps) {
     <div className={styles.pool}>
       <img src={img_poolTitle} style={{ width: 636, opacity: .95 }} alt={''} />
       <FEnergyBall percent={50} />
+      <div style={{ height: 60 }} />
+      <Space size={20}>
+        <FComponentsLib.FContentText type={'negative'} text={'每天12点更新'}/>
+        <FComponentsLib.FContentText type={'negative'} text={'最近更新时间：2024/01/28  12:00:00'}/>
+      </Space>
+      <div style={{ height: 60 }} />
     </div>
     <div style={{ height: 100 }} />
   </div>);
