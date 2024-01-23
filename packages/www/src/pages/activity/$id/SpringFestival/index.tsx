@@ -268,12 +268,12 @@ function SpringFestival({ activityDetailsPage }: SpringFestivalProps) {
 
         <label className={styles.label2} style={{ bottom: 20, left: -30 }}>已瓜分¥200</label>
         <label className={styles.label2} style={{ bottom: 50, left: -30 }}>已瓜分¥666</label>
-        <label className={styles.label2} style={{ bottom: 100, left: -35 }}>已瓜分¥1666</label>
+        {/*<label className={styles.label2} style={{ bottom: 100, left: -35 }}>已瓜分¥1666</label>*/}
         {/*<label className={styles.label2} style={{ bottom: 200, left: -35 }}>已瓜分¥2666</label>*/}
 
         {/*<label className={styles.label3} style={{ bottom: 20, left: -38 }}>¥200等待瓜分</label>*/}
         {/*<label className={styles.label3} style={{ bottom: 50, left: -38 }}>¥666等待瓜分</label>*/}
-        {/*<label className={styles.label3} style={{ bottom: 100, left: -40 }}>¥1666等待瓜分</label>*/}
+        <label className={styles.label3} style={{ bottom: 100, left: -40 }}>¥1666等待瓜分</label>
         <label className={styles.label3} style={{ bottom: 200, left: -40 }}>¥2666等待瓜分</label>
       </div>
       <div style={{ height: 60 }} />
