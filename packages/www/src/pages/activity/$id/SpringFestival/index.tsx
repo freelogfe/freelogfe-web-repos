@@ -4,10 +4,12 @@ import img_banner from '@/assets/activity/SpringFestival/banner@2x.png';
 import img_activityTimeCard from '@/assets/activity/SpringFestival/activityTimeCard@2x.png';
 import img_reward from '@/assets/activity/SpringFestival/reward@2x.png';
 import img_taskTitle from '@/assets/activity/SpringFestival/taskTitle@2x.png';
+import img_goldCoin from '@/assets/activity/SpringFestival/goldCoin@2x.png';
 import FComponentsLib from '@freelog/components-lib';
-import { Space } from 'antd';
+import { Space, Steps } from 'antd';
 import { connect } from 'dva';
 import { ActivityDetailsPageModelState, ConnectState } from '@/models/connect';
+import Steps21 from '@/pages/activity/$id/SpringFestival/Steps21';
 
 interface SpringFestivalProps {
   activityDetailsPage: ActivityDetailsPageModelState;
@@ -80,12 +82,54 @@ function SpringFestival({ activityDetailsPage }: SpringFestivalProps) {
     <div style={{ height: 40 }} />
     <div className={styles.task}>
       {/*<div style={{ height: 45 }} />*/}
-      <img src={img_taskTitle} style={{ width: 520 }} />
+      <img src={img_taskTitle} style={{ width: 520, opacity: .95 }} />
       <div className={styles.Steps}>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
+        <div>
+          <img src={img_goldCoin} style={{ width: 65 }} />
+        </div>
+        <div>
+          <img src={img_goldCoin} style={{ width: 65 }} />
+        </div>
+        <div>
+          <img src={img_goldCoin} style={{ width: 65 }} />
+        </div>
+        <div>
+          <img src={img_goldCoin} style={{ width: 65 }} />
+        </div>
+      </div>
+      <div style={{ height: 15 }} />
+      <div className={styles.Steps}>
+        <div>
+          <FComponentsLib.FContentText type={'normal'} text={'成功参与活动'} />
+        </div>
+        <div>
+          <FComponentsLib.FContentText type={'normal'} text={'瓜分888元'} />
+        </div>
+        <div>
+          <FComponentsLib.FContentText type={'normal'} text={'再瓜分1888元'} />
+        </div>
+        <div>
+          <FComponentsLib.FContentText type={'normal'} text={'再瓜分2888元'} />
+        </div>
+      </div>
+      <div style={{ height: 15 }} />
+      <div>
+        <Steps21 step={7} />
+      </div>
+      <div style={{ height: 15 }} />
+      <div className={styles.Steps}>
+        <div>
+          <FComponentsLib.FContentText type={'normal'} text={'打卡天数 1 天'} />
+        </div>
+        <div>
+          <FComponentsLib.FContentText type={'normal'} text={'打卡天数 1/7 天'} />
+        </div>
+        <div>
+          <FComponentsLib.FContentText type={'normal'} text={'打卡天数 1/14 天'} />
+        </div>
+        <div>
+          <FComponentsLib.FContentText type={'normal'} text={'打卡天数 1/21 天'} />
+        </div>
       </div>
     </div>
     <div style={{ height: 100 }} />

@@ -1,0 +1,61 @@
+@import '../../../../../config.less';
+
+.Steps21 {
+  width: 654px;
+  height: 24px;
+  position: relative;
+
+  .ProgressBarBg {
+    width: 100%;
+    height: 100%;
+    padding: 0 24px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ProgressBar {
+    width: 100%;
+    height: 100%;
+    padding: 0 24px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  .ProgressCircle {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    & > div {
+      width: 24px;
+      height: 24px;
+      background: #FFF;
+      border: 5px solid #E5E5E5;
+      border-radius: 50%;
+
+      &.red {
+        border: 5px solid #DC443A;
+      }
+    }
+  }
+
+}
