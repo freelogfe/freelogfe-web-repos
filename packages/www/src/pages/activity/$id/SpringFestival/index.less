@@ -170,7 +170,7 @@
   align-items: center;
   flex-direction: column;
   width: 1060px;
-  height: 472px;
+  //height: 472px;
   background: linear-gradient(135deg, rgba(255, 247, 234, .3) 0%, rgba(255, 204, 197, .3) 100%),
   url("../../../../assets/activity/SpringFestival/lantern@2x.png") top left / 153px 171px no-repeat,
   url("../../../../assets/activity/SpringFestival/candy@2x.png") bottom right / 153px 171px no-repeat;
@@ -191,5 +191,27 @@
 }
 
 .koi {
-  
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  width: 1060px;
+  //height: 472px;
+  background: linear-gradient(135deg, rgba(255, 247, 234, .3) 0%, rgba(255, 204, 197, .3) 100%),
+  url("../../../../assets/activity/SpringFestival/lantern@2x.png") top left / 153px 171px no-repeat,
+  url("../../../../assets/activity/SpringFestival/candy@2x.png") bottom right / 153px 171px no-repeat;
+
+  .textContent {
+    width: 760px;
+    //height: 78px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #222;
+    line-height: 26px;
+    //position: absolute;
+    text-align: center;
+
+    & > strong {
+      color: #FF6A1F;
+    }
+  }
 }
