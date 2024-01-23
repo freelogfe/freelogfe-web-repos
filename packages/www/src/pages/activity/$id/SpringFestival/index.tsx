@@ -150,17 +150,17 @@ function SpringFestival({ activityDetailsPage }: SpringFestivalProps) {
         </div>
         <a className={[styles.button, styles.small, styles.disabled].join(' ')}>已完成</a>
       </div>
-      <div style={{ borderBottom: '1px solid rgba(0,0,0,.1)' }} />
+      <div style={{ borderBottom: '1px solid rgba(0,0,0,.1)', width: 760 }} />
       <div className={styles.taskItem}>
         <FComponentsLib.FTitleText type={'h3'} text={'签约一个资源到节点（0/1）'} />
         <a className={[styles.button, styles.small].join(' ')}>去完成</a>
       </div>
-      <div style={{ borderBottom: '1px solid rgba(0,0,0,.1)' }} />
+      <div style={{ borderBottom: '1px solid rgba(0,0,0,.1)', width: 760 }} />
       <div className={styles.taskItem}>
         <FComponentsLib.FTitleText type={'h3'} text={'分享一次节点或展品（0/1）'} />
         <a className={[styles.button, styles.small].join(' ')}>去完成</a>
       </div>
-      <div style={{ borderBottom: '1px solid rgba(0,0,0,.1)' }} />
+      <div style={{ borderBottom: '1px solid rgba(0,0,0,.1)', width: 760 }} />
       <div style={{ height: 70 }} />
       <FComponentsLib.FTitleText type={'h1'} text={'重要通知'} />
       <div style={{ height: 20 }} />
