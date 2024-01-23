@@ -29,7 +29,7 @@ function FEnergyBall({ percent }: FEnergyBallProps) {
     //画布属性
     const mW = (canvas.width = 350);
     const mH = (canvas.height = 350);
-    const lineWidth = 1;
+    const lineWidth = 2;
 
     //圆属性
     const r = mH / 2; //圆心
@@ -50,7 +50,7 @@ function FEnergyBall({ percent }: FEnergyBallProps) {
     const drawCircle = function() {
       ctx.beginPath();
       // ctx.strokeStyle = '#1080d0';
-      ctx.strokeStyle = '#f00';
+      ctx.strokeStyle = '#FA8446';
       ctx.arc(r, r, cR + 1, 0, 2 * Math.PI);
       ctx.stroke();
       ctx.beginPath();
@@ -105,9 +105,9 @@ function FEnergyBall({ percent }: FEnergyBallProps) {
       }
 
       // drawSin(xOffset + Math.PI * 0.7, 'rgba(28, 134, 209, 0.5)', 18);
-      drawSin(xOffset + Math.PI * 0.7, '#0f0', 18);
+      drawSin(xOffset + Math.PI * 0.7, 'rgba(203, 47, 38, .3)', 18);
       // drawSin(xOffset, '#1c86d1', 18);
-      drawSin(xOffset, '#00f', 18);
+      drawSin(xOffset, '#CB2F26', 18);
       // drawText();
 
       xOffset += speed;
@@ -129,7 +129,9 @@ function FEnergyBall({ percent }: FEnergyBallProps) {
     render();
   }
 
-  return (<canvas ref={canvasRef} />);
+  return (<div className={styles.box}>
+    <canvas ref={canvasRef} />
+  </div>);
 }
 
 export default FEnergyBall;

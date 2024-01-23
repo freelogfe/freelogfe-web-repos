@@ -7,6 +7,7 @@ import img_taskTitle from '@/assets/activity/SpringFestival/taskTitle@2x.png';
 import img_colleagueTitle from '@/assets/activity/SpringFestival/colleagueTitle@2x.png';
 import img_newcomerTitle from '@/assets/activity/SpringFestival/newcomerTitle@2x.png';
 import img_koiTitle from '@/assets/activity/SpringFestival/koiTitle@2x.png';
+import img_poolTitle from '@/assets/activity/SpringFestival/poolTitle@2x.png';
 import img_goldCoin from '@/assets/activity/SpringFestival/goldCoin@2x.png';
 import img_colleagueProcess from '@/assets/activity/SpringFestival/colleagueProcess@2x.png';
 import img_newcomerProcess from '@/assets/activity/SpringFestival/newcomerProcess@2x.png';
@@ -16,6 +17,7 @@ import { connect } from 'dva';
 import { ActivityDetailsPageModelState, ConnectState } from '@/models/connect';
 import Steps21 from './Steps21';
 import Steps5 from './Steps5';
+import FEnergyBall from '@/components/FEnergyBall';
 
 interface SpringFestivalProps {
   activityDetailsPage: ActivityDetailsPageModelState;
@@ -253,6 +255,11 @@ function SpringFestival({ activityDetailsPage }: SpringFestivalProps) {
         <a className={[styles.button, styles.small].join(' ')}>去完成</a>
       </Space>
       <div style={{ height: 60 }} />
+    </div>
+    <div style={{ height: 50 }} />
+    <div className={styles.pool}>
+      <img src={img_poolTitle} style={{ width: 636, opacity: .95 }} alt={''} />
+      <FEnergyBall percent={50} />
     </div>
     <div style={{ height: 100 }} />
   </div>);
