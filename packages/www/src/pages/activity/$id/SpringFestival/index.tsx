@@ -447,7 +447,7 @@ function SpringFestival({ activityDetailsPage }: SpringFestivalProps) {
           </div>
           <FComponentsLib.FContentText
             type={'negative'}
-            text={'官方活动答疑微信群'}
+            text={'官方活动答疑微信'}
             style={{ maxWidth: 200 }}
             singleRow
           />
