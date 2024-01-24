@@ -1,5 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
+import sharedStyles from './shared.less';
 import img_banner from '@/assets/activity/SpringFestival/banner@2x.png';
 import img_activityTimeCard from '@/assets/activity/SpringFestival/activityTimeCard@2x.png';
 import img_reward from '@/assets/activity/SpringFestival/reward@2x.png';
@@ -41,12 +42,12 @@ function SpringFestival({ activityDetailsPage }: SpringFestivalProps) {
     <div className={styles.body}>
       <img src={img_banner} width={'100%'} style={{ display: 'block' }} alt={''} />
       <div style={{ height: 100 }} />
-      <div className={styles.h1}>活动日程</div>
+      <div className={sharedStyles.h1}>活动日程</div>
       <div style={{ height: 40 }} />
       <ActivitySchedule />
       <div style={{ height: 100 }} />
       <div className={styles.participation}>
-        <div className={styles.h1}>参与方式</div>
+        <div className={sharedStyles.h1}>参与方式</div>
 
         <div className={styles.textContent} style={{ top: 108, left: 270 }}>
           前往freelog网页端，发布带有“<FComponentsLib.FCopyToClipboard
@@ -63,7 +64,7 @@ function SpringFestival({ activityDetailsPage }: SpringFestivalProps) {
 
         <Space size={25}>
           <a
-            className={styles.button}
+            className={sharedStyles.button}
             onClick={() => {
               if (!activityDetailsPage.startTime || !activityDetailsPage.endTime) {
                 fCenterMessage({ message: '活动时间无效' });
@@ -80,13 +81,13 @@ function SpringFestival({ activityDetailsPage }: SpringFestivalProps) {
             }}
           >立即报名</a>
           <a
-            className={styles.button}
+            className={sharedStyles.button}
             onClick={() => {
 
             }}
           >查看操作教程</a>
           <a
-            className={styles.button}
+            className={sharedStyles.button}
             onClick={() => {
 
             }}
@@ -96,12 +97,12 @@ function SpringFestival({ activityDetailsPage }: SpringFestivalProps) {
 
       <div style={{ height: 100 }} />
 
-      <div className={styles.h1}>新春奖励大放送</div>
+      <div className={sharedStyles.h1}>新春奖励大放送</div>
       <div style={{ height: 40 }} />
       <img src={img_reward} style={{ width: 1060 }} alt={''} />
       <div style={{ height: 50 }} />
       <a
-        className={styles.button}
+        className={sharedStyles.button}
         onClick={() => {
           if (!activityDetailsPage.announceTime) {
             fCenterMessage({ message: '公示时间无效' });
@@ -115,7 +116,7 @@ function SpringFestival({ activityDetailsPage }: SpringFestivalProps) {
       >查看获奖公示</a>
       <div style={{ height: 100 }} />
 
-      <div className={styles.h1}>完成新春任务，赢取多多奖励</div>
+      <div className={sharedStyles.h1}>完成新春任务，赢取多多奖励</div>
 
       <div style={{ height: 40 }} />
       <div className={styles.registration}>
@@ -181,7 +182,7 @@ function SpringFestival({ activityDetailsPage }: SpringFestivalProps) {
             <FComponentsLib.FContentText type={'additional2'} text={'别忘了为资源添加“新春召集令，freelog创作激励计划启动！”活动标签哦！'} />
           </div>
           <a
-            className={[styles.button, styles.small, styles.disabled].join(' ')}
+            className={[sharedStyles.button, sharedStyles.small, sharedStyles.disabled].join(' ')}
             onClick={() => {
               self.open(FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.resourceCreatorEntry());
             }}
@@ -191,7 +192,7 @@ function SpringFestival({ activityDetailsPage }: SpringFestivalProps) {
         <div className={styles.taskItem}>
           <FComponentsLib.FTitleText type={'h3'} text={'签约一个资源到节点（0/1）'} />
           <a
-            className={[styles.button, styles.small].join(' ')}
+            className={[sharedStyles.button, sharedStyles.small].join(' ')}
             onClick={() => {
 
             }}
@@ -201,7 +202,7 @@ function SpringFestival({ activityDetailsPage }: SpringFestivalProps) {
         <div className={styles.taskItem}>
           <FComponentsLib.FTitleText type={'h3'} text={'分享一次节点或展品（0/1）'} />
           <a
-            className={[styles.button, styles.small].join(' ')}
+            className={[styles.button, sharedStyles.small].join(' ')}
             onClick={() => {
 
             }}
@@ -271,7 +272,7 @@ function SpringFestival({ activityDetailsPage }: SpringFestivalProps) {
         <FComponentsLib.FTitleText type={'h1'} text={'召唤好友  共赴全员瓜分盛宴'} />
         <img src={img_colleagueProcess} style={{ width: 967, opacity: .95 }} alt={''} />
         <a
-          className={styles.button}
+          className={sharedStyles.button}
         >去召唤好友</a>
         <div style={{ height: 60 }} />
       </div>
@@ -291,7 +292,7 @@ function SpringFestival({ activityDetailsPage }: SpringFestivalProps) {
         <div style={{ height: 50 }} />
         <Space size={30}>
           <FComponentsLib.FTitleText type={'h3'} text={'首次参与freelog活动，并完成1次“新春卷王打卡挑战”任务（0/1）'} />
-          <a className={[styles.button, styles.small].join(' ')}>去完成</a>
+          <a className={[sharedStyles.button, sharedStyles.small].join(' ')}>去完成</a>
         </Space>
         <div style={{ height: 60 }} />
       </div>
@@ -304,14 +305,14 @@ function SpringFestival({ activityDetailsPage }: SpringFestivalProps) {
         <div style={{ height: 45 }} />
         <Space size={30}>
           <FComponentsLib.FTitleText type={'h3'} text={'提交微博或小红书话题打卡记录（0/1）'} />
-          <a className={[styles.button, styles.small].join(' ')}>去完成</a>
+          <a className={[sharedStyles.button, sharedStyles.small].join(' ')}>去完成</a>
         </Space>
         <div style={{ height: 60 }} />
       </div>
       <div style={{ height: 50 }} />
       <BonusPool />
       <div style={{ height: 100 }} />
-      <div className={styles.h1}>更多的了解我们</div>
+      <div className={sharedStyles.h1}>更多的了解我们</div>
       <div style={{ height: 40 }} />
       <AboutUsMore />
       <div style={{ height: 100 }} />

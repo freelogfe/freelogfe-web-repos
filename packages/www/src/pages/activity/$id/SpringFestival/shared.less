@@ -1,0 +1,45 @@
+.h1 {
+  font-size: 30px;
+  font-weight: 600;
+  color: #222;
+  line-height: 36px;
+}
+
+.button {
+  width: 230px;
+  height: 54px;
+  background-image: linear-gradient(135deg, #FF8D4A 0%, #C32020 100%);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFF;
+  font-size: 16px;
+
+  &.small {
+    width: 82px;
+    height: 38px;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+
+  &:hover {
+    background-image: linear-gradient(135deg, rgba(255, 141, 74, .8) 0%, rgba(195, 32, 32, .8) 100%);
+  }
+
+  &:active {
+    background-image: linear-gradient(135deg, #FF8D4A 0%, #C32020 100%);
+
+  }
+
+  &.disabled {
+    background-color: #FFC8C8;
+    background-image: none;
+    cursor: not-allowed;
+  }
+
+
+  //&:disabled {
+  //
+  //}
+}
