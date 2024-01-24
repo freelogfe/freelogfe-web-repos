@@ -70,7 +70,10 @@ function SpringFestival({ activityDetailsPage }: SpringFestivalProps) {
         <div className={styles.h1}>参与方式</div>
 
         <div className={styles.textContent} style={{ top: 108, left: 270 }}>
-          前往freelog网页端，发布带有“<strong>新春召集令，freelog创作激励计划启动！</strong>”标签的原创资源并成功签约至展示节点，完成一次节点或展品分享后即视为参与此次活动
+          前往freelog网页端，发布带有“<FComponentsLib.FCopyToClipboard
+          text={'#新春召集令，freelog创作激励计划启动！#'}
+          title={'点击复制标签'}
+        ><strong>#新春召集令，freelog创作激励计划启动！#</strong></FComponentsLib.FCopyToClipboard>”标签的原创资源并成功签约至展示节点，完成一次节点或展品分享后即视为参与此次活动
         </div>
         <div className={styles.textContent} style={{ top: 290, left: 182 }}>
           不限制内容形式，<strong>原创小说/文章、漫画、图片、音乐、播客、视频、游戏/主题/插件开发资源</strong>等均可发布
@@ -97,8 +100,18 @@ function SpringFestival({ activityDetailsPage }: SpringFestivalProps) {
               }
             }}
           >立即报名</a>
-          <a className={styles.button}>查看操作教程</a>
-          <a className={styles.button}>活动规则</a>
+          <a
+            className={styles.button}
+            onClick={() => {
+
+            }}
+          >查看操作教程</a>
+          <a
+            className={styles.button}
+            onClick={() => {
+
+            }}
+          >活动规则</a>
         </Space>
       </div>
 
@@ -108,7 +121,19 @@ function SpringFestival({ activityDetailsPage }: SpringFestivalProps) {
       <div style={{ height: 40 }} />
       <img src={img_reward} style={{ width: 1060 }} alt={''} />
       <div style={{ height: 50 }} />
-      <a className={styles.button}>查看获奖公示</a>
+      <a
+        className={styles.button}
+        onClick={() => {
+          if (!activityDetailsPage.announceTime) {
+            fCenterMessage({ message: '公示时间无效' });
+            return;
+          }
+          if (moment().isBefore(activityDetailsPage.announceTime)) {
+            fCenterMessage({ message: '未到公示时间' });
+            return;
+          }
+        }}
+      >查看获奖公示</a>
       <div style={{ height: 100 }} />
 
       <div className={styles.h1}>完成新春任务，赢取多多奖励</div>
@@ -176,17 +201,32 @@ function SpringFestival({ activityDetailsPage }: SpringFestivalProps) {
             <div style={{ height: 10 }} />
             <FComponentsLib.FContentText type={'additional2'} text={'别忘了为资源添加“新春召集令，freelog创作激励计划启动！”活动标签哦！'} />
           </div>
-          <a className={[styles.button, styles.small, styles.disabled].join(' ')}>已完成</a>
+          <a
+            className={[styles.button, styles.small, styles.disabled].join(' ')}
+            onClick={() => {
+              self.open(FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.resourceCreatorEntry());
+            }}
+          >已完成</a>
         </div>
         <div style={{ borderBottom: '1px solid rgba(0,0,0,.1)', width: 760 }} />
         <div className={styles.taskItem}>
           <FComponentsLib.FTitleText type={'h3'} text={'签约一个资源到节点（0/1）'} />
-          <a className={[styles.button, styles.small].join(' ')}>去完成</a>
+          <a
+            className={[styles.button, styles.small].join(' ')}
+            onClick={() => {
+
+            }}
+          >去完成</a>
         </div>
         <div style={{ borderBottom: '1px solid rgba(0,0,0,.1)', width: 760 }} />
         <div className={styles.taskItem}>
           <FComponentsLib.FTitleText type={'h3'} text={'分享一次节点或展品（0/1）'} />
-          <a className={[styles.button, styles.small].join(' ')}>去完成</a>
+          <a
+            className={[styles.button, styles.small].join(' ')}
+            onClick={() => {
+
+            }}
+          >去完成</a>
         </div>
         <div style={{ borderBottom: '1px solid rgba(0,0,0,.1)', width: 760 }} />
         <div style={{ height: 70 }} />
@@ -198,7 +238,12 @@ function SpringFestival({ activityDetailsPage }: SpringFestivalProps) {
           style={{ width: 760, textAlign: 'center' }}
         />
         <div style={{ height: 20 }} />
-        <FComponentsLib.FTextBtn type={'primary'}>前往查看</FComponentsLib.FTextBtn>
+        <FComponentsLib.FTextBtn
+          type={'primary'}
+          onClick={() => {
+
+          }}
+        >前往查看</FComponentsLib.FTextBtn>
         <div style={{ height: 60 }} />
       </div>
       <div style={{ height: 50 }} />
@@ -246,7 +291,9 @@ function SpringFestival({ activityDetailsPage }: SpringFestivalProps) {
         <div style={{ height: 70 }} />
         <FComponentsLib.FTitleText type={'h1'} text={'召唤好友  共赴全员瓜分盛宴'} />
         <img src={img_colleagueProcess} style={{ width: 967, opacity: .95 }} alt={''} />
-        <a className={styles.button}>去召唤好友</a>
+        <a
+          className={styles.button}
+        >去召唤好友</a>
         <div style={{ height: 60 }} />
       </div>
       <div style={{ height: 50 }} />
