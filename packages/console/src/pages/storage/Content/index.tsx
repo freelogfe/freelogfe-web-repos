@@ -19,7 +19,6 @@ import FLoadingTip from '@/components/FLoadingTip';
 import { ColumnsType } from 'antd/lib/table/interface';
 import FTooltip from '@/components/FTooltip';
 import FLink from '@/components/FLink';
-// import fConfirmModal from '@/components/fConfirmModal';
 import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 import NoBucket from '@/pages/storage/NoBucket';
 import FListFooter from '@/components/FListFooter';

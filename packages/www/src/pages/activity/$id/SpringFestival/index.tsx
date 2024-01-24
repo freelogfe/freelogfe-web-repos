@@ -22,12 +22,17 @@ import Steps21 from './Steps21';
 import Steps5 from './Steps5';
 import FEnergyBall from '@/components/FEnergyBall';
 import FPropaganda from '@/components/FPropaganda';
+import { FUtil } from '@freelog/tools-lib';
+import moment, { Moment } from 'moment';
+import fCenterMessage from '@/components/fCenterMessage';
 
 interface SpringFestivalProps {
   activityDetailsPage: ActivityDetailsPageModelState;
 }
 
 function SpringFestival({ activityDetailsPage }: SpringFestivalProps) {
+  // const [$momentTime, set$momentTime, get$momentTime] = FUtil.Hook.useGetState<Moment>(moment());
+
   return (<>
     <div className={styles.body}>
       <img src={img_banner} width={'100%'} style={{ display: 'block' }} />
@@ -75,7 +80,23 @@ function SpringFestival({ activityDetailsPage }: SpringFestivalProps) {
         </div>
 
         <Space size={25}>
-          <a className={styles.button}>立即报名</a>
+          <a
+            className={styles.button}
+            onClick={() => {
+              if (!activityDetailsPage.startTime || !activityDetailsPage.endTime) {
+                fCenterMessage({ message: '活动时间无效' });
+                return;
+              }
+              if (moment().isBefore(activityDetailsPage.startTime)) {
+                fCenterMessage({ message: '活动未开始' });
+                return;
+              }
+              if (moment().isAfter(activityDetailsPage.endTime)) {
+                fCenterMessage({ message: '活动已结束' });
+                return;
+              }
+            }}
+          >立即报名</a>
           <a className={styles.button}>查看操作教程</a>
           <a className={styles.button}>活动规则</a>
         </Space>
@@ -85,7 +106,7 @@ function SpringFestival({ activityDetailsPage }: SpringFestivalProps) {
 
       <div className={styles.h1}>新春奖励大放送</div>
       <div style={{ height: 40 }} />
-      <img src={img_reward} style={{ width: 1060 }} />
+      <img src={img_reward} style={{ width: 1060 }} alt={''} />
       <div style={{ height: 50 }} />
       <a className={styles.button}>查看获奖公示</a>
       <div style={{ height: 100 }} />
