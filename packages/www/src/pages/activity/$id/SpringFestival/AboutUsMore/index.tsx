@@ -7,6 +7,7 @@ import img_weibaoAvatar from '@/assets/activity/SpringFestival/weibaoAvatar.png'
 import img_QQChatQR from '@/assets/activity/SpringFestival/QQChatQR.jpg';
 import img_weixinQR from '@/assets/activity/SpringFestival/weixinQR.jpg';
 
+
 interface AboutUsMoreProps {
 
 }
