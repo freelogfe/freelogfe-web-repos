@@ -30,6 +30,7 @@ import fCenterMessage from '@/components/fCenterMessage';
 import BonusPool from './BonusPool';
 import AboutUsMore from './AboutUsMore';
 import ActivitySchedule from './ActivitySchedule';
+import Participation from './Participation';
 
 interface SpringFestivalProps {
   activityDetailsPage: ActivityDetailsPageModelState;
@@ -46,54 +47,7 @@ function SpringFestival({ activityDetailsPage }: SpringFestivalProps) {
       <div style={{ height: 40 }} />
       <ActivitySchedule />
       <div style={{ height: 100 }} />
-      <div className={styles.participation}>
-        <div className={sharedStyles.h1}>参与方式</div>
-
-        <div className={styles.textContent} style={{ top: 108, left: 270 }}>
-          前往freelog网页端，发布带有“<FComponentsLib.FCopyToClipboard
-          text={'#新春召集令，freelog创作激励计划启动！#'}
-          title={'点击复制标签'}
-        ><strong>#新春召集令，freelog创作激励计划启动！#</strong></FComponentsLib.FCopyToClipboard>”标签的原创资源并成功签约至展示节点，完成一次节点或展品分享后即视为参与此次活动
-        </div>
-        <div className={styles.textContent} style={{ top: 290, left: 182 }}>
-          不限制内容形式，<strong>原创小说/文章、漫画、图片、音乐、播客、视频、游戏/主题/插件开发资源</strong>等均可发布
-        </div>
-        <div className={styles.textContent} style={{ top: 464, left: 330 }}>
-          由于平台尚在测试阶段，活动功能未全面开放。如您要参与活动，需点击下方报名入口获取内测资格。
-        </div>
-
-        <Space size={25}>
-          <a
-            className={sharedStyles.button}
-            onClick={() => {
-              if (!activityDetailsPage.startTime || !activityDetailsPage.endTime) {
-                fCenterMessage({ message: '活动时间无效' });
-                return;
-              }
-              if (moment().isBefore(activityDetailsPage.startTime)) {
-                fCenterMessage({ message: '活动未开始' });
-                return;
-              }
-              if (moment().isAfter(activityDetailsPage.endTime)) {
-                fCenterMessage({ message: '活动已结束' });
-                return;
-              }
-            }}
-          >立即报名</a>
-          <a
-            className={sharedStyles.button}
-            onClick={() => {
-
-            }}
-          >查看操作教程</a>
-          <a
-            className={sharedStyles.button}
-            onClick={() => {
-
-            }}
-          >活动规则</a>
-        </Space>
-      </div>
+      <Participation />
 
       <div style={{ height: 100 }} />
 
