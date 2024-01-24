@@ -28,6 +28,7 @@ import moment, { Moment } from 'moment';
 import fCenterMessage from '@/components/fCenterMessage';
 import BonusPool from './BonusPool';
 import AboutUsMore from './AboutUsMore';
+import ActivitySchedule from './ActivitySchedule';
 
 interface SpringFestivalProps {
   activityDetailsPage: ActivityDetailsPageModelState;
@@ -38,36 +39,11 @@ function SpringFestival({ activityDetailsPage }: SpringFestivalProps) {
 
   return (<>
     <div className={styles.body}>
-      <img src={img_banner} width={'100%'} style={{ display: 'block' }} />
+      <img src={img_banner} width={'100%'} style={{ display: 'block' }} alt={''} />
       <div style={{ height: 100 }} />
       <div className={styles.h1}>活动日程</div>
       <div style={{ height: 40 }} />
-      <div className={styles.schedule}>
-        <div className={styles.activityTimeCard} style={{ backgroundImage: `url(${img_activityTimeCard})` }}>
-          <Space size={10}>
-            <div className={styles.dot} style={{ backgroundColor: '#42C28C' }} />
-            <div className={styles.text}>活动开启</div>
-          </Space>
-          <div style={{ height: 20 }} />
-          <div className={styles.text}>{activityDetailsPage.startTime?.format('YYYY/MM/DD') || 'YYYY·MM·DD'}</div>
-        </div>
-        <div className={styles.activityTimeCard}>
-          <Space size={10}>
-            <div className={styles.dot} style={{ backgroundColor: '#EE4040' }} />
-            <div className={styles.text}>活动结束</div>
-          </Space>
-          <div style={{ height: 20 }} />
-          <div className={styles.text}>{activityDetailsPage.endTime?.format('YYYY/MM/DD') || 'YYYY·MM·DD'}</div>
-        </div>
-        <div className={styles.activityTimeCard}>
-          <Space size={10}>
-            <div className={styles.dot} style={{ backgroundColor: '#2784FF' }} />
-            <div className={styles.text}>结果公示</div>
-          </Space>
-          <div style={{ height: 20 }} />
-          <div className={styles.text}>{activityDetailsPage.announceTime?.format('YYYY/MM/DD') || 'YYYY·MM·DD'}</div>
-        </div>
-      </div>
+      <ActivitySchedule />
       <div style={{ height: 100 }} />
       <div className={styles.participation}>
         <div className={styles.h1}>参与方式</div>

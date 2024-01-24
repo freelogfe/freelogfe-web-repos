@@ -97,7 +97,7 @@ function Notice({}: NoticeProps) {
   //           <FComponentsLib.FTextBtn
   //             type='primary'
   //             onClick={async () => {
-  //               await FServiceAPI.Activity.eventTrackingAdsClick({ _id: n.id });
+  //               await FServiceAPI.ActivitySchedule.eventTrackingAdsClick({ _id: n.id });
   //               self.open(n.href);
   //             }}
   //           >查看详情</FComponentsLib.FTextBtn>

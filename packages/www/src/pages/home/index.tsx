@@ -23,7 +23,7 @@ function HomePage({}: HomePageProps) {
 
   AHooks.useMount(async () => {
     self._czc?.push(['_trackPageview', self.location.pathname]);
-    // const { data } = await FServiceAPI.Activity.adsList({
+    // const { data } = await FServiceAPI.ActivitySchedule.adsList({
     //   place: 1,
     // });
     // // console.log(data, 'data09ioweskjfsldkfjsldkfjdslkjl');
