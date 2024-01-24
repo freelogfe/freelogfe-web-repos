@@ -7,13 +7,14 @@ import img_taskTitle from '@/assets/activity/SpringFestival/taskTitle@2x.png';
 import img_colleagueTitle from '@/assets/activity/SpringFestival/colleagueTitle@2x.png';
 import img_newcomerTitle from '@/assets/activity/SpringFestival/newcomerTitle@2x.png';
 import img_koiTitle from '@/assets/activity/SpringFestival/koiTitle@2x.png';
-import img_poolTitle from '@/assets/activity/SpringFestival/poolTitle@2x.png';
+// import img_poolTitle from '@/assets/activity/SpringFestival/poolTitle@2x.png';
 import img_goldCoin from '@/assets/activity/SpringFestival/goldCoin@2x.png';
 import img_colleagueProcess from '@/assets/activity/SpringFestival/colleagueProcess@2x.png';
 import img_newcomerProcess from '@/assets/activity/SpringFestival/newcomerProcess@2x.png';
 import img_xiaohongshuAvatar from '@/assets/activity/SpringFestival/xiaohongshuAvatar.png';
 import img_weibaoAvatar from '@/assets/activity/SpringFestival/weibaoAvatar.png';
 import img_QQChatQR from '@/assets/activity/SpringFestival/QQChatQR.jpg';
+import img_weixinQR from '@/assets/activity/SpringFestival/weixinQR.jpg';
 import FComponentsLib from '@freelog/components-lib';
 import { Popover, Space, Steps } from 'antd';
 import { connect } from 'dva';
@@ -25,6 +26,8 @@ import FPropaganda from '@/components/FPropaganda';
 import { FUtil } from '@freelog/tools-lib';
 import moment, { Moment } from 'moment';
 import fCenterMessage from '@/components/fCenterMessage';
+import BonusPool from './BonusPool';
+import AboutUsMore from './AboutUsMore';
 
 interface SpringFestivalProps {
   activityDetailsPage: ActivityDetailsPageModelState;
@@ -330,129 +333,11 @@ function SpringFestival({ activityDetailsPage }: SpringFestivalProps) {
         <div style={{ height: 60 }} />
       </div>
       <div style={{ height: 50 }} />
-      <div className={styles.pool}>
-        <img src={img_poolTitle} style={{ width: 636, opacity: .95 }} alt={''} />
-        <FEnergyBall percent={50} />
-        <div className={styles.poolLabels}>
-          <label className={styles.label1} style={{ bottom: 20, left: -210 }}>参与20人</label>
-          <label className={styles.label1} style={{ bottom: 50, left: 120 }}>参与50人</label>
-          <label className={styles.label1} style={{ bottom: 100, left: -220 }}>参与100人</label>
-          <label className={styles.label1} style={{ bottom: 200, left: 120 }}>参与200人</label>
-
-          <label className={styles.label2} style={{ bottom: 20, left: -30 }}>已瓜分¥200</label>
-          <label className={styles.label2} style={{ bottom: 50, left: -30 }}>已瓜分¥666</label>
-          {/*<label className={styles.label2} style={{ bottom: 100, left: -35 }}>已瓜分¥1666</label>*/}
-          {/*<label className={styles.label2} style={{ bottom: 200, left: -35 }}>已瓜分¥2666</label>*/}
-
-          {/*<label className={styles.label3} style={{ bottom: 20, left: -38 }}>¥200等待瓜分</label>*/}
-          {/*<label className={styles.label3} style={{ bottom: 50, left: -38 }}>¥666等待瓜分</label>*/}
-          <label className={styles.label3} style={{ bottom: 100, left: -40 }}>¥1666等待瓜分</label>
-          <label className={styles.label3} style={{ bottom: 200, left: -40 }}>¥2666等待瓜分</label>
-        </div>
-        <div style={{ height: 60 }} />
-        <Space size={20}>
-          <FComponentsLib.FContentText type={'negative'} text={'每天12点更新'} />
-          <FComponentsLib.FContentText type={'negative'} text={'最近更新时间：2024/01/28  12:00:00'} />
-        </Space>
-        <div style={{ height: 60 }} />
-      </div>
+      <BonusPool />
       <div style={{ height: 100 }} />
       <div className={styles.h1}>更多的了解我们</div>
       <div style={{ height: 40 }} />
-      <div className={styles.more}>
-        <Space size={10} direction={'vertical'} align={'center'}>
-          <div
-            className={styles.moreItem}
-            onClick={() => {
-              self.open('https://www.xiaohongshu.com/user/profile/64c0d3810000000014039a75');
-            }}
-          >
-            <div
-              style={{
-                width: 100,
-                height: 100,
-                background: '#FFF',
-                border: '1px solid #E3E3E3',
-                borderRadius: '50%',
-              }}
-            ><img src={img_xiaohongshuAvatar} alt={''} style={{ width: '100%', height: '100%' }} /></div>
-            <div style={{ height: 20 }} />
-            <FComponentsLib.FContentText
-              type={'negative'}
-              text={'Freelog.Official'}
-              style={{ maxWidth: 200 }}
-              singleRow
-            />
-          </div>
-          <FComponentsLib.FContentText
-            type={'negative'}
-            text={'小红书'}
-            style={{ maxWidth: 200 }}
-            singleRow
-          />
-        </Space>
-        <Space size={10} direction={'vertical'} align={'center'}>
-          <div
-            className={styles.moreItem}
-            onClick={() => {
-              self.open('https://weibo.com/freelogofficial');
-            }}
-          >
-            <div
-              style={{
-                width: 100,
-                height: 100,
-                background: '#FFF',
-                border: '1px solid #E3E3E3',
-                borderRadius: '50%',
-              }}
-            ><img src={img_weibaoAvatar} alt={''} style={{ width: '100%', height: '100%' }} /></div>
-            <div style={{ height: 20 }} />
-            <FComponentsLib.FContentText
-              type={'negative'}
-              text={'Freelog_Official'}
-              style={{ maxWidth: 200 }}
-              singleRow
-            />
-          </div>
-          <FComponentsLib.FContentText
-            type={'negative'}
-            text={'微博'}
-            style={{ maxWidth: 200 }}
-            singleRow
-          />
-        </Space>
-        <Space size={10} direction={'vertical'} align={'center'}>
-          <div className={styles.moreItem}>
-            <img
-              src={img_QQChatQR}
-              style={{ width: 140, height: 140 }}
-              alt={''}
-            />
-          </div>
-          <FComponentsLib.FContentText
-            type={'negative'}
-            text={'官方活动答疑QQ群'}
-            style={{ maxWidth: 200 }}
-            singleRow
-          />
-        </Space>
-        <Space size={10} direction={'vertical'} align={'center'}>
-          <div className={styles.moreItem}>
-            <img
-              src={img_QQChatQR}
-              style={{ width: 140, height: 140 }}
-              alt={''}
-            />
-          </div>
-          <FComponentsLib.FContentText
-            type={'negative'}
-            text={'官方活动答疑微信'}
-            style={{ maxWidth: 200 }}
-            singleRow
-          />
-        </Space>
-      </div>
+      <AboutUsMore />
       <div style={{ height: 100 }} />
     </div>
     <FPropaganda />
