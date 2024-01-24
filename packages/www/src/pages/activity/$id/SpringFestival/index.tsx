@@ -11,6 +11,9 @@ import img_poolTitle from '@/assets/activity/SpringFestival/poolTitle@2x.png';
 import img_goldCoin from '@/assets/activity/SpringFestival/goldCoin@2x.png';
 import img_colleagueProcess from '@/assets/activity/SpringFestival/colleagueProcess@2x.png';
 import img_newcomerProcess from '@/assets/activity/SpringFestival/newcomerProcess@2x.png';
+import img_xiaohongshuAvatar from '@/assets/activity/SpringFestival/xiaohongshuAvatar.png';
+import img_weibaoAvatar from '@/assets/activity/SpringFestival/weibaoAvatar.png';
+import img_QQChatQR from '@/assets/activity/SpringFestival/QQChatQR.jpg';
 import FComponentsLib from '@freelog/components-lib';
 import { Popover, Space, Steps } from 'antd';
 import { connect } from 'dva';
@@ -304,11 +307,11 @@ function SpringFestival({ activityDetailsPage }: SpringFestivalProps) {
                 border: '1px solid #E3E3E3',
                 borderRadius: '50%',
               }}
-            />
+            ><img src={img_xiaohongshuAvatar} alt={''} style={{ width: '100%', height: '100%' }} /></div>
             <div style={{ height: 20 }} />
             <FComponentsLib.FContentText
               type={'negative'}
-              text={'小红书用户名小红书用户名小红书用户名小红书用户名'}
+              text={'Freelog.Official'}
               style={{ maxWidth: 200 }}
               singleRow
             />
@@ -335,11 +338,11 @@ function SpringFestival({ activityDetailsPage }: SpringFestivalProps) {
                 border: '1px solid #E3E3E3',
                 borderRadius: '50%',
               }}
-            />
+            ><img src={img_weibaoAvatar} alt={''} style={{ width: '100%', height: '100%' }} /></div>
             <div style={{ height: 20 }} />
             <FComponentsLib.FContentText
               type={'negative'}
-              text={'微博用户名'}
+              text={'Freelog_Official'}
               style={{ maxWidth: 200 }}
               singleRow
             />
@@ -354,7 +357,7 @@ function SpringFestival({ activityDetailsPage }: SpringFestivalProps) {
         <Space size={10} direction={'vertical'} align={'center'}>
           <div className={styles.moreItem}>
             <img
-              src={img_goldCoin}
+              src={img_QQChatQR}
               style={{ width: 140, height: 140 }}
               alt={''}
             />
@@ -369,7 +372,7 @@ function SpringFestival({ activityDetailsPage }: SpringFestivalProps) {
         <Space size={10} direction={'vertical'} align={'center'}>
           <div className={styles.moreItem}>
             <img
-              src={img_goldCoin}
+              src={img_QQChatQR}
               style={{ width: 140, height: 140 }}
               alt={''}
             />
