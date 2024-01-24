@@ -284,6 +284,104 @@ function SpringFestival({ activityDetailsPage }: SpringFestivalProps) {
       <div style={{ height: 60 }} />
     </div>
     <div style={{ height: 100 }} />
+    <div className={styles.h1}>更多的了解我们</div>
+    <div style={{ height: 40 }} />
+    <div className={styles.more}>
+      <Space size={10} direction={'vertical'} align={'center'}>
+        <div
+          className={styles.moreItem}
+          onClick={() => {
+            self.open('https://www.xiaohongshu.com/user/profile/64c0d3810000000014039a75');
+          }}
+        >
+          <div
+            style={{
+              width: 100,
+              height: 100,
+              background: '#FFF',
+              border: '1px solid #E3E3E3',
+              borderRadius: '50%',
+            }}
+          />
+          <div style={{ height: 20 }} />
+          <FComponentsLib.FContentText
+            type={'negative'}
+            text={'小红书用户名小红书用户名小红书用户名小红书用户名'}
+            style={{ maxWidth: 200 }}
+            singleRow
+          />
+        </div>
+        <FComponentsLib.FContentText
+          type={'negative'}
+          text={'小红书'}
+          style={{ maxWidth: 200 }}
+          singleRow
+        />
+      </Space>
+      <Space size={10} direction={'vertical'} align={'center'}>
+        <div
+          className={styles.moreItem}
+          onClick={() => {
+            self.open('https://weibo.com/freelogofficial');
+          }}
+        >
+          <div
+            style={{
+              width: 100,
+              height: 100,
+              background: '#FFF',
+              border: '1px solid #E3E3E3',
+              borderRadius: '50%',
+            }}
+          />
+          <div style={{ height: 20 }} />
+          <FComponentsLib.FContentText
+            type={'negative'}
+            text={'微博用户名'}
+            style={{ maxWidth: 200 }}
+            singleRow
+          />
+        </div>
+        <FComponentsLib.FContentText
+          type={'negative'}
+          text={'微博'}
+          style={{ maxWidth: 200 }}
+          singleRow
+        />
+      </Space>
+      <Space size={10} direction={'vertical'} align={'center'}>
+        <div className={styles.moreItem}>
+          <img
+            src={img_goldCoin}
+            style={{ width: 140, height: 140 }}
+            alt={''}
+          />
+        </div>
+        <FComponentsLib.FContentText
+          type={'negative'}
+          text={'官方活动答疑QQ群'}
+          style={{ maxWidth: 200 }}
+          singleRow
+        />
+      </Space>
+      <Space size={10} direction={'vertical'} align={'center'}>
+        <div className={styles.moreItem}>
+          <img
+            src={img_goldCoin}
+            style={{ width: 140, height: 140 }}
+            alt={''}
+          />
+        </div>
+        <FComponentsLib.FContentText
+          type={'negative'}
+          text={'官方活动答疑微信群'}
+          style={{ maxWidth: 200 }}
+          singleRow
+        />
+      </Space>
+    </div>
+
+    <div style={{ height: 100 }} />
   </div>);
 }
 
