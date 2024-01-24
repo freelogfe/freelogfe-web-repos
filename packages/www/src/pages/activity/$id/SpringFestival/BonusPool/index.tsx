@@ -16,9 +16,11 @@ interface BonusPoolProps {
 function BonusPool({ activityDetailsPage }: BonusPoolProps) {
   const [$momentTime, set$momentTime, get$momentTime] = FUtil.Hook.useGetState<Moment>(moment());
 
-  const [$updateTime, set$updateTime, get$updateTime] = FUtil.Hook.useGetState<string>(activityDetailsPage.endTime ? moment().isBefore(activityDetailsPage.endTime)
-    ? (get$momentTime().subtract(12, 'hours').format('YYYY-MM-DD') + ' 12:00:00')
-    : activityDetailsPage.endTime.format('YYYY-MM-DD HH:mm:ss') : 'YYYY-MM-DD HH:mm:ss');
+  const [$updateTime, set$updateTime, get$updateTime] = FUtil.Hook.useGetState<string>(activityDetailsPage.endTime
+    ? moment().isBefore(activityDetailsPage.endTime)
+      ? (get$momentTime().subtract(12, 'hours').format('YYYY-MM-DD') + ' 12:00:00')
+      : activityDetailsPage.endTime.format('YYYY-MM-DD HH:mm:ss')
+    : 'YYYY-MM-DD HH:mm:ss');
 
   return (<div className={styles.pool}>
     <img src={img_poolTitle} style={{ width: 636, opacity: .95 }} alt={''} />
