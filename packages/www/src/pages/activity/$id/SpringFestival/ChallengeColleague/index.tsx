@@ -82,7 +82,7 @@ function ChallengeColleague({}: ChallengeColleagueProps) {
         </div>
       </div>
       <div style={{ height: 70 }} />
-      <FComponentsLib.FTitleText type={'h1'} text={'召唤好友  共赴全员瓜分盛宴'} />
+      <FComponentsLib.FTitleText type={'h1'} text={'召唤好友共赴全员瓜分盛宴'} />
       <img src={img_colleagueProcess} style={{ width: 967, opacity: .95 }} alt={''} />
       <a
         className={[sharedStyles.button, $usedCount >= 5 ? sharedStyles.disabled : ''].join(' ')}
@@ -91,6 +91,7 @@ function ChallengeColleague({}: ChallengeColleagueProps) {
             await FServiceAPI.User.currentUserInfo();
             return;
           }
+
           if (get$usedCount() >= 5) {
             return;
           }
