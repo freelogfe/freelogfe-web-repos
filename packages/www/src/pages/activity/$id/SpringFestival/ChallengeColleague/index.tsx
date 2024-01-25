@@ -30,7 +30,7 @@ function ChallengeColleague({}: ChallengeColleagueProps) {
       }
 
     } = await FServiceAPI.TestQualification.codeDetails2({});
-    console.log(data, 'datadsflkjsdlkfjlkdsjlkfjlk');
+    // console.log(data, 'datadsflkjsdlkfjlkdsjlkfjlk');
     set$invitationCode(data.code);
     set$usedCount(data.usedCount);
   });

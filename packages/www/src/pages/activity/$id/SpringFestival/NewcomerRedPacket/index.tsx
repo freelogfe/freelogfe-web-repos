@@ -6,12 +6,31 @@ import img_newcomerProcess from '@/assets/activity/SpringFestival/newcomerProces
 import { Space } from 'antd';
 import FComponentsLib from '@freelog/components-lib';
 import sharedStyles from '@/pages/activity/$id/SpringFestival/shared.less';
+import { FServiceAPI, FUtil } from '@freelog/tools-lib';
+import * as AHooks from 'ahooks';
+import moment from 'moment';
 
 interface NewcomerRedPacketProps {
   onClick?(): void;
 }
 
 function NewcomerRedPacket({ onClick }: NewcomerRedPacketProps) {
+
+  const [$isNewcomer, set$isNewcomer, get$isNewcomer] = FUtil.Hook.useGetState<boolean>(true);
+
+  AHooks.useMount(async () => {
+    if (FUtil.Tool.getUserIDByCookies() === -1) {
+      return;
+    }
+    const { data }: {
+      data: {
+        createDate: string;
+      }
+    } = await FServiceAPI.User.currentUserInfo();
+    // console.log(), 'data sdifj;lsdkjflksdjflkjsdlkjlk');
+    set$isNewcomer(!moment(data.createDate).isBefore(moment('2023-11-22')));
+  });
+
   return (<div className={styles.newcomer}>
     <img src={img_newcomerTitle} style={{ width: 432, opacity: .95 }} alt={''} />
     <div className={styles.Steps}>
@@ -25,16 +44,20 @@ function NewcomerRedPacket({ onClick }: NewcomerRedPacketProps) {
     <div style={{ height: 30 }} />
     <img src={img_newcomerProcess} style={{ width: 688, opacity: .95 }} alt={''} />
     <div style={{ height: 50 }} />
-    <Space size={30}>
-      <FComponentsLib.FTitleText type={'h3'} text={'首次参与freelog活动，并完成1次“新春卷王打卡挑战”任务（0/1）'} />
-      <a
-        className={[sharedStyles.button, sharedStyles.small].join(' ')}
-        onClick={() => {
-          onClick && onClick();
+    {
+      $isNewcomer
+        ? (<Space size={30}>
+          <FComponentsLib.FTitleText type={'h3'} text={'首次参与freelog活动，并完成1次“新春卷王打卡挑战”任务（0/1）'} />
+          <a
+            className={[sharedStyles.button, sharedStyles.small].join(' ')}
+            onClick={() => {
+              onClick && onClick();
+            }}
+          >去完成</a>
+        </Space>)
+        : (<FComponentsLib.FContentText text={'此活动限2023-11-22 之后注册的用户参加'} type={'additional2'} />)
+    }
 
-        }}
-      >去完成</a>
-    </Space>
     <div style={{ height: 60 }} />
   </div>);
 }
