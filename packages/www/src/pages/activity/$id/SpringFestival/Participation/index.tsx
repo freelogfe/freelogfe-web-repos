@@ -48,6 +48,7 @@ function Participation({ activityDetailsPage }: ParticipationProps) {
               fCenterMessage({ message: '活动已结束' });
               return;
             }
+            self.open(FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.invitation());
           }}
         >立即报名</a>
         <a
