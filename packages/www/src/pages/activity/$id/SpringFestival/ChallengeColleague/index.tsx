@@ -33,6 +33,7 @@ function ChallengeColleague({}: ChallengeColleagueProps) {
     // console.log(data, 'datadsflkjsdlkfjlkdsjlkfjlk');
     set$invitationCode(data.code);
     set$usedCount(data.usedCount);
+    // set$usedCount(5);
   });
 
   return (<>
