@@ -284,3 +284,16 @@ export function statisticRewardRecords(params: StatisticRewardRecordsParamsType)
     data: params,
   });
 }
+
+// 统计个人的奖励情况
+interface StatisticTaskRecordsParamsType {
+  codes: string[];
+}
+
+export function statisticTaskRecords(params: StatisticTaskRecordsParamsType) {
+  return FUtil.Request({
+    method: 'POST',
+    url: `/v2/activities/facade/statisticTaskRecords`,
+    data: params,
+  });
+}

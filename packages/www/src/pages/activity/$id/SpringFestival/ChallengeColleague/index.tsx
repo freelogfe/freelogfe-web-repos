@@ -40,13 +40,13 @@ function ChallengeColleague({}: ChallengeColleagueProps) {
       <img src={img_colleagueTitle} style={{ width: 432, opacity: .95 }} alt={''} />
       <div className={styles.Steps}>
         <div>
-          <img src={img_goldCoin} style={{ width: 65, opacity: 1 }} alt={''} />
+          <img src={img_goldCoin} style={{ width: 65, opacity: $usedCount >= 1 ? 1 : .3 }} alt={''} />
         </div>
         <div>
-          <img src={img_goldCoin} style={{ width: 65, opacity: .3 }} alt={''} />
+          <img src={img_goldCoin} style={{ width: 65, opacity: $usedCount >= 3 ? 1 : .3 }} alt={''} />
         </div>
         <div>
-          <img src={img_goldCoin} style={{ width: 65, opacity: .3 }} alt={''} />
+          <img src={img_goldCoin} style={{ width: 65, opacity: $usedCount >= 5 ? 1 : .3 }} alt={''} />
         </div>
       </div>
       <div style={{ height: 15 }} />
@@ -63,18 +63,18 @@ function ChallengeColleague({}: ChallengeColleagueProps) {
       </div>
       <div style={{ height: 15 }} />
       <div>
-        <Steps5 step={3} />
+        <Steps5 step={Math.min($usedCount, 5)} />
       </div>
       <div style={{ height: 15 }} />
       <div className={styles.Steps}>
         <div>
-          <FComponentsLib.FContentText type={'normal'} text={'邀请 1 位'} />
+          <FComponentsLib.FContentText type={'normal'} text={`邀请 ${Math.min($usedCount, 1)} 位`} />
         </div>
         <div>
-          <FComponentsLib.FContentText type={'normal'} text={'邀请 1/3 位'} />
+          <FComponentsLib.FContentText type={'normal'} text={`邀请 ${Math.min($usedCount, 3)}/3 位`} />
         </div>
         <div>
-          <FComponentsLib.FContentText type={'normal'} text={'邀请 1/5 位'} />
+          <FComponentsLib.FContentText type={'normal'} text={`邀请 ${Math.min($usedCount, 5)}/5 位`} />
         </div>
       </div>
       <div style={{ height: 70 }} />
