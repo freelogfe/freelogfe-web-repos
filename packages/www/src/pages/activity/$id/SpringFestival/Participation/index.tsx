@@ -7,12 +7,14 @@ import fCenterMessage from '@/components/fCenterMessage';
 import { connect } from 'dva';
 import { ActivityDetailsPageModelState, ConnectState } from '@/models/connect';
 import moment, { Moment } from 'moment';
+import { FUtil } from '@freelog/tools-lib';
 
 interface ParticipationProps {
   activityDetailsPage: ActivityDetailsPageModelState;
 }
 
 function Participation({ activityDetailsPage }: ParticipationProps) {
+  const [$showRule, set$showRule, get$showRule] = FUtil.Hook.useGetState<boolean>(false);
   return (<>
     <div className={styles.participation}>
       <div className={sharedStyles.h1}>参与方式</div>
@@ -51,19 +53,19 @@ function Participation({ activityDetailsPage }: ParticipationProps) {
         <a
           className={sharedStyles.button}
           onClick={() => {
-
+            self.open('https://freelog3.freelog.com/home_freelog-query_id=62ce6f8a456ff0002e32915f');
           }}
         >查看操作教程</a>
         <a
           className={sharedStyles.button}
           onClick={() => {
-
+            set$showRule(true);
           }}
         >活动规则</a>
       </Space>
     </div>
     <Modal
-      open={true}
+      open={$showRule}
       title={null}
       footer={null}
       // closable={false}
@@ -71,6 +73,9 @@ function Participation({ activityDetailsPage }: ParticipationProps) {
       centered={true}
       style={{ borderRadius: 10, overflow: 'hidden' }}
       bodyStyle={{ height: 'calc(100vh - 200px)', padding: 0 }}
+      onCancel={() => {
+        set$showRule(false);
+      }}
     >
       <div className={styles.article}>
         <div className={styles.content}>
@@ -142,7 +147,9 @@ function Participation({ activityDetailsPage }: ParticipationProps) {
           <div style={{ height: 30 }} />
           <div className={styles.h2}>三、奖励查看及提取流程</div>
           <div style={{ height: 15 }} />
-          <div className={styles.p}>获奖用户需登录freelog平台，进入“个人中心”—“活动奖励”模块，查看获得的奖励金额。用户需绑定指定的支付平台，以确保奖励能够顺利提取。由于支付平台的限制，每日可提取现金的上限为200元。因个人原因未能成功领取奖励则视为自愿放弃；</div>
+          <div
+            className={styles.p}>获奖用户需登录freelog平台，进入“个人中心”—“活动奖励”模块，查看获得的奖励金额。用户需绑定指定的支付平台，以确保奖励能够顺利提取。由于支付平台的限制，每日可提取现金的上限为200元。因个人原因未能成功领取奖励则视为自愿放弃；
+          </div>
           <div style={{ height: 30 }} />
           <div className={styles.h2}>四、奖励领取注意事项</div>
           <div style={{ height: 15 }} />
@@ -160,7 +167,8 @@ function Participation({ activityDetailsPage }: ParticipationProps) {
           <div className={styles.list}>
             <div className={styles.order}>2</div>
             <div
-              className={styles.text}>活动期间开放举报通道，用户可以通过联系官方工作人员或向Freelog发送邮件（service@freelog.com）对涉嫌违规的行为和用户进行举报。 举报邮件内容需包含被举报作品名称、作品链接、涉嫌违规原因，否则不予处理；
+              className={styles.text}>活动期间开放举报通道，用户可以通过联系官方工作人员或向Freelog发送邮件（service@freelog.com）对涉嫌违规的行为和用户进行举报。
+              举报邮件内容需包含被举报作品名称、作品链接、涉嫌违规原因，否则不予处理；
             </div>
           </div>
           <div style={{ height: 15 }} />

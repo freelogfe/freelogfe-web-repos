@@ -1,0 +1,95 @@
+@import '../../../../../config.less';
+
+.article {
+  width: 1016px;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(255, 247, 234, .3) 0%, rgba(255, 204, 197, .3) 100%),
+  url("../../../../../assets/activity/SpringFestival/lantern@2x.png") top left / 153px 171px no-repeat,
+  url("../../../../../assets/activity/SpringFestival/candy@2x.png") bottom right / 153px 171px no-repeat;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  justify-content: center;
+
+  .content {
+    width: 800px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: fit-content;
+  }
+}
+
+.h1 {
+  //width: 120px;
+  //height: 36px;
+  font-size: 30px;
+  //font-family: PingFangSC, PingFang SC;
+  font-weight: 600;
+  color: #222;
+  line-height: 36px;
+  text-align: center;
+}
+
+.h2 {
+  //width: 570px;
+  //height: 22px;
+  font-size: 16px;
+  //font-family: PingFangSC, PingFang SC;
+  font-weight: 600;
+  color: #222;
+  line-height: 22px;
+  text-align: center;
+}
+
+.h3 {
+  //width: 700px;
+  //height: 40px;
+  font-size: 14px;
+  //font-family: PingFangSC, PingFang SC;
+  font-weight: 400;
+  color: #666;
+  line-height: 20px;
+  text-align: center;
+}
+
+.strong {
+  //width: 680px;
+  //height: 22px;
+  font-size: 16px;
+  //font-family: PingFangSC, PingFang SC;
+  font-weight: 600;
+  color: #FF6A1F;
+  line-height: 22px;
+  //display: inline-block;
+}
+
+.imgTitle {
+  width: 220px;
+}
+
+.list {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  width: 820px;
+
+  & > label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background-color: #FBF5EA;
+    border-radius: 12px;
+    padding: 3px 10px;
+
+    & > span {
+      font-size: 12px;
+      font-weight: 600;
+      color: #222222;
+      line-height: 18px;
+      display: inline-block;
+    }
+  }
+}

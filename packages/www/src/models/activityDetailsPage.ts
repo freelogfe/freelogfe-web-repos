@@ -118,7 +118,7 @@ const Model: ActivityDetailsPageModelType = {
 
           startTime: data.persist ? null : moment(data.startTime),
           endTime: data.persist ? null : moment(data.limitTime),
-          announceTime: data.persist ? null : moment(data.limitTime).add(7, 'days'),
+          announceTime: data.persist ? null : moment(data.limitTime).add(15, 'days'),
           timeValidity: data.persist ?
             'Validity'
             : nowTimestamp < new Date(data.startTime).getTime()

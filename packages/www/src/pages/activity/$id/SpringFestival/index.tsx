@@ -31,6 +31,7 @@ import BonusPool from './BonusPool';
 import AboutUsMore from './AboutUsMore';
 import ActivitySchedule from './ActivitySchedule';
 import Participation from './Participation';
+import Reward from './Reward';
 
 interface SpringFestivalProps {
   activityDetailsPage: ActivityDetailsPageModelState;
@@ -53,21 +54,7 @@ function SpringFestival({ activityDetailsPage }: SpringFestivalProps) {
 
       <div className={sharedStyles.h1}>新春奖励大放送</div>
       <div style={{ height: 40 }} />
-      <img src={img_reward} style={{ width: 1060 }} alt={''} />
-      <div style={{ height: 50 }} />
-      <a
-        className={sharedStyles.button}
-        onClick={() => {
-          if (!activityDetailsPage.announceTime) {
-            fCenterMessage({ message: '公示时间无效' });
-            return;
-          }
-          if (moment().isBefore(activityDetailsPage.announceTime)) {
-            fCenterMessage({ message: '未到公示时间' });
-            return;
-          }
-        }}
-      >查看获奖公示</a>
+      <Reward />
       <div style={{ height: 100 }} />
 
       <div className={sharedStyles.h1}>完成新春任务，赢取多多奖励</div>
