@@ -2,36 +2,24 @@ import * as React from 'react';
 import styles from './index.less';
 import sharedStyles from './shared.less';
 import img_banner from '@/assets/activity/SpringFestival/banner@2x.png';
-import img_activityTimeCard from '@/assets/activity/SpringFestival/activityTimeCard@2x.png';
-import img_reward from '@/assets/activity/SpringFestival/reward@2x.png';
 import img_taskTitle from '@/assets/activity/SpringFestival/taskTitle@2x.png';
-import img_colleagueTitle from '@/assets/activity/SpringFestival/colleagueTitle@2x.png';
 import img_newcomerTitle from '@/assets/activity/SpringFestival/newcomerTitle@2x.png';
 import img_koiTitle from '@/assets/activity/SpringFestival/koiTitle@2x.png';
-// import img_poolTitle from '@/assets/activity/SpringFestival/poolTitle@2x.png';
 import img_goldCoin from '@/assets/activity/SpringFestival/goldCoin@2x.png';
-import img_colleagueProcess from '@/assets/activity/SpringFestival/colleagueProcess@2x.png';
 import img_newcomerProcess from '@/assets/activity/SpringFestival/newcomerProcess@2x.png';
-import img_xiaohongshuAvatar from '@/assets/activity/SpringFestival/xiaohongshuAvatar.png';
-import img_weibaoAvatar from '@/assets/activity/SpringFestival/weibaoAvatar.png';
-import img_QQChatQR from '@/assets/activity/SpringFestival/QQChatQR.jpg';
-import img_weixinQR from '@/assets/activity/SpringFestival/weixinQR.jpg';
 import FComponentsLib from '@freelog/components-lib';
 import { Popover, Space, Steps } from 'antd';
 import { connect } from 'dva';
 import { ActivityDetailsPageModelState, ConnectState } from '@/models/connect';
 import Steps21 from './Steps21';
-import Steps5 from './Steps5';
-import FEnergyBall from '@/components/FEnergyBall';
 import FPropaganda from '@/components/FPropaganda';
 import { FUtil } from '@freelog/tools-lib';
-import moment, { Moment } from 'moment';
-import fCenterMessage from '@/components/fCenterMessage';
 import BonusPool from './BonusPool';
 import AboutUsMore from './AboutUsMore';
 import ActivitySchedule from './ActivitySchedule';
 import Participation from './Participation';
 import Reward from './Reward';
+import ChallengeColleague from './ChallengeColleague';
 
 interface SpringFestivalProps {
   activityDetailsPage: ActivityDetailsPageModelState;
@@ -168,55 +156,7 @@ function SpringFestival({ activityDetailsPage }: SpringFestivalProps) {
         <div style={{ height: 60 }} />
       </div>
       <div style={{ height: 50 }} />
-      <div className={styles.colleague}>
-        <img src={img_colleagueTitle} style={{ width: 432, opacity: .95 }} alt={''} />
-        <div className={styles.Steps}>
-          <div>
-            <img src={img_goldCoin} style={{ width: 65, opacity: 1 }} alt={''} />
-          </div>
-          <div>
-            <img src={img_goldCoin} style={{ width: 65, opacity: .3 }} alt={''} />
-          </div>
-          <div>
-            <img src={img_goldCoin} style={{ width: 65, opacity: .3 }} alt={''} />
-          </div>
-        </div>
-        <div style={{ height: 15 }} />
-        <div className={styles.Steps}>
-          <div>
-            <FComponentsLib.FContentText type={'normal'} text={'瓜分800元'} />
-          </div>
-          <div>
-            <FComponentsLib.FContentText type={'normal'} text={'再瓜分600元'} />
-          </div>
-          <div>
-            <FComponentsLib.FContentText type={'normal'} text={'再瓜分600元'} />
-          </div>
-        </div>
-        <div style={{ height: 15 }} />
-        <div>
-          <Steps5 step={3} />
-        </div>
-        <div style={{ height: 15 }} />
-        <div className={styles.Steps}>
-          <div>
-            <FComponentsLib.FContentText type={'normal'} text={'邀请 1 位'} />
-          </div>
-          <div>
-            <FComponentsLib.FContentText type={'normal'} text={'邀请 1/3 位'} />
-          </div>
-          <div>
-            <FComponentsLib.FContentText type={'normal'} text={'邀请 1/5 位'} />
-          </div>
-        </div>
-        <div style={{ height: 70 }} />
-        <FComponentsLib.FTitleText type={'h1'} text={'召唤好友  共赴全员瓜分盛宴'} />
-        <img src={img_colleagueProcess} style={{ width: 967, opacity: .95 }} alt={''} />
-        <a
-          className={sharedStyles.button}
-        >去召唤好友</a>
-        <div style={{ height: 60 }} />
-      </div>
+      <ChallengeColleague />
       <div style={{ height: 50 }} />
       <div className={styles.newcomer}>
         <img src={img_newcomerTitle} style={{ width: 432, opacity: .95 }} alt={''} />
