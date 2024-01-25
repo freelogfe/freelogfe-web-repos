@@ -8,7 +8,7 @@ import img_colleagueProcess from '@/assets/activity/SpringFestival/colleagueProc
 import sharedStyles from '../shared.less';
 import { Input, Modal } from 'antd';
 import copy from 'copy-to-clipboard';
-import { FUtil } from '@freelog/tools-lib';
+import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import * as AHooks from 'ahooks';
 
 interface ChallengeColleagueProps {
@@ -17,12 +17,21 @@ interface ChallengeColleagueProps {
 
 function ChallengeColleague({}: ChallengeColleagueProps) {
 
+  const [$showModal, set$showModal, get$showModal] = FUtil.Hook.useGetState<boolean>(false);
   const [$invitationCode, set$invitationCode, get$invitationCode] = FUtil.Hook.useGetState<string>('');
 
-  AHooks.useMount(() => {
+  AHooks.useMount(async () => {
+    const { data }: {
+      data: {
+        usedCount: number;
+        code: string;
+      }
 
+    } = await FServiceAPI.TestQualification.codeDetails2({});
+    console.log(data, 'datadsflkjsdlkfjlkdsjlkfjlk');
+    set$invitationCode(data.code);
   });
-  
+
   return (<>
     <div className={styles.colleague}>
       <img src={img_colleagueTitle} style={{ width: 432, opacity: .95 }} alt={''} />
@@ -71,31 +80,33 @@ function ChallengeColleague({}: ChallengeColleagueProps) {
       <a
         className={sharedStyles.button}
         onClick={() => {
-
+          set$showModal(true);
         }}
       >去召唤好友</a>
       <div style={{ height: 60 }} />
     </div>
     <Modal
-      open={true}
+      open={$showModal}
       title={null}
       footer={null}
-      // closable={false}
+      closable={true}
+      maskClosable={true}
+      closeIcon={<span/>}
       width={650}
       centered={true}
       style={{ borderRadius: 6, overflow: 'hidden' }}
       bodyStyle={{ padding: 0 }}
       onCancel={() => {
-        // set$showModal(false);
+        set$showModal(false);
       }}
     >
       <div className={styles.content}>
         <div className={styles.text}>
           <div>freelog，一款专业免费的数字资源发行和授权平台，支持漫画、小说、图片、游戏、视频、音乐、插件、主题等各类资源。立即注册，还有机会参与我们的惊喜活动，赢取丰厚好礼！</div>
           <div style={{ height: 20 }} />
-          <div>点击这里开始Freelog之旅：http://www.freelog.com/</div>
+          <div>点击这里开始Freelog之旅：{FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.logon({ invitationCode: $invitationCode })}</div>
           <div style={{ height: 20 }} />
-          <div>邀请码：{'InvitationCode'}</div>
+          <div>邀请码：{$invitationCode}</div>
           <div style={{ height: 20 }} />
         </div>
         <div style={{ height: 25 }} />
@@ -104,9 +115,9 @@ function ChallengeColleague({}: ChallengeColleagueProps) {
           onClick={() => {
             copy(`freelog，一款专业免费的数字资源发行和授权平台，支持漫画、小说、图片、游戏、视频、音乐、插件、主题等各类资源。立即注册，还有机会参与我们的惊喜活动，赢取丰厚好礼！
 
-点击这里开始Freelog之旅：http://www.freelog.com/
+点击这里开始Freelog之旅：${FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.logon({ invitationCode: $invitationCode })}
 
-邀请码：{'InvitationCode'}`, {
+邀请码：${$invitationCode}`, {
               format: 'text/plain',
             });
           }}
