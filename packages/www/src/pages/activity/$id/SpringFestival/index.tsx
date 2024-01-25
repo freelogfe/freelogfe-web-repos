@@ -35,14 +35,11 @@ function SpringFestival({ activityDetailsPage }: SpringFestivalProps) {
       <ActivitySchedule />
       <div style={{ height: 100 }} />
       <Participation />
-
       <div style={{ height: 100 }} />
-
       <div className={sharedStyles.h1}>新春奖励大放送</div>
       <div style={{ height: 40 }} />
       <Reward />
       <div style={{ height: 100 }} />
-
       <div className={sharedStyles.h1}>完成新春任务，赢取多多奖励</div>
       <div style={{ height: 40 }} />
       <FighterRegistration />
