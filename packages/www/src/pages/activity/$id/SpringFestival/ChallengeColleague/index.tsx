@@ -10,6 +10,7 @@ import { Input, Modal } from 'antd';
 import copy from 'copy-to-clipboard';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import * as AHooks from 'ahooks';
+import fCenterMessage from '@/components/fCenterMessage';
 
 interface ChallengeColleagueProps {
 
@@ -19,6 +20,7 @@ function ChallengeColleague({}: ChallengeColleagueProps) {
 
   const [$showModal, set$showModal, get$showModal] = FUtil.Hook.useGetState<boolean>(false);
   const [$invitationCode, set$invitationCode, get$invitationCode] = FUtil.Hook.useGetState<string>('');
+  const [$usedCount, set$usedCount, get$usedCount] = FUtil.Hook.useGetState<number>(0);
 
   AHooks.useMount(async () => {
     const { data }: {
@@ -30,6 +32,7 @@ function ChallengeColleague({}: ChallengeColleagueProps) {
     } = await FServiceAPI.TestQualification.codeDetails2({});
     console.log(data, 'datadsflkjsdlkfjlkdsjlkfjlk');
     set$invitationCode(data.code);
+    set$usedCount(data.usedCount);
   });
 
   return (<>
@@ -78,8 +81,11 @@ function ChallengeColleague({}: ChallengeColleagueProps) {
       <FComponentsLib.FTitleText type={'h1'} text={'召唤好友  共赴全员瓜分盛宴'} />
       <img src={img_colleagueProcess} style={{ width: 967, opacity: .95 }} alt={''} />
       <a
-        className={sharedStyles.button}
+        className={[sharedStyles.button, $usedCount >= 5 ? sharedStyles.disabled : ''].join(' ')}
         onClick={() => {
+          if (get$usedCount() >= 5) {
+            return;
+          }
           set$showModal(true);
         }}
       >去召唤好友</a>
@@ -91,7 +97,7 @@ function ChallengeColleague({}: ChallengeColleagueProps) {
       footer={null}
       closable={true}
       maskClosable={true}
-      closeIcon={<span/>}
+      closeIcon={<span />}
       width={650}
       centered={true}
       style={{ borderRadius: 6, overflow: 'hidden' }}
@@ -120,6 +126,7 @@ function ChallengeColleague({}: ChallengeColleagueProps) {
 邀请码：${$invitationCode}`, {
               format: 'text/plain',
             });
+            fCenterMessage({ message: '复制成功' });
           }}
         >复制内容</a>
       </div>
