@@ -28,8 +28,8 @@ function Participation({ activityDetailsPage }: ParticipationProps) {
       <div className={styles.textContent} style={{ top: 290, left: 182 }}>
         不限制内容形式，<strong>原创小说/文章、漫画、图片、音乐、播客、视频、游戏/主题/插件开发资源</strong>等均可发布
       </div>
-      <div className={styles.textContent} style={{ top: 464, left: 330 }}>
-        由于平台尚在测试阶段，活动功能未全面开放。如您要参与活动，需点击下方报名入口获取内测资格。
+      <div className={styles.textContent} style={{ top: 446, left: 330 }}>
+        由于平台尚在测试阶段，活动功能未全面开放。如您要参与活动，需点击下方报名入口获取内测资格。本次内测资格仅对前200名用户开放，名额有限，先到先得！
       </div>
 
       <Space size={25}>
