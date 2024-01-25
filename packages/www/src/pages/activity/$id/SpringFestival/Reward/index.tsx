@@ -15,6 +15,8 @@ import { Modal } from 'antd';
 import FComponentsLib from '@freelog/components-lib';
 import { FUtil } from '@freelog/tools-lib';
 
+// import FComponentsLib from '@freelog/components-lib';
+
 interface RewardProps {
   activityDetailsPage: ActivityDetailsPageModelState;
 }
@@ -25,20 +27,28 @@ function Reward({ activityDetailsPage }: RewardProps) {
     <img src={img_reward} style={{ width: 1060 }} alt={''} />
     <div style={{ height: 50 }} />
 
-    <a
-      className={sharedStyles.button}
-      onClick={() => {
-        if (!activityDetailsPage.announceTime) {
-          fCenterMessage({ message: '公示时间无效' });
-          return;
-        }
-        if (moment().isBefore(activityDetailsPage.announceTime)) {
-          fCenterMessage({ message: `获奖公示时间：${activityDetailsPage.announceTime.format('YYYY-MM-DD HH:mm:ss')}，敬请关注` });
-          return;
-        }
-        set$showModal(true);
-      }}
-    >查看获奖公示</a>
+    {
+      activityDetailsPage.announceTime && moment().isBefore(activityDetailsPage.announceTime)
+        ? (<FComponentsLib.FContentText
+          type={'additional2'}
+          text={`获奖公示时间：${activityDetailsPage.announceTime.format('YYYY-MM-DD HH:mm:ss')}，敬请关注`}
+        />)
+        : (<a
+          className={sharedStyles.button}
+          onClick={() => {
+            if (!activityDetailsPage.announceTime) {
+              fCenterMessage({ message: '公示时间无效' });
+              return;
+            }
+            if (moment().isBefore(activityDetailsPage.announceTime)) {
+              fCenterMessage({ message: `获奖公示时间：${activityDetailsPage.announceTime.format('YYYY-MM-DD HH:mm:ss')}，敬请关注` });
+              return;
+            }
+            set$showModal(true);
+          }}
+        >查看获奖公示</a>)
+    }
+
 
     <Modal
       open={$showModal}

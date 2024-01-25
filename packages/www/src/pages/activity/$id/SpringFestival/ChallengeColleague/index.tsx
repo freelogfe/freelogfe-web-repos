@@ -23,6 +23,9 @@ function ChallengeColleague({}: ChallengeColleagueProps) {
   const [$usedCount, set$usedCount, get$usedCount] = FUtil.Hook.useGetState<number>(0);
 
   AHooks.useMount(async () => {
+    if (FUtil.Tool.getUserIDByCookies() === -1) {
+      return;
+    }
     const { data }: {
       data: {
         usedCount: number;
@@ -83,7 +86,11 @@ function ChallengeColleague({}: ChallengeColleagueProps) {
       <img src={img_colleagueProcess} style={{ width: 967, opacity: .95 }} alt={''} />
       <a
         className={[sharedStyles.button, $usedCount >= 5 ? sharedStyles.disabled : ''].join(' ')}
-        onClick={() => {
+        onClick={async () => {
+          if (FUtil.Tool.getUserIDByCookies() === -1) {
+            await FServiceAPI.User.currentUserInfo();
+            return;
+          }
           if (get$usedCount() >= 5) {
             return;
           }
