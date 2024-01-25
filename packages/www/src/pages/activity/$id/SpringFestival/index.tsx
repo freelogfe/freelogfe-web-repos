@@ -143,7 +143,7 @@ function SpringFestival({ activityDetailsPage }: SpringFestivalProps) {
         <div className={styles.taskItem}>
           <FComponentsLib.FTitleText type={'h3'} text={'分享一次节点或展品（0/1）'} />
           <a
-            className={[styles.button, sharedStyles.small].join(' ')}
+            className={[sharedStyles.button, sharedStyles.small].join(' ')}
             onClick={() => {
 
             }}
