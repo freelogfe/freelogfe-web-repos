@@ -18,6 +18,7 @@ import Participation from './Participation';
 import Reward from './Reward';
 import ChallengeColleague from './ChallengeColleague';
 import FighterRegistration from './FighterRegistration';
+import NewcomerRedPacket from './NewcomerRedPacket';
 
 interface SpringFestivalProps {
   activityDetailsPage: ActivityDetailsPageModelState;
@@ -46,34 +47,15 @@ function SpringFestival({ activityDetailsPage }: SpringFestivalProps) {
       <div style={{ height: 50 }} />
       <ChallengeColleague />
       <div style={{ height: 50 }} />
-      <div className={styles.newcomer}>
-        <img src={img_newcomerTitle} style={{ width: 432, opacity: .95 }} alt={''} />
-        <div className={styles.Steps}>
-          <div>
-            <img src={img_goldCoin} style={{ width: 65, opacity: 1 }} alt={''} />
-          </div>
-          <div>
-            <img src={img_goldCoin} style={{ width: 65, opacity: 1 }} alt={''} />
-          </div>
-        </div>
-        <div style={{ height: 30 }} />
-        <img src={img_newcomerProcess} style={{ width: 688, opacity: .95 }} alt={''} />
-        <div style={{ height: 50 }} />
-        <Space size={30}>
-          <FComponentsLib.FTitleText type={'h3'} text={'首次参与freelog活动，并完成1次“新春卷王打卡挑战”任务（0/1）'} />
-          <a
-            className={[sharedStyles.button, sharedStyles.small].join(' ')}
-            onClick={() => {
-              const info = ref_content2.current?.getBoundingClientRect();
-              self.document.getElementById('layout-content')?.scrollBy({
-                top: (info?.top || 0) ,
-                behavior: 'smooth',
-              });
-            }}
-          >去完成</a>
-        </Space>
-        <div style={{ height: 60 }} />
-      </div>
+      <NewcomerRedPacket
+        onClick={() => {
+          const info = ref_content2.current?.getBoundingClientRect();
+          self.document.getElementById('layout-content')?.scrollBy({
+            top: (info?.top || 0),
+            behavior: 'smooth',
+          });
+        }}
+      />
       <div style={{ height: 50 }} />
       <div className={styles.koi}>
         <img src={img_koiTitle} style={{ width: 432, opacity: .95 }} alt={''} />
