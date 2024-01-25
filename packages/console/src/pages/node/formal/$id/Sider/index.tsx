@@ -92,12 +92,16 @@ function Sider({ dispatch, nodeManagerPage, match }: SiderProps) {
                 url={nodeManagerPage.nodeUrl}
                 onClickShare={() => {
                   // console.log('**********8 88888888d onClickShare')
+                  // FServiceAPI.Activity.pushMessageTask({
+                  //   taskConfigCode: 'TS000034',
+                  //   meta: { nodeId: nodeManagerPage.nodeId },
+                  // });
+                  // FServiceAPI.Activity.pushMessageTask({
+                  //   taskConfigCode: 'TS000076',
+                  //   meta: { nodeId: nodeManagerPage.nodeId },
+                  // });
                   FServiceAPI.Activity.pushMessageTask({
-                    taskConfigCode: 'TS000034',
-                    meta: { nodeId: nodeManagerPage.nodeId },
-                  });
-                  FServiceAPI.Activity.pushMessageTask({
-                    taskConfigCode: 'TS000076',
+                    taskConfigCode: 'TS000803',
                     meta: { nodeId: nodeManagerPage.nodeId },
                   });
                 }}

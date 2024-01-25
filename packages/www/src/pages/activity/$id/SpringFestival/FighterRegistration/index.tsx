@@ -5,7 +5,7 @@ import FComponentsLib from '@freelog/components-lib';
 import img_goldCoin from '@/assets/activity/SpringFestival/goldCoin@2x.png';
 import Steps21 from '@/pages/activity/$id/SpringFestival/Steps21';
 import sharedStyles from '@/pages/activity/$id/SpringFestival/shared.less';
-import { FUtil } from '@freelog/tools-lib';
+import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 
 interface FighterRegistrationProps {
 
@@ -86,8 +86,18 @@ function FighterRegistration({}: FighterRegistrationProps) {
       <FComponentsLib.FTitleText type={'h3'} text={'签约一个资源到节点（0/1）'} />
       <a
         className={[sharedStyles.button, sharedStyles.small].join(' ')}
-        onClick={() => {
-
+        onClick={async () => {
+          const { data }: {
+            data: {
+              totalItem: number;
+            }
+          } = await FServiceAPI.Node.nodes({});
+          // console.log(data, 'DDDDDDDD');
+          if (data.totalItem > 0) {
+            self.open(FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.market());
+          } else {
+            self.open(FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.nodeCreator());
+          }
         }}
       >去完成</a>
     </div>
@@ -96,8 +106,22 @@ function FighterRegistration({}: FighterRegistrationProps) {
       <FComponentsLib.FTitleText type={'h3'} text={'分享一次节点或展品（0/1）'} />
       <a
         className={[sharedStyles.button, sharedStyles.small].join(' ')}
-        onClick={() => {
-
+        onClick={async () => {
+          const { data }: {
+            data: {
+              totalItem: number;
+              dataList: {
+                nodeId: number;
+              }[]
+            }
+          } = await FServiceAPI.Node.nodes({});
+          if (data.totalItem > 0) {
+            self.open(FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.nodeManagement({
+              nodeID: data.dataList[0].nodeId,
+            }));
+          } else {
+            self.open(FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.nodeCreator());
+          }
         }}
       >去完成</a>
     </div>
