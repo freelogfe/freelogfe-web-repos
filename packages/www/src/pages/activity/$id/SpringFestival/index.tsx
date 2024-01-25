@@ -25,7 +25,7 @@ interface SpringFestivalProps {
 
 function SpringFestival({ activityDetailsPage }: SpringFestivalProps) {
   // const [$momentTime, set$momentTime, get$momentTime] = FUtil.Hook.useGetState<Moment>(moment());
-
+  const ref_content2 = React.useRef<HTMLDivElement>(null);
   return (<>
     <div className={styles.body}>
       <img src={img_banner} width={'100%'} style={{ display: 'block' }} alt={''} />
@@ -41,7 +41,7 @@ function SpringFestival({ activityDetailsPage }: SpringFestivalProps) {
       <Reward />
       <div style={{ height: 100 }} />
       <div className={sharedStyles.h1}>完成新春任务，赢取多多奖励</div>
-      <div style={{ height: 40 }} />
+      <div style={{ height: 40 }} ref={ref_content2} />
       <FighterRegistration />
       <div style={{ height: 50 }} />
       <ChallengeColleague />
@@ -61,7 +61,16 @@ function SpringFestival({ activityDetailsPage }: SpringFestivalProps) {
         <div style={{ height: 50 }} />
         <Space size={30}>
           <FComponentsLib.FTitleText type={'h3'} text={'首次参与freelog活动，并完成1次“新春卷王打卡挑战”任务（0/1）'} />
-          <a className={[sharedStyles.button, sharedStyles.small].join(' ')}>去完成</a>
+          <a
+            className={[sharedStyles.button, sharedStyles.small].join(' ')}
+            onClick={() => {
+              const info = ref_content2.current?.getBoundingClientRect();
+              self.document.getElementById('layout-content')?.scrollBy({
+                top: (info?.top || 0) ,
+                behavior: 'smooth',
+              });
+            }}
+          >去完成</a>
         </Space>
         <div style={{ height: 60 }} />
       </div>
