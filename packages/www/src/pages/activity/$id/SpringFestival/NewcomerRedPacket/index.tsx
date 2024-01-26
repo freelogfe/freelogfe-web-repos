@@ -17,6 +17,7 @@ interface NewcomerRedPacketProps {
 function NewcomerRedPacket({ onClick }: NewcomerRedPacketProps) {
 
   const [$isNewcomer, set$isNewcomer, get$isNewcomer] = FUtil.Hook.useGetState<boolean>(true);
+  const [$isFinish, set$isFinish, get$isFinish] = FUtil.Hook.useGetState<boolean>(false);
 
   AHooks.useMount(async () => {
     if (FUtil.Tool.getUserIDByCookies() === -1) {
@@ -29,6 +30,18 @@ function NewcomerRedPacket({ onClick }: NewcomerRedPacketProps) {
     } = await FServiceAPI.User.currentUserInfo();
     // console.log(), 'data sdifj;lsdkjflksdjflkjsdlkjlk');
     set$isNewcomer(!moment(data.createDate).isBefore(moment('2023-11-22')));
+
+    if (get$isNewcomer()) {
+      const { data }: {
+        data: {
+          completionTime: number;
+        }[];
+      } = await FServiceAPI.Activity.statisticTaskRecords({
+        codes: ['TS000805'],
+      });
+
+      set$isFinish(data[0].completionTime >= 1);
+    }
   });
 
   return (<div className={styles.newcomer}>
@@ -47,10 +60,13 @@ function NewcomerRedPacket({ onClick }: NewcomerRedPacketProps) {
     {
       $isNewcomer
         ? (<Space size={30}>
-          <FComponentsLib.FTitleText type={'h3'} text={'首次参与freelog活动，并完成1次“新春卷王打卡挑战”任务（0/1）'} />
+          <FComponentsLib.FTitleText type={'h3'} text={`首次参与freelog活动，并完成1次“新春卷王打卡挑战”任务（${Number($isFinish)}/1）`} />
           <a
-            className={[sharedStyles.button, sharedStyles.small].join(' ')}
+            className={[sharedStyles.button, sharedStyles.small, $isFinish ? sharedStyles.disabled : ''].join(' ')}
             onClick={() => {
+              if ($isFinish) {
+                return;
+              }
               onClick && onClick();
             }}
           >去完成</a>
