@@ -3,7 +3,6 @@ import styles from './index.less';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import { ConnectState, NodeManagerModelState } from '@/models/connect';
-// import { OnChange_ShowPage_Action } from '@/models/nodeManagerPage';
 import { withRouter } from 'umi';
 import FLink from '@/components/FLink';
 import { FUtil, FI18n, FServiceAPI } from '@freelog/tools-lib';

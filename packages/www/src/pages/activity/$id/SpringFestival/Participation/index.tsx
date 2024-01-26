@@ -23,10 +23,10 @@ function Participation({ activityDetailsPage }: ParticipationProps) {
         前往freelog网页端，发布带有“<FComponentsLib.FCopyToClipboard
         text={'#新春召集令，freelog创作激励计划启动！#'}
         title={'点击复制标签'}
-      ><strong>#新春召集令，freelog创作激励计划启动！#</strong></FComponentsLib.FCopyToClipboard>”标签的原创资源并成功签约至展示节点，完成一次节点或展品分享后即视为参与此次活动
+      ><strong>#新春召集令，freelog创作激励计划启动！#</strong></FComponentsLib.FCopyToClipboard>”标签的原创资源并成功签约至展示节点，完成一次节点或展品分享后即视为参与此次活动。
       </div>
       <div className={styles.textContent} style={{ top: 290, left: 182 }}>
-        不限制内容形式，<strong>原创小说/文章、漫画、图片、音乐、播客、视频、游戏/主题/插件开发资源</strong>等均可发布
+        不限制内容形式，<strong>原创小说/文章、漫画、图片、音乐、播客、视频、游戏/主题/插件开发资源</strong>等均可发布。
       </div>
       <div className={styles.textContent} style={{ top: 446, left: 330 }}>
         由于平台尚在测试阶段，活动功能未全面开放。如您要参与活动，需点击下方报名入口获取内测资格。本次内测资格仅对前200名用户开放，名额有限，先到先得！

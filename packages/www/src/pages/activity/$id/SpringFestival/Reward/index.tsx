@@ -13,7 +13,7 @@ import { ActivityDetailsPageModelState, ConnectState } from '@/models/connect';
 import moment from 'moment';
 import { Modal } from 'antd';
 import FComponentsLib from '@freelog/components-lib';
-import { FUtil } from '@freelog/tools-lib';
+import { FI18n, FUtil } from '@freelog/tools-lib';
 
 // import FComponentsLib from '@freelog/components-lib';
 
@@ -28,10 +28,11 @@ function Reward({ activityDetailsPage }: RewardProps) {
     <div style={{ height: 50 }} />
 
     {
-      activityDetailsPage.announceTime && moment().isBefore(activityDetailsPage.announceTime)
+      // activityDetailsPage.announceTime && moment().isBefore(activityDetailsPage.announceTime)
+      FI18n.i18nNext.t('event_cn_newyear_2024_winnerlist_switch') !== '1'
         ? (<FComponentsLib.FContentText
           type={'additional2'}
-          text={`获奖公示时间：${activityDetailsPage.announceTime.format('YYYY-MM-DD HH:mm:ss')}，敬请关注`}
+          text={`获奖公示时间：${activityDetailsPage.announceTime?.format('YYYY-MM-DD HH:mm:ss') || 'YYYY-MM-DD HH:mm:ss'}，敬请关注`}
         />)
         : (<a
           className={sharedStyles.button}

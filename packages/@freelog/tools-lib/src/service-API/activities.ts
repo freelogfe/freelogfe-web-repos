@@ -285,7 +285,7 @@ export function statisticRewardRecords(params: StatisticRewardRecordsParamsType)
   });
 }
 
-// 统计个人的奖励情况
+// 统计个人的任务情况
 interface StatisticTaskRecordsParamsType {
   codes: string[];
 }
@@ -294,6 +294,19 @@ export function statisticTaskRecords(params: StatisticTaskRecordsParamsType) {
   return FUtil.Request({
     method: 'POST',
     url: `/v2/activities/facade/statisticTaskRecords`,
+    data: params,
+  });
+}
+
+// 统计所有人的单个奖励情况
+interface StatisticSingleRewardRecordForAllParamsType {
+  code: string;
+}
+
+export function statisticSingleRewardRecordForAll(params: StatisticSingleRewardRecordForAllParamsType) {
+  return FUtil.Request({
+    method: 'POST',
+    url: `/v2/activities/facade/statisticSingleRewardRecordForAll`,
     data: params,
   });
 }
