@@ -40,7 +40,7 @@ function NewYearKoi({}: NewYearKoiProps) {
       </div>
       <div style={{ height: 45 }} />
       <Space size={30}>
-        <FComponentsLib.FTitleText type={'h3'} text={'提交微博或小红书话题打卡记录（0/1）'} />
+        <FComponentsLib.FTitleText type={'h3'} text={`提交微博或小红书话题打卡记录（${Number($isFinish)}/1）`} />
         <a
           className={[sharedStyles.button, sharedStyles.small, $isFinish ? sharedStyles.disabled : ''].join(' ')}
           onClick={async () => {
@@ -98,7 +98,17 @@ function NewYearKoi({}: NewYearKoiProps) {
         />
         <div style={{ height: 25 }} />
         <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <a className={[sharedStyles.button, sharedStyles.small].join(' ')}>提交</a>
+          <a
+            className={[sharedStyles.button, sharedStyles.small].join(' ')}
+            onClick={async () => {
+              await FServiceAPI.Activity.pushMessageTask({
+                taskConfigCode: 'TS000901',
+                meta: { linkUrl: get$value() },
+              });
+              set$isFinish(true);
+              set$showModal(false);
+            }}
+          >提交</a>
         </div>
       </div>
     </Modal>
