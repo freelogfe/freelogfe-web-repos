@@ -16,6 +16,10 @@ function FighterRegistration({}: FighterRegistrationProps) {
 
   const [$days, set$days, get$days] = FUtil.Hook.useGetState<number>(0);
 
+  const [$finish1, set$finish1, get$finish1] = FUtil.Hook.useGetState<boolean>(false);
+  const [$finish2, set$finish2, get$finish2] = FUtil.Hook.useGetState<boolean>(false);
+  const [$finish3, set$finish3, get$finish3] = FUtil.Hook.useGetState<boolean>(false);
+
   AHooks.useMount(async () => {
     if (FUtil.Tool.getUserIDByCookies() === -1) {
       return;
@@ -38,8 +42,23 @@ function FighterRegistration({}: FighterRegistrationProps) {
     }
 
     set$days(days);
+  });
 
-    // console.log(data, 'ijwse;lfijsdl;kjfl;ksjdlkfjlksdjflk;asdjkfj');
+  AHooks.useMount(async () => {
+    if (FUtil.Tool.getUserIDByCookies() === -1) {
+      return;
+    }
+    const { data }: {
+      data: {
+        completionTime: number;
+      }[];
+    } = await FServiceAPI.Activity.statisticTaskRecords({
+      codes: ['TS000801', 'TS000802', 'TS000803', 'TS000804'],
+    });
+    // console.log(data, 'datasdifjoiujwes8o9ifjuoisdjfl;ksdjlfkjsdlkjlk');
+    set$finish1(data[0].completionTime >= 1);
+    set$finish2(data[1].completionTime >= 1);
+    set$finish3(data[2].completionTime >= 1 || data[3].completionTime >= 1);
   });
 
   return (<div className={styles.registration}>
@@ -100,23 +119,29 @@ function FighterRegistration({}: FighterRegistrationProps) {
     <div style={{ borderBottom: '1px solid rgba(0,0,0,.1)', width: 760 }} />
     <div className={styles.taskItem}>
       <div>
-        <FComponentsLib.FTitleText type={'h3'} text={'发布一个原创资源（1/1）'} />
+        <FComponentsLib.FTitleText type={'h3'} text={`发布一个原创资源（${Number($finish1)}/1）`} />
         <div style={{ height: 10 }} />
         <FComponentsLib.FContentText type={'additional2'} text={'别忘了为资源添加“新春召集令，freelog创作激励计划启动！”活动标签哦！'} />
       </div>
       <a
-        className={[sharedStyles.button, sharedStyles.small, sharedStyles.disabled].join(' ')}
+        className={[sharedStyles.button, sharedStyles.small, $finish1 ? sharedStyles.disabled : ''].join(' ')}
         onClick={() => {
+          if ($finish1) {
+            return;
+          }
           self.open(FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.resourceCreatorEntry());
         }}
       >已完成</a>
     </div>
     <div style={{ borderBottom: '1px solid rgba(0,0,0,.1)', width: 760 }} />
     <div className={styles.taskItem}>
-      <FComponentsLib.FTitleText type={'h3'} text={'签约一个资源到节点（0/1）'} />
+      <FComponentsLib.FTitleText type={'h3'} text={`签约一个资源到节点（${Number($finish2)}/1）`} />
       <a
-        className={[sharedStyles.button, sharedStyles.small].join(' ')}
+        className={[sharedStyles.button, sharedStyles.small, $finish2 ? sharedStyles.disabled : ''].join(' ')}
         onClick={async () => {
+          if ($finish2) {
+            return;
+          }
           const { data }: {
             data: {
               totalItem: number;
@@ -133,10 +158,13 @@ function FighterRegistration({}: FighterRegistrationProps) {
     </div>
     <div style={{ borderBottom: '1px solid rgba(0,0,0,.1)', width: 760 }} />
     <div className={styles.taskItem}>
-      <FComponentsLib.FTitleText type={'h3'} text={'分享一次节点或展品（0/1）'} />
+      <FComponentsLib.FTitleText type={'h3'} text={`分享一次节点或展品（${Number($finish3)}/1）`} />
       <a
-        className={[sharedStyles.button, sharedStyles.small].join(' ')}
+        className={[sharedStyles.button, sharedStyles.small, $finish3 ? sharedStyles.disabled : ''].join(' ')}
         onClick={async () => {
+          if ($finish3) {
+            return;
+          }
           const { data }: {
             data: {
               totalItem: number;
