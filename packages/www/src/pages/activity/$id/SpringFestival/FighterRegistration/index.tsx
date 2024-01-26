@@ -6,28 +6,58 @@ import img_goldCoin from '@/assets/activity/SpringFestival/goldCoin@2x.png';
 import Steps21 from '@/pages/activity/$id/SpringFestival/Steps21';
 import sharedStyles from '@/pages/activity/$id/SpringFestival/shared.less';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
+import * as AHooks from 'ahooks';
 
 interface FighterRegistrationProps {
 
 }
 
 function FighterRegistration({}: FighterRegistrationProps) {
+
+  const [$days, set$days, get$days] = FUtil.Hook.useGetState<number>(0);
+
+  AHooks.useMount(async () => {
+    if (FUtil.Tool.getUserIDByCookies() === -1) {
+      return;
+    }
+    const { data }: {
+      data: {
+        completionTime: number;
+      }[];
+    } = await FServiceAPI.Activity.statisticTaskRecords({
+      codes: ['TS000806', 'TS000807', 'TS000808', 'TS000809'],
+    });
+
+    let days: number = 0;
+
+    for (let i = 3; i >= 0; i--) {
+      if (data[i].completionTime === 1) {
+        days = i * 7 || 1;
+        break;
+      }
+    }
+
+    set$days(days);
+
+    // console.log(data, 'ijwse;lfijsdl;kjfl;ksjdlkfjlksdjflk;asdjkfj');
+  });
+
   return (<div className={styles.registration}>
     {/*<div style={{ height: 45 }} />*/}
     <img src={img_taskTitle} style={{ width: 520, opacity: .95 }} alt={''} />
     <div className={styles.Steps}>
       <div>
         {/*<img src={img_goldCoin} style={{ width: 65 }} />*/}
-        <FComponentsLib.FIcons.FCheck style={{ fontSize: 64, opacity: 1 }} />
+        <FComponentsLib.FIcons.FCheck style={{ fontSize: 64, opacity: $days >= 1 ? 1 : .3 }} />
       </div>
       <div>
-        <img src={img_goldCoin} style={{ width: 65, opacity: 1 }} alt={''} />
+        <img src={img_goldCoin} style={{ width: 65, opacity: $days >= 7 ? 1 : .3 }} alt={''} />
       </div>
       <div>
-        <img src={img_goldCoin} style={{ width: 65, opacity: .3 }} alt={''} />
+        <img src={img_goldCoin} style={{ width: 65, opacity: $days >= 14 ? 1 : .3 }} alt={''} />
       </div>
       <div>
-        <img src={img_goldCoin} style={{ width: 65, opacity: .3 }} alt={''} />
+        <img src={img_goldCoin} style={{ width: 65, opacity: $days >= 21 ? 1 : .3 }} alt={''} />
       </div>
     </div>
     <div style={{ height: 15 }} />
@@ -47,21 +77,21 @@ function FighterRegistration({}: FighterRegistrationProps) {
     </div>
     <div style={{ height: 15 }} />
     <div>
-      <Steps21 step={12} />
+      <Steps21 step={Math.min(21, $days)} />
     </div>
     <div style={{ height: 15 }} />
     <div className={styles.Steps}>
       <div>
-        <FComponentsLib.FContentText type={'normal'} text={'打卡天数 1 天'} />
+        <FComponentsLib.FContentText type={'normal'} text={`打卡天数 ${Math.min(1, $days)}/1 天`} />
       </div>
       <div>
-        <FComponentsLib.FContentText type={'normal'} text={'打卡天数 1/7 天'} />
+        <FComponentsLib.FContentText type={'normal'} text={`打卡天数 ${Math.min(7, $days)}/7 天`} />
       </div>
       <div>
-        <FComponentsLib.FContentText type={'normal'} text={'打卡天数 1/14 天'} />
+        <FComponentsLib.FContentText type={'normal'} text={`打卡天数 ${Math.min(14, $days)}/14 天`} />
       </div>
       <div>
-        <FComponentsLib.FContentText type={'normal'} text={'打卡天数 1/21 天'} />
+        <FComponentsLib.FContentText type={'normal'} text={`打卡天数 ${Math.min(21, $days)}/21 天`} />
       </div>
     </div>
     <div style={{ height: 70 }} />
