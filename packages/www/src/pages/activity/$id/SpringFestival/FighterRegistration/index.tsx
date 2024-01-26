@@ -140,7 +140,7 @@ function FighterRegistration({}: FighterRegistrationProps) {
           }
           self.open(FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.resourceCreatorEntry());
         }}
-      >已完成</a>
+      >{$finish1 ? '已完成' : '去完成'}</a>
     </div>
     <div style={{ borderBottom: '1px solid rgba(0,0,0,.1)', width: 760 }} />
     <div className={styles.taskItem}>
@@ -163,7 +163,7 @@ function FighterRegistration({}: FighterRegistrationProps) {
             self.open(FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.nodeCreator());
           }
         }}
-      >去完成</a>
+      >{$finish2 ? '已完成' : '去完成'}</a>
     </div>
     <div style={{ borderBottom: '1px solid rgba(0,0,0,.1)', width: 760 }} />
     <div className={styles.taskItem}>
@@ -190,7 +190,7 @@ function FighterRegistration({}: FighterRegistrationProps) {
             self.open(FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.nodeCreator());
           }
         }}
-      >去完成</a>
+      >{$finish3 ? '已完成' : '去完成'}</a>
     </div>
     <div style={{ borderBottom: '1px solid rgba(0,0,0,.1)', width: 760 }} />
     <div style={{ height: 70 }} />

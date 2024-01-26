@@ -69,7 +69,7 @@ function NewcomerRedPacket({ onClick }: NewcomerRedPacketProps) {
               }
               onClick && onClick();
             }}
-          >去完成</a>
+          >{$isFinish ? '已完成' : '去完成'}</a>
         </Space>)
         : (<FComponentsLib.FContentText text={'此活动限2023-11-22 之后注册的用户参加'} type={'additional2'} />)
     }

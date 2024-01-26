@@ -4,7 +4,8 @@ import img_koiTitle from '@/assets/activity/SpringFestival/koiTitle@2x.png';
 import { Input, Modal, Space } from 'antd';
 import FComponentsLib from '@freelog/components-lib';
 import sharedStyles from '@/pages/activity/$id/SpringFestival/shared.less';
-import { FUtil } from '@freelog/tools-lib';
+import { FServiceAPI, FUtil } from '@freelog/tools-lib';
+import * as AHooks from 'ahooks';
 
 interface NewYearKoiProps {
 
@@ -12,8 +13,24 @@ interface NewYearKoiProps {
 
 function NewYearKoi({}: NewYearKoiProps) {
 
+  const [$isFinish, set$isFinish, get$isFinish] = FUtil.Hook.useGetState<boolean>(false);
   const [$showModal, set$showModal, get$showModal] = FUtil.Hook.useGetState<boolean>(false);
   const [$value, set$value, get$value] = FUtil.Hook.useGetState<string>('');
+
+  AHooks.useMount(async () => {
+    if (FUtil.Tool.getUserIDByCookies() === -1) {
+      return;
+    }
+    const { data }: {
+      data: {
+        completionTime: number;
+      }[];
+    } = await FServiceAPI.Activity.statisticTaskRecords({
+      codes: ['TS000901'],
+    });
+    // console.log(data, 'datasdijf;lksdjflksdjlkjl');
+    set$isFinish(data[0].completionTime >= 1);
+  });
 
   return (<>
     <div className={styles.koi}>
@@ -25,12 +42,16 @@ function NewYearKoi({}: NewYearKoiProps) {
       <Space size={30}>
         <FComponentsLib.FTitleText type={'h3'} text={'提交微博或小红书话题打卡记录（0/1）'} />
         <a
-          className={[sharedStyles.button, sharedStyles.small].join(' ')}
-          onClick={() => {
+          className={[sharedStyles.button, sharedStyles.small, $isFinish ? sharedStyles.disabled : ''].join(' ')}
+          onClick={async () => {
+            if (get$isFinish()) {
+              return;
+            }
+            await FServiceAPI.User.currentUserInfo();
             set$value('');
             set$showModal(true);
           }}
-        >去完成</a>
+        >{$isFinish ? '已完成' : '去完成'}</a>
       </Space>
       <div style={{ height: 60 }} />
     </div>
