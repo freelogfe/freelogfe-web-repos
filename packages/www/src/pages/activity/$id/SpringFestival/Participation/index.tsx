@@ -7,7 +7,8 @@ import fCenterMessage from '@/components/fCenterMessage';
 import { connect } from 'dva';
 import { ActivityDetailsPageModelState, ConnectState } from '@/models/connect';
 import moment, { Moment } from 'moment';
-import { FUtil } from '@freelog/tools-lib';
+import { FServiceAPI, FUtil } from '@freelog/tools-lib';
+import * as AHooks from 'ahooks';
 
 interface ParticipationProps {
   activityDetailsPage: ActivityDetailsPageModelState;
@@ -15,6 +16,21 @@ interface ParticipationProps {
 
 function Participation({ activityDetailsPage }: ParticipationProps) {
   const [$showRule, set$showRule, get$showRule] = FUtil.Hook.useGetState<boolean>(false);
+  const [$isRegister, set$isRegister, get$isRegister] = FUtil.Hook.useGetState<boolean>(false);
+  // userType
+  AHooks.useMount(async () => {
+    if (FUtil.Tool.getUserIDByCookies() === -1) {
+      return;
+    }
+    const { data }: {
+      data: {
+        userType: 0 | 1;
+      }
+    } = await FServiceAPI.User.currentUserInfo();
+    // console.log(data, 'data sdijf;lsdkjfl;ksdjlfksjdlkfjlkjl');
+    set$isRegister(data.userType === 1);
+  });
+
   return (<>
     <div className={styles.participation}>
       <div className={sharedStyles.h1}>参与方式</div>
@@ -34,8 +50,11 @@ function Participation({ activityDetailsPage }: ParticipationProps) {
 
       <Space size={25}>
         <a
-          className={sharedStyles.button}
+          className={[sharedStyles.button, $isRegister ? sharedStyles.disabled : ''].join(' ')}
           onClick={() => {
+            if (get$isRegister()) {
+              return;
+            }
             if (!activityDetailsPage.startTime || !activityDetailsPage.endTime) {
               fCenterMessage({ message: '活动时间无效' });
               return;
@@ -50,7 +69,7 @@ function Participation({ activityDetailsPage }: ParticipationProps) {
             }
             self.open(FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.invitation());
           }}
-        >立即报名</a>
+        >{$isRegister ? '已经报名' : '立即报名'}</a>
         <a
           className={sharedStyles.button}
           onClick={() => {

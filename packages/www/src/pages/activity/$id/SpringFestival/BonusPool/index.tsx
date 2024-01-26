@@ -26,11 +26,16 @@ function BonusPool({ activityDetailsPage }: BonusPoolProps) {
   const [$count, set$count, get$count] = FUtil.Hook.useGetState<number>(0);
 
   AHooks.useMount(async () => {
+
     const { data }: {
       data: {
         completionTime: number;
       }
-    } = await FServiceAPI.Activity.statisticSingleRewardRecordForAll({ code: 'TS000806' });
+    } = await FServiceAPI.Activity.statisticSingleRewardRecordForAll({
+      code: 'TS000806',
+      // @ts-ignore
+      completedTime: get$updateTime(),
+    });
     // console.log(data, '()I)OJUOKJLKJLKM><LKJJLKJLK)O(I*UY(*^&(*');
     set$count(data.completionTime);
   });
