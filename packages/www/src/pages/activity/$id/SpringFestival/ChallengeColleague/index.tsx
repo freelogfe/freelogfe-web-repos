@@ -72,7 +72,7 @@ function ChallengeColleague({}: ChallengeColleagueProps) {
       <div style={{ height: 15 }} />
       <div className={styles.Steps}>
         <div>
-          <FComponentsLib.FContentText type={'normal'} text={`邀请 ${Math.min($usedCount, 1)} 位`} />
+          <FComponentsLib.FContentText type={'normal'} text={`邀请 ${Math.min($usedCount, 1)}/1 位`} />
         </div>
         <div>
           <FComponentsLib.FContentText type={'normal'} text={`邀请 ${Math.min($usedCount, 3)}/3 位`} />

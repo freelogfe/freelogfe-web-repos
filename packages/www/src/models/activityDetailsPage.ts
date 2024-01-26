@@ -1,7 +1,7 @@
 import { DvaReducer, WholeReadonly } from '@/models/shared';
 import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription } from 'dva';
-import { FServiceAPI } from '@freelog/tools-lib';
+import { FI18n, FServiceAPI } from '@freelog/tools-lib';
 import moment, { Moment } from 'moment';
 
 
@@ -118,7 +118,11 @@ const Model: ActivityDetailsPageModelType = {
 
           startTime: data.persist ? null : moment(data.startTime),
           endTime: data.persist ? null : moment(data.limitTime),
-          announceTime: data.persist ? null : moment(data.limitTime).add(15, 'days'),
+          announceTime: data.persist
+            ? null
+            : FI18n.i18nNext.t('event_2024spring_winner_annouce_date') === 'event_2024spring_winner_annouce_date'
+              ? moment(data.limitTime).add(15, 'days')
+              : moment(FI18n.i18nNext.t('event_2024spring_winner_annouce_date')),
           timeValidity: data.persist ?
             'Validity'
             : nowTimestamp < new Date(data.startTime).getTime()
