@@ -24,24 +24,33 @@ function FighterRegistration({}: FighterRegistrationProps) {
     if (FUtil.Tool.getUserIDByCookies() === -1) {
       return;
     }
+    // const { data }: {
+    //   data: {
+    //     completionTime: number;
+    //   }[];
+    // } = await FServiceAPI.Activity.statisticTaskRecords({
+    //   codes: ['TS000806', 'TS000807', 'TS000808', 'TS000809'],
+    // });
+    //
+    // let days: number = 0;
+    //
+    // for (let i = 3; i >= 0; i--) {
+    //   if (data[i].completionTime === 1) {
+    //     days = i * 7 || 1;
+    //     break;
+    //   }
+    // }
+
     const { data }: {
       data: {
         completionTime: number;
       }[];
     } = await FServiceAPI.Activity.statisticTaskRecords({
-      codes: ['TS000806', 'TS000807', 'TS000808', 'TS000809'],
+      codes: ['TS000805'],
     });
+    // console.log(data, 'ai9jweoidkjf;lksdj;;lfka9iweojufliksd');
 
-    let days: number = 0;
-
-    for (let i = 3; i >= 0; i--) {
-      if (data[i].completionTime === 1) {
-        days = i * 7 || 1;
-        break;
-      }
-    }
-
-    set$days(days);
+    set$days(data[0].completionTime);
   });
 
   AHooks.useMount(async () => {
