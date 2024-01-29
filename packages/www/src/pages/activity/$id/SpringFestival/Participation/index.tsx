@@ -73,6 +73,9 @@ function Participation({ activityDetailsPage }: ParticipationProps) {
               }
             } = await FServiceAPI.User.currentUserInfo();
 
+            if (FUtil.Tool.getUserIDByCookies() === -1) {
+              return;
+            }
             // if (data.userType === 0) {
             //   fCenterMessage({ message: '此活动仅对内测用户开放!' });
             //   return;
