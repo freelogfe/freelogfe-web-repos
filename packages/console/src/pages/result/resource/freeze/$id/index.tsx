@@ -52,16 +52,18 @@ function Freeze({ match }: FreezeProps) {
   return (<div className={styles.container}>
     <FComponentsLib.FIcons.FForbid className={styles.FForbid} />
     <div style={{ height: 30 }} />
-    {
-      isOwner
-        ? FI18n.i18nNext.tJSXElement('alert_resourceblocked02', {
-          ResourceName: resourceName,
-          DisableDetails: freezeReason,
-        })
-        : FI18n.i18nNext.tJSXElement('alert_resourceblocked01', {
-          ResourceName: resourceName,
-        })
-    }
+    <div className={styles.content}>
+      {
+        isOwner
+          ? FI18n.i18nNext.tJSXElement('alert_resourceblocked02', {
+            ResourceName: resourceName,
+            DisableDetails: freezeReason,
+          })
+          : FI18n.i18nNext.tJSXElement('alert_resourceblocked01', {
+            ResourceName: resourceName,
+          })
+      }
+    </div>
     {/*<FComponentsLib.FTitleText text={'此资源因违规已被封禁'} type='h1' />*/}
     {/*/!*<FComponentsLib.FTitleText text={FI18n.i18nNext.t('alert_resourceblocked01')} type='h1' />*!/*/}
     {/*<div style={{ height: 80 }} />*/}
