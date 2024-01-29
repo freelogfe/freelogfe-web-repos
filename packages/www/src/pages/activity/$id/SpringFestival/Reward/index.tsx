@@ -137,7 +137,7 @@ function Reward({ activityDetailsPage }: RewardProps) {
             pentagramColor={'#E9A923'}
           />
           <div style={{ height: 25 }} />
-          <strong className={styles.strong}>10位新人首次参与了freelog活动并完成一次活动任务，瓜分奖励￥666</strong>
+          <strong className={styles.strong}>前100位完成的用户分别额外获得¥3奖励</strong>
           <div style={{ height: 15 }} />
           <RewardList
             names={['世袭锦鲤001', 'tomato_1234', '李家小孩']}
