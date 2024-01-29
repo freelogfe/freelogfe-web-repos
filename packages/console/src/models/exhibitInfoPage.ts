@@ -537,12 +537,12 @@ const Model: ExhibitInfoPageModelType = {
           exhibit_Name: data_PresentableDetails.presentableName,
           exhibit_Online: data_PresentableDetails.onlineStatus === 1,
           exhibit_IsAuth: data_ExhibitBatchAuthResults[0].isAuth,
-          // exhibit_AuthErrorText: data_ExhibitBatchAuthResults[0].error,
-          exhibit_AuthErrorText: data_ExhibitBatchAuthResults[0].defaulterIdentityType === 1
-            ? FI18n.i18nNext.t('alert_exhibit_auth_abnormal')
-            : data_ExhibitBatchAuthResults[0].defaulterIdentityType === 2
-              ? FI18n.i18nNext.t('alert_exhibit_no_auth')
-              : '',
+          exhibit_AuthErrorText: data_ExhibitBatchAuthResults[0].error,
+          // exhibit_AuthErrorText: data_ExhibitBatchAuthResults[0].defaulterIdentityType === 1
+          //   ? FI18n.i18nNext.t('alert_exhibit_auth_abnormal')
+          //   : data_ExhibitBatchAuthResults[0].defaulterIdentityType === 2
+          //     ? FI18n.i18nNext.t('alert_exhibit_no_auth')
+          //     : '',
           policy_List: policies,
 
           contract_ExhibitAllContractIDs: exhibitAllContractIDs,
