@@ -72,7 +72,6 @@ function Participation({ activityDetailsPage }: ParticipationProps) {
               self.open(FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.login({
                 goTo: FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.invitation(),
               }));
-
             } else {
               self.open(FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.invitation());
             }
