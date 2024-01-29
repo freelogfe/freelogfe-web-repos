@@ -87,8 +87,19 @@ function ChallengeColleague({}: ChallengeColleagueProps) {
       <a
         className={[sharedStyles.button, $usedCount >= 5 ? sharedStyles.disabled : ''].join(' ')}
         onClick={async () => {
-          if (FUtil.Tool.getUserIDByCookies() === -1) {
-            await FServiceAPI.User.currentUserInfo();
+          // if (FUtil.Tool.getUserIDByCookies() === -1) {
+          //   await FServiceAPI.User.currentUserInfo();
+          // return;
+          // }
+
+          const { data }: {
+            data: {
+              userType: 0 | 1;
+            }
+          } = await FServiceAPI.User.currentUserInfo();
+
+          if (data.userType === 0) {
+            fCenterMessage({ message: '此活动仅对内测用户开放!' });
             return;
           }
 

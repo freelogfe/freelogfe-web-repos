@@ -67,7 +67,16 @@ function Participation({ activityDetailsPage }: ParticipationProps) {
               fCenterMessage({ message: '活动已结束' });
               return;
             }
-            await FServiceAPI.User.currentUserInfo();
+            const { data }: {
+              data: {
+                userType: 0 | 1;
+              }
+            } = await FServiceAPI.User.currentUserInfo();
+
+            // if (data.userType === 0) {
+            //   fCenterMessage({ message: '此活动仅对内测用户开放!' });
+            //   return;
+            // }
             // if (FUtil.Tool.getUserIDByCookies() === -1) {
             //   // goTo=https%253A%252F%252Fconsole.testfreelog.com%252Finvitation
             //   self.open(FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.login({
