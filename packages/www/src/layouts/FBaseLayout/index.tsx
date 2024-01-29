@@ -168,6 +168,9 @@ function FBaseLayout({ children, global }: FBaseLayoutProps) {
               async onClick() {
                 await FServiceAPI.User.logout();
                 set$UserInfo(initStates['userInfo']);
+                if (self.location.pathname.startsWith('/activity')) {
+                  self.location.reload();
+                }
               },
             },
           ],

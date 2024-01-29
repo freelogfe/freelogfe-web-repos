@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './index.less';
 import FLoadingTip from '@/components/FLoadingTip';
 import { connect } from 'dva';
-import {Dispatch} from 'redux';
+import { Dispatch } from 'redux';
 import { ActivityDetailsPageModelState, ConnectState } from '@/models/connect';
 import ResourceCompetition from '@/pages/activity/$id/ResourceCompetition';
 import PlayNewer from './PlayNewer';
@@ -32,13 +32,17 @@ function Activity({
                     history,
                   }: ActivityProps) {
 
+  // const [cookie, setCookie] = AHooks.useCookieState('uid', {
+  //   defaultValue: undefined,
+  // });
+  // console.log(cookie, 'cookie dsFSDFSDFSDFSDFSDFSDFSDFSDFSDFSDFS');
   const Activities: any = {
     'ResourceCompetition': (<ResourceCompetition />),
     'play-newer': (<PlayNewer />),
-    'invite-friend': (<InviteFriend/>),
-    'Questionnaire': (<Questionnaire/>),
-    'ExperienceOfficer': (<ExperienceOfficer/>),
-    'SpringFestival': (<SpringFestival/>)
+    'invite-friend': (<InviteFriend />),
+    'Questionnaire': (<Questionnaire />),
+    'ExperienceOfficer': (<ExperienceOfficer />),
+    'SpringFestival': (<SpringFestival />),
   };
 
   AHooks.useMount(() => {
@@ -49,6 +53,15 @@ function Activity({
       },
     });
   });
+
+  // AHooks.useDebounceEffect(() => {
+  //   console.log(cookie, 'sdf90ijsdl;kfjsdlkfjlksdjlfkjlkj');
+  //   // if (!cookie) {
+  //   //   self.location.reload();
+  //   // }
+  // }, [cookie], {
+  //   wait: 300,
+  // });
 
   AHooks.useUnmount(() => {
     dispatch<OnUnmountPageAction>({
