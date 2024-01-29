@@ -112,11 +112,13 @@ function Invite({ jump }: InviteProps) {
           <span
             className={styles.link}
             onClick={() => {
-              history.push(
-                '/invitation?type=apply' +
-                (urlState.returnUrl ? '&returnUrl=' + urlState.returnUrl : ''),
-              );
-              jump('Apply');
+              // history.push(
+              //   '/invitation?type=apply' +
+              //   (urlState.returnUrl ? '&returnUrl=' + urlState.returnUrl : ''),
+              // );
+              // jump('Apply');
+              self.open('/invitation?type=apply' +
+                (urlState.returnUrl ? '&returnUrl=' + urlState.returnUrl : ''));
             }}
           >
             申请参加内测
