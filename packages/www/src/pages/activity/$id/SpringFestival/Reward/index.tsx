@@ -130,14 +130,14 @@ function Reward({ activityDetailsPage }: RewardProps) {
           <div style={{ height: 40 }} />
           <img src={img_rewardTitle4} className={styles.imgTitle} alt={''} />
           <div style={{ height: 25 }} />
-          <strong className={styles.strong}>10位新人首次参与了freelog活动并完成一次活动任务，瓜分奖励￥666（人均xxx元）</strong>
+          <strong className={styles.strong}>10位新人首次参与了freelog活动并完成一次活动任务，瓜分奖励￥666</strong>
           <div style={{ height: 15 }} />
           <RewardList
             names={['世袭锦鲤001', 'tomato_1234', '李家小孩']}
             pentagramColor={'#E9A923'}
           />
           <div style={{ height: 25 }} />
-          <strong className={styles.strong}>10位新人首次参与了freelog活动并完成一次活动任务，瓜分奖励￥666（人均xxx元）</strong>
+          <strong className={styles.strong}>10位新人首次参与了freelog活动并完成一次活动任务，瓜分奖励￥666</strong>
           <div style={{ height: 15 }} />
           <RewardList
             names={['世袭锦鲤001', 'tomato_1234', '李家小孩']}
