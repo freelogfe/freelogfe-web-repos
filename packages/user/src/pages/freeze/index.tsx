@@ -47,10 +47,12 @@ function Freeze({}: FreezeProps) {
   return (<div className={styles.container}>
     <FComponentsLib.FIcons.FForbid className={styles.FForbid} />
     <div style={{ height: 30 }} />
-    {FI18n.i18nNext.tJSXElement('alert_resourceblocked02', {
-      UserName: userName,
-      DisableDetails: freezeReason,
-    })}
+    <div className={styles.content}>
+      {FI18n.i18nNext.tJSXElement('alert_resourceblocked02', {
+        UserName: userName,
+        DisableDetails: freezeReason,
+      })}
+    </div>
     {/*<FComponentsLib.FTitleText text={'你的账号已经被冻结'} type='h1' />*/}
     {/*<div style={{ height: 80 }} />*/}
     {/*<div className={styles.content}>*/}

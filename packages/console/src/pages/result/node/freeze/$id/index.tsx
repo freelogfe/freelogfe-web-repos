@@ -46,17 +46,19 @@ function Freeze({ match }: FreezeProps) {
   return (<div className={styles.container}>
     <FComponentsLib.FIcons.FForbid className={styles.FForbid} />
     <div style={{ height: 30 }} />
-    {
-      isOwner
-        ? FI18n.i18nNext.tJSXElement('alert_nodedisable01', {
-          NodeDomain: nodeName,
-          DisableDetails: freezeReason,
-        })
-        : FI18n.i18nNext.tJSXElement('alert_nodedisable02', {
-          NodeDomain: nodeName,
-          DisableDetails: freezeReason,
-        })
-    }
+    <div className={styles.content}>
+      {
+        isOwner
+          ? FI18n.i18nNext.tJSXElement('alert_nodedisable01', {
+            NodeDomain: nodeName,
+            DisableDetails: freezeReason,
+          })
+          : FI18n.i18nNext.tJSXElement('alert_nodedisable02', {
+            NodeDomain: nodeName,
+            DisableDetails: freezeReason,
+          })
+      }
+    </div>
     {/*<FComponentsLib.FTitleText text={'你的节点已经被封停'} type='h1' />*/}
     {/*<div style={{ height: 80 }} />*/}
     {/*<div className={styles.content}>*/}
