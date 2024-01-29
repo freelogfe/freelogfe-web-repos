@@ -1,5 +1,8 @@
 <!doctype html>
 <script>
+  if (self.location.host.endsWith('.testfreelog.com') && self.location.pathname !== '/guideFreelog' && !self.document.cookie.includes('guideFreelog=false')) {
+    self.location.replace('https://www.testfreelog.com/guideFreelog');
+  }
   if (self.location.protocol === 'http:') {
     self.location.replace(self.location.href.replace('http:', 'https:'));
   }
