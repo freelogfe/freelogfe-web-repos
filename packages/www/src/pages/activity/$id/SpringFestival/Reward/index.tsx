@@ -69,7 +69,7 @@ function Reward({ activityDetailsPage }: RewardProps) {
           <div style={{ height: 40 }} />
           <div className={styles.h1}>获奖公示</div>
           <div style={{ height: 30 }} />
-          <div className={styles.h2}>新春召集令，freelog创作激励计划启动！”活动已结束，感谢大家的热情参与！</div>
+          <div className={styles.h2}>“新春召集令，freelog创作激励计划启动！”活动已结束，感谢大家的热情参与！</div>
           <div style={{ height: 15 }} />
           <div className={styles.h3}>以下是本次活动获奖名单，我们将在15个工作日内发放活动奖励至您的freelog【个人中心】—【活动奖励】模块，请留意官方信息，以便及时领取您的奖励！</div>
           <div style={{ height: 40 }} />
