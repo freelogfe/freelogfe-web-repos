@@ -16,6 +16,12 @@ function FEnergyBall({ percent }: FEnergyBallProps) {
     init();
   });
 
+  AHooks.useDebounceEffect(() => {
+    init();
+  }, [percent], {
+    wait: 100,
+  });
+
   function init() {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');

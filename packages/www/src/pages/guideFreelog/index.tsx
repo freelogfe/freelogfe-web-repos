@@ -4,7 +4,7 @@ import FComponentsLib from '@freelog/components-lib';
 import * as AHooks from 'ahooks';
 import moment from 'moment';
 import fCenterMessage from '@/components/fCenterMessage';
-import { FUtil } from '../../../../@freelog/tools-lib';
+import { FUtil } from '@freelog/tools-lib';
 
 interface GuideFreelogProps {
 

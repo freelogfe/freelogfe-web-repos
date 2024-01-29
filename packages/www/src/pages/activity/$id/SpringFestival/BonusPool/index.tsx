@@ -32,17 +32,21 @@ function BonusPool({ activityDetailsPage }: BonusPoolProps) {
         completionTime: number;
       }
     } = await FServiceAPI.Activity.statisticSingleRewardRecordForAll({
-      code: 'TS000806',
+      code: 'RS000901',
       // @ts-ignore
       completedTime: get$updateTime(),
     });
     // console.log(data, '()I)OJUOKJLKJLKM><LKJJLKJLK)O(I*UY(*^&(*');
     set$count(data.completionTime);
   });
+  // console.log(Math.min(100, $count / 20 * 100), '$count sdifj;sldkfjlksdjflkjsdlkj');
 
   return (<div className={styles.pool}>
     <img src={img_poolTitle} style={{ width: 636, opacity: .95 }} alt={''} />
-    <FEnergyBall percent={Math.min(100, $count / 2)} />
+    <FEnergyBall
+      percent={Math.min(100, $count / 20 * 100)}
+      // percent={50}
+    />
     <div className={styles.poolLabels}>
       <label className={styles.label1} style={{ bottom: 20, left: -210 }}>参与20人</label>
       <label className={styles.label1} style={{ bottom: 50, left: 120 }}>参与50人</label>
