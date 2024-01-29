@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './index.less';
-// import FPentagram from '@/components/FIcons/FPentagram';
 import img_Banner3_1 from '@/assets/home/banner3-1.png';
 import img_Banner3_2 from '@/assets/home/banner3-2.png';
 import img_Banner3_3 from '@/assets/home/banner3-3.png';

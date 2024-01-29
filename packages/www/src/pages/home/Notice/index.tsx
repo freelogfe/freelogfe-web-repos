@@ -55,6 +55,9 @@ function Notice({}: NoticeProps) {
       };
     }));
 
+    if (data.dataList.length === 0) {
+      return;
+    }
     await FServiceAPI.Activity.eventTrackingAdsVisit({ _id: data.dataList[0]._id });
   });
 

@@ -11,6 +11,12 @@ export default defineConfig({
   },
   routes: [
     {
+      path: '/guideFreelog',
+      component: '@/pages/guideFreelog/index',
+      title: '去正式环境 - Freelog',
+      exact: true
+    },
+    {
       path: '/',
       component: '@/layouts/FBaseLayout/index',
       routes: [
@@ -31,13 +37,15 @@ export default defineConfig({
           title: '活动详情 - Freelog',
         },
         {
-          path: 'invite',
+          path: '/invite',
           component: '@/pages/invite/index',
           title: '邀请 - Freelog',
         },
+
         { component: '@/pages/exception/404/index' },
       ],
     },
+
     { component: '@/pages/exception/404/index' },
   ],
   fastRefresh: {},
