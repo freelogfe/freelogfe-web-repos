@@ -134,10 +134,11 @@ function FighterRegistration({}: FighterRegistrationProps) {
       </div>
       <a
         className={[sharedStyles.button, sharedStyles.small, $finish1 ? sharedStyles.disabled : ''].join(' ')}
-        onClick={() => {
+        onClick={async () => {
           if ($finish1) {
             return;
           }
+          await FServiceAPI.User.currentUserInfo();
           self.open(FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.resourceCreatorEntry());
         }}
       >{$finish1 ? '已完成' : '去完成'}</a>
