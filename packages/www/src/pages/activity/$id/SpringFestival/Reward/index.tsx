@@ -71,32 +71,34 @@ function Reward({ activityDetailsPage }: RewardProps) {
           <div style={{ height: 30 }} />
           <div className={styles.h2}>新春召集令，freelog创作激励计划启动！”活动已结束，感谢大家的热情参与！</div>
           <div style={{ height: 15 }} />
-          <div className={styles.h3}>模块，请留意官方信息，以便及时领取您的奖励！</div>
+          <div className={styles.h3}>以下是本次活动获奖名单，我们将在15个工作日内发放活动奖励至您的freelog【个人中心】—【活动奖励】模块，请留意官方信息，以便及时领取您的奖励！</div>
           <div style={{ height: 40 }} />
           <img src={img_rewardTitle1} className={styles.imgTitle} alt={''} />
           <div style={{ height: 20 }} />
           <div className={styles.h2}>经过大家的齐心协力，新春瓜分奖励池成功解锁至 <span
-            className={styles.strong}>xxxx元</span> ！现在人均可获得丰厚的 <span
-            className={styles.strong}>xx元</span> 奖励，感谢大家的辛勤付出与参与！
+            className={styles.strong}>xxxx元</span> ！
+            {/*现在人均可获得丰厚的 <span*/}
+            {/*className={styles.strong}>xx元</span> 奖励，*/}
+            感谢大家的辛勤付出与参与！
           </div>
           <div style={{ height: 40 }} />
           <img src={img_rewardTitle2} className={styles.imgTitle} alt={''} />
           <div style={{ height: 25 }} />
-          <strong className={styles.strong}>共30人完成累计打卡21天挑战，瓜分奖励¥2888（人均xxx元）</strong>
+          <strong className={styles.strong}>共30人完成累计打卡21天挑战，瓜分奖励¥2888</strong>
           <div style={{ height: 15 }} />
           <RewardList
             names={['世袭锦鲤001', 'tomato_1234', '李家小孩']}
             pentagramColor={'#FF6A1F'}
           />
           <div style={{ height: 25 }} />
-          <strong className={styles.strong}>共20人完成累计打卡14天挑战，瓜分奖励¥1888（人均xxx元）</strong>
+          <strong className={styles.strong}>共20人完成累计打卡14天挑战，瓜分奖励¥1888</strong>
           <div style={{ height: 15 }} />
           <RewardList
             names={['世袭锦鲤001', 'tomato_1234', '李家小孩']}
             pentagramColor={'#E9A923'}
           />
           <div style={{ height: 25 }} />
-          <strong className={styles.strong}>共12人完成累计打卡7天挑战，瓜分奖励¥888（人均xxx元）</strong>
+          <strong className={styles.strong}>共12人完成累计打卡7天挑战，瓜分奖励¥888</strong>
           <div style={{ height: 15 }} />
           <RewardList
             names={['世袭锦鲤001', 'tomato_1234', '李家小孩']}
@@ -105,21 +107,21 @@ function Reward({ activityDetailsPage }: RewardProps) {
           <div style={{ height: 40 }} />
           <img src={img_rewardTitle3} className={styles.imgTitle} alt={''} />
           <div style={{ height: 25 }} />
-          <strong className={styles.strong}>共10人完成邀请5位好友任务，瓜分奖励¥2000（人均xxx元）</strong>
+          <strong className={styles.strong}>共10人完成邀请5位好友任务，瓜分奖励¥600</strong>
           <div style={{ height: 15 }} />
           <RewardList
             names={['世袭锦鲤001', 'tomato_1234', '李家小孩']}
             pentagramColor={'#E9A923'}
           />
           <div style={{ height: 25 }} />
-          <strong className={styles.strong}>共10人完成邀请3位好友任务，瓜分奖励¥1400（人均xxx元）</strong>
+          <strong className={styles.strong}>共10人完成邀请3位好友任务，瓜分奖励¥600</strong>
           <div style={{ height: 15 }} />
           <RewardList
             names={['世袭锦鲤001', 'tomato_1234', '李家小孩']}
             pentagramColor={'#E9A923'}
           />
           <div style={{ height: 25 }} />
-          <strong className={styles.strong}>共10人完成邀请1位好友任务，瓜分奖励¥600（人均xxx元）</strong>
+          <strong className={styles.strong}>共10人完成邀请1位好友任务，瓜分奖励¥800</strong>
           <div style={{ height: 15 }} />
           <RewardList
             names={['世袭锦鲤001', 'tomato_1234', '李家小孩']}
