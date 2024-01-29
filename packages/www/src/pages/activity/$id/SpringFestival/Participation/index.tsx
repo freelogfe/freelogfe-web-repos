@@ -67,7 +67,15 @@ function Participation({ activityDetailsPage }: ParticipationProps) {
               fCenterMessage({ message: '活动已结束' });
               return;
             }
-            self.open(FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.invitation());
+            if (FUtil.Tool.getUserIDByCookies() === -1) {
+              // goTo=https%253A%252F%252Fconsole.testfreelog.com%252Finvitation
+              self.open(FUtil.Format.completeUrlByDomain('user') + FUtil.LinkTo.login({
+                goTo: FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.invitation(),
+              }));
+
+            } else {
+              self.open(FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.invitation());
+            }
           }}
         >{$isRegister ? '已经报名' : '立即报名'}</a>
         <a
