@@ -39,6 +39,6 @@ function ActivitySchedule({ activityDetailsPage }: ActivityScheduleProps) {
   </div>);
 }
 
-export default connect(({ activityDetailsPage }: ConnectState) => ({
+export default  connect(({ activityDetailsPage }: ConnectState) => ({
   activityDetailsPage,
 }))(ActivitySchedule);
