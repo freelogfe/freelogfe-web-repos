@@ -4,7 +4,7 @@ import FTable from '@/components/FTable';
 import { ColumnsType } from 'antd/lib/table';
 import { Modal, Space, Radio, message, DatePicker } from 'antd';
 import FInput from '@/components/FInput';
-// import CoinActivity from './_components/activity';
+import CoinActivity from './_components/activity';
 
 import * as AHooks from 'ahooks';
 import { connect } from 'dva';
@@ -63,12 +63,13 @@ import { FUtil, FI18n, FServiceAPI } from '@freelog/tools-lib';
 import FDropdownMenu from '@/components/FDropdownMenu';
 import FListFooter from '@/components/FListFooter';
 import FNoDataTip from '@/components/FNoDataTip';
-import moment from 'moment';
+// import moment from 'moment';
 import FComponentsLib from '@freelog/components-lib';
 import userPermission from '@/permissions/UserPermission';
 import fConfirmModal from '@/components/fConfirmModal';
 import { history } from 'umi';
 import { ChangeAction } from '@/models/settingPage';
+import moment, { Moment } from 'moment';
 
 const RangePicker: any = DatePicker.RangePicker;
 
@@ -79,6 +80,10 @@ interface WalletProps {
 }
 
 function Wallet({ dispatch, walletPage }: WalletProps) {
+
+  const [$endTime, set$endTime, get$endTime] = FUtil.Hook.useGetState<Moment>(moment(FI18n.i18nNext.t('event_contest_eventperiod_end') === 'event_contest_eventperiod_end' ? undefined : FI18n.i18nNext.t('event_contest_eventperiod_end')));
+  const [$moment, set$moment, get$moment] = FUtil.Hook.useGetState<Moment>(moment());
+
   AHooks.useMount(() => {
     dispatch<OnMountPageAction>({
       type: 'walletPage/onMountPage',
@@ -255,417 +260,414 @@ function Wallet({ dispatch, walletPage }: WalletProps) {
       <div style={{ height: 40 }} />
       <FComponentsLib.FTitleText type='h1' text={'羽币账户'} />
       <div style={{ height: 20 }} />
-      {walletPage.accountStatus === 'inactive' ? (
-        <>
-          <div className={styles.Inactive}>
-            <FComponentsLib.FTipText
-              text={FI18n.i18nNext.t('msg_activate_feather_account')}
-              type='second'
-            />
-            <div style={{ width: 30 }} />
-            <FComponentsLib.FRectBtn
-              type='primary'
-              onClick={async () => {
-                // const { email, mobile } = await userPermission.getUserInfo();
-                const { data: data_userInfo }: {
-                  data: {
-                    mobile: string;
-                    email: string;
-                  };
-                } = await FServiceAPI.User.currentUserInfo();
-                // console.log(data_userInfo, 'data_userInfo 9wieojfsldkjflkasjdlfjsldk');
-                // return;
-                if (data_userInfo.mobile === '' && data_userInfo.email === '') {
-                  fConfirmModal({
-                    message: FI18n.i18nNext.t(
-                      'activatefethaccount_err_connectwithmobileoremail',
-                    ),
-                    okText: FI18n.i18nNext.t(
-                      'activatefethaccount_btn_connectnow',
-                    ),
-                    cancelText: FI18n.i18nNext.t(
-                      'activatefethaccount_btn_later',
-                    ),
-                    onOk() {
-                      history.push(FUtil.LinkTo.setting());
-                      dispatch<ChangeAction>({
-                        type: 'settingPage/change',
-                        payload: {
-                          showPage: 'security',
+      {
+        walletPage.accountStatus === 'inactive'
+          ? (<>
+              <div className={styles.Inactive}>
+                <FComponentsLib.FTipText
+                  text={FI18n.i18nNext.t('msg_activate_feather_account')}
+                  type='second'
+                />
+                <div style={{ width: 30 }} />
+                <FComponentsLib.FRectBtn
+                  type='primary'
+                  onClick={async () => {
+                    // const { email, mobile } = await userPermission.getUserInfo();
+                    const { data: data_userInfo }: {
+                      data: {
+                        mobile: string;
+                        email: string;
+                      };
+                    } = await FServiceAPI.User.currentUserInfo();
+                    // console.log(data_userInfo, 'data_userInfo 9wieojfsldkjflkasjdlfjsldk');
+                    // return;
+                    if (data_userInfo.mobile === '' && data_userInfo.email === '') {
+                      fConfirmModal({
+                        message: FI18n.i18nNext.t(
+                          'activatefethaccount_err_connectwithmobileoremail',
+                        ),
+                        okText: FI18n.i18nNext.t(
+                          'activatefethaccount_btn_connectnow',
+                        ),
+                        cancelText: FI18n.i18nNext.t(
+                          'activatefethaccount_btn_later',
+                        ),
+                        onOk() {
+                          history.push(FUtil.LinkTo.setting());
+                          dispatch<ChangeAction>({
+                            type: 'settingPage/change',
+                            payload: {
+                              showPage: 'security',
+                            },
+                          });
                         },
                       });
-                    },
-                  });
-                  return;
-                }
+                      return;
+                    }
 
-                dispatch<OnClick_Activate_AccountBtn_Action>({
-                  type: 'walletPage/onClick_Activate_AccountBtn',
-                });
-              }}
-            >
-              {FI18n.i18nNext.t('btn_activate_feather_account_now')}
-            </FComponentsLib.FRectBtn>
-          </div>
-          {/*{moment(FI18n.i18nNext.t('event_contest_eventperiod_end') === 'event_contest_eventperiod_end'*/}
-          {/*  ? FI18n.i18nNext.t('event_contest_eventperiod_end')*/}
-          {/*  : undefined).add(1, 'day').isAfter(moment()) && (*/}
-          {/*  <CoinActivity*/}
-          {/*    inActive={true}*/}
-          {/*    goActive={async () => {*/}
-          {/*      const { email, mobile } = await userPermission.getUserInfo();*/}
-          {/*      if (email === '' && mobile === '') {*/}
-          {/*        fConfirmModal({*/}
-          {/*          message: FI18n.i18nNext.t(*/}
-          {/*            'activatefethaccount_err_connectwithmobileoremail',*/}
-          {/*          ),*/}
-          {/*          okText: FI18n.i18nNext.t(*/}
-          {/*            'activatefethaccount_btn_connectnow',*/}
-          {/*          ),*/}
-          {/*          cancelText: FI18n.i18nNext.t(*/}
-          {/*            'activatefethaccount_btn_later',*/}
-          {/*          ),*/}
-          {/*          onOk() {*/}
-          {/*            history.push(FUtil.LinkTo.setting());*/}
-          {/*            dispatch<ChangeAction>({*/}
-          {/*              type: 'settingPage/change',*/}
-          {/*              payload: {*/}
-          {/*                showPage: 'security',*/}
-          {/*              },*/}
-          {/*            });*/}
-          {/*          },*/}
-          {/*        });*/}
-          {/*        return;*/}
-          {/*      }*/}
-          {/*      dispatch<OnClick_Activate_AccountBtn_Action>({*/}
-          {/*        type: 'walletPage/onClick_Activate_AccountBtn',*/}
-          {/*      });*/}
-          {/*    }}*/}
-          {/*  />*/}
-          {/*)}*/}
-        </>
-      ) : (
-        <>
-          <div className={styles.AccountInfo}>
-            <div>
-              <FComponentsLib.FTitleText type='h4' text={'账户余额（枚）'} />
-              <div style={{ height: 15 }} />
-              <div className={styles.Gold}>{walletPage.accountBalance}</div>
-            </div>
-            <div
-              className={styles.ChangePassword}
-              onClick={() => {
-                dispatch<OnClick_ChangingPasswordBtn_Action>({
-                  type: 'walletPage/onClick_ChangingPasswordBtn',
-                });
-              }}
-            >
-              <FComponentsLib.FIcons.FSafetyLock
-                style={{ fontSize: 32, color: '#DA6666' }}
-              />
-              {/*<div style={{height: 10}}/>*/}
-              <div style={{ color: '#333', fontSize: 13 }}>修改支付密码</div>
-            </div>
-          </div>
-          {/*{console.log(moment(FI18n.i18nNext.t('event_contest_eventperiod_end')).isBefore(moment()), '898888sdfsdf')}*/}
-          {/*{moment(FI18n.i18nNext.t('event_contest_eventperiod_end') === 'event_contest_eventperiod_end'*/}
-          {/*  ? FI18n.i18nNext.t('event_contest_eventperiod_end')*/}
-          {/*  : undefined).add(1, 'day').isAfter(moment()) && (*/}
-          {/*  <CoinActivity*/}
-          {/*    inActive={false}*/}
-          {/*    signSuccess={() => {*/}
-          {/*      dispatch<OnMountPageAction>({*/}
-          {/*        type: 'walletPage/onMountPage',*/}
-          {/*      });*/}
-          {/*    }}*/}
-          {/*    goActive={() => {*/}
-          {/*      dispatch<OnClick_ChangingPasswordBtn_Action>({*/}
-          {/*        type: 'walletPage/onClick_ChangingPasswordBtn',*/}
-          {/*      });*/}
-          {/*    }}*/}
-          {/*  />*/}
-          {/*)}*/}
-          <div style={{ height: 40 }} />
-          <FComponentsLib.FTitleText
-            type='h1'
-            text={FI18n.i18nNext.t('title_feather_tranaction_history')}
-          />
-          <div style={{ height: 20 }} />
-
-          <div className={styles.TableBody}>
-            {walletPage.table_State === 'noData' ? (
-              <FNoDataTip height={600} tipText={'无数据'} />
-            ) : (
-              <>
-                <div style={{ height: 20 }} />
-                <div className={styles.filter1}>
-                  <div className={styles.filter1Date}>
-                    <FComponentsLib.FContentText
-                      // text={'日期区间：'}
-                      style={{ maxWidth: 70 }}
-                      singleRow
-                      text={`${FI18n.i18nNext.t('filter_transaction_time')}：`}
-                    />
-                    <div style={{ width: 5 }} />
-                    <RangePicker
-                      allowClear
-                      value={walletPage.table_Filter_Date_Custom}
-                      onChange={(values: any) => {
-                        // console.log(values, 'values2423');
-                        dispatch<OnChange_Table_Filter_Date_Custom_Action>({
-                          type: 'walletPage/onChange_Table_Filter_Date_Custom',
-                          payload: {
-                            value: values,
+                    dispatch<OnClick_Activate_AccountBtn_Action>({
+                      type: 'walletPage/onClick_Activate_AccountBtn',
+                    });
+                  }}
+                >
+                  {FI18n.i18nNext.t('btn_activate_feather_account_now')}
+                </FComponentsLib.FRectBtn>
+              </div>
+              {
+                $moment.isBefore($endTime) && (<CoinActivity
+                    inActive={true}
+                    goActive={async () => {
+                      const { email, mobile } = await userPermission.getUserInfo();
+                      if (email === '' && mobile === '') {
+                        fConfirmModal({
+                          message: FI18n.i18nNext.t(
+                            'activatefethaccount_err_connectwithmobileoremail',
+                          ),
+                          okText: FI18n.i18nNext.t(
+                            'activatefethaccount_btn_connectnow',
+                          ),
+                          cancelText: FI18n.i18nNext.t(
+                            'activatefethaccount_btn_later',
+                          ),
+                          onOk() {
+                            history.push(FUtil.LinkTo.setting());
+                            dispatch<ChangeAction>({
+                              type: 'settingPage/change',
+                              payload: {
+                                showPage: 'security',
+                              },
+                            });
                           },
                         });
-                      }}
-                      disabledDate={(date: any) => {
-                        // console.log(date, 'date234234234');
-                        return moment().isBefore(date);
-                      }}
-                    />
-                    <div style={{ width: 15 }} />
-                    <a
-                      className={[
-                        styles.dateRange,
-                        walletPage.table_Filter_Date_Type === 'week'
-                          ? styles.active
-                          : '',
-                      ].join(' ')}
-                      onClick={() => {
-                        dispatch<OnChange_Table_Filter_Date_Type_Action>({
-                          type: 'walletPage/onChange_Table_Filter_Date_Type',
-                          payload: {
-                            value: 'week',
-                          },
-                        });
-                      }}
-                    >
-                      近一周
-                    </a>
-                    <a
-                      className={[
-                        styles.dateRange,
-                        walletPage.table_Filter_Date_Type === 'month'
-                          ? styles.active
-                          : '',
-                      ].join(' ')}
-                      onClick={() => {
-                        dispatch<OnChange_Table_Filter_Date_Type_Action>({
-                          type: 'walletPage/onChange_Table_Filter_Date_Type',
-                          payload: {
-                            value: 'month',
-                          },
-                        });
-                      }}
-                    >
-                      近一月
-                    </a>
-                    <a
-                      className={[
-                        styles.dateRange,
-                        walletPage.table_Filter_Date_Type === 'year'
-                          ? styles.active
-                          : '',
-                      ].join(' ')}
-                      onClick={() => {
-                        dispatch<OnChange_Table_Filter_Date_Type_Action>({
-                          type: 'walletPage/onChange_Table_Filter_Date_Type',
-                          payload: {
-                            value: 'year',
-                          },
-                        });
-                      }}
-                    >
-                      近一年
-                    </a>
-                  </div>
-                  <div className={styles.filter1Keyword}>
-                    <FComponentsLib.FContentText
-                      // text={'日期区间：'}
-                      style={{ maxWidth: 70 }}
-                      singleRow
-                      text={'关键字'}
-                    />
-                    <div style={{ width: 5 }} />
-                    <FInput
-                      // theme='dark'
-                      value={walletPage.table_Filter_Keywords}
-                      placeholder={FI18n.i18nNext.t('hint_search_transctions')}
-                      onChange={(e) => {
-                        dispatch<OnChange_Table_Filter_Keywords_Action>({
-                          type: 'walletPage/onChange_Table_Filter_Keywords',
-                          payload: {
-                            value: e.target.value,
-                          },
-                        });
-                      }}
-                      // debounce={300}
-                      // onDebounceChange={(value) => {
-                      //
-                      // }}
-                    />
-                  </div>
-                </div>
-
-                <div style={{ height: 15 }} />
-                <div className={styles.filter2}>
-                  <div className={styles.filter2Left}>
-                    <FComponentsLib.FContentText
-                      // text={'金额区间：'}
-                      style={{ maxWidth: 70 }}
-                      singleRow
-                      text={`${FI18n.i18nNext.t(
-                        'filter_transaction_amount',
-                      )}：`}
-                    />
-                    <div style={{ width: 5 }} />
-                    <FInput
-                      allowClear
-                      // min={0}
-                      // max={walletPage.table_Filter_MaxAmount || Number.POSITIVE_INFINITY}
-                      value={walletPage.table_Filter_MinAmount}
-                      // allowClear
-                      onChange={(e) => {
-                        dispatch<OnChange_Table_Filter_MinAmount_Action>({
-                          type: 'walletPage/onChange_Table_Filter_MinAmount',
-                          payload: {
-                            value: e.target.value,
-                          },
-                        });
-                      }}
-                      onBlur={() => {
-                        dispatch<OnBlur_Table_Filter_MinAmount_Action>({
-                          type: 'walletPage/onBlur_Table_Filter_MinAmount',
-                        });
-                      }}
-                      // type='number'
-                      size='small'
-                      placeholder={'最低金额'}
-                      className={styles.filterAmount}
-                      wrapClassName={styles.filterAmount}
-                    />
-                    <span className={styles.filterAmountTo}>-</span>
-                    <FInput
-                      allowClear
-                      // type='number'
-                      size='small'
-                      value={walletPage.table_Filter_MaxAmount}
-                      onChange={(e) => {
-                        dispatch<OnChange_Table_Filter_MaxAmount_Action>({
-                          type: 'walletPage/onChange_Table_Filter_MaxAmount',
-                          payload: {
-                            value: e.target.value,
-                          },
-                        });
-                      }}
-                      onBlur={() => {
-                        dispatch<OnBlur_Table_Filter_MaxAmount_Action>({
-                          type: 'walletPage/onBlur_Table_Filter_MaxAmount',
-                        });
-                      }}
-                      placeholder={'最高金额'}
-                      className={styles.filterAmount}
-                      wrapClassName={styles.filterAmount}
-                    />
-                    <div style={{ width: 50 }} />
-                    <FComponentsLib.FContentText text={'交易状态：'} />
-                    <div style={{ width: 5 }} />
-                    <FDropdownMenu
-                      options={walletPage.table_Filter_StateOptions}
-                      text={
-                        walletPage.table_Filter_StateOptions.find(
-                          (so) =>
-                            so.value === walletPage.table_Filter_StateSelected,
-                        )?.text || ''
+                        return;
                       }
-                      onChange={(value) => {
-                        dispatch<OnChange_Table_Filter_StateSelected_Action>({
-                          type: 'walletPage/onChange_Table_Filter_StateSelected',
-                          payload: {
-                            value: value as '0',
-                          },
-                        });
-                      }}
-                    />
-                  </div>
-                  <Space size={10} className={styles.filter2Right}>
-                    <FComponentsLib.FRectBtn
-                      type='default'
-                      onClick={() => {
-                        dispatch<OnClick_Table_Filter_ResetBtn_Action>({
-                          type: 'walletPage/onClick_Table_Filter_ResetBtn',
-                        });
-                      }}
-                    >
-                      {FI18n.i18nNext.t('btn_reset_filter')}
-                    </FComponentsLib.FRectBtn>
-                    <FComponentsLib.FRectBtn
-                      type='primary'
-                      onClick={() => {
-                        dispatch<OnClick_Table_Filter_SearchBtn_Action>({
-                          type: 'walletPage/onClick_Table_Filter_SearchBtn',
-                        });
-                      }}
-                    >
-                      {FI18n.i18nNext.t('btn_search_transactions')}
-                    </FComponentsLib.FRectBtn>
-                  </Space>
+                      dispatch<OnClick_Activate_AccountBtn_Action>({
+                        type: 'walletPage/onClick_Activate_AccountBtn',
+                      });
+                    }}
+                  />
+                )}
+            </>
+          ) : (
+            <>
+              <div className={styles.AccountInfo}>
+                <div>
+                  <FComponentsLib.FTitleText type='h4' text={'账户余额（枚）'} />
+                  <div style={{ height: 15 }} />
+                  <div className={styles.Gold}>{walletPage.accountBalance}</div>
                 </div>
+                <div
+                  className={styles.ChangePassword}
+                  onClick={() => {
+                    dispatch<OnClick_ChangingPasswordBtn_Action>({
+                      type: 'walletPage/onClick_ChangingPasswordBtn',
+                    });
+                  }}
+                >
+                  <FComponentsLib.FIcons.FSafetyLock
+                    style={{ fontSize: 32, color: '#DA6666' }}
+                  />
+                  {/*<div style={{height: 10}}/>*/}
+                  <div style={{ color: '#333', fontSize: 13 }}>修改支付密码</div>
+                </div>
+              </div>
+              {/*{console.log(moment(FI18n.i18nNext.t('event_contest_eventperiod_end')).isBefore(moment()), '898888sdfsdf')}*/}
+              {
+                $moment.isBefore($endTime) && (<CoinActivity
+                    inActive={false}
+                    signSuccess={() => {
+                      dispatch<OnMountPageAction>({
+                        type: 'walletPage/onMountPage',
+                      });
+                    }}
+                    goActive={() => {
+                      dispatch<OnClick_ChangingPasswordBtn_Action>({
+                        type: 'walletPage/onClick_ChangingPasswordBtn',
+                      });
+                    }}
+                  />
+                )}
+              <div style={{ height: 40 }} />
+              <FComponentsLib.FTitleText
+                type='h1'
+                text={FI18n.i18nNext.t('title_feather_tranaction_history')}
+              />
+              <div style={{ height: 20 }} />
 
-                {walletPage.table_State === 'loading' ? (
-                  <FLoadingTip height={600} />
+              <div className={styles.TableBody}>
+                {walletPage.table_State === 'noData' ? (
+                  <FNoDataTip height={600} tipText={'无数据'} />
                 ) : (
                   <>
-                    <div style={{ height: 30 }} />
-                    <div className={styles.totalAmount}>
-                      <FComponentsLib.FTitleText text={'支出'} type='table' />
-                      <div style={{ width: 10 }} />
-                      <div className={styles.totalAmountExpenditure}>
-                        {walletPage.table_TotalAmountExpenditure}
+                    <div style={{ height: 20 }} />
+                    <div className={styles.filter1}>
+                      <div className={styles.filter1Date}>
+                        <FComponentsLib.FContentText
+                          // text={'日期区间：'}
+                          style={{ maxWidth: 70 }}
+                          singleRow
+                          text={`${FI18n.i18nNext.t('filter_transaction_time')}：`}
+                        />
+                        <div style={{ width: 5 }} />
+                        <RangePicker
+                          allowClear
+                          value={walletPage.table_Filter_Date_Custom}
+                          onChange={(values: any) => {
+                            // console.log(values, 'values2423');
+                            dispatch<OnChange_Table_Filter_Date_Custom_Action>({
+                              type: 'walletPage/onChange_Table_Filter_Date_Custom',
+                              payload: {
+                                value: values,
+                              },
+                            });
+                          }}
+                          disabledDate={(date: any) => {
+                            // console.log(date, 'date234234234');
+                            return moment().isBefore(date);
+                          }}
+                        />
+                        <div style={{ width: 15 }} />
+                        <a
+                          className={[
+                            styles.dateRange,
+                            walletPage.table_Filter_Date_Type === 'week'
+                              ? styles.active
+                              : '',
+                          ].join(' ')}
+                          onClick={() => {
+                            dispatch<OnChange_Table_Filter_Date_Type_Action>({
+                              type: 'walletPage/onChange_Table_Filter_Date_Type',
+                              payload: {
+                                value: 'week',
+                              },
+                            });
+                          }}
+                        >
+                          近一周
+                        </a>
+                        <a
+                          className={[
+                            styles.dateRange,
+                            walletPage.table_Filter_Date_Type === 'month'
+                              ? styles.active
+                              : '',
+                          ].join(' ')}
+                          onClick={() => {
+                            dispatch<OnChange_Table_Filter_Date_Type_Action>({
+                              type: 'walletPage/onChange_Table_Filter_Date_Type',
+                              payload: {
+                                value: 'month',
+                              },
+                            });
+                          }}
+                        >
+                          近一月
+                        </a>
+                        <a
+                          className={[
+                            styles.dateRange,
+                            walletPage.table_Filter_Date_Type === 'year'
+                              ? styles.active
+                              : '',
+                          ].join(' ')}
+                          onClick={() => {
+                            dispatch<OnChange_Table_Filter_Date_Type_Action>({
+                              type: 'walletPage/onChange_Table_Filter_Date_Type',
+                              payload: {
+                                value: 'year',
+                              },
+                            });
+                          }}
+                        >
+                          近一年
+                        </a>
                       </div>
-                      <div style={{ width: 20 }} />
-                      <FComponentsLib.FTitleText text={'收入'} type='table' />
-                      <div style={{ width: 10 }} />
-                      <div className={styles.totalAmountIncome}>
-                        {walletPage.table_TotalAmountIncome}
+                      <div className={styles.filter1Keyword}>
+                        <FComponentsLib.FContentText
+                          // text={'日期区间：'}
+                          style={{ maxWidth: 70 }}
+                          singleRow
+                          text={'关键字'}
+                        />
+                        <div style={{ width: 5 }} />
+                        <FInput
+                          // theme='dark'
+                          value={walletPage.table_Filter_Keywords}
+                          placeholder={FI18n.i18nNext.t('hint_search_transctions')}
+                          onChange={(e) => {
+                            dispatch<OnChange_Table_Filter_Keywords_Action>({
+                              type: 'walletPage/onChange_Table_Filter_Keywords',
+                              payload: {
+                                value: e.target.value,
+                              },
+                            });
+                          }}
+                          // debounce={300}
+                          // onDebounceChange={(value) => {
+                          //
+                          // }}
+                        />
                       </div>
                     </div>
-                    <div style={{ height: 10 }} />
 
-                    {walletPage.table_State === 'noSearchResult' && (
-                      <FNoDataTip height={600} tipText={'无交易记录'} />
-                    )}
-
-                    {walletPage.table_State === 'loaded' && (
-                      <>
-                        <FTable
-                          columns={columns}
-                          dataSource={walletPage.table_DateSource.map((tr) => {
-                            return {
-                              key: tr.serialNo,
-                              ...tr,
-                            };
-                          })}
+                    <div style={{ height: 15 }} />
+                    <div className={styles.filter2}>
+                      <div className={styles.filter2Left}>
+                        <FComponentsLib.FContentText
+                          // text={'金额区间：'}
+                          style={{ maxWidth: 70 }}
+                          singleRow
+                          text={`${FI18n.i18nNext.t(
+                            'filter_transaction_amount',
+                          )}：`}
                         />
-
-                        <FListFooter
-                          state={walletPage.table_More}
-                          onClickLoadMore={() => {
-                            dispatch<OnClick_Table_LoadMoreBtn_Action>({
-                              type: 'walletPage/onClick_Table_LoadMoreBtn',
+                        <div style={{ width: 5 }} />
+                        <FInput
+                          allowClear
+                          // min={0}
+                          // max={walletPage.table_Filter_MaxAmount || Number.POSITIVE_INFINITY}
+                          value={walletPage.table_Filter_MinAmount}
+                          // allowClear
+                          onChange={(e) => {
+                            dispatch<OnChange_Table_Filter_MinAmount_Action>({
+                              type: 'walletPage/onChange_Table_Filter_MinAmount',
+                              payload: {
+                                value: e.target.value,
+                              },
+                            });
+                          }}
+                          onBlur={() => {
+                            dispatch<OnBlur_Table_Filter_MinAmount_Action>({
+                              type: 'walletPage/onBlur_Table_Filter_MinAmount',
+                            });
+                          }}
+                          // type='number'
+                          size='small'
+                          placeholder={'最低金额'}
+                          className={styles.filterAmount}
+                          wrapClassName={styles.filterAmount}
+                        />
+                        <span className={styles.filterAmountTo}>-</span>
+                        <FInput
+                          allowClear
+                          // type='number'
+                          size='small'
+                          value={walletPage.table_Filter_MaxAmount}
+                          onChange={(e) => {
+                            dispatch<OnChange_Table_Filter_MaxAmount_Action>({
+                              type: 'walletPage/onChange_Table_Filter_MaxAmount',
+                              payload: {
+                                value: e.target.value,
+                              },
+                            });
+                          }}
+                          onBlur={() => {
+                            dispatch<OnBlur_Table_Filter_MaxAmount_Action>({
+                              type: 'walletPage/onBlur_Table_Filter_MaxAmount',
+                            });
+                          }}
+                          placeholder={'最高金额'}
+                          className={styles.filterAmount}
+                          wrapClassName={styles.filterAmount}
+                        />
+                        <div style={{ width: 50 }} />
+                        <FComponentsLib.FContentText text={'交易状态：'} />
+                        <div style={{ width: 5 }} />
+                        <FDropdownMenu
+                          options={walletPage.table_Filter_StateOptions}
+                          text={
+                            walletPage.table_Filter_StateOptions.find(
+                              (so) =>
+                                so.value === walletPage.table_Filter_StateSelected,
+                            )?.text || ''
+                          }
+                          onChange={(value) => {
+                            dispatch<OnChange_Table_Filter_StateSelected_Action>({
+                              type: 'walletPage/onChange_Table_Filter_StateSelected',
+                              payload: {
+                                value: value as '0',
+                              },
                             });
                           }}
                         />
+                      </div>
+                      <Space size={10} className={styles.filter2Right}>
+                        <FComponentsLib.FRectBtn
+                          type='default'
+                          onClick={() => {
+                            dispatch<OnClick_Table_Filter_ResetBtn_Action>({
+                              type: 'walletPage/onClick_Table_Filter_ResetBtn',
+                            });
+                          }}
+                        >
+                          {FI18n.i18nNext.t('btn_reset_filter')}
+                        </FComponentsLib.FRectBtn>
+                        <FComponentsLib.FRectBtn
+                          type='primary'
+                          onClick={() => {
+                            dispatch<OnClick_Table_Filter_SearchBtn_Action>({
+                              type: 'walletPage/onClick_Table_Filter_SearchBtn',
+                            });
+                          }}
+                        >
+                          {FI18n.i18nNext.t('btn_search_transactions')}
+                        </FComponentsLib.FRectBtn>
+                      </Space>
+                    </div>
+
+                    {walletPage.table_State === 'loading' ? (
+                      <FLoadingTip height={600} />
+                    ) : (
+                      <>
+                        <div style={{ height: 30 }} />
+                        <div className={styles.totalAmount}>
+                          <FComponentsLib.FTitleText text={'支出'} type='table' />
+                          <div style={{ width: 10 }} />
+                          <div className={styles.totalAmountExpenditure}>
+                            {walletPage.table_TotalAmountExpenditure}
+                          </div>
+                          <div style={{ width: 20 }} />
+                          <FComponentsLib.FTitleText text={'收入'} type='table' />
+                          <div style={{ width: 10 }} />
+                          <div className={styles.totalAmountIncome}>
+                            {walletPage.table_TotalAmountIncome}
+                          </div>
+                        </div>
+                        <div style={{ height: 10 }} />
+
+                        {walletPage.table_State === 'noSearchResult' && (
+                          <FNoDataTip height={600} tipText={'无交易记录'} />
+                        )}
+
+                        {walletPage.table_State === 'loaded' && (
+                          <>
+                            <FTable
+                              columns={columns}
+                              dataSource={walletPage.table_DateSource.map((tr) => {
+                                return {
+                                  key: tr.serialNo,
+                                  ...tr,
+                                };
+                              })}
+                            />
+
+                            <FListFooter
+                              state={walletPage.table_More}
+                              onClickLoadMore={() => {
+                                dispatch<OnClick_Table_LoadMoreBtn_Action>({
+                                  type: 'walletPage/onClick_Table_LoadMoreBtn',
+                                });
+                              }}
+                            />
+                          </>
+                        )}
                       </>
                     )}
                   </>
                 )}
-              </>
-            )}
-          </div>
-        </>
-      )}
+              </div>
+            </>
+          )}
 
       <div style={{ height: 100 }} />
 
