@@ -288,6 +288,8 @@ export function statisticRewardRecords(params: StatisticRewardRecordsParamsType)
 // 统计个人的任务情况
 interface StatisticTaskRecordsParamsType {
   codes: string[];
+  startTime?: string;
+  limitTime?: string;
 }
 
 export function statisticTaskRecords(params: StatisticTaskRecordsParamsType) {
