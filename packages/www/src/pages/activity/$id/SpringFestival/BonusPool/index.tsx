@@ -39,13 +39,13 @@ function BonusPool({ activityDetailsPage }: BonusPoolProps) {
     // console.log(data, '()I)OJUOKJLKJLKM><LKJJLKJLK)O(I*UY(*^&(*');
     set$count(data.completionTime);
   });
-  console.log(Math.min(100, $count / 200 * 100), '$count sdifj;sldkfjlksdjflkjsdlkj');
+  // console.log(Math.min(100, $count / 200 * 100), '$count sdifj;sldkfjlksdjflkjsdlkj');
 
   return (<div className={styles.pool}>
     <img src={img_poolTitle} style={{ width: 636, opacity: .95 }} alt={''} />
     <FEnergyBall
-      // percent={Math.min(100, $count / 200 * 100)}
-      percent={20}
+      percent={(Math.min(100, $count / 200 * 100) * 5 + 50 * 3) / 8}
+      // percent={(Math.min(100, $count / 200 * 100) * 2 + 50) / 3}
     />
     <div className={styles.poolLabels}>
       <label className={styles.label1} style={{ bottom: 20, left: -210 }}>参与20人</label>
