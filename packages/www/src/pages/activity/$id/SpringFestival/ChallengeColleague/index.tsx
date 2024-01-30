@@ -21,6 +21,7 @@ function ChallengeColleague({}: ChallengeColleagueProps) {
   const [$showModal, set$showModal, get$showModal] = FUtil.Hook.useGetState<boolean>(false);
   const [$invitationCode, set$invitationCode, get$invitationCode] = FUtil.Hook.useGetState<string>('');
   const [$usedCount, set$usedCount, get$usedCount] = FUtil.Hook.useGetState<number>(0);
+  const [$success, set$success, get$success] = FUtil.Hook.useGetState<number>(0);
 
   AHooks.useMount(async () => {
     if (FUtil.Tool.getUserIDByCookies() === -1) {
@@ -34,8 +35,17 @@ function ChallengeColleague({}: ChallengeColleagueProps) {
 
     } = await FServiceAPI.TestQualification.codeDetails2({});
     // console.log(data, 'datadsflkjsdlkfjlkdsjlkfjlk');
+
+    const { data: data_statisticTaskRecords }: {
+      data: {
+        completionTime: number;
+      }[];
+    } = await FServiceAPI.Activity.statisticTaskRecords({
+      codes: ['TS001001'],
+    });
     set$invitationCode(data.code);
     set$usedCount(data.usedCount);
+    set$success(data_statisticTaskRecords[0]?.completionTime || 0);
     // set$usedCount(5);
   });
 
@@ -44,13 +54,13 @@ function ChallengeColleague({}: ChallengeColleagueProps) {
       <img src={img_colleagueTitle} style={{ width: 432, opacity: .95 }} alt={''} />
       <div className={styles.Steps}>
         <div>
-          <img src={img_goldCoin} style={{ width: 65, opacity: $usedCount >= 1 ? 1 : .3 }} alt={''} />
+          <img src={img_goldCoin} style={{ width: 65, opacity: $success >= 1 ? 1 : .3 }} alt={''} />
         </div>
         <div>
-          <img src={img_goldCoin} style={{ width: 65, opacity: $usedCount >= 3 ? 1 : .3 }} alt={''} />
+          <img src={img_goldCoin} style={{ width: 65, opacity: $success >= 3 ? 1 : .3 }} alt={''} />
         </div>
         <div>
-          <img src={img_goldCoin} style={{ width: 65, opacity: $usedCount >= 5 ? 1 : .3 }} alt={''} />
+          <img src={img_goldCoin} style={{ width: 65, opacity: $success >= 5 ? 1 : .3 }} alt={''} />
         </div>
       </div>
       <div style={{ height: 15 }} />
@@ -67,18 +77,18 @@ function ChallengeColleague({}: ChallengeColleagueProps) {
       </div>
       <div style={{ height: 15 }} />
       <div>
-        <Steps5 step={Math.min($usedCount, 5)} />
+        <Steps5 step={Math.min($success, 5)} />
       </div>
       <div style={{ height: 15 }} />
       <div className={styles.Steps}>
         <div>
-          <FComponentsLib.FContentText type={'normal'} text={`邀请 ${Math.min($usedCount, 1)}/1 位`} />
+          <FComponentsLib.FContentText type={'normal'} text={`邀请 ${Math.min($success, 1)}/1 位`} />
         </div>
         <div>
-          <FComponentsLib.FContentText type={'normal'} text={`邀请 ${Math.min($usedCount, 3)}/3 位`} />
+          <FComponentsLib.FContentText type={'normal'} text={`邀请 ${Math.min($success, 3)}/3 位`} />
         </div>
         <div>
-          <FComponentsLib.FContentText type={'normal'} text={`邀请 ${Math.min($usedCount, 5)}/5 位`} />
+          <FComponentsLib.FContentText type={'normal'} text={`邀请 ${Math.min($success, 5)}/5 位`} />
         </div>
       </div>
       <div style={{ height: 70 }} />
