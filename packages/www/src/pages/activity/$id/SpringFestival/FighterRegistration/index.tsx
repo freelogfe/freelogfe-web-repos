@@ -7,6 +7,7 @@ import Steps21 from '@/pages/activity/$id/SpringFestival/Steps21';
 import sharedStyles from '@/pages/activity/$id/SpringFestival/shared.less';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import * as AHooks from 'ahooks';
+import moment from 'moment';
 
 interface FighterRegistrationProps {
 
@@ -63,6 +64,8 @@ function FighterRegistration({}: FighterRegistrationProps) {
       }[];
     } = await FServiceAPI.Activity.statisticTaskRecords({
       codes: ['TS000801', 'TS000802', 'TS000803', 'TS000804'],
+      // @ts-ignore
+      startTime: moment().format('YYYY-MM-DD') + ' 00:00:00',
     });
     // console.log(data, 'datasdifjoiujwes8o9ifjuoisdjfl;ksdjlfkjsdlkjlk');
     set$finish1(data[0].completionTime >= 1);
