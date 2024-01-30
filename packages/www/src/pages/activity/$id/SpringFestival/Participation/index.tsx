@@ -9,6 +9,7 @@ import { ActivityDetailsPageModelState, ConnectState } from '@/models/connect';
 import moment, { Moment } from 'moment';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import * as AHooks from 'ahooks';
+import img_receive from '@/assets/activity/SpringFestival/receive.png';
 
 interface ParticipationProps {
   activityDetailsPage: ActivityDetailsPageModelState;
@@ -172,7 +173,55 @@ function Participation({ activityDetailsPage }: ParticipationProps) {
             className={styles.small}>请务必遵守活动资源要求，{activityDetailsPage.endTime?.format('YYYY/MM/DD') || 'YYYY·MM·DD'}后经平台核查发现有任何影响奖励发放的情况，例如用户在完成累计7天打卡任务的过程中，有1天存在资源或展品不符合要求（如文件类型不正确、虚假、无意义的资源或已下架的状态），该用户将失去瓜分7天打卡奖励的资格，且用户在{activityDetailsPage.endTime?.format('YYYY/MM/DD') || 'YYYY·MM·DD'}之后重新上架或修改资源的行为将不会影响该结果的判定。此外，如果用户发行非原创资源，将被取消参与活动和获奖的资格。
           </div>
           <div style={{ height: 30 }} />
-          <div className={styles.h2}>五、违规警告</div>
+          <div className={styles.h2}>五、活动常见Q&A：</div>
+          <div style={{ height: 15 }} />
+          <div className={styles.list}>
+            <div className={styles.order}>1</div>
+            <div
+              className={styles.text}>
+              <div style={{ fontWeight: 600 }}>如何提交产品使用反馈</div>
+              <div>用户可以Freelog【社区】的<FComponentsLib.FTextBtn
+                style={{ display: 'inline-block' }}
+                type={'primary'}
+                onClick={() => {
+                  self.open('https://forum.freelog.com/category/3');
+                }}>【吐槽反馈区】</FComponentsLib.FTextBtn>，在该模块内发帖提交您的使用反馈和建议，Freelog工作人员会查看解答大家的反馈哦~
+              </div>
+            </div>
+          </div>
+          <div style={{ height: 15 }} />
+          <div className={styles.list}>
+            <div className={styles.order}>2</div>
+            <div
+              className={styles.text}>
+              <div style={{ fontWeight: 600 }}>如何在授权合约流程中使用真实货币交易</div>
+              <div>内测期间，Freelog暂不支持真实货币交易，为了便于用户体验资源授权合约交易中的付费相关功能，Freelog提供虚拟币——“羽币”支持。
+                内测期间，羽币与真实货币无任何联系，Freelog平台不支持以任何形式、任何比例进行羽币与真实货币之间的兑换。
+              </div>
+            </div>
+          </div>
+          <div style={{ height: 15 }} />
+          <div className={styles.list}>
+            <div className={styles.order}>3</div>
+            <div
+              className={styles.text}>
+              <div style={{ fontWeight: 600 }}>如何领取羽币</div>
+              <div>
+                <div>用户可以通过点击【个人中心】—【我的钱包】进入“羽币账户”界面，先点击激活您的羽币账户后，点击下方【立即领取】按钮即可领取100枚内测羽币。</div>
+                <div style={{ height: 5 }} />
+                <img src={img_receive} style={{ width: '100%' }} alt={''} />
+                <div style={{ height: 5 }} />
+                <div>更多活动问题答疑详见“<FComponentsLib.FTextBtn
+                  style={{ display: 'inline-block' }}
+                  type={'primary'}
+                  onClick={() => {
+                    self.open('https://freelog3.freelog.com/home_freelog-query_id=62d0d04f456ff0002e329537');
+                  }}>常见问题</FComponentsLib.FTextBtn>”</div>
+              </div>
+            </div>
+          </div>
+          <div style={{ height: 30 }} />
+          <div className={styles.h2}>六、违规警告</div>
           <div style={{ height: 15 }} />
           <div className={styles.p}>为保证活动公平，严禁用户恶意刷量、批量注册小号等作弊行为。若出现影响活动正常运行的违规操作，平台将立即取消参与和获奖资格；</div>
           <div style={{ height: 40 }} />
