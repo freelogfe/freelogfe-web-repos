@@ -133,7 +133,7 @@ function FighterRegistration({}: FighterRegistrationProps) {
       <div>
         <FComponentsLib.FTitleText type={'h3'} text={`发布一个原创资源（${Number($finish1)}/1）`} />
         <div style={{ height: 10 }} />
-        <FComponentsLib.FContentText type={'additional2'} text={'别忘了为资源添加“新春召集令，freelog创作激励计划启动！”活动标签哦！'} />
+        <FComponentsLib.FContentText type={'additional2'} text={'别忘了为资源添加 #新春召集令，freelog创作激励计划启动！# 活动标签哦！'} />
       </div>
       <a
         className={[sharedStyles.button, sharedStyles.small, $finish1 ? sharedStyles.disabled : ''].join(' ')}
