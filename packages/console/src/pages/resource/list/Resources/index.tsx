@@ -21,7 +21,7 @@ import styles from './index.less';
 import FResourceTypeFilter from '@/components/FResourceTypeFilter';
 import FComponentsLib from '@freelog/components-lib';
 import FMenu from '@/components/FMenu';
-import { Checkbox, Modal, Space } from 'antd';
+import { Checkbox, Modal, Select, Space } from 'antd';
 // import { history } from 'umi';
 import FResourceCard from '@/components/FResourceCard';
 import FListFooter from '@/components/FListFooter';
@@ -30,6 +30,9 @@ import fPolicyBuilder from '@/components/fPolicyBuilder';
 // import FResourceFeedback from '@/components/FResourceFeedback';
 import FCoverImage from '@/components/FCoverImage';
 import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
+import FDrawer from '@/components/FDrawer';
+import FSelect from '@/components/FSelect';
+import FSignResourceToNode from '@/components/FSignResourceToNode';
 
 interface ResourceProps {
   dispatch: Dispatch;
@@ -475,6 +478,10 @@ function Resources({ dispatch, resourceListPage }: ResourceProps) {
           },
         });
       }}
+    />
+
+    <FSignResourceToNode
+      resourceIDs={['65aa1b1a19a979002eb04ff8', '658a78a64d1119002edeba5d']}
     />
   </>);
 }
