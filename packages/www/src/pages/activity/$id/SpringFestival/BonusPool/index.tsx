@@ -39,13 +39,13 @@ function BonusPool({ activityDetailsPage }: BonusPoolProps) {
     // console.log(data, '()I)OJUOKJLKJLKM><LKJJLKJLK)O(I*UY(*^&(*');
     set$count(data.completionTime);
   });
-  // console.log(Math.min(100, $count / 20 * 100), '$count sdifj;sldkfjlksdjflkjsdlkj');
+  // console.log(Math.min(100, $count / 200 * 100), '$count sdifj;sldkfjlksdjflkjsdlkj');
 
   return (<div className={styles.pool}>
     <img src={img_poolTitle} style={{ width: 636, opacity: .95 }} alt={''} />
     <FEnergyBall
-      percent={Math.min(100, $count / 20 * 100)}
-      // percent={50}
+      percent={(Math.min(100, $count / 200 * 100) * 5 + 50 * 3) / 8}
+      // percent={(Math.min(100, $count / 200 * 100) * 2 + 50) / 3}
     />
     <div className={styles.poolLabels}>
       <label className={styles.label1} style={{ bottom: 20, left: -210 }}>参与20人</label>
@@ -54,25 +54,25 @@ function BonusPool({ activityDetailsPage }: BonusPoolProps) {
       <label className={styles.label1} style={{ bottom: 200, left: 120 }}>参与200人</label>
 
       {
-        $count >= 2
+        $count >= 20
           ? (<label className={styles.label2} style={{ bottom: 20, left: -24 }}>瓜分¥200</label>)
           : (<label className={styles.label3} style={{ bottom: 20, left: -38 }}>¥200等待瓜分</label>)
       }
 
       {
-        $count >= 5
+        $count >= 50
           ? (<label className={styles.label2} style={{ bottom: 50, left: -24 }}>瓜分¥666</label>)
           : (<label className={styles.label3} style={{ bottom: 50, left: -38 }}>¥666等待瓜分</label>)
       }
 
       {
-        $count >= 10
+        $count >= 100
           ? (<label className={styles.label2} style={{ bottom: 100, left: -26 }}>瓜分¥1666</label>)
           : (<label className={styles.label3} style={{ bottom: 100, left: -40 }}>¥1666等待瓜分</label>)
       }
 
       {
-        $count >= 20
+        $count >= 200
           ? (<label className={styles.label2} style={{ bottom: 200, left: -26 }}>瓜分¥3666</label>)
           : (<label className={styles.label3} style={{ bottom: 200, left: -40 }}>¥3666等待瓜分</label>)
       }

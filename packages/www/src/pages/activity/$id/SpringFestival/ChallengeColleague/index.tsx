@@ -94,14 +94,11 @@ function ChallengeColleague({}: ChallengeColleagueProps) {
       <div style={{ height: 70 }} />
       <FComponentsLib.FTitleText type={'h1'} text={'召唤好友共赴全员瓜分盛宴'} />
       <img src={img_colleagueProcess} style={{ width: 967, opacity: .95 }} alt={''} />
+      <FComponentsLib.FContentText type={'negative'} text={'注意：“ 好友需用您提供邀请码激活内测资格，并成功完成一次新春卷王打卡挑战 ”'} />
+      <div style={{ height: 40 }} />
       <a
         className={[sharedStyles.button, $usedCount >= 5 ? sharedStyles.disabled : ''].join(' ')}
         onClick={async () => {
-          // if (FUtil.Tool.getUserIDByCookies() === -1) {
-          //   await FServiceAPI.User.currentUserInfo();
-          // return;
-          // }
-
           const { data }: {
             data: {
               userType: 0 | 1;

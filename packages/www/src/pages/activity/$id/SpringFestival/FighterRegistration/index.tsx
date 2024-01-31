@@ -7,6 +7,7 @@ import Steps21 from '@/pages/activity/$id/SpringFestival/Steps21';
 import sharedStyles from '@/pages/activity/$id/SpringFestival/shared.less';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import * as AHooks from 'ahooks';
+import moment from 'moment';
 
 interface FighterRegistrationProps {
 
@@ -63,6 +64,8 @@ function FighterRegistration({}: FighterRegistrationProps) {
       }[];
     } = await FServiceAPI.Activity.statisticTaskRecords({
       codes: ['TS000801', 'TS000802', 'TS000803', 'TS000804'],
+      // @ts-ignore
+      startTime: moment().format('YYYY-MM-DD') + ' 00:00:00',
     });
     // console.log(data, 'datasdifjoiujwes8o9ifjuoisdjfl;ksdjlfkjsdlkjlk');
     set$finish1(data[0].completionTime >= 1);
@@ -130,7 +133,7 @@ function FighterRegistration({}: FighterRegistrationProps) {
       <div>
         <FComponentsLib.FTitleText type={'h3'} text={`发布一个原创资源（${Number($finish1)}/1）`} />
         <div style={{ height: 10 }} />
-        <FComponentsLib.FContentText type={'additional2'} text={'别忘了为资源添加“新春召集令，freelog创作激励计划启动！”活动标签哦！'} />
+        <FComponentsLib.FContentText type={'additional2'} text={'别忘了为资源添加 #新春召集令，freelog创作激励计划启动！# 活动标签哦！'} />
       </div>
       <a
         className={[sharedStyles.button, sharedStyles.small, $finish1 ? sharedStyles.disabled : ''].join(' ')}

@@ -1,4 +1,9 @@
 .actionContainer {
+  background-color: white;
+  border-radius: 6px;
+  //background-image: url("../../../reward.jpg");
+  background-size: 100% 100%;
+
   .title {
     height: 24px;
     font-size: 18px;
@@ -7,12 +12,14 @@
     line-height: 24px;
     margin-right: 20px;
   }
+
   .title2 {
     font-size: 18px;
     font-weight: 600;
     color: #222222;
     line-height: 24px;
   }
+
   .total {
     height: 18px;
     font-size: 12px;
@@ -21,6 +28,7 @@
     line-height: 18px;
     margin-bottom: 20px;
   }
+
   .tip {
     font-size: 12px;
     font-weight: 400;
@@ -29,15 +37,18 @@
     line-height: 18px;
     opacity: 0.6;
   }
+
   .link {
     font-size: 12px;
     cursor: pointer;
     font-weight: 400;
     color: #2784ff;
     line-height: 18px;
+
     &:hover {
       color: #529dff;
     }
+
     &:active {
       color: #2376e5;
     }
@@ -51,12 +62,14 @@
   color: #222222;
   line-height: 25px;
 }
+
 .text {
   font-size: 12px;
   font-weight: 600;
   color: #7a869a;
   line-height: 18px;
 }
+
 .text1 {
   height: 20px;
   font-size: 14px;
@@ -64,6 +77,7 @@
   color: #222222;
   line-height: 20px;
 }
+
 .dot {
   width: 4px;
   height: 4px;
@@ -80,18 +94,21 @@
   color: #222222;
   line-height: 25px;
 }
+
 .middleTip {
   font-size: 16px;
   font-weight: 400;
   color: #666666;
   line-height: 22px;
 }
+
 .bottomTip {
   font-size: 14px;
   font-weight: 400;
   color: #999999;
   line-height: 20px;
   cursor: pointer;
+
   &:hover {
     opacity: 0.6;
   }
@@ -160,30 +177,32 @@
     }
   }
 }
+
 //固定模式
 .animation(@animation-name, @animation-duration, @animation-timing-function, @animation-delay,
   @animation-iteration-count,
   @animation-direction) {
   animation: @arguments;
 }
+
 .keyframes();
 
-.starMove{
+.starMove {
   opacity: 0;
-  .animation(star,2s,linear,1s,1,normal );
-  animation-fill-mode:forwards;
+  .animation(star, 2s, linear, 1s, 1, normal);
+  animation-fill-mode: forwards;
 }
 
-.titleMove{
+.titleMove {
   opacity: 0;
-  .animation(slideInUp,1s,linear,1s,1,normal );
-  animation-fill-mode:forwards;
+  .animation(slideInUp, 1s, linear, 1s, 1, normal);
+  animation-fill-mode: forwards;
 }
 
 .lightMove {
   display: block !important;
-  .animation(cash,0.5s,linear,0s,1,normal );
-  animation-fill-mode:forwards;
+  .animation(cash, 0.5s, linear, 0s, 1, normal);
+  animation-fill-mode: forwards;
 }
 
 

@@ -372,7 +372,6 @@ function Resources({ dispatch, resourceListPage }: ResourceProps) {
 
           {
             resourceListPage.resource_List.map((i, j) => {
-
               if (resourceListPage.isBatchManagement) {
                 return (<FResourceCard_AbleCheck
                   checked={resourceListPage.checkedResourceIDs.includes(i.id)}

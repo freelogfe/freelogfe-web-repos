@@ -10,6 +10,7 @@ import * as AHooks from 'ahooks';
 import { Modal } from 'antd';
 import star from '@/assets/star.svg';
 import 'animate.css';
+import url from '*.svg';
 
 interface CoinActivity {
   goActive: any;
@@ -78,9 +79,8 @@ function CoinActivity(props: CoinActivity) {
   return (
     <div className='w-100x h-170 mt-20 flex-column'>
       <div
-        className={
-          'w-100x h-100x flex-column p-20 p-abs ' + styles.actionContainer
-        }
+        className={'w-100x h-100x flex-column p-20 p-abs ' + styles.actionContainer}
+        // style={{backgroundImage: `url(${reward})`}}
       >
         <div className={'flex-row align-center'}>
           {datas.isSign ? (
@@ -150,7 +150,7 @@ function CoinActivity(props: CoinActivity) {
           </span>
         </div>
       </div>
-      <img src={reward} alt='' className='w-100x' />
+      {/*<img src={reward} alt='' className='w-100x' />*/}
       <Modal
         title={null}
         onCancel={() => setShowAccountTip(false)}
@@ -240,15 +240,27 @@ function CoinActivity(props: CoinActivity) {
           <div className='flex-row mt-10 align-center'>
             <div className={styles.dot + ' shrink-0'} />
             <div className={styles.text1 + ' text-breakAll'}>
-              羽币为Freelog平台的虚拟货币，与真实货币无任何联系，Freelog平台不支持以任何形式、任何比例进行羽币与真实货币中间的兑换；
+              内测期间，Freelog暂不支持真实货币交易，为了便于用户体验资源授权合约交易中的付费相关功能，Freelog提供虚拟币——“羽币”支持。
             </div>
           </div>
           <div className='flex-row mt-30 align-center'>
             <div className={styles.dot + ' shrink-0'} />
             <div className={styles.text1 + ' text-breakAll'}>
-              用户在内测活动期间，使用羽币购买资源或展品授权的次数达到3次及以上，内测活动结束后，积累的羽币可在Freelog积分商城进行奖品兑换，使用羽币购买资源或展品授权的次数少于3次，内测活动结束后，所得羽币将会清零。
+              内测期间，羽币与真实货币无任何联系，Freelog平台不支持以任何形式、任何比例进行羽币与真实货币之间的兑换。
             </div>
           </div>
+          {/*<div className='flex-row mt-10 align-center'>*/}
+          {/*  <div className={styles.dot + ' shrink-0'} />*/}
+          {/*  <div className={styles.text1 + ' text-breakAll'}>*/}
+          {/*    羽币为Freelog平台的虚拟货币，与真实货币无任何联系，Freelog平台不支持以任何形式、任何比例进行羽币与真实货币中间的兑换；*/}
+          {/*  </div>*/}
+          {/*</div>*/}
+          {/*<div className='flex-row mt-30 align-center'>*/}
+          {/*  <div className={styles.dot + ' shrink-0'} />*/}
+          {/*  <div className={styles.text1 + ' text-breakAll'}>*/}
+          {/*    用户在内测活动期间，使用羽币购买资源或展品授权的次数达到3次及以上，内测活动结束后，积累的羽币可在Freelog积分商城进行奖品兑换，使用羽币购买资源或展品授权的次数少于3次，内测活动结束后，所得羽币将会清零。*/}
+          {/*  </div>*/}
+          {/*</div>*/}
         </div>
       </Modal>
     </div>

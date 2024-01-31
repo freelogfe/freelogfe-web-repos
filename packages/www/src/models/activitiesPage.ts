@@ -82,18 +82,22 @@ const Model: activitiesPageModelType = {
         4: 'ongoing',
         5: 'end',
       };
-      const list: ActivitiesPageModelState['list'] = data.dataList.map<ActivitiesPageModelState['list'][0]>((d) => {
-        return {
-          activityID: d._id,
-          activityTitle: d.title,
-          activityCover: d.cover,
-          status: status[d.status] || 'end',
-          persis: d.persist,
-          link: d.link,
-          startTime: d.startTime ? FUtil.Format.formatDateTime(d.startTime) : '',
-          limitTime: d.limitTime ? FUtil.Format.formatDateTime(d.limitTime) : '',
-        };
-      });
+      const list: ActivitiesPageModelState['list'] = data.dataList
+        .filter((d) => {
+          return d.link !== 'SpringFestival';
+        })
+        .map<ActivitiesPageModelState['list'][0]>((d) => {
+          return {
+            activityID: d._id,
+            activityTitle: d.title,
+            activityCover: d.cover,
+            status: status[d.status] || 'end',
+            persis: d.persist,
+            link: d.link,
+            startTime: d.startTime ? FUtil.Format.formatDateTime(d.startTime) : '',
+            limitTime: d.limitTime ? FUtil.Format.formatDateTime(d.limitTime) : '',
+          };
+        });
       yield put<ChangeAction>({
         type: 'change',
         payload: {
