@@ -481,7 +481,7 @@ function Resources({ dispatch, resourceListPage }: ResourceProps) {
     />
 
     <FSignResourceToNode
-      resourceIDs={['65aa1b1a19a979002eb04ff8', '658a78a64d1119002edeba5d']}
+      resourceIDs={['65aa1b1a19a979002eb04ff8', '658a78a64d1119002edeba5d','62415c5d008d27002e349894', '62144d11182192002eeed162']}
     />
   </>);
 }

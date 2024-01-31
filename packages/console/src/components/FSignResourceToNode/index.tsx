@@ -7,9 +7,30 @@ import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
 import * as AHooks from 'ahooks';
 import FTooltip from '@/components/FTooltip';
 import FCoverImage from '@/components/FCoverImage';
+import moment from 'moment';
 
 interface FSignResourceToNodeProps {
   resourceIDs: string[];
+}
+
+interface FSignResourceToNodeStates {
+  goodResources: {
+    resourceID: string;
+    resourceName: string;
+    resourceTitle: string;
+    cover: string;
+    resourceType: string[];
+    updateTime: string;
+  }[];
+  badResources: {
+    resourceID: string;
+    resourceName: string;
+    resourceTitle: string;
+    cover: string;
+    resourceType: string[];
+    updateTime: string;
+    errorReason: string;
+  }[];
 }
 
 function FSignResourceToNode({ resourceIDs }: FSignResourceToNodeProps) {
@@ -20,22 +41,8 @@ function FSignResourceToNode({ resourceIDs }: FSignResourceToNodeProps) {
     label: string;
   }[]>([]);
 
-  const [$goodResources, set$goodResources, get$goodResources] = FUtil.Hook.useGetState<{
-    resourceID: string;
-    resourceName: string;
-    resourceTitle: string;
-    cover: string;
-    resourceType: string[];
-    updateTime: string;
-  }[]>([]);
-  const [$badResources, set$badResources, get$badResources] = FUtil.Hook.useGetState<{
-    resourceID: string;
-    resourceName: string;
-    resourceTitle: string;
-    cover: string;
-    resourceType: string[];
-    updateTime: string;
-  }[]>([]);
+  const [$goodResources, set$goodResources, get$goodResources] = FUtil.Hook.useGetState<FSignResourceToNodeStates['goodResources']>([]);
+  const [$badResources, set$badResources, get$badResources] = FUtil.Hook.useGetState<FSignResourceToNodeStates['badResources']>([]);
 
   AHooks.useMount(async () => {
     const { data }: {
@@ -64,6 +71,27 @@ function FSignResourceToNode({ resourceIDs }: FSignResourceToNodeProps) {
     const { data } = await FServiceAPI.Resource.batchInfo({
       resourceIds: resourceIDs.join(','),
     });
+    const goodResources: FSignResourceToNodeStates['goodResources'] = [];
+    const badResources: FSignResourceToNodeStates['badResources'] = [];
+    for (const d of data) {
+      const resource = {
+        resourceID: d.resourceId,
+        resourceName: d.resourceName,
+        resourceTitle: d.resourceTitle,
+        cover: d.coverImages[0] || '',
+        resourceType: d.resourceType,
+        updateTime: moment(d.updateDate).format('YYYY-MM-DD'),
+      };
+      if (d.status === 0) {
+
+      } else if (d.status === 2) {
+
+      } else if (d.status === 4) {
+
+      } else {
+        
+      }
+    }
 
 
     console.log(data, 'datawsedfjsldkjflksdjflkjlk');
@@ -71,7 +99,7 @@ function FSignResourceToNode({ resourceIDs }: FSignResourceToNodeProps) {
 
   return (<FDrawer
     title={'添加至节点'}
-    open={true}
+    open={false}
     topRight={<Space size={30}>
       <FComponentsLib.FTextBtn
         type='default'
