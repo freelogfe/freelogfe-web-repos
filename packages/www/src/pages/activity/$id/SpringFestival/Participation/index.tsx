@@ -216,7 +216,8 @@ function Participation({ activityDetailsPage }: ParticipationProps) {
                   type={'primary'}
                   onClick={() => {
                     self.open('https://freelog3.freelog.com/home_freelog-query_id=62d0d04f456ff0002e329537');
-                  }}>常见问题</FComponentsLib.FTextBtn>”</div>
+                  }}>常见问题</FComponentsLib.FTextBtn>”
+                </div>
               </div>
             </div>
           </div>
@@ -250,7 +251,12 @@ function Participation({ activityDetailsPage }: ParticipationProps) {
           <div className={styles.list}>
             <div className={styles.order}>1</div>
             <div
-              className={styles.text}>活动期内所有用户须遵守《Freelog平台管理规范》，违规者平台有权取消其活动资格并扣除奖励不予发放；
+              className={styles.text}>活动期内所有用户须遵守<FComponentsLib.FTextBtn
+              style={{ display: 'inline-block' }}
+              onClick={() => {
+                self.open('https://freelog2.freelog.com/reader_freelog-query_id=62cce8f2456ff0002e328eb2');
+              }}
+            >《Freelog平台管理规范》</FComponentsLib.FTextBtn>，违规者平台有权取消其活动资格并扣除奖励不予发放；
             </div>
           </div>
           <div style={{ height: 15 }} />
