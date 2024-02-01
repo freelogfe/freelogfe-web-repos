@@ -8,6 +8,7 @@ import * as AHooks from 'ahooks';
 import FTooltip from '@/components/FTooltip';
 import FCoverImage from '@/components/FCoverImage';
 import moment from 'moment';
+import fCenterMessage from '@/components/fCenterMessage';
 
 interface FSignResourceToNodeDrawerProps {
   resourceIDs: string[];
@@ -175,7 +176,13 @@ function FSignResourceToNodeDrawer({ resourceIDs, onClose, onOk }: FSignResource
         type='primary'
         onClick={async () => {
 
-          const { data } = await FServiceAPI.Exhibit.batchCreatePresentable({
+          const { data }: {
+            data: {
+              [resourceID: string]: {
+                status: 1 | 2, data: string;
+              }
+            }
+          } = await FServiceAPI.Exhibit.batchCreatePresentable({
             nodeId: get$selectNodeID() || -1,
             // @ts-ignore
             resources: resourceIDs.map((id) => {
@@ -185,10 +192,17 @@ function FSignResourceToNodeDrawer({ resourceIDs, onClose, onOk }: FSignResource
               };
             }),
           });
-          console.log(data, 'data sdifj;sldkfjlksdjfljiowejflksdjflkjsdlfkjl');
+          // console.log(data, 'data sdifj;sldkfjlksdjfljiowejflksdjflkjsdlfkjl');
           onOk && onOk({
             nodeID: get$selectNodeID() || -1,
           });
+
+          if (Object.values(data).some((v) => {
+            return v.status === 2;
+          })) {
+            fCenterMessage({ message: '存在未发行签约成功的资源' });
+          }
+
           set$open(false);
         }}
       >确定</FComponentsLib.FRectBtn>
@@ -293,6 +307,8 @@ function FSignResourceToNodeDrawer({ resourceIDs, onClose, onOk }: FSignResource
           </Space>
         </>)
       }
+
+      <div style={{ height: 100 }} />
 
       {
         $badResources.length > 0 && (<div className={styles.tip}>
