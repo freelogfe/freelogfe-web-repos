@@ -7,20 +7,25 @@ interface fSignResourceToNodeProps {
   resourceIDs: string[];
 }
 
-function fSignResourceToNode({ resourceIDs }: fSignResourceToNodeProps) {
+type ReturnData = {
+  nodeID: number;
+} | null;
 
-  return new Promise<void>((resolve) => {
+function fSignResourceToNode({ resourceIDs }: fSignResourceToNodeProps): Promise<ReturnData> {
+
+  return new Promise<ReturnData>((resolve) => {
     const divRoot = self.document.body;
     const div = self.document.createElement('div') as HTMLDivElement;
     divRoot.appendChild(div);
     const root = ReactDOM.createRoot(div);
     return root.render(<FSignResourceToNodeDrawer
       resourceIDs={resourceIDs}
+      onOk={({ nodeID }) => {
+        resolve({ nodeID });
+      }}
       onClose={() => {
-        resolve();
-        setTimeout(() => {
-          root.unmount();
-        }, 30);
+        resolve(null);
+        root.unmount();
       }}
     />);
   });

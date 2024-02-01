@@ -29,6 +29,7 @@ import fPolicyBuilder from '@/components/fPolicyBuilder';
 import FCoverImage from '@/components/FCoverImage';
 import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
 import fSignResourceToNode from '@/components/fSignResourceToNode';
+import { history } from 'umi';
 
 interface ResourceProps {
   dispatch: Dispatch;
@@ -274,9 +275,13 @@ function Resources({ dispatch, resourceListPage }: ResourceProps) {
                     //     status: 1,
                     //   },
                     // });
-                    await fSignResourceToNode({
+                    const result = await fSignResourceToNode({
                       resourceIDs: resourceListPage.checkedResourceIDs,
                     });
+                    if (result) {
+                      history.push(FUtil.LinkTo.nodeManagement({ nodeID: result.nodeID }));
+                    }
+
                   }}
                 >
                   <FComponentsLib.FIcons.FNodes style={{ fontSize: 14, color: '#2784FF' }} />

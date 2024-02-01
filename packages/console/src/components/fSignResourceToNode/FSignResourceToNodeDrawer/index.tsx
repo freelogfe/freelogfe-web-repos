@@ -12,7 +12,7 @@ import moment from 'moment';
 interface FSignResourceToNodeDrawerProps {
   resourceIDs: string[];
 
-  onOk?(): void;
+  onOk?(value: { nodeID: number }): void;
 
   onClose?(): void;
 }
@@ -171,10 +171,25 @@ function FSignResourceToNodeDrawer({ resourceIDs, onClose, onOk }: FSignResource
       >取消</FComponentsLib.FTextBtn>
 
       <FComponentsLib.FRectBtn
-        disabled={$goodResources.length === 0}
+        disabled={!$selectNodeID || $goodResources.length === 0}
         type='primary'
-        onClick={() => {
+        onClick={async () => {
 
+          const { data } = await FServiceAPI.Exhibit.batchCreatePresentable({
+            nodeId: get$selectNodeID() || -1,
+            // @ts-ignore
+            resources: resourceIDs.map((id) => {
+              return {
+                resourceId: id,
+                // policyId: '' || undefined,
+              };
+            }),
+          });
+          console.log(data, 'data sdifj;sldkfjlksdjfljiowejflksdjflkjsdlfkjl');
+          onOk && onOk({
+            nodeID: get$selectNodeID() || -1,
+          });
+          set$open(false);
         }}
       >确定</FComponentsLib.FRectBtn>
     </Space>}
@@ -194,6 +209,7 @@ function FSignResourceToNodeDrawer({ resourceIDs, onClose, onOk }: FSignResource
         style={{ width: '100%', height: 38, borderRadius: 4 }}
         onChange={(value) => {
           set$selectNodeID(value);
+          handleResource();
         }}
         options={$nodeOptions}
       />
