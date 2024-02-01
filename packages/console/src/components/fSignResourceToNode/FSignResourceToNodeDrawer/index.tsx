@@ -57,16 +57,21 @@ function FSignResourceToNodeDrawer({ resourceIDs, onClose, onOk }: FSignResource
           nodeDomain: string;
           nodeId: number;
           nodeName: string;
+          status: number;
         }[];
       }
     } = await FServiceAPI.Node.nodes({ limit: 100 });
     // console.log(data, 'data sdifj;lsdkjflksdjflkjsdlkjf');
-    set$nodeOptions(data.dataList.map((d) => {
-      return {
-        value: d.nodeId,
-        label: d.nodeName,
-      };
-    }));
+    set$nodeOptions(data.dataList
+      .filter((d) => {
+        return d.status === 2;
+      })
+      .map((d) => {
+        return {
+          value: d.nodeId,
+          label: d.nodeName,
+        };
+      }));
   });
 
   AHooks.useMount(() => {
@@ -176,12 +181,15 @@ function FSignResourceToNodeDrawer({ resourceIDs, onClose, onOk }: FSignResource
         type='primary'
         onClick={async () => {
 
-          const { data }: {
+          const { ret, errCode, data, msg }: {
+            ret: number;
+            errCode: number;
             data: {
               [resourceID: string]: {
                 status: 1 | 2, data: string;
               }
-            }
+            };
+            msg: string;
           } = await FServiceAPI.Exhibit.batchCreatePresentable({
             nodeId: get$selectNodeID() || -1,
             // @ts-ignore
@@ -192,6 +200,13 @@ function FSignResourceToNodeDrawer({ resourceIDs, onClose, onOk }: FSignResource
               };
             }),
           });
+
+          if (ret !== 0 || errCode !== 0) {
+            fCenterMessage({ message: msg });
+            set$open(false);
+            return;
+          }
+
           // console.log(data, 'data sdifj;sldkfjlksdjfljiowejflksdjflkjsdlfkjl');
           onOk && onOk({
             nodeID: get$selectNodeID() || -1,
@@ -200,7 +215,7 @@ function FSignResourceToNodeDrawer({ resourceIDs, onClose, onOk }: FSignResource
           if (Object.values(data).some((v) => {
             return v.status === 2;
           })) {
-            fCenterMessage({ message: '存在未发行签约成功的资源' });
+            fCenterMessage({ message: '资源状态异常，无法添加' });
           }
 
           set$open(false);
