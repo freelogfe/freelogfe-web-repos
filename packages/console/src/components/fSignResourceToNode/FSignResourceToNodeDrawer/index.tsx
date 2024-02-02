@@ -64,7 +64,7 @@ function FSignResourceToNodeDrawer({ resourceIDs, onClose, onOk }: FSignResource
     // console.log(data, 'data sdifj;lsdkjflksdjflkjsdlkjf');
     set$nodeOptions(data.dataList
       .filter((d) => {
-        return d.status === 2;
+        return d.status !== 4 && d.status !== 5;
       })
       .map((d) => {
         return {
@@ -327,10 +327,12 @@ function FSignResourceToNodeDrawer({ resourceIDs, onClose, onOk }: FSignResource
 
       {
         $badResources.length > 0 && (<div className={styles.tip}>
-          <FComponentsLib.FIcons.FExclamation style={{
-            fontSize: 16,
-            color: '#E9A923',
-          }} />
+          <FComponentsLib.FIcons.FExclamation
+            style={{
+              fontSize: 16,
+              color: '#E9A923',
+            }}
+          />
           <span>已选择的资源中，部分资源无法自动签约，但不影响其他资源签约</span>
         </div>)
       }
