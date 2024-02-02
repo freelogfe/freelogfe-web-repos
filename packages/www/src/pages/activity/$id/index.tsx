@@ -19,6 +19,7 @@ import { FUtil, FI18n } from '@freelog/tools-lib';
 import { Helmet } from 'react-helmet';
 import ExperienceOfficer from './ExperienceOfficer';
 import SpringFestival from './SpringFestival';
+import EditorPick  from './EditorPick';
 
 interface ActivityProps extends IRouteComponentProps {
   dispatch: Dispatch;
@@ -43,6 +44,7 @@ function Activity({
     'Questionnaire': (<Questionnaire />),
     'ExperienceOfficer': (<ExperienceOfficer />),
     'SpringFestival': (<SpringFestival />),
+    'event_editorpick': (<EditorPick />),
   };
 
   AHooks.useMount(() => {
