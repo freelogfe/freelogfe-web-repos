@@ -403,6 +403,14 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                         return fCenterMessage({ message: '请选择要执行操作的对象' });
                       }
 
+                      const confirm: boolean = await fPromiseModalConfirm({
+                        title: '下架展品',
+                        description: '下架后，其它用户将无法签约该展品，确认要下架吗？',
+                      });
+                      if (!confirm) {
+                        return;
+                      }
+
                       const { ret, errCode, msg, data }: {
                         ret: number;
                         errCode: number;
