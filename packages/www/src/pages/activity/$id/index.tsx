@@ -44,7 +44,7 @@ function Activity({
     'Questionnaire': (<Questionnaire />),
     'ExperienceOfficer': (<ExperienceOfficer />),
     'SpringFestival': (<SpringFestival />),
-    'event_editorpick ': (<EditorPick />),
+    'event_editorpick': (<EditorPick />),
   };
 
   AHooks.useMount(() => {
