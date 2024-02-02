@@ -20,12 +20,16 @@ import original from '@/assets/activity/editorPick/original@2x.png';
 import spread from '@/assets/activity/editorPick/spread@2x.png';
 import title2 from '@/assets/activity/editorPick/title2@2x.png';
 import Module from './module';
+import more from '@/assets/activity/editorPick/more.png';
+
 import FFooter from '@/components/Footer';
 import { ActivityDetailsPageModelState } from '@/models/activityDetailsPage';
 import { connect } from 'dva';
 import { ConnectState } from '@/models/connect';
 import FComponentsLib from '@freelog/components-lib';
 import AboutUsMore from '../SpringFestival/AboutUsMore';
+import { FUtil, FI18n } from '@freelog/tools-lib';
+
 interface EditorPickProps {
   activityDetailsPage: ActivityDetailsPageModelState;
 }
@@ -60,14 +64,18 @@ function EditorPick({ activityDetailsPage }: EditorPickProps) {
               <div className="flex-column align-center">
                 <span className="editor-pick-1-title">征集期</span>
                 <span className="editor-pick-1-content mt-34">
-                  2024-04-01 00:00
+                  {FI18n.i18nNext.t(
+                    'event_2024monthlyeditorspick_collect_date',
+                  )}
                 </span>
                 <span className="editor-pick-1-content">截止</span>
               </div>
               <div className="flex-column align-center">
                 <span className="editor-pick-1-title">评选期</span>
                 <span className="editor-pick-1-content mt-20">
-                  2023-04-01 00:00
+                  {FI18n.i18nNext.t(
+                    'event_2024monthlyeditorspick_selection_date',
+                  )}
                 </span>
                 <span className="editor-pick-1-content my-5">~</span>
                 <span className="editor-pick-1-content">2024-04-15 00:00</span>
@@ -75,7 +83,7 @@ function EditorPick({ activityDetailsPage }: EditorPickProps) {
               <div className="flex-column align-center">
                 <span className="editor-pick-1-title">结果公示</span>
                 <span className="editor-pick-1-content mt-48">
-                  2024-04-15 00:00
+                  {FI18n.i18nNext.t('event_2024monthlyeditorspick_awards_date')}
                 </span>
               </div>
             </div>
@@ -159,7 +167,11 @@ function EditorPick({ activityDetailsPage }: EditorPickProps) {
                 <img src={title2} alt="" className="w-100x" />
               </div>
             </div> */}
+            <div className="w-151 mb-46">
+              <img src={more} alt="" className="w-100x" />
+            </div>
           </div>
+
           <AboutUsMore />
         </div>
         <Module
