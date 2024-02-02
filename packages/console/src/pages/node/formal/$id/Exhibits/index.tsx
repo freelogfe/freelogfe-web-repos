@@ -407,7 +407,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                     // });
                   }}
                 >
-                  <FComponentsLib.FIcons.FConfiguration style={{ fontSize: 14 }} />
+                  <FComponentsLib.FIcons.FUpcast style={{ fontSize: 14 }} />
                   &nbsp;{FI18n.i18nNext.t('nodemgnt_exhibitmgnt_bulkaction_btn_availabletoauth')}
                 </FComponentsLib.FTextBtn>
 
@@ -423,7 +423,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                     // });
                   }}
                 >
-                  <FComponentsLib.FIcons.FConfiguration style={{ fontSize: 14 }} />
+                  <FComponentsLib.FIcons.FUpcast style={{ fontSize: 14, transform: 'rotate(180deg)' }} />
                   &nbsp;{FI18n.i18nNext.t('nodemgnt_exhibitmgnt_bulkaction_btn_remoefromauth')}
                 </FComponentsLib.FTextBtn>
 
@@ -439,7 +439,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                     // });
                   }}
                 >
-                  <FComponentsLib.FIcons.FConfiguration style={{ fontSize: 14 }} />
+                  <FComponentsLib.FIcons.FPolicy style={{ fontSize: 14 }} />
                   &nbsp;{FI18n.i18nNext.t('nodemgnt_exhibitmgnt_bulkaction_btn_addauthplan')}
                 </FComponentsLib.FTextBtn>
 
