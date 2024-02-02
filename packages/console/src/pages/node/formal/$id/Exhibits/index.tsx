@@ -403,14 +403,6 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                         return fCenterMessage({ message: '请选择要执行操作的对象' });
                       }
 
-                      const confirm: boolean = await fPromiseModalConfirm({
-                        title: '下架展品',
-                        description: '下架后，其它用户将无法签约该展品，确认要下架吗？',
-                      });
-                      if (!confirm) {
-                        return;
-                      }
-
                       const { ret, errCode, msg, data }: {
                         ret: number;
                         errCode: number;
@@ -499,15 +491,23 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                   </FComponentsLib.FTextBtn>
 
                   <FComponentsLib.FTextBtn
-                    // disabled={storageHomePage.checkedObjectIDs.length === 0}
+                    disabled={nodeManagerPage.checkedExhibitIDs.length === 0}
                     type={'primary'}
                     onClick={async () => {
-                      // if (storageHomePage.checkedObjectIDs.length === 0) {
-                      //   return fCenterMessage({ message: '请选择要执行操作的对象' });
-                      // }
+                      if (nodeManagerPage.checkedExhibitIDs.length === 0) {
+                        return fCenterMessage({ message: '请选择要执行操作的对象' });
+                      }
                       // dispatch<OnBatchUpdateObjectsAction>({
                       //   type: 'storageHomePage/onBatchUpdateObjects',
                       // });
+
+                      const confirm: boolean = await fPromiseModalConfirm({
+                        title: '下架展品',
+                        description: '下架后，其它用户将无法签约该展品，确认要下架吗？',
+                      });
+                      if (!confirm) {
+                        return;
+                      }
 
                       const { ret, errCode, msg, data }: {
                         ret: number;
