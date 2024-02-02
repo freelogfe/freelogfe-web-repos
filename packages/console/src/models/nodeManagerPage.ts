@@ -56,6 +56,13 @@ export interface NodeManagerModelState {
   exhibit_ListState: 'loading' | 'noData' | 'noSearchResult' | 'loaded';
   exhibit_ListMore: 'loading' | 'andMore' | 'noMore';
   checkedExhibitIDs: string[];
+  updateExhibitResultType: '' | 'online' | 'offline' | 'addPolicy',
+  updateExhibitResult: {
+    [k: string]: {
+      data: string;
+      status: 1 | 2;
+    };
+  } | null;
 
   theme_ActivatingThemeID: string;
   theme_InputFilter: string;
@@ -379,7 +386,9 @@ const exhibitInitStates: Pick<NodeManagerModelState,
   | 'exhibit_ListTotal'
   | 'exhibit_ListState'
   | 'exhibit_ListMore'
-  | 'checkedExhibitIDs'> = {
+  | 'checkedExhibitIDs'
+  | 'updateExhibitResultType'
+  | 'updateExhibitResult'> = {
   exhibit_ResourceTypeCodes: {
     value: '#all',
     label: '全部',
@@ -398,6 +407,8 @@ const exhibitInitStates: Pick<NodeManagerModelState,
   exhibit_ListState: 'loading',
   exhibit_ListMore: 'loading',
   checkedExhibitIDs: [],
+  updateExhibitResultType: '',
+  updateExhibitResult: null,
 };
 
 const themeInitStates: Pick<NodeManagerModelState, 'theme_ActivatingThemeID'
