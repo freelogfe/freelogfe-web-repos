@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import FTable from '@/components/FTable';
-import { Space } from 'antd';
+import { Checkbox, Space } from 'antd';
 import FSwitch from '@/components/FSwitch';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
@@ -9,6 +9,7 @@ import { ConnectState, NodeManagerModelState } from '@/models/connect';
 import { history } from 'umi';
 import { ColumnsType } from 'antd/lib/table/interface';
 import {
+  ChangeAction,
   FetchExhibitsAction,
   OnChange_Exhibit_InputFilter_Action,
   OnChange_Exhibit_SelectedStatus_Action,
@@ -33,6 +34,9 @@ import { Helmet } from 'react-helmet';
 import FComponentsLib from '@freelog/components-lib';
 import FResourceTypeFilter from '@/components/FResourceTypeFilter';
 import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
+// import { ChangeAction, OnBatchDeleteObjectsAction, OnBatchUpdateObjectsAction } from '@/models/storageHomePage';
+import fCenterMessage from '@/components/fCenterMessage';
+import { exhibitManagement } from '../../../../../../../@freelog/tools-lib/dist/utils/linkTo';
 
 // import { fOnOffFeedback } from '@/components/fOnOffFeedback';
 
@@ -74,6 +78,67 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
   );
   // console.log(exhibit_ListTotal, 'exhibit_ListTotal3092oiklsdf')
   const columns: ColumnsType<NonNullable<NodeManagerModelState['exhibit_List']>[number]> = [
+    {
+      title: <Space size={5}>
+        <Checkbox
+          checked={nodeManagerPage.checkedExhibitIDs.length === nodeManagerPage.exhibit_List.length}
+          indeterminate={nodeManagerPage.checkedExhibitIDs.length !== 0 && nodeManagerPage.checkedExhibitIDs.length !== nodeManagerPage.exhibit_List.length}
+          onChange={(e) => {
+            if (e.target.checked) {
+              dispatch<ChangeAction>({
+                type: 'nodeManagerPage/change',
+                payload: {
+                  checkedExhibitIDs: nodeManagerPage.exhibit_List.map((o) => {
+                    return o.id;
+                  }),
+                },
+              });
+            } else {
+              dispatch<ChangeAction>({
+                type: 'nodeManagerPage/change',
+                payload: {
+                  checkedExhibitIDs: [],
+                },
+              });
+            }
+          }}
+        />
+        <FComponentsLib.FTitleText
+          style={{ display: 'inline-block' }}
+          type='table'
+          text={'全选'}
+        />
+      </Space>,
+      dataIndex: 'checked',
+      key: 'checked',
+      render(text, record) {
+        return (<Checkbox
+          // checked={storageHomePage.checkedObjectIDs.includes(record.id)}
+          onChange={(e) => {
+            if (e.target.checked) {
+              dispatch<ChangeAction>({
+                type: 'nodeManagerPage/change',
+                payload: {
+                  checkedExhibitIDs: [
+                    ...nodeManagerPage.checkedExhibitIDs,
+                    record.id,
+                  ],
+                },
+              });
+            } else {
+              dispatch<ChangeAction>({
+                type: 'nodeManagerPage/change',
+                payload: {
+                  checkedExhibitIDs: nodeManagerPage.checkedExhibitIDs.filter((id) => {
+                    return id !== record.id;
+                  }),
+                },
+              });
+            }
+          }} />);
+      },
+      width: 100,
+    },
     {
       title: <FComponentsLib.FTitleText text={`${FI18n.i18nNext.t('tableheader_exhibit')}`} type='table' />,
       dataIndex: 'name',
@@ -316,7 +381,72 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
           <FNoDataTip height={'calc(100vh - 270px)'} tipText={'无搜索结果'} />
         )}
 
-        {nodeManagerPage.exhibit_ListState === 'loaded' && (
+        {nodeManagerPage.exhibit_ListState === 'loaded' && (<>
+
+          {
+            nodeManagerPage.checkedExhibitIDs.length > 0 && (<>
+              {/*true && (<>*/}
+              <div className={styles.handled}>
+                <FComponentsLib.FContentText
+                  type={'additional2'}
+                  style={{ fontSize: 14 }}
+                  // text={'已选择2个对象，可进行操作:'}
+                  text={FI18n.i18nNext.t('nodemgnt_exhibitmgnt_bulkaction_label_selectedqty', {
+                    Qty: nodeManagerPage.checkedExhibitIDs.length,
+                  })}
+                />
+                <FComponentsLib.FTextBtn
+                  // disabled={storageHomePage.checkedObjectIDs.length === 0}
+                  type={'primary'}
+                  onClick={() => {
+                    // if (storageHomePage.checkedObjectIDs.length === 0) {
+                    //   return fCenterMessage({ message: '请选择要执行操作的对象' });
+                    // }
+                    // dispatch<OnBatchUpdateObjectsAction>({
+                    //   type: 'storageHomePage/onBatchUpdateObjects',
+                    // });
+                  }}
+                >
+                  <FComponentsLib.FIcons.FConfiguration style={{ fontSize: 14 }} />
+                  &nbsp;{FI18n.i18nNext.t('nodemgnt_exhibitmgnt_bulkaction_btn_availabletoauth')}
+                </FComponentsLib.FTextBtn>
+
+                <FComponentsLib.FTextBtn
+                  // disabled={storageHomePage.checkedObjectIDs.length === 0}
+                  type={'primary'}
+                  onClick={() => {
+                    // if (storageHomePage.checkedObjectIDs.length === 0) {
+                    //   return fCenterMessage({ message: '请选择要执行操作的对象' });
+                    // }
+                    // dispatch<OnBatchUpdateObjectsAction>({
+                    //   type: 'storageHomePage/onBatchUpdateObjects',
+                    // });
+                  }}
+                >
+                  <FComponentsLib.FIcons.FConfiguration style={{ fontSize: 14 }} />
+                  &nbsp;{FI18n.i18nNext.t('nodemgnt_exhibitmgnt_bulkaction_btn_remoefromauth')}
+                </FComponentsLib.FTextBtn>
+
+                <FComponentsLib.FTextBtn
+                  // disabled={storageHomePage.checkedObjectIDs.length === 0}
+                  type={'primary'}
+                  onClick={() => {
+                    // if (storageHomePage.checkedObjectIDs.length === 0) {
+                    //   return fCenterMessage({ message: '请选择要执行操作的对象' });
+                    // }
+                    // dispatch<OnBatchUpdateObjectsAction>({
+                    //   type: 'storageHomePage/onBatchUpdateObjects',
+                    // });
+                  }}
+                >
+                  <FComponentsLib.FIcons.FConfiguration style={{ fontSize: 14 }} />
+                  &nbsp;{FI18n.i18nNext.t('nodemgnt_exhibitmgnt_bulkaction_btn_addauthplan')}
+                </FComponentsLib.FTextBtn>
+
+              </div>
+              <div style={{ height: 30 }} />
+            </>)
+          }
           <div className={styles.body}>
             <FTable
               rowClassName={styles.rowClassName}
@@ -334,7 +464,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
               }}
             />
           </div>
-        )}
+        </>)}
 
       </FLeftSiderLayout>
     </>

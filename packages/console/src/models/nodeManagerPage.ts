@@ -55,6 +55,7 @@ export interface NodeManagerModelState {
   exhibit_ListTotal: number;
   exhibit_ListState: 'loading' | 'noData' | 'noSearchResult' | 'loaded';
   exhibit_ListMore: 'loading' | 'andMore' | 'noMore';
+  checkedExhibitIDs: string[];
 
   theme_ActivatingThemeID: string;
   theme_InputFilter: string;
@@ -377,7 +378,8 @@ const exhibitInitStates: Pick<NodeManagerModelState,
   | 'exhibit_List'
   | 'exhibit_ListTotal'
   | 'exhibit_ListState'
-  | 'exhibit_ListMore'> = {
+  | 'exhibit_ListMore'
+  | 'checkedExhibitIDs'> = {
   exhibit_ResourceTypeCodes: {
     value: '#all',
     label: '全部',
@@ -395,6 +397,7 @@ const exhibitInitStates: Pick<NodeManagerModelState,
   exhibit_ListTotal: -1,
   exhibit_ListState: 'loading',
   exhibit_ListMore: 'loading',
+  checkedExhibitIDs: [],
 };
 
 const themeInitStates: Pick<NodeManagerModelState, 'theme_ActivatingThemeID'
