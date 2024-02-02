@@ -795,6 +795,10 @@ function ResultModal({ type, dataSource, onClose }: ResultModalProps) {
           presentableId: string;
           presentableTitle: string;
           presentableName: string;
+          coverImages: string[];
+          resourceInfo: {
+            resourceType: string[];
+          };
         }[];
       } = await FServiceAPI.Exhibit.presentableList({
         presentableIds: failedExhibitIDs.join(','),
@@ -804,11 +808,11 @@ function ResultModal({ type, dataSource, onClose }: ResultModalProps) {
       set$failedList(data.map((d) => {
         return {
           // cover: d.coverImages[0],
-          cover: '',
+          cover: d.coverImages[0] || '',
           resourceID: d.presentableId,
           resourceName: d.presentableName,
           resourceTitle: d.presentableTitle,
-          resourceType: ['xxxx', 'yyyy'].join('/'),
+          resourceType: d.resourceInfo.resourceType.join('/'),
           failedReason: dataSource[d.presentableId].data,
         };
       }));
