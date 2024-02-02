@@ -19,18 +19,20 @@ import inovation from '@/assets/activity/editorPick/inovation@2x.png';
 import original from '@/assets/activity/editorPick/original@2x.png';
 import spread from '@/assets/activity/editorPick/spread@2x.png';
 import title2 from '@/assets/activity/editorPick/title2@2x.png';
-
+import Module from './module';
 import FFooter from '@/components/Footer';
 import { ActivityDetailsPageModelState } from '@/models/activityDetailsPage';
 import { connect } from 'dva';
 import { ConnectState } from '@/models/connect';
 import FComponentsLib from '@freelog/components-lib';
-
+import AboutUsMore from '../SpringFestival/AboutUsMore';
 interface EditorPickProps {
   activityDetailsPage: ActivityDetailsPageModelState;
 }
 
 function EditorPick({ activityDetailsPage }: EditorPickProps) {
+  const [modalVisible, set_ModalVisible] = React.useState<boolean>(false);
+
   const scrollToAnchor = (anchorName: any) => {
     let state: any = {
       behavior: 'smooth',
@@ -46,7 +48,7 @@ function EditorPick({ activityDetailsPage }: EditorPickProps) {
   return (
     <>
       <div className={'editor-pick w-100x h-100x flex-column align-center'}>
-        <div className="editor-pick-container">
+        <div className="editor-pick-container pb-100">
           <div className="w-100x">
             <img src={img_banner} alt="" className="w-100x" />
           </div>
@@ -77,7 +79,7 @@ function EditorPick({ activityDetailsPage }: EditorPickProps) {
                 </span>
               </div>
             </div>
-            <div className="flex-column px-162 align-center w-100x">
+            <div className="flex-column px-162 align-center w-100x mt-50">
               <span className="editor-pick-1-title mb-20">奖项设置</span>
               <div className="flex-row space-between w-100x mb-20">
                 <div className="w-237 over-h">
@@ -104,9 +106,12 @@ function EditorPick({ activityDetailsPage }: EditorPickProps) {
               <div className="w-485 over-h mt-30 mb-50">
                 <img src={reward} alt="" className="w-100x" />
               </div>
-              <div className="editor-pick-1-button flex-column-center">
+              {/* <button
+                className="editor-pick-1-button flex-column-center"
+                title="本期获奖结果于 2024-04-15 00:00 进行公示，敬请期待～"
+              >
                 查看获奖公示
-              </div>
+              </button> */}
               <div className="editor-pick-1-tip mt-50">
                 游戏、主题、插件月度精选仍在筹备中，首期暂不进行评选，但您提交的作品将自动纳入后续评选，敬请期待！
               </div>
@@ -123,9 +128,16 @@ function EditorPick({ activityDetailsPage }: EditorPickProps) {
                   <img src={operator} alt="" className="w-100x" />
                 </div>
               </div>
-              <a className="link">查看活动规则</a>
+              <a
+                className="link"
+                onClick={() => {
+                  set_ModalVisible(true);
+                }}
+              >
+                查看活动规则
+              </a>
             </div>
-            <div className="flex-column px-160  align-center w-100x mt-96 ">
+            <div className="flex-column px-160  align-center w-100x mt-96 mb-90">
               <div className="w-151 mb-45">
                 <img src={standard} alt="" className="w-100x" />
               </div>
@@ -142,13 +154,19 @@ function EditorPick({ activityDetailsPage }: EditorPickProps) {
                 <img src={spread} alt="" className="w-100x" />
               </div>
             </div>
-            <div className="flex-column align-center w-100x mt-101 ">
+            {/* <div className="flex-column align-center w-100x mt-101 ">
               <div className="w-427 mb-47">
                 <img src={title2} alt="" className="w-100x" />
               </div>
-            </div>
+            </div> */}
           </div>
+          <AboutUsMore />
         </div>
+        <Module
+          activityDetailsPage={activityDetailsPage}
+          visible={modalVisible}
+          set_ModalVisible={set_ModalVisible}
+        />
         <FFooter />
       </div>
     </>
