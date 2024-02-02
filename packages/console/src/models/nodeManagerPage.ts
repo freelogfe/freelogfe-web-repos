@@ -1070,7 +1070,7 @@ const Model: NodeManagerModelType = {
             return {
               id: i.presentableId,
               cover: i.coverImages[0],
-              title: i.presentableTitle,
+              title: i.presentableTitle || i.presentableName,
               resourceName: i.presentableName,
               version: i.version,
               isOnline: i.onlineStatus === 1,
