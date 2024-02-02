@@ -68,7 +68,7 @@ function EditorPick({ activityDetailsPage }: EditorPickProps) {
                     'event_2024monthlyeditorspick_collect_date',
                   )}
                 </span>
-                <span className="editor-pick-1-content">截止</span>
+                {/* <span className="editor-pick-1-content">截止</span> */}
               </div>
               <div className="flex-column align-center">
                 <span className="editor-pick-1-title">评选期</span>
@@ -77,8 +77,8 @@ function EditorPick({ activityDetailsPage }: EditorPickProps) {
                     'event_2024monthlyeditorspick_selection_date',
                   )}
                 </span>
-                <span className="editor-pick-1-content my-5">~</span>
-                <span className="editor-pick-1-content">2024-04-15 00:00</span>
+                {/* <span className="editor-pick-1-content my-5">~</span> */}
+                {/* <span className="editor-pick-1-content">2024-04-15 00:00</span> */}
               </div>
               <div className="flex-column align-center">
                 <span className="editor-pick-1-title">结果公示</span>
