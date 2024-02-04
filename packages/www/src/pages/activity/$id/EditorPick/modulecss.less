@@ -1,0 +1,127 @@
+﻿@import '../../../../config.less';
+
+.participation {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  width: 1060px;
+  height: 660px;
+  background-image: url('../../../../assets/activity/SpringFestival/participation@2x.png');
+  background-size: 970px 556px;
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  position: relative;
+
+  .textContent {
+    width: 540px;
+    height: 78px;
+    font-size: 16px;
+    font-weight: 400;
+    color: #222;
+    line-height: 26px;
+    position: absolute;
+
+    strong {
+      color: #ff6a1f;
+    }
+  }
+}
+
+.article {
+  width: 1016px;
+  height: 100%;
+  // background: linear-gradient(
+  //     135deg,
+  //     rgba(255, 247, 234, 0.3) 0%,
+  //     rgba(255, 204, 197, 0.3) 100%
+  //   ),
+  //   url('../../../../assets/activity/SpringFestival/lantern@2x.png') top left /
+  //     153px 171px no-repeat,
+  //   url('../../../../assets/activity/SpringFestival/candy@2x.png') bottom
+  //     right / 153px 171px no-repeat;
+  background: #ffffff;
+  // border-radius: 10px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  justify-content: center;
+
+  .content {
+    width: 820px;
+
+    .h1 {
+      //width: 120px;
+      //height: 36px;
+      font-size: 30px;
+      font-weight: 600;
+      color: #222;
+      line-height: 36px;
+    }
+
+    .h2 {
+      //width: 820px;
+      //height: 22px;
+      font-size: 16px;
+      font-weight: 600;
+      color: #222222;
+      line-height: 22px;
+    }
+
+    .p {
+      //width: 820px;
+      //height: 20px;
+      font-size: 14px;
+      //font-family: PingFangSC, PingFang SC;
+      font-weight: 400;
+      color: #666;
+      line-height: 20px;
+
+      strong {
+        color: #ff6a1f;
+      }
+    }
+    .subText {
+      font-size: 14px;
+      font-weight: 400;
+      margin-left: 30px;
+      color: #666666;
+      line-height: 20px;
+      margin-top: 10px;
+    }
+    .list {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+
+      .order {
+        width: 20px;
+        height: 20px;
+        background: #edf6ff;
+        border-radius: 50%;
+        font-size: 12px;
+        font-weight: 600;
+        color: #2784ff;
+        line-height: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .text {
+        width: 790px;
+        font-size: 14px;
+        font-weight: 600;
+        color: #666666;
+        line-height: 20px;
+      }
+    }
+
+    .small {
+      font-size: 14px;
+      font-weight: 600;
+      color: #222222;
+      line-height: 20px;
+    }
+  }
+}
