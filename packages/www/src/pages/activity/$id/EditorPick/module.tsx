@@ -47,6 +47,8 @@ function ActivityRule({
                 'YYYY·MM·DD'}
               起，以月度为周期，征集期自每月初启动，月末结束，次月中旬公示结果；
               <br />
+            </div>
+            <div className={styles.p + " mt-10"}>
               第一期活动征集期为
               {activityDetailsPage.startTime?.format('YYYY/MM/DD') ||
                 'YYYY·MM·DD'}
@@ -54,13 +56,6 @@ function ActivityRule({
               {activityDetailsPage.endTime?.format('YYYY/MM/DD') ||
                 'YYYY·MM·DD'}
               ，评选期为开始时间至结束时间，评选期结束后7个工作日公示首期获奖结果；
-              {/* 活动时间为 */}
-              {/* {activityDetailsPage.startTime?.format('YYYY/MM/DD') ||
-                'YYYY·MM·DD'}
-              至
-              {activityDetailsPage.endTime?.format('YYYY/MM/DD') ||
-                'YYYY·MM·DD'}
-              ，为保证您的活动参与体验，请尽量使用PC端访问freelog网页版； */}
             </div>
             <div style={{ height: 30 }} />
             <div className={styles.h2}>二、参与方式</div>
