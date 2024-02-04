@@ -209,7 +209,9 @@ function FighterRegistration({}: FighterRegistrationProps) {
     <FComponentsLib.FTextBtn
       type={'primary'}
       onClick={() => {
-        self.open(self.location.hostname.endsWith('.freelog.com') ? 'https://www.freelog.com/activity/65b0c90ec759060039cc61b9' : 'https://www.testfreelog.com/activity/65b0c790435d96002f7b8358');
+        self.open(self.location.hostname.endsWith('.freelog.com')
+          ? 'https://www.freelog.com/activity/65b0c90ec759060039cc61b9'
+          : 'https://www.testfreelog.com/activity/65b0c790435d96002f7b8358');
       }}
     >前往查看</FComponentsLib.FTextBtn>
     <div style={{ height: 60 }} />
