@@ -114,6 +114,9 @@ function EditorPick({ activityDetailsPage }: EditorPickProps) {
               <div className="w-485 over-h mt-30 mb-50">
                 <img src={reward} alt="" className="w-100x" />
               </div>
+              <div className="flex-column-center editor-pick-1-pub">
+                本期获奖结果于 2024-04-15 00:00 进行公示，敬请期待～
+              </div>
               {/* <button
                 className="editor-pick-1-button flex-column-center"
                 title="本期获奖结果于 2024-04-15 00:00 进行公示，敬请期待～"
@@ -131,17 +134,13 @@ function EditorPick({ activityDetailsPage }: EditorPickProps) {
               <div className="flex-row space-between w-100x mb-40">
                 <div className="w-362 flex-column align-center">
                   <img src={publish} alt="" className="w-100x" />
-                  <button
-                    className="editor-pick-1-button flex-column-center"
-                  >
+                  <button className="editor-pick-1-button flex-column-center">
                     立即发布资源
                   </button>
                 </div>
                 <div className="w-362 flex-column align-center">
                   <img src={operator} alt="" className="w-100x" />
-                  <button
-                    className="editor-pick-1-button flex-column-center"
-                  >
+                  <button className="editor-pick-1-button flex-column-center">
                     立即运营节点
                   </button>
                 </div>
