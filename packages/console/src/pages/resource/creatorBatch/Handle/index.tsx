@@ -238,17 +238,25 @@ function Handle({ dispatch, resourceCreatorBatchPage }: HandleProps) {
 
     let covers: string[] = [];
     if (resourceCreatorBatchPage.selectedResourceType?.labels.includes('图片')) {
-      const coverPromise = get$tempLocalSuccess().map((o) => {
-        return FServiceAPI.Storage.handleImage({
-          sha1: o.sha1,
-        });
-      });
-      const res: { ret: number, errCode: number, data: { url: string } }[] = await Promise.all(coverPromise);
-      covers = res.map(({ ret, errCode, data }) => {
-        if (ret === 0 && errCode === 0) {
-          return data.url || '';
-        }
-        return '';
+      // const coverPromise = get$tempLocalSuccess().map((o) => {
+      //
+      //   return FServiceAPI.Storage.handleImage({
+      //     sha1: o.sha1,
+      //     // @ts-ignore
+      //     isMQ: true,
+      //   });
+      // });
+      // const res: { ret: number, errCode: number, data: { url: string } }[] = await Promise.all(coverPromise);
+      // covers = res.map(({ ret, errCode, data }) => {
+      //   if (ret === 0 && errCode === 0) {
+      //     return data.url || '';
+      //   }
+      //   return '';
+      // });
+      covers = await handleImage({
+        sha1s: get$tempLocalSuccess().map((o) => {
+          return o.sha1;
+        }),
       });
     }
     let dataSource: HandleStates['dataSource'] = get$dataSource().map((resource) => {
@@ -457,19 +465,24 @@ function Handle({ dispatch, resourceCreatorBatchPage }: HandleProps) {
     let covers: string[] = [];
     if (resourceCreatorBatchPage.selectedResourceType?.labels.includes('图片')) {
       // console.error(info, 'info 89weijufoliksjdlfkjsdlkfjlkdsjflksdjlfkj');
-      const coverPromise = data_objs.map((o) => {
-        return FServiceAPI.Storage.handleImage({
-          sha1: o.sha1,
-        });
-      });
-      const res: { ret: number, errCode: number, data: { url: string } }[] = await Promise.all(coverPromise);
-
-      // console.error(res, 'res sdflksdjflksjdlkfjlksdjflsdjlfjlskdjlk');
-      covers = res.map(({ ret, errCode, data }) => {
-        if (ret === 0 && errCode === 0) {
-          return data.url || '';
-        }
-        return '';
+      // const coverPromise = data_objs.map((o) => {
+      //   return FServiceAPI.Storage.handleImage({
+      //     sha1: o.sha1,
+      //   });
+      // });
+      // const res: { ret: number, errCode: number, data: { url: string } }[] = await Promise.all(coverPromise);
+      //
+      // // console.error(res, 'res sdflksdjflksjdlkfjlksdjflsdjlfjlskdjlk');
+      // covers = res.map(({ ret, errCode, data }) => {
+      //   if (ret === 0 && errCode === 0) {
+      //     return data.url || '';
+      //   }
+      //   return '';
+      // });
+      covers = await handleImage({
+        sha1s: get$tempLocalSuccess().map((o) => {
+          return o.sha1;
+        }),
       });
     }
 
@@ -1155,4 +1168,37 @@ async function occupies(sha1s: string[]): Promise<{
     }
   }
   return result;
+}
+
+interface HandleImageParams {
+  sha1s: string[];
+}
+
+async function handleImage({ sha1s }: HandleImageParams): Promise<string[]> {
+
+  const URLs: string[] = [];
+
+  let index: number = 0;
+  while (index < sha1s.length) {
+    const { ret, errCode, msg, data }: {
+      ret: number;
+      errCode: number;
+      msg: string;
+      data: any;
+    } = await FServiceAPI.Storage.handleImage({
+      sha1: sha1s[index],
+      // @ts-ignore
+      isMQ: true,
+    });
+
+    if (ret !== 0 || errCode !== 0) {
+      URLs.push('');
+      index++;
+    } else if (!!data && data.url) {
+      URLs.push(data.url);
+      index++;
+    }
+    await FUtil.Tool.promiseSleep(200);
+  }
+  return URLs;
 }
