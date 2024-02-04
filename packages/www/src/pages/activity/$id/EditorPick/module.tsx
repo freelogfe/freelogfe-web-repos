@@ -42,7 +42,10 @@ function ActivityRule({
             <div className={styles.h2}>一、活动时间</div>
             <div style={{ height: 15 }} />
             <div className={styles.p}>
-              本活动自XXXX年XX月XX日起，以月度为周期，征集期自每月初启动，月末结束，次月中旬公示结果；
+              本活动自
+              {activityDetailsPage.startTime?.format('YYYY/MM/DD') ||
+                'YYYY·MM·DD'}
+              起，以月度为周期，征集期自每月初启动，月末结束，次月中旬公示结果；
               <br />
               第一期活动征集期为
               {activityDetailsPage.startTime?.format('YYYY/MM/DD') ||
