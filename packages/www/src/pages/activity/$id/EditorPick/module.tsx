@@ -48,13 +48,8 @@ function ActivityRule({
               起，以月度为周期，征集期自每月初启动，月末结束，次月中旬公示结果；
               <br />
             </div>
-            <div className={styles.p + " mt-10"}>
-              第一期活动征集期为
-              {activityDetailsPage.startTime?.format('YYYY/MM/DD') ||
-                'YYYY·MM·DD'}
-              至
-              {activityDetailsPage.endTime?.format('YYYY/MM/DD') ||
-                'YYYY·MM·DD'}
+            <div className={styles.p + ' mt-10'}>
+              第一期活动征集期截止至 2024-04-01 00:00:00
               ，评选期为开始时间至结束时间，评选期结束后7个工作日公示首期获奖结果；
             </div>
             <div style={{ height: 30 }} />
