@@ -21,14 +21,13 @@ import spread from '@/assets/activity/editorPick/spread@2x.png';
 import title2 from '@/assets/activity/editorPick/title2@2x.png';
 import Module from './module';
 import more from '@/assets/activity/editorPick/more.png';
-
 import FFooter from '@/components/Footer';
 import { ActivityDetailsPageModelState } from '@/models/activityDetailsPage';
 import { connect } from 'dva';
 import { ConnectState } from '@/models/connect';
 import FComponentsLib from '@freelog/components-lib';
 import AboutUsMore from '../SpringFestival/AboutUsMore';
-import { FUtil, FI18n } from '@freelog/tools-lib';
+import { FUtil, FI18n, FServiceAPI } from '@freelog/tools-lib';
 
 interface EditorPickProps {
   activityDetailsPage: ActivityDetailsPageModelState;
@@ -63,7 +62,7 @@ function EditorPick({ activityDetailsPage }: EditorPickProps) {
             <div className="flex-row px-216 space-between w-100x">
               <div className="flex-column align-center">
                 <span className="editor-pick-1-title">征集期</span>
-                <span className="editor-pick-1-content mt-34">
+                <span className="editor-pick-1-content mt-20">
                   {FI18n.i18nNext.t(
                     'event_2024monthlyeditorspick_collect_date',
                   )}
@@ -82,7 +81,7 @@ function EditorPick({ activityDetailsPage }: EditorPickProps) {
               </div>
               <div className="flex-column align-center">
                 <span className="editor-pick-1-title">结果公示</span>
-                <span className="editor-pick-1-content mt-48">
+                <span className="editor-pick-1-content mt-20">
                   {FI18n.i18nNext.t('event_2024monthlyeditorspick_awards_date')}
                 </span>
               </div>
@@ -115,7 +114,9 @@ function EditorPick({ activityDetailsPage }: EditorPickProps) {
                 <img src={reward} alt="" className="w-100x" />
               </div>
               <div className="flex-column-center editor-pick-1-pub">
-                本期获奖结果于 2024-04-15 00:00 进行公示，敬请期待～
+                本期获奖结果于{' '}
+                {FI18n.i18nNext.t('event_2024monthlyeditorspick_awards_date')}{' '}
+                进行公示，敬请期待～
               </div>
               {/* <button
                 className="editor-pick-1-button flex-column-center"
@@ -134,13 +135,48 @@ function EditorPick({ activityDetailsPage }: EditorPickProps) {
               <div className="flex-row space-between w-100x mb-40">
                 <div className="w-362 flex-column align-center">
                   <img src={publish} alt="" className="w-100x" />
-                  <button className="editor-pick-1-button flex-column-center">
+                  <button
+                    className="editor-pick-1-button flex-column-center"
+                    onClick={() => {
+                      window.open(
+                        FUtil.Format.completeUrlByDomain('console') +
+                          FUtil.LinkTo.resourceCreatorEntry(),
+                      );
+                    }}
+                  >
                     立即发布资源
                   </button>
                 </div>
                 <div className="w-362 flex-column align-center">
                   <img src={operator} alt="" className="w-100x" />
-                  <button className="editor-pick-1-button flex-column-center">
+                  <button
+                    className="editor-pick-1-button flex-column-center"
+                    onClick={async () => {
+                      const {
+                        data,
+                      }: {
+                        data: {
+                          totalItem: number;
+                        };
+                      } = await FServiceAPI.Node.nodes({});
+                      // console.log(data, 'DDDDDDDD');
+                      if (data.totalItem > 0) {
+                        self.open(
+                          FUtil.Format.completeUrlByDomain('console') +
+                            FUtil.LinkTo.market(),
+                        );
+                      } else {
+                        self.open(
+                          FUtil.Format.completeUrlByDomain('console') +
+                            FUtil.LinkTo.nodeCreator(),
+                        );
+                      }
+                      window.open(
+                        FUtil.Format.completeUrlByDomain('console') +
+                          FUtil.LinkTo.resourceCreatorEntry(),
+                      );
+                    }}
+                  >
                     立即运营节点
                   </button>
                 </div>
