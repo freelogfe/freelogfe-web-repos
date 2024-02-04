@@ -186,7 +186,7 @@ function ActivityRule({
                   如何在授权合约流程中使用真实货币交易
                 </div>
                 <div className={'ml-1 ' + styles.subText}>
-                  内测期间，Freelog暂不支持真实货币交易，为了便于用户体验资源授权合约交易中的付费相关功能，Freelog提供虚拟币——“羽币”支持。
+                  内测期间，Freelog暂不支持真实货币交易，为了便于用户体验资源授权合约交易中的付费相关功能，Freelog提供虚拟币——<span  style={{ fontWeight: 600 }}>“羽币”</span>支持。
                   内测期间，羽币与真实货币无任何联系，Freelog平台不支持以任何形式、任何比例进行羽币与真实货币之间的兑换。
                 </div>
               </div>
