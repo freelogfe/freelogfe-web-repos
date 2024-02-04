@@ -63,18 +63,22 @@ function EditorPick({ activityDetailsPage }: EditorPickProps) {
               <div className="flex-column align-center">
                 <span className="editor-pick-1-title">征集期</span>
                 <span className="editor-pick-1-content mt-32">
-                  {FI18n.i18nNext.tJSXElement(FI18n.i18nNext.t(
-                    'event_2024monthlyeditorspick_collect_date',
-                  ))}
+                  {FI18n.i18nNext.tJSXElement(
+                    FI18n.i18nNext.t(
+                      'event_2024monthlyeditorspick_collect_date',
+                    ),
+                  )}
                 </span>
                 {/* <span className="editor-pick-1-content">截止</span> */}
               </div>
               <div className="flex-column align-center">
                 <span className="editor-pick-1-title">评选期</span>
                 <span className="editor-pick-1-content mt-20">
-                  {FI18n.i18nNext.tJSXElement(FI18n.i18nNext.t(
-                    'event_2024monthlyeditorspick_selection_date',
-                  ))}
+                  {FI18n.i18nNext.tJSXElement(
+                    FI18n.i18nNext.t(
+                      'event_2024monthlyeditorspick_selection_date',
+                    ),
+                  )}
                 </span>
                 {/* <span className="editor-pick-1-content my-5">~</span> */}
                 {/* <span className="editor-pick-1-content">2024-04-15 00:00</span> */}
@@ -82,7 +86,11 @@ function EditorPick({ activityDetailsPage }: EditorPickProps) {
               <div className="flex-column align-center">
                 <span className="editor-pick-1-title">结果公示</span>
                 <span className="editor-pick-1-content mt-48">
-                  {FI18n.i18nNext.tJSXElement(FI18n.i18nNext.t('event_2024monthlyeditorspick_awards_date'))}
+                  {FI18n.i18nNext.tJSXElement(
+                    FI18n.i18nNext.t(
+                      'event_2024monthlyeditorspick_awards_date',
+                    ),
+                  )}
                 </span>
               </div>
             </div>
@@ -136,7 +144,7 @@ function EditorPick({ activityDetailsPage }: EditorPickProps) {
                 <div className="w-490 flex-column align-center">
                   <img src={publish} alt="" className="w-100x" />
                   <button
-                    className="editor-pick-1-button flex-column-center"
+                    className="editor-pick-1-button flex-column-center cur-pointer"
                     onClick={() => {
                       window.open(
                         FUtil.Format.completeUrlByDomain('console') +
@@ -150,7 +158,7 @@ function EditorPick({ activityDetailsPage }: EditorPickProps) {
                 <div className="w-490 flex-column align-center">
                   <img src={operator} alt="" className="w-100x" />
                   <button
-                    className="editor-pick-1-button flex-column-center"
+                    className="editor-pick-1-button flex-column-center  cur-pointer"
                     onClick={async () => {
                       const {
                         data,
@@ -171,10 +179,6 @@ function EditorPick({ activityDetailsPage }: EditorPickProps) {
                             FUtil.LinkTo.nodeCreator(),
                         );
                       }
-                      window.open(
-                        FUtil.Format.completeUrlByDomain('console') +
-                          FUtil.LinkTo.resourceCreatorEntry(),
-                      );
                     }}
                   >
                     立即运营节点
