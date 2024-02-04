@@ -130,8 +130,19 @@ const initStates: HandleStates = {
 };
 
 function Handle({ dispatch, resourceCreatorBatchPage }: HandleProps) {
+  const [$username, set$username, get$username] = FUtil.Hook.useGetState<string>('');
   const [$dataSource, set$dataSource, get$dataSource] = FUtil.Hook.useGetState<HandleStates['dataSource']>(initStates['dataSource']);
   const [$tempLocalSuccess, set$tempLocalSuccess, get$tempLocalSuccess] = FUtil.Hook.useGetState<HandleStates['tempLocalSuccess']>(initStates['tempLocalSuccess']);
+
+  AHooks.useMount(async () => {
+    const { data }: {
+      data: {
+        username: string;
+      }
+    } = await FServiceAPI.User.currentUserInfo();
+    // console.log(data, 'asd9ifjs;dlkfjlskdjflksdjlkjl');
+    set$username(data.username);
+  });
 
   AHooks.useDebounceEffect(() => {
     // console.log(get$dataSource(), get$tempLocalSuccess(), 'get$dataSource(), get$tempLocalSuccess() 色打发士大夫');
@@ -177,7 +188,7 @@ function Handle({ dispatch, resourceCreatorBatchPage }: HandleProps) {
   }
 
   async function handleLocalUploadSuccess() {
-    console.log(get$tempLocalSuccess(), 'handleLocalUploadSuccess sdfsdlkjflksdjfl handleLocalUploadSuccess');
+    // console.log(get$tempLocalSuccess(), 'handleLocalUploadSuccess sdfsdlkjflksdjfl handleLocalUploadSuccess');
     const namesMap: Map<string, number> = new Map<string, number>();
 
     for (const resource of get$dataSource()) {
@@ -880,7 +891,7 @@ function Handle({ dispatch, resourceCreatorBatchPage }: HandleProps) {
                 r.state === 'list' && !!r.listInfo && (<Card
                   resourceType={resourceCreatorBatchPage.selectedResourceType?.labels || []}
                   order={ri + 1}
-                  username={'$username'}
+                  username={$username}
                   info={r.listInfo}
                   onChange={(value) => {
                     // console.log(value, 'onChange value sidjflksdjflkjsdlkfjlksdfjlksdjlfjlksdjflkjsdlkf');
