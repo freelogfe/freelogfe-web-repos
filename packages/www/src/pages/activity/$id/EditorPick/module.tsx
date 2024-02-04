@@ -43,13 +43,13 @@ function ActivityRule({
             <div style={{ height: 15 }} />
             <div className={styles.p}>
               本活动自
-              {activityDetailsPage.startTime?.format('YYYY/MM/DD') ||
+              {activityDetailsPage.startTime?.format('YYYY-MM-DD') ||
                 'YYYY·MM·DD'}
               起，以月度为周期，征集期自每月初启动，月末结束，次月中旬公示结果；
               <br />
             </div>
             <div className={styles.p + ' mt-10'}>
-              第一期活动征集期截止至 2024-04-01 00:00:00
+              第一期活动征集期截止至 2024-03-31 23:59:59
               ，评选期为开始时间至结束时间，评选期结束后7个工作日公示首期获奖结果；
             </div>
             <div style={{ height: 30 }} />
@@ -186,7 +186,7 @@ function ActivityRule({
                   如何在授权合约流程中使用真实货币交易
                 </div>
                 <div className={'ml-1 ' + styles.subText}>
-                  内测期间，Freelog暂不支持真实货币交易，为了便于用户体验资源授权合约交易中的付费相关功能，Freelog提供虚拟币——“羽币”支持。
+                  内测期间，Freelog暂不支持真实货币交易，为了便于用户体验资源授权合约交易中的付费相关功能，Freelog提供虚拟币——<span  style={{ fontWeight: 600 }}>“羽币”</span>支持。
                   内测期间，羽币与真实货币无任何联系，Freelog平台不支持以任何形式、任何比例进行羽币与真实货币之间的兑换。
                 </div>
               </div>
