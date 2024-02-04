@@ -136,7 +136,7 @@ function EditorPick({ activityDetailsPage }: EditorPickProps) {
                 <div className="w-490 flex-column align-center">
                   <img src={publish} alt="" className="w-100x" />
                   <button
-                    className="editor-pick-1-button flex-column-center"
+                    className="editor-pick-1-button flex-column-center cur-pointer"
                     onClick={() => {
                       window.open(
                         FUtil.Format.completeUrlByDomain('console') +
@@ -150,7 +150,7 @@ function EditorPick({ activityDetailsPage }: EditorPickProps) {
                 <div className="w-490 flex-column align-center">
                   <img src={operator} alt="" className="w-100x" />
                   <button
-                    className="editor-pick-1-button flex-column-center"
+                    className="editor-pick-1-button flex-column-center  cur-pointer"
                     onClick={async () => {
                       const {
                         data,
