@@ -49,7 +49,7 @@ function ActivityRule({
               <br />
             </div>
             <div className={styles.p + ' mt-10'}>
-              第一期活动征集期截止至 2024-04-01 00:00:00
+              第一期活动征集期截止至 2024-03-31 23:59:59
               ，评选期为开始时间至结束时间，评选期结束后7个工作日公示首期获奖结果；
             </div>
             <div style={{ height: 30 }} />
