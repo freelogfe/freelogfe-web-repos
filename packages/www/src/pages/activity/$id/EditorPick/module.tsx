@@ -43,7 +43,7 @@ function ActivityRule({
             <div style={{ height: 15 }} />
             <div className={styles.p}>
               本活动自
-              {activityDetailsPage.startTime?.format('YYYY/MM/DD') ||
+              {activityDetailsPage.startTime?.format('YYYY-MM-DD') ||
                 'YYYY·MM·DD'}
               起，以月度为周期，征集期自每月初启动，月末结束，次月中旬公示结果；
               <br />
