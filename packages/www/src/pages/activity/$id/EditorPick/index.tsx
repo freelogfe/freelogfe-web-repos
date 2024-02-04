@@ -129,11 +129,21 @@ function EditorPick({ activityDetailsPage }: EditorPickProps) {
                 <img src={way} alt="" className="w-100x" />
               </div>
               <div className="flex-row space-between w-100x mb-40">
-                <div className="w-362 ">
+                <div className="w-362 flex-column align-center">
                   <img src={publish} alt="" className="w-100x" />
+                  <button
+                    className="editor-pick-1-button flex-column-center"
+                  >
+                    立即发布资源
+                  </button>
                 </div>
-                <div className="w-362 ">
+                <div className="w-362 flex-column align-center">
                   <img src={operator} alt="" className="w-100x" />
+                  <button
+                    className="editor-pick-1-button flex-column-center"
+                  >
+                    立即运营节点
+                  </button>
                 </div>
               </div>
               <a

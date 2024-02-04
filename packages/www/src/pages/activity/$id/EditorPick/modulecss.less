@@ -31,15 +31,17 @@
 .article {
   width: 1016px;
   height: 100%;
-  background: linear-gradient(
-      135deg,
-      rgba(255, 247, 234, 0.3) 0%,
-      rgba(255, 204, 197, 0.3) 100%
-    ),
-    url('../../../../assets/activity/SpringFestival/lantern@2x.png') top left /
-      153px 171px no-repeat,
-    url('../../../../assets/activity/SpringFestival/candy@2x.png') bottom
-      right / 153px 171px no-repeat;
+  // background: linear-gradient(
+  //     135deg,
+  //     rgba(255, 247, 234, 0.3) 0%,
+  //     rgba(255, 204, 197, 0.3) 100%
+  //   ),
+  //   url('../../../../assets/activity/SpringFestival/lantern@2x.png') top left /
+  //     153px 171px no-repeat,
+  //   url('../../../../assets/activity/SpringFestival/candy@2x.png') bottom
+  //     right / 153px 171px no-repeat;
+  background: #ffffff;
+  // border-radius: 10px;
   overflow-y: auto;
   overflow-x: hidden;
   display: flex;
@@ -61,9 +63,8 @@
       //width: 820px;
       //height: 22px;
       font-size: 16px;
-      //font-family: PingFangSC, PingFang SC;
       font-weight: 600;
-      color: #ff6a1f;
+      color: #222222;
       line-height: 22px;
     }
 
@@ -80,7 +81,14 @@
         color: #ff6a1f;
       }
     }
-
+    .subText {
+      font-size: 14px;
+      font-weight: 400;
+      margin-left: 30px;
+      color: #666666;
+      line-height: 20px;
+      margin-top: 10px;
+    }
     .list {
       display: flex;
       align-items: flex-start;
@@ -89,11 +97,11 @@
       .order {
         width: 20px;
         height: 20px;
-        background: rgba(255, 106, 31, 0.1);
+        background: #edf6ff;
         border-radius: 50%;
         font-size: 12px;
         font-weight: 600;
-        color: #ff6a1f;
+        color: #2784ff;
         line-height: 18px;
         display: flex;
         align-items: center;
@@ -103,20 +111,17 @@
       .text {
         width: 790px;
         font-size: 14px;
-        font-weight: 400;
-        color: #666;
+        font-weight: 600;
+        color: #666666;
         line-height: 20px;
       }
     }
 
     .small {
-      //width: 820px;
-      //height: 54px;
-      font-size: 12px;
-      //font-family: PingFangSC, PingFang SC;
+      font-size: 14px;
       font-weight: 600;
-      color: #666;
-      line-height: 18px;
+      color: #222222;
+      line-height: 20px;
     }
   }
 }
