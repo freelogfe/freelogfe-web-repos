@@ -83,9 +83,9 @@ const Model: activitiesPageModelType = {
         5: 'end',
       };
       const list: ActivitiesPageModelState['list'] = data.dataList
-        .filter((d) => {
-          return d.link !== 'SpringFestival';
-        })
+        // .filter((d) => {
+        //   return d.link !== 'SpringFestival';
+        // })
         .map<ActivitiesPageModelState['list'][0]>((d) => {
           return {
             activityID: d._id,
