@@ -102,11 +102,18 @@ function Card({
               }: CardProps) {
   const [$showMore, set$showMore, get$showMore] = FUtil.Hook.useGetState<boolean>(false);
   const [$auth, set$auth, get$auth] = FUtil.Hook.useGetState<'block' | 'none'>('none');
+  const [$resourceName, set$resourceName, get$resourceName] = FUtil.Hook.useGetState<string>(info.resourceName);
   // const [$dataSource, set$dataSource, get$dataSource] = FUtil.Hook.useGetState<CardProps['info']>(info);
 
   // React.useEffect(() => {
   //   set$dataSource(info);
   // }, [info]);
+
+  React.useEffect(() => {
+    if (get$resourceName() !== info.resourceName) {
+      set$resourceName(info.resourceName);
+    }
+  }, [info.resourceName]);
 
   AHooks.useDebounceEffect(() => {
     // onVerifyResourceName();
@@ -114,11 +121,11 @@ function Card({
     wait: 300,
   });
 
-  const { run } = AHooks.useDebounceFn(() => {
-    onVerifyResourceName();
-  }, {
-    wait: 100,
-  });
+  // const { run } = AHooks.useDebounceFn(() => {
+  //   onVerifyResourceName();
+  // }, {
+  //   wait: 100,
+  // });
 
   async function onVerifyResourceName() {
     let nameErrorText: string = '';
@@ -209,13 +216,40 @@ function Card({
           />
           <FResourceNameInput
             userName={username}
-            value={info.resourceName}
+            value={$resourceName}
             onChange={(value) => {
+              // onChange && onChange({
+              //   ...info,
+              //   resourceName: value,
+              // });
+              // run();
+              set$resourceName(value);
+            }}
+            onBlur={(value) => {
+              let nameErrorText: string = '';
+              if (get$resourceName() === '') {
+                nameErrorText = '请输入资源授权标识';
+              } else if (get$resourceName().length > 60) {
+                nameErrorText = '不多于60个字符';
+              } else if (!FUtil.Regexp.RESOURCE_NAME.test(get$resourceName())) {
+                // nameErrorText = `不符合正则 ${FUtil.Regexp.RESOURCE_NAME}`;
+                nameErrorText = FI18n.i18nNext.t('naming_convention_resource_name');
+              } else {
+                // const params1: Parameters<typeof FServiceAPI.Resource.info>[0] = {
+                //   resourceIdOrName: encodeURIComponent(`${username}/${info.resourceName}`),
+                // };
+                // const { data: data_info } = await FServiceAPI.Resource.info(params1);
+                // if (!!data_info) {
+                //   nameErrorText = '资源授权标识已存在';
+                // }
+                // nameErrorText = '###***';
+                onVerifyResourceName();
+              }
               onChange && onChange({
                 ...info,
-                resourceName: value,
+                resourceName: get$resourceName(),
+                resourceNameError: nameErrorText,
               });
-              run();
             }}
           />
         </div>
