@@ -116,9 +116,9 @@ function Card({
   }, [info.resourceName]);
 
   AHooks.useDebounceEffect(() => {
-    // onVerifyResourceName();
+    onVerifyResourceName();
   }, [info.resourceName], {
-    wait: 300,
+    wait: 100,
   });
 
   // const { run } = AHooks.useDebounceFn(() => {
@@ -126,6 +126,10 @@ function Card({
   // }, {
   //   wait: 100,
   // });
+  //
+  // AHooks.useDebounceEffect(() => {
+  //
+  // }, [])
 
   async function onVerifyResourceName() {
     let nameErrorText: string = '';
@@ -243,7 +247,7 @@ function Card({
                 //   nameErrorText = '资源授权标识已存在';
                 // }
                 // nameErrorText = '###***';
-                onVerifyResourceName();
+                // onVerifyResourceName();
               }
               onChange && onChange({
                 ...info,
