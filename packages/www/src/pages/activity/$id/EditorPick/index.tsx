@@ -51,66 +51,66 @@ function EditorPick({ activityDetailsPage }: EditorPickProps) {
   return (
     <>
       <div className={'editor-pick w-100x h-100x flex-column align-center'}>
-        <div className="editor-pick-container pb-100">
+        <div className="editor-pick-container pb-100 flex-column align-center">
           <div className="w-100x">
             <img src={img_banner} alt="" className="w-100x" />
           </div>
-          <div className="w-100x flex-column align-center mt-80 editor-pick-1">
+          <div className=" flex-column align-center mt-80 editor-pick-1">
             <div className="w-353 mb-40">
               <img src={title} alt="" className="w-100x" />
             </div>
-            <div className="flex-row px-216 space-between w-100x">
+            <div className="flex-row  space-between w-100x px-72">
               <div className="flex-column align-center">
                 <span className="editor-pick-1-title">征集期</span>
-                <span className="editor-pick-1-content mt-20">
-                  {FI18n.i18nNext.t(
+                <span className="editor-pick-1-content mt-32">
+                  {FI18n.i18nNext.tJSXElement(FI18n.i18nNext.t(
                     'event_2024monthlyeditorspick_collect_date',
-                  )}
+                  ))}
                 </span>
                 {/* <span className="editor-pick-1-content">截止</span> */}
               </div>
               <div className="flex-column align-center">
                 <span className="editor-pick-1-title">评选期</span>
                 <span className="editor-pick-1-content mt-20">
-                  {FI18n.i18nNext.t(
+                  {FI18n.i18nNext.tJSXElement(FI18n.i18nNext.t(
                     'event_2024monthlyeditorspick_selection_date',
-                  )}
+                  ))}
                 </span>
                 {/* <span className="editor-pick-1-content my-5">~</span> */}
                 {/* <span className="editor-pick-1-content">2024-04-15 00:00</span> */}
               </div>
               <div className="flex-column align-center">
                 <span className="editor-pick-1-title">结果公示</span>
-                <span className="editor-pick-1-content mt-20">
-                  {FI18n.i18nNext.t('event_2024monthlyeditorspick_awards_date')}
+                <span className="editor-pick-1-content mt-48">
+                  {FI18n.i18nNext.tJSXElement(FI18n.i18nNext.t('event_2024monthlyeditorspick_awards_date'))}
                 </span>
               </div>
             </div>
-            <div className="flex-column px-162 align-center w-100x mt-50">
+            <div className="flex-column  align-center w-100x mt-50">
               <span className="editor-pick-1-title mb-20">奖项设置</span>
               <div className="flex-row space-between w-100x mb-20">
-                <div className="w-237 over-h">
+                <div className="w-320 over-h">
                   <img src={fiction} alt="" className="w-100x" />
                 </div>
-                <div className="w-237 over-h">
+                <div className="w-320 over-h">
                   <img src={cartoon} alt="" className="w-100x" />
                 </div>
-                <div className="w-237 over-h">
+                <div className="w-320 over-h">
                   <img src={picture} alt="" className="w-100x" />
                 </div>
               </div>
               <div className="flex-row space-between w-100x">
-                <div className="w-237 over-h">
+                <div className="w-320 over-h">
                   <img src={vedio} alt="" className="w-100x" />
                 </div>
-                <div className="w-237 over-h">
+                <div className="w-320 over-h">
                   <img src={voice} alt="" className="w-100x" />
                 </div>
-                <div className="w-237 over-h">
+                <div className="w-320 over-h">
                   <img src={node} alt="" className="w-100x" />
                 </div>
               </div>
-              <div className="w-485 over-h mt-30 mb-50">
+              <div className="w-656 over-h mt-30 mb-50">
                 <img src={reward} alt="" className="w-100x" />
               </div>
               <div className="flex-column-center editor-pick-1-pub">
@@ -128,12 +128,12 @@ function EditorPick({ activityDetailsPage }: EditorPickProps) {
                 游戏、主题、插件月度精选仍在筹备中，首期暂不进行评选，但您提交的作品将自动纳入后续评选，敬请期待！
               </div>
             </div>
-            <div className="flex-column px-162 align-center w-100x mt-96">
-              <div className="w-151 mb-46">
+            <div className="flex-column  align-center w-100x mt-96">
+              <div className="w-205 mb-46">
                 <img src={way} alt="" className="w-100x" />
               </div>
               <div className="flex-row space-between w-100x mb-40">
-                <div className="w-362 flex-column align-center">
+                <div className="w-490 flex-column align-center">
                   <img src={publish} alt="" className="w-100x" />
                   <button
                     className="editor-pick-1-button flex-column-center"
@@ -147,7 +147,7 @@ function EditorPick({ activityDetailsPage }: EditorPickProps) {
                     立即发布资源
                   </button>
                 </div>
-                <div className="w-362 flex-column align-center">
+                <div className="w-490 flex-column align-center">
                   <img src={operator} alt="" className="w-100x" />
                   <button
                     className="editor-pick-1-button flex-column-center"
@@ -182,7 +182,7 @@ function EditorPick({ activityDetailsPage }: EditorPickProps) {
                 </div>
               </div>
               <a
-                className="link"
+                className="link mt-40"
                 onClick={() => {
                   set_ModalVisible(true);
                 }}
@@ -190,8 +190,8 @@ function EditorPick({ activityDetailsPage }: EditorPickProps) {
                 查看活动规则
               </a>
             </div>
-            <div className="flex-column px-160  align-center w-100x mt-96 mb-90">
-              <div className="w-151 mb-45">
+            <div className="flex-column   align-center w-100x mt-96 mb-90">
+              <div className="w-203 mb-45">
                 <img src={standard} alt="" className="w-100x" />
               </div>
               <div className="w-100x mb-36">
@@ -212,7 +212,7 @@ function EditorPick({ activityDetailsPage }: EditorPickProps) {
                 <img src={title2} alt="" className="w-100x" />
               </div>
             </div> */}
-            <div className="w-151 mb-46">
+            <div className="w-237 mb-46">
               <img src={more} alt="" className="w-100x" />
             </div>
           </div>
