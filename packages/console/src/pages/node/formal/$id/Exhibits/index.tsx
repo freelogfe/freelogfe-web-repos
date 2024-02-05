@@ -251,8 +251,11 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                 // console.log('9e8wijofijdslkfjldskjflksdjlkjlkjl');
                 if (!value) {
                   const confirm: boolean = await fPromiseModalConfirm({
-                    title: '下架展品',
-                    description: '下架后，其它用户将无法签约该展品，确认要下架吗？',
+                    title: '提示',
+                    // description: '下架后，其它用户将无法签约该展品，确认要下架吗？',
+                    description: FI18n.i18nNext.t('confirm_msg_remove_exhibits_from_auth'),
+                    okText: FI18n.i18nNext.t('btn_remove_exhibits_from_auth'),
+                    promptKey_localStorage: 'offlineExhibit',
                   });
                   if (!confirm) {
                     return;
@@ -504,8 +507,12 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                       // });
 
                       const confirm: boolean = await fPromiseModalConfirm({
-                        title: '下架展品',
-                        description: '下架后，其它用户将无法签约该展品，确认要下架吗？',
+                        // title: '下架展品',
+                        // description: '下架后，其它用户将无法签约该展品，确认要下架吗？',
+                        title: '提示',
+                        description: FI18n.i18nNext.t('confirm_msg_remove_exhibits_from_auth'),
+                        okText: FI18n.i18nNext.t('btn_remove_exhibits_from_auth'),
+                        promptKey_localStorage: 'offlineExhibit',
                       });
                       if (!confirm) {
                         return;
