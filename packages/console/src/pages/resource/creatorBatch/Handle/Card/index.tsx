@@ -101,7 +101,7 @@ function Card({
                 onClickApplyPolicies,
               }: CardProps) {
   const [$showMore, set$showMore, get$showMore] = FUtil.Hook.useGetState<boolean>(false);
-  const [$auth, set$auth, get$auth] = FUtil.Hook.useGetState<'block' | 'none'>('none');
+  // const [$auth, set$auth, get$auth] = FUtil.Hook.useGetState<'block' | 'none'>('none');
   const [$resourceName, set$resourceName, get$resourceName] = FUtil.Hook.useGetState<string>(info.resourceName);
   // const [$dataSource, set$dataSource, get$dataSource] = FUtil.Hook.useGetState<CardProps['info']>(info);
 
@@ -404,8 +404,8 @@ function Card({
       <FComponentsLib.FTextBtn
         style={{ fontSize: 12 }}
         onClick={() => {
-          set$showMore(true);
-          set$auth(get$auth() === 'block' ? 'none' : 'block');
+          set$showMore(!get$showMore());
+          // set$auth(get$auth() === 'block' ? 'none' : 'block');
         }}
       >{$showMore
         ? FI18n.i18nNext.t('brr_resourcelisting_item_btn_showlesssetting')
@@ -706,34 +706,31 @@ function Card({
     }
 
     {/*<div style={{height: 5}}/>*/}
-    {
-      $showMore && (<div style={{ display: $auth }}>
-        <div style={{ height: 5 }} />
-        <div className={styles.block}>
-          <FMicroAPP_Authorization
-            // name={'Authorization_' + info.order}
-            licenseeId={''}
-            mainAppType={'resourceInBatchPublish'}
-            depList={info.directDependencies}
-            upcastList={info.baseUpcastResources}
-            update={(data: any) => {
-              // console.error(get$dataSource(), '@#################################');
-              // console.info(data, '############################################@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
-              // console.error(info, data, 'resourceInBatchPublish ____________________ data sdifjlskdfjlkjlk');
-              onChange && onChange({
-                ...info,
-                directDependencies: data.depList,
-                resolveResources: data.resolveResources,
-                baseUpcastResources: data.upcastList,
-                isCompleteAuthorization: data.isAllAuthComplete,
-              });
-            }}
-          />
-        </div>
-      </div>)
-    }
 
-
+    <div style={{ display: $showMore ? 'block' : 'none' }}>
+      <div style={{ height: 5 }} />
+      <div className={styles.block}>
+        <FMicroAPP_Authorization
+          // name={'Authorization_' + info.order}
+          licenseeId={''}
+          mainAppType={'resourceInBatchPublish'}
+          depList={info.directDependencies}
+          upcastList={info.baseUpcastResources}
+          update={(data: any) => {
+            // console.error(get$dataSource(), '@#################################');
+            // console.info(data, '############################################@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
+            // console.error(info, data, 'resourceInBatchPublish ____________________ data sdifjlskdfjlkjlk');
+            onChange && onChange({
+              ...info,
+              directDependencies: data.depList,
+              resolveResources: data.resolveResources,
+              baseUpcastResources: data.upcastList,
+              isCompleteAuthorization: data.isAllAuthComplete,
+            });
+          }}
+        />
+      </div>
+    </div>
   </div>);
 }
 
