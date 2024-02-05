@@ -68,6 +68,7 @@ function NodeManager({ dispatch, nodeManagerPage, match }: NodeManagerProps) {
   }, [showPage]);
 
   AHooks.useAsyncEffect(async () => {
+    // console.log(match.params.id, 'match.params.id sdifjsdlkfjklsdjlkj');
     await dispatch<OnChange_ShowPage_Action>({
       type: 'nodeManagerPage/onChange_ShowPage',
       payload: {

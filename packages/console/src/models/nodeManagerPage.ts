@@ -645,7 +645,7 @@ const Model: NodeManagerModelType = {
       });
     },
     * onMount_ThemePage({}: OnMount_ThemePage_Action, { select, put }: EffectsCommandMap) {
-      console.log('onMount_ThemePage 3w2890iojhsdfjsdlfjsldjl');
+      // console.log('onMount_ThemePage 3w2890iojhsdfjsdlfjsldjl');
       yield put<FetchThemesAction>({
         type: 'fetchThemes',
         payload: {

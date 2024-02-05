@@ -59,14 +59,15 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
     });
   });
 
-  AHooks.useDebounceEffect(() => {
+  const { run } = AHooks.useDebounceFn(() => {
+    // console.log(nodeManagerPage.exhibit_InputFilter, 'nodeManagerPage.exhibit_InputFilter )))))');
     dispatch<FetchExhibitsAction>({
       type: 'nodeManagerPage/fetchExhibits',
       payload: {
         restart: true,
       },
     });
-  }, [nodeManagerPage.exhibit_InputFilter], {
+  }, {
     wait: 300,
   });
 
@@ -366,6 +367,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                           value: value,
                         },
                       });
+                      run();
                     }}
                     className={styles.input}
                     // placeholder={FI18n.i18nNext.t('nodemgmt_search_exhibits_hint')}
