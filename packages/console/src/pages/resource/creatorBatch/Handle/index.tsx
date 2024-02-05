@@ -765,7 +765,22 @@ function Handle({ dispatch, resourceCreatorBatchPage }: HandleProps) {
       resourceTypeCode: resourceCreatorBatchPage.selectedResourceType?.value || '',
       createResourceObjects: createResourceObjects,
     };
-    const { data } = await FServiceAPI.Resource.createBatch(params);
+    const { data }: {
+      data: {
+        [resourceID: string]: {
+          data: {
+            resourceId: string;
+            resourceName: string;
+            resourceTitle: string;
+            coverImages: string[];
+            status: number;
+            policies: any[];
+          } | null;
+          message: string;
+          status: number;
+        };
+      }
+    } = await FServiceAPI.Resource.createBatch(params);
     // console.log(data, 'data isdjflksjdlkfjslkdjflkjsolikfjewsoijlkj');
     const list: {
       resourceID: string;
@@ -775,26 +790,45 @@ function Handle({ dispatch, resourceCreatorBatchPage }: HandleProps) {
       status: 'online' | 'offline' | 'unreleased' | 'freeze';
       policies: string[];
       failReason: string;
-    }[] = Object.values(data).map((d: any) => {
-      const data = d.data;
-      return {
-        resourceID: data.resourceId,
-        resourceName: data.resourceName,
-        resourceTitle: data.resourceTitle,
-        cover: data.coverImages,
-        status: data.status === 2
-          ? 'freeze'
-          : data.status === 1
-            ? 'online'
-            : data.status === 0
-              ? 'unreleased'
-              : 'offline',
-        policies: data.policies.map((p: any) => {
-          return p.policyName;
-        }),
-        failReason: d.message || '',
-      };
-    });
+    }[] = Object.entries(data)
+      // .filter((d) => {
+      //   return !d.data;
+      // })
+      .map(([k, d]) => {
+        // const data = d.data;
+        if (!d.data) {
+          console.log(createResourceObjects, 'createResourceObjectssdfjlsdkjflksdjklfjdslkjflkdsjlkj');
+          const oldResource = createResourceObjects.find((ro) => {
+            return ro.name === k;
+          })
+          return {
+            resourceID: FUtil.Tool.generateRandomCode(),
+            resourceName: oldResource?.name || '资源创建失败',
+            resourceTitle: oldResource?.resourceTitle || '资源创建失败',
+            cover: '',
+            status: 'unreleased',
+            policies: [],
+            failReason: d.message,
+          };
+        }
+        return {
+          resourceID: d.data.resourceId,
+          resourceName: d.data.resourceName,
+          resourceTitle: d.data.resourceTitle,
+          cover: d.data.coverImages[0] || '',
+          status: d.data.status === 2
+            ? 'freeze'
+            : d.data.status === 1
+              ? 'online'
+              : d.data.status === 0
+                ? 'unreleased'
+                : 'offline',
+          policies: d.data.policies.map((p: any) => {
+            return p.policyName;
+          }),
+          failReason: d.message || '',
+        };
+      });
     // console.log(list, 'sdiofj;sldkjflksdjfolijsdolfjlksdjlkj');
     dispatch<ChangeAction>({
       type: 'resourceCreatorBatchPage/change',
