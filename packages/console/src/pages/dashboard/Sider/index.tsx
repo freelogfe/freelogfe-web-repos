@@ -74,7 +74,7 @@ function Sider({}: SiderProps) {
             extra={<FComponentsLib.FTextBtn
               type='default'
               onClick={() => {
-                window.open('https://freelog3.freelog.com/home_freelog-query_id=62d0d04f456ff0002e329537');
+                window.open('https://freelog3.freelog.com/reader_freelog-query_id=62d0d04f456ff0002e329537');
               }}
             >更多 &gt;</FComponentsLib.FTextBtn>}
           >
@@ -83,7 +83,7 @@ function Sider({}: SiderProps) {
                 <i />
                 <span />
                 <a
-                  href={'https://freelog3.freelog.com/home_freelog-query_id=62d0d04f456ff0002e329537&title=1.+%E5%A6%82%E4%BD%95%E5%88%9B%E5%BB%BA%E5%8F%91%E8%A1%8C%E5%8D%95%E4%B8%AA%E8%B5%84%E6%BA%90'}
+                  href={'https://freelog3.freelog.com/reader_freelog-query_id=62d0d04f456ff0002e329537&title=1.+%E5%A6%82%E4%BD%95%E5%88%9B%E5%BB%BA%E5%8F%91%E8%A1%8C%E5%8D%95%E4%B8%AA%E8%B5%84%E6%BA%90'}
                   target={'_blank'}
                 >如何创建资源？</a>
               </div>
@@ -91,7 +91,7 @@ function Sider({}: SiderProps) {
                 <i />
                 <span />
                 <a
-                  href={'https://freelog3.freelog.com/home_freelog-query_id=62d0d04f456ff0002e329537&title=1.%E5%A6%82%E4%BD%95%E5%88%9B%E5%BB%BA%E8%8A%82%E7%82%B9'}
+                  href={'https://freelog3.freelog.com/reader_freelog-query_id=62d0d04f456ff0002e329537&title=1.%E5%A6%82%E4%BD%95%E5%88%9B%E5%BB%BA%E8%8A%82%E7%82%B9'}
                   target={'_blank'}
                 >如何创建节点？</a>
               </div>
@@ -107,7 +107,7 @@ function Sider({}: SiderProps) {
                 <i />
                 <span />
                 <a
-                  href={'https://freelog3.freelog.com/home_freelog-query_id=62d0cf48456ff0002e3294fb&title=%E4%B8%80%E3%80%81%E5%B9%B3%E5%8F%B0%E8%A7%92%E8%89%B2'}
+                  href={'https://freelog3.freelog.com/reader_freelog-query_id=62d0cf48456ff0002e3294fb&title=%E4%B8%80%E3%80%81%E5%B9%B3%E5%8F%B0%E8%A7%92%E8%89%B2'}
                   target={'_blank'}
                 >资源作者和节点商有什么区别？</a>
               </div>
@@ -115,7 +115,7 @@ function Sider({}: SiderProps) {
                 <i />
                 <span />
                 <a
-                  href={'https://freelog3.freelog.com/home_freelog-query_id=62d0d04f456ff0002e329537&title=3.%E5%8F%AA%E5%88%9B%E5%BB%BA%E4%BA%86%E6%8E%88%E6%9D%83%E6%9D%A1%E7%9B%AE%EF%BC%8C%E5%A6%82%E4%BD%95%E7%BB%A7%E7%BB%AD%E6%8F%90%E4%BA%A4%E8%B5%84%E6%BA%90%E6%96%87%E4%BB%B6%E3%80%81%E6%B7%BB%E5%8A%A0%E6%8E%88%E6%9D%83%E7%AD%96%E7%95%A5'}
+                  href={'https://freelog3.freelog.com/reader_freelog-query_id=62d0cf48456ff0002e3294fb&title=%E4%B8%83%E3%80%81%E6%8E%88%E6%9D%83%E7%AD%96%E7%95%A5'}
                   target={'_blank'}
                 >如何添加授权策略？</a>
               </div>
