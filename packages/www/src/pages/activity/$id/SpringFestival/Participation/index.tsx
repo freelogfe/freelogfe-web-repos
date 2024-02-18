@@ -95,7 +95,7 @@ function Participation({ activityDetailsPage }: ParticipationProps) {
         <a
           className={sharedStyles.button}
           onClick={() => {
-            self.open('https://freelog3.freelog.com/home_freelog-query_id=62ce6f8a456ff0002e32915f');
+            self.open('https://freelog3.freelog.com/reader_freelog-query_id=62ce6f8a456ff0002e32915f');
           }}
         >查看操作教程</a>
         <a
