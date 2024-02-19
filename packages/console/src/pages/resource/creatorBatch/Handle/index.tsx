@@ -130,8 +130,19 @@ const initStates: HandleStates = {
 };
 
 function Handle({ dispatch, resourceCreatorBatchPage }: HandleProps) {
+  const [$username, set$username, get$username] = FUtil.Hook.useGetState<string>('');
   const [$dataSource, set$dataSource, get$dataSource] = FUtil.Hook.useGetState<HandleStates['dataSource']>(initStates['dataSource']);
   const [$tempLocalSuccess, set$tempLocalSuccess, get$tempLocalSuccess] = FUtil.Hook.useGetState<HandleStates['tempLocalSuccess']>(initStates['tempLocalSuccess']);
+
+  AHooks.useMount(async () => {
+    const { data }: {
+      data: {
+        username: string;
+      }
+    } = await FServiceAPI.User.currentUserInfo();
+    // console.log(data, 'asd9ifjs;dlkfjlskdjflksdjlkjl');
+    set$username(data.username);
+  });
 
   AHooks.useDebounceEffect(() => {
     // console.log(get$dataSource(), get$tempLocalSuccess(), 'get$dataSource(), get$tempLocalSuccess() 色打发士大夫');
@@ -177,7 +188,7 @@ function Handle({ dispatch, resourceCreatorBatchPage }: HandleProps) {
   }
 
   async function handleLocalUploadSuccess() {
-    console.log(get$tempLocalSuccess(), 'handleLocalUploadSuccess sdfsdlkjflksdjfl handleLocalUploadSuccess');
+    // console.log(get$tempLocalSuccess(), 'handleLocalUploadSuccess sdfsdlkjflksdjfl handleLocalUploadSuccess');
     const namesMap: Map<string, number> = new Map<string, number>();
 
     for (const resource of get$dataSource()) {
@@ -227,17 +238,25 @@ function Handle({ dispatch, resourceCreatorBatchPage }: HandleProps) {
 
     let covers: string[] = [];
     if (resourceCreatorBatchPage.selectedResourceType?.labels.includes('图片')) {
-      const coverPromise = get$tempLocalSuccess().map((o) => {
-        return FServiceAPI.Storage.handleImage({
-          sha1: o.sha1,
-        });
-      });
-      const res: { ret: number, errCode: number, data: { url: string } }[] = await Promise.all(coverPromise);
-      covers = res.map(({ ret, errCode, data }) => {
-        if (ret === 0 && errCode === 0) {
-          return data.url || '';
-        }
-        return '';
+      // const coverPromise = get$tempLocalSuccess().map((o) => {
+      //
+      //   return FServiceAPI.Storage.handleImage({
+      //     sha1: o.sha1,
+      //     // @ts-ignore
+      //     isMQ: true,
+      //   });
+      // });
+      // const res: { ret: number, errCode: number, data: { url: string } }[] = await Promise.all(coverPromise);
+      // covers = res.map(({ ret, errCode, data }) => {
+      //   if (ret === 0 && errCode === 0) {
+      //     return data.url || '';
+      //   }
+      //   return '';
+      // });
+      covers = await handleImage({
+        sha1s: get$tempLocalSuccess().map((o) => {
+          return o.sha1;
+        }),
       });
     }
     let dataSource: HandleStates['dataSource'] = get$dataSource().map((resource) => {
@@ -446,19 +465,24 @@ function Handle({ dispatch, resourceCreatorBatchPage }: HandleProps) {
     let covers: string[] = [];
     if (resourceCreatorBatchPage.selectedResourceType?.labels.includes('图片')) {
       // console.error(info, 'info 89weijufoliksjdlfkjsdlkfjlkdsjflksdjlfkj');
-      const coverPromise = data_objs.map((o) => {
-        return FServiceAPI.Storage.handleImage({
-          sha1: o.sha1,
-        });
-      });
-      const res: { ret: number, errCode: number, data: { url: string } }[] = await Promise.all(coverPromise);
-
-      // console.error(res, 'res sdflksdjflksjdlkfjlksdjflsdjlfjlskdjlk');
-      covers = res.map(({ ret, errCode, data }) => {
-        if (ret === 0 && errCode === 0) {
-          return data.url || '';
-        }
-        return '';
+      // const coverPromise = data_objs.map((o) => {
+      //   return FServiceAPI.Storage.handleImage({
+      //     sha1: o.sha1,
+      //   });
+      // });
+      // const res: { ret: number, errCode: number, data: { url: string } }[] = await Promise.all(coverPromise);
+      //
+      // // console.error(res, 'res sdflksdjflksjdlkfjlksdjflsdjlfjlskdjlk');
+      // covers = res.map(({ ret, errCode, data }) => {
+      //   if (ret === 0 && errCode === 0) {
+      //     return data.url || '';
+      //   }
+      //   return '';
+      // });
+      covers = await handleImage({
+        sha1s: get$tempLocalSuccess().map((o) => {
+          return o.sha1;
+        }),
       });
     }
 
@@ -741,7 +765,22 @@ function Handle({ dispatch, resourceCreatorBatchPage }: HandleProps) {
       resourceTypeCode: resourceCreatorBatchPage.selectedResourceType?.value || '',
       createResourceObjects: createResourceObjects,
     };
-    const { data } = await FServiceAPI.Resource.createBatch(params);
+    const { data }: {
+      data: {
+        [resourceID: string]: {
+          data: {
+            resourceId: string;
+            resourceName: string;
+            resourceTitle: string;
+            coverImages: string[];
+            status: number;
+            policies: any[];
+          } | null;
+          message: string;
+          status: number;
+        };
+      }
+    } = await FServiceAPI.Resource.createBatch(params);
     // console.log(data, 'data isdjflksjdlkfjslkdjflkjsolikfjewsoijlkj');
     const list: {
       resourceID: string;
@@ -751,26 +790,45 @@ function Handle({ dispatch, resourceCreatorBatchPage }: HandleProps) {
       status: 'online' | 'offline' | 'unreleased' | 'freeze';
       policies: string[];
       failReason: string;
-    }[] = Object.values(data).map((d: any) => {
-      const data = d.data;
-      return {
-        resourceID: data.resourceId,
-        resourceName: data.resourceName,
-        resourceTitle: data.resourceTitle,
-        cover: data.coverImages,
-        status: data.status === 2
-          ? 'freeze'
-          : data.status === 1
-            ? 'online'
-            : data.status === 0
-              ? 'unreleased'
-              : 'offline',
-        policies: data.policies.map((p: any) => {
-          return p.policyName;
-        }),
-        failReason: d.message || '',
-      };
-    });
+    }[] = Object.entries(data)
+      // .filter((d) => {
+      //   return !d.data;
+      // })
+      .map(([k, d]) => {
+        // const data = d.data;
+        if (!d.data) {
+          console.log(createResourceObjects, 'createResourceObjectssdfjlsdkjflksdjklfjdslkjflkdsjlkj');
+          const oldResource = createResourceObjects.find((ro) => {
+            return ro.name === k;
+          })
+          return {
+            resourceID: FUtil.Tool.generateRandomCode(),
+            resourceName: oldResource?.name || '资源创建失败',
+            resourceTitle: oldResource?.resourceTitle || '资源创建失败',
+            cover: '',
+            status: 'unreleased',
+            policies: [],
+            failReason: d.message,
+          };
+        }
+        return {
+          resourceID: d.data.resourceId,
+          resourceName: d.data.resourceName,
+          resourceTitle: d.data.resourceTitle,
+          cover: d.data.coverImages[0] || '',
+          status: d.data.status === 2
+            ? 'freeze'
+            : d.data.status === 1
+              ? 'online'
+              : d.data.status === 0
+                ? 'unreleased'
+                : 'offline',
+          policies: d.data.policies.map((p: any) => {
+            return p.policyName;
+          }),
+          failReason: d.message || '',
+        };
+      });
     // console.log(list, 'sdiofj;sldkjflksdjfolijsdolfjlksdjlkj');
     dispatch<ChangeAction>({
       type: 'resourceCreatorBatchPage/change',
@@ -880,7 +938,7 @@ function Handle({ dispatch, resourceCreatorBatchPage }: HandleProps) {
                 r.state === 'list' && !!r.listInfo && (<Card
                   resourceType={resourceCreatorBatchPage.selectedResourceType?.labels || []}
                   order={ri + 1}
-                  username={'$username'}
+                  username={$username}
                   info={r.listInfo}
                   onChange={(value) => {
                     // console.log(value, 'onChange value sidjflksdjflkjsdlkfjlksdfjlksdjlfjlksdjflkjsdlkf');
@@ -1144,4 +1202,37 @@ async function occupies(sha1s: string[]): Promise<{
     }
   }
   return result;
+}
+
+interface HandleImageParams {
+  sha1s: string[];
+}
+
+async function handleImage({ sha1s }: HandleImageParams): Promise<string[]> {
+
+  const URLs: string[] = [];
+
+  let index: number = 0;
+  while (index < sha1s.length) {
+    const { ret, errCode, msg, data }: {
+      ret: number;
+      errCode: number;
+      msg: string;
+      data: any;
+    } = await FServiceAPI.Storage.handleImage({
+      sha1: sha1s[index],
+      // @ts-ignore
+      isMQ: true,
+    });
+
+    if (ret !== 0 || errCode !== 0) {
+      URLs.push('');
+      index++;
+    } else if (!!data && data.url) {
+      URLs.push(data.url);
+      index++;
+    }
+    await FUtil.Tool.promiseSleep(200);
+  }
+  return URLs;
 }

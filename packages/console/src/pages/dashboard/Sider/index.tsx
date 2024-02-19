@@ -74,7 +74,7 @@ function Sider({}: SiderProps) {
             extra={<FComponentsLib.FTextBtn
               type='default'
               onClick={() => {
-                window.open('https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62d0d04f456ff0002e329537');
+                window.open('https://freelog3.freelog.com/reader_freelog-query_id=62d0d04f456ff0002e329537');
               }}
             >更多 &gt;</FComponentsLib.FTextBtn>}
           >
@@ -83,7 +83,7 @@ function Sider({}: SiderProps) {
                 <i />
                 <span />
                 <a
-                  href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f&title=1.+%E5%A6%82%E4%BD%95%E5%8F%91%E8%A1%8C%E8%B5%84%E6%BA%90'}
+                  href={'https://freelog3.freelog.com/reader_freelog-query_id=62d0d04f456ff0002e329537&title=1.+%E5%A6%82%E4%BD%95%E5%88%9B%E5%BB%BA%E5%8F%91%E8%A1%8C%E5%8D%95%E4%B8%AA%E8%B5%84%E6%BA%90'}
                   target={'_blank'}
                 >如何创建资源？</a>
               </div>
@@ -91,23 +91,23 @@ function Sider({}: SiderProps) {
                 <i />
                 <span />
                 <a
-                  href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62ce6f8a456ff0002e32915f&title=2.+%E5%A6%82%E4%BD%95%E8%BF%90%E8%90%A5%E8%8A%82%E7%82%B9'}
+                  href={'https://freelog3.freelog.com/reader_freelog-query_id=62d0d04f456ff0002e329537&title=1.%E5%A6%82%E4%BD%95%E5%88%9B%E5%BB%BA%E8%8A%82%E7%82%B9'}
                   target={'_blank'}
                 >如何创建节点？</a>
               </div>
+              {/*<div className={styles.linkListItem}>*/}
+              {/*  <i />*/}
+              {/*  <span />*/}
+              {/*  <a*/}
+              {/*    href={'https://www.freelog.com/home'}*/}
+              {/*    target={'_blank'}*/}
+              {/*  >Freelog有哪些使用场景？</a>*/}
+              {/*</div>*/}
               <div className={styles.linkListItem}>
                 <i />
                 <span />
                 <a
-                  href={'https://www.freelog.com/home'}
-                  target={'_blank'}
-                >Freelog有哪些使用场景？</a>
-              </div>
-              <div className={styles.linkListItem}>
-                <i />
-                <span />
-                <a
-                  href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62d0cf48456ff0002e3294fb'}
+                  href={'https://freelog3.freelog.com/reader_freelog-query_id=62d0cf48456ff0002e3294fb&title=%E4%B8%80%E3%80%81%E5%B9%B3%E5%8F%B0%E8%A7%92%E8%89%B2'}
                   target={'_blank'}
                 >资源作者和节点商有什么区别？</a>
               </div>
@@ -115,7 +115,7 @@ function Sider({}: SiderProps) {
                 <i />
                 <span />
                 <a
-                  href={'https://freelog3.freelog.com/$freelog-61f252ef6fe5c1002e2c7b4b=/home_id=62d0cf48456ff0002e3294fb&title=%E6%8E%88%E6%9D%83%E7%AD%96%E7%95%A5'}
+                  href={'https://freelog3.freelog.com/reader_freelog-query_id=62d0cf48456ff0002e3294fb&title=%E4%B8%83%E3%80%81%E6%8E%88%E6%9D%83%E7%AD%96%E7%95%A5'}
                   target={'_blank'}
                 >如何添加授权策略？</a>
               </div>
@@ -124,30 +124,35 @@ function Sider({}: SiderProps) {
         </FFormLayout>
       </div>
 
-      <div className={styles.panelCard}>
-        <FFormLayout>
-          <FFormLayout.FBlock
-            title={'热门讨论'}
-            extra={<FComponentsLib.FTextBtn type='default'>更多 &gt;</FComponentsLib.FTextBtn>}
-          >
-            <div className={styles.linkList}>
-              <div className={styles.linkListItem}>
-                <i />
-                <span />
-                <a
-                  href={'https://forum.freelog.com/topic/3/freelog%E5%86%85%E6%B5%8B%E7%AD%BE%E5%88%B0%E6%A5%BC-%E5%AE%8C%E6%88%90%E7%AD%BE%E5%88%B0%E5%8D%B3%E6%9C%89%E6%9C%BA%E4%BC%9A%E9%A2%866%E5%85%83%E7%8E%B0%E9%87%91%E5%A5%96%E5%8A%B1'}
-                  target='_blank'
-                >Freelog内测签到盖楼，完成签到和其他基础任务领6元现金奖励！</a>
-              </div>
-              {/*<div className={styles.linkListItem}>*/}
-              {/*  <i />*/}
-              {/*  <span />*/}
-              {/*  <a href={'#'} target='_blank'>Freelog内测等你来“找茬”，参与有机会赢取400元京东购物卡！</a>*/}
-              {/*</div>*/}
-            </div>
-          </FFormLayout.FBlock>
-        </FFormLayout>
-      </div>
+      {/*<div className={styles.panelCard}>*/}
+      {/*  <FFormLayout>*/}
+      {/*    <FFormLayout.FBlock*/}
+      {/*      title={'热门讨论'}*/}
+      {/*      extra={<FComponentsLib.FTextBtn*/}
+      {/*        type='default'*/}
+      {/*        onClick={() => {*/}
+
+      {/*        }}*/}
+      {/*      >更多 &gt;</FComponentsLib.FTextBtn>}*/}
+      {/*    >*/}
+      {/*      <div className={styles.linkList}>*/}
+      {/*        <div className={styles.linkListItem}>*/}
+      {/*          <i />*/}
+      {/*          <span />*/}
+      {/*          <a*/}
+      {/*            href={'https://forum.freelog.com/topic/3/freelog%E5%86%85%E6%B5%8B%E7%AD%BE%E5%88%B0%E6%A5%BC-%E5%AE%8C%E6%88%90%E7%AD%BE%E5%88%B0%E5%8D%B3%E6%9C%89%E6%9C%BA%E4%BC%9A%E9%A2%866%E5%85%83%E7%8E%B0%E9%87%91%E5%A5%96%E5%8A%B1'}*/}
+      {/*            target='_blank'*/}
+      {/*          >Freelog内测签到盖楼，完成签到和其他基础任务领6元现金奖励！</a>*/}
+      {/*        </div>*/}
+      {/*        /!*<div className={styles.linkListItem}>*!/*/}
+      {/*        /!*  <i />*!/*/}
+      {/*        /!*  <span />*!/*/}
+      {/*        /!*  <a href={'#'} target='_blank'>Freelog内测等你来“找茬”，参与有机会赢取400元京东购物卡！</a>*!/*/}
+      {/*        /!*</div>*!/*/}
+      {/*      </div>*/}
+      {/*    </FFormLayout.FBlock>*/}
+      {/*  </FFormLayout>*/}
+      {/*</div>*/}
 
     </Space>
   </div>);

@@ -21,15 +21,15 @@ import styles from './index.less';
 import FResourceTypeFilter from '@/components/FResourceTypeFilter';
 import FComponentsLib from '@freelog/components-lib';
 import FMenu from '@/components/FMenu';
-import { Checkbox, Modal, Space } from 'antd';
-// import { history } from 'umi';
+import { Checkbox, Modal, Select, Space } from 'antd';
 import FResourceCard from '@/components/FResourceCard';
 import FListFooter from '@/components/FListFooter';
 import FResourceCard_AbleCheck from '@/components/FResourceCard_AbleCheck';
 import fPolicyBuilder from '@/components/fPolicyBuilder';
-import FResourceFeedback from '@/components/FResourceFeedback';
 import FCoverImage from '@/components/FCoverImage';
 import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
+import fSignResourceToNode from '@/components/fSignResourceToNode';
+import { history } from 'umi';
 
 interface ResourceProps {
   dispatch: Dispatch;
@@ -264,6 +264,30 @@ function Resources({ dispatch, resourceListPage }: ResourceProps) {
               </div>
 
               <div className={styles.batchHandleRight}>
+
+                <FComponentsLib.FTextBtn
+                  disabled={resourceListPage.checkedResourceIDs.length === 0}
+                  type={'primary'}
+                  onClick={async () => {
+                    // dispatch<OnBatchUpdateAction>({
+                    //   type: 'resourceListPage/onBatchUpdate',
+                    //   payload: {
+                    //     status: 1,
+                    //   },
+                    // });
+                    const result = await fSignResourceToNode({
+                      resourceIDs: resourceListPage.checkedResourceIDs,
+                    });
+                    if (result) {
+                      history.push(FUtil.LinkTo.nodeManagement({ nodeID: result.nodeID }));
+                    }
+
+                  }}
+                >
+                  <FComponentsLib.FIcons.FNodes style={{ fontSize: 14, color: '#2784FF' }} />
+                  &nbsp;{FI18n.i18nNext.t('myresources_bulkaction_btn_addtomynode')}
+                </FComponentsLib.FTextBtn>
+
                 <FComponentsLib.FTextBtn
                   disabled={resourceListPage.checkedResourceIDs.length === 0}
                   type={'primary'}
@@ -460,7 +484,7 @@ function Resources({ dispatch, resourceListPage }: ResourceProps) {
       </>)
     }
     <div style={{ height: 100 }} />
-    <FResourceFeedback show={''} />
+    {/*<FResourceFeedback show={''} />*/}
 
     <ResultModal
       type={resourceListPage.updateResourceResultType}
@@ -476,6 +500,10 @@ function Resources({ dispatch, resourceListPage }: ResourceProps) {
         });
       }}
     />
+
+    {/*<FSignResourceToNode*/}
+    {/*  resourceIDs={['658a78a64d1119002edeba5d', '658a7b794d1119002edebb51','6584f74a4d1119002ede820d', '62144d11182192002eeed162']}*/}
+    {/*/>*/}
   </>);
 }
 

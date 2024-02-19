@@ -9,6 +9,9 @@ import { ConnectState, ResourceCreatorBatchPageState } from '@/models/connect';
 import { Dispatch } from 'redux';
 import { FI18n, FUtil } from '@freelog/tools-lib';
 import FTooltip from '@/components/FTooltip';
+import fSignResourceToNode from '@/components/fSignResourceToNode';
+import { history } from '@@/core/history';
+import fCenterMessage from '@/components/fCenterMessage';
 
 interface FinishProps {
   dispatch: Dispatch;
@@ -47,12 +50,27 @@ function Finish({ dispatch, resourceCreatorBatchPage }: FinishProps) {
           self.open(FUtil.LinkTo.resourceCreatorEntry());
         }}
       >{FI18n.i18nNext.t('brr_completed_btn_moretorelease_single')}</FComponentsLib.FTextBtn>
-      {/*<FComponentsLib.FTextBtn*/}
-      {/*  type={'primary'}*/}
-      {/*  onClick={() => {*/}
-      {/*    self.open(FUtil.LinkTo.resourceCreatorBatch());*/}
-      {/*  }}*/}
-      {/*>继续发行(批量)</FComponentsLib.FTextBtn>*/}
+      <FComponentsLib.FTextBtn
+        type={'primary'}
+        onClick={async () => {
+          const resourceIDs: string[] = resourceCreatorBatchPage.resultList
+            .filter((r) => {
+              return r.status === 'online';
+            })
+            .map((r) => {
+              return r.resourceID;
+            });
+          if (resourceIDs.length === 0) {
+            fCenterMessage({ message: '不存在上线资源不能签约到节点' });
+          }
+          const result = await fSignResourceToNode({
+            resourceIDs: resourceIDs,
+          });
+          if (result) {
+            history.push(FUtil.LinkTo.nodeManagement({ nodeID: result.nodeID }));
+          }
+        }}
+      >{FI18n.i18nNext.t('myresources_bulkaction_btn_addtomynode')}</FComponentsLib.FTextBtn>
     </Space>
     <div style={{ height: 50 }} />
     <div className={styles.list}>
@@ -80,14 +98,14 @@ function Finish({ dispatch, resourceCreatorBatchPage }: FinishProps) {
                   text={result.resourceTitle}
                   type={'highlight'}
                   singleRow
-                  style={{maxWidth: 400}}
+                  style={{ maxWidth: 400 }}
                 />
                 <div style={{ height: 10 }} />
                 <FComponentsLib.FContentText
                   text={result.resourceName}
                   type={'additional2'}
                   singleRow
-                  style={{maxWidth: 400}}
+                  style={{ maxWidth: 400 }}
                 />
                 <div style={{ height: 10 }} />
                 <div className={styles.MetaFooter}>

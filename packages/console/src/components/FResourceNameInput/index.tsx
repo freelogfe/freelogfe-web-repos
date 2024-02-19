@@ -8,9 +8,11 @@ interface FResourceNameInputProps {
   value: string;
 
   onChange?(value: string): void;
+
+  onBlur?(value: string): void;
 }
 
-function FResourceNameInput({ userName, value, onChange }: FResourceNameInputProps) {
+function FResourceNameInput({ userName, value, onChange, onBlur }: FResourceNameInputProps) {
 
   const inputRef = React.useRef<InputRef>(null);
 
@@ -29,6 +31,9 @@ function FResourceNameInput({ userName, value, onChange }: FResourceNameInputPro
         onChange && onChange(e.target.value);
       }}
       placeholder={FI18n.i18nNext.t('rqr_input_resourceauthid_hint')}
+      onBlur={(e) => {
+        onBlur && onBlur(e.target.value);
+      }}
     />
   </div>);
 }

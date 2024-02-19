@@ -38,7 +38,7 @@ function Participation({ activityDetailsPage }: ParticipationProps) {
 
       <div className={styles.textContent} style={{ top: 108, left: 270 }}>
         前往freelog网页端，发布带有<FComponentsLib.FCopyToClipboard
-        text={'#新春召集令，freelog创作激励计划启动！#'}
+        text={'新春召集令，freelog创作激励计划启动！'}
         title={'点击复制标签'}
       ><strong>#新春召集令，freelog创作激励计划启动！#</strong></FComponentsLib.FCopyToClipboard>标签的原创资源并成功签约至展示节点，完成一次节点或展品分享后即视为参与此次活动。
       </div>

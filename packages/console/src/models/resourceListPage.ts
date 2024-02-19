@@ -360,7 +360,7 @@ const Model: ResourceListPageModelType = {
       };
       const { data }: {
         data: {
-          [k: string]: {
+          [resourceID: string]: {
             data: any;
             status: 1 | 2;
           };

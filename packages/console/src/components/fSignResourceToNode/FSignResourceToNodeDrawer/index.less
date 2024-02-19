@@ -1,0 +1,55 @@
+@import '../../../config.less';
+
+.resourceItem {
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.03);
+  border-radius: 6px;
+  gap: 10px;
+
+  .policyLabel {
+    width: 81px;
+    height: 26px;
+    //background: rgba(255, 255, 255, 0);
+    border-radius: 4px;
+    border: 1px solid #2784FF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    font-size: 12px;
+    color: #2784FF;
+    font-weight: 600;
+  }
+
+  .resourceItemError {
+    font-size: 12px;
+    font-weight: 400;
+    color: #E9A923;
+    line-height: 18px;
+    width: 140px;
+    text-align: right;
+  }
+}
+
+.tip {
+  width: 600px;
+  height: 58px;
+  background: #FCF6E9;
+  box-shadow: 0 2px 10px 0 rgba(233, 169, 35, 0.4);
+  border-radius: 10px;
+  border: 1px solid rgba(233, 169, 35, 0.5);
+  position: fixed;
+  bottom: 20px;
+  right: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+
+  font-size: 14px;
+  font-weight: 600;
+  color: #E9A923;
+  line-height: 18px;
+}
