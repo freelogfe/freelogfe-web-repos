@@ -26,7 +26,6 @@ import FDoubleUp from './FDoubleUp';
 import FDown from './FDown';
 import FDownload from './FDownload';
 import FEdit from './FEdit';
-import FExclamation from './FExclamation';
 import FExit from './FExit';
 import FExport from './FExport';
 import FFail from './FFail';
@@ -113,7 +112,6 @@ const FIcons = {
     FDown,
     FDownload,
     FEdit,
-    FExclamation,
     FExit,
     FExport,
     FFail,

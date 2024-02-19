@@ -59,14 +59,14 @@ function Themes({ match, dispatch, nodeManagerPage }: ThemesProps) {
     });
   });
 
-  const { run } = AHooks.useDebounceFn(() => {
+  AHooks.useDebounceEffect(() => {
     dispatch<OnChangeThemeAction>({
       type: 'nodeManagerPage/onChangeTheme',
       payload: {
         themeInputFilter: themeInputFilter,
       },
     });
-  }, {
+  }, [themeInputFilter], {
     wait: 300,
   });
 
@@ -269,7 +269,7 @@ function Themes({ match, dispatch, nodeManagerPage }: ThemesProps) {
                   // debounce={300}
                   onChange={(value) => {
                     setThemeInputFilter(value);
-                    run();
+
                   }}
                   // placeholder={FI18n.i18nNext.t('nodemgmt_search_themes_hint')}
                   placeholder={FI18n.i18nNext.t('nodemngt_theme_search_hint')}

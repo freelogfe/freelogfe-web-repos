@@ -344,20 +344,6 @@ export function resourceVersionInfo2(params: ResourceVersionInfo2ParamsType) {
   });
 }
 
-// 批量查询资源版本列表
-interface GetVersionListParamsType {
-  versionIds: string;
-  projection?: string;
-}
-
-export function getVersionList({...params}: GetVersionListParamsType) {
-  return FUtil.Request({
-    method: 'GET',
-    url: `/v2/resources/versions/list`,
-    params: params,
-  });
-}
-
 // 根据sha1查询版本列表 (查询文件对象所挂载的资源及版本)
 interface GetResourceVersionBySha1ParamsType {
   fileSha1: string;
@@ -365,6 +351,9 @@ interface GetResourceVersionBySha1ParamsType {
 }
 
 export function getResourceVersionBySha1({fileSha1, ...params}: GetResourceVersionBySha1ParamsType) {
+  // return FUtil.Axios.get(`/v2/resources/files/${fileSha1}/versions`, {
+  //   params,
+  // });
   return FUtil.Request({
     method: 'GET',
     url: `/v2/resources/files/${fileSha1}/versions`,

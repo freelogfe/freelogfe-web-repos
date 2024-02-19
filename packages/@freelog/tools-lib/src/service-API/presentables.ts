@@ -21,6 +21,7 @@ export interface CreatePresentableParamsType {
 }
 
 export function createPresentable(params: CreatePresentableParamsType) {
+  // return FUtil.Axios.post(`/v2/presentables`, params);
   return FUtil.Request({
     method: 'POST',
     url: `/v2/presentables`,
@@ -53,6 +54,7 @@ interface UpdatePresentableParamsType {
 }
 
 export function updatePresentable({presentableId, ...params}: UpdatePresentableParamsType) {
+  // return FUtil.Axios.put(`/v2/presentables/${presentableId}`, params);
   return FUtil.Request({
     method: 'PUT',
     url: `/v2/presentables/${presentableId}`,
@@ -71,6 +73,7 @@ interface PresentablesOnlineParamsType {
 }
 
 export function presentablesOnlineStatus({presentableId, ...params}: PresentablesOnlineParamsType) {
+  // return FUtil.Axios.put(`/v2/presentables/${presentableId}/onlineStatus`, params);
   return FUtil.Request({
     method: 'PUT',
     url: `/v2/presentables/${presentableId}/onlineStatus`,
@@ -103,6 +106,9 @@ interface PresentableDetailsParamsType2 {
 
 export function presentableDetails(params: PresentableDetailsParamsType1 | PresentableDetailsParamsType2) {
   if ((params as PresentableDetailsParamsType2).nodeId) {
+    // return FUtil.Axios.get(`/v2/presentables/detail`, {
+    //   params,
+    // });
     return FUtil.Request({
       method: 'GET',
       url: `/v2/presentables/detail`,
@@ -110,6 +116,9 @@ export function presentableDetails(params: PresentableDetailsParamsType1 | Prese
     });
   }
   const {presentableId, ...p} = params as PresentableDetailsParamsType1;
+  // return FUtil.Axios.get(`/v2/presentables/${presentableId}`, {
+  //   params: p,
+  // });
   return FUtil.Request({
     method: 'GET',
     url: `/v2/presentables/${presentableId}`,
@@ -173,6 +182,7 @@ interface DependencyTreeParamsType {
 }
 
 export function dependencyTree({presentableId, ...params}: DependencyTreeParamsType) {
+  // return FUtil.Axios.get(`/v2/presentables/${presentableId}/dependencyTree`, {params});
   return FUtil.Request({
     method: 'GET',
     url: `/v2/presentables/${presentableId}/dependencyTree`,
@@ -187,6 +197,7 @@ interface RelationTreeParamsType {
 }
 
 export function relationTree({presentableId, ...params}: RelationTreeParamsType) {
+  // return FUtil.Axios.get(`/v2/presentables/${presentableId}/relationTree`, {params});
   return FUtil.Request({
     method: 'GET',
     url: `/v2/presentables/${presentableId}/relationTree`,
@@ -204,6 +215,7 @@ interface AuthTreeParamsType {
 }
 
 export function authTree({presentableId, ...params}: AuthTreeParamsType) {
+  // return FUtil.Axios.get(`/v2/presentables/${presentableId}/authTree`, {params});
   return FUtil.Request({
     method: 'GET',
     url: `/v2/presentables/${presentableId}/authTree`,
@@ -218,6 +230,7 @@ interface PresentablesVersionParamsType {
 }
 
 export function presentablesVersion({presentableId, ...params}: PresentablesVersionParamsType) {
+  // return FUtil.Axios.put(`/v2/presentables/${presentableId}/version`, params);
   return FUtil.Request({
     method: 'PUT',
     url: `/v2/presentables/${presentableId}/version`,
@@ -236,6 +249,7 @@ interface UpdateRewritePropertyParamsType {
 }
 
 export function updateRewriteProperty({presentableId, ...params}: UpdateRewritePropertyParamsType) {
+  // return FUtil.Axios.put(`/v2/presentables/${presentableId}/rewriteProperty`, params);
   return FUtil.Request({
     method: 'PUT',
     url: `/v2/presentables/${presentableId}/rewriteProperty`,
@@ -251,6 +265,9 @@ interface BatchAuthParamsType {
 }
 
 export function batchAuth({nodeId, ...params}: BatchAuthParamsType) {
+  // return FUtil.Axios.get(`/v2/auths/presentables/nodes/${nodeId}/batchAuth/result`, {
+  //   params,
+  // });
   return FUtil.Request({
     method: 'GET',
     url: `/v2/auths/presentables/nodes/${nodeId}/batchAuth/result`,
@@ -265,58 +282,12 @@ interface ContractAppliedPresentableParamsType {
 }
 
 export function contractAppliedPresentable({nodeId, ...params}: ContractAppliedPresentableParamsType) {
+  // return FUtil.Axios.get(`/v2/presentables/${nodeId}/contractAppliedPresentable`, {
+  //   params,
+  // });
   return FUtil.Request({
     method: 'GET',
     url: `/v2/presentables/${nodeId}/contractAppliedPresentable`,
     params: params,
-  });
-}
-
-// 一键批量创建展品
-export interface BatchCreatePresentableParamsType {
-  nodeId: number;
-  resources: {
-    resourceId: string;
-    policyId: string;
-  }[];
-}
-
-export function batchCreatePresentable(params: BatchCreatePresentableParamsType) {
-  return FUtil.Request({
-    method: 'POST',
-    url: `/v2/presentables/createPresentableBatchEasy`,
-    data: params,
-  });
-}
-
-// 批量更新展品
-interface BatchUpdatePresentableParamsType {
-  presentableIds: string[];
-  addPolicies: {
-    policyName: string;
-    policyText: string;
-    status?: 0 | 1;
-  }[];
-}
-
-export function batchUpdatePresentable({...params}: BatchUpdatePresentableParamsType) {
-  return FUtil.Request({
-    method: 'PUT',
-    url: `/v2/presentables/updatePresentableBatch`,
-    data: params,
-  });
-}
-
-// 批量切换展品上下线状态
-interface BatchUpdatePresentableStatusParamsType {
-  presentableIds: string[];
-  onlineStatus: 0 | 1;
-}
-
-export function batchUpdatePresentableStatus({...params}: BatchUpdatePresentableStatusParamsType) {
-  return FUtil.Request({
-    method: 'PUT',
-    url: `/v2/presentables/updatePresentableOnlineStatusBatch`,
-    data: params,
   });
 }

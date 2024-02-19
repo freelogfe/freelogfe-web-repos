@@ -4,6 +4,7 @@ import { EffectsCommandMap, Subscription } from 'dva';
 import { FI18n, FServiceAPI } from '@freelog/tools-lib';
 import moment, { Moment } from 'moment';
 
+
 export interface ActivityDetailsPageModelState {
   pageState: 'loading' | 'loaded' | 'noDate';
   activityID: string;

@@ -9,7 +9,6 @@ import { RouteComponentProps } from 'react-router';
 import FComponentsLib from '@freelog/components-lib';
 import FCoverImage from '@/components/FCoverImage';
 import * as AHooks from 'ahooks';
-import fSignResourceToNode from '@/components/fSignResourceToNode';
 
 interface SuccessProps extends RouteComponentProps<{ id: string; }> {
   dispatch: Dispatch;
@@ -83,18 +82,6 @@ function Success({ match, dispatch }: SuccessProps) {
           self.open(FUtil.LinkTo.resourceCreatorEntry());
         }}
       >继续创建资源</FComponentsLib.FTextBtn>
-
-      <FComponentsLib.FTextBtn
-        type={'primary'}
-        onClick={async () => {
-          const result = await fSignResourceToNode({
-            resourceIDs: [match.params.id],
-          });
-          if (result) {
-            history.push(FUtil.LinkTo.nodeManagement({ nodeID: result.nodeID }));
-          }
-        }}
-      >{FI18n.i18nNext.t('myresources_bulkaction_btn_addtomynode')}</FComponentsLib.FTextBtn>
     </div>
     {/*<FComponentsLib.FRectBtn onClick={goto}>{FI18n.i18nNext.t('create_first_version')}</FComponentsLib.FRectBtn>*/}
     <div style={{ flexGrow: 3 }} />

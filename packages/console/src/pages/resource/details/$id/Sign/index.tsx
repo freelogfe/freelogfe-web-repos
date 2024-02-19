@@ -24,7 +24,7 @@ function Sign({ dispatch, resourceDetailPage }: SignProps) {
   const ref = React.useRef(null);
   const size = AHooks.useSize(ref);
 
-  // console.log(size, 'size sdifjlskdjfldsjfljsdlkjlk');
+  console.log(size, 'size sdifjlskdjfldsjfljsdlkjlk');
 
   const resource = resourceDetailPage.sign_SignResources.find((r) => r.selected);
 

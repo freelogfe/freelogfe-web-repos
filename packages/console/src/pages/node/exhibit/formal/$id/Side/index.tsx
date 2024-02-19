@@ -13,13 +13,20 @@ interface SideProps {
 }
 
 function Side({ dispatch, exhibitInfoPage }: SideProps) {
+
+
   return (<div className={styles.side}>
     <div className={styles.base}>
+
       <Info />
+
       <Setting />
     </div>
+
     <div style={{ height: 10 }} />
+
     <Relation />
+
   </div>);
 }
 

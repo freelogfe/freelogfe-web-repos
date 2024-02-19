@@ -55,14 +55,6 @@ export interface NodeManagerModelState {
   exhibit_ListTotal: number;
   exhibit_ListState: 'loading' | 'noData' | 'noSearchResult' | 'loaded';
   exhibit_ListMore: 'loading' | 'andMore' | 'noMore';
-  checkedExhibitIDs: string[];
-  updateExhibitResultType: '' | 'online' | 'offline' | 'addPolicy',
-  updateExhibitResult: {
-    [k: string]: {
-      data: string;
-      status: 1 | 2;
-    };
-  } | null;
 
   theme_ActivatingThemeID: string;
   theme_InputFilter: string;
@@ -385,10 +377,7 @@ const exhibitInitStates: Pick<NodeManagerModelState,
   | 'exhibit_List'
   | 'exhibit_ListTotal'
   | 'exhibit_ListState'
-  | 'exhibit_ListMore'
-  | 'checkedExhibitIDs'
-  | 'updateExhibitResultType'
-  | 'updateExhibitResult'> = {
+  | 'exhibit_ListMore'> = {
   exhibit_ResourceTypeCodes: {
     value: '#all',
     label: '全部',
@@ -406,9 +395,6 @@ const exhibitInitStates: Pick<NodeManagerModelState,
   exhibit_ListTotal: -1,
   exhibit_ListState: 'loading',
   exhibit_ListMore: 'loading',
-  checkedExhibitIDs: [],
-  updateExhibitResultType: '',
-  updateExhibitResult: null,
 };
 
 const themeInitStates: Pick<NodeManagerModelState, 'theme_ActivatingThemeID'
@@ -645,7 +631,7 @@ const Model: NodeManagerModelType = {
       });
     },
     * onMount_ThemePage({}: OnMount_ThemePage_Action, { select, put }: EffectsCommandMap) {
-      // console.log('onMount_ThemePage 3w2890iojhsdfjsdlfjsldjl');
+      console.log('onMount_ThemePage 3w2890iojhsdfjsdlfjsldjl');
       yield put<FetchThemesAction>({
         type: 'fetchThemes',
         payload: {
@@ -1084,7 +1070,7 @@ const Model: NodeManagerModelType = {
             return {
               id: i.presentableId,
               cover: i.coverImages[0],
-              title: i.presentableTitle || i.presentableName,
+              title: i.presentableTitle,
               resourceName: i.presentableName,
               version: i.version,
               isOnline: i.onlineStatus === 1,
