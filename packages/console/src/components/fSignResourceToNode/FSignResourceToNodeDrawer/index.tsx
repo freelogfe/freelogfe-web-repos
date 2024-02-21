@@ -9,6 +9,9 @@ import FTooltip from '@/components/FTooltip';
 import FCoverImage from '@/components/FCoverImage';
 import moment from 'moment';
 import fCenterMessage from '@/components/fCenterMessage';
+import FPolicyDisplay from '@/components/FPolicyDisplay';
+import { PolicyFullInfo_Type } from '@/type/contractTypes';
+import fPolicyBuilder from '@/components/fPolicyBuilder';
 
 interface FSignResourceToNodeDrawerProps {
   resourceIDs: string[];
@@ -26,6 +29,14 @@ interface FSignResourceToNodeDrawerStates {
     cover: string;
     resourceType: string[];
     updateTime: string;
+    selectedPolicy: {
+      policyID: string;
+      policyName: string;
+    } | null;
+    addPolicy: {
+      title: string;
+      text: string;
+    } | null;
   }[];
   badResources: {
     resourceID: string;
@@ -46,9 +57,9 @@ function FSignResourceToNodeDrawer({ resourceIDs, onClose, onOk }: FSignResource
     value: number;
     label: string;
   }[]>([]);
-
   const [$goodResources, set$goodResources, get$goodResources] = FUtil.Hook.useGetState<FSignResourceToNodeDrawerStates['goodResources']>([]);
   const [$badResources, set$badResources, get$badResources] = FUtil.Hook.useGetState<FSignResourceToNodeDrawerStates['badResources']>([]);
+  const [$selectingPolicyResourceID, set$selectingPolicyResourceID, get$selectingPolicyResourceID] = FUtil.Hook.useGetState<string>('');
 
   AHooks.useMount(async () => {
     const { data }: {
@@ -92,6 +103,8 @@ function FSignResourceToNodeDrawer({ resourceIDs, onClose, onOk }: FSignResource
         cover: d.coverImages[0] || '',
         resourceType: d.resourceType,
         updateTime: moment(d.updateDate).format('YYYY-MM-DD'),
+        selectedPolicy: null,
+        addPolicy: null,
       };
       if (d.status === 0) {
         badResources.push({
@@ -180,7 +193,6 @@ function FSignResourceToNodeDrawer({ resourceIDs, onClose, onOk }: FSignResource
         disabled={!$selectNodeID || $goodResources.length === 0}
         type='primary'
         onClick={async () => {
-
           const { ret, errCode, data, msg }: {
             ret: number;
             errCode: number;
@@ -276,10 +288,29 @@ function FSignResourceToNodeDrawer({ resourceIDs, onClose, onOk }: FSignResource
                       text={`资源类型 ${r.resourceType.join('/')}｜更新时间 ${r.updateTime}`}
                     />
                     <div style={{ height: 7 }} />
-                    <label className={styles.policyLabel}>
-                      <FComponentsLib.FIcons.FPolicy style={{ fontSize: 12 }} />
-                      <span>永久免费</span>
-                    </label>
+                    <Space size={20}>
+                      <label className={styles.policyLabel}>
+                        <FComponentsLib.FIcons.FPolicy style={{ fontSize: 12 }} />
+                        {
+                          r.selectedPolicy && (<span>{r.selectedPolicy.policyName}</span>)
+                        }
+                        {
+                          r.addPolicy && (<span>{r.addPolicy.title}</span>)
+                        }
+                        {
+                          !r.selectedPolicy && !r.addPolicy && (<span>永久免费</span>)
+                        }
+
+                      </label>
+                      <FComponentsLib.FTextBtn
+                        type={'primary'}
+                        style={{ fontSize: 12 }}
+                        onClick={() => {
+                          set$selectingPolicyResourceID(r.resourceID);
+                        }}
+                      >更换授权策略</FComponentsLib.FTextBtn>
+                    </Space>
+
                   </div>
                 </div>);
               })
@@ -291,7 +322,10 @@ function FSignResourceToNodeDrawer({ resourceIDs, onClose, onOk }: FSignResource
       {
         $badResources.length > 0 && (<>
           <div style={{ height: 30 }} />
-          <FComponentsLib.FTitleText text={FI18n.i18nNext.t('addresourcetonode_addtonode_list_error')} type={'h3'} />
+          <FComponentsLib.FTitleText
+            text={FI18n.i18nNext.t('addresourcetonode_addtonode_list_error')}
+            type={'h3'}
+          />
           <div style={{ height: 10 }} />
           <Space size={10} direction={'vertical'} style={{ width: '100%' }}>
             {
@@ -338,7 +372,121 @@ function FSignResourceToNodeDrawer({ resourceIDs, onClose, onOk }: FSignResource
       }
 
     </div>
+
+    <SelectPolicyDrawer
+      resourceID={$selectingPolicyResourceID}
+      onCancel={() => {
+        set$selectingPolicyResourceID('');
+      }}
+      onSelected={(value) => {
+        set$goodResources(get$goodResources().map((resource) => {
+          if (get$selectingPolicyResourceID() !== resource.resourceID) {
+            return resource;
+          }
+          return {
+            ...resource,
+            selectedPolicy: value,
+          };
+        }));
+        set$selectingPolicyResourceID('');
+      }}
+    />
   </FDrawer>);
 }
 
 export default FSignResourceToNodeDrawer;
+
+interface SelectPolicyDrawerProps {
+  resourceID: string;
+
+  onSelected?(value: {
+    policyID: string;
+    policyName: string;
+  }): void;
+
+  onCancel?(): void;
+}
+
+function SelectPolicyDrawer({ resourceID, onSelected, onCancel }: SelectPolicyDrawerProps) {
+
+  const [$policyFullInfo, set$policyFullInfo, get$policyFullInfo] = FUtil.Hook.useGetState<PolicyFullInfo_Type[]>([]);
+
+  async function handleData() {
+    const { data } = await FServiceAPI.Resource.info({
+      resourceIdOrName: resourceID,
+      isLoadPolicyInfo: 1,
+      isTranslate: 1,
+    });
+    // console.log(data, 'data sdifjl;sdkjfl;ksjdal;kfjsdfikjweo;ikfjlksadjflkj');
+    set$policyFullInfo(data.policies as PolicyFullInfo_Type[]);
+  }
+
+  return (<FDrawer
+    open={resourceID !== ''}
+    title={FI18n.i18nNext.t('addresourcetonode_changeauthplan_title')}
+    topRight={(<FComponentsLib.FRectBtn
+      type={'default'}
+      onClick={() => {
+        onCancel && onCancel();
+      }}
+    >取消</FComponentsLib.FRectBtn>)}
+    afterOpenChange={(o) => {
+      if (o) {
+        handleData();
+      }
+    }}
+  >
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      <Space size={5}>
+        <FComponentsLib.FIcons.FPolicy style={{ fontSize: 14, color: '#222' }} />
+        <FComponentsLib.FContentText type={'additional2'} text={'选择策略'} style={{ color: '#222' }} />
+      </Space>
+      <Space size={5}>
+        <FComponentsLib.FCircleBtn
+          type={'primary'}
+          size={'small'}
+          onClick={() => {
+
+          }}
+        />
+        <FComponentsLib.FTextBtn
+          type={'primary'}
+          onClick={() => {
+            fPolicyBuilder({
+              alreadyUsedTexts: [],
+              alreadyUsedTitles: [],
+              targetType: 'resource',
+            });
+          }}
+        >新建授权策略</FComponentsLib.FTextBtn>
+      </Space>
+    </div>
+    <div style={{ height: 10 }} />
+    <Space size={10} direction={'vertical'} style={{ width: '100%' }}>
+      {
+        $policyFullInfo.map((p) => {
+          return (<div className={styles.policyCard} key={p.policyId}>
+            <div className={styles.policyCardTitle}>
+              <FComponentsLib.FContentText
+                text={p.policyName}
+                type={'highlight'}
+              />
+              <FComponentsLib.FRectBtn
+                onClick={() => {
+                  onSelected && onSelected({
+                    policyID: p.policyId,
+                    policyName: p.policyName,
+                  });
+                }}
+              >{FI18n.i18nNext.t('addresourcetonode_changeauthplan_btn_select')}</FComponentsLib.FRectBtn>
+            </div>
+            <div style={{ height: 25 }} />
+            <FPolicyDisplay fullInfo={p} />
+          </div>);
+        })
+      }
+
+    </Space>
+
+  </FDrawer>);
+}
