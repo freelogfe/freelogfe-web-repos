@@ -33,10 +33,10 @@ interface FSignResourceToNodeDrawerStates {
       policyID: string;
       policyName: string;
     } | null;
-    addPolicy: {
-      title: string;
-      text: string;
-    } | null;
+    // addPolicy: {
+    //   title: string;
+    //   text: string;
+    // } | null;
   }[];
   badResources: {
     resourceID: string;
@@ -104,7 +104,7 @@ function FSignResourceToNodeDrawer({ resourceIDs, onClose, onOk }: FSignResource
         resourceType: d.resourceType,
         updateTime: moment(d.updateDate).format('YYYY-MM-DD'),
         selectedPolicy: null,
-        addPolicy: null,
+        // addPolicy: null,
       };
       if (d.status === 0) {
         badResources.push({
@@ -193,6 +193,18 @@ function FSignResourceToNodeDrawer({ resourceIDs, onClose, onOk }: FSignResource
         disabled={!$selectNodeID || $goodResources.length === 0}
         type='primary'
         onClick={async () => {
+
+          // FServiceAPI.Resource.batchUpdate({
+          //   resourceIds: get$goodResources()
+          //     .filter((r) => {
+          //       return !!r.addPolicy;
+          //     })
+          //     .map((r) => {
+          //       return r.resourceID;
+          //     }),
+          //   // addPolicies: get,
+          // });
+
           const { ret, errCode, data, msg }: {
             ret: number;
             errCode: number;
@@ -205,12 +217,18 @@ function FSignResourceToNodeDrawer({ resourceIDs, onClose, onOk }: FSignResource
           } = await FServiceAPI.Exhibit.batchCreatePresentable({
             nodeId: get$selectNodeID() || -1,
             // @ts-ignore
-            resources: resourceIDs.map((id) => {
+            resources: get$goodResources().map((r) => {
               return {
-                resourceId: id,
-                // policyId: '' || undefined,
+                resourceId: r.resourceID,
+                policyId: !!r.selectedPolicy ? r.selectedPolicy.policyID : undefined,
               };
             }),
+            // resources: resourceIDs.map((id) => {
+            //   return {
+            //     resourceId: id,
+            //     policyId: '' || undefined,
+            //   };
+            // }),
           });
 
           if (ret !== 0 || errCode !== 0) {
@@ -294,11 +312,11 @@ function FSignResourceToNodeDrawer({ resourceIDs, onClose, onOk }: FSignResource
                         {
                           r.selectedPolicy && (<span>{r.selectedPolicy.policyName}</span>)
                         }
+                        {/*{*/}
+                        {/*  r.addPolicy && (<span>{r.addPolicy.title}</span>)*/}
+                        {/*}*/}
                         {
-                          r.addPolicy && (<span>{r.addPolicy.title}</span>)
-                        }
-                        {
-                          !r.selectedPolicy && !r.addPolicy && (<span>永久免费</span>)
+                          !r.selectedPolicy && (<span>永久免费</span>)
                         }
 
                       </label>
@@ -391,19 +409,19 @@ function FSignResourceToNodeDrawer({ resourceIDs, onClose, onOk }: FSignResource
         }));
         set$selectingPolicyResourceID('');
       }}
-      onAdd={(value) => {
-        set$goodResources(get$goodResources().map((resource) => {
-          if (get$selectingPolicyResourceID() !== resource.resourceID) {
-            return resource;
-          }
-          return {
-            ...resource,
-            addPolicy: value,
-            selectedPolicy: null,
-          };
-        }));
-        set$selectingPolicyResourceID('');
-      }}
+      // onAdd={(value) => {
+      //   set$goodResources(get$goodResources().map((resource) => {
+      //     if (get$selectingPolicyResourceID() !== resource.resourceID) {
+      //       return resource;
+      //     }
+      //     return {
+      //       ...resource,
+      //       addPolicy: value,
+      //       selectedPolicy: null,
+      //     };
+      //   }));
+      //   set$selectingPolicyResourceID('');
+      // }}
     />
   </FDrawer>);
 }
@@ -418,15 +436,15 @@ interface SelectPolicyDrawerProps {
     policyName: string;
   }): void;
 
-  onAdd?(value: {
-    title: string;
-    text: string;
-  }): void;
+  // onAdd?(value: {
+  //   title: string;
+  //   text: string;
+  // }): void;
 
   onCancel?(): void;
 }
 
-function SelectPolicyDrawer({ resourceID, onSelected, onAdd, onCancel }: SelectPolicyDrawerProps) {
+function SelectPolicyDrawer({ resourceID, onSelected, onCancel }: SelectPolicyDrawerProps) {
 
   const [$policyFullInfo, set$policyFullInfo, get$policyFullInfo] = FUtil.Hook.useGetState<PolicyFullInfo_Type[]>([]);
 
@@ -453,7 +471,37 @@ function SelectPolicyDrawer({ resourceID, onSelected, onAdd, onCancel }: SelectP
     if (!result) {
       return;
     }
-    onAdd && onAdd(result);
+    // onAdd && onAdd(result);
+    const { ret, errCode, msg, data }: {
+      ret: number;
+      errCode: number;
+      msg: string;
+      data: {
+        policies: {
+          policyId: string;
+          policyName: string;
+          status: 0 | 1;
+        }[];
+      }
+    } = await FServiceAPI.Resource.update({
+      resourceId: resourceID,
+      addPolicies: [{
+        policyName: result.title,
+        policyText: result.text,
+        status: 1,
+      }],
+    });
+    const policy = data.policies.find((p) => {
+      return p.policyName === result.title;
+    });
+
+    if (!policy) {
+      return;
+    }
+    onSelected && onSelected({
+      policyID: policy.policyId,
+      policyName: policy.policyName,
+    });
   }
 
   return (<FDrawer
