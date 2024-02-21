@@ -386,6 +386,20 @@ function FSignResourceToNodeDrawer({ resourceIDs, onClose, onOk }: FSignResource
           return {
             ...resource,
             selectedPolicy: value,
+            addPolicy: null,
+          };
+        }));
+        set$selectingPolicyResourceID('');
+      }}
+      onAdd={(value) => {
+        set$goodResources(get$goodResources().map((resource) => {
+          if (get$selectingPolicyResourceID() !== resource.resourceID) {
+            return resource;
+          }
+          return {
+            ...resource,
+            addPolicy: value,
+            selectedPolicy: null,
           };
         }));
         set$selectingPolicyResourceID('');
@@ -404,10 +418,15 @@ interface SelectPolicyDrawerProps {
     policyName: string;
   }): void;
 
+  onAdd?(value: {
+    title: string;
+    text: string;
+  }): void;
+
   onCancel?(): void;
 }
 
-function SelectPolicyDrawer({ resourceID, onSelected, onCancel }: SelectPolicyDrawerProps) {
+function SelectPolicyDrawer({ resourceID, onSelected, onAdd, onCancel }: SelectPolicyDrawerProps) {
 
   const [$policyFullInfo, set$policyFullInfo, get$policyFullInfo] = FUtil.Hook.useGetState<PolicyFullInfo_Type[]>([]);
 
@@ -419,6 +438,22 @@ function SelectPolicyDrawer({ resourceID, onSelected, onCancel }: SelectPolicyDr
     });
     // console.log(data, 'data sdifjl;sdkjfl;ksjdal;kfjsdfikjweo;ikfjlksadjflkj');
     set$policyFullInfo(data.policies as PolicyFullInfo_Type[]);
+  }
+
+  async function onAddPolicy() {
+    const result = await fPolicyBuilder({
+      alreadyUsedTexts: get$policyFullInfo().map((p) => {
+        return p.policyText;
+      }),
+      alreadyUsedTitles: get$policyFullInfo().map((p) => {
+        return p.policyName;
+      }),
+      targetType: 'resource',
+    });
+    if (!result) {
+      return;
+    }
+    onAdd && onAdd(result);
   }
 
   return (<FDrawer
@@ -446,17 +481,13 @@ function SelectPolicyDrawer({ resourceID, onSelected, onCancel }: SelectPolicyDr
           type={'primary'}
           size={'small'}
           onClick={() => {
-
+            onAddPolicy();
           }}
         />
         <FComponentsLib.FTextBtn
           type={'primary'}
           onClick={() => {
-            fPolicyBuilder({
-              alreadyUsedTexts: [],
-              alreadyUsedTitles: [],
-              targetType: 'resource',
-            });
+            onAddPolicy();
           }}
         >新建授权策略</FComponentsLib.FTextBtn>
       </Space>
