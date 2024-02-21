@@ -96,7 +96,9 @@ function FSignResourceToNodeDrawer({ resourceIDs, onClose, onOk }: FSignResource
     const goodResources: FSignResourceToNodeDrawerStates['goodResources'] = [];
     const badResources: FSignResourceToNodeDrawerStates['badResources'] = [];
     for (const d of data_batchInfo) {
-      const resource: FSignResourceToNodeDrawerStates['goodResources'][number] = {
+      const resource: FSignResourceToNodeDrawerStates['goodResources'][number] = get$goodResources().find((gr) => {
+        return gr.resourceID === d.resourceId;
+      }) || {
         resourceID: d.resourceId,
         resourceName: d.resourceName,
         resourceTitle: d.resourceTitle,
