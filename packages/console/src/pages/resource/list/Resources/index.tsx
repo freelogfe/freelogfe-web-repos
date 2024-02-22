@@ -269,12 +269,6 @@ function Resources({ dispatch, resourceListPage }: ResourceProps) {
                   disabled={resourceListPage.checkedResourceIDs.length === 0}
                   type={'primary'}
                   onClick={async () => {
-                    // dispatch<OnBatchUpdateAction>({
-                    //   type: 'resourceListPage/onBatchUpdate',
-                    //   payload: {
-                    //     status: 1,
-                    //   },
-                    // });
                     const result = await fSignResourceToNode({
                       resourceIDs: resourceListPage.checkedResourceIDs,
                     });

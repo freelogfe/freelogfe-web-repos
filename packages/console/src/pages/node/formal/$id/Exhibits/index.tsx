@@ -367,16 +367,19 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                         },
                       });
                     }}
-                  >
-                  <span style={{ cursor: 'pointer' }}>
-                    {
-                      nodeManagerPage.exhibit_ResourceStateOptions.find((rso) => {
-                        return rso.value === nodeManagerPage.exhibit_SelectedStatus.toString();
-                      })?.text
-                    }
-                    <FComponentsLib.FIcons.FDown style={{ marginLeft: 10, fontSize: 12 }} />
-                  </span>
-                  </FDropdownMenu>
+                    text={nodeManagerPage.exhibit_ResourceStateOptions.find((rso) => {
+                      return rso.value === nodeManagerPage.exhibit_SelectedStatus.toString();
+                    })?.text || ''}
+                  />
+                  {/*<span style={{ cursor: 'pointer' }}>*/}
+                  {/*  {*/}
+                  {/*    nodeManagerPage.exhibit_ResourceStateOptions.find((rso) => {*/}
+                  {/*      return rso.value === nodeManagerPage.exhibit_SelectedStatus.toString();*/}
+                  {/*    })?.text*/}
+                  {/*  }*/}
+                  {/*  <FComponentsLib.FIcons.FDown style={{ marginLeft: 10, fontSize: 12 }} />*/}
+                  {/*</span>*/}
+                  {/*</FDropdownMenu>*/}
                 </div>
 
 

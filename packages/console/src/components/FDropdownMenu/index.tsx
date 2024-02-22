@@ -6,6 +6,7 @@ import FMenu, { FMenuProps } from '../FMenu';
 import { DownOutlined } from '@ant-design/icons';
 // import FDropdown from "../FDropdown";
 import FComponentsLib from '@freelog/components-lib';
+import { FUtil } from '../../../../@freelog/tools-lib';
 
 interface FDropdownMenuProps extends FMenuProps {
   children?: React.ReactNode;
@@ -14,15 +15,29 @@ interface FDropdownMenuProps extends FMenuProps {
 }
 
 function FDropdownMenu({ options, children, text, onChange }: FDropdownMenuProps) {
+  const [$open, set$open, get$open] = FUtil.Hook.useGetState<boolean>(true);
   return (<FComponentsLib.FDropdown
+    // @ts-ignore
+    onOpenChange={(o: boolean) => {
+      console.log(o, 'siodfjlksdjflksdjfljdslfjlkj');
+      set$open(o);
+    }}
     overlay={<FMenu
       onClick={onChange}
       options={options} />}>
-    {text ? (<div className={styles.text}>
-      {text}
-      {/*<DownOutlined className={styles.DownOutlined} />*/}
-      <FComponentsLib.FIcons.FDown className={styles.DownOutlined} style={{ fontSize: 12 }} />
-    </div>) : children}
+    {
+      text ?
+        (<div className={styles.text}>
+          {text}
+          {
+            $open
+              ? (<FComponentsLib.FIcons.FUp style={{ fontSize: 12 }} />)
+              : (<FComponentsLib.FIcons.FDown style={{ fontSize: 12 }} />)
+          }
+
+        </div>)
+        : children
+    }
   </FComponentsLib.FDropdown>);
 }
 
