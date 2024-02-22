@@ -55,6 +55,7 @@ export interface NodeManagerModelState {
   exhibit_ListTotal: number;
   exhibit_ListState: 'loading' | 'noData' | 'noSearchResult' | 'loaded';
   exhibit_ListMore: 'loading' | 'andMore' | 'noMore';
+  isBatchManagement: boolean;
   checkedExhibitIDs: string[];
   updateExhibitResultType: '' | 'online' | 'offline' | 'addPolicy',
   updateExhibitResult: {
@@ -386,6 +387,7 @@ const exhibitInitStates: Pick<NodeManagerModelState,
   | 'exhibit_ListTotal'
   | 'exhibit_ListState'
   | 'exhibit_ListMore'
+  | 'isBatchManagement'
   | 'checkedExhibitIDs'
   | 'updateExhibitResultType'
   | 'updateExhibitResult'> = {
@@ -406,6 +408,7 @@ const exhibitInitStates: Pick<NodeManagerModelState,
   exhibit_ListTotal: -1,
   exhibit_ListState: 'loading',
   exhibit_ListMore: 'loading',
+  isBatchManagement: false,
   checkedExhibitIDs: [],
   updateExhibitResultType: '',
   updateExhibitResult: null,

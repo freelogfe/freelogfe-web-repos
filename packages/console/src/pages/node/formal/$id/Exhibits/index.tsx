@@ -38,8 +38,6 @@ import fCenterMessage from '@/components/fCenterMessage';
 import fPolicyBuilder from '@/components/fPolicyBuilder';
 import { fOnOffFeedback } from '@/components/fOnOffFeedback';
 
-// import { exhibitManagement } from '../../../../../../../@freelog/tools-lib/dist/utils/linkTo';
-
 interface ExhibitsProps {
   dispatch: Dispatch;
   nodeManagerPage: NodeManagerModelState;
@@ -80,7 +78,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
   // console.log(exhibit_ListTotal, 'exhibit_ListTotal3092oiklsdf')
   const columns: ColumnsType<NonNullable<NodeManagerModelState['exhibit_List']>[number]> = [
     {
-      title: <Space size={5}>
+      title: nodeManagerPage.isBatchManagement ? (<Space size={5}>
         <Checkbox
           checked={nodeManagerPage.checkedExhibitIDs.length === nodeManagerPage.exhibit_List.length}
           indeterminate={nodeManagerPage.checkedExhibitIDs.length !== 0 && nodeManagerPage.checkedExhibitIDs.length !== nodeManagerPage.exhibit_List.length}
@@ -109,10 +107,13 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
           type='table'
           text={'全选'}
         />
-      </Space>,
+      </Space>) : null,
       dataIndex: 'checked',
       key: 'checked',
       render(text, record) {
+        if (!nodeManagerPage.isBatchManagement) {
+          return null;
+        }
         return (<Checkbox
           checked={nodeManagerPage.checkedExhibitIDs.includes(record.id)}
           onChange={(e) => {
@@ -139,7 +140,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
           }}
         />);
       },
-      width: 100,
+      width: nodeManagerPage.isBatchManagement ? 100 : 2,
     },
     {
       title: <FComponentsLib.FTitleText text={`${FI18n.i18nNext.t('tableheader_exhibit')}`} type='table' />,
@@ -320,7 +321,24 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                 type='h1'
                 text={`展品管理 ` + (nodeManagerPage.exhibit_ListTotal === -1 ? '' : `(${nodeManagerPage.exhibit_ListTotal})`)}
               />
-              <Space size={80}>
+              <Space size={50}>
+                {
+                  !nodeManagerPage.isBatchManagement && (<FComponentsLib.FTextBtn
+                    style={{ fontSize: 14 }}
+                    onClick={() => {
+                      dispatch<ChangeAction>({
+                        type: 'nodeManagerPage/change',
+                        payload: {
+                          isBatchManagement: true,
+                        },
+                      });
+                    }}
+                  >
+                    <FComponentsLib.FIcons.FConfiguration style={{ fontSize: 14 }} />
+                    &nbsp;{FI18n.i18nNext.t('myresources_btn_bulkaction')}
+                  </FComponentsLib.FTextBtn>)
+                }
+
                 <div>
                   <span>{FI18n.i18nNext.t('resource_type')}：</span>
 
@@ -360,6 +378,8 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                   </span>
                   </FDropdownMenu>
                 </div>
+
+
                 <div>
                   <FComponentsLib.FInput.FSearch
                     value={nodeManagerPage.exhibit_InputFilter}
@@ -377,6 +397,8 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                     placeholder={FI18n.i18nNext.t('nodemngt_exhibit_search_hint')}
                   />
                 </div>
+
+
               </Space>
             </div>)
         }
@@ -389,17 +411,17 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
         {
           nodeManagerPage.exhibit_ListState === 'loaded' && (<>
             {
-              nodeManagerPage.checkedExhibitIDs.length > 0 && (<>
+              nodeManagerPage.isBatchManagement && (<>
                 {/*true && (<>*/}
                 <div className={styles.handled}>
                   <FComponentsLib.FContentText
                     type={'additional2'}
                     style={{ fontSize: 14 }}
-                    // text={'已选择2个对象，可进行操作:'}
                     text={FI18n.i18nNext.t('nodemgnt_exhibitmgnt_bulkaction_label_selectedqty', {
                       Qty: nodeManagerPage.checkedExhibitIDs.length,
                     })}
                   />
+
                   <FComponentsLib.FTextBtn
                     disabled={nodeManagerPage.checkedExhibitIDs.length === 0}
                     type={'primary'}
@@ -436,34 +458,9 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                               if (data[rl.id] && data[rl.id].status === 1) {
                                 return {
                                   ...rl,
-                                  // ...(data[rl.id].data || {}),
-                                  // policy: data[rl.id].data.policies
-                                  //   .filter((l: any) => {
-                                  //     return l.status === 1;
-                                  //   })
-                                  //   .map((l: any) => {
-                                  //     return l.policyName;
-                                  //   }),
-                                  // status: data[rl.id].data.status,
                                   isOnline: true,
                                 };
                               }
-
-                              // const failResource = data_failResources.find((fr) => {
-                              //   return fr.resourceId === rl.id;
-                              // });
-                              // // console.log(failResource, 'failResource dsifjsldkfjlksdjflkjsdlkjflkjl');
-                              // if (!!failResource) {
-                              //   return {
-                              //     ...rl,
-                              //     policy: failResource.policies
-                              //       .filter((l: any) => {
-                              //         return l.status === 1;
-                              //       })
-                              //       .map((l: any) => l.policyName),
-                              //     status: failResource.status,
-                              //   };
-                              // }
                               return rl;
                             }),
                         },
@@ -475,12 +472,6 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                         fOnOffFeedback({ state: 'on', message: '上架成功' });
                         return;
                       }
-
-                      // console.log(data, 'data sdifjsd;lfjlsdkfjlksdjflksdjflksdjlkj');
-                      // dispatch<OnBatchUpdateObjectsAction>({
-                      //   type: 'storageHomePage/onBatchUpdateObjects',
-                      // });
-
                       dispatch<ChangeAction>({
                         type: 'nodeManagerPage/change',
                         payload: {
@@ -502,13 +493,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                       if (nodeManagerPage.checkedExhibitIDs.length === 0) {
                         return fCenterMessage({ message: '请选择要执行操作的对象' });
                       }
-                      // dispatch<OnBatchUpdateObjectsAction>({
-                      //   type: 'storageHomePage/onBatchUpdateObjects',
-                      // });
-
                       const confirm: boolean = await fPromiseModalConfirm({
-                        // title: '下架展品',
-                        // description: '下架后，其它用户将无法签约该展品，确认要下架吗？',
                         title: '提示',
                         description: FI18n.i18nNext.t('confirm_msg_remove_exhibits_from_auth'),
                         okText: FI18n.i18nNext.t('btn_remove_exhibits_from_auth'),
@@ -537,11 +522,6 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                         return fCenterMessage({ message: msg });
                       }
 
-                      // console.log(data, 'data sdifjsd;lfjlsdkfjlksdjflksdjflksdjlkj');
-                      // dispatch<OnBatchUpdateObjectsAction>({
-                      //   type: 'storageHomePage/onBatchUpdateObjects',
-                      // });
-
                       dispatch<ChangeAction>({
                         type: 'nodeManagerPage/change',
                         payload: {
@@ -551,34 +531,9 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                               if (data[rl.id] && data[rl.id].status === 1) {
                                 return {
                                   ...rl,
-                                  // ...(data[rl.id].data || {}),
-                                  // policy: data[rl.id].data.policies
-                                  //   .filter((l: any) => {
-                                  //     return l.status === 1;
-                                  //   })
-                                  //   .map((l: any) => {
-                                  //     return l.policyName;
-                                  //   }),
-                                  // status: data[rl.id].data.status,
                                   isOnline: false,
                                 };
                               }
-
-                              // const failResource = data_failResources.find((fr) => {
-                              //   return fr.resourceId === rl.id;
-                              // });
-                              // // console.log(failResource, 'failResource dsifjsldkfjlksdjflkjsdlkjflkjl');
-                              // if (!!failResource) {
-                              //   return {
-                              //     ...rl,
-                              //     policy: failResource.policies
-                              //       .filter((l: any) => {
-                              //         return l.status === 1;
-                              //       })
-                              //       .map((l: any) => l.policyName),
-                              //     status: failResource.status,
-                              //   };
-                              // }
                               return rl;
                             }),
                         },
@@ -608,13 +563,6 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                     disabled={nodeManagerPage.checkedExhibitIDs.length === 0}
                     type={'primary'}
                     onClick={async () => {
-                      // if (storageHomePage.checkedObjectIDs.length === 0) {
-                      //   return fCenterMessage({ message: '请选择要执行操作的对象' });
-                      // }
-                      // dispatch<OnBatchUpdateObjectsAction>({
-                      //   type: 'storageHomePage/onBatchUpdateObjects',
-                      // });
-
                       if (nodeManagerPage.checkedExhibitIDs.length === 0) {
                         return fCenterMessage({ message: '请选择要执行操作的对象' });
                       }
@@ -656,36 +604,10 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                               if (data[rl.id] && data[rl.id].status === 1) {
                                 return {
                                   ...rl,
-                                  // ...(data[rl.id].data || {}),
-                                  // policy: data[rl.id].data.policies
-                                  //   .filter((l: any) => {
-                                  //     return l.status === 1;
-                                  //   })
-                                  //   .map((l: any) => {
-                                  //     return l.policyName;
-                                  //   }),
-                                  // status: data[rl.id].data.status,
-                                  // isOnline: false,
                                   policies: [...rl.policies, result.title],
                                   hasPolicy: true,
                                 };
                               }
-
-                              // const failResource = data_failResources.find((fr) => {
-                              //   return fr.resourceId === rl.id;
-                              // });
-                              // // console.log(failResource, 'failResource dsifjsldkfjlksdjflkjsdlkjflkjl');
-                              // if (!!failResource) {
-                              //   return {
-                              //     ...rl,
-                              //     policy: failResource.policies
-                              //       .filter((l: any) => {
-                              //         return l.status === 1;
-                              //       })
-                              //       .map((l: any) => l.policyName),
-                              //     status: failResource.status,
-                              //   };
-                              // }
                               return rl;
                             }),
                         },
@@ -697,7 +619,6 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                         fCenterMessage({ message: '策略添加成功' });
                         return;
                       }
-                      // console.log(data);
 
                       dispatch<ChangeAction>({
                         type: 'nodeManagerPage/change',
@@ -710,6 +631,22 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
                   >
                     <FComponentsLib.FIcons.FPolicy style={{ fontSize: 14 }} />
                     &nbsp;{FI18n.i18nNext.t('nodemgnt_exhibitmgnt_bulkaction_btn_addauthplan')}
+                  </FComponentsLib.FTextBtn>
+
+                  <FComponentsLib.FTextBtn
+                    type={'danger'}
+                    onClick={() => {
+                      dispatch<ChangeAction>({
+                        type: 'nodeManagerPage/change',
+                        payload: {
+                          isBatchManagement: false,
+                          checkedExhibitIDs: [],
+                        },
+                      });
+                    }}
+                  >
+                    <FComponentsLib.FIcons.FExit style={{ fontSize: 14 }} />
+                    &nbsp;{FI18n.i18nNext.t('myresources_bulkaction_btn_quit')}
                   </FComponentsLib.FTextBtn>
 
                 </div>
