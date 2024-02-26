@@ -62,6 +62,7 @@ function Finish({ dispatch, resourceCreatorBatchPage }: FinishProps) {
             });
           if (resourceIDs.length === 0) {
             fCenterMessage({ message: '不存在上线资源不能签约到节点' });
+            return;
           }
           const result = await fSignResourceToNode({
             resourceIDs: resourceIDs,

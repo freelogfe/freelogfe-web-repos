@@ -309,7 +309,10 @@ function FSignResourceToNodeDrawer({ resourceIDs, onClose, onOk }: FSignResource
           <Space size={10} direction={'vertical'} style={{ width: '100%' }}>
             {
               $goodResources.map((r) => {
-                return (<div className={styles.resourceItem} key={r.resourceID}>
+                return (<div
+                  className={styles.resourceItem}
+                  key={r.resourceID}
+                >
                   <FCoverImage
                     src={r.cover}
                     width={104}
@@ -319,6 +322,8 @@ function FSignResourceToNodeDrawer({ resourceIDs, onClose, onOk }: FSignResource
                     <FComponentsLib.FTitleText
                       type={'h3'}
                       text={r.resourceTitle || r.resourceName}
+                      style={{ maxWidth: 500 }}
+                      singleRow={true}
                     />
                     <div style={{ height: 7 }} />
                     <FComponentsLib.FContentText
@@ -332,9 +337,6 @@ function FSignResourceToNodeDrawer({ resourceIDs, onClose, onOk }: FSignResource
                         {
                           r.selectedPolicy && (<span>{r.selectedPolicy.policyName}</span>)
                         }
-                        {/*{*/}
-                        {/*  r.addPolicy && (<span>{r.addPolicy.title}</span>)*/}
-                        {/*}*/}
                         {
                           !r.selectedPolicy && (<span>永久免费</span>)
                         }
