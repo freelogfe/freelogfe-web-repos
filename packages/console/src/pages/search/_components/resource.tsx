@@ -44,21 +44,27 @@ export default function ResourceList({
                   );
                 }}
               >
-                <FCoverImage src={item.coverImages[0]} width={280}/>
+                <FCoverImage src={item.coverImages[0]} width={280} />
                 <ResourceInfo
                   name={item.resourceTitle || item.resourceName}
                   type={item.resourceType.join(' / ')}
                   version={item.latestVersion}
                 />
                 <div className='flex-row over-h'>
-                  {item.policies.map((policy: any) => (
+                  {item.policies.filter((p: any) => {
+                    return p.status === 1;
+                  }).map((policy: any) => (
                     <PolicyTag name={policy.policyName} key={policy.policyId} />
                   ))}
                 </div>
               </CardContainer>
             )
             : (
-              <CardContainer className='d-none' diabled key={item.resourceId + index} />
+              <CardContainer
+                className='d-none'
+                diabled
+                key={item.resourceId + index}
+              />
             );
         })}
       <div style={{ width: 300 }} />
