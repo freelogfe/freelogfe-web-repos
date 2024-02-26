@@ -67,7 +67,11 @@ function Finish({ dispatch, resourceCreatorBatchPage }: FinishProps) {
             resourceIDs: resourceIDs,
           });
           if (result) {
-            history.push(FUtil.LinkTo.nodeManagement({ nodeID: result.nodeID }));
+            if (result.allIsTheme) {
+              history.push(FUtil.LinkTo.nodeManagement({ nodeID: result.nodeID, showPage: 'theme' }));
+            } else {
+              history.push(FUtil.LinkTo.nodeManagement({ nodeID: result.nodeID }));
+            }
           }
         }}
       >{FI18n.i18nNext.t('myresources_bulkaction_btn_addtomynode')}</FComponentsLib.FTextBtn>

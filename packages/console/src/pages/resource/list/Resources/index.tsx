@@ -273,9 +273,12 @@ function Resources({ dispatch, resourceListPage }: ResourceProps) {
                       resourceIDs: resourceListPage.checkedResourceIDs,
                     });
                     if (result) {
-                      history.push(FUtil.LinkTo.nodeManagement({ nodeID: result.nodeID }));
+                      if (result.allIsTheme) {
+                        history.push(FUtil.LinkTo.nodeManagement({ nodeID: result.nodeID, showPage: 'theme' }));
+                      } else {
+                        history.push(FUtil.LinkTo.nodeManagement({ nodeID: result.nodeID }));
+                      }
                     }
-
                   }}
                 >
                   <FComponentsLib.FIcons.FNodes style={{ fontSize: 14, color: '#2784FF' }} />

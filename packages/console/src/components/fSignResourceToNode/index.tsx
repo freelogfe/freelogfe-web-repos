@@ -9,10 +9,10 @@ interface fSignResourceToNodeProps {
 
 type ReturnData = {
   nodeID: number;
+  allIsTheme: boolean;
 } | null;
 
 function fSignResourceToNode({ resourceIDs }: fSignResourceToNodeProps): Promise<ReturnData> {
-
   return new Promise<ReturnData>((resolve) => {
     const divRoot = self.document.body;
     const div = self.document.createElement('div') as HTMLDivElement;
@@ -20,8 +20,8 @@ function fSignResourceToNode({ resourceIDs }: fSignResourceToNodeProps): Promise
     const root = ReactDOM.createRoot(div);
     return root.render(<FSignResourceToNodeDrawer
       resourceIDs={resourceIDs}
-      onOk={({ nodeID }) => {
-        resolve({ nodeID });
+      onOk={({ nodeID, allIsTheme }) => {
+        resolve({ nodeID, allIsTheme });
       }}
       onClose={() => {
         resolve(null);

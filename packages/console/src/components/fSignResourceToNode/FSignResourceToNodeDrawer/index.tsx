@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import { Divider, Select, Space } from 'antd';
+import { Select, Space } from 'antd';
 import FComponentsLib from '@freelog/components-lib';
 import FDrawer from '@/components/FDrawer';
 import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
@@ -17,7 +17,10 @@ import fMessage from '@/components/fMessage';
 interface FSignResourceToNodeDrawerProps {
   resourceIDs: string[];
 
-  onOk?(value: { nodeID: number }): void;
+  onOk?(value: {
+    nodeID: number;
+    allIsTheme: boolean;
+  }): void;
 
   onClose?(): void;
 }
@@ -34,10 +37,6 @@ interface FSignResourceToNodeDrawerStates {
       policyID: string;
       policyName: string;
     } | null;
-    // addPolicy: {
-    //   title: string;
-    //   text: string;
-    // } | null;
   }[];
   badResources: {
     resourceID: string;
@@ -207,6 +206,7 @@ function FSignResourceToNodeDrawer({ resourceIDs, onClose, onOk }: FSignResource
             msg: string;
           } = await FServiceAPI.Exhibit.batchCreatePresentable({
             nodeId: get$selectNodeID() || -1,
+            // @ts-ignore
             resources: get$goodResources().map((r) => {
               return {
                 resourceId: r.resourceID,
@@ -224,6 +224,9 @@ function FSignResourceToNodeDrawer({ resourceIDs, onClose, onOk }: FSignResource
           // console.log(data, 'data sdifj;sldkfjlksdjfljiowejflksdjflkjsdlfkjl');
           onOk && onOk({
             nodeID: get$selectNodeID() || -1,
+            allIsTheme: get$goodResources().every((r) => {
+              return r.resourceType.includes('主题');
+            }),
           });
 
           if (Object.values(data).some((v) => {
