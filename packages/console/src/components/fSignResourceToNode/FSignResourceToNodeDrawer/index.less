@@ -68,3 +68,36 @@
 
   }
 }
+
+.newButton {
+  display: flex;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  color: @f-primary-color;
+  transition: none;
+  border-top: 1px solid #E4E7EB;
+  font-weight: 600;
+
+  &:hover {
+    color: white;
+    background-color: @f-primary-color;
+  }
+}
+
+.nodeSelector {
+  //border: 1px solid #E4E7EB;
+  display: flex;
+  width: 638px;
+  //padding: 0 15px;
+  align-items: center;
+  justify-content: space-between;
+  height: 48px;
+  border-radius: 4px;
+  cursor: pointer;
+
+  .nodeSelectorLabel {
+    font-size: 14px;
+    color: #D1D1D1;
+  }
+}

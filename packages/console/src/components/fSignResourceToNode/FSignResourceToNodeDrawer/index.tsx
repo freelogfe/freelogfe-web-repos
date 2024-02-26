@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import { Select, Space } from 'antd';
+import { Divider, Select, Space } from 'antd';
 import FComponentsLib from '@freelog/components-lib';
 import FDrawer from '@/components/FDrawer';
 import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
@@ -195,18 +195,6 @@ function FSignResourceToNodeDrawer({ resourceIDs, onClose, onOk }: FSignResource
         disabled={!$selectNodeID || $goodResources.length === 0}
         type='primary'
         onClick={async () => {
-
-          // FServiceAPI.Resource.batchUpdate({
-          //   resourceIds: get$goodResources()
-          //     .filter((r) => {
-          //       return !!r.addPolicy;
-          //     })
-          //     .map((r) => {
-          //       return r.resourceID;
-          //     }),
-          //   // addPolicies: get,
-          // });
-
           const { ret, errCode, data, msg }: {
             ret: number;
             errCode: number;
@@ -225,12 +213,6 @@ function FSignResourceToNodeDrawer({ resourceIDs, onClose, onOk }: FSignResource
                 policyId: !!r.selectedPolicy ? r.selectedPolicy.policyID : undefined,
               };
             }),
-            // resources: resourceIDs.map((id) => {
-            //   return {
-            //     resourceId: id,
-            //     policyId: '' || undefined,
-            //   };
-            // }),
           });
 
           if (ret !== 0 || errCode !== 0) {
@@ -262,18 +244,51 @@ function FSignResourceToNodeDrawer({ resourceIDs, onClose, onOk }: FSignResource
   >
     <div style={{ position: 'relative' }}>
       {/*<FComponentsLib.FTitleText text={'选择节点'} type={'h3'} />*/}
-      <FComponentsLib.FTitleText text={FI18n.i18nNext.t('addresourcetonode_addtonode_selectnode')} type={'h3'} />
-      <div style={{ height: 10 }} />
-      <Select
-        value={$selectNodeID}
-        placeholder={'选择签约的节点'}
-        style={{ width: '100%', height: 38, borderRadius: 4 }}
-        onChange={(value) => {
-          set$selectNodeID(value);
-          handleResource();
-        }}
-        options={$nodeOptions}
+      <FComponentsLib.FTitleText
+        text={FI18n.i18nNext.t('addresourcetonode_addtonode_selectnode')}
+        type={'h3'}
       />
+      <div style={{ height: 10 }} />
+      {
+        $nodeOptions.length === 0
+          ? (<div className={styles.nodeSelector}>
+            <Space size={10}>
+              <span className={styles.nodeSelectorLabel}>您还没有创建节点</span>
+              <FComponentsLib.FTextBtn
+                type='primary'
+                onClick={() => {
+                  self.open(FUtil.LinkTo.nodeCreator());
+                }}>创建节点</FComponentsLib.FTextBtn>
+            </Space>
+          </div>)
+          : (<Select
+            value={$selectNodeID}
+            placeholder={'选择签约的节点'}
+            style={{ width: '100%', height: 38, borderRadius: 4 }}
+            onChange={(value) => {
+              set$selectNodeID(value);
+              handleResource();
+            }}
+            options={$nodeOptions}
+            dropdownRender={(menu) => (
+              <>
+                {menu}
+                {/*<Divider style={{ margin: '8px 0' }} />*/}
+                <a
+                  href={FUtil.LinkTo.nodeCreator()}
+                  className={styles.newButton}
+                  target={'_blank'}
+                >
+                  <Space size={10}>
+                    <FComponentsLib.FIcons.FPlus style={{ fontSize: 14 }} />
+                    <span>创建节点</span>
+                  </Space>
+                </a>
+              </>
+            )}
+          />)
+      }
+
       {
         $goodResources.length > 0 && (<>
           <div style={{ height: 30 }} />
