@@ -12,6 +12,7 @@ import fCenterMessage from '@/components/fCenterMessage';
 import FPolicyDisplay from '@/components/FPolicyDisplay';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
 import fPolicyBuilder from '@/components/fPolicyBuilder';
+import fMessage from '@/components/fMessage';
 
 interface FSignResourceToNodeDrawerProps {
   resourceIDs: string[];
@@ -508,6 +509,12 @@ function SelectPolicyDrawer({ resourceID, onSelected, onCancel }: SelectPolicyDr
         status: 1,
       }],
     });
+
+    if (ret !== 0 || errCode !== 0) {
+      fMessage(msg, 'error');
+      return;
+    }
+
     const policy = data.policies.find((p) => {
       return p.policyName === result.title;
     });
