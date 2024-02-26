@@ -4,13 +4,15 @@
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  margin-right: -5px;
-  margin-bottom: -5px;
+  //margin-right: -5px;
+  //margin-bottom: -5px;
   flex-wrap: wrap;
+  gap: 5px;
 
   &.singleRow {
-    height: 29px;
+    //height: 29px;
     overflow: hidden;
+    flex-wrap: nowrap;
   }
 
   .label {
@@ -21,8 +23,10 @@
     border: 1px solid #AED0FF;
     height: 24px;
     padding: 0 5px;
-    margin-right: 5px;
-    margin-bottom: 5px;
+    //margin-right: 5px;
+    //margin-bottom: 5px;
+    flex-shrink: 0;
+    width: fit-content;
 
     .labelText {
       font-size: 12px;
