@@ -207,7 +207,6 @@ function FSignResourceToNodeDrawer({ resourceIDs, onClose, onOk }: FSignResource
             msg: string;
           } = await FServiceAPI.Exhibit.batchCreatePresentable({
             nodeId: get$selectNodeID() || -1,
-            // @ts-ignore
             resources: get$goodResources().map((r) => {
               return {
                 resourceId: r.resourceID,
@@ -427,19 +426,6 @@ function FSignResourceToNodeDrawer({ resourceIDs, onClose, onOk }: FSignResource
         }));
         set$selectingPolicyResourceID('');
       }}
-      // onAdd={(value) => {
-      //   set$goodResources(get$goodResources().map((resource) => {
-      //     if (get$selectingPolicyResourceID() !== resource.resourceID) {
-      //       return resource;
-      //     }
-      //     return {
-      //       ...resource,
-      //       addPolicy: value,
-      //       selectedPolicy: null,
-      //     };
-      //   }));
-      //   set$selectingPolicyResourceID('');
-      // }}
     />
   </FDrawer>);
 }
@@ -453,11 +439,6 @@ interface SelectPolicyDrawerProps {
     policyID: string;
     policyName: string;
   }): void;
-
-  // onAdd?(value: {
-  //   title: string;
-  //   text: string;
-  // }): void;
 
   onCancel?(): void;
 }

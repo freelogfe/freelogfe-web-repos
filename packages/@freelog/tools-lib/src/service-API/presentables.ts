@@ -277,7 +277,7 @@ export interface BatchCreatePresentableParamsType {
   nodeId: number;
   resources: {
     resourceId: string;
-    policyId: string;
+    policyId?: string;
   }[];
 }
 
