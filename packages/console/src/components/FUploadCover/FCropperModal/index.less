@@ -2,10 +2,52 @@
 
 .content {
   display: flex;
-  justify-content: space-between;
+  //justify-content: space-between;
+  align-items: flex-start;
 
   .contentLeft {
-    width: 560px;
+    width: 512px;
+  }
+
+  .contentMiddle {
+
+    .checkBox {
+      width: 93px;
+      height: 384px;
+      background-color: rgba(0, 0, 0, 0.03);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      flex-direction: column;
+
+      .checkBoxItem {
+        width: 77px;
+        height: 28px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 4px;
+        color: #222;
+        font-weight: 400;
+        gap: 10px;
+        font-size: 12px;
+        line-height: 18px;
+        cursor: pointer;
+
+        .rect {
+          background: #D8D8D8;
+          border-radius: 2px;
+        }
+
+        &.checked {
+          background-color: rgba(0, 0, 0, .05);
+          font-weight: 600;
+        }
+      }
+    }
+
   }
 
   .contentRight {
@@ -18,11 +60,24 @@
       border-radius: 10px;
       padding: 10px;
 
-      .imgPreview {
-        overflow: hidden;
-        display: block;
+      .imgPreviewBox {
         width: 280px;
         height: 210px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0, 0, 0, 0.03);
+        border-radius: 4px;
+        overflow: hidden;
+
+        .imgPreview {
+          overflow: hidden;
+          display: block;
+          width: 280px;
+          height: 210px;
+          max-width: 100%;
+          max-height: 100%;
+        }
       }
     }
   }
