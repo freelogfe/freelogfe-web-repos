@@ -7,6 +7,7 @@ import { FServiceAPI, FI18n, FUtil } from '@freelog/tools-lib';
 import fMessage from '@/components/fMessage';
 
 interface FUploadCoverProps {
+  use?: 'resource' | 'exhibit';
   children: React.ReactNode;
 
   onUploadSuccess?(url: string): void;
@@ -26,7 +27,7 @@ const initStates: FUploadCoverStates = {
   uploading: false,
 };
 
-function FUploadCover({ children, onUploadSuccess, onError }: FUploadCoverProps) {
+function FUploadCover({ use = 'resource', children, onUploadSuccess, onError }: FUploadCoverProps) {
   const ref = React.useRef<any>(null);
   // const [$naturalFile, set$naturalFile, get$naturalFile] = FUtil.Hook.useGetState<FUploadCoverStates['naturalFile']>(initStates['naturalFile']);
   const [$image, set$image, get$image] = FUtil.Hook.useGetState<FUploadCoverStates['image']>(initStates['image']);
@@ -113,6 +114,7 @@ function FUploadCover({ children, onUploadSuccess, onError }: FUploadCoverProps)
       </div>
     </Upload>
     <FCropperModal
+      use={use}
       uploading={$uploading}
       uploadRef={ref}
       imgSrc={$image}

@@ -7,6 +7,7 @@ import FComponentsLib from '@freelog/components-lib';
 import { FI18n, FUtil } from '@freelog/tools-lib';
 
 interface FCropperModalProps {
+  use: 'resource' | 'exhibit';
   uploadRef: any;
   imgSrc: string;
   uploading: boolean;
@@ -25,6 +26,7 @@ interface FCropperModalProps {
 }
 
 function FCropperModal({
+                         use,
                          uploadRef,
                          imgSrc,
                          onOK,
@@ -61,8 +63,15 @@ function FCropperModal({
     wrapClassName={styles.wrapClassName}
     className={styles.className}
     open={!!imgSrc}
-    width={1000}
-    title={<FComponentsLib.FTitleText text={'上传资源图片'} type='popup' />}
+    width={use === 'resource' ? 1000 : 670}
+    title={(<div className={styles.modalTitle}>
+      {
+        use === 'resource' && (<FComponentsLib.FTitleText text={'上传资源图片'} type='popup' />)
+      }
+      {
+        use === 'exhibit' && (<FComponentsLib.FTitleText text={'上传展品图片'} type='popup' />)
+      }
+    </div>)}
     destroyOnClose
     bodyStyle={{ padding: '20px 30px' }}
     maskClosable={false}
@@ -349,29 +358,33 @@ function FCropperModal({
           </div>
         </div>
       </div>
-      <div style={{ width: 30 }} />
-      <div className={styles.contentRight}>
-        <FComponentsLib.FTitleText
-          text={'资源卡片预览'}
-          type='h4'
-        />
-        <div style={{ height: 10 }} />
+      {
+        use === 'resource' && <>
+          <div style={{ width: 30 }} />
+          <div className={styles.contentRight}>
+            <FComponentsLib.FTitleText
+              text={'资源卡片预览'}
+              type='h4'
+            />
+            <div style={{ height: 10 }} />
 
-        <div className={styles.previewCard}>
-          <div className={styles.imgPreviewBox}>
-            <div className={styles.imgPreview} />
+            <div className={styles.previewCard}>
+              <div className={styles.imgPreviewBox}>
+                <div className={styles.imgPreview} />
+              </div>
+              <div style={{ height: 10 }} />
+              <FComponentsLib.FContentText text={'资源名称'} type='highlight' />
+              <div style={{ height: 8 }} />
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <FComponentsLib.FContentText text={'资源类型'} type={'additional2'} />
+                <FComponentsLib.FContentText text={'最新版本'} type={'additional2'} />
+              </div>
+              <div style={{ height: 12 }} />
+              <FComponentsLib.F_Contract_And_Policy_Labels data={[{ text: '授权策略', dot: '' }]} />
+            </div>
           </div>
-          <div style={{ height: 10 }} />
-          <FComponentsLib.FContentText text={'资源名称'} type='highlight' />
-          <div style={{ height: 8 }} />
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <FComponentsLib.FContentText text={'资源类型'} type={'additional2'} />
-            <FComponentsLib.FContentText text={'最新版本'} type={'additional2'} />
-          </div>
-          <div style={{ height: 12 }} />
-          <FComponentsLib.F_Contract_And_Policy_Labels data={[{ text: '授权策略', dot: '' }]} />
-        </div>
-      </div>
+        </>
+      }
     </div>
   </Modal>);
 }

@@ -46,6 +46,7 @@ function Info({ dispatch, exhibitInfoPage }: InfoProps) {
     <div style={{ height: 20 }} />
 
     <FUploadCover
+      use={'exhibit'}
       onError={(err) => {
         fMessage(err, 'error');
       }}
