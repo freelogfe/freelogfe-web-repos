@@ -44,23 +44,28 @@ function FCropperModal({
     if (aspectRatioChecked === 'free') {
       cropperInstance.enable();
       cropperInstance.setAspectRatio(0);
+      cropperInstance.reset();
     } else if (aspectRatioChecked === 'original') {
       cropperInstance.setAspectRatio(0);
+      cropperInstance.reset();
       cropperInstance.disable();
     } else {
       cropperInstance.enable();
       cropperInstance.setAspectRatio(aspectRatioChecked);
+      cropperInstance.reset();
     }
 
   }, [$aspectRatioChecked]);
 
   return (<Modal
-    // wrapClassName={styles.wrapClassName}
+    wrapClassName={styles.wrapClassName}
+    className={styles.className}
     open={!!imgSrc}
     width={1000}
     title={<FComponentsLib.FTitleText text={'上传资源图片'} type='popup' />}
     destroyOnClose
     bodyStyle={{ padding: '20px 30px' }}
+    maskClosable={false}
     // onOk={() => {
     //   // const info = cropper.getData();
     //   // console.log(info, '##SDfsiodlk');
@@ -81,9 +86,9 @@ function FCropperModal({
     //     }
     //   });
     // }}
-    // onCancel={() => {
-    //   onCancel && onCancel();
-    // }}
+    onCancel={() => {
+      onCancel && onCancel();
+    }}
     // okText={FI18n.i18nNext.t('btn_done')}
     // cancelText={FI18n.i18nNext.t('btn_cancel')}
     // okText={uploading ? '更换中' : FI18n.i18nNext.t('btn_done')}
