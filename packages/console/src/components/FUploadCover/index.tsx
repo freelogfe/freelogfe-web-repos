@@ -15,19 +15,22 @@ interface FUploadCoverProps {
 }
 
 interface FUploadCoverStates {
-  naturalFile: File | null;
+  // naturalFile: File | null;
   image: string;
+  uploading: boolean;
 }
 
 const initStates: FUploadCoverStates = {
-  naturalFile: null,
+  // naturalFile: null,
   image: '',
+  uploading: false,
 };
 
 function FUploadCover({ children, onUploadSuccess, onError }: FUploadCoverProps) {
   const ref = React.useRef<any>(null);
   // const [$naturalFile, set$naturalFile, get$naturalFile] = FUtil.Hook.useGetState<FUploadCoverStates['naturalFile']>(initStates['naturalFile']);
   const [$image, set$image, get$image] = FUtil.Hook.useGetState<FUploadCoverStates['image']>(initStates['image']);
+  const [$uploading, set$uploading, get$uploading] = FUtil.Hook.useGetState<FUploadCoverStates['uploading']>(initStates['uploading']);
 
   // function beforeUpload(file: RcFile) {
   //   if (file.type !== 'image/gif' && file.type !== 'image/png' && file.type !== 'image/jpeg') {
@@ -110,12 +113,14 @@ function FUploadCover({ children, onUploadSuccess, onError }: FUploadCoverProps)
       </div>
     </Upload>
     <FCropperModal
+      uploading={$uploading}
       uploadRef={ref}
       imgSrc={$image}
       onOK={async (blob) => {
         const myFile = new File([blob], 'image.jpeg', {
           type: blob.type,
         });
+        set$uploading(true);
         const { ret, errCode, msg, data: data_uploadImage }: {
           ret: number;
           errCode: number;
@@ -131,6 +136,7 @@ function FUploadCover({ children, onUploadSuccess, onError }: FUploadCoverProps)
         // $setState({
         //   uploading: initStates['uploading'],
         // });
+        set$uploading(false);
         if (ret !== 0 || errCode !== 0) {
           fMessage(msg, 'error');
           return;

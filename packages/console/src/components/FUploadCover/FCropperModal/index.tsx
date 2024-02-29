@@ -9,6 +9,7 @@ import { FI18n, FUtil } from '@freelog/tools-lib';
 interface FCropperModalProps {
   uploadRef: any;
   imgSrc: string;
+  uploading: boolean;
 
   // onOk?(info: {
   //   h: number;
@@ -28,6 +29,7 @@ function FCropperModal({
                          imgSrc,
                          onOK,
                          onCancel,
+                         uploading,
                        }: FCropperModalProps) {
   const [$cropperInstance, set$cropperInstance, get$cropperInstance] = FUtil.Hook.useGetState<Cropper | null>(null);
 
@@ -81,8 +83,12 @@ function FCropperModal({
     onCancel={() => {
       onCancel && onCancel();
     }}
-    okText={FI18n.i18nNext.t('btn_done')}
+    // okText={FI18n.i18nNext.t('btn_done')}
     cancelText={FI18n.i18nNext.t('btn_cancel')}
+    okText={uploading ? '更换中' : FI18n.i18nNext.t('btn_done')}
+    okButtonProps={{
+      loading: uploading,
+    }}
   >
     <div className={styles.content}>
       <div className={styles.contentLeft}>
