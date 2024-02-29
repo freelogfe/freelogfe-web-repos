@@ -55,40 +55,63 @@ function FCropperModal({
   }, [$aspectRatioChecked]);
 
   return (<Modal
+    // wrapClassName={styles.wrapClassName}
     open={!!imgSrc}
     width={1000}
     title={<FComponentsLib.FTitleText text={'上传资源图片'} type='popup' />}
     destroyOnClose
     bodyStyle={{ padding: '20px 30px' }}
-    onOk={() => {
-      // const info = cropper.getData();
-      // console.log(info, '##SDfsiodlk');
-      // onOk && onOk({
-      //   h: info.height,
-      //   w: info.width,
-      //   x: info.x,
-      //   y: info.y,
-      //   r: info.rotate,
-      // });
-      const cropperInstance = get$cropperInstance();
-      if (!cropperInstance) {
-        return;
-      }
-      cropperInstance.getCroppedCanvas().toBlob((blob) => {
-        if (blob) {
-          onOK && onOK(blob);
-        }
-      });
-    }}
-    onCancel={() => {
-      onCancel && onCancel();
-    }}
+    // onOk={() => {
+    //   // const info = cropper.getData();
+    //   // console.log(info, '##SDfsiodlk');
+    //   // onOk && onOk({
+    //   //   h: info.height,
+    //   //   w: info.width,
+    //   //   x: info.x,
+    //   //   y: info.y,
+    //   //   r: info.rotate,
+    //   // });
+    //   const cropperInstance = get$cropperInstance();
+    //   if (!cropperInstance) {
+    //     return;
+    //   }
+    //   cropperInstance.getCroppedCanvas().toBlob((blob) => {
+    //     if (blob) {
+    //       onOK && onOK(blob);
+    //     }
+    //   });
+    // }}
+    // onCancel={() => {
+    //   onCancel && onCancel();
+    // }}
     // okText={FI18n.i18nNext.t('btn_done')}
-    cancelText={FI18n.i18nNext.t('btn_cancel')}
-    okText={uploading ? '更换中' : FI18n.i18nNext.t('btn_done')}
-    okButtonProps={{
-      loading: uploading,
-    }}
+    // cancelText={FI18n.i18nNext.t('btn_cancel')}
+    // okText={uploading ? '更换中' : FI18n.i18nNext.t('btn_done')}
+    // okButtonProps={{
+    //   loading: uploading,
+    // }}
+    footer={(<div className={styles.modalFooter}>
+      <FComponentsLib.FTextBtn
+        type={'default'}
+        onClick={() => {
+          onCancel && onCancel();
+        }}
+      >{FI18n.i18nNext.t('btn_cancel')}</FComponentsLib.FTextBtn>
+      <FComponentsLib.FRectBtn
+        disabled={uploading}
+        onClick={() => {
+          const cropperInstance = get$cropperInstance();
+          if (!cropperInstance) {
+            return;
+          }
+          cropperInstance.getCroppedCanvas().toBlob((blob) => {
+            if (blob) {
+              onOK && onOK(blob);
+            }
+          });
+        }}
+      >{uploading ? '更换中' : FI18n.i18nNext.t('btn_done')}</FComponentsLib.FRectBtn>
+    </div>)}
   >
     <div className={styles.content}>
       <div className={styles.contentLeft}>
