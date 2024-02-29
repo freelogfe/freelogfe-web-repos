@@ -17,6 +17,8 @@ interface FCropperModalProps {
   //   y: number;
   //   r: number;
   // }): void;
+  onOK?(blob: Blob): void;
+
 
   onCancel?(): void;
 }
@@ -24,7 +26,7 @@ interface FCropperModalProps {
 function FCropperModal({
                          uploadRef,
                          imgSrc,
-                         // onOk,
+                         onOK,
                          onCancel,
                        }: FCropperModalProps) {
   const [$cropperInstance, set$cropperInstance, get$cropperInstance] = FUtil.Hook.useGetState<Cropper | null>(null);
@@ -66,6 +68,15 @@ function FCropperModal({
       //   y: info.y,
       //   r: info.rotate,
       // });
+      const cropperInstance = get$cropperInstance();
+      if (!cropperInstance) {
+        return;
+      }
+      cropperInstance.getCroppedCanvas().toBlob((blob) => {
+        if (blob) {
+          onOK && onOK(blob);
+        }
+      });
     }}
     onCancel={() => {
       onCancel && onCancel();

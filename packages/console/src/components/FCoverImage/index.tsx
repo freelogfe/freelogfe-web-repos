@@ -23,16 +23,16 @@ interface FCoverImageStates {
 
 function FCoverImage({ src = '', width, style = {}, className = '' }: FCoverImageProps) {
 
-  const [imgStyle, setImgStyle] = React.useState<FCoverImageStates['imgStyle']>(null);
+  const [$imgStyle, set$imgStyle] = React.useState<FCoverImageStates['imgStyle']>(null);
   const [$hasError, set$hasError] = React.useState<FCoverImageStates['$hasError']>(false);
 
   React.useEffect(() => {
     if (!src.includes('#')) {
-      setImgStyle(null);
+      set$imgStyle(null);
     } else {
       const { x, y, w, h, r, width: wh, height: ht } = hashString(src);
       const scale: number = width / w;
-      setImgStyle({
+      set$imgStyle({
         width: wh * scale,
         height: ht * scale,
         translateX: -x * scale,
@@ -54,21 +54,23 @@ function FCoverImage({ src = '', width, style = {}, className = '' }: FCoverImag
     }}
   >
     {
-      imgStyle
+      $imgStyle
         ? (<img
           src={src}
           alt={''}
           style={{
-            width: imgStyle.width,
-            height: imgStyle.height,
-            transform: `translateX(${imgStyle.translateX}px) translateY(${imgStyle.translateY}px)`,
+            width: $imgStyle.width,
+            height: $imgStyle.height,
+            transform: `translateX(${$imgStyle.translateX}px) translateY(${$imgStyle.translateY}px)`,
           }}
         />)
         : (<img
           src={!$hasError && !!src ? src : '//static.freelog.com/static/default_cover.png'}
           style={{
-            width: width,
-            height: width / 4 * 3,
+            // width: width,
+            // height: width / 4 * 3,
+            maxWidth: '100%',
+            maxHeight: '100%',
           }}
           alt={''}
           onError={(e) => {

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import { Space } from 'antd';
-import FUploadResourceCover from '@/pages/resource/components/FUploadResourceCover';
+// import FUploadResourceCover from '@/pages/resource/components/FUploadResourceCover';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import { ConnectState, ResourceInfoPageModelState } from '@/models/connect';
@@ -20,7 +20,7 @@ import {
   OnClick_SaveTitleBtn_Action, OnChange_TitleInput_Action,
 } from '@/models/resourceInfoPage';
 import { OnChange_Page_Action, OnMount_Page_Action as OnMount_Sidebar_Action } from '@/models/resourceSider';
-import FFormLayout from '@/components/FFormLayout';
+// import FFormLayout from '@/components/FFormLayout';
 import { RouteComponentProps } from 'react-router';
 import { Helmet } from 'react-helmet';
 import { FI18n } from '@freelog/tools-lib';
