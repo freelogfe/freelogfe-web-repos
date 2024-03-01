@@ -26,6 +26,7 @@ export interface FResourceCardProps {
     updateDate: string;
     username: string;
     useAvatar: string;
+    isChoice: boolean;
   };
   onBoomJuice?: EventFunc;
   onClickDetails?: EventFunc;
@@ -108,11 +109,14 @@ function FResourceCard({
               <FTooltip title={'存在授权问题'}><FComponentsLib.FIcons.FWarning style={{ fontSize: 16 }} /></FTooltip>}
             </div>
 
-            <img
-              src={img_choiceLabel}
-              alt={''}
-              style={{ position: 'absolute', right: 10, top: 10, width: 63 }}
-            />
+            {
+              resource.isChoice && (<img
+                src={img_choiceLabel}
+                alt={''}
+                style={{ position: 'absolute', right: 10, top: 10, width: 63 }}
+              />)
+            }
+
           </>)
         }
       </div>

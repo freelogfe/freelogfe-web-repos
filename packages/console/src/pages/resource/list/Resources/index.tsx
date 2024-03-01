@@ -398,15 +398,27 @@ function Resources({ dispatch, resourceListPage }: ResourceProps) {
                   checked={resourceListPage.checkedResourceIDs.includes(i.id)}
                   disabled={i.status === 2}
                   key={i.id}
-                  title={i.title || i.name.split('/')[1]}
-                  cover={i.cover}
-                  latestVersion={i.version}
-                  resourceType={i.type.join('/')}
-                  policies={i.policy}
-                  status={i.status}
-                  updateDate={i.updateDate}
-                  username={i.username}
-                  useAvatar={i.useAvatar}
+                  resource={{
+                    title: i.title || i.name.split('/')[1],
+                    cover: i.cover,
+                    resourceType: i.type.join('/'),
+                    latestVersion: i.version,
+                    policies:i.policy,
+                    status: i.status,
+                    updateDate: i.updateDate,
+                    username: i.username,
+                    useAvatar: i.useAvatar,
+                    isChoice: i.isChoice,
+                  }}
+                  // title={i.title || i.name.split('/')[1]}
+                  // cover={i.cover}
+                  // latestVersion={i.version}
+                  // resourceType={i.type.join('/')}
+                  // policies={i.policy}
+                  // status={i.status}
+                  // updateDate={i.updateDate}
+                  // username={i.username}
+                  // useAvatar={i.useAvatar}
                   onChange={(value) => {
                     if (value) {
                       dispatch<ChangeAction>({

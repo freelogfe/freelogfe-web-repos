@@ -41,6 +41,7 @@ export interface ResourceListPageModelState {
     updateDate: string;
     username: string;
     useAvatar: string;
+    isChoice: boolean;
   }[];
   resource_ListState: 'loading' | 'noData' | 'noSearchResult' | 'loaded';
   resource_ListMore: 'loading' | 'andMore' | 'noMore';
@@ -283,6 +284,7 @@ const Model: ResourceListPageModelType = {
             updateDate: moment(i.updateDate).format('YYYY-MM-DD'),
             username: i.username,
             useAvatar: '',
+            isChoice: true,
           };
         }),
       ];

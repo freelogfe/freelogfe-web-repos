@@ -8,16 +8,19 @@ import img_choiceLabel from '@/assets/choice-label@2x.png';
 
 interface FResourceCard_AbleCheck_Props {
   checked: boolean;
-  title: string;
   disabled?: boolean;
-  cover: string;
-  resourceType: string;
-  latestVersion: string;
-  policies: string[];
-  status: 0 | 1 | 2 | 4;
-  updateDate: string;
-  username: string;
-  useAvatar: string;
+  resource: {
+    title: string;
+    cover: string;
+    resourceType: string;
+    latestVersion: string;
+    policies: string[];
+    status: 0 | 1 | 2 | 4;
+    updateDate: string;
+    username: string;
+    useAvatar: string;
+    isChoice: boolean;
+  };
 
   onChange?(checked: boolean): void;
 }
@@ -25,14 +28,8 @@ interface FResourceCard_AbleCheck_Props {
 function FResourceCard_AbleCheck({
                                    checked,
                                    disabled = false,
-                                   cover,
-                                   title,
-                                   resourceType,
-                                   latestVersion,
-                                   policies,
-                                   status,
+                                   resource,
                                    onChange,
-                                   updateDate, username, useAvatar,
                                  }: FResourceCard_AbleCheck_Props) {
   return (<div style={{ position: 'relative' }}>
     <div
@@ -53,13 +50,13 @@ function FResourceCard_AbleCheck({
       <div style={{ height: 10 }} />
       {/*<div style={{ display: 'block' }}>*/}
       <FCoverImage
-        src={cover}
+        src={resource.cover}
         width={280}
       />
       {/*</div>*/}
       <div style={{ height: 10 }} />
       <FComponentsLib.FContentText
-        text={title}
+        text={resource.title}
         type={'highlight'}
         style={{ maxWidth: 280 }}
         singleRow
@@ -67,7 +64,7 @@ function FResourceCard_AbleCheck({
       <div style={{ height: 10 }} />
       <div className={styles.ableCheckCardInfo}>
         <FComponentsLib.FContentText
-          text={resourceType}
+          text={resource.resourceType}
           type={'additional2'}
           style={{ maxWidth: 120 }}
           singleRow
@@ -85,15 +82,15 @@ function FResourceCard_AbleCheck({
           // style={{ maxWidth: 120 }}
           type='additional2'
           // text={resource.version ? (FI18n.i18nNext.t('latest_version') + ' ' + resource.version) : '暂无版本'}
-          text={`最新更新时间 ${updateDate}`}
+          text={`最新更新时间 ${resource.updateDate}`}
         />
       </div>
       <div style={{ height: 10 }} />
       <div className={styles.MetaFooter}>
         {
-          policies.length > 0
+          resource.policies.length > 0
             ? (<FComponentsLib.F_Contract_And_Policy_Labels
-              data={policies.map((p) => {
+              data={resource.policies.map((p) => {
                 return {
                   text: p,
                   dot: '',
@@ -106,22 +103,30 @@ function FResourceCard_AbleCheck({
       </div>
       <div style={{ height: 12 }} />
       <div className={styles.user}>
-        <img src={useAvatar || img_choiceLabel} alt={''} />
-        <span>{username}</span>
+        <img src={resource.useAvatar || img_choiceLabel} alt={''} />
+        <span>{resource.username}</span>
       </div>
     </div>
 
     <div style={{ position: 'absolute', top: 52, left: 20 }}>
       <FResourceStatusBadge
-        status={status === 2
+        status={resource.status === 2
           ? 'freeze'
-          : status === 1
+          : resource.status === 1
             ? 'online'
-            : status === 0
+            : resource.status === 0
               ? 'unreleased'
               : 'offline'}
       />
     </div>
+
+    {
+      resource.isChoice && (<img
+        src={img_choiceLabel}
+        alt={''}
+        style={{ position: 'absolute', right: 20, top: 52, width: 63 }}
+      />)
+    }
   </div>);
 }
 
