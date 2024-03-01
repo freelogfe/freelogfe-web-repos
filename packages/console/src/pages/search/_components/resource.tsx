@@ -1,19 +1,35 @@
 import * as React from 'react';
 import styles from './index.less';
 import CardContainer from './resource/cardContainer';
-// import ResourceImage from './resource/image';
 import ResourceInfo from './resource/info';
 import PolicyTag from './resource/policyTag';
 import { FServiceAPI, FI18n, FUtil } from '@freelog/tools-lib';
 import FNoDataTip from '@/components/FNoDataTip';
 import FCoverImage from '@/components/FCoverImage';
+import FResourceCard from '@/components/FResourceCard';
+import moment from 'moment';
 
 interface ResourceListProps {
   onClick?: any;
   diabled?: boolean;
   className?: string;
   children?: any;
-  resourcesList: any;
+  resourcesList: {
+    resourceId: string;
+    resourceName: string;
+    resourceTitle: string;
+    resourceType: string[];
+    latestVersion: string;
+    coverImages: string[];
+    status: 0 | 1;
+    policies: {
+      policyId: string;
+      policyName: string;
+      status: 0 | 1;
+    }[];
+    updateDate: string;
+    username: string;
+  }[];
   keywords: any;
   resourcesListPure: any;
   pageData: any;
@@ -31,41 +47,66 @@ export default function ResourceList({
   return (
     <>
       {
-        resourcesList.map((item: any, index: number) => {
-          return !item._fake
-            ? (
-              <CardContainer
-                key={item.resourceId + index}
-                onClick={() => {
-                  window.open(
-                    FUtil.LinkTo.resourceDetails({
-                      resourceID: String(item.resourceId),
-                    }),
-                  );
-                }}
-              >
-                <FCoverImage src={item.coverImages[0]} width={280} />
-                <ResourceInfo
-                  name={item.resourceTitle || item.resourceName}
-                  type={item.resourceType.join(' / ')}
-                  version={item.latestVersion}
-                />
-                <div className='flex-row over-h'>
-                  {item.policies.filter((p: any) => {
-                    return p.status === 1;
-                  }).map((policy: any) => (
-                    <PolicyTag name={policy.policyName} key={policy.policyId} />
-                  ))}
-                </div>
-              </CardContainer>
-            )
-            : (
-              <CardContainer
-                className='d-none'
-                diabled
-                key={item.resourceId + index}
-              />
-            );
+        resourcesList.map((i, index) => {
+          // console.log(i, 'resource');
+          // return null;
+          return (<FResourceCard
+            resource={{
+              id: i.resourceId,
+              cover: i.coverImages.length > 0 ? i.coverImages[0] : '',
+              name: i.resourceName,
+              title: i.resourceTitle,
+              version: i.latestVersion,
+              policy: i.policies
+                .filter((l) => {
+                  return l.status === 1;
+                })
+                .map((l: any) => l.policyName),
+              type: i.resourceType,
+              status: i.status,
+              // authProblem: !!res && !res.isAuth,
+              authProblem: true,
+              updateDate: moment(i.updateDate).format('YYYY-MM-DD'),
+              username: i.username,
+              useAvatar: '',
+              isChoice: true,
+            }}
+            key={i.resourceId}
+          />);
+          // return !item._fake
+          //   ? (
+          //     <CardContainer
+          //       key={item.resourceId + index}
+          //       onClick={() => {
+          //         window.open(
+          //           FUtil.LinkTo.resourceDetails({
+          //             resourceID: String(item.resourceId),
+          //           }),
+          //         );
+          //       }}
+          //     >
+          //       <FCoverImage src={item.coverImages[0]} width={280} />
+          //       <ResourceInfo
+          //         name={item.resourceTitle || item.resourceName}
+          //         type={item.resourceType.join(' / ')}
+          //         version={item.latestVersion}
+          //       />
+          //       <div className='flex-row over-h'>
+          //         {item.policies.filter((p: any) => {
+          //           return p.status === 1;
+          //         }).map((policy: any) => (
+          //           <PolicyTag name={policy.policyName} key={policy.policyId} />
+          //         ))}
+          //       </div>
+          //     </CardContainer>
+          //   )
+          //   : (
+          //     <CardContainer
+          //       className='d-none'
+          //       diabled
+          //       key={item.resourceId + index}
+          //     />
+          //   );
         })}
       <div style={{ width: 300 }} />
       <div style={{ width: 300 }} />

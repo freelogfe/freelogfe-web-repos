@@ -183,54 +183,55 @@ function Market({ dispatch, discoverPage }: MarketProps) {
 
       {discoverPage.totalItem === -1 && <FLoadingTip height={'calc(100vh - 140px - 50px)'} />}
 
-      {discoverPage.dataSource.length > 0 ? (
-        <>
-          <div style={{ height: 30 }} />
-          <div className={styles.Content}>
-            {
-              discoverPage.dataSource.map((resource) => (
-                <FResourceCard
-                  key={resource.id}
-                  resource={resource}
-                  className={styles.FResourceCard}
-                  onClick={() => {
-                    window.open(
-                      FUtil.LinkTo.resourceDetails({
-                        resourceID: resource.id,
-                      }),
-                    );
-                  }}
-                />
-              ))
-            }
-            <div className={styles.bottomPadding} />
-            <div className={styles.bottomPadding} />
-            <div className={styles.bottomPadding} />
-            <div className={styles.bottomPadding} />
-          </div>
+      {
+        discoverPage.dataSource.length > 0 ? (<>
+            <div style={{ height: 30 }} />
+            <div className={styles.Content}>
+              {
+                discoverPage.dataSource.map((resource) => (
+                  <FResourceCard
+                    key={resource.id}
+                    resource={resource}
+                    // className={styles.FResourceCard}
+                    onClick={() => {
+                      window.open(
+                        FUtil.LinkTo.resourceDetails({
+                          resourceID: resource.id,
+                        }),
+                      );
+                    }}
+                  />
+                ))
+              }
+              <div className={styles.bottomPadding} />
+              <div className={styles.bottomPadding} />
+              <div className={styles.bottomPadding} />
+              <div className={styles.bottomPadding} />
+            </div>
 
-          {discoverPage.totalItem > discoverPage.dataSource.length && (
-            <>
-              <div style={{ height: 100 }} />
-              <div className={styles.bottom}>
-                <Button
-                  className={styles.loadMore}
-                  onClick={() => {
-                    dispatch<OnClickLoadMoreBtnAction>({
-                      type: 'discoverPage/onClickLoadMoreBtn',
-                    });
-                  }}
-                >
-                  加载更多
-                </Button>
-              </div>
-            </>
-          )}
-          <div style={{ height: 200 }} />
-        </>
-      ) : discoverPage.totalItem === 0 ? (
-        <FNoDataTip height={'calc(100vh - 275px)'} tipText={'没有符合条件的资源'} />
-      ) : null}
+            {discoverPage.totalItem > discoverPage.dataSource.length && (
+              <>
+                <div style={{ height: 100 }} />
+                <div className={styles.bottom}>
+                  <Button
+                    className={styles.loadMore}
+                    onClick={() => {
+                      dispatch<OnClickLoadMoreBtnAction>({
+                        type: 'discoverPage/onClickLoadMoreBtn',
+                      });
+                    }}
+                  >
+                    加载更多
+                  </Button>
+                </div>
+              </>
+            )}
+            <div style={{ height: 200 }} />
+          </>)
+          : discoverPage.totalItem === 0
+            ? (<FNoDataTip height={'calc(100vh - 275px)'} tipText={'没有符合条件的资源'} />)
+            : null
+      }
     </>
   );
 }

@@ -157,9 +157,15 @@ function Search({}: SearchProps) {
           });
       }
     }
-    setPageData({ ...pageData, totalItem: res.totalItem });
+    setPageData({
+      ...pageData,
+      totalItem: res.totalItem
+    });
     setResourcesListPure(dataList);
-    setResourcesList([...dataList, ...supplyArray]);
+    setResourcesList([
+      ...dataList,
+      ...supplyArray,
+    ]);
   };
   const resolveUsers = async (res: any) => {
     const ids = res.dataList.map((item: any) => item.userId).join(',');
@@ -305,132 +311,133 @@ function Search({}: SearchProps) {
         </div>
       </div>
       <div className={styles.list + ' flex-1 w-100x '}>
-        {tab === 'user' ? (
-          <div className='w-100x h-100x    flex-column align-center'>
-            {showUserResource && (
-              <div className='w-100x h-100x   px-115 flex-column-center'>
-                <div
-                  className={
-                    'flex-row flex-wrap h-100x   pt-40 w-100x' +
-                    (userResourcesList.length > 3 ? ' space-between' : '')
-                  }
-                >
-                  <Drawer
-                    close={() => {
-                      setShowUserResource(false);
-                    }}
-                  >
-                    <div
-                      className={styles.closeContainer + ' flex-column-center'}
-                      onClick={() => setShowUserResource(false)}
-                    >
-                      <i className={styles.close + ' freelog fl-icon-guanbi'} />
-                    </div>
-                    <div className={'h-100x ' + styles.cContainer}>
-                      <div className='flex-row align-center mb-20 mt-6 ml-10'>
-                        <div className={styles.userimg + ' over-h shrink-0'}>
-                          <img
-                            src={selectedUser.headImage}
-                            className='w-100x'
-                          />
-                        </div>
-                        <span className={styles.userName}>
-                          {selectedUser.username}
-                        </span>
-                        <span className={styles.userResource}>
-                          {/*上架的资源（{selectedUser.createdResourceCount}）*/}
-                          {FI18n.i18nNext.t(
-                            'search_result_user_resource_qty02',
-                            {
-                              ResourceQty: selectedUser.createdResourceCount,
-                            },
-                          )}
-                        </span>
-                      </div>
-                      <div
-                        className={
-                          'flex-row flex-wrap h-100x   w-100x ' +
-                          (userResourcesListPure.length > 3
-                            ? ' space-between'
-                            : '')
-                        }
-                        ref={userResourceContainer}
-                      >
-                        <ResourceList
-                          resourcesList={userResourcesList}
-                          keywords={keywords}
-                          resourcesListPure={userResourcesListPure}
-                          pageData={userResourcePageData}
-                          setPageData={setUserResourcePageData}
-                        />
-                      </div>
-                    </div>
-                  </Drawer>
-                </div>
-              </div>
-            )}
-            <div className={'flex-column h-100x   pt-40 w-920 '}>
-              <UserList
-                setShowUserResource={(user: any) => {
-                  setSelectedUser(user);
-                  setShowUserResource(true);
-                }}
-                userList={userList}
-                keywords={keywords}
-                userPageData={userPageData}
-                setUserPageData={setUserPageData}
-              />
-            </div>
-          </div>
-        ) : (
-          <div className='w-100x h-100x   px-115 flex-column-center'>
-            <div
-              className={
-                'h-100x   pt-40  flex-column-center ' + styles.rContainer
-              }
-            >
-              <div>
-                <FOperationCategoryFilter
-                  value={selectedOperationCategoryIDs}
-                  onChange={(value) => {
-                    setSelectedOperationCategoryIDs(value);
-                  }}
-                />
-              </div>
-              {!resourcesListPure.length ? (
-                <div className='flex-column-center w-100x h-100x'>
-                  {/*<div className="flex-2" />*/}
-                  <span className={styles.none}>
-                    抱歉，没有找到与{' ' + keywords + ' '}相关的结果
-                  </span>
-                  {/*<div className="flex-3" />*/}
-                </div>
-              ) : (
-                <>
-                  <div className={styles.tip + ' mb-20 w-100x ml-18'}>
-                    以下是{' ' + keywords + ' '}相关结果（{pageData.totalItem}）
-                  </div>
-
+        {
+          tab === 'user' ? (
+            <div className='w-100x h-100x    flex-column align-center'>
+              {showUserResource && (
+                <div className='w-100x h-100x   px-115 flex-column-center'>
                   <div
                     className={
-                      'flex-row flex-wrap h-100x w-100x   '
-                      + (resourcesListPure.length > 3 ? ' space-between' : '')
+                      'flex-row flex-wrap h-100x   pt-40 w-100x' +
+                      (userResourcesList.length > 3 ? ' space-between' : '')
                     }
-                    ref={container}
                   >
-                    <ResourceList
-                      resourcesList={resourcesList}
-                      keywords={keywords}
-                      resourcesListPure={resourcesListPure}
-                      pageData={pageData}
-                      setPageData={setPageData}
-                    />
+                    <Drawer
+                      close={() => {
+                        setShowUserResource(false);
+                      }}
+                    >
+                      <div
+                        className={styles.closeContainer + ' flex-column-center'}
+                        onClick={() => setShowUserResource(false)}
+                      >
+                        <i className={styles.close + ' freelog fl-icon-guanbi'} />
+                      </div>
+                      <div className={'h-100x ' + styles.cContainer}>
+                        <div className='flex-row align-center mb-20 mt-6 ml-10'>
+                          <div className={styles.userimg + ' over-h shrink-0'}>
+                            <img
+                              src={selectedUser.headImage}
+                              className='w-100x'
+                            />
+                          </div>
+                          <span className={styles.userName}>
+                          {selectedUser.username}
+                        </span>
+                          <span className={styles.userResource}>
+                          {/*上架的资源（{selectedUser.createdResourceCount}）*/}
+                            {FI18n.i18nNext.t(
+                              'search_result_user_resource_qty02',
+                              {
+                                ResourceQty: selectedUser.createdResourceCount,
+                              },
+                            )}
+                        </span>
+                        </div>
+                        <div
+                          className={
+                            'flex-row flex-wrap h-100x   w-100x ' +
+                            (userResourcesListPure.length > 3
+                              ? ' space-between'
+                              : '')
+                          }
+                          ref={userResourceContainer}
+                        >
+                          <ResourceList
+                            resourcesList={userResourcesList}
+                            keywords={keywords}
+                            resourcesListPure={userResourcesListPure}
+                            pageData={userResourcePageData}
+                            setPageData={setUserResourcePageData}
+                          />
+                        </div>
+                      </div>
+                    </Drawer>
                   </div>
-                </>
+                </div>
               )}
+              <div className={'flex-column h-100x   pt-40 w-920 '}>
+                <UserList
+                  setShowUserResource={(user: any) => {
+                    setSelectedUser(user);
+                    setShowUserResource(true);
+                  }}
+                  userList={userList}
+                  keywords={keywords}
+                  userPageData={userPageData}
+                  setUserPageData={setUserPageData}
+                />
+              </div>
             </div>
-          </div>
-        )}
+          ) : (
+            <div className='w-100x h-100x   px-115 flex-column-center'>
+              <div
+                className={
+                  'h-100x   pt-40  flex-column-center ' + styles.rContainer
+                }
+              >
+                <div>
+                  <FOperationCategoryFilter
+                    value={selectedOperationCategoryIDs}
+                    onChange={(value) => {
+                      setSelectedOperationCategoryIDs(value);
+                    }}
+                  />
+                </div>
+                {!resourcesListPure.length ? (
+                  <div className='flex-column-center w-100x h-100x'>
+                    {/*<div className="flex-2" />*/}
+                    <span className={styles.none}>
+                    抱歉，没有找到与{' ' + keywords + ' '}相关的结果
+                  </span>
+                    {/*<div className="flex-3" />*/}
+                  </div>
+                ) : (
+                  <>
+                    <div className={styles.tip + ' mb-20 w-100x ml-18'}>
+                      以下是{' ' + keywords + ' '}相关结果（{pageData.totalItem}）
+                    </div>
+
+                    <div
+                      className={
+                        'flex-row flex-wrap h-100x w-100x   '
+                        + (resourcesListPure.length > 3 ? ' space-between' : '')
+                      }
+                      ref={container}
+                    >
+                      <ResourceList
+                        resourcesList={resourcesList}
+                        keywords={keywords}
+                        resourcesListPure={resourcesListPure}
+                        pageData={pageData}
+                        setPageData={setPageData}
+                      />
+                    </div>
+                  </>
+                )}
+              </div>
+            </div>
+          )}
       </div>
     </div>
   );
