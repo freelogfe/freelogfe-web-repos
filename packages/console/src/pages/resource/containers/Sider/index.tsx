@@ -33,7 +33,6 @@ interface SilderProps {
 }
 
 function Sider({ resourceSider, dispatch }: SilderProps) {
-  // console.log(match, 'matchiosdjflkjsdlkfjlkj');
   const [$resourceAuthShownArray, set$resourceAuthShownArray] = AHooks.useLocalStorageState<{ [k: string]: string }>(
     'resourceAuthShownArray',
     {
@@ -41,10 +40,6 @@ function Sider({ resourceSider, dispatch }: SilderProps) {
     },
   );
 
-  // const [inactiveDialogShow, setInactiveDialogShow] = React.useState(false);
-  // const [resultPopupType, setResultPopupType] = React.useState<null | 0 | 1>(null);
-  // const [loading, setLoading] = React.useState(false);
-  // const [noLonger, setNoLonger] = React.useState(false);
   const [$processing, set$processing, get$processing] = FUtil.Hook.useGetState<string>('');
 
   AHooks.useUnmount(() => {
@@ -78,12 +73,7 @@ function Sider({ resourceSider, dispatch }: SilderProps) {
       }
     } else {
       // 下架
-      // const resourceNoTip = self.localStorage.getItem('resourceNoTip') || false;
       const bool: boolean = await fPromiseModalConfirm({
-        // title: '资源待上架',
-        // description: '将资源上架到资源市场开放授权，为你带来更多收益',
-        // okText: '立即上架',
-        // cancelText: '暂不上架',
         title: FI18n.i18nNext.t('remove_resource_from_auth_confirmation_title'),
         description: FI18n.i18nNext.t('confirm_msg_remove_resource_from_auth'),
         okText: FI18n.i18nNext.t('remove_resource_from_auth_btn_remve'),
@@ -97,20 +87,9 @@ function Sider({ resourceSider, dispatch }: SilderProps) {
     }
   }
 
-  /** 下架 */
-  // const inactiveResource = () => {
-  // if (inactiveDialogShow && noLonger) {
-  //   self.localStorage.setItem('resourceNoTip', 'true');
-  // }
-
-  // };
-
   /** 资源上下架 */
   async function operateResource(data: any) {
-    // setInactiveDialogShow(false);
     set$processing(FI18n.i18nNext.t('remove_resource_from_auth_msg_processing'));
-    // setResultPopupType(data.status);
-
     const { ret, errCode, msg } = await FServiceAPI.Resource.update({
       resourceId: resourceSider.resourceID,
       status: data.status,
@@ -119,7 +98,6 @@ function Sider({ resourceSider, dispatch }: SilderProps) {
     if (ret !== 0 && errCode !== 0) {
       fMessage(msg, 'error');
       set$processing('');
-      // setResultPopupType(null);
       return;
     }
     setTimeout(() => {
@@ -274,7 +252,6 @@ export async function resourceOnline(resourceID: string): Promise<boolean> {
     isTranslate: 1,
   });
 
-  // const { policies, info } = resourceInfo;
   if (!data_resourceInfo.latestVersion) {
     fMessage(FI18n.i18nNext.t('msg_release_version_first'), 'error');
     return false;
@@ -283,14 +260,12 @@ export async function resourceOnline(resourceID: string): Promise<boolean> {
       title: FI18n.i18nNext.t(
         'set_resource_available_for_auth_activate_auth_plan_title',
       ),
-      // icon: null,
       description: FI18n.i18nNext.t('msg_set_resource_avaliable_for_auth01'),
       okText: FI18n.i18nNext.t(
         'set_resource_available_for_auth_btn_create_auth_plan',
       ),
       cancelText: FI18n.i18nNext.t('btn_cancel'),
     });
-    // console.log(confirm, 'confirmisoedjflskdjflsdjfl9888888');
     if (!confirm) {
       return false;
     }
