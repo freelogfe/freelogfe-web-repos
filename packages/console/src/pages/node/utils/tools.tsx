@@ -5,6 +5,8 @@ import fPolicyBuilder from '@/components/fPolicyBuilder';
 import fPolicyOperator from '@/components/fPolicyOperator';
 import { message } from 'antd';
 import { fOnOffFeedback } from '@/components/fOnOffFeedback';
+import fCenterMessage from '@/components/fCenterMessage';
+import fMessage from '@/components/fMessage';
 
 
 export async function onlineExhibit(exhibit_ID: string): Promise<boolean> {
@@ -57,8 +59,12 @@ export async function onlineExhibit(exhibit_ID: string): Promise<boolean> {
         status: 1,
       }],
     };
-    await FServiceAPI.Exhibit.updatePresentable(params1);
-
+    const { ret, errCode, msg } = await FServiceAPI.Exhibit.updatePresentable(params1);
+    if (ret !== 0 || errCode !== 0) {
+      // fCenterMessage({ message: msg });
+      fMessage(msg, 'error');
+      return false;
+    }
   } else if (!data_exhibit.policies.some((item: { status: number }) => item.status === 1)) {
     const res3: boolean = await fPromiseModalConfirm({
       title: isTheme
