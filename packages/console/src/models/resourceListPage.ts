@@ -40,6 +40,7 @@ export interface ResourceListPageModelState {
     authProblem: boolean;
     updateDate: string;
     username: string;
+    useAvatar: string;
   }[];
   resource_ListState: 'loading' | 'noData' | 'noSearchResult' | 'loaded';
   resource_ListMore: 'loading' | 'andMore' | 'noMore';
@@ -281,6 +282,7 @@ const Model: ResourceListPageModelType = {
             authProblem: !!res && !res.isAuth,
             updateDate: moment(i.updateDate).format('YYYY-MM-DD'),
             username: i.username,
+            useAvatar: '',
           };
         }),
       ];

@@ -25,6 +25,7 @@ export interface FResourceCardProps {
     authProblem?: boolean;
     updateDate: string;
     username: string;
+    useAvatar: string;
   };
   onBoomJuice?: EventFunc;
   onClickDetails?: EventFunc;
@@ -126,6 +127,7 @@ function FResourceCard({
         <FComponentsLib.FContentText
           type='additional2'
           text={FUtil.Format.resourceTypeKeyArrToResourceType(resource.type)}
+          style={{ maxWidth: 120 }}
         />
         <div style={{ height: 5 }} />
         <FComponentsLib.FContentText
@@ -156,7 +158,7 @@ function FResourceCard({
       </div>
       <div style={{ height: 12 }} />
       <div className={styles.user}>
-        <img src={img_choiceLabel} alt={''} />
+        <img src={resource.useAvatar || img_choiceLabel} alt={''} />
         <span>{resource.username}</span>
       </div>
     </div>

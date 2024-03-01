@@ -404,6 +404,9 @@ function Resources({ dispatch, resourceListPage }: ResourceProps) {
                   resourceType={i.type.join('/')}
                   policies={i.policy}
                   status={i.status}
+                  updateDate={i.updateDate}
+                  username={i.username}
+                  useAvatar={i.useAvatar}
                   onChange={(value) => {
                     if (value) {
                       dispatch<ChangeAction>({

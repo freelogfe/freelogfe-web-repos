@@ -4,6 +4,7 @@ import { Checkbox } from 'antd';
 import FCoverImage from '@/components/FCoverImage';
 import FComponentsLib from '@freelog/components-lib';
 import FResourceStatusBadge from '@/components/FResourceStatusBadge';
+import img_choiceLabel from '@/assets/choice-label@2x.png';
 
 interface FResourceCard_AbleCheck_Props {
   checked: boolean;
@@ -14,6 +15,9 @@ interface FResourceCard_AbleCheck_Props {
   latestVersion: string;
   policies: string[];
   status: 0 | 1 | 2 | 4;
+  updateDate: string;
+  username: string;
+  useAvatar: string;
 
   onChange?(checked: boolean): void;
 }
@@ -28,6 +32,7 @@ function FResourceCard_AbleCheck({
                                    policies,
                                    status,
                                    onChange,
+                                   updateDate, username, useAvatar,
                                  }: FResourceCard_AbleCheck_Props) {
   return (<div style={{ position: 'relative' }}>
     <div
@@ -46,11 +51,12 @@ function FResourceCard_AbleCheck({
         />
       </div>
       <div style={{ height: 10 }} />
+      {/*<div style={{ display: 'block' }}>*/}
       <FCoverImage
         src={cover}
         width={280}
-        style={{ display: 'block' }}
       />
+      {/*</div>*/}
       <div style={{ height: 10 }} />
       <FComponentsLib.FContentText
         text={title}
@@ -67,11 +73,19 @@ function FResourceCard_AbleCheck({
           singleRow
         />
 
+        {/*<FComponentsLib.FContentText*/}
+        {/*  text={latestVersion === '' ? '暂无版本' : `最新版本 ${latestVersion}`}*/}
+        {/*  type={'additional2'}*/}
+        {/*  style={{ maxWidth: 120 }}*/}
+        {/*  singleRow*/}
+        {/*/>*/}
+        <div style={{ height: 5 }} />
         <FComponentsLib.FContentText
-          text={latestVersion === '' ? '暂无版本' : `最新版本 ${latestVersion}`}
-          type={'additional2'}
-          style={{ maxWidth: 120 }}
           singleRow
+          // style={{ maxWidth: 120 }}
+          type='additional2'
+          // text={resource.version ? (FI18n.i18nNext.t('latest_version') + ' ' + resource.version) : '暂无版本'}
+          text={`最新更新时间 ${updateDate}`}
         />
       </div>
       <div style={{ height: 10 }} />
@@ -89,6 +103,11 @@ function FResourceCard_AbleCheck({
             />)
             : (<FComponentsLib.FContentText text={'暂无策略…'} type='additional2' />)
         }
+      </div>
+      <div style={{ height: 12 }} />
+      <div className={styles.user}>
+        <img src={useAvatar || img_choiceLabel} alt={''} />
+        <span>{username}</span>
       </div>
     </div>
 
