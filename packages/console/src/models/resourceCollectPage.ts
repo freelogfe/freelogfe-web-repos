@@ -4,6 +4,7 @@ import { DvaReducer } from './shared';
 import { ConnectState } from '@/models/connect';
 import { FServiceAPI, FUtil } from '@freelog/tools-lib';
 import { listStateAndListMore } from '@/components/FListFooter';
+import moment from 'moment';
 
 export interface ResourceCollectPageModelState {
   resourceTypeCodes: {
@@ -25,6 +26,9 @@ export interface ResourceCollectPageModelState {
     policy: string[];
     type: string[];
     status: 0 | 1;
+    updateDate: string;
+    username: string;
+    useAvatar: string;
   }[];
   resource_ListState: 'loading' | 'noData' | 'noSearchResult' | 'loaded';
   resource_ListMore: 'loading' | 'andMore' | 'noMore';
@@ -270,6 +274,9 @@ const Model: ResourceCollectModelType = {
             policyName: string;
             status: 0 | 1;
           }[];
+          updateDate: string;
+          username: string;
+          useAvatar: string;
         }[];
       } = yield call(FServiceAPI.Resource.batchInfo, params1);
       // console.log(data_batchInfo, 'data_resourceList data1w09ejflk23');
@@ -290,6 +297,9 @@ const Model: ResourceCollectModelType = {
               .map((l: any) => l.policyName),
             type: i.resourceType,
             status: i.status,
+            updateDate: moment(i.updateDate).format('YYYY-MM-DD'),
+            username: i.username,
+            useAvatar: '',
           };
         }),
       ];
