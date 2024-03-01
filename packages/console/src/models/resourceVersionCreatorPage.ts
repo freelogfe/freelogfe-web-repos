@@ -904,11 +904,11 @@ const Model: ResourceVersionCreatorModelType = {
         payload: {
           selectedFileInfo: null,
           rawProperties: [],
-          additionalProperties: [],
-          customProperties: [],
-          customConfigurations: [],
+          // additionalProperties: [],
+          // customProperties: [],
+          // customConfigurations: [],
           dataIsDirty: true,
-          selectedFile_UsedResources: [],
+          // selectedFile_UsedResources: [],
         },
       });
     },

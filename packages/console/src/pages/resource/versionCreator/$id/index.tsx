@@ -316,17 +316,7 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
             && (<MarkdownEditor
               style={{ width: '100%', flexGrow: 1 }}
               onClickBtn={() => {
-                // dispatch<OnClick_step2_editMarkdownBtn_Action>({
-                //   type: 'resourceCreatorPage/onClick_step2_editMarkdownBtn',
-                // });
                 onClick_EditMarkdownBtn();
-
-                // dispatch<ChangeAction>({
-                //   type: 'resourceVersionCreatorPage/change',
-                //   payload: {
-                //     isOpenMarkdown: true,
-                //   },
-                // });
               }}
             />)
           }
@@ -335,9 +325,6 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
             isCartoon && (<CartoonEditor
               style={{ width: '100%', flexGrow: 1 }}
               onClickBtn={() => {
-                // dispatch<OnClick_step2_editCartoonBtn_Action>({
-                //   type: 'resourceCreatorPage/onClick_step2_editCartoonBtn',
-                // });
                 dispatch<OnClick_OpenCartoonBtn_Action>({
                   type: 'resourceVersionCreatorPage/onClick_OpenCartoonBtn',
                 });
@@ -485,12 +472,9 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
                   disabled={resourceVersionCreatorPage.rawPropertiesState === 'parsing'}
                   style={{ fontSize: 12, display: 'flex', alignItems: 'center', gap: 5 }}
                   onClick={() => {
-                    // self.location.href = FUtil.Format.completeUrlByDomain('qi')
-                    //   + `/v2/storages/files/${$prop.fileInfo?.sha1}/download?attachmentName=${$prop.fileInfo?.name}`;
                     if (!resourceVersionCreatorPage.selectedFileInfo) {
                       return;
                     }
-                    // console.log(type, '98ieowjfkldjflksdjflksjdflkjsdlfkjsdlkj');
                     self.location.href = FUtil.Format.completeUrlByDomain('api')
                       + `/v2/storages/files/${resourceVersionCreatorPage.selectedFileInfo?.sha1 || ''}/download?attachmentName=${resourceVersionCreatorPage.selectedFileInfo?.name || 'download'}`;
                   }}
@@ -509,9 +493,6 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
                 type='primary'
                 style={{ fontSize: 12, display: 'flex', alignItems: 'center', gap: 5 }}
                 onClick={() => {
-                  // dispatch<OnClick_OpenCartoonBtn_Action>({
-                  //   type: 'resourceVersionCreatorPage/onClick_OpenCartoonBtn',
-                  // });
                   dispatch<OnClick_OpenCartoonBtn_Action>({
                     type: 'resourceVersionCreatorPage/onClick_OpenCartoonBtn',
                   });
@@ -528,35 +509,24 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
               style={{ fontSize: 12, display: 'flex', alignItems: 'center', gap: 5 }}
               // disabled={$prop.disabledOperations?.includes('remove')}
               onClick={async () => {
-                if (resourceVersionCreatorPage.customProperties.length > 0 || resourceVersionCreatorPage.customConfigurations.length > 0) {
-                  const bool: boolean = await fPromiseModalConfirm({
-                    title: '提示',
-                    description: FI18n.i18nNext.t('createversion_remove_file_confirmation'),
-                    okText: FI18n.i18nNext.t('createversion_remove_file_btn_remove'),
-                    cancelText: FI18n.i18nNext.t('btn_cancel'),
-                  });
-                  if (bool) {
-                    dispatch<OnDelete_ObjectFile_Action>({
-                      type: 'resourceVersionCreatorPage/onDelete_ObjectFile',
-                    });
-                  }
-                  // fConfirmModal({
-                  //   message: FI18n.i18nNext.t('createversion_remove_file_confirmation'),
-                  //   okText: FI18n.i18nNext.t('createversion_remove_file_btn_remove'),
-                  //   cancelText: FI18n.i18nNext.t('btn_cancel'),
-                  //   onOk() {
-                  //     dispatch<OnDelete_ObjectFile_Action>({
-                  //       type: 'resourceVersionCreatorPage/onDelete_ObjectFile',
-                  //     });
-                  //   },
-                  // });
-                } else {
-                  dispatch<OnDelete_ObjectFile_Action>({
-                    type: 'resourceVersionCreatorPage/onDelete_ObjectFile',
-                  });
-                }
+                // if (resourceVersionCreatorPage.customProperties.length > 0 || resourceVersionCreatorPage.customConfigurations.length > 0) {
+                //   const bool: boolean = await fPromiseModalConfirm({
+                //     title: '提示',
+                //     description: FI18n.i18nNext.t('createversion_remove_file_confirmation'),
+                //     okText: FI18n.i18nNext.t('createversion_remove_file_btn_remove'),
+                //     cancelText: FI18n.i18nNext.t('btn_cancel'),
+                //   });
+                //   if (bool) {
+                //     dispatch<OnDelete_ObjectFile_Action>({
+                //       type: 'resourceVersionCreatorPage/onDelete_ObjectFile',
+                //     });
+                //   }
+                // } else {
+                dispatch<OnDelete_ObjectFile_Action>({
+                  type: 'resourceVersionCreatorPage/onDelete_ObjectFile',
+                });
+                // }
               }}
-              // className={styles.delete}
             >
               <FComponentsLib.FIcons.FDelete style={{ fontSize: 12 }} />
               <span>{FI18n.i18nNext.t('remove')}</span>
