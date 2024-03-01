@@ -54,7 +54,7 @@ function FResourceCard({
       <div className={styles.Cover}>
         <FCoverImage src={resource.cover} width={280} style={{ borderRadius: 4 }} />
         {
-          type === 'market' || (<>
+          type !== 'market' && (<>
             <nav className={styles.CoverMask}>
               {
                 type === 'favorite'
@@ -108,16 +108,16 @@ function FResourceCard({
               {resource.authProblem &&
               <FTooltip title={'存在授权问题'}><FComponentsLib.FIcons.FWarning style={{ fontSize: 16 }} /></FTooltip>}
             </div>
-
-            {
-              resource.isChoice && (<img
-                src={img_choiceLabel}
-                alt={''}
-                style={{ position: 'absolute', right: 10, top: 10, width: 63 }}
-              />)
-            }
-
           </>)
+
+        }
+
+        {
+          resource.isChoice && (<img
+            src={img_choiceLabel}
+            alt={''}
+            style={{ position: 'absolute', right: 10, top: 10, width: 63 }}
+          />)
         }
       </div>
       <div style={{ height: 10 }} />

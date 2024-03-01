@@ -4,6 +4,7 @@ import { DvaReducer } from './shared';
 import { ConnectState } from '@/models/connect';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
+import moment from 'moment';
 
 type HandledOperationCategories = {
   id: string;
@@ -34,6 +35,10 @@ export interface DiscoverPageModelState {
     type: string[];
     status: 0 | 1 | 2 | 4;
     authProblem?: boolean;
+    updateDate: string;
+    username: string;
+    useAvatar: string;
+    isChoice: boolean;
   }[];
   tags: string;
   totalItem: number;
@@ -249,6 +254,8 @@ const Model: DiscoverPageModelType = {
             status: 0 | 1 | 2 | 4;
             latestVersion: string;
             policies: PolicyFullInfo_Type[];
+            // updateDate: string;
+            username: string;
           }[];
           totalItem: number;
         };
@@ -278,6 +285,10 @@ const Model: DiscoverPageModelType = {
                     .map((l) => l.policyName),
                   type: i.resourceType,
                   status: 1,
+                  updateDate: moment(i.updateDate).format('YYYY-MM-DD'),
+                  username: i.username,
+                  useAvatar: '',
+                  isChoice: true,
                 };
               }),
           ],

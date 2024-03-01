@@ -2,14 +2,12 @@ import * as React from 'react';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import { ConnectState, DiscoverPageModelState } from '@/models/connect';
-// import categoryData from '@/utils/category';
 import styles from './index.less';
-// import useUrlState from '@ahooksjs/use-url-state';
 import {
-  // OnChangeResourceTypeAction,
   OnClickLoadMoreBtnAction,
-  // OnChangeTagsAction,
-  OnUnmountMarketPageAction, OnMountMarketPageAction, OnChange_SelectedOperationCategoryIDs_Action,
+  OnUnmountMarketPageAction,
+  OnMountMarketPageAction,
+  OnChange_SelectedOperationCategoryIDs_Action,
 } from '@/models/discoverPage';
 import FResourceCard from '@/components/FResourceCard';
 import { Button } from 'antd';
@@ -189,20 +187,22 @@ function Market({ dispatch, discoverPage }: MarketProps) {
         <>
           <div style={{ height: 30 }} />
           <div className={styles.Content}>
-            {discoverPage.dataSource.map((resource) => (
-              <FResourceCard
-                key={resource.id}
-                resource={resource}
-                className={styles.FResourceCard}
-                onClick={() => {
-                  window.open(
-                    FUtil.LinkTo.resourceDetails({
-                      resourceID: resource.id,
-                    }),
-                  );
-                }}
-              />
-            ))}
+            {
+              discoverPage.dataSource.map((resource) => (
+                <FResourceCard
+                  key={resource.id}
+                  resource={resource}
+                  className={styles.FResourceCard}
+                  onClick={() => {
+                    window.open(
+                      FUtil.LinkTo.resourceDetails({
+                        resourceID: resource.id,
+                      }),
+                    );
+                  }}
+                />
+              ))
+            }
             <div className={styles.bottomPadding} />
             <div className={styles.bottomPadding} />
             <div className={styles.bottomPadding} />
