@@ -10,11 +10,9 @@ import img from '@/assets/file-object.svg';
 import FTooltip from '@/components/FTooltip';
 import fResourcePropertyEditor from '@/components/fResourcePropertyEditor';
 import FResourceProperties from '@/components/FResourceProperties';
-import { Drawer, Progress, Space } from 'antd';
+import { Progress, Space } from 'antd';
 import fResourceOptionEditor from '@/components/fResourceOptionEditor';
 import FResourceOptions from '@/components/FResourceOptions';
-// import FResourceAuthorizationProcessor, { getProcessor } from '@/components/FResourceAuthorizationProcessor';
-// import fAddDependencies from '@/components/fAddDependencies';
 import { connect } from 'dva';
 import { ConnectState, ResourceVersionCreatorPageModelState } from '@/models/connect';
 import { Dispatch } from 'redux';
@@ -27,11 +25,9 @@ import {
   OnChange_AdditionalProperties_Action,
   OnChange_CustomConfigurations_Action,
   OnChange_CustomProperties_Action,
-  // OnChange_DataIsDirty_Action,
   OnChange_IsOpenCartoon_Action,
   OnChange_VersionInput_Action,
   OnClick_CreateVersionBtn_Action,
-  // OnClick_ImportLastVersionDependents_Btn_Action,
   OnClick_OpenCartoonBtn_Action,
   OnClose_CartoonEditor_Action,
   OnClose_MarkdownEditor_Action,
@@ -42,9 +38,7 @@ import {
   OnTrigger_SaveDraft_Action,
   OnUnmountPageAction,
 } from '@/models/resourceVersionCreatorPage';
-// import fResourceMarkdownEditor from '@/components/fResourceMarkdownEditor';
 import { ComicTool } from '@/components/fComicTool/FComicToolModal';
-// import FReleaseTip from '@/';
 import FReleaseTip from '@/components/FReleaseTip';
 import fAddFileBaseProps from '@/components/fAddFileBaseProps';
 import fAddCustomOptions from '@/components/fAddCustomOptions';
@@ -55,7 +49,6 @@ import { withRouter, history } from 'umi';
 import FMicroApp_MarkdownEditorDrawer from '@/components/FMicroApp_MarkdownEditorDrawer';
 import { getFilesSha1Info } from '@/utils/service';
 import fMessage from '@/components/fMessage';
-// import { MicroApp } from 'umi';
 import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
 import FMicroAPP_Authorization from '@/components/FMicroAPP_Authorization';
 
@@ -193,9 +186,10 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
             text={resourceVersionCreatorPage.resourceInfo?.resourceName || ''}
             type={'highlight'}
             style={{
-              maxWidth: 600,
-              overflowWrap: 'break-word',
+              maxWidth: 490,
+              // overflowWrap: 'break-word',
             }}
+            singleRow
           />
         </a>
         <div style={{ width: 5 }} />
@@ -207,6 +201,10 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
           padding: '0 5px',
           lineHeight: '18px',
           display: 'inline-block',
+          maxWidth: 240,
+          overflow: 'hidden',
+          whiteSpace: 'nowrap',
+          textOverflow: 'ellipsis',
         }}>{resourceVersionCreatorPage.resourceInfo?.resourceType.join('/')}</label>
         <div style={{ width: 10 }} />
         <FComponentsLib.FTitleText text={'/'} type={'h1'} />
