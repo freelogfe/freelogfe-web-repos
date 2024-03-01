@@ -166,15 +166,17 @@ function Sider({ resourceSider, dispatch }: SilderProps) {
           status={resourceSider.resourceState as 'online'}
         />
         <div style={{ height: 15 }} />
-        <FLink
-          to={FUtil.LinkTo.resourceDetails({
-            resourceID: resourceSider.resourceID,
-          })}
-          target={'_blank'}
-          className={styles.resourceName}
-        >
-          {resourceSider.resourceTitle || resourceSider.resourceName.split('/')[1]}
-        </FLink>
+        <FTooltip title={FI18n.i18nNext.t('editresource_viewresource')} placement={'top'}>
+          <FLink
+            to={FUtil.LinkTo.resourceDetails({
+              resourceID: resourceSider.resourceID,
+            })}
+            target={'_blank'}
+            className={styles.resourceName}
+          >
+            {resourceSider.resourceTitle || resourceSider.resourceName.split('/')[1]}
+          </FLink>
+        </FTooltip>
         <div style={{ height: 10 }} />
         <label className={styles.label}>
           {resourceSider.resourceType.join(' / ')}
