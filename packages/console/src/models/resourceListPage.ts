@@ -6,6 +6,7 @@ import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import { listStateAndListMore } from '@/components/FListFooter';
 import fCenterMessage from '@/components/fCenterMessage';
 import { fOnOffFeedback } from '@/components/fOnOffFeedback';
+import moment from 'moment';
 
 export interface ResourceListPageModelState {
   resourceTypeCodes: {
@@ -37,6 +38,8 @@ export interface ResourceListPageModelState {
     type: string[];
     status: 0 | 1 | 2 | 4;
     authProblem: boolean;
+    updateDate: string;
+    username: string;
   }[];
   resource_ListState: 'loading' | 'noData' | 'noSearchResult' | 'loaded';
   resource_ListMore: 'loading' | 'andMore' | 'noMore';
@@ -233,6 +236,8 @@ const Model: ResourceListPageModelType = {
               policyName: string;
               status: 0 | 1;
             }[];
+            updateDate: string;
+            username: string;
           }[];
         };
       } = yield call(FServiceAPI.Resource.list, params);
@@ -274,6 +279,8 @@ const Model: ResourceListPageModelType = {
             type: i.resourceType,
             status: i.status,
             authProblem: !!res && !res.isAuth,
+            updateDate: moment(i.updateDate).format('YYYY-MM-DD'),
+            username: i.username,
           };
         }),
       ];

@@ -6,6 +6,7 @@ import FCoverFooterButtons from '@/components/FCoverFooterButtons';
 import FTooltip from '@/components/FTooltip';
 import FComponentsLib from '@freelog/components-lib';
 import { FI18n, FUtil } from '@freelog/tools-lib';
+import img_choiceLabel from '@/assets/choice-label@2x.png';
 
 type EventFunc = () => void
 
@@ -22,6 +23,8 @@ export interface FResourceCardProps {
     type: string[];
     status: 0 | 1 | 2 | 4;
     authProblem?: boolean;
+    updateDate: string;
+    username: string;
   };
   onBoomJuice?: EventFunc;
   onClickDetails?: EventFunc;
@@ -32,8 +35,14 @@ export interface FResourceCardProps {
 }
 
 function FResourceCard({
-                         className = '', type = 'market', resource,
-                         onBoomJuice, onClickDetails, onClickEditing, onClickRevision, onClick,
+                         className = '',
+                         type = 'market',
+                         resource,
+                         onBoomJuice,
+                         onClickDetails,
+                         onClickEditing,
+                         onClickRevision,
+                         onClick,
                        }: FResourceCardProps) {
   return (
     <div
@@ -97,47 +106,58 @@ function FResourceCard({
               {resource.authProblem &&
               <FTooltip title={'存在授权问题'}><FComponentsLib.FIcons.FWarning style={{ fontSize: 16 }} /></FTooltip>}
             </div>
+
+            <img
+              src={img_choiceLabel}
+              alt={''}
+              style={{ position: 'absolute', right: 10, top: 10, width: 63 }}
+            />
           </>)
         }
-
+      </div>
+      <div style={{ height: 10 }} />
+      <FComponentsLib.FContentText
+        singleRow={true}
+        text={resource.title || resource.name.split('/')[1]}
+        type={'highlight'}
+      />
+      <div style={{ height: 5 }} />
+      <div className={styles.MetaInfo}>
+        <FComponentsLib.FContentText
+          type='additional2'
+          text={FUtil.Format.resourceTypeKeyArrToResourceType(resource.type)}
+        />
+        <div style={{ height: 5 }} />
+        <FComponentsLib.FContentText
+          singleRow
+          // style={{ maxWidth: 120 }}
+          type='additional2'
+          // text={resource.version ? (FI18n.i18nNext.t('latest_version') + ' ' + resource.version) : '暂无版本'}
+          text={`最新更新时间 ${resource.updateDate}`}
+        />
       </div>
 
-      <div className={styles.Meta}>
-        <div style={{ height: '12px' }} />
-        <FComponentsLib.FContentText
-          singleRow={true}
-          text={resource.title || resource.name.split('/')[1]}
-        />
-        <div style={{ height: '6px' }} />
-        <div className={styles.MetaInfo}>
-          <FComponentsLib.FContentText
-            type='additional1'
-            text={FUtil.Format.resourceTypeKeyArrToResourceType(resource.type)}
-          />
-          <FComponentsLib.FContentText
-            singleRow
-            style={{ maxWidth: 120 }}
-            type='additional1'
-            text={resource.version ? (FI18n.i18nNext.t('latest_version') + ' ' + resource.version) : '暂无版本'}
-          />
-        </div>
-        <div style={{ height: '15px' }} />
-        <div className={styles.MetaFooter}>
-          {
-            resource.policy.length > 0
-              // ? resource.policy.map((i: string) => <Policy key={i} text={i} />)
-              ? (<FComponentsLib.F_Contract_And_Policy_Labels
-                data={resource.policy.map((p) => {
-                  return {
-                    text: p,
-                    dot: '',
-                  };
-                })}
-                singleRow
-              />)
-              : (<FComponentsLib.FContentText text={'暂无策略…'} type='additional2' />)
-          }
-        </div>
+      <div style={{ height: 5 }} />
+      <div className={styles.MetaFooter}>
+        {
+          resource.policy.length > 0
+            // ? resource.policy.map((i: string) => <Policy key={i} text={i} />)
+            ? (<FComponentsLib.F_Contract_And_Policy_Labels
+              data={resource.policy.map((p) => {
+                return {
+                  text: p,
+                  dot: '',
+                };
+              })}
+              singleRow
+            />)
+            : (<FComponentsLib.FContentText text={'暂无策略…'} type='additional2' />)
+        }
+      </div>
+      <div style={{ height: 12 }} />
+      <div className={styles.user}>
+        <img src={img_choiceLabel} alt={''} />
+        <span>{resource.username}</span>
       </div>
     </div>
   );
