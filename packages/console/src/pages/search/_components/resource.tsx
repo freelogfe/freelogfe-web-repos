@@ -29,6 +29,7 @@ interface ResourceListProps {
     }[];
     updateDate: string;
     username: string;
+    userId: number;
   }[];
   keywords: any;
   resourcesListPure: any;
@@ -68,7 +69,7 @@ export default function ResourceList({
               authProblem: true,
               updateDate: moment(i.updateDate).format('YYYY-MM-DD'),
               username: i.username,
-              useAvatar: '',
+              useAvatar: `https://image.freelog.com/avatar/${i.userId}`,
               isChoice: true,
             }}
             key={i.resourceId}

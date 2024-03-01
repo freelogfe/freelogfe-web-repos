@@ -275,6 +275,7 @@ const Model: ResourceCollectModelType = {
             policyName: string;
             status: 0 | 1;
           }[];
+          userId: number;
           updateDate: string;
           username: string;
           useAvatar: string;
@@ -300,7 +301,7 @@ const Model: ResourceCollectModelType = {
             status: i.status,
             updateDate: moment(i.updateDate).format('YYYY-MM-DD'),
             username: i.username,
-            useAvatar: '',
+            useAvatar: `https://image.freelog.com/avatar/${i.userId}`,
             isChoice: true,
           };
         }),

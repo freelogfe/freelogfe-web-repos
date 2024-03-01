@@ -238,6 +238,7 @@ const Model: ResourceListPageModelType = {
               policyName: string;
               status: 0 | 1;
             }[];
+            userId: number;
             updateDate: string;
             username: string;
           }[];
@@ -283,7 +284,7 @@ const Model: ResourceListPageModelType = {
             authProblem: !!res && !res.isAuth,
             updateDate: moment(i.updateDate).format('YYYY-MM-DD'),
             username: i.username,
-            useAvatar: '',
+            useAvatar: `https://image.freelog.com/avatar/${i.userId}`,
             isChoice: true,
           };
         }),

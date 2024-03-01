@@ -256,6 +256,7 @@ const Model: DiscoverPageModelType = {
             policies: PolicyFullInfo_Type[];
             // updateDate: string;
             username: string;
+            userId: number;
           }[];
           totalItem: number;
         };
@@ -287,7 +288,7 @@ const Model: DiscoverPageModelType = {
                   status: 1,
                   updateDate: moment(i.updateDate).format('YYYY-MM-DD'),
                   username: i.username,
-                  useAvatar: '',
+                  useAvatar: `https://image.freelog.com/avatar/${i.userId}`,
                   isChoice: true,
                 };
               }),
