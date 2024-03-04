@@ -1105,9 +1105,10 @@ const Model: ResourceCreatorPageModelType = {
         // }),
         // dependencies: dependencies,
         // resolveResources: resolveResources,
-        baseUpcastResources: resourceCreatorPage.step2_baseUpcastResources.map((r) => {
-          return { resourceId: r.resourceID };
-        }),
+        baseUpcastResources: resourceCreatorPage.step2_baseUpcastResources
+          .map((r) => {
+            return { resourceId: r.resourceID };
+          }),
         dependencies: resourceCreatorPage.step2_directDependencies
           .map((r) => {
             return {
@@ -1117,9 +1118,9 @@ const Model: ResourceCreatorPageModelType = {
           }),
         resolveResources: resourceCreatorPage.step2_resolveResources,
         inputAttrs: resourceCreatorPage.step2_additionalProperties
-          .filter((ap) => {
-            return ap.value !== '';
-          })
+          // .filter((ap) => {
+          //   return ap.value !== '';
+          // })
           .map((ap) => {
             return {
               key: ap.key,
