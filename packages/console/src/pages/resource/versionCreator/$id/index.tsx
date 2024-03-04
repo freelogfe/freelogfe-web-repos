@@ -24,7 +24,7 @@ import {
   ChangeAction,
   OnChange_AdditionalProperties_Action,
   OnChange_CustomConfigurations_Action,
-  OnChange_CustomProperties_Action,
+  OnChange_CustomProperties_Action, OnChange_DescriptionText_Action,
   OnChange_IsOpenCartoon_Action,
   OnChange_VersionInput_Action,
   OnClick_CreateVersionBtn_Action,
@@ -51,6 +51,10 @@ import { getFilesSha1Info } from '@/utils/service';
 import fMessage from '@/components/fMessage';
 import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
 import FMicroAPP_Authorization from '@/components/FMicroAPP_Authorization';
+import { UpdateDataSourceAction } from '@/models/resourceVersionEditorPage';
+import FBraftEditor from '@/components/FBraftEditor';
+import BraftEditor, { EditorState } from 'braft-editor';
+import { editor } from 'monaco-editor';
 
 interface VersionCreatorProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -99,7 +103,7 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
         });
       }
     },
-    [resourceVersionCreatorPage.dataIsDirty, resourceVersionCreatorPage.descriptionEditorState],
+    [resourceVersionCreatorPage.dataIsDirty, resourceVersionCreatorPage.descriptionText],
     {
       wait: 300,
     },
@@ -1062,8 +1066,21 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
             </div>
           </div>)
         }
+        {/*{console.log(resourceVersionCreatorPage.descriptionEditorState.toHTML(), 'resourceVersionCreatorPage.descriptionEditorState.toHTML()')}*/}
 
+        <div style={{ height: 10 }} />
 
+        <Description
+          value={resourceVersionCreatorPage.descriptionText}
+          onChange={(value) => {
+            dispatch<OnChange_DescriptionText_Action>({
+              type: 'resourceVersionCreatorPage/onChange_DescriptionText',
+              payload: {
+                value: value,
+              },
+            });
+          }}
+        />
         <div style={{ height: 30 }} />
 
         <div className={styles.btn}>
@@ -1158,3 +1175,167 @@ export default withRouter(connect(({ resourceVersionCreatorPage }: ConnectState)
 }))(VersionCreator));
 
 
+interface DescriptionProps {
+  value: string;
+
+  onChange?(value: string): void;
+}
+
+function Description({ value, onChange }: DescriptionProps) {
+
+  const [$editorState, set$editorState, get$editorState] = FUtil.Hook.useGetState<EditorState>(BraftEditor.createEditorState(value));
+  const [$isEditing, set$isEditing, get$isEditing] = FUtil.Hook.useGetState<boolean>(false);
+
+  React.useEffect(() => {
+    set$editorState(BraftEditor.createEditorState(value));
+  }, [value]);
+
+  return (<div className={styles.block}>
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      <FComponentsLib.FContentText text={FI18n.i18nNext.t('version_description')} type={'highlight'} />
+
+      <Space size={10}>
+        {
+          $isEditing
+            ? (<>
+              {/*<FComponentsLib.FTextBtn*/}
+              {/*  type='default'*/}
+              {/*  onClick={() => {*/}
+              {/*    onChange({ descriptionFullScreen: true });*/}
+              {/*  }}*/}
+              {/*>全屏编辑</FComponentsLib.FTextBtn>*/}
+              {/*<FDivider />*/}
+              <FComponentsLib.FTextBtn
+                type='default'
+                style={{ fontSize: 12 }}
+                onClick={() => {
+                  // dispatch<ChangeAction>({
+                  //   type: 'resourceVersionCreatorPage/change',
+                  //   payload: {
+                  //     descriptionIsEditing: false,
+                  //   },
+                  // });
+                  set$isEditing(false);
+                  set$editorState(BraftEditor.createEditorState(value));
+                }}
+              >{FI18n.i18nNext.t('cancel')}</FComponentsLib.FTextBtn>
+              <FComponentsLib.FTextBtn
+                type='primary'
+                style={{ fontSize: 12 }}
+                onClick={() => {
+                  const html: string = $editorState.toHTML();
+                  const description: string = html === '<p></p>' ? '' : html;
+                  onChange && onChange(description);
+                  set$isEditing(false);
+
+                  // dispatch<ChangeAction>({
+                  //   type: 'resourceVersionEditorPage/change',
+                  //   payload: {
+                  //     description: description,
+                  //   },
+                  // });
+                  // dispatch<UpdateDataSourceAction>({
+                  //   type: 'resourceVersionEditorPage/updateDataSource',
+                  //   payload: {
+                  //     description: description,
+                  //   },
+                  // });
+                  // setIsEditing(false);
+                  // if (!description) {
+                  //   onChange({
+                  //     descriptionFullScreen: false,
+                  //   });
+                  // }
+                }}
+              >{FI18n.i18nNext.t('save')}</FComponentsLib.FTextBtn>
+            </>)
+            : !($editorState.toHTML() === '' || $editorState.toHTML() === '<p></p>')
+              ? (<>
+                {/*<FComponentsLib.FTextBtn*/}
+                {/*  type='default'*/}
+                {/*  onClick={() => {*/}
+                {/*    onChange({ descriptionFullScreen: true });*/}
+                {/*    // const s = self.open();*/}
+                {/*    // s.document.write(buildPreviewHtml(resourceVersionEditorPage.description))*/}
+                {/*  }}*/}
+                {/*>全屏查看</FComponentsLib.FTextBtn>*/}
+                {/*<FDivider />*/}
+                <FComponentsLib.FTextBtn
+                  type='primary'
+                  style={{ fontSize: 12 }}
+                  onClick={() => {
+                    // setIsEditing(true);
+                    // dispatch<ChangeAction>({
+                    //   type: 'resourceVersionCreatorPage/change',
+                    //   payload: {
+                    //     descriptionIsEditing: true,
+                    //   },
+                    // });
+                    set$isEditing(true);
+                  }}
+                >编辑</FComponentsLib.FTextBtn>
+              </>)
+              : undefined
+        }
+      </Space>
+    </div>
+
+    {
+      ($editorState.toHTML() === '' || $editorState.toHTML() === '<p></p>') && !$isEditing && (<>
+        <div style={{ height: 10 }} />
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <FComponentsLib.FContentText
+            text={'动动手，让你的资源看起来更丰富～'}
+            type={'additional2'}
+          />
+          <div style={{ height: 20 }} />
+
+          <FComponentsLib.FRectBtn
+            type={'primary'}
+            onClick={() => {
+              // dispatch<ChangeAction>({
+              //   type: 'resourceVersionCreatorPage/change',
+              //   payload: {
+              //     descriptionIsEditing: true,
+              //   },
+              // });
+              set$isEditing(true);
+            }}
+          >添加版本描述</FComponentsLib.FRectBtn>
+        </div>
+      </>)
+    }
+
+    {
+      $isEditing
+        ? (<>
+          <div style={{ height: 20 }} />
+
+          <FBraftEditor
+            value={$editorState}
+            // defaultValue={editorText}
+            onChange={(value: EditorState) => {
+              // dispatch<ChangeAction>({
+              //   type: 'resourceVersionCreatorPage/change',
+              //   payload: {
+              //     descriptionEditorState: value,
+              //   },
+              // });
+              set$editorState(value);
+            }}
+            style={{ minHeight: 500 }}
+          />
+        </>)
+        : !($editorState.toHTML() === '' || $editorState.toHTML() === '<p></p>') && (
+        <>
+          <div style={{ height: 20 }} />
+          <div className={styles.description}>
+            <div
+              className={styles.container}
+              dangerouslySetInnerHTML={{ __html: $editorState.toHTML() }}
+            />
+          </div>
+        </>)
+    }
+  </div>);
+}
