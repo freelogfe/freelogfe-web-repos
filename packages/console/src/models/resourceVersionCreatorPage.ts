@@ -661,6 +661,7 @@ const Model: ResourceVersionCreatorModelType = {
               };
             }),
         ],
+        description: resourceVersionCreatorPage.descriptionText,
         // description: resourceVersionCreatorPage.descriptionEditorState.toHTML() === '<p></p>'
         //   ? ''
         //   : resourceVersionCreatorPage.descriptionEditorState.toHTML(),
