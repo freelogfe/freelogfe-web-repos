@@ -100,27 +100,27 @@ export interface ResourceVersionCreatorPageModelState {
   descriptionText: string;
   descriptionIsEditing: boolean;
 
-  preVersion_additionalProperties: {
-    key: string;
-    // name: string;
-    value: string;
-    // description: string;
-  }[];
-  preVersion_customProperties: {
-    key: string;
-    name: string;
-    value: string;
-    description: string;
-  }[];
+  // preVersion_additionalProperties: {
+  //   key: string;
+  //   // name: string;
+  //   value: string;
+  //   // description: string;
+  // }[];
+  // preVersion_customProperties: {
+  //   key: string;
+  //   name: string;
+  //   value: string;
+  //   description: string;
+  // }[];
 
-  preVersion_customConfigurations: {
-    key: string;
-    name: string;
-    description: string;
-    type: 'input' | 'select';
-    input: string;
-    select: string[];
-  }[];
+  // preVersion_customConfigurations: {
+  //   key: string;
+  //   name: string;
+  //   description: string;
+  //   type: 'input' | 'select';
+  //   input: string;
+  //   select: string[];
+  // }[];
 
   // preVersionDirectDependencies: {
   //   id: string;
@@ -346,9 +346,9 @@ const initStates: ResourceVersionCreatorPageModelState = {
   descriptionText: '',
   descriptionIsEditing: false,
 
-  preVersion_additionalProperties: [],
-  preVersion_customProperties: [],
-  preVersion_customConfigurations: [],
+  // preVersion_additionalProperties: [],
+  // preVersion_customProperties: [],
+  // preVersion_customConfigurations: [],
   // preVersionDirectDependencies: [],
 
   releaseTipVisible: false,
@@ -507,7 +507,7 @@ const Model: ResourceVersionCreatorModelType = {
               .filter((spd) => {
                 return spd.insertMode === 2;
               })
-              .map((spd) => {
+              .map<ResourceVersionCreatorPageModelState['additionalProperties'][number]>((spd) => {
                 // return {
                 //   key: spd.key,
                 //   value: spd.valueDisplay,
@@ -522,7 +522,7 @@ const Model: ResourceVersionCreatorModelType = {
             // preVersion_customProperties,
             customProperties: data_resourceVersionInfo.customPropertyDescriptors
               .filter((cpd: any) => cpd.type === 'readonlyText')
-              .map<ResourceVersionCreatorPageModelState['preVersion_customProperties'][number]>((cpd) => {
+              .map<ResourceVersionCreatorPageModelState['customProperties'][number]>((cpd) => {
                 // console.log(cpd, 'cpdoidsjflksdjflkjkl');
                 return {
                   key: cpd.key,
@@ -534,7 +534,7 @@ const Model: ResourceVersionCreatorModelType = {
             // preVersion_customConfigurations,
             customConfigurations: data_resourceVersionInfo.customPropertyDescriptors
               .filter((cpd: any) => cpd.type !== 'readonlyText')
-              .map<ResourceVersionCreatorPageModelState['preVersion_customConfigurations'][number]>((cpd) => {
+              .map<ResourceVersionCreatorPageModelState['customConfigurations'][number]>((cpd) => {
                 return {
                   key: cpd.key,
                   name: cpd.name,
@@ -544,20 +544,22 @@ const Model: ResourceVersionCreatorModelType = {
                   select: cpd.candidateItems,
                 };
               }),
-            directDependencies: data_resourceVersionInfo.dependencies.map((d) => {
-              return {
-                id: d.resourceId,
-                name: d.resourceName,
-                type: 'resource',
-                versionRange: d.versionRange,
-              };
-            }),
-            baseUpcastResources: data_resourceInfo.baseUpcastResources.map((b) => {
-              return {
-                resourceID: b.resourceId,
-                resourceName: b.resourceName,
-              };
-            }),
+            directDependencies: data_resourceVersionInfo.dependencies
+              .map<ResourceVersionCreatorPageModelState['directDependencies'][number]>((d) => {
+                return {
+                  id: d.resourceId,
+                  name: d.resourceName,
+                  type: 'resource',
+                  versionRange: d.versionRange,
+                };
+              }),
+            baseUpcastResources: data_resourceInfo.baseUpcastResources
+              .map<ResourceVersionCreatorPageModelState['baseUpcastResources'][number]>((b) => {
+                return {
+                  resourceID: b.resourceId,
+                  resourceName: b.resourceName,
+                };
+              }),
             // descriptionEditorState,
             descriptionText: data_resourceVersionInfo.description,
           },
