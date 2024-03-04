@@ -627,9 +627,9 @@ const Model: ResourceVersionCreatorModelType = {
           }),
         resolveResources: resourceVersionCreatorPage.resolveResources,
         inputAttrs: resourceVersionCreatorPage.additionalProperties
-          .filter((ap) => {
-            return ap.value !== '';
-          })
+          // .filter((ap) => {
+          //   return ap.value !== '';
+          // })
           .map((ap) => {
             return {
               key: ap.key,
