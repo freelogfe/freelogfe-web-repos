@@ -51,6 +51,7 @@ function fPromiseModalConfirm({
       afterClose={() => {
         setTimeout(() => {
           root.unmount();
+          div.remove();
         }, .1);
       }}
     />);

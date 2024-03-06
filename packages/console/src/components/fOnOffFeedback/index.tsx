@@ -23,6 +23,7 @@ export function fOnOffFeedback({ ...props }: fOnOffFeedbackProps): void {
     afterClose={() => {
       setTimeout(() => {
         root.unmount();
+        div.remove();
       }, .1);
     }}
   />);

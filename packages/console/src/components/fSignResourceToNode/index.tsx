@@ -26,6 +26,7 @@ function fSignResourceToNode({ resourceIDs }: fSignResourceToNodeProps): Promise
       onClose={() => {
         resolve(null);
         root.unmount();
+        div.remove();
       }}
     />);
   });

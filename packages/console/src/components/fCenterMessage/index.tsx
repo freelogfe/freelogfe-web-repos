@@ -28,6 +28,7 @@ function fCenterMessage({ message, width }: fCenterMessageProps) {
         resolve();
         setTimeout(() => {
           root.unmount();
+          div.remove();
         }, 30);
       }}
     />);
