@@ -148,16 +148,18 @@ function VersionInfo({ dispatch, resourceVersionEditorPage, match }: VersionInfo
         <FSkeletonNode width={340} height={38} />
       </div>)
     }
+
     {
-      resourceVersionEditorPage.version === '' ? (<div
-          className={styles.noData}
-          style={{
-            height: 'calc(100vh - 70px)',
-            display: resourceVersionEditorPage.pageState === 'loaded' ? 'block' : 'none',
-          }}
-        >
-          <div />
-          <div>
+      resourceVersionEditorPage.version === '' && (<div
+        className={styles.noData}
+        style={{
+          height: 'calc(100vh - 70px)',
+          display: resourceVersionEditorPage.pageState === 'loaded' ? 'block' : 'none',
+        }}
+      >
+        <div />
+        {
+          !resourceVersionEditorPage.draft && (<div>
             <FComponentsLib.FTipText
               type='first'
               text={'上传资源，开启授权之旅'}
@@ -184,10 +186,40 @@ function VersionInfo({ dispatch, resourceVersionEditorPage, match }: VersionInfo
                 }}
               >上传资源</FComponentsLib.FRectBtn>
             </FComponentsLib.FHotspotTooltip>
-          </div>
-          <div />
-        </div>)
-        : (<div style={{ display: resourceVersionEditorPage.pageState === 'loaded' ? 'block' : 'none' }}>
+          </div>)
+        }
+
+
+        {
+          !!resourceVersionEditorPage.draft && (<div>
+            <div style={{
+              fontSize: 30,
+              color: '#666',
+              lineHeight: '42px',
+            }}>
+              您有一个未完成的发行
+            </div>
+            <div style={{ height: 40 }} />
+            <Space size={40}>
+              <FComponentsLib.FTextBtn
+                type={'primary'}
+              >继续编辑</FComponentsLib.FTextBtn>
+              <FComponentsLib.FTextBtn
+                type={'default'}
+              >丢弃</FComponentsLib.FTextBtn>
+            </Space>
+          </div>)
+        }
+        <div />
+      </div>)
+    }
+
+    {/*{*/}
+    {/*  resourceVersionEditorPage.version === '' && */}
+    {/*}*/}
+    {
+      resourceVersionEditorPage.version !== '' && (
+        <div style={{ display: resourceVersionEditorPage.pageState === 'loaded' ? 'block' : 'none' }}>
           <div>
             <div style={{ height: 40 }} />
             <Header

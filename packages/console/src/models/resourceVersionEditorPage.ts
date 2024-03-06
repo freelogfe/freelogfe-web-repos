@@ -16,7 +16,6 @@ export interface ResourceVersionEditorPageModelState {
   resourceID: string;
   version: string;
   versions: string[];
-  // signingDate: string;
 
   resourceInfo: {
     resourceID: string;
@@ -221,12 +220,20 @@ const Model: ResourceVersionEditorModelType = {
           resourceSelectedVersion = data_resourceInfo.latestVersion;
         }
       }
+
+      const params3: Parameters<typeof FServiceAPI.Resource.lookDraft>[0] = {
+        resourceId: resourceVersionEditorPage.resourceID,
+      };
+      // console.log(params, 'params9iosdjflksjdflkjlk');
+      const { data: data_draft } = yield call(FServiceAPI.Resource.lookDraft, params3);
+
       // console.log(resourceSelectedVersion, 'resourceVersionEditorPage.version sdfjsdlkfjlkjl');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           // pageState: 'loaded',
           version: resourceSelectedVersion,
+          draft: data_draft ? data_draft.draftData : null,
         },
       });
       if (resourceSelectedVersion === '') {
@@ -240,11 +247,7 @@ const Model: ResourceVersionEditorModelType = {
         return;
       }
 
-      const params3: Parameters<typeof FServiceAPI.Resource.lookDraft>[0] = {
-        resourceId: resourceVersionEditorPage.resourceID,
-      };
-      // console.log(params, 'params9iosdjflksjdflkjlk');
-      const { data: data_draft } = yield call(FServiceAPI.Resource.lookDraft, params3);
+
       // console.log(data_draft, 'data_draftewsdi9fojsdlikfjlsdjflksjdlkfjlskdjl');
       const params: Parameters<typeof FServiceAPI.Resource.resourceVersionInfo1>[0] = {
         resourceId: resourceVersionEditorPage.resourceID,
@@ -307,7 +310,7 @@ const Model: ResourceVersionEditorModelType = {
             resourceName: data_versionInfo.resourceName,
             resourceType: data_versionInfo.resourceType,
           },
-          draft: data_draft ? data_draft.draftData : null,
+
           resourceVersionInfo: {
             version: data_versionInfo.version,
             sha1: data_versionInfo.fileSha1,
