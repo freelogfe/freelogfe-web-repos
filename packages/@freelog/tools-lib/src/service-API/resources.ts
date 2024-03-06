@@ -452,6 +452,20 @@ export function lookDraft(params: LookDraftParamsType) {
   });
 }
 
+// 删除资源版本草稿
+interface DeleteResourceDraftParamsType {
+  resourceId: string;
+}
+
+export function deleteResourceDraft({resourceId}: DeleteResourceDraftParamsType) {
+  // return FUtil.Axios.post(`/v2/resources/${params.resourceId}/versions/drafts`, params);
+  return FUtil.Request({
+    method: 'DELETE',
+    url: `/v2/resources/${resourceId}/versions/drafts`,
+    // data: params,
+  });
+}
+
 // 校验文件是否被引入资源
 interface ResourceIsUsedByOtherParamsType {
   fileSha1: string;

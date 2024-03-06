@@ -12,15 +12,13 @@ import { RouteComponentProps } from 'react-router/index';
 import { Dispatch } from 'redux';
 import * as AHooks from 'ahooks';
 import useUrlState from '@ahooksjs/use-url-state';
-// import FNoDataTip from '@/components/FNoDataTip';
 import FComponentsLib from '@freelog/components-lib';
 import { Space, Badge } from 'antd';
-import { FI18n, FUtil } from '@freelog/tools-lib';
+import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
 import FDropdownMenu from '@/components/FDropdownMenu';
 import FTooltip from '@/components/FTooltip';
 import {
   ChangeAction,
-  // FetchDataSourceAction,
   SyncAllPropertiesAction,
   UpdateDataSourceAction,
   OnMount_Page_Action,
@@ -34,9 +32,9 @@ import FBraftEditor from '@/components/FBraftEditor';
 import BraftEditor, { EditorState } from 'braft-editor';
 import FMenu from '@/components/FMenu';
 import FViewportCards_Resource from '@/components/FAntvG6/FViewportCards_Resource';
-// import { OnMount_PolicyPage_Action } from '@/models/resourceAuthPage';
 import FMicroAPP_Authorization from '@/components/FMicroAPP_Authorization';
 import FSkeletonNode from '@/components/FSkeletonNode';
+import fMessage from '@/components/fMessage';
 
 interface VersionInfoProps extends RouteComponentProps<{ id: string; }> {
   dispatch: Dispatch;
@@ -209,6 +207,21 @@ function VersionInfo({ dispatch, resourceVersionEditorPage, match }: VersionInfo
               >继续编辑</FComponentsLib.FTextBtn>
               <FComponentsLib.FTextBtn
                 type={'default'}
+                onClick={async () => {
+                  const { ret, errCode, msg } = await FServiceAPI.Resource.deleteResourceDraft({
+                    resourceId: match.params.id,
+                  });
+                  if (ret !== 0 || errCode !== 0) {
+                    fMessage(msg, 'error');
+                    return;
+                  }
+                  dispatch<ChangeAction>({
+                    type: 'resourceVersionEditorPage/change',
+                    payload: {
+                      draft: null,
+                    },
+                  });
+                }}
               >丢弃</FComponentsLib.FTextBtn>
             </Space>
           </div>)
