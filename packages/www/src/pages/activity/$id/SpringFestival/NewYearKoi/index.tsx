@@ -44,12 +44,12 @@ function NewYearKoi({}: NewYearKoiProps) {
         <a
           className={[sharedStyles.button, sharedStyles.small, sharedStyles.disabled].join(' ')}
           onClick={async () => {
-            if (get$isFinish()) {
-              return;
-            }
-            await FServiceAPI.User.currentUserInfo();
-            set$value('');
-            set$showModal(true);
+            // if (get$isFinish()) {
+            //   return;
+            // }
+            // await FServiceAPI.User.currentUserInfo();
+            // set$value('');
+            // set$showModal(true);
           }}
         >已结束</a>
       </Space>

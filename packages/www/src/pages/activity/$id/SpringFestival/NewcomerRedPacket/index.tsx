@@ -62,14 +62,14 @@ function NewcomerRedPacket({ onClick }: NewcomerRedPacketProps) {
         ? (<Space size={30}>
           <FComponentsLib.FTitleText type={'h3'} text={`首次参与freelog活动，并完成1次“新春卷王打卡挑战”任务（${Number($isFinish)}/1）`} />
           <a
-            className={[sharedStyles.button, sharedStyles.small, $isFinish ? sharedStyles.disabled : ''].join(' ')}
+            className={[sharedStyles.button, sharedStyles.small, sharedStyles.disabled].join(' ')}
             onClick={() => {
-              if ($isFinish) {
-                return;
-              }
-              onClick && onClick();
+              // if ($isFinish) {
+              //   return;
+              // }
+              // onClick && onClick();
             }}
-          >{$isFinish ? '已完成' : '去完成'}</a>
+          >已结束</a>
         </Space>)
         : (<FComponentsLib.FContentText text={'此活动限2023-11-22 之后注册的用户参加'} type={'additional2'} />)
     }
