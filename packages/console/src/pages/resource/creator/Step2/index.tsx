@@ -47,15 +47,18 @@ interface Step2Props {
 
 function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
 
-  // const ref = React.useRef(null);
-  // const size = AHooks.useSize(ref);
-
   const [$showMore, set$ShowMore, get$ShowMore] = useGetState<boolean>(false);
   const [$uploadingInfo, set$uploadingInfo, get$uploadingInfo] = useGetState<null | {
     name: string;
     percent: number;
     cancelHandler: any;
   }>(null);
+
+  // const [$resourceTypeConfig, set$resourceTypeConfig, get$resourceTypeConfig] = FUtil.Hook.useGetState<any>({});
+  //
+  // AHooks.useMount(() => {
+  //
+  // });
 
   AHooks.useDebounceEffect(() => {
     // console.log(resourceCreatorPage.step2_dataIsDirty_count, 'resourceCreatorPage.step2_dataIsDirty_count wieosfjlskdjflk');
@@ -68,10 +71,10 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
     wait: 300,
   });
 
-  const isCartoon = resourceCreatorPage.step1_createdResourceInfo?.resourceType[0] === '阅读'
-    && resourceCreatorPage.step1_createdResourceInfo?.resourceType[1] === '漫画'
-    && (resourceCreatorPage.step1_createdResourceInfo?.resourceType[2] === '条漫'
-      || resourceCreatorPage.step1_createdResourceInfo?.resourceType[2] === '页漫');
+  // const isCartoon = resourceCreatorPage.step1_createdResourceInfo?.resourceType[0] === '阅读'
+  //   && resourceCreatorPage.step1_createdResourceInfo?.resourceType[1] === '漫画'
+  //   && (resourceCreatorPage.step1_createdResourceInfo?.resourceType[2] === '条漫'
+  //     || resourceCreatorPage.step1_createdResourceInfo?.resourceType[2] === '页漫');
 
   return (<>
     <div style={{ display: !resourceCreatorPage.step2_fileInfo && !!$uploadingInfo ? 'block' : 'none' }}>
@@ -135,10 +138,11 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
       <div style={{ height: 40 }} />
       <div className={styles.styles}>
         {
-          !isCartoon && (<LocalUpload
+          resourceCreatorPage.step2_resourceTypeConfig.uploadEntry.includes('localUpload') && (<LocalUpload
             style={{ width: '100%', flexGrow: 1 }}
+            limitFileSize={resourceCreatorPage.step2_resourceTypeConfig.limitFileSize}
             resourceTypeCode={resourceCreatorPage.step1_createdResourceInfo?.resourceTypeCode || ''}
-            resourceType={resourceCreatorPage.step1_createdResourceInfo?.resourceType || []}
+            // resourceType={resourceCreatorPage.step1_createdResourceInfo?.resourceType || []}
             onSucceed={(value) => {
               dispatch<OnSucceed_step2_localUpload_Action>({
                 type: 'resourceCreatorPage/onSucceed_step2_localUpload',
@@ -155,7 +159,7 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
         }
 
         {
-          !isCartoon && (<StorageSpace
+          resourceCreatorPage.step2_resourceTypeConfig.uploadEntry.includes('storageSpace') && (<StorageSpace
             style={{ width: '100%', flexGrow: 1 }}
             resourceTypeCode={resourceCreatorPage.step1_createdResourceInfo?.resourceTypeCode || ''}
             onSucceed={(value) => {
@@ -168,9 +172,7 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
         }
 
         {
-          !isCartoon && resourceCreatorPage.step1_createdResourceInfo?.resourceType[0] === '阅读'
-          && resourceCreatorPage.step1_createdResourceInfo?.resourceType[1] === '文章'
-          && (<MarkdownEditor
+          resourceCreatorPage.step2_resourceTypeConfig.uploadEntry.includes('markdownEditor') && (<MarkdownEditor
             style={{ width: '100%', flexGrow: 1 }}
             onClickBtn={() => {
               dispatch<OnClick_step2_editMarkdownBtn_Action>({
@@ -181,7 +183,7 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
         }
 
         {
-          isCartoon && (<CartoonEditor
+          resourceCreatorPage.step2_resourceTypeConfig.uploadEntry.includes('cartoonEditor') && (<CartoonEditor
             style={{ width: '100%', flexGrow: 1 }}
             onClickBtn={() => {
               dispatch<OnClick_step2_editCartoonBtn_Action>({
@@ -222,7 +224,6 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
 
       <div style={{ height: 100 }} />
 
-
     </div>
     <div style={{ display: resourceCreatorPage.step2_fileInfo ? 'block' : 'none' }}>
       <div style={{ height: 40 }} />
@@ -251,73 +252,84 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
 
           {
-            resourceCreatorPage.step1_createdResourceInfo?.resourceType[0] === '阅读'
-            && resourceCreatorPage.step1_createdResourceInfo?.resourceType[1] === '文章' && (<>
+            resourceCreatorPage.step2_resourceTypeConfig.isSupportEdit && (<>
               <FComponentsLib.FTextBtn
                 style={{ fontSize: 12, display: 'flex', alignItems: 'center', gap: 5 }}
                 disabled={resourceCreatorPage.step2_rawPropertiesState === 'parsing'}
                 type='primary'
                 onClick={async () => {
 
-                  const { result } = await getFilesSha1Info({
-                    sha1: [resourceCreatorPage.step2_fileInfo?.sha1 || ''],
-                    resourceTypeCode: '',
-                  });
-
-                  if (result[0].fileSize > 2 * 1024 * 1024) {
-                    fMessage(FI18n.i18nNext.t('mdeditor_import_error_lengthlimitation'), 'error');
-                    return;
+                  if (resourceCreatorPage.step1_createdResourceInfo?.resourceType[1] === '漫画') {
+                    dispatch<OnClick_step2_editCartoonBtn_Action>({
+                      type: 'resourceCreatorPage/onClick_step2_editCartoonBtn',
+                    });
                   }
 
-                  // $prop.onClick_EditBtn && $prop.onClick_EditBtn();
-                  dispatch<OnClick_step2_editMarkdownBtn_Action>({
-                    type: 'resourceCreatorPage/onClick_step2_editMarkdownBtn',
-                  });
+                  if (resourceCreatorPage.step1_createdResourceInfo?.resourceType[0] === '阅读' && resourceCreatorPage.step1_createdResourceInfo?.resourceType[1] === '文章') {
+                    const { result } = await getFilesSha1Info({
+                      sha1: [resourceCreatorPage.step2_fileInfo?.sha1 || ''],
+                      resourceTypeCode: '',
+                    });
+
+                    // if (result[0].fileSize > 2 * 1024 * 1024) {
+                    if (result[0].fileSize > resourceCreatorPage.step2_resourceTypeConfig.limitFileSize) {
+                      fMessage(FI18n.i18nNext.t('mdeditor_import_error_lengthlimitation'), 'error');
+                      return;
+                    }
+
+                    // $prop.onClick_EditBtn && $prop.onClick_EditBtn();
+                    dispatch<OnClick_step2_editMarkdownBtn_Action>({
+                      type: 'resourceCreatorPage/onClick_step2_editMarkdownBtn',
+                    });
+                  }
                 }}
               >
                 <FComponentsLib.FIcons.FEdit style={{ fontSize: 12 }} />
                 <span>编辑</span>
               </FComponentsLib.FTextBtn>
 
-              <FComponentsLib.FTextBtn
-                style={{ fontSize: 12, display: 'flex', alignItems: 'center', gap: 5 }}
-                type='primary'
-                disabled={resourceCreatorPage.step2_rawPropertiesState === 'parsing'}
-                onClick={() => {
-                  // self.location.href = FUtil.Format.completeUrlByDomain('qi')
-                  //   + `/v2/storages/files/${$prop.fileInfo?.sha1}/download?attachmentName=${$prop.fileInfo?.name}`;
-                  if (!resourceCreatorPage.step2_fileInfo) {
-                    return;
-                  }
-                  // console.log(type, '98ieowjfkldjflksdjflksjdflkjsdlfkjsdlkj');
-                  self.location.href = FUtil.Format.completeUrlByDomain('api')
-                    + `/v2/storages/files/${resourceCreatorPage.step2_fileInfo?.sha1 || ''}/download?attachmentName=${resourceCreatorPage.step2_fileInfo?.name || 'download'}`;
-                }}
-              >
-                <FComponentsLib.FIcons.FDownload style={{ fontSize: 12 }} />
-                <span>下载</span>
-              </FComponentsLib.FTextBtn>
+              {
+                resourceCreatorPage.step2_resourceTypeConfig.isSupportDownload && (<FComponentsLib.FTextBtn
+                  style={{ fontSize: 12, display: 'flex', alignItems: 'center', gap: 5 }}
+                  type='primary'
+                  disabled={resourceCreatorPage.step2_rawPropertiesState === 'parsing'}
+                  onClick={() => {
+                    // self.location.href = FUtil.Format.completeUrlByDomain('qi')
+                    //   + `/v2/storages/files/${$prop.fileInfo?.sha1}/download?attachmentName=${$prop.fileInfo?.name}`;
+                    if (!resourceCreatorPage.step2_fileInfo) {
+                      return;
+                    }
+                    // console.log(type, '98ieowjfkldjflksdjflksjdflkjsdlfkjsdlkj');
+                    self.location.href = FUtil.Format.completeUrlByDomain('api')
+                      + `/v2/storages/files/${resourceCreatorPage.step2_fileInfo?.sha1 || ''}/download?attachmentName=${resourceCreatorPage.step2_fileInfo?.name || 'download'}`;
+                  }}
+                >
+                  <FComponentsLib.FIcons.FDownload style={{ fontSize: 12 }} />
+                  <span>下载</span>
+                </FComponentsLib.FTextBtn>)
+              }
+
             </>)
           }
 
-          {
-            resourceCreatorPage.step1_createdResourceInfo?.resourceType[1] === '漫画'
-            && (resourceCreatorPage.step1_createdResourceInfo?.resourceType[2] === '条漫'
-              || resourceCreatorPage.step1_createdResourceInfo?.resourceType[2] === '页漫') && (<FComponentsLib.FTextBtn
-              disabled={resourceCreatorPage.step2_rawPropertiesState === 'parsing'}
-              type='primary'
-              style={{ fontSize: 12, display: 'flex', alignItems: 'center', gap: 5 }}
-              onClick={() => {
-                // $prop.onClick_EditBtn && $prop.onClick_EditBtn();
-                dispatch<OnClick_step2_editCartoonBtn_Action>({
-                  type: 'resourceCreatorPage/onClick_step2_editCartoonBtn',
-                });
-              }}
-            >
-              <FComponentsLib.FIcons.FEdit style={{ fontSize: 12 }} />
-              <span>编辑</span>
-            </FComponentsLib.FTextBtn>)
-          }
+          {/*{*/}
+          {/*  resourceCreatorPage.step1_createdResourceInfo?.resourceType[1] === '漫画'*/}
+          {/*  && (resourceCreatorPage.step1_createdResourceInfo?.resourceType[2] === '条漫'*/}
+          {/*    || resourceCreatorPage.step1_createdResourceInfo?.resourceType[2] === '页漫') && (<FComponentsLib.FTextBtn*/}
+          {/*    disabled={resourceCreatorPage.step2_rawPropertiesState === 'parsing'}*/}
+          {/*    type='primary'*/}
+          {/*    style={{ fontSize: 12, display: 'flex', alignItems: 'center', gap: 5 }}*/}
+          {/*    onClick={() => {*/}
+          {/*      // $prop.onClick_EditBtn && $prop.onClick_EditBtn();*/}
+          {/*      dispatch<OnClick_step2_editCartoonBtn_Action>({*/}
+          {/*        type: 'resourceCreatorPage/onClick_step2_editCartoonBtn',*/}
+          {/*      });*/}
+          {/*    }}*/}
+          {/*  >*/}
+          {/*    <FComponentsLib.FIcons.FEdit style={{ fontSize: 12 }} />*/}
+          {/*    <span>编辑</span>*/}
+          {/*  </FComponentsLib.FTextBtn>)*/}
+          {/*}*/}
 
           <FComponentsLib.FTextBtn
             type='danger'

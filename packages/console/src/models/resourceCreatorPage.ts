@@ -1,7 +1,11 @@
 import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription, SubscriptionAPI } from 'dva';
 import { DvaReducer } from './shared';
-import { ConnectState, ResourceVersionCreatorPageModelState, UserModelState } from '@/models/connect';
+import {
+  ConnectState,
+  ResourceVersionCreatorPageModelState,
+  UserModelState,
+} from '@/models/connect';
 import { FI18n, FServiceAPI, FUtil } from '@freelog/tools-lib';
 import fMessage from '@/components/fMessage';
 import userPermission from '@/permissions/UserPermission';
@@ -10,12 +14,7 @@ import { PolicyFullInfo_Type } from '@/type/contractTypes';
 import fPolicyBuilder from '@/components/fPolicyBuilder';
 import { history } from 'umi';
 import { IResourceCreateVersionDraftType } from '@/type/resourceTypes';
-// import fResourceMarkdownEditor from '@/components/fResourceMarkdownEditor';
 import fComicTool from '@/components/fComicTool';
-import data from '@/utils/category';
-// import { getProcessor } from '@/components/FResourceAuthorizationProcessor';
-
-// import moment from 'moment';
 
 export interface ResourceCreatorPageModelState {
   userInfo: {
@@ -41,6 +40,13 @@ export interface ResourceCreatorPageModelState {
   } | null;
   step1_dataIsDirty_count: number;
 
+  step2_resourceTypeConfig: {
+    uploadEntry: ('localUpload' | 'storageSpace' | 'markdownEditor' | 'cartoonEditor')[];
+    limitFileSize: number;
+    isSupportDownload: boolean;
+    isSupportEdit: boolean;
+    isSupportOptionalConfig: boolean;
+  };
   step2_fileInfo: {
     name: string;
     sha1: string;
@@ -290,6 +296,13 @@ export const initStates: ResourceCreatorPageModelState = {
   step1_createdResourceInfo: null,
   step1_dataIsDirty_count: 0,
 
+  step2_resourceTypeConfig: {
+    uploadEntry: [],
+    limitFileSize: 0,
+    isSupportDownload: false,
+    isSupportEdit: false,
+    isSupportOptionalConfig: false,
+  },
   step2_fileInfo: null,
   // step2_fileInfo_errorTip: '不能超过200M',
   step2_rawProperties: [],
@@ -430,6 +443,41 @@ const Model: ResourceCreatorPageModelType = {
         return;
       }
       self._czc?.push(['_trackEvent', '资源创建页', '创建资源', '', 1]);
+
+      const params1: Parameters<typeof FServiceAPI.Resource.getResourceTypeInfoByCode>[0] = {
+        code: resourceCreatorPage.step1_resourceType.value,
+      };
+      const { data: data_ResourceTypeInfo }: {
+        ret: number;
+        errCode: number;
+        msg: string;
+        data: {
+          resourceConfig: {
+            fileCommitMode: (0 | 1 | 2 | 3)[];
+            fileMaxSize: number;
+            fileMaxSizeUnit: 1 | 2;
+            supportDownload: 1 | 2;
+            supportEdit: 1 | 2;
+            supportOptionalConfig: 1 | 2;
+          }
+        };
+      } = yield call(FServiceAPI.Resource.getResourceTypeInfoByCode, params1);
+      // console.log(data_ResourceTypeInfo, 'data_ResourceTypeInfo sdiofjsdlkjflksdjlkjl');
+      const uploadEntry: ResourceCreatorPageModelState['step2_resourceTypeConfig']['uploadEntry'] = [];
+      if (data_ResourceTypeInfo.resourceConfig.fileCommitMode.includes(0)) {
+        uploadEntry.push('localUpload');
+      }
+      if (data_ResourceTypeInfo.resourceConfig.fileCommitMode.includes(1)) {
+        uploadEntry.push('storageSpace');
+      }
+      if (data_ResourceTypeInfo.resourceConfig.fileCommitMode.includes(2)) {
+        uploadEntry.push('markdownEditor');
+      }
+      if (data_ResourceTypeInfo.resourceConfig.fileCommitMode.includes(3)) {
+        uploadEntry.push('cartoonEditor');
+      }
+
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -441,6 +489,13 @@ const Model: ResourceCreatorPageModelType = {
             resourceTypeCode: data.resourceTypeCode,
           },
           step1_dataIsDirty_count: 0,
+          step2_resourceTypeConfig: {
+            uploadEntry: uploadEntry,
+            limitFileSize: data_ResourceTypeInfo.resourceConfig.fileMaxSize * 1024 * 1024 ** data_ResourceTypeInfo.resourceConfig.fileMaxSizeUnit,
+            isSupportDownload: data_ResourceTypeInfo.resourceConfig.supportDownload === 2,
+            isSupportEdit: data_ResourceTypeInfo.resourceConfig.supportEdit === 2,
+            isSupportOptionalConfig: data_ResourceTypeInfo.resourceConfig.supportOptionalConfig === 2,
+          },
           step4_resourceTitle: resourceCreatorPage.step1_resourceName,
         },
       });

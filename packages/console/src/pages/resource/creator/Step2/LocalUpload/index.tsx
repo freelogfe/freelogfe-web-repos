@@ -6,14 +6,13 @@ import FComponentsLib from '@freelog/components-lib';
 import { RcFile } from 'antd/lib/upload/interface';
 import fReadLocalFiles from '@/components/fReadLocalFiles';
 import fMessage from '@/components/fMessage';
-import FModal from '@/components/FModal';
-import FTable from '@/components/FTable';
 import * as AHooks from 'ahooks';
 import fOccupiedFileResourceVersion from '@/components/fOccupiedFileResourceVersion';
 
 interface LocalUploadProps {
   resourceTypeCode: string;
-  resourceType: string[];
+  // resourceType: string[];
+  limitFileSize: number;
   style?: React.CSSProperties;
 
   onSucceed?(value: { sha1: string; fileName: string }): void;
@@ -31,39 +30,26 @@ interface LocalUploadStates {
     sha1: string;
     fileName: string;
   } | null;
-  // $selfUsedResource: {
-  //   resourceID: string;
-  //   resourceName: string;
-  //   resourceType: string[];
-  //   resourceVersion: string;
-  //   url: string;
-  // }[];
-  // $otherUsedResource: {
-  //   resourceID: string;
-  //   resourceName: string;
-  //   resourceType: string[];
-  //   resourceVersion: string;
-  //   url: string;
-  // }[];
   $uploadingProgress: null | number;
 }
 
 const initStates: LocalUploadStates = {
   $accept: '',
   $fileInfo: null,
-  // $selfUsedResource: [],
-  // $otherUsedResource: [],
   $uploadingProgress: null,
 };
 
-function LocalUpload({ style, resourceTypeCode, resourceType, onSucceed, onChange_uploadingInfo }: LocalUploadProps) {
+function LocalUpload({
+                       style,
+                       resourceTypeCode,
+                       // resourceType,
+                       limitFileSize,
+                       onSucceed,
+                       onChange_uploadingInfo,
+                     }: LocalUploadProps) {
 
-  // const uploadCancelHandler = React.useRef<any>();
   const [$accept, set$accept, get$accept] = useGetState<LocalUploadStates['$accept']>(initStates['$accept']);
   const [$fileInfo, set$fileInfo, get$fileInfo] = useGetState<LocalUploadStates['$fileInfo']>(initStates['$fileInfo']);
-  // const [$selfUsedResource, set$selfUsedResource, get$selfUsedResource] = useGetState<LocalUploadStates['$selfUsedResource']>(initStates['$selfUsedResource']);
-  // const [$otherUsedResource, set$otherUsedResource, get$otherUsedResource] = useGetState<LocalUploadStates['$otherUsedResource']>(initStates['$otherUsedResource']);
-  // const [$uploadingProgress, set$uploadingProgress, get$uploadingProgress] = useGetState<LocalUploadStates['$uploadingProgress']>(initStates['$uploadingProgress']);
 
   AHooks.useMount(async () => {
     const { data }: {
@@ -99,13 +85,18 @@ function LocalUpload({ style, resourceTypeCode, resourceType, onSucceed, onChang
             return;
           }
 
-          if (resourceType[0] === '视频' && files[0].size > 1024 * 1024 * 1024) {
-            fMessage('文件大小不能超过1GB', 'error');
-            return;
-          }
+          // if (resourceType[0] === '视频' && files[0].size > 1024 * 1024 * 1024) {
+          //   fMessage('文件大小不能超过1GB', 'error');
+          //   return;
+          // }
+          //
+          // if (resourceType[0] !== '视频' && files[0].size > 200 * 1024 * 1024) {
+          //   fMessage('文件大小不能超过200MB', 'error');
+          //   return;
+          // }
 
-          if (resourceType[0] !== '视频' && files[0].size > 200 * 1024 * 1024) {
-            fMessage('文件大小不能超过200MB', 'error');
+          if (files[0].size > limitFileSize) {
+            fMessage(`文件大小不能超过 ${FUtil.Format.humanizeSize(limitFileSize)}`, 'error');
             return;
           }
 
@@ -140,7 +131,7 @@ function LocalUpload({ style, resourceTypeCode, resourceType, onSucceed, onChang
 
             if (data_ResourcesBySha1.length > 0) {
               if (data_ResourcesBySha1[0].userId === FUtil.Tool.getUserIDByCookies()) {
-                const usedResources= data_ResourcesBySha1.map((d) => {
+                const usedResources = data_ResourcesBySha1.map((d) => {
                   return d.resourceVersions.map((v) => {
                     return {
                       resourceID: d.resourceId,
@@ -193,12 +184,6 @@ function LocalUpload({ style, resourceTypeCode, resourceType, onSucceed, onChang
               });
             }
           } else {
-            // set$uploadingProgress(0);
-            // onChange_uploadingInfo && onChange_uploadingInfo({
-            //   name: files[0].name,
-            //   percent: 0,
-            //   cancelHandler: null,
-            // });
             const [promise, cancel] = await FServiceAPI.Storage.uploadFile({
               file: files[0],
               // resourceType: resourceVersionCreatorPage.resourceType,
@@ -235,152 +220,6 @@ function LocalUpload({ style, resourceTypeCode, resourceType, onSucceed, onChang
         }}
       >本地上传</FComponentsLib.FRectBtn>
     </div>
-
-    {/*<FModal*/}
-    {/*  title={null}*/}
-    {/*  width={920}*/}
-    {/*  open={$selfUsedResource.length > 0}*/}
-    {/*  onOk={() => {*/}
-    {/*    set$selfUsedResource([]);*/}
-    {/*    const fileInfo = get$fileInfo();*/}
-    {/*    if (fileInfo) {*/}
-    {/*      onSucceed && onSucceed(fileInfo);*/}
-    {/*    }*/}
-    {/*  }}*/}
-    {/*  onCancel={() => {*/}
-    {/*    set$selfUsedResource([]);*/}
-    {/*  }}*/}
-    {/*  okText={'继续上传'}*/}
-    {/*  cancelText={'取消'}*/}
-    {/*>*/}
-    {/*  <div style={{ padding: 20 }}>*/}
-    {/*    <div style={{ color: '#EE4040' }}>该文件已经发行过</div>*/}
-    {/*  </div>*/}
-    {/*  <div style={{ height: 5 }} />*/}
-    {/*  <FTable*/}
-    {/*    // rowClassName={styles.tableRowClassName}*/}
-    {/*    scroll={{ y: $selfUsedResource.length > 5 ? 350 : undefined }}*/}
-    {/*    columns={[*/}
-    {/*      {*/}
-    {/*        title: '资源',*/}
-    {/*        dataIndex: 'resourceName',*/}
-    {/*        width: 400,*/}
-    {/*        render(value, record, index) {*/}
-    {/*          return (<FComponentsLib.FContentText*/}
-    {/*            text={record.resourceName}*/}
-    {/*            style={{ maxWidth: 370 }}*/}
-    {/*          />);*/}
-    {/*        },*/}
-    {/*      },*/}
-    {/*      {*/}
-    {/*        title: '类型',*/}
-    {/*        dataIndex: 'resourceType',*/}
-    {/*        width: 280,*/}
-    {/*        render(value, record, index) {*/}
-    {/*          return (<FComponentsLib.FContentText*/}
-    {/*            text={record.resourceType.join(' / ')}*/}
-    {/*          />);*/}
-    {/*        },*/}
-    {/*      },*/}
-    {/*      {*/}
-    {/*        title: '版本',*/}
-    {/*        dataIndex: 'resourceVersion',*/}
-    {/*        width: 160,*/}
-    {/*        render(value, record, index) {*/}
-    {/*          return (<FComponentsLib.FContentText*/}
-    {/*            text={record.resourceVersion}*/}
-    {/*          />);*/}
-    {/*        },*/}
-    {/*      },*/}
-    {/*      {*/}
-    {/*        title: '操作',*/}
-    {/*        dataIndex: 'operation',*/}
-    {/*        render(value, record, index) {*/}
-    {/*          return (<FComponentsLib.FTextBtn onClick={() => {*/}
-    {/*            window.open(record.url);*/}
-    {/*          }}>查看</FComponentsLib.FTextBtn>);*/}
-    {/*        },*/}
-    {/*      },*/}
-    {/*    ]}*/}
-    {/*    dataSource={$selfUsedResource.map((sfur) => {*/}
-    {/*      return {*/}
-    {/*        key: sfur.url,*/}
-    {/*        ...sfur,*/}
-    {/*      };*/}
-    {/*    })}*/}
-    {/*  />*/}
-    {/*</FModal>*/}
-    {/*<FModal*/}
-    {/*  title={null}*/}
-    {/*  width={920}*/}
-    {/*  open={$otherUsedResource.length > 0}*/}
-    {/*  onCancel={() => {*/}
-    {/*    set$otherUsedResource([]);*/}
-    {/*  }}*/}
-    {/*  onOk={() => {*/}
-    {/*    set$otherUsedResource([]);*/}
-    {/*  }}*/}
-    {/*  okText={'关闭'}*/}
-    {/*  // cancelText={'取消'}*/}
-    {/*  cancelButtonProps={{*/}
-    {/*    style: {*/}
-    {/*      display: 'none',*/}
-    {/*    },*/}
-    {/*  }}*/}
-    {/*>*/}
-    {/*  <FTable*/}
-    {/*    // rowClassName={styles.tableRowClassName}*/}
-    {/*    scroll={{ y: $selfUsedResource.length > 5 ? 350 : undefined }}*/}
-    {/*    columns={[*/}
-    {/*      {*/}
-    {/*        title: '资源',*/}
-    {/*        dataIndex: 'resourceName',*/}
-    {/*        width: 400,*/}
-    {/*        render(value, record, index) {*/}
-    {/*          return (<FComponentsLib.FContentText*/}
-    {/*            text={record.resourceName}*/}
-    {/*            style={{ maxWidth: 370 }}*/}
-    {/*          />);*/}
-    {/*        },*/}
-    {/*      },*/}
-    {/*      {*/}
-    {/*        title: '类型',*/}
-    {/*        dataIndex: 'resourceType',*/}
-    {/*        width: 280,*/}
-    {/*        render(value, record, index) {*/}
-    {/*          return (<FComponentsLib.FContentText*/}
-    {/*            text={record.resourceType.join(' / ')}*/}
-    {/*          />);*/}
-    {/*        },*/}
-    {/*      },*/}
-    {/*      {*/}
-    {/*        title: '版本',*/}
-    {/*        dataIndex: 'resourceVersion',*/}
-    {/*        width: 160,*/}
-    {/*        render(value, record, index) {*/}
-    {/*          return (<FComponentsLib.FContentText*/}
-    {/*            text={record.resourceVersion}*/}
-    {/*          />);*/}
-    {/*        },*/}
-    {/*      },*/}
-    {/*      {*/}
-    {/*        title: '操作',*/}
-    {/*        dataIndex: 'operation',*/}
-    {/*        render(value, record, index) {*/}
-    {/*          return (<FComponentsLib.FTextBtn onClick={() => {*/}
-    {/*            window.open(record.url);*/}
-    {/*          }}>查看</FComponentsLib.FTextBtn>);*/}
-    {/*        },*/}
-    {/*      },*/}
-    {/*    ]}*/}
-    {/*    dataSource={$otherUsedResource.map((sfur) => {*/}
-    {/*      return {*/}
-    {/*        key: sfur.url,*/}
-    {/*        ...sfur,*/}
-    {/*      };*/}
-    {/*    })}*/}
-    {/*  />*/}
-    {/*</FModal>*/}
   </>);
 }
 
