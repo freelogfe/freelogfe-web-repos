@@ -136,65 +136,65 @@ function FighterRegistration({}: FighterRegistrationProps) {
         <FComponentsLib.FContentText type={'additional2'} text={'别忘了为资源添加 #新春召集令，freelog创作激励计划启动！# 活动标签哦！'} />
       </div>
       <a
-        className={[sharedStyles.button, sharedStyles.small, $finish1 ? sharedStyles.disabled : ''].join(' ')}
+        className={[sharedStyles.button, sharedStyles.small, sharedStyles.disabled].join(' ')}
         onClick={async () => {
-          if ($finish1) {
-            return;
-          }
-          await FServiceAPI.User.currentUserInfo();
-          self.open(FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.resourceCreatorEntry());
+          // if ($finish1) {
+          //   return;
+          // }
+          // await FServiceAPI.User.currentUserInfo();
+          // self.open(FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.resourceCreatorEntry());
         }}
-      >{$finish1 ? '已完成' : '去完成'}</a>
+      >已结束</a>
     </div>
     <div style={{ borderBottom: '1px solid rgba(0,0,0,.1)', width: 760 }} />
     <div className={styles.taskItem}>
       <FComponentsLib.FTitleText type={'h3'} text={`签约一个资源到节点（${Number($finish2)}/1）`} />
       <a
-        className={[sharedStyles.button, sharedStyles.small, $finish2 ? sharedStyles.disabled : ''].join(' ')}
+        className={[sharedStyles.button, sharedStyles.small, sharedStyles.disabled].join(' ')}
         onClick={async () => {
-          if ($finish2) {
-            return;
-          }
-          const { data }: {
-            data: {
-              totalItem: number;
-            }
-          } = await FServiceAPI.Node.nodes({});
-          // console.log(data, 'DDDDDDDD');
-          if (data.totalItem > 0) {
-            self.open(FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.market());
-          } else {
-            self.open(FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.nodeCreator());
-          }
+          // if ($finish2) {
+          //   return;
+          // }
+          // const { data }: {
+          //   data: {
+          //     totalItem: number;
+          //   }
+          // } = await FServiceAPI.Node.nodes({});
+          // // console.log(data, 'DDDDDDDD');
+          // if (data.totalItem > 0) {
+          //   self.open(FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.market());
+          // } else {
+          //   self.open(FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.nodeCreator());
+          // }
         }}
-      >{$finish2 ? '已完成' : '去完成'}</a>
+      >已结束</a>
     </div>
     <div style={{ borderBottom: '1px solid rgba(0,0,0,.1)', width: 760 }} />
     <div className={styles.taskItem}>
       <FComponentsLib.FTitleText type={'h3'} text={`分享一次节点或展品（${Number($finish3)}/1）`} />
       <a
-        className={[sharedStyles.button, sharedStyles.small, $finish3 ? sharedStyles.disabled : ''].join(' ')}
+        className={[sharedStyles.button, sharedStyles.small, sharedStyles.disabled].join(' ')}
         onClick={async () => {
-          if ($finish3) {
-            return;
-          }
-          const { data }: {
-            data: {
-              totalItem: number;
-              dataList: {
-                nodeId: number;
-              }[]
-            }
-          } = await FServiceAPI.Node.nodes({});
-          if (data.totalItem > 0) {
-            self.open(FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.nodeManagement({
-              nodeID: data.dataList[0].nodeId,
-            }));
-          } else {
-            self.open(FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.nodeCreator());
-          }
+          // if ($finish3) {
+          //   return;
+          // }
+          // const { data }: {
+          //   data: {
+          //     totalItem: number;
+          //     dataList: {
+          //       nodeId: number;
+          //     }[]
+          //   }
+          // } = await FServiceAPI.Node.nodes({});
+          // if (data.totalItem > 0) {
+          //   self.open(FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.nodeManagement({
+          //     nodeID: data.dataList[0].nodeId,
+          //   }));
+          // } else {
+          //   self.open(FUtil.Format.completeUrlByDomain('console') + FUtil.LinkTo.nodeCreator());
+          // }
         }}
-      >{$finish3 ? '已完成' : '去完成'}</a>
+      >已结束</a>
     </div>
     <div style={{ borderBottom: '1px solid rgba(0,0,0,.1)', width: 760 }} />
     <div style={{ height: 70 }} />

@@ -97,25 +97,26 @@ function ChallengeColleague({}: ChallengeColleagueProps) {
       <FComponentsLib.FContentText type={'negative'} text={'注意：“ 好友需用您提供邀请码激活内测资格，并成功完成一次新春卷王打卡挑战 ”'} />
       <div style={{ height: 40 }} />
       <a
-        className={[sharedStyles.button, $usedCount >= 5 ? sharedStyles.disabled : ''].join(' ')}
+        // className={[sharedStyles.button, $usedCount >= 5 ? sharedStyles.disabled : ''].join(' ')}
+        className={[sharedStyles.button, sharedStyles.disabled].join(' ')}
         onClick={async () => {
-          const { data }: {
-            data: {
-              userType: 0 | 1;
-            }
-          } = await FServiceAPI.User.currentUserInfo();
-
-          if (data.userType === 0) {
-            fCenterMessage({ message: '此活动仅对内测用户开放!' });
-            return;
-          }
-
-          if (get$usedCount() >= 5) {
-            return;
-          }
-          set$showModal(true);
+          // const { data }: {
+          //   data: {
+          //     userType: 0 | 1;
+          //   }
+          // } = await FServiceAPI.User.currentUserInfo();
+          //
+          // if (data.userType === 0) {
+          //   fCenterMessage({ message: '此活动仅对内测用户开放!' });
+          //   return;
+          // }
+          //
+          // if (get$usedCount() >= 5) {
+          //   return;
+          // }
+          // set$showModal(true);
         }}
-      >去召唤好友</a>
+      >已结束</a>
       <div style={{ height: 60 }} />
     </div>
     <Modal

@@ -42,16 +42,16 @@ function NewYearKoi({}: NewYearKoiProps) {
       <Space size={30}>
         <FComponentsLib.FTitleText type={'h3'} text={`提交微博或小红书话题打卡记录（${Number($isFinish)}/1）`} />
         <a
-          className={[sharedStyles.button, sharedStyles.small, $isFinish ? sharedStyles.disabled : ''].join(' ')}
+          className={[sharedStyles.button, sharedStyles.small, sharedStyles.disabled].join(' ')}
           onClick={async () => {
-            if (get$isFinish()) {
-              return;
-            }
-            await FServiceAPI.User.currentUserInfo();
-            set$value('');
-            set$showModal(true);
+            // if (get$isFinish()) {
+            //   return;
+            // }
+            // await FServiceAPI.User.currentUserInfo();
+            // set$value('');
+            // set$showModal(true);
           }}
-        >{$isFinish ? '已完成' : '去完成'}</a>
+        >已结束</a>
       </Space>
       <div style={{ height: 60 }} />
     </div>
