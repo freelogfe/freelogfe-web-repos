@@ -277,8 +277,9 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
       {
         !$uploadingInfo && (<div className={styles.styles}>
           {
-            !isCartoon && (<LocalUpload
-              resourceType={resourceVersionCreatorPage.resourceInfo?.resourceType || []}
+            resourceVersionCreatorPage.resourceTypeConfig.uploadEntry.includes('localUpload') && (<LocalUpload
+              // resourceType={resourceVersionCreatorPage.resourceInfo?.resourceType || []}
+              limitFileSize={resourceVersionCreatorPage.resourceTypeConfig.limitFileSize}
               style={{ width: '100%', flexGrow: 1 }}
               resourceTypeCode={resourceVersionCreatorPage.resourceInfo?.resourceTypeCode || ''}
               onSucceed={(value) => {
@@ -297,7 +298,7 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
           }
 
           {
-            !isCartoon && (<StorageSpace
+            resourceVersionCreatorPage.resourceTypeConfig.uploadEntry.includes('storageSpace') && (<StorageSpace
               style={{ width: '100%', flexGrow: 1 }}
               resourceTypeCode={resourceVersionCreatorPage.resourceInfo?.resourceTypeCode || ''}
               onSucceed={(value) => {
@@ -315,9 +316,7 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
 
 
           {
-            !isCartoon && resourceVersionCreatorPage.resourceInfo?.resourceType[0] === '阅读'
-            && resourceVersionCreatorPage.resourceInfo?.resourceType[1] === '文章'
-            && (<MarkdownEditor
+            resourceVersionCreatorPage.resourceTypeConfig.uploadEntry.includes('markdownEditor') && (<MarkdownEditor
               style={{ width: '100%', flexGrow: 1 }}
               onClickBtn={() => {
                 onClick_EditMarkdownBtn();
@@ -326,7 +325,7 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
           }
 
           {
-            isCartoon && (<CartoonEditor
+            resourceVersionCreatorPage.resourceTypeConfig.uploadEntry.includes('cartoonEditor') && (<CartoonEditor
               style={{ width: '100%', flexGrow: 1 }}
               onClickBtn={() => {
                 dispatch<OnClick_OpenCartoonBtn_Action>({
@@ -339,40 +338,18 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
         </div>)
       }
 
-
       <div style={{ height: 100 }} />
 
       <FReleaseTip
         visible={resourceVersionCreatorPage.releaseTipVisible}
       />
-
-      {/*<ComicTool*/}
-      {/*  resourceId={resourceVersionCreatorPage.resourceInfo?.resourceID || ''}*/}
-      {/*  show={resourceVersionCreatorPage.isOpenCartoon}*/}
-      {/*  setSaved={(saved) => {*/}
-      {/*    // set_isfComicToolDirty(!saved);*/}
-      {/*    dispatch<ChangeAction>({*/}
-      {/*      type: 'resourceVersionCreatorPage/change',*/}
-      {/*      payload: {*/}
-      {/*        isDirtyCartoonEditor: !saved,*/}
-      {/*      },*/}
-      {/*    });*/}
-      {/*  }}*/}
-      {/*  close={() => {*/}
-      {/*    dispatch<OnClose_CartoonEditor_Action>({*/}
-      {/*      type: 'resourceVersionCreatorPage/onClose_CartoonEditor',*/}
-      {/*    });*/}
-      {/*  }}*/}
-      {/*/>*/}
     </div>
     <FPrompt
       watch={resourceVersionCreatorPage.dataIsDirty || isMarkdownEditorDirty || resourceVersionCreatorPage.isDirtyCartoonEditor}
       messageText={'还没有保存草稿或发行，现在离开会导致信息丢失'}
       onOk={(locationHref) => {
-        console.log('还没有保存草稿或发行 Ok');
+        // console.log('还没有保存草稿或发行 Ok');
         history.push(locationHref);
-        // set_isOpenCartoon(false);
-        // console.log('+++++++++++++++++++++++++还没有保存草稿或发行 w9e0opfjsdlk;fjlk');
         dispatch<OnChange_IsOpenCartoon_Action>({
           type: 'resourceVersionCreatorPage/onChange_IsOpenCartoon',
           payload: {
@@ -455,57 +432,67 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
               </div>
             </div>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <Space size={10}>
             {
-              resourceVersionCreatorPage.resourceInfo?.resourceType[0] === '阅读'
-              && resourceVersionCreatorPage.resourceInfo?.resourceType[1] === '文章' && (<>
+              resourceVersionCreatorPage.resourceTypeConfig.isSupportEdit && (<>
                 <FComponentsLib.FTextBtn
                   disabled={resourceVersionCreatorPage.rawPropertiesState === 'parsing'}
                   type='primary'
                   style={{ fontSize: 12, display: 'flex', alignItems: 'center', gap: 5 }}
                   onClick={async () => {
-                    onClick_EditMarkdownBtn();
+                    if (resourceVersionCreatorPage.resourceInfo?.resourceType[0] === '阅读'
+                      && resourceVersionCreatorPage.resourceInfo?.resourceType[1] === '文章') {
+                      onClick_EditMarkdownBtn();
+                    }
+
+                    if (resourceVersionCreatorPage.resourceInfo?.resourceType[1] === '漫画') {
+                      // && (resourceVersionCreatorPage.resourceInfo?.resourceType[2] === '条漫'
+                      //   || resourceVersionCreatorPage.resourceInfo?.resourceType[2] === '页漫')
+                      dispatch<OnClick_OpenCartoonBtn_Action>({
+                        type: 'resourceVersionCreatorPage/onClick_OpenCartoonBtn',
+                      });
+                    }
                   }}
                 >
                   <FComponentsLib.FIcons.FEdit style={{ fontSize: 12 }} />
                   <span>编辑</span>
                 </FComponentsLib.FTextBtn>
-
-                <FComponentsLib.FTextBtn
-                  type='primary'
-                  disabled={resourceVersionCreatorPage.rawPropertiesState === 'parsing'}
-                  style={{ fontSize: 12, display: 'flex', alignItems: 'center', gap: 5 }}
-                  onClick={() => {
-                    if (!resourceVersionCreatorPage.selectedFileInfo) {
-                      return;
-                    }
-                    self.location.href = FUtil.Format.completeUrlByDomain('api')
-                      + `/v2/storages/files/${resourceVersionCreatorPage.selectedFileInfo?.sha1 || ''}/download?attachmentName=${resourceVersionCreatorPage.selectedFileInfo?.name || 'download'}`;
-                  }}
-                >
-                  <FComponentsLib.FIcons.FDownload style={{ fontSize: 12 }} />
-                  <span>下载</span>
-                </FComponentsLib.FTextBtn>
               </>)
             }
 
             {
-              resourceVersionCreatorPage.resourceInfo?.resourceType[1] === '漫画'
-              && (resourceVersionCreatorPage.resourceInfo?.resourceType[2] === '条漫'
-                || resourceVersionCreatorPage.resourceInfo?.resourceType[2] === '页漫') && (<FComponentsLib.FTextBtn
-                disabled={resourceVersionCreatorPage.rawPropertiesState === 'parsing'}
+              resourceVersionCreatorPage.resourceTypeConfig.isSupportDownload && (<FComponentsLib.FTextBtn
                 type='primary'
+                disabled={resourceVersionCreatorPage.rawPropertiesState === 'parsing'}
                 style={{ fontSize: 12, display: 'flex', alignItems: 'center', gap: 5 }}
                 onClick={() => {
-                  dispatch<OnClick_OpenCartoonBtn_Action>({
-                    type: 'resourceVersionCreatorPage/onClick_OpenCartoonBtn',
-                  });
+                  if (!resourceVersionCreatorPage.selectedFileInfo) {
+                    return;
+                  }
+                  self.location.href = FUtil.Format.completeUrlByDomain('api')
+                    + `/v2/storages/files/${resourceVersionCreatorPage.selectedFileInfo?.sha1 || ''}/download?attachmentName=${resourceVersionCreatorPage.selectedFileInfo?.name || 'download'}`;
                 }}
               >
-                <FComponentsLib.FIcons.FEdit style={{ fontSize: 12 }} />
-                <span>编辑</span>
+                <FComponentsLib.FIcons.FDownload style={{ fontSize: 12 }} />
+                <span>下载</span>
               </FComponentsLib.FTextBtn>)
             }
+
+            {/*{*/}
+            {/*  resourceVersionCreatorPage.resourceInfo?.resourceType[1] === '漫画'*/}
+            {/*  && (resourceVersionCreatorPage.resourceInfo?.resourceType[2] === '条漫'*/}
+            {/*    || resourceVersionCreatorPage.resourceInfo?.resourceType[2] === '页漫') && (<FComponentsLib.FTextBtn*/}
+            {/*    disabled={resourceVersionCreatorPage.rawPropertiesState === 'parsing'}*/}
+            {/*    type='primary'*/}
+            {/*    style={{ fontSize: 12, display: 'flex', alignItems: 'center', gap: 5 }}*/}
+            {/*    onClick={() => {*/}
+            {/*      */}
+            {/*    }}*/}
+            {/*  >*/}
+            {/*    <FComponentsLib.FIcons.FEdit style={{ fontSize: 12 }} />*/}
+            {/*    <span>编辑</span>*/}
+            {/*  </FComponentsLib.FTextBtn>)*/}
+            {/*}*/}
 
 
             <FComponentsLib.FTextBtn
@@ -513,29 +500,15 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
               style={{ fontSize: 12, display: 'flex', alignItems: 'center', gap: 5 }}
               // disabled={$prop.disabledOperations?.includes('remove')}
               onClick={async () => {
-                // if (resourceVersionCreatorPage.customProperties.length > 0 || resourceVersionCreatorPage.customConfigurations.length > 0) {
-                //   const bool: boolean = await fPromiseModalConfirm({
-                //     title: '提示',
-                //     description: FI18n.i18nNext.t('createversion_remove_file_confirmation'),
-                //     okText: FI18n.i18nNext.t('createversion_remove_file_btn_remove'),
-                //     cancelText: FI18n.i18nNext.t('btn_cancel'),
-                //   });
-                //   if (bool) {
-                //     dispatch<OnDelete_ObjectFile_Action>({
-                //       type: 'resourceVersionCreatorPage/onDelete_ObjectFile',
-                //     });
-                //   }
-                // } else {
                 dispatch<OnDelete_ObjectFile_Action>({
                   type: 'resourceVersionCreatorPage/onDelete_ObjectFile',
                 });
-                // }
               }}
             >
               <FComponentsLib.FIcons.FDelete style={{ fontSize: 12 }} />
               <span>{FI18n.i18nNext.t('remove')}</span>
             </FComponentsLib.FTextBtn>
-          </div>
+          </Space>
         </div>
 
         <div style={{ height: 5 }} />

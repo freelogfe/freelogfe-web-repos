@@ -1,16 +1,13 @@
 import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription, SubscriptionAPI } from 'dva';
 import { DvaReducer } from './shared';
-import { ConnectState } from '@/models/connect';
+import { ConnectState, ResourceCreatorPageModelState } from '@/models/connect';
 import { history } from 'umi';
-import BraftEditor, { EditorState } from 'braft-editor';
 import fMessage from '@/components/fMessage';
 import * as semver from 'semver';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
 import { getFilesSha1Info } from '@/utils/service';
 import { IResourceCreateVersionDraftType } from '@/type/resourceTypes';
-// import { getProcessor } from '@/components/FResourceAuthorizationProcessor';
-// import { IBaseUpcastResource } from '@/components/FResourceAuthorizationProcessor/types';
 import moment from 'moment';
 import { OnChange_Draft_Action } from '@/models/resourceSider';
 
@@ -34,6 +31,14 @@ export interface ResourceVersionCreatorPageModelState {
   dataIsDirty: boolean;
 
   versionInput: string;
+
+  resourceTypeConfig: {
+    uploadEntry: ('localUpload' | 'storageSpace' | 'markdownEditor' | 'cartoonEditor')[];
+    limitFileSize: number;
+    isSupportDownload: boolean;
+    isSupportEdit: boolean;
+    isSupportOptionalConfig: boolean;
+  };
 
   selectedFileInfo: {
     name: string;
@@ -99,38 +104,6 @@ export interface ResourceVersionCreatorPageModelState {
 
   descriptionText: string;
   descriptionIsEditing: boolean;
-
-  // preVersion_additionalProperties: {
-  //   key: string;
-  //   // name: string;
-  //   value: string;
-  //   // description: string;
-  // }[];
-  // preVersion_customProperties: {
-  //   key: string;
-  //   name: string;
-  //   value: string;
-  //   description: string;
-  // }[];
-
-  // preVersion_customConfigurations: {
-  //   key: string;
-  //   name: string;
-  //   description: string;
-  //   type: 'input' | 'select';
-  //   input: string;
-  //   select: string[];
-  // }[];
-
-  // preVersionDirectDependencies: {
-  //   id: string;
-  //   name: string;
-  //   type: 'resource' | 'object';
-  //
-  //   versionRange?: string;
-  // }[];
-
-  // promptLeavePath: string;
   releaseTipVisible: boolean;
 
   isOpenMarkdown: boolean;
@@ -326,6 +299,14 @@ const initStates: ResourceVersionCreatorPageModelState = {
 
   versionInput: '',
 
+  resourceTypeConfig: {
+    uploadEntry: [],
+    limitFileSize: 0,
+    isSupportDownload: false,
+    isSupportEdit: false,
+    isSupportOptionalConfig: false,
+  },
+
   selectedFileInfo: null,
   selectedFile_UsedResources: [],
 
@@ -345,11 +326,6 @@ const initStates: ResourceVersionCreatorPageModelState = {
 
   descriptionText: '',
   descriptionIsEditing: false,
-
-  // preVersion_additionalProperties: [],
-  // preVersion_customProperties: [],
-  // preVersion_customConfigurations: [],
-  // preVersionDirectDependencies: [],
 
   releaseTipVisible: false,
 
@@ -374,7 +350,7 @@ const Model: ResourceVersionCreatorModelType = {
           pageState: 'loading',
         },
       });
-      const params1: Parameters<typeof FServiceAPI.Resource.info>[0] = {
+      const params2: Parameters<typeof FServiceAPI.Resource.info>[0] = {
         resourceIdOrName: payload.resourceID,
         isLoadLatestVersionInfo: 1,
       };
@@ -392,12 +368,45 @@ const Model: ResourceVersionCreatorModelType = {
           userId: number;
           coverImages: string[];
         };
-      } = yield call(FServiceAPI.Resource.info, params1);
+      } = yield call(FServiceAPI.Resource.info, params2);
       // console.log(data_resourceInfo, '2093jdsl;kfasdf');
 
       if (!data_resourceInfo || data_resourceInfo.userId !== FUtil.Tool.getUserIDByCookies()) {
         history.replace(FUtil.LinkTo.exception403());
         return;
+      }
+
+      const params1: Parameters<typeof FServiceAPI.Resource.getResourceTypeInfoByCode>[0] = {
+        code: data_resourceInfo.resourceTypeCode,
+      };
+      const { data: data_ResourceTypeInfo }: {
+        ret: number;
+        errCode: number;
+        msg: string;
+        data: {
+          resourceConfig: {
+            fileCommitMode: (0 | 1 | 2 | 3)[];
+            fileMaxSize: number;
+            fileMaxSizeUnit: 1 | 2;
+            supportDownload: 1 | 2;
+            supportEdit: 1 | 2;
+            supportOptionalConfig: 1 | 2;
+          }
+        };
+      } = yield call(FServiceAPI.Resource.getResourceTypeInfoByCode, params1);
+      // console.log(data_ResourceTypeInfo, 'data_ResourceTypeInfo sdiofjsdlkjflksdjlkjl');
+      const uploadEntry: ResourceCreatorPageModelState['step2_resourceTypeConfig']['uploadEntry'] = [];
+      if (data_ResourceTypeInfo.resourceConfig.fileCommitMode.includes(0)) {
+        uploadEntry.push('localUpload');
+      }
+      if (data_ResourceTypeInfo.resourceConfig.fileCommitMode.includes(1)) {
+        uploadEntry.push('storageSpace');
+      }
+      if (data_ResourceTypeInfo.resourceConfig.fileCommitMode.includes(2)) {
+        uploadEntry.push('markdownEditor');
+      }
+      if (data_ResourceTypeInfo.resourceConfig.fileCommitMode.includes(3)) {
+        uploadEntry.push('cartoonEditor');
       }
 
       yield put<ChangeAction>({
@@ -417,14 +426,17 @@ const Model: ResourceVersionCreatorModelType = {
             }),
             cover: data_resourceInfo.coverImages[0] || '',
           },
+
+          resourceTypeConfig: {
+            uploadEntry: uploadEntry,
+            limitFileSize: data_ResourceTypeInfo.resourceConfig.fileMaxSize * 1024 * 1024 ** data_ResourceTypeInfo.resourceConfig.fileMaxSizeUnit,
+            isSupportDownload: data_ResourceTypeInfo.resourceConfig.supportDownload === 2,
+            isSupportEdit: data_ResourceTypeInfo.resourceConfig.supportEdit === 2,
+            isSupportOptionalConfig: data_ResourceTypeInfo.resourceConfig.supportOptionalConfig === 2,
+          },
         },
       });
 
-      // let descriptionEditorState: EditorState = BraftEditor.createEditorState('');
-      // let preVersion_additionalProperties: ResourceVersionCreatorPageModelState['preVersion_additionalProperties'] = [];
-      // let preVersion_customProperties: ResourceVersionCreatorPageModelState['preVersion_customProperties'] = [];
-      // let preVersion_customConfigurations: ResourceVersionCreatorPageModelState['preVersion_customConfigurations'] = [];
-      // let preVersionDirectDependencies: ResourceVersionCreatorPageModelState['directDependencies'] = [];
       if (data_resourceInfo.latestVersion) {
         const params2: Parameters<typeof FServiceAPI.Resource.resourceVersionInfo1>[0] = {
           resourceId: data_resourceInfo.resourceId,
@@ -453,50 +465,6 @@ const Model: ResourceVersionCreatorModelType = {
             }[];
           }
         } = yield call(FServiceAPI.Resource.resourceVersionInfo1, params2);
-        // console.log(data_resourceVersionInfo, 'data_resourceVersionInfo90-32iokpsdlfsdfsdlfkjl');
-        // descriptionEditorState = BraftEditor.createEditorState(data_resourceVersionInfo.description);
-        // preVersion_additionalProperties = data_resourceVersionInfo.systemPropertyDescriptors
-        //   .filter((spd) => {
-        //     return spd.insertMode === 2;
-        //   })
-        //   .map((spd) => {
-        //     return {
-        //       key: spd.key,
-        //       value: spd.valueDisplay,
-        //     };
-        //   });
-        // preVersion_customProperties = data_resourceVersionInfo.customPropertyDescriptors
-        //   .filter((cpd: any) => cpd.type === 'readonlyText')
-        //   .map<ResourceVersionCreatorPageModelState['preVersion_customProperties'][number]>((cpd) => {
-        //     // console.log(cpd, 'cpdoidsjflksdjflkjkl');
-        //     return {
-        //       key: cpd.key,
-        //       name: cpd.name,
-        //       value: cpd.defaultValue,
-        //       description: cpd.remark,
-        //     };
-        //   });
-        //
-        // preVersion_customConfigurations = data_resourceVersionInfo.customPropertyDescriptors
-        //   .filter((cpd: any) => cpd.type !== 'readonlyText')
-        //   .map<ResourceVersionCreatorPageModelState['preVersion_customConfigurations'][number]>((cpd) => {
-        //     return {
-        //       key: cpd.key,
-        //       name: cpd.name,
-        //       description: cpd.remark,
-        //       type: cpd.type === 'editableText' ? 'input' : 'select',
-        //       input: cpd.defaultValue,
-        //       select: cpd.candidateItems,
-        //     };
-        //   });
-        // preVersionDirectDependencies = data_resourceVersionInfo.dependencies.map((d) => {
-        //   return {
-        //     id: d.resourceId,
-        //     name: d.resourceName,
-        //     type: 'resource',
-        //     versionRange: d.versionRange,
-        //   };
-        // });
 
         yield put<ChangeAction>({
           type: 'change',
