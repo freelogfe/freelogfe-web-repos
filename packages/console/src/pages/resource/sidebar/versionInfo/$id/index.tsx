@@ -203,6 +203,9 @@ function VersionInfo({ dispatch, resourceVersionEditorPage, match }: VersionInfo
             <Space size={40}>
               <FComponentsLib.FTextBtn
                 type={'primary'}
+                onClick={() => {
+                  self.open(FUtil.LinkTo.resourceVersionCreator({ resourceID: match.params.id }));
+                }}
               >继续编辑</FComponentsLib.FTextBtn>
               <FComponentsLib.FTextBtn
                 type={'default'}
