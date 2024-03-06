@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './index.less';
 import FDrawer from '@/components/FDrawer';
-import { Space } from 'antd';
+import { Input, Space } from 'antd';
 import FComponentsLib from '@freelog/components-lib';
 import { FI18n, FUtil } from '@freelog/tools-lib';
 import * as AHooks from 'ahooks';
@@ -76,6 +76,7 @@ function FResourceOptionEditorDrawer({
                                        onClose,
                                      }: FResourceOptionEditorDrawerProps) {
 
+  const [$keyPrefix, set$keyPrefix, get$keyPrefix] = FUtil.Hook.useGetState<string>('options_');
   const [$state, $setState] = AHooks.useSetState<FResourceOptionEditorDrawerStates>(initStates);
   // const [visible, set_visible] = React.useState<FResourceOptionEditorDrawerStates['visible']>(initStates['visible']);
   // const [nameInput, set_nameInput] = React.useState<FResourceOptionEditorDrawerStates['nameInput']>(initStates['nameInput']);
@@ -105,7 +106,7 @@ function FResourceOptionEditorDrawer({
 
     $setState({
       pageState: 'loaded',
-      keyInput: defaultData.key,
+      keyInput: defaultData.key.replace(get$keyPrefix(), ''),
       nameInput: defaultData.name,
       typeSelect: defaultData.type,
       inputInput: defaultData.input,
@@ -174,7 +175,7 @@ function FResourceOptionEditorDrawer({
         })))}
         onClick={async () => {
           onOk && onOk({
-            key: $state.keyInput,
+            key: get$keyPrefix() + $state.keyInput,
             name: $state.nameInput,
             type: $state.typeSelect,
             input: $state.typeSelect === 'input' ? $state.inputInput : '',
@@ -265,24 +266,27 @@ function FResourceOptionEditorDrawer({
             />
           </div>
           <div style={{ height: 5 }} />
-          <FComponentsLib.FInput.FSingleLine
-            lengthLimit={-1}
+          <Input
+            prefix={(<FComponentsLib.FContentText
+              type={'normal'}
+              text={$keyPrefix}
+            />)}
+            className={[styles.keyInput].join(' ')}
             disabled={noneEditableFields.includes('key')}
-            // placeholder={'输入key'}
             placeholder={FI18n.i18nNext.t('resourceoptions_add_input_key_hint')}
             value={$state.keyInput}
-            className={styles.input}
             onChange={(e) => {
               const value: string = e.target.value;
+              const finalValue: string = get$keyPrefix() + value;
               let errorText: string = '';
               if (value === '') {
                 errorText = '请输入key';
-              } else if (value.length > 20) {
+              } else if (finalValue.length > 20) {
                 // errorText = FI18n.i18nNext.t('alert_key_convention_key');
                 errorText = '不超过20个字符';
-              } else if (disabledKeys.includes(value) && value !== defaultData?.key) {
+              } else if (disabledKeys.includes(finalValue) && finalValue !== defaultData?.key) {
                 errorText = FI18n.i18nNext.t('alert_key_exist');
-              } else if (!FUtil.Regexp.CUSTOM_KEY.test(value)) {
+              } else if (!FUtil.Regexp.CUSTOM_KEY.test(finalValue)) {
                 errorText = FI18n.i18nNext.t('alert_naming_convention_key');
               }
               // set_keyInput(value);
@@ -293,6 +297,40 @@ function FResourceOptionEditorDrawer({
               });
             }}
           />
+          {/*<Space size={5}>*/}
+          {/*  <FComponentsLib.FContentText*/}
+          {/*    type={'normal'}*/}
+          {/*    text={'options_'}*/}
+          {/*  />*/}
+          {/*  <FComponentsLib.FInput.FSingleLine*/}
+          {/*    lengthLimit={-1}*/}
+          {/*    disabled={noneEditableFields.includes('key')}*/}
+          {/*    // placeholder={'输入key'}*/}
+          {/*    placeholder={FI18n.i18nNext.t('resourceoptions_add_input_key_hint')}*/}
+          {/*    value={$state.keyInput}*/}
+          {/*    className={styles.input}*/}
+          {/*    onChange={(e) => {*/}
+          {/*      const value: string = e.target.value;*/}
+          {/*      let errorText: string = '';*/}
+          {/*      if (value === '') {*/}
+          {/*        errorText = '请输入key';*/}
+          {/*      } else if (value.length > 20) {*/}
+          {/*        // errorText = FI18n.i18nNext.t('alert_key_convention_key');*/}
+          {/*        errorText = '不超过20个字符';*/}
+          {/*      } else if (disabledKeys.includes(value) && value !== defaultData?.key) {*/}
+          {/*        errorText = FI18n.i18nNext.t('alert_key_exist');*/}
+          {/*      } else if (!FUtil.Regexp.CUSTOM_KEY.test(value)) {*/}
+          {/*        errorText = FI18n.i18nNext.t('alert_naming_convention_key');*/}
+          {/*      }*/}
+          {/*      // set_keyInput(value);*/}
+          {/*      // set_keyInputError(errorText);*/}
+          {/*      $setState({*/}
+          {/*        keyInput: value,*/}
+          {/*        keyInputError: errorText,*/}
+          {/*      });*/}
+          {/*    }}*/}
+          {/*  />*/}
+          {/*</Space>*/}
           {
             $state.keyInputError !== '' && (<>
               <div style={{ height: 5 }} />

@@ -65,6 +65,29 @@
 //  display: inline-block;
 //}
 
+.keyInput {
+  border-width: 1px;
+  border-style: solid;
+  //width: 160px;
+  background-color: white;
+  border-color: #E4E7EB;
+  width: 520px !important;
+  height: 38px !important;
 
+  &:hover {
+    border-color: #CBCBCB;
+  }
+
+  &:focus {
+    //border-color: @f-primary-color;
+    border-color: @f-primary-color !important;
+  }
+
+  &.InputError {
+    &, &:hover, &:active, &:focus {
+      border-color: @f-error-color1;
+    }
+  }
+}
 
 
