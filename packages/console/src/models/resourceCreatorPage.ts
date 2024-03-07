@@ -634,12 +634,26 @@ const Model: ResourceCreatorPageModelType = {
         },
       });
 
-      // yield put<ChangeAction>({
-      //   type: 'change',
-      //   payload: {
-      //
-      //   },
-      // });
+      const params: Parameters<typeof FServiceAPI.Storage.objectDetails>[0] = {
+        objectIdOrName: payload.objectID,
+      };
+      const { data: data_objectDetails }: {
+        data: {
+          dependencies: {
+            name: string;
+            type: 'resource' | 'object';
+            versionRange?: string;
+          }[];
+          customPropertyDescriptors: {
+            key: string;
+            name: string;
+            defaultValue: string;
+            type: 'editableText' | 'readonlyText' | 'radio' | 'checkbox' | 'select';
+            candidateItems: string[];
+            remark: string;
+          }[],
+        }
+      } = yield call(FServiceAPI.Storage.objectDetails, params);
 
       const params0: Parameters<typeof getFilesSha1Info>[0] = {
         sha1: [payload.sha1],
@@ -649,8 +663,6 @@ const Model: ResourceCreatorPageModelType = {
         result,
         error,
       }: Awaited<ReturnType<typeof getFilesSha1Info>> = yield call(getFilesSha1Info, params0);
-
-      // console.log(result, 'resulte53452sdf', error, 'error asdfsdfsdfsdf');
 
       if (error !== '') {
         yield put<ChangeAction>({
@@ -674,20 +686,7 @@ const Model: ResourceCreatorPageModelType = {
         return fMessage('文件解析失败', 'error');
       }
 
-      // if (payload.delay) {
-      //   yield call(FUtil.Tool.promiseSleep, 1000);
-      // }
-
       if (result[0].state === 'success') {
-
-        // const params: Parameters<typeof FServiceAPI.Resource.lookDraft>[0] = {
-        //   resourceId: resourceVersionCreatorPage.resourceInfo?.resourceID || '',
-        // };
-        // const { data: data_draft }: {
-        //   data: null | {
-        //     draftData: IResourceCreateVersionDraftType;
-        //   };
-        // } = yield call(FServiceAPI.Resource.lookDraft, params);
 
         yield put<ChangeAction>({
           type: 'change',
@@ -696,7 +695,8 @@ const Model: ResourceCreatorPageModelType = {
               .filter((i) => {
                 return i.insertMode === 1;
               })
-              .map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((i) => {
+              // .map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((i) => {
+              .map<ResourceCreatorPageModelState['step2_rawProperties'][number]>((i) => {
                 return {
                   key: i.key,
                   name: i.name,
@@ -709,7 +709,7 @@ const Model: ResourceCreatorPageModelType = {
               .filter((i) => {
                 return i.insertMode === 2;
               })
-              .map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((i) => {
+              .map<ResourceCreatorPageModelState['step2_additionalProperties'][number]>((i) => {
                 // const item = data_draft?.draftData.additionalProperties?.find((ap) => {
                 //   return ap.key === i.key;
                 // }) || {};
@@ -719,6 +719,32 @@ const Model: ResourceCreatorPageModelType = {
                   value: i.valueDisplay,
                   description: i.remark,
                   // ...item,
+                };
+              }),
+            step2_customProperties: data_objectDetails.customPropertyDescriptors
+              .filter((cpd) => cpd.type === 'readonlyText')
+              .map<ResourceCreatorPageModelState['step2_customProperties'][number]>((cpd: any) => {
+                return {
+                  key: cpd.key,
+                  name: cpd.key,
+                  value: cpd.defaultValue,
+                  description: cpd.remark,
+                };
+              }),
+            step2_customConfigurations: data_objectDetails.customPropertyDescriptors
+              .filter((cpd) => cpd.type !== 'readonlyText')
+              .map<ResourceCreatorPageModelState['step2_customConfigurations'][number]>((cpd) => {
+                return {
+                  key: cpd.key,
+                  name: cpd.name,
+                  // keyError: '',
+                  description: cpd.remark,
+                  // descriptionError: '',
+                  type: cpd.type === 'editableText' ? 'input' : 'select',
+                  input: cpd.defaultValue,
+                  // defaultValueError: '',
+                  select: cpd.candidateItems,
+                  // customOptionError: '',
                 };
               }),
           },

@@ -487,7 +487,6 @@ const Model: ResourceVersionCreatorModelType = {
                   description: '',
                 };
               }),
-            // preVersion_customProperties,
             customProperties: data_resourceVersionInfo.customPropertyDescriptors
               .filter((cpd: any) => cpd.type === 'readonlyText')
               .map<ResourceVersionCreatorPageModelState['customProperties'][number]>((cpd) => {
@@ -499,7 +498,6 @@ const Model: ResourceVersionCreatorModelType = {
                   description: cpd.remark,
                 };
               }),
-            // preVersion_customConfigurations,
             customConfigurations: data_resourceVersionInfo.customPropertyDescriptors
               .filter((cpd: any) => cpd.type !== 'readonlyText')
               .map<ResourceVersionCreatorPageModelState['customConfigurations'][number]>((cpd) => {
