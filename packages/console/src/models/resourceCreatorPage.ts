@@ -453,7 +453,7 @@ const Model: ResourceCreatorPageModelType = {
         msg: string;
         data: {
           resourceConfig: {
-            fileCommitMode: (0 | 1 | 2 | 3)[];
+            fileCommitMode: number[];
             fileMaxSize: number;
             fileMaxSizeUnit: 1 | 2;
             supportDownload: 1 | 2;
@@ -464,16 +464,16 @@ const Model: ResourceCreatorPageModelType = {
       } = yield call(FServiceAPI.Resource.getResourceTypeInfoByCode, params1);
       // console.log(data_ResourceTypeInfo, 'data_ResourceTypeInfo sdiofjsdlkjflksdjlkjl');
       const uploadEntry: ResourceCreatorPageModelState['step2_resourceTypeConfig']['uploadEntry'] = [];
-      if (data_ResourceTypeInfo.resourceConfig.fileCommitMode.includes(0)) {
+      if (data_ResourceTypeInfo.resourceConfig.fileCommitMode.includes(2 ** 0)) {
         uploadEntry.push('localUpload');
       }
-      if (data_ResourceTypeInfo.resourceConfig.fileCommitMode.includes(1)) {
+      if (data_ResourceTypeInfo.resourceConfig.fileCommitMode.includes(2 ** 1)) {
         uploadEntry.push('storageSpace');
       }
-      if (data_ResourceTypeInfo.resourceConfig.fileCommitMode.includes(2)) {
+      if (data_ResourceTypeInfo.resourceConfig.fileCommitMode.includes(2 ** 2)) {
         uploadEntry.push('markdownEditor');
       }
-      if (data_ResourceTypeInfo.resourceConfig.fileCommitMode.includes(3)) {
+      if (data_ResourceTypeInfo.resourceConfig.fileCommitMode.includes(2 ** 3)) {
         uploadEntry.push('cartoonEditor');
       }
 
