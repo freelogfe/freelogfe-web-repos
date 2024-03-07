@@ -178,19 +178,6 @@ const Model: ResourceCollectModelType = {
         });
       }
 
-      // const resourceTypes: Array<string | number> = resourceCollectPage.resourceTypeCodes.labels.filter((rt) => {
-      //   return rt !== '全部';
-      // });
-
-      // const resourceTypes: string[] = resourceCollectPage.resourceTypeCodes.value.split('#');
-      // let resourceTypeCode: string = resourceTypes[0];
-      // let resourceTypeCategory: 1 | 2 = 1;
-      //
-      // if (resourceTypes.length > 1 && resourceTypes[resourceTypes.length - 1] === 'other') {
-      //   resourceTypeCode = resourceTypes[0];
-      //   resourceTypeCategory = 2;
-      // }
-
       const resourceTypes: string[] = resourceCollectPage.resourceTypeCodes.value.split('#');
       let resourceTypeCode: string = resourceTypes[0];
       let resourceTypeCategory: 1 | 2 = 1;
@@ -206,13 +193,9 @@ const Model: ResourceCollectModelType = {
       }
 
       const params: Parameters<typeof FServiceAPI.Collection.collectionResources>[0] = {
-        // skip: dataSource.length,
         skip: resource_List.length,
         limit: FUtil.Predefined.pageSize,
         keywords: resourceCollectPage.inputText || undefined,
-        // resourceType: resourceTypes.length === 0 ? undefined : String(resourceTypes[resourceTypes.length - 1]),
-        // resourceTypeCode: resourceTypeCode || undefined,
-        // resourceTypeCategory: resourceTypeCategory,
         resourceType: resourceType || undefined,
         resourceTypeCode: resourceType === '' ? (resourceTypeCode || undefined) : undefined,
         resourceTypeCategory: resourceType === '' ? resourceTypeCategory : undefined,
@@ -279,6 +262,7 @@ const Model: ResourceCollectModelType = {
           updateDate: string;
           username: string;
           useAvatar: string;
+          operationType: 0 | 1;
         }[];
       } = yield call(FServiceAPI.Resource.batchInfo, params1);
       // console.log(data_batchInfo, 'data_resourceList data1w09ejflk23');
@@ -302,7 +286,7 @@ const Model: ResourceCollectModelType = {
             updateDate: moment(i.updateDate).format('YYYY-MM-DD'),
             username: i.username,
             useAvatar: `https://image.freelog.com/avatar/${i.userId}`,
-            isChoice: true,
+            isChoice: i.operationType === 1,
           };
         }),
       ];

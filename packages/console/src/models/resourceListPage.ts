@@ -241,6 +241,7 @@ const Model: ResourceListPageModelType = {
             userId: number;
             updateDate: string;
             username: string;
+            operationType: 0 | 1;
           }[];
         };
       } = yield call(FServiceAPI.Resource.list, params);
@@ -285,7 +286,7 @@ const Model: ResourceListPageModelType = {
             updateDate: moment(i.updateDate).format('YYYY-MM-DD'),
             username: i.username,
             useAvatar: `https://image.freelog.com/avatar/${i.userId}`,
-            isChoice: true,
+            isChoice: i.operationType === 1,
           };
         }),
       ];

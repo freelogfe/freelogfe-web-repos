@@ -257,6 +257,7 @@ const Model: DiscoverPageModelType = {
             // updateDate: string;
             username: string;
             userId: number;
+            operationType: 0 | 1;
           }[];
           totalItem: number;
         };
@@ -289,7 +290,7 @@ const Model: DiscoverPageModelType = {
                   updateDate: moment(i.updateDate).format('YYYY-MM-DD'),
                   username: i.username,
                   useAvatar: `https://image.freelog.com/avatar/${i.userId}`,
-                  isChoice: true,
+                  isChoice: i.operationType === 1,
                 };
               }),
           ],
