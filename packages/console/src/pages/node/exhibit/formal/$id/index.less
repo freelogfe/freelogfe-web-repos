@@ -1,140 +1,197 @@
 @import '../../../../../config.less';
 
-.styles {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: #fafbfc;
-}
-
-.header {
-  height: 100px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.nav {
-  display: flex;
-  align-items: baseline;
-
-  .nodeName {
-    &:hover {
-      color: inherit;
-    }
-  }
-}
-
-.body {
+.Presentable {
   display: flex;
   align-items: flex-start;
-}
-
-.content {
-  background-color: white;
-  width: 920px;
-  display: flex;
   justify-content: center;
-  //border-radius: 8px;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
-  border-radius: 6px;
+  height: fit-content;
+  background-color: #FAFBFC;
 
-  & > div {
-    width: 860px;
-    border-radius: 8px;
-    padding: 40px 0;
-  }
-}
+  .content {
+    height: fit-content;
+    width: 920px;
 
-.no-longer {
-  font-size: 12px;
-  color: #999999;
-  line-height: 18px;
-  padding: 0 5px;
-}
-
-.result-modal {
-  position: fixed;
-  inset: 0;
-  background-color: rgba(0, 0, 0, 0.4);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  animation: fade 0.2s ease;
-  z-index: @f-zIndex-modal;
-
-  .result-popup {
-    width: 312px;
-    height: 200px;
-    background: #ffffff;
-    border-radius: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    animation: scale 0.2s ease;
-
-    .loader {
+    .onlineSwitch {
+      height: 70px;
+      background-color: #FFF;
+      border-radius: 6px;
+      padding: 0 20px;
       display: flex;
       align-items: center;
-      color: #2784ff;
+      justify-content: space-between;
+      flex-direction: row-reverse;
 
-      .loader-icon {
-        font-size: 16px;
-      }
+      .CustomSwitch {
+        min-width: 54px;
+        height: 36px;
+        line-height: 36px;
 
-      .loader-text {
-        font-size: 16px;
-        line-height: 22px;
-        margin-left: 10px;
+        :global(.ant-switch-handle) {
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+          overflow: hidden;
+        }
+
+        &:global(.ant-switch-checked) {
+          background-color: #42C28C;
+        }
+
+        &:global(.ant-switch-checked .ant-switch-handle) {
+          left: calc(100% - 32px - 2px);
+        }
       }
     }
 
-    .result {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-
-      .result-icon {
-        font-size: 76px;
-
-        &.up {
-          color: #42c28c;
-        }
-
-        &.down {
-          color: #e9a923;
-          transform: rotate(180deg);
-        }
+    .smallSwitch {
+      &:global(.ant-switch-checked) {
+        background-color: #42C28C;
       }
+    }
 
-      .result-text {
-        font-size: 18px;
-        //font-family: PingFangSC-Regular, PingFang SC;
-        font-weight: 400;
-        color: #222222;
-        line-height: 24px;
-        margin-top: 20px;
-      }
+    .block {
+      padding: 20px;
+      background-color: white;
+      border-radius: 6px;
     }
   }
 }
 
-@keyframes fade {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes scale {
-  from {
-    transform: scale(0);
-    opacity: 0;
-  }
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
+//.styles {
+//  display: flex;
+//  flex-direction: column;
+//  align-items: center;
+//  background-color: #fafbfc;
+//}
+//
+//.header {
+//  height: 100px;
+//  display: flex;
+//  align-items: center;
+//  justify-content: space-between;
+//}
+//
+//.nav {
+//  display: flex;
+//  align-items: baseline;
+//
+//  .nodeName {
+//    &:hover {
+//      color: inherit;
+//    }
+//  }
+//}
+//
+//.body {
+//  display: flex;
+//  align-items: flex-start;
+//}
+//
+//.content {
+//  background-color: white;
+//  width: 920px;
+//  display: flex;
+//  justify-content: center;
+//  //border-radius: 8px;
+//  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+//  border-radius: 6px;
+//
+//  & > div {
+//    width: 860px;
+//    border-radius: 8px;
+//    padding: 40px 0;
+//  }
+//}
+//
+//.no-longer {
+//  font-size: 12px;
+//  color: #999999;
+//  line-height: 18px;
+//  padding: 0 5px;
+//}
+//
+//.result-modal {
+//  position: fixed;
+//  inset: 0;
+//  background-color: rgba(0, 0, 0, 0.4);
+//  display: flex;
+//  align-items: center;
+//  justify-content: center;
+//  animation: fade 0.2s ease;
+//  z-index: @f-zIndex-modal;
+//
+//  .result-popup {
+//    width: 312px;
+//    height: 200px;
+//    background: #ffffff;
+//    border-radius: 6px;
+//    display: flex;
+//    align-items: center;
+//    justify-content: center;
+//    animation: scale 0.2s ease;
+//
+//    .loader {
+//      display: flex;
+//      align-items: center;
+//      color: #2784ff;
+//
+//      .loader-icon {
+//        font-size: 16px;
+//      }
+//
+//      .loader-text {
+//        font-size: 16px;
+//        line-height: 22px;
+//        margin-left: 10px;
+//      }
+//    }
+//
+//    .result {
+//      display: flex;
+//      flex-direction: column;
+//      align-items: center;
+//
+//      .result-icon {
+//        font-size: 76px;
+//
+//        &.up {
+//          color: #42c28c;
+//        }
+//
+//        &.down {
+//          color: #e9a923;
+//          transform: rotate(180deg);
+//        }
+//      }
+//
+//      .result-text {
+//        font-size: 18px;
+//        //font-family: PingFangSC-Regular, PingFang SC;
+//        font-weight: 400;
+//        color: #222222;
+//        line-height: 24px;
+//        margin-top: 20px;
+//      }
+//    }
+//  }
+//}
+//
+//@keyframes fade {
+//  from {
+//    opacity: 0;
+//  }
+//  to {
+//    opacity: 1;
+//  }
+//}
+//
+//@keyframes scale {
+//  from {
+//    transform: scale(0);
+//    opacity: 0;
+//  }
+//  to {
+//    transform: scale(1);
+//    opacity: 1;
+//  }
+//}

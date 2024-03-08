@@ -7,13 +7,14 @@ import { FI18n, FUtil } from '@freelog/tools-lib';
 
 interface FResourceLabelEditor2Props {
   value: string[];
+  style?: React.CSSProperties;
 
   onChange?(value: string[]): void;
 
   onClickApply?(): void;
 }
 
-function FResourceLabelEditor2({ value, onChange, onClickApply }: FResourceLabelEditor2Props) {
+function FResourceLabelEditor2({ value, onChange, onClickApply, style }: FResourceLabelEditor2Props) {
   const refDiv = React.useRef<HTMLDivElement>(null);
   const inputRef = React.useRef<InputRef>(null);
   const [$showInput, set$showInput, get$showInput] = FUtil.Hook.useGetState<boolean>(false);
@@ -29,6 +30,7 @@ function FResourceLabelEditor2({ value, onChange, onClickApply }: FResourceLabel
   return (<div>
     <div
       className={styles.editor2}
+      style={style}
       onClick={() => {
         set$showInput(true);
         setTimeout(() => {
