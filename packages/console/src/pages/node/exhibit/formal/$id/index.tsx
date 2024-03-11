@@ -11,7 +11,7 @@ import { Dispatch } from 'redux';
 import { ConnectState, ExhibitInfoPageModelState } from '@/models/connect';
 import {
   ChangeAction, ChangeVersionAction,
-  FetchInfoAction,
+  FetchInfoAction, OnChange_Side_InputTitle_Action,
   OnMountPageAction,
   OnUnmountPageAction, UpdateBaseInfoAction,
 } from '@/models/exhibitInfoPage';
@@ -80,6 +80,15 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
 
     dispatch<FetchInfoAction>({
       type: 'exhibitInfoPage/fetchInfo',
+    });
+  }
+
+  function onChangePInputTitle(value: string | null) {
+    dispatch<OnChange_Side_InputTitle_Action>({
+      type: 'exhibitInfoPage/onChange_Side_InputTitle',
+      payload: {
+        value: value,
+      },
     });
   }
 
@@ -305,34 +314,62 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
         </FUploadCover>
 
         <div>
-          <Space size={10} style={{ height: 38 }}>
-            {
-              exhibitInfoPage.side_ExhibitTitle === '' && (<>
-                <FComponentsLib.FTextBtn onClick={() => {
-                  // onChangePInputTitle(exhibitInfoPage.side_ExhibitTitle);
-                }}><FComponentsLib.FIcons.FAdd /></FComponentsLib.FTextBtn>
-                <FComponentsLib.FTextBtn onClick={() => {
-                  // onChangePInputTitle(exhibitInfoPage.side_ExhibitTitle);
-                }}>添加标题</FComponentsLib.FTextBtn>
-              </>)
-            }
+          {
+            exhibitInfoPage.side_ExhibitInputTitle === null && (<Space size={10} style={{ height: 38 }}>
+              {
+                exhibitInfoPage.side_ExhibitTitle === '' && (<>
+                  <FComponentsLib.FTextBtn
+                    onClick={() => {
+                      onChangePInputTitle(exhibitInfoPage.side_ExhibitTitle);
+                    }}>
+                    <FComponentsLib.FIcons.FAdd />
+                  </FComponentsLib.FTextBtn>
+                  <FComponentsLib.FTextBtn
+                    onClick={() => {
+                      onChangePInputTitle(exhibitInfoPage.side_ExhibitTitle);
+                    }}>添加标题</FComponentsLib.FTextBtn>
+                </>)
+              }
 
-            {
-              exhibitInfoPage.side_ExhibitTitle !== '' && (<>
-                <FComponentsLib.FContentText
-                  text={exhibitInfoPage.side_ExhibitTitle}
-                  style={{ overflowWrap: 'anywhere' }}
-                />
-                <FTooltip title={'编辑'}>
-                  <div>
-                    <FComponentsLib.FTextBtn onClick={() => {
-                      // onChangePInputTitle(exhibitInfoPage.side_ExhibitTitle);
-                    }}><FComponentsLib.FIcons.FEdit /></FComponentsLib.FTextBtn>
-                  </div>
-                </FTooltip>
-              </>)
-            }
-          </Space>
+              {
+                exhibitInfoPage.side_ExhibitTitle !== '' && (<>
+                  <FComponentsLib.FContentText
+                    text={exhibitInfoPage.side_ExhibitTitle}
+                    style={{ overflowWrap: 'anywhere' }}
+                  />
+                  <FTooltip title={'编辑'}>
+                    <div>
+                      <FComponentsLib.FTextBtn
+                        onClick={() => {
+                          onChangePInputTitle(exhibitInfoPage.side_ExhibitTitle);
+                        }}>
+                        <FComponentsLib.FIcons.FEdit />
+                      </FComponentsLib.FTextBtn>
+                    </div>
+                  </FTooltip>
+                </>)
+              }
+            </Space>)
+          }
+
+          {
+            exhibitInfoPage.side_ExhibitInputTitle !== null && (<TitleInput
+              value={exhibitInfoPage.side_ExhibitTitle}
+              onOK={(value) => {
+                dispatch<UpdateBaseInfoAction>({
+                  type: 'exhibitInfoPage/updateBaseInfo',
+                  payload: {
+                    // side_ExhibitTitle: exhibitInfoPage.side_ExhibitInputTitle || '',
+                    side_ExhibitTitle: value,
+                  },
+                });
+                onChangePInputTitle(null);
+              }}
+              onCancel={() => {
+                onChangePInputTitle(null);
+              }}
+            />)
+          }
           <div style={{ height: 10 }} />
           <FComponentsLib.FContentText type={'additional2'} text={'来自于 yyy/freelog白皮书'} />
           <div style={{ height: 15 }} />
@@ -968,3 +1005,63 @@ export default connect(({ exhibitInfoPage }: ConnectState) => ({
   exhibitInfoPage,
 }))(Presentable);
 
+interface TitleInputProps {
+  value: string;
+
+  onOK(value: string): void;
+
+  onCancel(): void;
+}
+
+function TitleInput({ value, onOK, onCancel }: TitleInputProps) {
+
+  const [$value, set$value, get$value] = FUtil.Hook.useGetState<string>(value);
+  const [$valueError, set$valueError, get$valueError] = FUtil.Hook.useGetState<string>('');
+
+  return (<div>
+    <Space size={10}>
+      <FComponentsLib.FInput.FSingleLine
+        lengthLimit={-1}
+        className={styles.FInput}
+        style={{ width: 480 }}
+        // wrapClassName={styles.FInput}
+        value={$value}
+        onChange={(e) => {
+          set$value(e.target.value);
+          set$valueError(e.target.value.length > 100 ? '不能超过100个字符' : '');
+        }}
+      />
+
+      <FComponentsLib.FRectBtn
+        type='default'
+        // size="small"
+        // onClick={() => onChangePInputTitle(null)}
+        onClick={() => {
+          onCancel();
+        }}
+      >{FI18n.i18nNext.t('btn_cancel')}</FComponentsLib.FRectBtn>
+      <FComponentsLib.FRectBtn
+        type={'primary'}
+        disabled={$valueError !== ''}
+        // size='small'
+        onClick={() => {
+          // dispatch<UpdateBaseInfoAction>({
+          //   type: 'exhibitInfoPage/updateBaseInfo',
+          //   payload: {
+          //     side_ExhibitTitle: exhibitInfoPage.side_ExhibitInputTitle || '',
+          //   },
+          // });
+          // onChangePInputTitle(null);
+          onOK(get$value());
+        }}
+      >{FI18n.i18nNext.t('btn_save')}</FComponentsLib.FRectBtn>
+    </Space>
+
+    {
+      $valueError !== '' && (<>
+        <div style={{ height: 5 }} />
+        <div style={{ color: '#EE4040' }}>{$valueError}</div>
+      </>)
+    }
+  </div>);
+}
