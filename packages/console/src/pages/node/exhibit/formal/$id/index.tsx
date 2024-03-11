@@ -420,10 +420,18 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
           onClick={() => {
             // set$showMore(!get$showMore());
             // set$auth(get$auth() === 'block' ? 'none' : 'block');
+            dispatch<ChangeAction>({
+              type: 'exhibitInfoPage/change',
+              payload: {
+                side_SettingUnfold: !exhibitInfoPage.side_SettingUnfold,
+              },
+            });
           }}
-        >{0 === 0
-          ? FI18n.i18nNext.t('brr_resourcelisting_item_btn_showlesssetting')
-          : FI18n.i18nNext.t('brr_resourcelisting_item_btn_moresetting')}</FComponentsLib.FTextBtn>
+        >{
+          exhibitInfoPage.side_SettingUnfold
+            ? FI18n.i18nNext.t('brr_resourcelisting_item_btn_showlesssetting')
+            : FI18n.i18nNext.t('brr_resourcelisting_item_btn_moresetting')
+        }</FComponentsLib.FTextBtn>
         <FComponentsLib.FContentText
           text={'可以为资源文件添加可选配置，或进行依赖资源的声明'}
           type={'negative'}
@@ -432,438 +440,165 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
       </Space>
       <div style={{ height: 10 }} />
 
-      <div className={styles.block}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <FComponentsLib.FContentText
-            text={'展示版本'}
-            type={'highlight'}
-          />
-        </div>
-        <div style={{ height: 20 }} />
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-          <FComponentsLib.FContentText
-            type={'highlight'}
-            text={exhibitInfoPage.side_Version}
-            style={{ fontSize: 12 }}
-          />
-          <div style={{ width: 20 }} />
-          <FDropdownMenu
-            options={[...exhibitInfoPage.side_AllVersions].reverse().map((av: string) => ({ value: av, text: av }))}
-            onChange={(value) => {
-              dispatch<ChangeVersionAction>({
-                type: 'exhibitInfoPage/changeVersion',
-                payload: value,
-              });
-            }}
-          >
-            <Space style={{ cursor: 'pointer' }} size={2}>
-              <FComponentsLib.FTextBtn><FComponentsLib.FIcons.FSwap
-                style={{ fontSize: 12 }} /></FComponentsLib.FTextBtn>
-              <FComponentsLib.FTextBtn style={{ fontSize: 12 }}>切换展示版本</FComponentsLib.FTextBtn>
-            </Space>
-          </FDropdownMenu>
-
-          <div style={{ width: 60 }} />
-          <FComponentsLib.FContentText
-            type={'highlight'}
-            text={'自动更新到最新版本'}
-            style={{ fontSize: 12 }}
-          />
-          <div style={{ width: 20 }} />
-          <Switch
-            size='small'
-            defaultChecked
-            className={styles.smallSwitch}
-          />
-        </div>
-
-      </div>
-
-      <div style={{ height: 5 }} />
-      <div className={styles.block}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <FComponentsLib.FContentText text={'基础属性'} type={'highlight'} />
-          {/*{*/}
-          {/*  info.customProperties.length < 30 && (*/}
-          {/*    <FTooltip title={FI18n.i18nNext.t('resourceinfo_add_btn_info')}>*/}
-          {/*      <div>*/}
-          {/*        <FComponentsLib.FTextBtn*/}
-          {/*          style={{ fontSize: 12, display: 'flex', alignItems: 'center', gap: 5 }}*/}
-          {/*          type='primary'*/}
-          {/*          onClick={async () => {*/}
-          {/*            const dataSource: {*/}
-          {/*              key: string;*/}
-          {/*              name: string;*/}
-          {/*              value: string;*/}
-          {/*              description: string;*/}
-          {/*            } | null = await fResourcePropertyEditor({*/}
-          {/*              disabledKeys: [*/}
-          {/*                ...info.rawProperties.map<string>((rp) => rp.key),*/}
-          {/*                ...info.additionalProperties.map<string>((rp) => rp.key),*/}
-          {/*                ...info.customProperties.map<string>((bp) => bp.key),*/}
-          {/*                ...info.customConfigurations.map<string>((pp) => pp.key),*/}
-          {/*              ],*/}
-          {/*              disabledNames: [*/}
-          {/*                ...info.rawProperties.map<string>((rp) => rp.name),*/}
-          {/*                ...info.additionalProperties.map<string>((rp) => rp.name),*/}
-          {/*                ...info.customProperties.map<string>((bp) => bp.name),*/}
-          {/*                ...info.customConfigurations.map<string>((pp) => pp.name),*/}
-          {/*              ],*/}
-          {/*            });*/}
-          {/*            if (!dataSource) {*/}
-          {/*              return;*/}
-          {/*            }*/}
-          {/*            onChange && onChange({*/}
-          {/*              ...info,*/}
-          {/*              customProperties: [*/}
-          {/*                ...info.customProperties,*/}
-          {/*                dataSource,*/}
-          {/*              ],*/}
-          {/*            });*/}
-          {/*          }}*/}
-          {/*        >*/}
-          {/*          <FComponentsLib.FIcons.FProperty style={{ fontSize: 14 }} />*/}
-          {/*          <span>补充属性</span>*/}
-          {/*        </FComponentsLib.FTextBtn>*/}
-          {/*      </div>*/}
-          {/*    </FTooltip>)*/}
-          {/*}*/}
-
-        </div>
-        <div style={{ height: 20 }} />
-
-        <FResourceProperties
-          // immutableData={info.rawProperties}
-          immutableData={exhibitInfoPage.side_RawProperties}
-          // onlyEditValueData={info.additionalProperties}
-          onlyEditValueData={[]}
-          // alterableData={info.customProperties}
-          alterableData={[]}
-          onEdit_onlyEditValueData={async (value) => {
-            // console.log(value, 'value sidjfoikjo sd value sdiofjlkj');
-            // const index: number = info.additionalProperties.findIndex((p) => {
-            //   return p === value;
-            // });
-            // const dataSource: {
-            //   key: string;
-            //   name: string;
-            //   value: string;
-            //   description: string;
-            // } | null = await fResourcePropertyEditor({
-            //   disabledKeys: [
-            //     ...info.rawProperties.map<string>((rp) => rp.key),
-            //     ...info.additionalProperties.map<string>((rp) => rp.key),
-            //     ...info.customProperties.map<string>((bp) => bp.key),
-            //     ...info.customConfigurations.map<string>((pp) => pp.key),
-            //   ],
-            //   disabledNames: [
-            //     ...info.rawProperties.map<string>((rp) => rp.name),
-            //     ...info.additionalProperties.map<string>((rp) => rp.name),
-            //     ...info.customProperties.map<string>((bp) => bp.name),
-            //     ...info.customConfigurations.map<string>((pp) => pp.name),
-            //   ],
-            //   defaultData: value,
-            //   noneEditableFields: ['key', 'description', 'name'],
-            //   valueAcceptNull: true,
-            // });
-            // if (!dataSource) {
-            //   return;
-            // }
-            // onChange && onChange({
-            //   ...info,
-            //   additionalProperties: info.additionalProperties.map((v, i) => {
-            //     if (i !== index) {
-            //       return v;
-            //     }
-            //     return dataSource;
-            //   }),
-            // });
-          }}
-          onEdit_alterableData={async (value) => {
-            // const index: number = info.customProperties.findIndex((p) => {
-            //   return p === value;
-            // });
-            // const dataSource: {
-            //   key: string;
-            //   name: string;
-            //   value: string;
-            //   description: string;
-            // } | null = await fResourcePropertyEditor({
-            //   disabledKeys: [
-            //     ...info.rawProperties.map<string>((rp) => rp.key),
-            //     ...info.additionalProperties.map<string>((rp) => rp.key),
-            //     ...info.customProperties.map<string>((bp) => bp.key),
-            //     ...info.customConfigurations.map<string>((pp) => pp.key),
-            //   ],
-            //   disabledNames: [
-            //     ...info.rawProperties.map<string>((rp) => rp.name),
-            //     ...info.additionalProperties.map<string>((rp) => rp.name),
-            //     ...info.customProperties.map<string>((bp) => bp.name),
-            //     ...info.customConfigurations.map<string>((pp) => pp.name),
-            //   ],
-            //   defaultData: value,
-            // });
-            // if (!dataSource) {
-            //   return;
-            // }
-            //
-            // onChange && onChange({
-            //   ...info,
-            //   customProperties: info.customProperties.map((v, i) => {
-            //     if (i !== index) {
-            //       return v;
-            //     }
-            //     return dataSource;
-            //   }),
-            // });
-          }}
-          onDelete_alterableData={async (value) => {
-            // onChange && onChange({
-            //   ...info,
-            //   customProperties: info.customProperties.filter((v, i) => {
-            //     return v.key !== value.key && v.name !== value.name;
-            //   }),
-            // });
-          }}
-        />
-      </div>
-
-      <div style={{ height: 5 }} />
-      <div className={styles.block}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <FComponentsLib.FContentText
-            text={'可选配置'}
-            type={'highlight'}
-          />
-          {/*{*/}
-          {/*  info.customConfigurations.length < 30 && (*/}
-          {/*    // <FTooltip title={FI18n.i18nNext.t('resourceinfo_add_btn_info')}>*/}
-          {/*    <FTooltip title={FI18n.i18nNext.t('info_versionoptions')}>*/}
-          {/*      <div>*/}
-          {/*        <FComponentsLib.FTextBtn*/}
-          {/*          style={{ fontSize: 12, display: 'flex', alignItems: 'center', gap: 5 }}*/}
-          {/*          type='primary'*/}
-          {/*          onClick={async () => {*/}
-          {/*            const dataSource: {*/}
-          {/*              key: string;*/}
-          {/*              name: string;*/}
-          {/*              type: 'input' | 'select';*/}
-          {/*              input: string;*/}
-          {/*              select: string[];*/}
-          {/*              description: string;*/}
-          {/*            } | null = await fResourceOptionEditor({*/}
-          {/*              disabledKeys: [*/}
-          {/*                ...info.rawProperties.map<string>((rp) => rp.key),*/}
-          {/*                ...info.additionalProperties.map<string>((rp) => rp.key),*/}
-          {/*                ...info.customProperties.map<string>((bp) => bp.key),*/}
-          {/*                ...info.customConfigurations.map<string>((pp) => pp.key),*/}
-          {/*              ],*/}
-          {/*              disabledNames: [*/}
-          {/*                ...info.rawProperties.map<string>((rp) => rp.name),*/}
-          {/*                ...info.additionalProperties.map<string>((rp) => rp.name),*/}
-          {/*                ...info.customProperties.map<string>((bp) => bp.name),*/}
-          {/*                ...info.customConfigurations.map<string>((pp) => pp.name),*/}
-          {/*              ],*/}
-          {/*            });*/}
-
-          {/*            if (!dataSource) {*/}
-          {/*              return;*/}
-          {/*            }*/}
-
-          {/*            onChange && onChange({*/}
-          {/*              ...info,*/}
-          {/*              customConfigurations: [*/}
-          {/*                ...info.customConfigurations,*/}
-          {/*                dataSource,*/}
-          {/*              ],*/}
-          {/*            });*/}
-          {/*          }}*/}
-          {/*        >*/}
-          {/*          <FComponentsLib.FIcons.FConfiguration style={{ fontSize: 14 }} />*/}
-          {/*          <span>{FI18n.i18nNext.t('resourceoptions_add_btn')}</span>*/}
-          {/*        </FComponentsLib.FTextBtn>*/}
-          {/*      </div>*/}
-          {/*    </FTooltip>)*/}
-          {/*}*/}
-
-        </div>
-
-        {
-          // info.customConfigurations.length === 0 && (<>
-          0 === 0 && (<>
-            <div style={{ height: 10 }} />
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              {/*<span>{FI18n.i18nNext.t('resourceoptions_list_empty')}</span>*/}
+      {
+        exhibitInfoPage.side_SettingUnfold && (<>
+          <div className={styles.block}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <FComponentsLib.FContentText
-                text={FI18n.i18nNext.t('resourceoptions_list_empty')}
-                type={'additional2'}
+                text={'展示版本'}
+                type={'highlight'}
               />
             </div>
             <div style={{ height: 20 }} />
-          </>)
-        }
-
-        {
-          // info.customConfigurations.length > 0 && (<>
-          0 > 0 && (<>
-            <div style={{ height: 20 }} />
-            <FResourceOptions
-              theme={'dark'}
-              // dataSource={resourceVersionCreatorPage.customOptionsData}
-              dataSource={[]}
-              onEdit={async (value) => {
-                // const index: number = info.customConfigurations.findIndex((p) => {
-                //   return p === value;
-                // });
-                //
-                // const dataSource: {
-                //   key: string;
-                //   name: string;
-                //   type: 'input' | 'select';
-                //   input: string;
-                //   select: string[];
-                //   description: string;
-                // } | null = await fResourceOptionEditor({
-                //   disabledKeys: [
-                //     ...info.rawProperties.map<string>((rp) => rp.key),
-                //     ...info.additionalProperties.map<string>((rp) => rp.key),
-                //     ...info.customProperties.map<string>((bp) => bp.key),
-                //     ...info.customConfigurations.map<string>((pp) => pp.key),
-                //   ],
-                //   disabledNames: [
-                //     ...info.rawProperties.map<string>((rp) => rp.name),
-                //     ...info.additionalProperties.map<string>((rp) => rp.name),
-                //     ...info.customProperties.map<string>((bp) => bp.name),
-                //     ...info.customConfigurations.map<string>((pp) => pp.name),
-                //   ],
-                //   defaultData: value,
-                // });
-                //
-                // if (!dataSource) {
-                //   return;
-                // }
-                //
-                // onChange && onChange({
-                //   ...info,
-                //   customConfigurations: info.customConfigurations.map((a, b) => {
-                //     if (b !== index) {
-                //       return a;
-                //     }
-                //     return dataSource;
-                //   }),
-                // });
-              }}
-              onDelete={async (value) => {
-                // onChange && onChange({
-                //   ...info,
-                //   customConfigurations: info.customConfigurations.filter((a) => {
-                //     return a.key !== value.key && a.name !== value.name;
-                //   }),
-                // });
-              }}
-            />
-          </>)
-        }
-      </div>
-
-      <div style={{ height: 5 }} />
-      <div className={styles.block}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <FComponentsLib.FContentText
-            text={'自定义信息'}
-            type={'highlight'}
-          />
-          {
-            // info.customConfigurations.length < 30 && (
-            0 < 30 && (
-              // <FTooltip title={FI18n.i18nNext.t('resourceinfo_add_btn_info')}>
-              // <FTooltip title={FI18n.i18nNext.t('info_versionoptions')}>
-              //   <div>
-              <FComponentsLib.FTextBtn
-                style={{ fontSize: 12, display: 'flex', alignItems: 'center', gap: 5 }}
-                type='primary'
-                onClick={async () => {
-                  // const dataSource: {
-                  //   key: string;
-                  //   name: string;
-                  //   type: 'input' | 'select';
-                  //   input: string;
-                  //   select: string[];
-                  //   description: string;
-                  // } | null = await fResourceOptionEditor({
-                  //   disabledKeys: [
-                  //     ...info.rawProperties.map<string>((rp) => rp.key),
-                  //     ...info.additionalProperties.map<string>((rp) => rp.key),
-                  //     ...info.customProperties.map<string>((bp) => bp.key),
-                  //     ...info.customConfigurations.map<string>((pp) => pp.key),
-                  //   ],
-                  //   disabledNames: [
-                  //     ...info.rawProperties.map<string>((rp) => rp.name),
-                  //     ...info.additionalProperties.map<string>((rp) => rp.name),
-                  //     ...info.customProperties.map<string>((bp) => bp.name),
-                  //     ...info.customConfigurations.map<string>((pp) => pp.name),
-                  //   ],
-                  // });
-                  //
-                  // if (!dataSource) {
-                  //   return;
-                  // }
-                  //
-                  // onChange && onChange({
-                  //   ...info,
-                  //   customConfigurations: [
-                  //     ...info.customConfigurations,
-                  //     dataSource,
-                  //   ],
-                  // });
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <FComponentsLib.FContentText
+                type={'highlight'}
+                text={exhibitInfoPage.side_Version}
+                style={{ fontSize: 12 }}
+              />
+              <div style={{ width: 20 }} />
+              <FDropdownMenu
+                options={[...exhibitInfoPage.side_AllVersions].reverse().map((av: string) => ({ value: av, text: av }))}
+                onChange={(value) => {
+                  dispatch<ChangeVersionAction>({
+                    type: 'exhibitInfoPage/changeVersion',
+                    payload: value,
+                  });
                 }}
               >
-                <FComponentsLib.FIcons.FConfiguration style={{ fontSize: 14 }} />
-                <span>添加自定义信息</span>
-              </FComponentsLib.FTextBtn>
-              // </div>
-              // </FTooltip>
-            )
-          }
+                <Space style={{ cursor: 'pointer' }} size={2}>
+                  <FComponentsLib.FTextBtn><FComponentsLib.FIcons.FSwap
+                    style={{ fontSize: 12 }} /></FComponentsLib.FTextBtn>
+                  <FComponentsLib.FTextBtn style={{ fontSize: 12 }}>切换展示版本</FComponentsLib.FTextBtn>
+                </Space>
+              </FDropdownMenu>
 
-        </div>
-
-        {
-          // info.customConfigurations.length === 0 && (<>
-          0 === 0 && (<>
-            <div style={{ height: 10 }} />
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              {/*<span>{FI18n.i18nNext.t('resourceoptions_list_empty')}</span>*/}
+              <div style={{ width: 60 }} />
               <FComponentsLib.FContentText
-                text={FI18n.i18nNext.t('resourceoptions_list_empty')}
-                type={'additional2'}
+                type={'highlight'}
+                text={'自动更新到最新版本'}
+                style={{ fontSize: 12 }}
+              />
+              <div style={{ width: 20 }} />
+              <Switch
+                size='small'
+                defaultChecked
+                className={styles.smallSwitch}
               />
             </div>
-            <div style={{ height: 20 }} />
-          </>)
-        }
 
-        {
-          // info.customConfigurations.length > 0 && (<>
-          0 > 0 && (<>
+          </div>
+
+          <div style={{ height: 5 }} />
+          <div className={styles.block}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <FComponentsLib.FContentText text={'基础属性'} type={'highlight'} />
+              {/*{*/}
+              {/*  info.customProperties.length < 30 && (*/}
+              {/*    <FTooltip title={FI18n.i18nNext.t('resourceinfo_add_btn_info')}>*/}
+              {/*      <div>*/}
+              {/*        <FComponentsLib.FTextBtn*/}
+              {/*          style={{ fontSize: 12, display: 'flex', alignItems: 'center', gap: 5 }}*/}
+              {/*          type='primary'*/}
+              {/*          onClick={async () => {*/}
+              {/*            const dataSource: {*/}
+              {/*              key: string;*/}
+              {/*              name: string;*/}
+              {/*              value: string;*/}
+              {/*              description: string;*/}
+              {/*            } | null = await fResourcePropertyEditor({*/}
+              {/*              disabledKeys: [*/}
+              {/*                ...info.rawProperties.map<string>((rp) => rp.key),*/}
+              {/*                ...info.additionalProperties.map<string>((rp) => rp.key),*/}
+              {/*                ...info.customProperties.map<string>((bp) => bp.key),*/}
+              {/*                ...info.customConfigurations.map<string>((pp) => pp.key),*/}
+              {/*              ],*/}
+              {/*              disabledNames: [*/}
+              {/*                ...info.rawProperties.map<string>((rp) => rp.name),*/}
+              {/*                ...info.additionalProperties.map<string>((rp) => rp.name),*/}
+              {/*                ...info.customProperties.map<string>((bp) => bp.name),*/}
+              {/*                ...info.customConfigurations.map<string>((pp) => pp.name),*/}
+              {/*              ],*/}
+              {/*            });*/}
+              {/*            if (!dataSource) {*/}
+              {/*              return;*/}
+              {/*            }*/}
+              {/*            onChange && onChange({*/}
+              {/*              ...info,*/}
+              {/*              customProperties: [*/}
+              {/*                ...info.customProperties,*/}
+              {/*                dataSource,*/}
+              {/*              ],*/}
+              {/*            });*/}
+              {/*          }}*/}
+              {/*        >*/}
+              {/*          <FComponentsLib.FIcons.FProperty style={{ fontSize: 14 }} />*/}
+              {/*          <span>补充属性</span>*/}
+              {/*        </FComponentsLib.FTextBtn>*/}
+              {/*      </div>*/}
+              {/*    </FTooltip>)*/}
+              {/*}*/}
+
+            </div>
             <div style={{ height: 20 }} />
-            <FResourceOptions
-              theme={'dark'}
-              // dataSource={resourceVersionCreatorPage.customOptionsData}
-              dataSource={[]}
-              onEdit={async (value) => {
-                // const index: number = info.customConfigurations.findIndex((p) => {
+
+            <FResourceProperties
+              // immutableData={info.rawProperties}
+              immutableData={exhibitInfoPage.side_RawProperties}
+              // onlyEditValueData={info.additionalProperties}
+              onlyEditValueData={[]}
+              // alterableData={info.customProperties}
+              alterableData={[]}
+              onEdit_onlyEditValueData={async (value) => {
+                // console.log(value, 'value sidjfoikjo sd value sdiofjlkj');
+                // const index: number = info.additionalProperties.findIndex((p) => {
                 //   return p === value;
                 // });
-                //
                 // const dataSource: {
                 //   key: string;
                 //   name: string;
-                //   type: 'input' | 'select';
-                //   input: string;
-                //   select: string[];
+                //   value: string;
                 //   description: string;
-                // } | null = await fResourceOptionEditor({
+                // } | null = await fResourcePropertyEditor({
+                //   disabledKeys: [
+                //     ...info.rawProperties.map<string>((rp) => rp.key),
+                //     ...info.additionalProperties.map<string>((rp) => rp.key),
+                //     ...info.customProperties.map<string>((bp) => bp.key),
+                //     ...info.customConfigurations.map<string>((pp) => pp.key),
+                //   ],
+                //   disabledNames: [
+                //     ...info.rawProperties.map<string>((rp) => rp.name),
+                //     ...info.additionalProperties.map<string>((rp) => rp.name),
+                //     ...info.customProperties.map<string>((bp) => bp.name),
+                //     ...info.customConfigurations.map<string>((pp) => pp.name),
+                //   ],
+                //   defaultData: value,
+                //   noneEditableFields: ['key', 'description', 'name'],
+                //   valueAcceptNull: true,
+                // });
+                // if (!dataSource) {
+                //   return;
+                // }
+                // onChange && onChange({
+                //   ...info,
+                //   additionalProperties: info.additionalProperties.map((v, i) => {
+                //     if (i !== index) {
+                //       return v;
+                //     }
+                //     return dataSource;
+                //   }),
+                // });
+              }}
+              onEdit_alterableData={async (value) => {
+                // const index: number = info.customProperties.findIndex((p) => {
+                //   return p === value;
+                // });
+                // const dataSource: {
+                //   key: string;
+                //   name: string;
+                //   value: string;
+                //   description: string;
+                // } | null = await fResourcePropertyEditor({
                 //   disabledKeys: [
                 //     ...info.rawProperties.map<string>((rp) => rp.key),
                 //     ...info.additionalProperties.map<string>((rp) => rp.key),
@@ -878,35 +613,312 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
                 //   ],
                 //   defaultData: value,
                 // });
-                //
                 // if (!dataSource) {
                 //   return;
                 // }
                 //
                 // onChange && onChange({
                 //   ...info,
-                //   customConfigurations: info.customConfigurations.map((a, b) => {
-                //     if (b !== index) {
-                //       return a;
+                //   customProperties: info.customProperties.map((v, i) => {
+                //     if (i !== index) {
+                //       return v;
                 //     }
                 //     return dataSource;
                 //   }),
                 // });
               }}
-              onDelete={async (value) => {
+              onDelete_alterableData={async (value) => {
                 // onChange && onChange({
                 //   ...info,
-                //   customConfigurations: info.customConfigurations.filter((a) => {
-                //     return a.key !== value.key && a.name !== value.name;
+                //   customProperties: info.customProperties.filter((v, i) => {
+                //     return v.key !== value.key && v.name !== value.name;
                 //   }),
                 // });
               }}
             />
-          </>)
-        }
-      </div>
+          </div>
 
-      <div style={{ height: 5 }} />
+          <div style={{ height: 5 }} />
+          <div className={styles.block}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <FComponentsLib.FContentText
+                text={'可选配置'}
+                type={'highlight'}
+              />
+              {/*{*/}
+              {/*  info.customConfigurations.length < 30 && (*/}
+              {/*    // <FTooltip title={FI18n.i18nNext.t('resourceinfo_add_btn_info')}>*/}
+              {/*    <FTooltip title={FI18n.i18nNext.t('info_versionoptions')}>*/}
+              {/*      <div>*/}
+              {/*        <FComponentsLib.FTextBtn*/}
+              {/*          style={{ fontSize: 12, display: 'flex', alignItems: 'center', gap: 5 }}*/}
+              {/*          type='primary'*/}
+              {/*          onClick={async () => {*/}
+              {/*            const dataSource: {*/}
+              {/*              key: string;*/}
+              {/*              name: string;*/}
+              {/*              type: 'input' | 'select';*/}
+              {/*              input: string;*/}
+              {/*              select: string[];*/}
+              {/*              description: string;*/}
+              {/*            } | null = await fResourceOptionEditor({*/}
+              {/*              disabledKeys: [*/}
+              {/*                ...info.rawProperties.map<string>((rp) => rp.key),*/}
+              {/*                ...info.additionalProperties.map<string>((rp) => rp.key),*/}
+              {/*                ...info.customProperties.map<string>((bp) => bp.key),*/}
+              {/*                ...info.customConfigurations.map<string>((pp) => pp.key),*/}
+              {/*              ],*/}
+              {/*              disabledNames: [*/}
+              {/*                ...info.rawProperties.map<string>((rp) => rp.name),*/}
+              {/*                ...info.additionalProperties.map<string>((rp) => rp.name),*/}
+              {/*                ...info.customProperties.map<string>((bp) => bp.name),*/}
+              {/*                ...info.customConfigurations.map<string>((pp) => pp.name),*/}
+              {/*              ],*/}
+              {/*            });*/}
+
+              {/*            if (!dataSource) {*/}
+              {/*              return;*/}
+              {/*            }*/}
+
+              {/*            onChange && onChange({*/}
+              {/*              ...info,*/}
+              {/*              customConfigurations: [*/}
+              {/*                ...info.customConfigurations,*/}
+              {/*                dataSource,*/}
+              {/*              ],*/}
+              {/*            });*/}
+              {/*          }}*/}
+              {/*        >*/}
+              {/*          <FComponentsLib.FIcons.FConfiguration style={{ fontSize: 14 }} />*/}
+              {/*          <span>{FI18n.i18nNext.t('resourceoptions_add_btn')}</span>*/}
+              {/*        </FComponentsLib.FTextBtn>*/}
+              {/*      </div>*/}
+              {/*    </FTooltip>)*/}
+              {/*}*/}
+
+            </div>
+
+            {
+              // info.customConfigurations.length === 0 && (<>
+              0 === 0 && (<>
+                <div style={{ height: 10 }} />
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  {/*<span>{FI18n.i18nNext.t('resourceoptions_list_empty')}</span>*/}
+                  <FComponentsLib.FContentText
+                    text={FI18n.i18nNext.t('resourceoptions_list_empty')}
+                    type={'additional2'}
+                  />
+                </div>
+                <div style={{ height: 20 }} />
+              </>)
+            }
+
+            {
+              // info.customConfigurations.length > 0 && (<>
+              0 > 0 && (<>
+                <div style={{ height: 20 }} />
+                <FResourceOptions
+                  theme={'dark'}
+                  // dataSource={resourceVersionCreatorPage.customOptionsData}
+                  dataSource={[]}
+                  onEdit={async (value) => {
+                    // const index: number = info.customConfigurations.findIndex((p) => {
+                    //   return p === value;
+                    // });
+                    //
+                    // const dataSource: {
+                    //   key: string;
+                    //   name: string;
+                    //   type: 'input' | 'select';
+                    //   input: string;
+                    //   select: string[];
+                    //   description: string;
+                    // } | null = await fResourceOptionEditor({
+                    //   disabledKeys: [
+                    //     ...info.rawProperties.map<string>((rp) => rp.key),
+                    //     ...info.additionalProperties.map<string>((rp) => rp.key),
+                    //     ...info.customProperties.map<string>((bp) => bp.key),
+                    //     ...info.customConfigurations.map<string>((pp) => pp.key),
+                    //   ],
+                    //   disabledNames: [
+                    //     ...info.rawProperties.map<string>((rp) => rp.name),
+                    //     ...info.additionalProperties.map<string>((rp) => rp.name),
+                    //     ...info.customProperties.map<string>((bp) => bp.name),
+                    //     ...info.customConfigurations.map<string>((pp) => pp.name),
+                    //   ],
+                    //   defaultData: value,
+                    // });
+                    //
+                    // if (!dataSource) {
+                    //   return;
+                    // }
+                    //
+                    // onChange && onChange({
+                    //   ...info,
+                    //   customConfigurations: info.customConfigurations.map((a, b) => {
+                    //     if (b !== index) {
+                    //       return a;
+                    //     }
+                    //     return dataSource;
+                    //   }),
+                    // });
+                  }}
+                  onDelete={async (value) => {
+                    // onChange && onChange({
+                    //   ...info,
+                    //   customConfigurations: info.customConfigurations.filter((a) => {
+                    //     return a.key !== value.key && a.name !== value.name;
+                    //   }),
+                    // });
+                  }}
+                />
+              </>)
+            }
+          </div>
+
+          <div style={{ height: 5 }} />
+          <div className={styles.block}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <FComponentsLib.FContentText
+                text={'自定义信息'}
+                type={'highlight'}
+              />
+              {
+                // info.customConfigurations.length < 30 && (
+                0 < 30 && (
+                  // <FTooltip title={FI18n.i18nNext.t('resourceinfo_add_btn_info')}>
+                  // <FTooltip title={FI18n.i18nNext.t('info_versionoptions')}>
+                  //   <div>
+                  <FComponentsLib.FTextBtn
+                    style={{ fontSize: 12, display: 'flex', alignItems: 'center', gap: 5 }}
+                    type='primary'
+                    onClick={async () => {
+                      // const dataSource: {
+                      //   key: string;
+                      //   name: string;
+                      //   type: 'input' | 'select';
+                      //   input: string;
+                      //   select: string[];
+                      //   description: string;
+                      // } | null = await fResourceOptionEditor({
+                      //   disabledKeys: [
+                      //     ...info.rawProperties.map<string>((rp) => rp.key),
+                      //     ...info.additionalProperties.map<string>((rp) => rp.key),
+                      //     ...info.customProperties.map<string>((bp) => bp.key),
+                      //     ...info.customConfigurations.map<string>((pp) => pp.key),
+                      //   ],
+                      //   disabledNames: [
+                      //     ...info.rawProperties.map<string>((rp) => rp.name),
+                      //     ...info.additionalProperties.map<string>((rp) => rp.name),
+                      //     ...info.customProperties.map<string>((bp) => bp.name),
+                      //     ...info.customConfigurations.map<string>((pp) => pp.name),
+                      //   ],
+                      // });
+                      //
+                      // if (!dataSource) {
+                      //   return;
+                      // }
+                      //
+                      // onChange && onChange({
+                      //   ...info,
+                      //   customConfigurations: [
+                      //     ...info.customConfigurations,
+                      //     dataSource,
+                      //   ],
+                      // });
+                    }}
+                  >
+                    <FComponentsLib.FIcons.FConfiguration style={{ fontSize: 14 }} />
+                    <span>添加自定义信息</span>
+                  </FComponentsLib.FTextBtn>
+                  // </div>
+                  // </FTooltip>
+                )
+              }
+
+            </div>
+
+            {
+              // info.customConfigurations.length === 0 && (<>
+              0 === 0 && (<>
+                <div style={{ height: 10 }} />
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  {/*<span>{FI18n.i18nNext.t('resourceoptions_list_empty')}</span>*/}
+                  <FComponentsLib.FContentText
+                    text={FI18n.i18nNext.t('resourceoptions_list_empty')}
+                    type={'additional2'}
+                  />
+                </div>
+                <div style={{ height: 20 }} />
+              </>)
+            }
+
+            {
+              // info.customConfigurations.length > 0 && (<>
+              0 > 0 && (<>
+                <div style={{ height: 20 }} />
+                <FResourceOptions
+                  theme={'dark'}
+                  // dataSource={resourceVersionCreatorPage.customOptionsData}
+                  dataSource={[]}
+                  onEdit={async (value) => {
+                    // const index: number = info.customConfigurations.findIndex((p) => {
+                    //   return p === value;
+                    // });
+                    //
+                    // const dataSource: {
+                    //   key: string;
+                    //   name: string;
+                    //   type: 'input' | 'select';
+                    //   input: string;
+                    //   select: string[];
+                    //   description: string;
+                    // } | null = await fResourceOptionEditor({
+                    //   disabledKeys: [
+                    //     ...info.rawProperties.map<string>((rp) => rp.key),
+                    //     ...info.additionalProperties.map<string>((rp) => rp.key),
+                    //     ...info.customProperties.map<string>((bp) => bp.key),
+                    //     ...info.customConfigurations.map<string>((pp) => pp.key),
+                    //   ],
+                    //   disabledNames: [
+                    //     ...info.rawProperties.map<string>((rp) => rp.name),
+                    //     ...info.additionalProperties.map<string>((rp) => rp.name),
+                    //     ...info.customProperties.map<string>((bp) => bp.name),
+                    //     ...info.customConfigurations.map<string>((pp) => pp.name),
+                    //   ],
+                    //   defaultData: value,
+                    // });
+                    //
+                    // if (!dataSource) {
+                    //   return;
+                    // }
+                    //
+                    // onChange && onChange({
+                    //   ...info,
+                    //   customConfigurations: info.customConfigurations.map((a, b) => {
+                    //     if (b !== index) {
+                    //       return a;
+                    //     }
+                    //     return dataSource;
+                    //   }),
+                    // });
+                  }}
+                  onDelete={async (value) => {
+                    // onChange && onChange({
+                    //   ...info,
+                    //   customConfigurations: info.customConfigurations.filter((a) => {
+                    //     return a.key !== value.key && a.name !== value.name;
+                    //   }),
+                    // });
+                  }}
+                />
+              </>)
+            }
+          </div>
+          <div style={{ height: 5 }} />
+        </>)
+      }
+
       <div className={styles.block}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <FComponentsLib.FContentText text={FI18n.i18nNext.t('resource_short_description')} type={'highlight'} />
