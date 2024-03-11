@@ -314,62 +314,22 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
         </FUploadCover>
 
         <div>
-          {
-            exhibitInfoPage.side_ExhibitInputTitle === null && (<Space size={10}>
-              {
-                exhibitInfoPage.side_ExhibitTitle === '' && (<>
-                  <FComponentsLib.FTextBtn
-                    onClick={() => {
-                      onChangePInputTitle(exhibitInfoPage.side_ExhibitTitle);
-                    }}>
-                    <FComponentsLib.FIcons.FAdd />
-                  </FComponentsLib.FTextBtn>
-                  <FComponentsLib.FTextBtn
-                    onClick={() => {
-                      onChangePInputTitle(exhibitInfoPage.side_ExhibitTitle);
-                    }}>添加标题</FComponentsLib.FTextBtn>
-                </>)
-              }
-
-              {
-                exhibitInfoPage.side_ExhibitTitle !== '' && (<>
-                  <FComponentsLib.FContentText
-                    text={exhibitInfoPage.side_ExhibitTitle}
-                    style={{ overflowWrap: 'anywhere' }}
-                  />
-                  <FTooltip title={'编辑'}>
-                    <div>
-                      <FComponentsLib.FTextBtn
-                        onClick={() => {
-                          onChangePInputTitle(exhibitInfoPage.side_ExhibitTitle);
-                        }}>
-                        <FComponentsLib.FIcons.FEdit />
-                      </FComponentsLib.FTextBtn>
-                    </div>
-                  </FTooltip>
-                </>)
-              }
-            </Space>)
-          }
-
-          {
-            exhibitInfoPage.side_ExhibitInputTitle !== null && (<TitleInput
-              value={exhibitInfoPage.side_ExhibitTitle}
-              onOK={(value) => {
-                dispatch<UpdateBaseInfoAction>({
-                  type: 'exhibitInfoPage/updateBaseInfo',
-                  payload: {
-                    // side_ExhibitTitle: exhibitInfoPage.side_ExhibitInputTitle || '',
-                    side_ExhibitTitle: value,
-                  },
-                });
-                onChangePInputTitle(null);
-              }}
-              onCancel={() => {
-                onChangePInputTitle(null);
-              }}
-            />)
-          }
+          <TitleInput
+            value={exhibitInfoPage.side_ExhibitTitle}
+            onOK={(value) => {
+              dispatch<UpdateBaseInfoAction>({
+                type: 'exhibitInfoPage/updateBaseInfo',
+                payload: {
+                  // side_ExhibitTitle: exhibitInfoPage.side_ExhibitInputTitle || '',
+                  side_ExhibitTitle: value,
+                },
+              });
+              // onChangePInputTitle(null);
+            }}
+            // onCancel={() => {
+            //   onChangePInputTitle(null);
+            // }}
+          />
           <div style={{ height: 10 }} />
           <FComponentsLib.FTextBtn
             type='default'
@@ -1049,13 +1009,58 @@ interface TitleInputProps {
 
   onOK(value: string): void;
 
-  onCancel(): void;
+  // onCancel(): void;
 }
 
-function TitleInput({ value, onOK, onCancel }: TitleInputProps) {
+function TitleInput({ value, onOK }: TitleInputProps) {
 
+  const [$isEdit, set$isEdit, get$isEdit] = FUtil.Hook.useGetState<boolean>(false);
   const [$value, set$value, get$value] = FUtil.Hook.useGetState<string>(value);
   const [$valueError, set$valueError, get$valueError] = FUtil.Hook.useGetState<string>('');
+
+  function onEdit() {
+    set$isEdit(true);
+    set$value(value);
+  }
+
+  if (!$isEdit) {
+    return (<Space size={10}>
+      {
+        value === '' && (<>
+          <FComponentsLib.FTextBtn
+            onClick={() => {
+              onEdit();
+            }}>
+            <FComponentsLib.FIcons.FAdd />
+          </FComponentsLib.FTextBtn>
+          <FComponentsLib.FTextBtn
+            onClick={() => {
+              onEdit();
+            }}>添加标题</FComponentsLib.FTextBtn>
+        </>)
+      }
+
+      {
+        value !== '' && (<>
+          <FComponentsLib.FContentText
+            text={value}
+            style={{ overflowWrap: 'anywhere' }}
+          />
+          <FTooltip title={'编辑'}>
+            <div>
+              <FComponentsLib.FTextBtn
+                onClick={() => {
+                  onEdit();
+                }}>
+                <FComponentsLib.FIcons.FEdit />
+              </FComponentsLib.FTextBtn>
+            </div>
+          </FTooltip>
+        </>)
+      }
+    </Space>);
+  }
+
 
   return (<div>
     <Space size={10}>
@@ -1076,7 +1081,7 @@ function TitleInput({ value, onOK, onCancel }: TitleInputProps) {
         // size="small"
         // onClick={() => onChangePInputTitle(null)}
         onClick={() => {
-          onCancel();
+          set$isEdit(false);
         }}
       >{FI18n.i18nNext.t('btn_cancel')}</FComponentsLib.FRectBtn>
       <FComponentsLib.FRectBtn
@@ -1092,6 +1097,7 @@ function TitleInput({ value, onOK, onCancel }: TitleInputProps) {
           // });
           // onChangePInputTitle(null);
           onOK(get$value());
+          set$isEdit(false);
         }}
       >{FI18n.i18nNext.t('btn_save')}</FComponentsLib.FRectBtn>
     </Space>
