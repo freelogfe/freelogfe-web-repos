@@ -315,7 +315,7 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
 
         <div>
           {
-            exhibitInfoPage.side_ExhibitInputTitle === null && (<Space size={10} style={{ height: 38 }}>
+            exhibitInfoPage.side_ExhibitInputTitle === null && (<Space size={10}>
               {
                 exhibitInfoPage.side_ExhibitTitle === '' && (<>
                   <FComponentsLib.FTextBtn
