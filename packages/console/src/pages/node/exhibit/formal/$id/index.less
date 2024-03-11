@@ -11,6 +11,12 @@
     height: fit-content;
     width: 920px;
 
+    .block {
+      padding: 20px;
+      background-color: white;
+      border-radius: 6px;
+    }
+
     .onlineSwitch {
       height: 70px;
       background-color: #FFF;
@@ -49,10 +55,35 @@
       }
     }
 
-    .block {
-      padding: 20px;
-      background-color: white;
-      border-radius: 6px;
+
+    .cover {
+      width: 260px;
+      height: 195px;
+      position: relative;
+      display: flex;
+      cursor: pointer;
+
+      &:hover {
+        & > .coverEdit {
+          visibility: visible;
+        }
+      }
+
+      & > .coverEdit {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        color: white;
+        background: rgba(0, 0, 0, 0.4);
+        border-radius: 6px;
+        visibility: hidden;
+      }
     }
   }
 }

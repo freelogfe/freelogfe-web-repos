@@ -13,7 +13,7 @@ import {
   ChangeAction, ChangeVersionAction,
   FetchInfoAction,
   OnMountPageAction,
-  OnUnmountPageAction,
+  OnUnmountPageAction, UpdateBaseInfoAction,
 } from '@/models/exhibitInfoPage';
 import FTooltip from '@/components/FTooltip';
 import { RouteComponentProps } from 'react-router';
@@ -38,6 +38,8 @@ import {
   OnClick_EditIntroductionBtn_Action, OnClick_SaveIntroductionBtn_Action,
 } from '@/models/resourceInfoPage';
 import FDropdownMenu from '@/components/FDropdownMenu';
+import fMessage from '@/components/fMessage';
+import FUploadCover from '@/components/FUploadCover';
 
 interface PresentableProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -273,12 +275,35 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
 
       <div style={{ height: 40 }} />
       <Space size={20} style={{ alignItems: 'flex-start' }}>
-        <FCoverImage
-          src={exhibitInfoPage.side_ExhibitCover || ''}
-          // src={''}
-          width={260}
-          style={{ borderRadius: 6 }}
-        />
+        <FUploadCover
+          use={'exhibit'}
+          onError={(err) => {
+            fMessage(err, 'error');
+          }}
+          onUploadSuccess={(url: string) => {
+            // console.log(url, 'url@#$!@#$@#@#$@#');
+            dispatch<UpdateBaseInfoAction>({
+              type: 'exhibitInfoPage/updateBaseInfo',
+              payload: {
+                side_ExhibitCover: url,
+              },
+            });
+          }}>
+          <div className={styles.cover}>
+            <FCoverImage
+              src={exhibitInfoPage.side_ExhibitCover || ''}
+              // src={''}
+              width={260}
+              style={{ borderRadius: 6 }}
+            />
+            <div className={styles.coverEdit}>
+              <FComponentsLib.FIcons.FEdit style={{ fontSize: 32 }} />
+              <div style={{ height: 10 }} />
+              <div>{FI18n.i18nNext.t('btn_edit_cover')}</div>
+            </div>
+          </div>
+        </FUploadCover>
+
         <div>
           <Space size={10} style={{ height: 38 }}>
             {
