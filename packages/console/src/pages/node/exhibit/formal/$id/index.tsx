@@ -14,6 +14,8 @@ import {
   FetchInfoAction, OnChange_Side_InputTitle_Action,
   OnMountPageAction,
   OnUnmountPageAction, UpdateBaseInfoAction,
+  // OnClick_SaveIntroductionBtn_Action,
+  OnSave_Side_ExhibitIntroduction_Action,
 } from '@/models/exhibitInfoPage';
 import FTooltip from '@/components/FTooltip';
 import { RouteComponentProps } from 'react-router';
@@ -32,11 +34,11 @@ import fResourcePropertyEditor from '@/components/fResourcePropertyEditor';
 import FResourceProperties from '@/components/FResourceProperties';
 import fResourceOptionEditor from '@/components/fResourceOptionEditor';
 import FResourceOptions from '@/components/FResourceOptions';
-import {
-  OnChange_IntroductionEditor_Action, OnClick_AddIntroductionBtn_Action,
-  OnClick_CancelEditIntroductionBtn_Action,
-  OnClick_EditIntroductionBtn_Action, OnClick_SaveIntroductionBtn_Action,
-} from '@/models/resourceInfoPage';
+// import {
+//   OnChange_IntroductionEditor_Action, OnClick_AddIntroductionBtn_Action,
+//   OnClick_CancelEditIntroductionBtn_Action,
+//   OnClick_EditIntroductionBtn_Action, OnClick_SaveIntroductionBtn_Action,
+// } from '@/models/resourceInfoPage';
 import FDropdownMenu from '@/components/FDropdownMenu';
 import fMessage from '@/components/fMessage';
 import FUploadCover from '@/components/FUploadCover';
@@ -879,98 +881,17 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
         </>)
       }
 
-      <div className={styles.block}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <FComponentsLib.FContentText text={FI18n.i18nNext.t('resource_short_description')} type={'highlight'} />
-
-          <Space size={10}>
-            {
-              // resourceInfoPage.resourceInfo.intro !== '' && !resourceInfoPage.introduction_IsEditing
-              0 === 0
-              && (<FComponentsLib.FTextBtn
-                style={{ fontSize: 12 }}
-                onClick={() => {
-                  // onChangeIsEditing(true);
-                  dispatch<OnClick_EditIntroductionBtn_Action>({
-                    type: 'resourceInfoPage/onClick_EditIntroductionBtn',
-                  });
-                }}
-              >{FI18n.i18nNext.t('edit')}</FComponentsLib.FTextBtn>)
-            }
-            {
-              // resourceInfoPage.introduction_IsEditing && (<>
-              0 === 0 && (<>
-                <FComponentsLib.FTextBtn
-                  style={{ fontSize: 12 }}
-                  type='default'
-                  onClick={() => {
-                    // onChangeIsEditing(false);
-                    dispatch<OnClick_CancelEditIntroductionBtn_Action>({
-                      type: 'resourceInfoPage/onClick_CancelEditIntroductionBtn',
-                    });
-                  }}
-                >{FI18n.i18nNext.t('cancel')}</FComponentsLib.FTextBtn>
-                <FComponentsLib.FTextBtn
-                  style={{ fontSize: 12 }}
-                  onClick={() => {
-                    dispatch<OnClick_SaveIntroductionBtn_Action>({
-                      type: 'resourceInfoPage/onClick_SaveIntroductionBtn',
-                    });
-                  }}
-                  // disabled={resourceInfoPage.introduction_EditorText_Error !== ''}
-                >{FI18n.i18nNext.t('save')}</FComponentsLib.FTextBtn>
-              </>)
-            }
-          </Space>
-        </div>
-
-        <div style={{ height: 20 }} />
-        {
-          0 === 0 && (<div>
-            <FComponentsLib.FInput.FMultiLine
-              // value={resourceInfoPage.introduction_EditorText}
-              value={''}
-              lengthLimit={200}
-              onChange={(e) => {
-                dispatch<OnChange_IntroductionEditor_Action>({
-                  type: 'resourceInfoPage/onChange_IntroductionEditor',
-                  payload: {
-                    value: e.target.value,
-                  },
-                });
-              }}
-            />
-
-            {/*{*/}
-            {/*  resourceInfoPage.introduction_EditorText_Error !== '' && (<>*/}
-            {/*    <div style={{ height: 5 }} />*/}
-            {/*    <div style={{ color: '#EE4040' }}>{resourceInfoPage.introduction_EditorText_Error}</div>*/}
-            {/*  </>)*/}
-            {/*}*/}
-
-          </div>)
-        }
-
-        {
-          // resourceInfoPage.resourceInfo.intro !== ''
-          0 !== 0
-            ? (<div className={styles.aboutPanel}>
-              {/*<pre>{resourceInfoPage.resourceInfo.intro}</pre>*/}
-              <pre>{'12345'}</pre>
-            </div>)
-            : (<FComponentsLib.FRectBtn
-              type='default'
-              onClick={() => {
-                dispatch<OnClick_AddIntroductionBtn_Action>({
-                  type: 'resourceInfoPage/onClick_AddIntroductionBtn',
-                });
-                // onChangeIsEditing(true);
-              }}
-            >
-              添加简介
-            </FComponentsLib.FRectBtn>)
-        }
-      </div>
+      <IntroductionInput
+        value={exhibitInfoPage.side_ExhibitIntroduction}
+        onOK={(value) => {
+          dispatch<OnSave_Side_ExhibitIntroduction_Action>({
+            type: 'exhibitInfoPage/onSave_Side_ExhibitIntroduction',
+            payload: {
+              value,
+            },
+          });
+        }}
+      />
 
       <div style={{ height: 5 }} />
       <div className={styles.block}>
@@ -1106,6 +1027,128 @@ function TitleInput({ value, onOK }: TitleInputProps) {
       $valueError !== '' && (<>
         <div style={{ height: 5 }} />
         <div style={{ color: '#EE4040' }}>{$valueError}</div>
+      </>)
+    }
+  </div>);
+}
+
+interface IntroductionInputProps {
+  value: string;
+
+  onOK(value: string): void;
+}
+
+function IntroductionInput({ value, onOK }: IntroductionInputProps) {
+  const [$isEdit, set$isEdit, get$isEdit] = FUtil.Hook.useGetState<boolean>(false);
+  const [$value, set$value, get$value] = FUtil.Hook.useGetState<string>(value);
+  const [$valueError, set$valueError, get$valueError] = FUtil.Hook.useGetState<string>('');
+
+  function onEdit() {
+    set$isEdit(true);
+    set$value(value);
+  }
+
+  return (<div className={styles.block}>
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      <FComponentsLib.FContentText text={FI18n.i18nNext.t('resource_short_description')} type={'highlight'} />
+
+      <Space size={10}>
+        {
+          // resourceInfoPage.resourceInfo.intro !== '' && !resourceInfoPage.introduction_IsEditing
+          !$isEdit && (<FComponentsLib.FTextBtn
+            style={{ fontSize: 12 }}
+            onClick={() => {
+              // onChangeIsEditing(true);
+              // dispatch<OnClick_EditIntroductionBtn_Action>({
+              //   type: 'resourceInfoPage/onClick_EditIntroductionBtn',
+              // });
+              // set$isEdit(true);
+              onEdit();
+            }}
+          >{FI18n.i18nNext.t('edit')}</FComponentsLib.FTextBtn>)
+        }
+        {
+          // resourceInfoPage.introduction_IsEditing && (<>
+          $isEdit && (<>
+            <FComponentsLib.FTextBtn
+              style={{ fontSize: 12 }}
+              type='default'
+              onClick={() => {
+                // onChangeIsEditing(false);
+                // dispatch<OnClick_CancelEditIntroductionBtn_Action>({
+                //   type: 'resourceInfoPage/onClick_CancelEditIntroductionBtn',
+                // });
+                set$isEdit(false);
+              }}
+            >{FI18n.i18nNext.t('cancel')}</FComponentsLib.FTextBtn>
+            <FComponentsLib.FTextBtn
+              style={{ fontSize: 12 }}
+              onClick={() => {
+                // dispatch<OnClick_SaveIntroductionBtn_Action>({
+                //   type: 'resourceInfoPage/onClick_SaveIntroductionBtn',
+                // });
+                onOK(get$value());
+                set$isEdit(false);
+              }}
+              // disabled={resourceInfoPage.introduction_EditorText_Error !== ''}
+            >{FI18n.i18nNext.t('save')}</FComponentsLib.FTextBtn>
+          </>)
+        }
+      </Space>
+    </div>
+
+    <div style={{ height: 20 }} />
+    {
+      $isEdit && (<div>
+        <FComponentsLib.FInput.FMultiLine
+          // value={resourceInfoPage.introduction_EditorText}
+          value={$value}
+          lengthLimit={200}
+          onChange={(e) => {
+            // dispatch<OnChange_IntroductionEditor_Action>({
+            //   type: 'resourceInfoPage/onChange_IntroductionEditor',
+            //   payload: {
+            //     value: e.target.value,
+            //   },
+            // });
+            set$value(e.target.value);
+          }}
+        />
+
+        {
+          $valueError !== '' && (<>
+            <div style={{ height: 5 }} />
+            <div style={{ color: '#EE4040' }}>{$valueError}</div>
+          </>)
+        }
+
+      </div>)
+    }
+
+    {
+      // resourceInfoPage.resourceInfo.intro !== ''
+      !$isEdit && (<>
+        {
+          value !== ''
+            ? (<div className={styles.aboutPanel}>
+              {/*<pre>{resourceInfoPage.resourceInfo.intro}</pre>*/}
+              <pre>{value}</pre>
+            </div>)
+            : (<FComponentsLib.FRectBtn
+              type='default'
+              onClick={() => {
+                // dispatch<OnClick_AddIntroductionBtn_Action>({
+                //   type: 'resourceInfoPage/onClick_AddIntroductionBtn',
+                // });
+                // onChangeIsEditing(true);
+                // set$isEdit(true);
+                // onOK(get$value());
+                onEdit();
+              }}
+            >
+              添加简介
+            </FComponentsLib.FRectBtn>)
+        }
       </>)
     }
   </div>);

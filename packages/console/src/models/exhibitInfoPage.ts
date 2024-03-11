@@ -8,6 +8,7 @@ import { history } from 'umi';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
 import FComponentsLib from '@freelog/components-lib';
 import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
+import { valid } from 'semver';
 
 export interface ExhibitInfoPageModelState {
   pageLoading: boolean;
@@ -197,6 +198,9 @@ export interface OnChange_Side_ExhibitInputIntroduction_Action extends AnyAction
 
 export interface OnSave_Side_ExhibitIntroduction_Action extends AnyAction {
   type: 'exhibitInfoPage/onSave_Side_ExhibitIntroduction';
+  payload: {
+    value: string;
+  };
 }
 
 export interface OnClick_Side_InheritOptions_ResetBtn_Action extends AnyAction {
@@ -983,7 +987,7 @@ const Model: ExhibitInfoPageModelType = {
         },
       });
     },
-    * onSave_Side_ExhibitIntroduction({}: OnSave_Side_ExhibitIntroduction_Action, {
+    * onSave_Side_ExhibitIntroduction({ payload }: OnSave_Side_ExhibitIntroduction_Action, {
       select,
       call,
       put,
@@ -994,14 +998,19 @@ const Model: ExhibitInfoPageModelType = {
 
       const params: Parameters<typeof FServiceAPI.Exhibit.updatePresentable>[0] = {
         presentableId: exhibitInfoPage.exhibit_ID,
-        // @ts-ignore
-        presentableIntro: exhibitInfoPage.side_ExhibitInputIntroduction,
+        // presentableIntro: exhibitInfoPage.side_ExhibitInputIntroduction,
+        presentableIntro: payload.value,
       };
-      yield call(FServiceAPI.Exhibit.updatePresentable, params);
+      const { ret, errCode, msg } = yield call(FServiceAPI.Exhibit.updatePresentable, params);
+      if (ret !== 0 || errCode !== 0) {
+        fMessage(msg, 'error');
+        return;
+      }
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          side_ExhibitIntroduction: exhibitInfoPage.side_ExhibitInputIntroduction || '',
+          // side_ExhibitIntroduction: exhibitInfoPage.side_ExhibitInputIntroduction || '',
+          side_ExhibitIntroduction: payload.value,
         },
       });
     },
