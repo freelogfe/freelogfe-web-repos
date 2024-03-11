@@ -392,13 +392,22 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
           </FComponentsLib.FTextBtn>
           <div style={{ height: 15 }} />
           <FResourceLabelEditor2
-            style={{ minHeight: 114, width: 640, backgroundColor: '#fff', alignItems: 'flex-start' }}
-            value={[]}
+            style={{ minHeight: 70, width: 640, backgroundColor: '#fff', alignItems: 'flex-start' }}
+            // value={[]}
+            // onChange={(value) => {
+            //   // onChange && onChange({
+            //   //   ...info,
+            //   //   resourceLabels: value,
+            //   // });
+            // }}
+            value={exhibitInfoPage.side_ExhibitTags}
             onChange={(value) => {
-              // onChange && onChange({
-              //   ...info,
-              //   resourceLabels: value,
-              // });
+              dispatch<UpdateBaseInfoAction>({
+                type: 'exhibitInfoPage/updateBaseInfo',
+                payload: {
+                  side_ExhibitTags: value,
+                },
+              });
             }}
             // onClickApply={onClickApplyLabels}
           />
