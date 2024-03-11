@@ -809,7 +809,11 @@ const Model: ExhibitInfoPageModelType = {
         presentableIntro: payload.side_ExhibitInputIntroduction || undefined,
         coverImages: payload.side_ExhibitCover ? [payload.side_ExhibitCover] : undefined,
       };
-      yield call(FServiceAPI.Exhibit.updatePresentable, params);
+      const { ret, errCode, msg } = yield call(FServiceAPI.Exhibit.updatePresentable, params);
+      if (ret !== 0 || errCode !== 0) {
+        fMessage(msg, 'error');
+        return;
+      }
       yield put<ChangeAction>({
         type: 'change',
         payload,
