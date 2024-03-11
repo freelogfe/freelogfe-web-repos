@@ -371,7 +371,25 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
             />)
           }
           <div style={{ height: 10 }} />
-          <FComponentsLib.FContentText type={'additional2'} text={'来自于 yyy/freelog白皮书'} />
+          <FComponentsLib.FTextBtn
+            type='default'
+            onClick={() => {
+              window.open(FUtil.LinkTo.resourceDetails({ resourceID: exhibitInfoPage.side_ResourceID }));
+            }}
+          >
+            <Space size={5}>
+              <FComponentsLib.FContentText
+                type={'additional2'}
+                text={'来自于'}
+              />
+              <FComponentsLib.FContentText
+                type={'additional2'}
+                style={{ width: 220 }}
+                singleRow
+                text={exhibitInfoPage.side_ResourceName}
+              />
+            </Space>
+          </FComponentsLib.FTextBtn>
           <div style={{ height: 15 }} />
           <FResourceLabelEditor2
             style={{ minHeight: 114, width: 640, backgroundColor: '#fff', alignItems: 'flex-start' }}
