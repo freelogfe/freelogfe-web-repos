@@ -9,6 +9,7 @@ import { PolicyFullInfo_Type } from '@/type/contractTypes';
 import FComponentsLib from '@freelog/components-lib';
 import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
 import { valid } from 'semver';
+import ex from 'umi/dist';
 
 export interface ExhibitInfoPageModelState {
   pageLoading: boolean;
@@ -224,6 +225,13 @@ export interface OnBlur_Side_InheritOptions_ValueInput_Action extends AnyAction 
     index: number;
   };
 }
+
+// export interface OnBlur_Side_InheritOptions_ValueInput_Action extends AnyAction {
+//   type: 'exhibitInfoPage/onBlur_Side_InheritOptions_ValueInput';
+//   payload: {
+//     index: number;
+//   };
+// }
 
 export interface OnClick_Side_CustomOptions_DeleteBtn_Action extends AnyAction {
   type: 'exhibitInfoPage/onClick_Side_CustomOptions_DeleteBtn';
@@ -1556,13 +1564,13 @@ async function handleFinalResolveResource({
   });
 }
 
-interface UpdateRewriteParams {
+export interface UpdateRewriteParams {
   exhibit_ID: string;
   side_InheritOptions: ExhibitInfoPageModelState['side_InheritOptions'];
   side_CustomOptions: ExhibitInfoPageModelState['side_CustomOptions'];
 }
 
-async function updateRewrite({
+export async function updateRewrite({
                                exhibit_ID,
                                side_InheritOptions,
                                side_CustomOptions,

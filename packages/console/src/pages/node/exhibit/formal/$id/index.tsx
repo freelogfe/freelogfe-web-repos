@@ -15,7 +15,7 @@ import {
   OnMountPageAction,
   OnUnmountPageAction, UpdateBaseInfoAction,
   // OnClick_SaveIntroductionBtn_Action,
-  OnSave_Side_ExhibitIntroduction_Action,
+  OnSave_Side_ExhibitIntroduction_Action, UpdateRewriteParams, updateRewrite,
 } from '@/models/exhibitInfoPage';
 import FTooltip from '@/components/FTooltip';
 import { RouteComponentProps } from 'react-router';
@@ -662,7 +662,7 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
 
             {
               // info.customConfigurations.length === 0 && (<>
-              0 === 0 && (<>
+              exhibitInfoPage.side_InheritOptions.length === 0 && (<>
                 <div style={{ height: 10 }} />
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   {/*<span>{FI18n.i18nNext.t('resourceoptions_list_empty')}</span>*/}
@@ -677,43 +677,89 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
 
             {
               // info.customConfigurations.length > 0 && (<>
-              0 > 0 && (<>
+              exhibitInfoPage.side_InheritOptions.length > 0 && (<>
                 <div style={{ height: 20 }} />
                 <FResourceOptions
                   theme={'dark'}
                   // dataSource={resourceVersionCreatorPage.customOptionsData}
-                  dataSource={[]}
+                  dataSource={exhibitInfoPage.side_InheritOptions.map((o) => {
+                    return {
+                      key: o.key,
+                      name: o.name,
+                      description: o.description,
+                      type: o.type,
+                      input: o.value,
+                      select: o.options,
+                    };
+                  })}
                   onEdit={async (value) => {
-                    // const index: number = info.customConfigurations.findIndex((p) => {
-                    //   return p === value;
-                    // });
-                    //
-                    // const dataSource: {
-                    //   key: string;
-                    //   name: string;
-                    //   type: 'input' | 'select';
-                    //   input: string;
-                    //   select: string[];
-                    //   description: string;
-                    // } | null = await fResourceOptionEditor({
-                    //   disabledKeys: [
-                    //     ...info.rawProperties.map<string>((rp) => rp.key),
-                    //     ...info.additionalProperties.map<string>((rp) => rp.key),
-                    //     ...info.customProperties.map<string>((bp) => bp.key),
-                    //     ...info.customConfigurations.map<string>((pp) => pp.key),
-                    //   ],
-                    //   disabledNames: [
-                    //     ...info.rawProperties.map<string>((rp) => rp.name),
-                    //     ...info.additionalProperties.map<string>((rp) => rp.name),
-                    //     ...info.customProperties.map<string>((bp) => bp.name),
-                    //     ...info.customConfigurations.map<string>((pp) => pp.name),
-                    //   ],
-                    //   defaultData: value,
-                    // });
-                    //
-                    // if (!dataSource) {
-                    //   return;
-                    // }
+                    const index: number = exhibitInfoPage.side_InheritOptions.findIndex((p) => {
+                      return p.key === value.key;
+                    });
+
+                    const dataSource: {
+                      key: string;
+                      name: string;
+                      type: 'input' | 'select';
+                      input: string;
+                      select: string[];
+                      description: string;
+                    } | null = await fResourceOptionEditor({
+                      noneEditableFields: ['key', 'name', 'description', 'type'],
+                      disabledKeys: [
+                        // ...info.rawProperties.map<string>((rp) => rp.key),
+                        // ...info.additionalProperties.map<string>((rp) => rp.key),
+                        // ...info.customProperties.map<string>((bp) => bp.key),
+                        // ...info.customConfigurations.map<string>((pp) => pp.key),
+                      ],
+                      disabledNames: [
+                        // ...info.rawProperties.map<string>((rp) => rp.name),
+                        // ...info.additionalProperties.map<string>((rp) => rp.name),
+                        // ...info.customProperties.map<string>((bp) => bp.name),
+                        // ...info.customConfigurations.map<string>((pp) => pp.name),
+                      ],
+                      defaultData: value,
+                    });
+
+                    if (!dataSource) {
+                      return;
+                    }
+                    console.log(dataSource, 'dataSource sdifjlskdjflksdjlkfjl');
+                    const side_InheritOptions: ExhibitInfoPageModelState['side_InheritOptions'] = exhibitInfoPage.side_InheritOptions.map<ExhibitInfoPageModelState['side_InheritOptions'][number]>((io, i) => {
+                      if (i !== index) {
+                        return io;
+                      }
+                      // const valueInputError: string = io.valueInput.length > 140 ? '不超过140个字符' : '';
+                      // currentHasError = valueInputError !== '';
+                      return {
+                        ...io,
+                        value: dataSource.input,
+                        options: dataSource.select,
+                      };
+                    });
+                    console.log(side_InheritOptions, 'side_InheritOptions sdifjhsldjflksdjlkfjlk');
+
+                    const params: UpdateRewriteParams = {
+                      exhibit_ID: exhibitInfoPage.exhibit_ID,
+                      side_InheritOptions: side_InheritOptions,
+                      side_CustomOptions: exhibitInfoPage.side_CustomOptions,
+                    };
+                    const { data, errCode, ret, msg }: {
+                      data: boolean;
+                      errCode: number;
+                      msg: string;
+                      ret: number;
+                    } = await updateRewrite(params);
+                    if (ret !== 0 || errCode !== 0 || !data) {
+                      return fMessage(msg, 'error');
+                    }
+                    dispatch<ChangeAction>({
+                      type: 'exhibitInfoPage/change',
+                      payload: {
+                        side_InheritOptions: side_InheritOptions,
+                      },
+                    });
+                    fMessage('自定义选项已更新');
                     //
                     // onChange && onChange({
                     //   ...info,
@@ -725,14 +771,14 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
                     //   }),
                     // });
                   }}
-                  onDelete={async (value) => {
-                    // onChange && onChange({
-                    //   ...info,
-                    //   customConfigurations: info.customConfigurations.filter((a) => {
-                    //     return a.key !== value.key && a.name !== value.name;
-                    //   }),
-                    // });
-                  }}
+                  // onDelete={async (value) => {
+                  //   onChange && onChange({
+                  //     ...info,
+                  //     customConfigurations: info.customConfigurations.filter((a) => {
+                  //       return a.key !== value.key && a.name !== value.name;
+                  //     }),
+                  //   });
+                  // }}
                 />
               </>)
             }

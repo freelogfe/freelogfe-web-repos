@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
 import FComponentsLib from '@freelog/components-lib';
-// import FTooltip from '@/components/FTooltip';
 import FResourcePropertyAndOptionTipPopover from '@/components/FResourcePropertyAndOptionTipPopover';
 
 interface FResourceOptionsProps {
