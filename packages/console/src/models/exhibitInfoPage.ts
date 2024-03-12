@@ -61,10 +61,10 @@ export interface ExhibitInfoPageModelState {
 
   side_ExhibitCover: string;
   side_ExhibitTitle: string;
-  side_ExhibitInputTitle: string | null;
-  side_ExhibitInputTitle_Error: string;
+  // side_ExhibitInputTitle: string | null;
+  // side_ExhibitInputTitle_Error: string;
   side_ExhibitIntroduction: string;
-  side_ExhibitInputIntroduction: string | null;
+  // side_ExhibitInputIntroduction: string | null;
   side_ExhibitTags: string[];
   side_AllVersions: string[];
   side_Version: string;
@@ -183,19 +183,19 @@ export interface UpdateContractUsedAction {
   };
 }
 
-export interface OnChange_Side_InputTitle_Action extends AnyAction {
-  type: 'exhibitInfoPage/onChange_Side_InputTitle';
-  payload: {
-    value: string | null;
-  };
-}
+// export interface OnChange_Side_InputTitle_Action extends AnyAction {
+//   type: 'exhibitInfoPage/onChange_Side_InputTitle';
+//   payload: {
+//     value: string | null;
+//   };
+// }
 
-export interface OnChange_Side_ExhibitInputIntroduction_Action extends AnyAction {
-  type: 'exhibitInfoPage/onChange_Side_ExhibitInputIntroduction';
-  payload: {
-    value: string | null;
-  };
-}
+// export interface OnChange_Side_ExhibitInputIntroduction_Action extends AnyAction {
+//   type: 'exhibitInfoPage/onChange_Side_ExhibitInputIntroduction';
+//   payload: {
+//     value: string | null;
+//   };
+// }
 
 export interface OnSave_Side_ExhibitIntroduction_Action extends AnyAction {
   type: 'exhibitInfoPage/onSave_Side_ExhibitIntroduction';
@@ -302,8 +302,8 @@ export interface ExhibitInfoPageModelType {
     changeVersion: (action: ChangeVersionAction, effects: EffectsCommandMap) => void;
     updateContractUsed: (action: UpdateContractUsedAction, effects: EffectsCommandMap) => void;
 
-    onChange_Side_InputTitle: (action: OnChange_Side_InputTitle_Action, effects: EffectsCommandMap) => void;
-    onChange_Side_ExhibitInputIntroduction: (action: OnChange_Side_ExhibitInputIntroduction_Action, effects: EffectsCommandMap) => void;
+    // onChange_Side_InputTitle: (action: OnChange_Side_InputTitle_Action, effects: EffectsCommandMap) => void;
+    // onChange_Side_ExhibitInputIntroduction: (action: OnChange_Side_ExhibitInputIntroduction_Action, effects: EffectsCommandMap) => void;
     onSave_Side_ExhibitIntroduction: (action: OnSave_Side_ExhibitIntroduction_Action, effects: EffectsCommandMap) => void;
     onClick_Side_InheritOptions_ResetBtn: (action: OnClick_Side_InheritOptions_ResetBtn_Action, effects: EffectsCommandMap) => void;
     onChange_Side_InheritOptions_ValueInput: (action: OnChange_Side_InheritOptions_ValueInput_Action, effects: EffectsCommandMap) => void;
@@ -352,10 +352,10 @@ const initStates: ExhibitInfoPageModelState = {
 
   side_ExhibitCover: '',
   side_ExhibitTitle: '',
-  side_ExhibitInputTitle: null,
-  side_ExhibitInputTitle_Error: '',
+  // side_ExhibitInputTitle: null,
+  // side_ExhibitInputTitle_Error: '',
   side_ExhibitIntroduction: '',
-  side_ExhibitInputIntroduction: null,
+  // side_ExhibitInputIntroduction: null,
   side_ExhibitTags: [],
   side_AllVersions: [],
   side_Version: '',
@@ -978,23 +978,23 @@ const Model: ExhibitInfoPageModelType = {
       });
     },
 
-    * onChange_Side_InputTitle({ payload }: OnChange_Side_InputTitle_Action, { put }: EffectsCommandMap) {
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          side_ExhibitInputTitle: payload.value,
-          side_ExhibitInputTitle_Error: (payload.value || '').length > 100 ? '不能超过100个字符' : '',
-        },
-      });
-    },
-    * onChange_Side_ExhibitInputIntroduction({ payload }: OnChange_Side_ExhibitInputIntroduction_Action, { put }: EffectsCommandMap) {
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          side_ExhibitInputIntroduction: payload.value,
-        },
-      });
-    },
+    // * onChange_Side_InputTitle({ payload }: OnChange_Side_InputTitle_Action, { put }: EffectsCommandMap) {
+    //   yield put<ChangeAction>({
+    //     type: 'change',
+    //     payload: {
+    //       side_ExhibitInputTitle: payload.value,
+    //       side_ExhibitInputTitle_Error: (payload.value || '').length > 100 ? '不能超过100个字符' : '',
+    //     },
+    //   });
+    // },
+    // * onChange_Side_ExhibitInputIntroduction({ payload }: OnChange_Side_ExhibitInputIntroduction_Action, { put }: EffectsCommandMap) {
+    //   yield put<ChangeAction>({
+    //     type: 'change',
+    //     payload: {
+    //       side_ExhibitInputIntroduction: payload.value,
+    //     },
+    //   });
+    // },
     * onSave_Side_ExhibitIntroduction({ payload }: OnSave_Side_ExhibitIntroduction_Action, {
       select,
       call,

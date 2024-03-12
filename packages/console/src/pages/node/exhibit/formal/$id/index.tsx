@@ -11,7 +11,7 @@ import {
   ChangeAction,
   ChangeVersionAction,
   FetchInfoAction,
-  OnChange_Side_InputTitle_Action,
+  // OnChange_Side_InputTitle_Action,
   OnMountPageAction,
   OnUnmountPageAction,
   UpdateBaseInfoAction,
@@ -85,14 +85,14 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
     });
   }
 
-  function onChangePInputTitle(value: string | null) {
-    dispatch<OnChange_Side_InputTitle_Action>({
-      type: 'exhibitInfoPage/onChange_Side_InputTitle',
-      payload: {
-        value: value,
-      },
-    });
-  }
+  // function onChangePInputTitle(value: string | null) {
+  //   dispatch<OnChange_Side_InputTitle_Action>({
+  //     type: 'exhibitInfoPage/onChange_Side_InputTitle',
+  //     payload: {
+  //       value: value,
+  //     },
+  //   });
+  // }
 
   return <div className={styles.Presentable}>
     <div className={styles.content}>
