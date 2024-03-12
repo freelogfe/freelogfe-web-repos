@@ -1,11 +1,9 @@
 import * as React from 'react';
 import styles from './index.less';
-import FSwitch from '@/components/FSwitch';
-import { message, Space, Switch } from 'antd';
+import { Space, Switch } from 'antd';
 import Policies from './Policies';
 import Contracts from './Contracts';
 import Viewports from './Viewports';
-import Side from './Side';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import { ConnectState, ExhibitInfoPageModelState } from '@/models/connect';
@@ -17,40 +15,28 @@ import {
   OnMountPageAction,
   OnUnmountPageAction,
   UpdateBaseInfoAction,
-  // OnClick_SaveIntroductionBtn_Action,
   OnSave_Side_ExhibitIntroduction_Action,
-  UpdateRewriteParams,
-  updateRewrite,
   OnClick_Side_InheritOptions_ResetBtn_Action,
   OnChange_Side_InheritOptions_ValueInput_Action,
   OnBlur_Side_InheritOptions_ValueInput_Action,
   OnConfirm_CustomOptionDrawer_Action,
   OnClick_Side_CustomOptions_DeleteBtn_Action,
   OnChange_Side_CustomOptions_ValueInput_Action,
-  OnBlur_Side_CustomOptions_ValueInput_Action, OnConfirm_AddCustomOptionsDrawer_Action,
+  OnBlur_Side_CustomOptions_ValueInput_Action,
+  OnConfirm_AddCustomOptionsDrawer_Action,
 } from '@/models/exhibitInfoPage';
 import FTooltip from '@/components/FTooltip';
 import { RouteComponentProps } from 'react-router';
 import { FUtil, FI18n, FServiceAPI } from '@freelog/tools-lib';
 import * as AHooks from 'ahooks';
-import FLoadingTip from '@/components/FLoadingTip';
-import { Helmet } from 'react-helmet';
 import FComponentsLib from '@freelog/components-lib';
-import useUrlState from '@ahooksjs/use-url-state';
 import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
 import { onlineExhibit } from '@/pages/node/utils/tools';
 import { fOnOffFeedback } from '@/components/fOnOffFeedback';
 import FCoverImage from '@/components/FCoverImage';
 import FResourceLabelEditor2 from '@/components/FResourceLabelEditor2';
-import fResourcePropertyEditor from '@/components/fResourcePropertyEditor';
 import FResourceProperties from '@/components/FResourceProperties';
 import fResourceOptionEditor from '@/components/fResourceOptionEditor';
-import FResourceOptions from '@/components/FResourceOptions';
-// import {
-//   OnChange_IntroductionEditor_Action, OnClick_AddIntroductionBtn_Action,
-//   OnClick_CancelEditIntroductionBtn_Action,
-//   OnClick_EditIntroductionBtn_Action, OnClick_SaveIntroductionBtn_Action,
-// } from '@/models/resourceInfoPage';
 import FDropdownMenu from '@/components/FDropdownMenu';
 import fMessage from '@/components/fMessage';
 import FUploadCover from '@/components/FUploadCover';
@@ -161,18 +147,6 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
                 }
                 {
                   !exhibitInfoPage.exhibit_Online && (<>
-                    {/*<span*/}
-                    {/*  style={{ color: exhibitInfoPage.exhibit_Online ? '#42C28C' : '#666' }}>{FI18n.i18nNext.t('toggle_activate_theme')}</span>*/}
-
-                    {/*<FSwitch*/}
-                    {/*  disabled={!exhibitInfoPage.exhibit_IsAuth && !exhibitInfoPage.exhibit_Online}*/}
-                    {/*  checked={exhibitInfoPage.exhibit_Online}*/}
-                    {/*  // loading={loading}*/}
-                    {/*  onChange={async () => {*/}
-                    {/*    activateTheme();*/}
-                    {/*  }}*/}
-                    {/*/>*/}
-
                     <FComponentsLib.FContentText
                       type={'highlight'}
                       text={FI18n.i18nNext.t('toggle_activate_theme')}
