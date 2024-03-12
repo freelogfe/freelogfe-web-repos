@@ -8,8 +8,6 @@ import { history } from 'umi';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
 import FComponentsLib from '@freelog/components-lib';
 import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
-import { valid } from 'semver';
-import ex from 'umi/dist';
 
 export interface ExhibitInfoPageModelState {
   pageLoading: boolean;
