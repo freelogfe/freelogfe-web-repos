@@ -2,7 +2,6 @@ import * as React from 'react';
 import styles from './index.less';
 import { Space } from 'antd';
 import { AddAPolicyAction, ChangeAction, UpdateAPolicyAction } from '@/models/exhibitInfoPage';
-// import FPolicyBuilder from '@/components/FPolicyBuilderDrawer';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import { ConnectState, ExhibitInfoPageModelState } from '@/models/connect';
@@ -42,29 +41,69 @@ function Policies({ dispatch, exhibitInfoPage }: PoliciesProps) {
     });
   }
 
-  return (<div>
-    <Space size={15}>
-      <FComponentsLib.FTitleText
+  // return (<div>
+  //   <Space size={15}>
+  //     <FComponentsLib.FTitleText
+  //       text={FI18n.i18nNext.t('title_auth_plan')}
+  //       type='h3'
+  //     />
+  //     {
+  //       exhibitInfoPage.policy_List.length !== 0 && (<FComponentsLib.FCircleBtn
+  //         size='small'
+  //         onClick={async () => {
+  //           self._czc?.push(['_trackEvent', '授权策略页', '创建授权策略', '', 1]);
+  //           // dispatch<ChangeAction>({
+  //           //   type: 'exhibitInfoPage/change',
+  //           //   payload: {
+  //           //     policy_BuildDrawer_Visible: true,
+  //           //   },
+  //           // });
+  //           await addPolicy();
+  //         }}
+  //       />)
+  //     }
+  //   </Space>
+  //   <div style={{ height: 20 }} />
+  return (<div className={styles.block}>
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      <FComponentsLib.FContentText
         text={FI18n.i18nNext.t('title_auth_plan')}
-        type='h3'
+        type={'highlight'}
       />
+
       {
-        exhibitInfoPage.policy_List.length !== 0 && (<FComponentsLib.FCircleBtn
-          size='small'
+        exhibitInfoPage.policy_List.length !== 0 && (<FComponentsLib.FTextBtn
+          style={{ fontSize: 12 }}
+          type='primary'
           onClick={async () => {
-            self._czc?.push(['_trackEvent', '授权策略页', '创建授权策略', '', 1]);
-            // dispatch<ChangeAction>({
-            //   type: 'exhibitInfoPage/change',
-            //   payload: {
-            //     policy_BuildDrawer_Visible: true,
-            //   },
+            // onChangeIsEditing(false);
+            // dispatch<OnClick_CancelEditIntroductionBtn_Action>({
+            //   type: 'resourceInfoPage/onClick_CancelEditIntroductionBtn',
             // });
+            // set$isEdit(false);
+            self._czc?.push(['_trackEvent', '授权策略页', '创建授权策略', '', 1]);
             await addPolicy();
           }}
-        />)
+        >添加授权策略</FComponentsLib.FTextBtn>)
       }
-    </Space>
-    <div style={{ height: 20 }} />
+
+      {/*{*/}
+      {/*  exhibitInfoPage.policy_List.length !== 0 && (<FComponentsLib.FCircleBtn*/}
+      {/*    size='small'*/}
+      {/*    onClick={async () => {*/}
+      {/*      self._czc?.push(['_trackEvent', '授权策略页', '创建授权策略', '', 1]);*/}
+      {/*      // dispatch<ChangeAction>({*/}
+      {/*      //   type: 'exhibitInfoPage/change',*/}
+      {/*      //   payload: {*/}
+      {/*      //     policy_BuildDrawer_Visible: true,*/}
+      {/*      //   },*/}
+      {/*      // });*/}
+      {/*      await addPolicy();*/}
+      {/*    }}*/}
+      {/*  />)*/}
+      {/*}*/}
+    </div>
+    <div style={{ height: 10 }} />
     {
       exhibitInfoPage.policy_List.length === 0
         ? (<div className={styles.empty}>

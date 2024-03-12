@@ -940,6 +940,9 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
       />
 
       <div style={{ height: 5 }} />
+
+      <Policies />
+      <div style={{ height: 5 }} />
       <div className={styles.block}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <FComponentsLib.FContentText text={'相关合约'} type={'highlight'} />
