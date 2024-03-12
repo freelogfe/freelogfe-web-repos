@@ -21,7 +21,13 @@ export interface ExhibitInfoPageModelState {
   exhibit_BelongNode_ID: number;
   exhibit_BelongNode_Name: string;
   exhibit_BelongNode_ActiveThemeId: string;
-
+  resourceTypeConfig: {
+    // uploadEntry: [],
+    // limitFileSize: 0,
+    // isSupportDownload: false,
+    // isSupportEdit: false,
+    isSupportOptionalConfig: boolean;
+  };
   policy_List: PolicyFullInfo_Type[];
 
   contract_ExhibitAllContractIDs: {
@@ -336,7 +342,9 @@ const initStates: ExhibitInfoPageModelState = {
   exhibit_BelongNode_ID: -1,
   exhibit_BelongNode_Name: '',
   exhibit_BelongNode_ActiveThemeId: '',
-
+  resourceTypeConfig: {
+    isSupportOptionalConfig: false,
+  },
   policy_List: [],
   // policy_BuildDrawer_Visible: false,
 
@@ -536,6 +544,25 @@ const Model: ExhibitInfoPageModelType = {
         return (a.status === 1 && b.status === 0) ? -1 : 0;
       });
 
+      const params4: Parameters<typeof FServiceAPI.Resource.getResourceTypeInfoByCode>[0] = {
+        code: data_ResourceInfo.resourceTypeCode,
+      };
+      const { data: data_ResourceTypeInfo }: {
+        ret: number;
+        errCode: number;
+        msg: string;
+        data: {
+          resourceConfig: {
+            fileCommitMode: number[];
+            fileMaxSize: number;
+            fileMaxSizeUnit: 1 | 2;
+            supportDownload: 1 | 2;
+            supportEdit: 1 | 2;
+            supportOptionalConfig: 1 | 2;
+          }
+        };
+      } = yield call(FServiceAPI.Resource.getResourceTypeInfoByCode, params4);
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -553,6 +580,10 @@ const Model: ExhibitInfoPageModelType = {
           //   : data_ExhibitBatchAuthResults[0].defaulterIdentityType === 2
           //     ? FI18n.i18nNext.t('alert_exhibit_no_auth')
           //     : '',
+          resourceTypeConfig: {
+            isSupportOptionalConfig: data_ResourceTypeInfo.resourceConfig.supportOptionalConfig === 2,
+          },
+
           policy_List: policies,
 
           contract_ExhibitAllContractIDs: exhibitAllContractIDs,
@@ -1569,10 +1600,10 @@ export interface UpdateRewriteParams {
 }
 
 export async function updateRewrite({
-                               exhibit_ID,
-                               side_InheritOptions,
-                               side_CustomOptions,
-                             }: UpdateRewriteParams): Promise<any> {
+                                      exhibit_ID,
+                                      side_InheritOptions,
+                                      side_CustomOptions,
+                                    }: UpdateRewriteParams): Promise<any> {
   const params: Parameters<typeof FServiceAPI.Exhibit.updateRewriteProperty>[0] = {
     presentableId: exhibit_ID,
     rewriteProperty: [

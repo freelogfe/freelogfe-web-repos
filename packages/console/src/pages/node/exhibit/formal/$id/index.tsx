@@ -588,366 +588,371 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
             />
           </div>
 
-          <div style={{ height: 5 }} />
-          <div className={styles.block}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <FComponentsLib.FContentText
-                text={'可选配置'}
-                type={'highlight'}
-              />
-            </div>
-
-            {
-              // info.customConfigurations.length === 0 && (<>
-              exhibitInfoPage.side_InheritOptions.length === 0 && (<>
-                <div style={{ height: 10 }} />
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  {/*<span>{FI18n.i18nNext.t('resourceoptions_list_empty')}</span>*/}
+          {
+            exhibitInfoPage.resourceTypeConfig.isSupportOptionalConfig && (<>
+              <div style={{ height: 5 }} />
+              <div className={styles.block}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                   <FComponentsLib.FContentText
-                    text={FI18n.i18nNext.t('resourceoptions_list_empty')}
-                    type={'additional2'}
+                    text={'可选配置'}
+                    type={'highlight'}
                   />
                 </div>
-                <div style={{ height: 20 }} />
-              </>)
-            }
 
-            {
-              exhibitInfoPage.side_InheritOptions.length > 0 && (<>
-                <div style={{ height: 10 }} />
-                <Space direction={'vertical'} size={10} className={styles.InheritOptions}>
-                  {
-                    exhibitInfoPage.side_InheritOptions.map((io, index) => {
-                      return (<div key={io.key}>
-                        <div className={styles.optionTitle}>
-                          <FResourcePropertyAndOptionTipPopover
-                            info={{
-                              key: io.key,
-                              name: io.name,
-                              description: io.description,
-                            }}
-                            type={'option'}
-                          >
-                            <div>
-                              <FComponentsLib.FContentText
-                                text={io.name}
-                                singleRow
-                                style={{ maxWidth: 160 }}
-                              />
-                            </div>
-                          </FResourcePropertyAndOptionTipPopover>
+                {
+                  // info.customConfigurations.length === 0 && (<>
+                  exhibitInfoPage.side_InheritOptions.length === 0 && (<>
+                    <div style={{ height: 10 }} />
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      {/*<span>{FI18n.i18nNext.t('resourceoptions_list_empty')}</span>*/}
+                      <FComponentsLib.FContentText
+                        text={FI18n.i18nNext.t('resourceoptions_list_empty')}
+                        type={'additional2'}
+                      />
+                    </div>
+                    <div style={{ height: 20 }} />
+                  </>)
+                }
 
-                          <FTooltip title={FI18n.i18nNext.t('tip_reset_value')}>
-                            <div>
-                              <FComponentsLib.FTextBtn
-                                onClick={() => {
-                                  // onChangeCustomAttrs({ key: pc.key, value: pc.defaultValue || '' }, true);
-                                  dispatch<OnClick_Side_InheritOptions_ResetBtn_Action>({
-                                    type: 'exhibitInfoPage/onClick_Side_InheritOptions_ResetBtn',
-                                    payload: {
-                                      index: index,
-                                    },
-                                  });
+                {
+                  exhibitInfoPage.side_InheritOptions.length > 0 && (<>
+                    <div style={{ height: 10 }} />
+                    <Space direction={'vertical'} size={10} className={styles.InheritOptions}>
+                      {
+                        exhibitInfoPage.side_InheritOptions.map((io, index) => {
+                          return (<div key={io.key}>
+                            <div className={styles.optionTitle}>
+                              <FResourcePropertyAndOptionTipPopover
+                                info={{
+                                  key: io.key,
+                                  name: io.name,
+                                  description: io.description,
                                 }}
+                                type={'option'}
                               >
-                                <FComponentsLib.FIcons.FRedo style={{ fontSize: 12 }} />
-                              </FComponentsLib.FTextBtn>
-                            </div>
-                          </FTooltip>
-                        </div>
-                        <div style={{ height: 5 }} />
-                        {
-                          io.type === 'select'
-                            ? (<FSelect
-                              className={styles.FSelect}
-                              // getPopupContainer={() => {
-                              //   // console.log(ref.current, 'ref.currentiosdjflksdjflksjdklf sdaoifj;sldkfjlkj');
-                              //   return ref.current;
-                              // }}
-                              value={io.valueInput}
-                              dataSource={io.options.map((d) => ({ value: d, title: d }))}
-                              onChange={(value: string) => {
-                                // onChangeCustomAttrs({ key: pc.key, value: value }, true);
-                                dispatch<OnChange_Side_InheritOptions_ValueInput_Action>({
-                                  type: 'exhibitInfoPage/onChange_Side_InheritOptions_ValueInput',
-                                  payload: {
-                                    index: index,
-                                    value: value,
-                                  },
-                                });
-                              }}
-                              onBlur={() => {
-                                dispatch<OnBlur_Side_InheritOptions_ValueInput_Action>({
-                                  type: 'exhibitInfoPage/onBlur_Side_InheritOptions_ValueInput',
-                                  payload: {
-                                    index: index,
-                                  },
-                                });
-                              }}
-                            />)
-                            : (<div>
-                              <FComponentsLib.FInput.FSingleLine
-                                lengthLimit={-1}
-                                className={styles.FInput}
-                                value={io.valueInput}
-                                // errorText={io.valueInputError}
-                                placeholder={'输入自定义选项'}
-                                onChange={(e) => {
-                                  // onChangeCustomAttrs({ key: pc.key, value: e.target.value });
-                                  dispatch<OnChange_Side_InheritOptions_ValueInput_Action>({
-                                    type: 'exhibitInfoPage/onChange_Side_InheritOptions_ValueInput',
-                                    payload: {
-                                      index: index,
-                                      value: e.target.value,
-                                    },
-                                  });
-                                }}
-                                onBlur={() => {
-                                  dispatch<OnBlur_Side_InheritOptions_ValueInput_Action>({
-                                    type: 'exhibitInfoPage/onBlur_Side_InheritOptions_ValueInput',
-                                    payload: {
-                                      index: index,
-                                    },
-                                  });
-                                }}
-                              />
-                              {
-                                io.valueInputError !== '' && (
-                                  <div style={{ color: '#EE4040' }}>{io.valueInputError}</div>)
-                              }
+                                <div>
+                                  <FComponentsLib.FContentText
+                                    text={io.name}
+                                    singleRow
+                                    style={{ maxWidth: 160 }}
+                                  />
+                                </div>
+                              </FResourcePropertyAndOptionTipPopover>
 
-                            </div>)
-                        }
-                      </div>);
-                    })
-                  }
-                </Space>
-              </>)
-            }
-
-          </div>
-
-          <div style={{ height: 5 }} />
-          <div className={styles.block}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <FComponentsLib.FContentText
-                text={'自定义信息'}
-                type={'highlight'}
-              />
-              {
-                exhibitInfoPage.side_CustomOptions.length < 30 && (<FComponentsLib.FTextBtn
-                  style={{ fontSize: 12, display: 'flex', alignItems: 'center', gap: 5 }}
-                  type='primary'
-                  onClick={async () => {
-                    const dataSource: {
-                      key: string;
-                      name: string;
-                      type: 'input' | 'select';
-                      input: string;
-                      select: string[];
-                      description: string;
-                    } | null = await fResourceOptionEditor({
-                      disabledKeys: [
-                        ...exhibitInfoPage.side_RawProperties.map((ba) => ba.key),
-                        ...exhibitInfoPage.side_BaseProperties.map((ba) => ba.key),
-                        ...exhibitInfoPage.side_InheritOptions.map((io) => io.key),
-                        ...exhibitInfoPage.side_CustomOptions.map((co) => co.key),
-                      ],
-                      disabledNames: [
-                        // ...exhibitInfoPage.side_RawProperties.map((ba) => ba.name),
-                        ...exhibitInfoPage.side_BaseProperties.map((ba) => ba.name),
-                        ...exhibitInfoPage.side_InheritOptions.map((io) => io.name),
-                        ...exhibitInfoPage.side_CustomOptions.map((co) => co.name),
-                      ],
-                      hideTypeSelect: true,
-                    });
-
-                    if (!dataSource) {
-                      return;
-                    }
-
-                    dispatch<OnConfirm_AddCustomOptionsDrawer_Action>({
-                      type: 'exhibitInfoPage/onConfirm_AddCustomOptionsDrawer',
-                      payload: {
-                        value: {
-                          key: dataSource.key,
-                          name: dataSource.name,
-                          // type: 'input' | 'select';
-                          input: dataSource.input,
-                          // select: string[];
-                          description: dataSource.description,
-                        },
-                      },
-                    });
-                  }}
-                >
-                  <FComponentsLib.FIcons.FConfiguration style={{ fontSize: 14 }} />
-                  <span>添加自定义信息</span>
-                </FComponentsLib.FTextBtn>)
-              }
-
-            </div>
-
-            {
-              // info.customConfigurations.length === 0 && (<>
-              exhibitInfoPage.side_CustomOptions.length === 0 && (<>
-                <div style={{ height: 10 }} />
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  {/*<span>{FI18n.i18nNext.t('resourceoptions_list_empty')}</span>*/}
-                  <FComponentsLib.FContentText
-                    text={FI18n.i18nNext.t('resourceoptions_list_empty')}
-                    type={'additional2'}
-                  />
-                </div>
-                <div style={{ height: 20 }} />
-              </>)
-            }
-
-            {
-              exhibitInfoPage.side_CustomOptions.length > 0 && (<>
-                <div style={{ height: 20 }} />
-                <Space direction={'vertical'} size={10} className={styles.CustomOptions}>
-                  {
-                    exhibitInfoPage.side_CustomOptions.map((co, index) => {
-                      return (<div key={co.key}>
-                        <div className={styles.optionTitle}>
-                          <FResourcePropertyAndOptionTipPopover
-                            info={{
-                              key: co.key,
-                              name: co.name,
-                              description: co.description,
-                            }}
-                            type={'option'}
-                          >
-                            <div>
-                              <FComponentsLib.FContentText
-                                text={co.name}
-                                singleRow
-                                style={{ maxWidth: 160 }}
-                              />
-                            </div>
-                          </FResourcePropertyAndOptionTipPopover>
-                          <Space size={10}>
-                            <FTooltip title={FI18n.i18nNext.t('tips_edit')}>
-                              <div>
-                                <FComponentsLib.FTextBtn
-                                  // theme="primary"
-                                  onClick={async () => {
-
-                                    const dataSource: {
-                                      key: string;
-                                      name: string;
-                                      type: 'input' | 'select';
-                                      input: string;
-                                      select: string[];
-                                      description: string;
-                                    } | null = await fResourceOptionEditor({
-                                      disabledKeys: [
-                                        ...exhibitInfoPage.side_RawProperties.map((ba) => ba.key),
-                                        ...exhibitInfoPage.side_BaseProperties.map((ba) => ba.key),
-                                        ...exhibitInfoPage.side_InheritOptions.map((io) => io.key),
-                                        ...exhibitInfoPage.side_CustomOptions.map((co) => co.key),
-                                      ],
-                                      disabledNames: [
-                                        // ...exhibitInfoPage.side_RawProperties.map((ba) => ba.name),
-                                        ...exhibitInfoPage.side_BaseProperties.map((ba) => ba.name),
-                                        ...exhibitInfoPage.side_InheritOptions.map((io) => io.name),
-                                        ...exhibitInfoPage.side_CustomOptions.map((co) => co.name),
-                                      ],
-                                      //co
-                                      defaultData: {
-                                        key: co.key,
-                                        name: co.name,
-                                        type: 'input',
-                                        input: co.value,
-                                        select: [],
-                                        description: co.description,
-                                      },
-                                      hideTypeSelect: true,
-                                    });
-
-                                    if (!dataSource) {
-                                      return;
-                                    }
-
-                                    dispatch<OnConfirm_CustomOptionDrawer_Action>({
-                                      type: 'exhibitInfoPage/onConfirm_CustomOptionDrawer',
-                                      payload: {
-                                        value: {
-                                          key: dataSource.key,
-                                          name: dataSource.name,
-                                          value: dataSource.input,
-                                          description: dataSource.description,
-                                          valueType: 'input',
-                                        },
-                                      },
-                                    });
-                                  }}
-                                >
-                                  <FComponentsLib.FIcons.FEdit style={{ fontSize: 14 }} />
-                                </FComponentsLib.FTextBtn>
-                              </div>
-                            </FTooltip>
-                            <FTooltip title={FI18n.i18nNext.t('tip_delete_custom_option')}>
-                              <div>
-                                <FComponentsLib.FIcons.FDelete
-                                  style={{ color: '#EE4040', cursor: 'pointer', fontSize: 14 }}
-                                  onClick={async () => {
-                                    const bool: boolean = await fPromiseModalConfirm({
-                                      title: '提示',
-                                      description: '一旦删除则无法恢复，确认删除吗？',
-                                    });
-                                    if (bool) {
-                                      dispatch<OnClick_Side_CustomOptions_DeleteBtn_Action>({
-                                        type: 'exhibitInfoPage/onClick_Side_CustomOptions_DeleteBtn',
+                              <FTooltip title={FI18n.i18nNext.t('tip_reset_value')}>
+                                <div>
+                                  <FComponentsLib.FTextBtn
+                                    onClick={() => {
+                                      // onChangeCustomAttrs({ key: pc.key, value: pc.defaultValue || '' }, true);
+                                      dispatch<OnClick_Side_InheritOptions_ResetBtn_Action>({
+                                        type: 'exhibitInfoPage/onClick_Side_InheritOptions_ResetBtn',
                                         payload: {
                                           index: index,
                                         },
                                       });
-                                    }
+                                    }}
+                                  >
+                                    <FComponentsLib.FIcons.FRedo style={{ fontSize: 12 }} />
+                                  </FComponentsLib.FTextBtn>
+                                </div>
+                              </FTooltip>
+                            </div>
+                            <div style={{ height: 5 }} />
+                            {
+                              io.type === 'select'
+                                ? (<FSelect
+                                  className={styles.FSelect}
+                                  // getPopupContainer={() => {
+                                  //   // console.log(ref.current, 'ref.currentiosdjflksdjflksjdklf sdaoifj;sldkfjlkj');
+                                  //   return ref.current;
+                                  // }}
+                                  value={io.valueInput}
+                                  dataSource={io.options.map((d) => ({ value: d, title: d }))}
+                                  onChange={(value: string) => {
+                                    // onChangeCustomAttrs({ key: pc.key, value: value }, true);
+                                    dispatch<OnChange_Side_InheritOptions_ValueInput_Action>({
+                                      type: 'exhibitInfoPage/onChange_Side_InheritOptions_ValueInput',
+                                      payload: {
+                                        index: index,
+                                        value: value,
+                                      },
+                                    });
                                   }}
-                                />
-                              </div>
-                            </FTooltip>
-                          </Space>
-                        </div>
-                        <div style={{ height: 5 }} />
-                        <FComponentsLib.FInput.FSingleLine
-                          lengthLimit={-1}
-                          placeholder={FI18n.i18nNext.t('hint_value_null')}
-                          className={styles.FInput}
-                          value={co.valueInput}
-                          // errorText={co.valueInputError}
-                          onChange={(e) => {
-                            // console.log(e, 'eEEEEeeeeeEEE');
-                            dispatch<OnChange_Side_CustomOptions_ValueInput_Action>({
-                              type: 'exhibitInfoPage/onChange_Side_CustomOptions_ValueInput',
-                              payload: {
-                                index: index,
-                                value: e.target.value,
-                              },
-                            });
-                          }}
-                          onBlur={() => {
-                            dispatch<OnBlur_Side_CustomOptions_ValueInput_Action>({
-                              type: 'exhibitInfoPage/onBlur_Side_CustomOptions_ValueInput',
-                              payload: {
-                                index: index,
-                              },
-                            });
-                          }}
-                        />
-                        {
-                          co.valueInputError !== '' && (<div style={{ color: '#EE4040' }}>{co.valueInputError}</div>)
+                                  onBlur={() => {
+                                    dispatch<OnBlur_Side_InheritOptions_ValueInput_Action>({
+                                      type: 'exhibitInfoPage/onBlur_Side_InheritOptions_ValueInput',
+                                      payload: {
+                                        index: index,
+                                      },
+                                    });
+                                  }}
+                                />)
+                                : (<div>
+                                  <FComponentsLib.FInput.FSingleLine
+                                    lengthLimit={-1}
+                                    className={styles.FInput}
+                                    value={io.valueInput}
+                                    // errorText={io.valueInputError}
+                                    placeholder={'输入自定义选项'}
+                                    onChange={(e) => {
+                                      // onChangeCustomAttrs({ key: pc.key, value: e.target.value });
+                                      dispatch<OnChange_Side_InheritOptions_ValueInput_Action>({
+                                        type: 'exhibitInfoPage/onChange_Side_InheritOptions_ValueInput',
+                                        payload: {
+                                          index: index,
+                                          value: e.target.value,
+                                        },
+                                      });
+                                    }}
+                                    onBlur={() => {
+                                      dispatch<OnBlur_Side_InheritOptions_ValueInput_Action>({
+                                        type: 'exhibitInfoPage/onBlur_Side_InheritOptions_ValueInput',
+                                        payload: {
+                                          index: index,
+                                        },
+                                      });
+                                    }}
+                                  />
+                                  {
+                                    io.valueInputError !== '' && (
+                                      <div style={{ color: '#EE4040' }}>{io.valueInputError}</div>)
+                                  }
+
+                                </div>)
+                            }
+                          </div>);
+                        })
+                      }
+                    </Space>
+                  </>)
+                }
+
+              </div>
+
+              <div style={{ height: 5 }} />
+              <div className={styles.block}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <FComponentsLib.FContentText
+                    text={'自定义信息'}
+                    type={'highlight'}
+                  />
+                  {
+                    exhibitInfoPage.side_CustomOptions.length < 30 && (<FComponentsLib.FTextBtn
+                      style={{ fontSize: 12, display: 'flex', alignItems: 'center', gap: 5 }}
+                      type='primary'
+                      onClick={async () => {
+                        const dataSource: {
+                          key: string;
+                          name: string;
+                          type: 'input' | 'select';
+                          input: string;
+                          select: string[];
+                          description: string;
+                        } | null = await fResourceOptionEditor({
+                          disabledKeys: [
+                            ...exhibitInfoPage.side_RawProperties.map((ba) => ba.key),
+                            ...exhibitInfoPage.side_BaseProperties.map((ba) => ba.key),
+                            ...exhibitInfoPage.side_InheritOptions.map((io) => io.key),
+                            ...exhibitInfoPage.side_CustomOptions.map((co) => co.key),
+                          ],
+                          disabledNames: [
+                            // ...exhibitInfoPage.side_RawProperties.map((ba) => ba.name),
+                            ...exhibitInfoPage.side_BaseProperties.map((ba) => ba.name),
+                            ...exhibitInfoPage.side_InheritOptions.map((io) => io.name),
+                            ...exhibitInfoPage.side_CustomOptions.map((co) => co.name),
+                          ],
+                          hideTypeSelect: true,
+                        });
+
+                        if (!dataSource) {
+                          return;
                         }
-                      </div>);
-                    })
+
+                        dispatch<OnConfirm_AddCustomOptionsDrawer_Action>({
+                          type: 'exhibitInfoPage/onConfirm_AddCustomOptionsDrawer',
+                          payload: {
+                            value: {
+                              key: dataSource.key,
+                              name: dataSource.name,
+                              // type: 'input' | 'select';
+                              input: dataSource.input,
+                              // select: string[];
+                              description: dataSource.description,
+                            },
+                          },
+                        });
+                      }}
+                    >
+                      <FComponentsLib.FIcons.FConfiguration style={{ fontSize: 14 }} />
+                      <span>添加自定义信息</span>
+                    </FComponentsLib.FTextBtn>)
                   }
 
-                </Space>
-              </>)
-            }
-          </div>
+                </div>
+
+                {
+                  // info.customConfigurations.length === 0 && (<>
+                  exhibitInfoPage.side_CustomOptions.length === 0 && (<>
+                    <div style={{ height: 10 }} />
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      {/*<span>{FI18n.i18nNext.t('resourceoptions_list_empty')}</span>*/}
+                      <FComponentsLib.FContentText
+                        text={FI18n.i18nNext.t('resourceoptions_list_empty')}
+                        type={'additional2'}
+                      />
+                    </div>
+                    <div style={{ height: 20 }} />
+                  </>)
+                }
+
+                {
+                  exhibitInfoPage.side_CustomOptions.length > 0 && (<>
+                    <div style={{ height: 20 }} />
+                    <Space direction={'vertical'} size={10} className={styles.CustomOptions}>
+                      {
+                        exhibitInfoPage.side_CustomOptions.map((co, index) => {
+                          return (<div key={co.key}>
+                            <div className={styles.optionTitle}>
+                              <FResourcePropertyAndOptionTipPopover
+                                info={{
+                                  key: co.key,
+                                  name: co.name,
+                                  description: co.description,
+                                }}
+                                type={'option'}
+                              >
+                                <div>
+                                  <FComponentsLib.FContentText
+                                    text={co.name}
+                                    singleRow
+                                    style={{ maxWidth: 160 }}
+                                  />
+                                </div>
+                              </FResourcePropertyAndOptionTipPopover>
+                              <Space size={10}>
+                                <FTooltip title={FI18n.i18nNext.t('tips_edit')}>
+                                  <div>
+                                    <FComponentsLib.FTextBtn
+                                      // theme="primary"
+                                      onClick={async () => {
+
+                                        const dataSource: {
+                                          key: string;
+                                          name: string;
+                                          type: 'input' | 'select';
+                                          input: string;
+                                          select: string[];
+                                          description: string;
+                                        } | null = await fResourceOptionEditor({
+                                          disabledKeys: [
+                                            ...exhibitInfoPage.side_RawProperties.map((ba) => ba.key),
+                                            ...exhibitInfoPage.side_BaseProperties.map((ba) => ba.key),
+                                            ...exhibitInfoPage.side_InheritOptions.map((io) => io.key),
+                                            ...exhibitInfoPage.side_CustomOptions.map((co) => co.key),
+                                          ],
+                                          disabledNames: [
+                                            // ...exhibitInfoPage.side_RawProperties.map((ba) => ba.name),
+                                            ...exhibitInfoPage.side_BaseProperties.map((ba) => ba.name),
+                                            ...exhibitInfoPage.side_InheritOptions.map((io) => io.name),
+                                            ...exhibitInfoPage.side_CustomOptions.map((co) => co.name),
+                                          ],
+                                          //co
+                                          defaultData: {
+                                            key: co.key,
+                                            name: co.name,
+                                            type: 'input',
+                                            input: co.value,
+                                            select: [],
+                                            description: co.description,
+                                          },
+                                          hideTypeSelect: true,
+                                        });
+
+                                        if (!dataSource) {
+                                          return;
+                                        }
+
+                                        dispatch<OnConfirm_CustomOptionDrawer_Action>({
+                                          type: 'exhibitInfoPage/onConfirm_CustomOptionDrawer',
+                                          payload: {
+                                            value: {
+                                              key: dataSource.key,
+                                              name: dataSource.name,
+                                              value: dataSource.input,
+                                              description: dataSource.description,
+                                              valueType: 'input',
+                                            },
+                                          },
+                                        });
+                                      }}
+                                    >
+                                      <FComponentsLib.FIcons.FEdit style={{ fontSize: 14 }} />
+                                    </FComponentsLib.FTextBtn>
+                                  </div>
+                                </FTooltip>
+                                <FTooltip title={FI18n.i18nNext.t('tip_delete_custom_option')}>
+                                  <div>
+                                    <FComponentsLib.FIcons.FDelete
+                                      style={{ color: '#EE4040', cursor: 'pointer', fontSize: 14 }}
+                                      onClick={async () => {
+                                        const bool: boolean = await fPromiseModalConfirm({
+                                          title: '提示',
+                                          description: '一旦删除则无法恢复，确认删除吗？',
+                                        });
+                                        if (bool) {
+                                          dispatch<OnClick_Side_CustomOptions_DeleteBtn_Action>({
+                                            type: 'exhibitInfoPage/onClick_Side_CustomOptions_DeleteBtn',
+                                            payload: {
+                                              index: index,
+                                            },
+                                          });
+                                        }
+                                      }}
+                                    />
+                                  </div>
+                                </FTooltip>
+                              </Space>
+                            </div>
+                            <div style={{ height: 5 }} />
+                            <FComponentsLib.FInput.FSingleLine
+                              lengthLimit={-1}
+                              placeholder={FI18n.i18nNext.t('hint_value_null')}
+                              className={styles.FInput}
+                              value={co.valueInput}
+                              // errorText={co.valueInputError}
+                              onChange={(e) => {
+                                // console.log(e, 'eEEEEeeeeeEEE');
+                                dispatch<OnChange_Side_CustomOptions_ValueInput_Action>({
+                                  type: 'exhibitInfoPage/onChange_Side_CustomOptions_ValueInput',
+                                  payload: {
+                                    index: index,
+                                    value: e.target.value,
+                                  },
+                                });
+                              }}
+                              onBlur={() => {
+                                dispatch<OnBlur_Side_CustomOptions_ValueInput_Action>({
+                                  type: 'exhibitInfoPage/onBlur_Side_CustomOptions_ValueInput',
+                                  payload: {
+                                    index: index,
+                                  },
+                                });
+                              }}
+                            />
+                            {
+                              co.valueInputError !== '' && (<div style={{ color: '#EE4040' }}>{co.valueInputError}</div>)
+                            }
+                          </div>);
+                        })
+                      }
+
+                    </Space>
+                  </>)
+                }
+              </div>
+            </>)
+          }
+
           <div style={{ height: 5 }} />
         </>)
       }
