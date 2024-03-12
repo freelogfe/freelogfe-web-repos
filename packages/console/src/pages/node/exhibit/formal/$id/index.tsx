@@ -423,18 +423,18 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
                 </Space>
               </FDropdownMenu>
 
-              <div style={{ width: 60 }} />
-              <FComponentsLib.FContentText
-                type={'highlight'}
-                text={'自动更新到最新版本'}
-                style={{ fontSize: 12 }}
-              />
-              <div style={{ width: 20 }} />
-              <Switch
-                size='small'
-                defaultChecked
-                className={styles.smallSwitch}
-              />
+              {/*<div style={{ width: 60 }} />*/}
+              {/*<FComponentsLib.FContentText*/}
+              {/*  type={'highlight'}*/}
+              {/*  text={'自动更新到最新版本'}*/}
+              {/*  style={{ fontSize: 12 }}*/}
+              {/*/>*/}
+              {/*<div style={{ width: 20 }} />*/}
+              {/*<Switch*/}
+              {/*  size='small'*/}
+              {/*  defaultChecked*/}
+              {/*  className={styles.smallSwitch}*/}
+              {/*/>*/}
             </div>
 
           </div>
