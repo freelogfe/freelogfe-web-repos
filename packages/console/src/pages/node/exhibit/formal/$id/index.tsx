@@ -1154,39 +1154,25 @@ function IntroductionInput({ value, onOK }: IntroductionInputProps) {
 
       <Space size={10}>
         {
-          // resourceInfoPage.resourceInfo.intro !== '' && !resourceInfoPage.introduction_IsEditing
-          !$isEdit && (<FComponentsLib.FTextBtn
+          !$isEdit && value !== '' && (<FComponentsLib.FTextBtn
             style={{ fontSize: 12 }}
             onClick={() => {
-              // onChangeIsEditing(true);
-              // dispatch<OnClick_EditIntroductionBtn_Action>({
-              //   type: 'resourceInfoPage/onClick_EditIntroductionBtn',
-              // });
-              // set$isEdit(true);
               onEdit();
             }}
           >{FI18n.i18nNext.t('edit')}</FComponentsLib.FTextBtn>)
         }
         {
-          // resourceInfoPage.introduction_IsEditing && (<>
           $isEdit && (<>
             <FComponentsLib.FTextBtn
               style={{ fontSize: 12 }}
               type='default'
               onClick={() => {
-                // onChangeIsEditing(false);
-                // dispatch<OnClick_CancelEditIntroductionBtn_Action>({
-                //   type: 'resourceInfoPage/onClick_CancelEditIntroductionBtn',
-                // });
                 set$isEdit(false);
               }}
             >{FI18n.i18nNext.t('cancel')}</FComponentsLib.FTextBtn>
             <FComponentsLib.FTextBtn
               style={{ fontSize: 12 }}
               onClick={() => {
-                // dispatch<OnClick_SaveIntroductionBtn_Action>({
-                //   type: 'resourceInfoPage/onClick_SaveIntroductionBtn',
-                // });
                 onOK(get$value());
                 set$isEdit(false);
               }}
@@ -1201,16 +1187,9 @@ function IntroductionInput({ value, onOK }: IntroductionInputProps) {
     {
       $isEdit && (<div>
         <FComponentsLib.FInput.FMultiLine
-          // value={resourceInfoPage.introduction_EditorText}
           value={$value}
           lengthLimit={200}
           onChange={(e) => {
-            // dispatch<OnChange_IntroductionEditor_Action>({
-            //   type: 'resourceInfoPage/onChange_IntroductionEditor',
-            //   payload: {
-            //     value: e.target.value,
-            //   },
-            // });
             set$value(e.target.value);
           }}
         />
@@ -1226,28 +1205,33 @@ function IntroductionInput({ value, onOK }: IntroductionInputProps) {
     }
 
     {
-      // resourceInfoPage.resourceInfo.intro !== ''
       !$isEdit && (<>
         {
           value !== ''
             ? (<div className={styles.aboutPanel}>
-              {/*<pre>{resourceInfoPage.resourceInfo.intro}</pre>*/}
               <pre>{value}</pre>
             </div>)
-            : (<FComponentsLib.FRectBtn
-              type='default'
-              onClick={() => {
-                // dispatch<OnClick_AddIntroductionBtn_Action>({
-                //   type: 'resourceInfoPage/onClick_AddIntroductionBtn',
-                // });
-                // onChangeIsEditing(true);
-                // set$isEdit(true);
-                // onOK(get$value());
-                onEdit();
-              }}
-            >
-              添加简介
-            </FComponentsLib.FRectBtn>)
+            : (<div>
+
+              <div style={{ height: 10 }} />
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
+                <FComponentsLib.FContentText
+                  text={FI18n.i18nNext.t('resourceoptions_list_empty')}
+                  type={'additional2'}
+                />
+                <div style={{ height: 20 }} />
+                <FComponentsLib.FRectBtn
+                  type='primary'
+                  onClick={() => {
+                    onEdit();
+                  }}
+                >
+                  添加展品简介
+                </FComponentsLib.FRectBtn>
+              </div>
+              <div style={{ height: 20 }} />
+
+            </div>)
         }
       </>)
     }

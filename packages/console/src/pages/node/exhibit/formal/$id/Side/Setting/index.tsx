@@ -559,8 +559,15 @@ function Setting({ dispatch, exhibitInfoPage }: SettingProps) {
             },
           });
         }}
-      >{exhibitInfoPage.side_SettingUnfold ? <>{FI18n.i18nNext.t('btn_show_less')}
-        <FComponentsLib.FIcons.FDoubleUp /></> : <>更多 <FComponentsLib.FIcons.FDoubleDown /></>}</FComponentsLib.FTextBtn>
+      >{
+        exhibitInfoPage.side_SettingUnfold
+          ? (<>{FI18n.i18nNext.t('btn_show_less')}
+            <FComponentsLib.FIcons.FDoubleUp />
+          </>)
+          : (<>
+            更多 <FComponentsLib.FIcons.FDoubleDown />
+          </>)
+      }</FComponentsLib.FTextBtn>
     </div>
   </>);
 }
