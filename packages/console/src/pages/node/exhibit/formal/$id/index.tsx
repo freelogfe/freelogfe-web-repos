@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import { Space, Switch } from 'antd';
+import { Popover, Space, Switch } from 'antd';
 import Policies from './Policies';
 import Contracts from './Contracts';
 import Viewports from './Viewports';
@@ -42,6 +42,8 @@ import fMessage from '@/components/fMessage';
 import FUploadCover from '@/components/FUploadCover';
 import FResourcePropertyAndOptionTipPopover from '@/components/FResourcePropertyAndOptionTipPopover';
 import FSelect from '@/components/FSelect';
+import FResourceCard from '@/components/FResourceCard';
+import FPopover from '@/components/FPopover';
 
 interface PresentableProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -134,7 +136,7 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
         >
           <Space size={20}>
             {
-              exhibitInfoPage.side_ResourceType.includes('主题') && (<>
+              exhibitInfoPage.exhibit_ResourceInfo?.type.includes('主题') && (<>
                 {
                   exhibitInfoPage.exhibit_Online && (<div style={{
                     backgroundColor: '#42C28C',
@@ -165,7 +167,7 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
             }
 
             {
-              !exhibitInfoPage.side_ResourceType.includes('主题') && (<>
+              !exhibitInfoPage.exhibit_ResourceInfo?.type.includes('主题') && (<>
 
                 <FComponentsLib.FContentText
                   type={'highlight'}
@@ -284,13 +286,13 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
             dispatch<UpdateBaseInfoAction>({
               type: 'exhibitInfoPage/updateBaseInfo',
               payload: {
-                side_ExhibitCover: url,
+                exhibit_Cover: url,
               },
             });
           }}>
           <div className={styles.cover}>
             <FCoverImage
-              src={exhibitInfoPage.side_ExhibitCover || ''}
+              src={exhibitInfoPage.exhibit_Cover || ''}
               // src={''}
               width={260}
               style={{ borderRadius: 6 }}
@@ -310,36 +312,60 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
               dispatch<UpdateBaseInfoAction>({
                 type: 'exhibitInfoPage/updateBaseInfo',
                 payload: {
-                  // side_ExhibitTitle: exhibitInfoPage.side_ExhibitInputTitle || '',
                   side_ExhibitTitle: value,
                 },
               });
-              // onChangePInputTitle(null);
             }}
-            // onCancel={() => {
-            //   onChangePInputTitle(null);
-            // }}
           />
           <div style={{ height: 10 }} />
-          <FComponentsLib.FTextBtn
-            type='default'
-            onClick={() => {
-              window.open(FUtil.LinkTo.resourceDetails({ resourceID: exhibitInfoPage.side_ResourceID }));
-            }}
-          >
-            <Space size={5}>
-              <FComponentsLib.FContentText
-                type={'additional2'}
-                text={'来自于'}
-              />
-              <FComponentsLib.FContentText
-                type={'additional2'}
-                style={{ width: 220 }}
-                singleRow
-                text={exhibitInfoPage.side_ResourceName}
-              />
-            </Space>
-          </FComponentsLib.FTextBtn>
+          {
+            exhibitInfoPage.exhibit_ResourceInfo && (<Popover
+              // open={true}
+              content={<FResourceCard
+                key={exhibitInfoPage.exhibit_ResourceInfo.id}
+                resource={exhibitInfoPage.exhibit_ResourceInfo}
+                // className={styles.FResourceCard}
+                onClick={() => {
+                  window.open(
+                    FUtil.LinkTo.resourceDetails({
+                      resourceID: exhibitInfoPage.exhibit_ResourceInfo?.id || '',
+                    }),
+                  );
+                }}
+              />}
+              title={null}
+              // placement={'bottomLeft'}
+              placement={'bottom'}
+              // style={{ padding: 0 }}
+              // overlayInnerStyle={{ padding: 0 }}
+              // overlayStyle={{ padding: 0 }}
+              // className={styles.resourceCardPopover}
+              overlayClassName={styles.resourceCardPopover}
+            >
+              <div style={{ width: 'fit-content' }}>
+                <FComponentsLib.FTextBtn
+                  type='default'
+                  onClick={() => {
+                    window.open(FUtil.LinkTo.resourceDetails({ resourceID: exhibitInfoPage.exhibit_ResourceInfo?.id || '' }));
+                  }}
+                >
+                  <FComponentsLib.FContentText
+                    type={'additional2'}
+                    text={'来自于'}
+                    style={{ color: 'inherit' }}
+                  />
+                  <FComponentsLib.FContentText
+                    type={'additional2'}
+                    style={{ width: 220, color: 'inherit' }}
+                    singleRow
+                    text={exhibitInfoPage.exhibit_ResourceInfo?.name || ''}
+                  />
+
+                </FComponentsLib.FTextBtn>
+              </div>
+            </Popover>)
+          }
+
           <div style={{ height: 15 }} />
           <FResourceLabelEditor2
             style={{ minHeight: 70, width: 640, backgroundColor: '#fff', alignItems: 'flex-start' }}
@@ -898,9 +924,10 @@ function TitleInput({ value, onOK }: TitleInputProps) {
 
       {
         value !== '' && (<>
-          <FComponentsLib.FContentText
+          <FComponentsLib.FTitleText
+            type={'h2'}
             text={value}
-            style={{ overflowWrap: 'anywhere' }}
+            style={{ overflowWrap: 'anywhere', fontWeight: 600 }}
           />
           <FTooltip title={'编辑'}>
             <div>
@@ -908,7 +935,7 @@ function TitleInput({ value, onOK }: TitleInputProps) {
                 onClick={() => {
                   onEdit();
                 }}>
-                <FComponentsLib.FIcons.FEdit />
+                <FComponentsLib.FIcons.FEdit style={{ fontSize: 12 }} />
               </FComponentsLib.FTextBtn>
             </div>
           </FTooltip>

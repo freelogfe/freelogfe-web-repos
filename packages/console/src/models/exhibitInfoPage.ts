@@ -8,6 +8,7 @@ import { history } from 'umi';
 import { PolicyFullInfo_Type } from '@/type/contractTypes';
 import FComponentsLib from '@freelog/components-lib';
 import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
+import moment from 'moment';
 
 export interface ExhibitInfoPageModelState {
   pageLoading: boolean;
@@ -21,6 +22,25 @@ export interface ExhibitInfoPageModelState {
   exhibit_BelongNode_ID: number;
   exhibit_BelongNode_Name: string;
   exhibit_BelongNode_ActiveThemeId: string;
+
+  exhibit_Cover: string;
+
+  exhibit_ResourceInfo: {
+    id: string;
+    cover: string;
+    name: string;
+    title: string;
+    version: string;
+    policy: string[];
+    type: string[];
+    status: 0 | 1 | 2 | 4;
+    authProblem?: boolean;
+    updateDate: string;
+    username: string;
+    useAvatar: string;
+    isChoice: boolean;
+  } | null;
+
   resourceTypeConfig: {
     // uploadEntry: [],
     // limitFileSize: 0,
@@ -63,7 +83,7 @@ export interface ExhibitInfoPageModelState {
 
   graphShow: boolean;
 
-  side_ExhibitCover: string;
+  // side_ExhibitCover: string;
   side_ExhibitTitle: string;
   // side_ExhibitInputTitle: string | null;
   // side_ExhibitInputTitle_Error: string;
@@ -105,10 +125,10 @@ export interface ExhibitInfoPageModelState {
     valueInputError: string;
   }[];
 
-  side_ResourceID: string;
-  side_ResourceName: string;
-  side_ResourceType: string[];
-  side_ResourceCover: string;
+  // side_ResourceID: string;
+  // side_ResourceName: string;
+  // side_ResourceType: string[];
+  // side_ResourceCover: string;
 
   policyEditorVisible: boolean;
   policyOperaterVisible: boolean;
@@ -152,7 +172,7 @@ export interface UpdateAPolicyAction extends AnyAction {
 
 export interface UpdateBaseInfoAction extends AnyAction {
   type: 'exhibitInfoPage/updateBaseInfo';
-  payload: Partial<Pick<ExhibitInfoPageModelState, 'side_ExhibitCover' | 'side_ExhibitTitle' | 'side_ExhibitTags'>>;
+  payload: Partial<Pick<ExhibitInfoPageModelState, 'exhibit_Cover' | 'side_ExhibitTitle' | 'side_ExhibitTags'>>;
 }
 
 export interface UpdateStatusAction extends AnyAction {
@@ -342,6 +362,8 @@ const initStates: ExhibitInfoPageModelState = {
   exhibit_BelongNode_ID: -1,
   exhibit_BelongNode_Name: '',
   exhibit_BelongNode_ActiveThemeId: '',
+  exhibit_Cover: '',
+  exhibit_ResourceInfo: null,
   resourceTypeConfig: {
     isSupportOptionalConfig: false,
   },
@@ -356,7 +378,7 @@ const initStates: ExhibitInfoPageModelState = {
   // graph_Viewport_Show: 'relationship',
   graphShow: true,
 
-  side_ExhibitCover: '',
+  // side_ExhibitCover: '',
   side_ExhibitTitle: '',
   // side_ExhibitInputTitle: null,
   // side_ExhibitInputTitle_Error: '',
@@ -371,10 +393,10 @@ const initStates: ExhibitInfoPageModelState = {
   side_InheritOptions: [],
   side_CustomOptions: [],
 
-  side_ResourceID: '',
-  side_ResourceName: '',
-  side_ResourceType: [],
-  side_ResourceCover: '',
+  // side_ResourceID: '',
+  // side_ResourceName: '',
+  // side_ResourceType: [],
+  // side_ResourceCover: '',
 
   policyEditorVisible: false,
   policyOperaterVisible: false,
@@ -487,7 +509,27 @@ const Model: ExhibitInfoPageModelType = {
         resourceIdOrName: data_PresentableDetails.resourceInfo.resourceId,
       };
 
-      const { data: data_ResourceInfo } = yield call(FServiceAPI.Resource.info, params2);
+      const { data: data_ResourceInfo }: {
+        data: {
+          resourceId: string;
+          coverImages: string[];
+          resourceName: string;
+          resourceTitle: string;
+          resourceTypeCode: string;
+          resourceType: string[];
+          updateDate: string;
+          status: 0 | 1 | 2 | 4;
+          latestVersion: string;
+          resourceVersions: {
+            version: string;
+          }[];
+          policies: PolicyFullInfo_Type[];
+          // updateDate: string;
+          username: string;
+          userId: number;
+          operationType: 0 | 1;
+        }
+      } = yield call(FServiceAPI.Resource.info, params2);
       // console.log(data2, 'data2309jdsfa');
 
       // 组织授权信息数据
@@ -580,6 +622,30 @@ const Model: ExhibitInfoPageModelType = {
           //   : data_ExhibitBatchAuthResults[0].defaulterIdentityType === 2
           //     ? FI18n.i18nNext.t('alert_exhibit_no_auth')
           //     : '',
+          exhibit_Cover: data_PresentableDetails.coverImages[0] || '',
+          // side_ResourceID: data_ResourceInfo.resourceId,
+          // side_ResourceName: data_ResourceInfo.resourceName,
+          // side_ResourceType: data_ResourceInfo.resourceType,
+          // side_ResourceCover: data_ResourceInfo.coverImages[0] || '',
+          exhibit_ResourceInfo: {
+            id: data_ResourceInfo.resourceId,
+            cover: data_ResourceInfo.coverImages[0] || '',
+            name: data_ResourceInfo.resourceName,
+            title: data_ResourceInfo.resourceTitle,
+            version: data_ResourceInfo.latestVersion,
+            policy: data_ResourceInfo.policies
+              .filter((l) => {
+                return l.status === 1;
+              })
+              .map((l) => l.policyName),
+            type: data_ResourceInfo.resourceType,
+            status: data_ResourceInfo.status,
+            authProblem: false,
+            updateDate: moment(data_ResourceInfo.updateDate).format('YYYY-MM-DD'),
+            username: data_ResourceInfo.username,
+            useAvatar: `https://image.freelog.com/avatar/${data_ResourceInfo.userId}`,
+            isChoice: data_ResourceInfo.operationType === 1,
+          },
           resourceTypeConfig: {
             isSupportOptionalConfig: data_ResourceTypeInfo.resourceConfig.supportOptionalConfig === 2,
           },
@@ -642,7 +708,6 @@ const Model: ExhibitInfoPageModelType = {
               };
             }),
 
-          side_ExhibitCover: data_PresentableDetails.coverImages[0] || '',
           side_ExhibitTitle: data_PresentableDetails.presentableTitle,
           side_ExhibitIntroduction: data_PresentableDetails.presentableIntro || '',
           side_ExhibitTags: data_PresentableDetails.tags,
@@ -698,11 +763,6 @@ const Model: ExhibitInfoPageModelType = {
                 valueInputError: '',
               };
             }),
-
-          side_ResourceID: data_ResourceInfo.resourceId,
-          side_ResourceName: data_ResourceInfo.resourceName,
-          side_ResourceType: data_ResourceInfo.resourceType,
-          side_ResourceCover: data_ResourceInfo.coverImages[0] || '',
         },
       });
     },
@@ -745,7 +805,7 @@ const Model: ExhibitInfoPageModelType = {
         });
       });
 
-      if (!exhibitInfoPage.exhibit_Online && !exhibitInfoPage.side_ResourceType.includes('主题')) {
+      if (!exhibitInfoPage.exhibit_Online && !exhibitInfoPage.exhibit_ResourceInfo?.type.includes('主题')) {
         const online: boolean = yield call(fPromiseModalConfirm, {
           title: '展品待上架',
           description: '将展品上架开放授权，为你带来更多收益',
@@ -848,7 +908,7 @@ const Model: ExhibitInfoPageModelType = {
         tags: payload.side_ExhibitTags,
         // @ts-ignore
         presentableIntro: payload.side_ExhibitInputIntroduction || undefined,
-        coverImages: payload.side_ExhibitCover ? [payload.side_ExhibitCover] : undefined,
+        coverImages: payload.exhibit_Cover ? [payload.exhibit_Cover] : undefined,
       };
       const { ret, errCode, msg } = yield call(FServiceAPI.Exhibit.updatePresentable, params);
       if (ret !== 0 || errCode !== 0) {
@@ -870,7 +930,10 @@ const Model: ExhibitInfoPageModelType = {
       };
       const { data } = yield call(FServiceAPI.Exhibit.presentablesOnlineStatus, params);
       if (!data) {
-        fMessage(exhibitInfoPage.side_ResourceType.includes('主题') ? '激活失败' : '上线失败', 'error');
+        fMessage(exhibitInfoPage.exhibit_ResourceInfo?.type.includes('主题')
+            ? '激活失败'
+            : '上线失败',
+          'error');
         return;
       }
       yield put<FetchInfoAction>({
