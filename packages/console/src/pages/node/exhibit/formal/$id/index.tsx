@@ -214,50 +214,6 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
                     });
                   }}
                 />
-                {/*<span*/}
-                {/*  style={{ color: exhibitInfoPage.exhibit_Online ? '#42C28C' : '#666' }}>{FI18n.i18nNext.t('switch_set_exhibit_avaliable')}</span>*/}
-
-                {/*<FSwitch*/}
-                {/*  disabled={!exhibitInfoPage.exhibit_IsAuth && !exhibitInfoPage.exhibit_Online}*/}
-                {/*  checked={exhibitInfoPage.exhibit_Online}*/}
-                {/*  // loading={loading}*/}
-                {/*  onChange={async (checked) => {*/}
-                {/*    if (checked) {*/}
-                {/*      await onlineExhibit(exhibitInfoPage.exhibit_ID);*/}
-                {/*    } else {*/}
-
-                {/*      const confirm: boolean = await fPromiseModalConfirm({*/}
-                {/*        // title: '下架展品',*/}
-                {/*        // description: '下架后，其它用户将无法签约该展品，确认要下架吗？',*/}
-                {/*        title: '提示',*/}
-                {/*        description: FI18n.i18nNext.t('confirm_msg_remove_exhibits_from_auth'),*/}
-                {/*        okText: FI18n.i18nNext.t('btn_remove_exhibits_from_auth'),*/}
-                {/*        promptKey_localStorage: 'offlineExhibit',*/}
-                {/*      });*/}
-
-                {/*      if (confirm) {*/}
-                {/*        const params2: Parameters<typeof FServiceAPI.Exhibit.presentablesOnlineStatus>[0] = {*/}
-                {/*          presentableId: exhibitInfoPage.exhibit_ID,*/}
-                {/*          onlineStatus: 0,*/}
-                {/*        };*/}
-                {/*        await FServiceAPI.Exhibit.presentablesOnlineStatus(params2);*/}
-                {/*        fOnOffFeedback({*/}
-                {/*          state: 'off',*/}
-                {/*          message: FI18n.i18nNext.t('remove_resource_from_auth_msg_done'),*/}
-                {/*        });*/}
-                {/*      }*/}
-
-                {/*    }*/}
-                {/*    FComponentsLib.fSetHotspotTooltipVisible('exhibitDetailPage.onlineSwitch', {*/}
-                {/*      value: false,*/}
-                {/*      effectiveImmediately: true,*/}
-                {/*      onlyNullish: false,*/}
-                {/*    });*/}
-                {/*    dispatch<FetchInfoAction>({*/}
-                {/*      type: 'exhibitInfoPage/fetchInfo',*/}
-                {/*    });*/}
-                {/*  }}*/}
-                {/*/>*/}
               </>)
             }
 
@@ -962,15 +918,6 @@ function TitleInput({ value, onOK }: TitleInputProps) {
           set$valueError(e.target.value.length > 100 ? '不能超过100个字符' : '');
         }}
       />
-
-      <FComponentsLib.FRectBtn
-        type='default'
-        // size="small"
-        // onClick={() => onChangePInputTitle(null)}
-        onClick={() => {
-          set$isEdit(false);
-        }}
-      >{FI18n.i18nNext.t('btn_cancel')}</FComponentsLib.FRectBtn>
       <FComponentsLib.FRectBtn
         type={'primary'}
         disabled={$valueError !== ''}
@@ -987,6 +934,14 @@ function TitleInput({ value, onOK }: TitleInputProps) {
           set$isEdit(false);
         }}
       >{FI18n.i18nNext.t('btn_save')}</FComponentsLib.FRectBtn>
+      <FComponentsLib.FRectBtn
+        type='default'
+        // size="small"
+        // onClick={() => onChangePInputTitle(null)}
+        onClick={() => {
+          set$isEdit(false);
+        }}
+      >{FI18n.i18nNext.t('btn_cancel')}</FComponentsLib.FRectBtn>
     </Space>
 
     {
