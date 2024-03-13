@@ -24,23 +24,10 @@ function Contracts({ dispatch, exhibitInfoPage }: ContractsProps) {
 
   const selectedResource = exhibitInfoPage.contract_Associated.find((a) => a.id === exhibitInfoPage.contract_SelectedAssociatedID);
 
-
-  // async function onChange(payload: Partial<ExhibitInfoPageModelState>) {
-  //   await dispatch<ChangeAction>({
-  //     type: 'exhibitInfoPage/change',
-  //     payload: payload,
-  //   });
-  // }
-
   return (<div className={styles.sign}>
     <div className={styles.signLeft}>
       <Resources />
     </div>
-
-    {/*{*/}
-    {/*  selectedResource && selectedResource.error !== '' &&*/}
-    {/*}*/}
-
     {
       selectedResource && (selectedResource.error === '' || (selectedResource.error === 'offline' && selectedResource.contracts.length > 0) ? (
           <div className={styles.signRight}>
