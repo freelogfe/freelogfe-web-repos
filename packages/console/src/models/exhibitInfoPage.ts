@@ -714,16 +714,22 @@ const Model: ExhibitInfoPageModelType = {
 
           side_AllVersions: data_ResourceInfo.resourceVersions.map((d2: any) => d2.version),
           side_Version: data_PresentableDetails.version,
-          side_RawProperties: data_PresentableDetails.resourceSystemPropertyDescriptors.map((spd) => {
-            return {
-              key: spd.key,
-              name: spd.name,
-              value: spd.valueDisplay,
-              description: spd.remark,
-            };
-          }),
+          side_RawProperties: data_PresentableDetails.resourceSystemPropertyDescriptors
+            .filter((spd) => {
+              return spd.defaultValue !== '';
+            })
+            .map((spd) => {
+              return {
+                key: spd.key,
+                name: spd.name,
+                value: spd.valueDisplay,
+                description: spd.remark,
+              };
+            }),
           side_BaseProperties: data_PresentableDetails.resourceCustomPropertyDescriptors
-            .filter((rd: any) => rd.type === 'readonlyText')
+            .filter((rd) => {
+              return rd.type === 'readonlyText' && rd.defaultValue !== '';
+            })
             .map((rd: any) => ({
               key: rd.key,
               name: rd.name,
