@@ -9,6 +9,7 @@ import fMessage from '@/components/fMessage';
 interface FUploadCoverProps {
   use?: 'resource' | 'exhibit';
   children: React.ReactNode;
+  style?: React.CSSProperties;
 
   onUploadSuccess?(url: string): void;
 
@@ -27,7 +28,7 @@ const initStates: FUploadCoverStates = {
   uploading: false,
 };
 
-function FUploadCover({ use = 'resource', children, onUploadSuccess, onError }: FUploadCoverProps) {
+function FUploadCover({ use = 'resource', children, onUploadSuccess, onError, style }: FUploadCoverProps) {
   const ref = React.useRef<any>(null);
   // const [$naturalFile, set$naturalFile, get$naturalFile] = FUtil.Hook.useGetState<FUploadCoverStates['naturalFile']>(initStates['naturalFile']);
   const [$image, set$image, get$image] = FUtil.Hook.useGetState<FUploadCoverStates['image']>(initStates['image']);
@@ -81,38 +82,47 @@ function FUploadCover({ use = 'resource', children, onUploadSuccess, onError }: 
   //   };
   // }
 
-  return (<div className={styles.styles}>
-
-    <Upload
-      // accept={'image/gif,image/png,.jpg'}
-      accept={'.gif,.png,.jpg,.jpeg,.jpe'}
-      beforeUpload={(file: RcFile) => {
-        if (file.type !== 'image/gif' && file.type !== 'image/png' && file.type !== 'image/jpeg') {
-          onError && onError(FI18n.i18nNext.t('limit_resource_image_format'));
-          return false;
-        }
-
-        if (file.size > 5 * 1024 * 1024) {
-          onError && onError(FI18n.i18nNext.t('limit_resource_image_size'));
-          return false;
-        }
-
-        // setNaturalFile(file);
-
-        const reader = new FileReader();
-        reader.onload = () => {
-          set$image(reader.result as any);
-        };
-        reader.readAsDataURL(file);
-        return false;
+  return (<>
+    <div
+      className={styles.styles}
+      style={style}
+      onClick={() => {
+        ref.current.click();
       }}
-      multiple={false}
-      showUploadList={false}
     >
-      <div ref={ref} className={styles.uploadContainer}>
-        {children}
-      </div>
-    </Upload>
+      {children}
+    </div>
+    <div style={{ display: 'none', width: 0, height: 0, overflow: 'hidden' }}>
+      <Upload
+        // accept={'image/gif,image/png,.jpg'}
+        accept={'.gif,.png,.jpg,.jpeg,.jpe'}
+        beforeUpload={(file: RcFile) => {
+          if (file.type !== 'image/gif' && file.type !== 'image/png' && file.type !== 'image/jpeg') {
+            onError && onError(FI18n.i18nNext.t('limit_resource_image_format'));
+            return false;
+          }
+
+          if (file.size > 5 * 1024 * 1024) {
+            onError && onError(FI18n.i18nNext.t('limit_resource_image_size'));
+            return false;
+          }
+
+          // setNaturalFile(file);
+
+          const reader = new FileReader();
+          reader.onload = () => {
+            set$image(reader.result as any);
+          };
+          reader.readAsDataURL(file);
+          return false;
+        }}
+        multiple={false}
+        showUploadList={false}
+        style={{ display: 'none' }}
+      >
+        <div ref={ref} className={styles.uploadContainer} />
+      </Upload>
+    </div>
     <FCropperModal
       use={use}
       uploading={$uploading}
@@ -151,7 +161,8 @@ function FUploadCover({ use = 'resource', children, onUploadSuccess, onError }: 
         set$image(initStates['image']);
       }}
     />
-  </div>);
+
+  </>);
 }
 
 export default FUploadCover;

@@ -28,13 +28,13 @@
       flex-direction: row-reverse;
 
       .CustomSwitch {
-        min-width: 54px;
-        height: 36px;
-        line-height: 36px;
+        min-width: 42px;
+        height: 28px;
+        line-height: 42px;
 
         :global(.ant-switch-handle) {
-          width: 32px;
-          height: 32px;
+          width: 24px;
+          height: 24px;
           border-radius: 50%;
           overflow: hidden;
         }
@@ -44,7 +44,7 @@
         }
 
         &:global(.ant-switch-checked .ant-switch-handle) {
-          left: calc(100% - 32px - 2px);
+          left: calc(100% - 24px - 2px);
         }
       }
     }
@@ -62,6 +62,7 @@
       position: relative;
       display: flex;
       cursor: pointer;
+      overflow: hidden;
 
       &:hover {
         & > .coverEdit {

@@ -277,6 +277,7 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
       <div style={{ height: 40 }} />
       <Space size={20} style={{ alignItems: 'flex-start' }}>
         <FUploadCover
+          style={{ height: 195 }}
           use={'exhibit'}
           onError={(err) => {
             fMessage(err, 'error');
@@ -384,7 +385,7 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
           </div>
         </div>
       </Space>
-      <div style={{ height: 20 }} />
+      <div style={{ height: 15 }} />
       <Space size={10}>
         <FComponentsLib.FTextBtn
           style={{ fontSize: 12 }}
@@ -413,7 +414,7 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
 
       {
         exhibitInfoPage.side_SettingUnfold && (<>
-          <div className={styles.block}>
+          <div className={styles.block} style={{ backgroundColor: 'rgba(0,0,0,0.02)' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <FComponentsLib.FContentText
                 text={'展示版本'}
@@ -461,7 +462,7 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
           </div>
 
           <div style={{ height: 5 }} />
-          <div className={styles.block}>
+          <div className={styles.block} style={{ backgroundColor: 'rgba(0,0,0,0.02)' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <FComponentsLib.FContentText text={'基础属性'} type={'highlight'} />
             </div>
@@ -477,7 +478,7 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
           {
             exhibitInfoPage.resourceTypeConfig.isSupportOptionalConfig && (<>
               <div style={{ height: 5 }} />
-              <div className={styles.block}>
+              <div className={styles.block} style={{ backgroundColor: 'rgba(0,0,0,0.02)' }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                   <FComponentsLib.FContentText
                     text={'可选配置'}
@@ -618,7 +619,7 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
           }
 
           <div style={{ height: 5 }} />
-          <div className={styles.block}>
+          <div className={styles.block} style={{ backgroundColor: 'rgba(0,0,0,0.02)' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <FComponentsLib.FContentText
                 text={'自定义信息'}
