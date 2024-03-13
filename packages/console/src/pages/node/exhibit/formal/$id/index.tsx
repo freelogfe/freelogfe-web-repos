@@ -228,6 +228,30 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
           </Space>)
         }
 
+        {
+          exhibitInfoPage.exhibit_IsAuth && (<>
+            {
+              exhibitInfoPage.exhibit_ResourceInfo?.type.includes('主题') && (<>
+                <FComponentsLib.FContentText
+                  text={exhibitInfoPage.exhibit_Online ? '主题已激活' : '主题未激活'}
+                  type={'additional2'}
+                  style={{ color: '#222' }}
+                />
+              </>)
+            }
+
+            {
+              !exhibitInfoPage.exhibit_ResourceInfo?.type.includes('主题') && (<>
+                <FComponentsLib.FContentText
+                  text={exhibitInfoPage.exhibit_Online ? '展品已上架' : '展品未上架'}
+                  type={'additional2'}
+                  style={{ color: '#222' }}
+                />
+              </>)
+            }
+          </>)
+        }
+
       </div>
 
       <div style={{ height: 40 }} />
