@@ -41,13 +41,13 @@ export interface ExhibitInfoPageModelState {
     isChoice: boolean;
   } | null;
 
-  resourceTypeConfig: {
-    // uploadEntry: [],
-    // limitFileSize: 0,
-    // isSupportDownload: false,
-    // isSupportEdit: false,
-    isSupportOptionalConfig: boolean;
-  };
+  // resourceTypeConfig: {
+  //   // uploadEntry: [],
+  //   // limitFileSize: 0,
+  //   // isSupportDownload: false,
+  //   // isSupportEdit: false,
+  //   isSupportOptionalConfig: boolean;
+  // };
   policy_List: PolicyFullInfo_Type[];
 
   contract_ExhibitAllContractIDs: {
@@ -350,9 +350,9 @@ const initStates: ExhibitInfoPageModelState = {
   exhibit_BelongNode_ActiveThemeId: '',
   exhibit_Cover: '',
   exhibit_ResourceInfo: null,
-  resourceTypeConfig: {
-    isSupportOptionalConfig: false,
-  },
+  // resourceTypeConfig: {
+  //   isSupportOptionalConfig: false,
+  // },
   policy_List: [],
   // policy_BuildDrawer_Visible: false,
 
@@ -572,24 +572,24 @@ const Model: ExhibitInfoPageModelType = {
         return (a.status === 1 && b.status === 0) ? -1 : 0;
       });
 
-      const params4: Parameters<typeof FServiceAPI.Resource.getResourceTypeInfoByCode>[0] = {
-        code: data_ResourceInfo.resourceTypeCode,
-      };
-      const { data: data_ResourceTypeInfo }: {
-        ret: number;
-        errCode: number;
-        msg: string;
-        data: {
-          resourceConfig: {
-            fileCommitMode: number[];
-            fileMaxSize: number;
-            fileMaxSizeUnit: 1 | 2;
-            supportDownload: 1 | 2;
-            supportEdit: 1 | 2;
-            supportOptionalConfig: 1 | 2;
-          }
-        };
-      } = yield call(FServiceAPI.Resource.getResourceTypeInfoByCode, params4);
+      // const params4: Parameters<typeof FServiceAPI.Resource.getResourceTypeInfoByCode>[0] = {
+      //   code: data_ResourceInfo.resourceTypeCode,
+      // };
+      // const { data: data_ResourceTypeInfo }: {
+      //   ret: number;
+      //   errCode: number;
+      //   msg: string;
+      //   data: {
+      //     resourceConfig: {
+      //       fileCommitMode: number[];
+      //       fileMaxSize: number;
+      //       fileMaxSizeUnit: 1 | 2;
+      //       supportDownload: 1 | 2;
+      //       supportEdit: 1 | 2;
+      //       supportOptionalConfig: 1 | 2;
+      //     }
+      //   };
+      // } = yield call(FServiceAPI.Resource.getResourceTypeInfoByCode, params4);
 
       yield put<ChangeAction>({
         type: 'change',
@@ -632,9 +632,9 @@ const Model: ExhibitInfoPageModelType = {
             useAvatar: `https://image.freelog.com/avatar/${data_ResourceInfo.userId}`,
             isChoice: data_ResourceInfo.operationType === 1,
           },
-          resourceTypeConfig: {
-            isSupportOptionalConfig: data_ResourceTypeInfo.resourceConfig.supportOptionalConfig === 2,
-          },
+          // resourceTypeConfig: {
+          //   isSupportOptionalConfig: data_ResourceTypeInfo.resourceConfig.supportOptionalConfig === 2,
+          // },
 
           policy_List: policies,
 
