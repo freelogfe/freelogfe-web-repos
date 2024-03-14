@@ -1135,7 +1135,7 @@ const Model: ExhibitInfoPageModelType = {
       if (ret !== 0 || errCode !== 0 || !data) {
         return fMessage(msg, 'error');
       }
-      fMessage('自定义选项已重置');
+      fMessage('可选配置已重置');
     },
     * onChange_Side_InheritOptions_ValueInput({ payload }: OnChange_Side_InheritOptions_ValueInput_Action, {
       select,
