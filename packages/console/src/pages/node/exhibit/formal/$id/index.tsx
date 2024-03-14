@@ -456,7 +456,7 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
           </div>
 
           {
-            exhibitInfoPage.resourceTypeConfig.isSupportOptionalConfig && (<>
+            exhibitInfoPage.side_InheritOptions.length > 0 && (<>
               <div style={{ height: 5 }} />
               <div className={styles.block} style={{ backgroundColor: 'rgba(0,0,0,0.02)' }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -466,134 +466,114 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
                   />
                 </div>
 
-                {
-                  // info.customConfigurations.length === 0 && (<>
-                  exhibitInfoPage.side_InheritOptions.length === 0 && (<>
-                    <div style={{ height: 10 }} />
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      {/*<span>{FI18n.i18nNext.t('resourceoptions_list_empty')}</span>*/}
-                      <FComponentsLib.FContentText
-                        text={FI18n.i18nNext.t('resourceoptions_list_empty')}
-                        type={'additional2'}
-                      />
-                    </div>
-                    <div style={{ height: 20 }} />
-                  </>)
-                }
-
-                {
-                  exhibitInfoPage.side_InheritOptions.length > 0 && (<>
-                    <div style={{ height: 10 }} />
-                    <Space direction={'vertical'} size={10} className={styles.InheritOptions}>
-                      {
-                        exhibitInfoPage.side_InheritOptions.map((io, index) => {
-                          return (<div key={io.key}>
-                            <div className={styles.optionTitle}>
-                              <FResourcePropertyAndOptionTipPopover
-                                info={{
-                                  key: io.key,
-                                  name: io.name,
-                                  description: io.description,
-                                }}
-                                type={'option'}
-                              >
-                                <div>
-                                  <FComponentsLib.FContentText
-                                    text={io.name}
-                                    singleRow
-                                    style={{ maxWidth: 160 }}
-                                  />
-                                </div>
-                              </FResourcePropertyAndOptionTipPopover>
-
-                              <FTooltip title={FI18n.i18nNext.t('tip_reset_value')}>
-                                <div>
-                                  <FComponentsLib.FTextBtn
-                                    onClick={() => {
-                                      // onChangeCustomAttrs({ key: pc.key, value: pc.defaultValue || '' }, true);
-                                      dispatch<OnClick_Side_InheritOptions_ResetBtn_Action>({
-                                        type: 'exhibitInfoPage/onClick_Side_InheritOptions_ResetBtn',
-                                        payload: {
-                                          index: index,
-                                        },
-                                      });
-                                    }}
-                                  >
-                                    <FComponentsLib.FIcons.FRedo style={{ fontSize: 12 }} />
-                                  </FComponentsLib.FTextBtn>
-                                </div>
-                              </FTooltip>
+                <div style={{ height: 10 }} />
+                <Space direction={'vertical'} size={10} className={styles.InheritOptions}>
+                  {
+                    exhibitInfoPage.side_InheritOptions.map((io, index) => {
+                      return (<div key={io.key}>
+                        <div className={styles.optionTitle}>
+                          <FResourcePropertyAndOptionTipPopover
+                            info={{
+                              key: io.key,
+                              name: io.name,
+                              description: io.description,
+                            }}
+                            type={'option'}
+                          >
+                            <div>
+                              <FComponentsLib.FContentText
+                                text={io.name}
+                                singleRow
+                                style={{ maxWidth: 160 }}
+                              />
                             </div>
-                            <div style={{ height: 5 }} />
-                            {
-                              io.type === 'select'
-                                ? (<FSelect
-                                  className={styles.FSelect}
-                                  // getPopupContainer={() => {
-                                  //   // console.log(ref.current, 'ref.currentiosdjflksdjflksjdklf sdaoifj;sldkfjlkj');
-                                  //   return ref.current;
-                                  // }}
-                                  value={io.valueInput}
-                                  dataSource={io.options.map((d) => ({ value: d, title: d }))}
-                                  onChange={(value: string) => {
-                                    // onChangeCustomAttrs({ key: pc.key, value: value }, true);
-                                    dispatch<OnChange_Side_InheritOptions_ValueInput_Action>({
-                                      type: 'exhibitInfoPage/onChange_Side_InheritOptions_ValueInput',
-                                      payload: {
-                                        index: index,
-                                        value: value,
-                                      },
-                                    });
-                                  }}
-                                  onBlur={() => {
-                                    dispatch<OnBlur_Side_InheritOptions_ValueInput_Action>({
-                                      type: 'exhibitInfoPage/onBlur_Side_InheritOptions_ValueInput',
-                                      payload: {
-                                        index: index,
-                                      },
-                                    });
-                                  }}
-                                />)
-                                : (<div>
-                                  <FComponentsLib.FInput.FSingleLine
-                                    lengthLimit={-1}
-                                    className={styles.FInput}
-                                    value={io.valueInput}
-                                    // errorText={io.valueInputError}
-                                    placeholder={'输入自定义选项'}
-                                    onChange={(e) => {
-                                      // onChangeCustomAttrs({ key: pc.key, value: e.target.value });
-                                      dispatch<OnChange_Side_InheritOptions_ValueInput_Action>({
-                                        type: 'exhibitInfoPage/onChange_Side_InheritOptions_ValueInput',
-                                        payload: {
-                                          index: index,
-                                          value: e.target.value,
-                                        },
-                                      });
-                                    }}
-                                    onBlur={() => {
-                                      dispatch<OnBlur_Side_InheritOptions_ValueInput_Action>({
-                                        type: 'exhibitInfoPage/onBlur_Side_InheritOptions_ValueInput',
-                                        payload: {
-                                          index: index,
-                                        },
-                                      });
-                                    }}
-                                  />
-                                  {
-                                    io.valueInputError !== '' && (
-                                      <div style={{ color: '#EE4040' }}>{io.valueInputError}</div>)
-                                  }
+                          </FResourcePropertyAndOptionTipPopover>
 
-                                </div>)
-                            }
-                          </div>);
-                        })
-                      }
-                    </Space>
-                  </>)
-                }
+                          <FTooltip title={FI18n.i18nNext.t('tip_reset_value')}>
+                            <div>
+                              <FComponentsLib.FTextBtn
+                                onClick={() => {
+                                  // onChangeCustomAttrs({ key: pc.key, value: pc.defaultValue || '' }, true);
+                                  dispatch<OnClick_Side_InheritOptions_ResetBtn_Action>({
+                                    type: 'exhibitInfoPage/onClick_Side_InheritOptions_ResetBtn',
+                                    payload: {
+                                      index: index,
+                                    },
+                                  });
+                                }}
+                              >
+                                <FComponentsLib.FIcons.FRedo style={{ fontSize: 12 }} />
+                              </FComponentsLib.FTextBtn>
+                            </div>
+                          </FTooltip>
+                        </div>
+                        <div style={{ height: 5 }} />
+                        {
+                          io.type === 'select'
+                            ? (<FSelect
+                              className={styles.FSelect}
+                              // getPopupContainer={() => {
+                              //   // console.log(ref.current, 'ref.currentiosdjflksdjflksjdklf sdaoifj;sldkfjlkj');
+                              //   return ref.current;
+                              // }}
+                              value={io.valueInput}
+                              dataSource={io.options.map((d) => ({ value: d, title: d }))}
+                              onChange={(value: string) => {
+                                // onChangeCustomAttrs({ key: pc.key, value: value }, true);
+                                dispatch<OnChange_Side_InheritOptions_ValueInput_Action>({
+                                  type: 'exhibitInfoPage/onChange_Side_InheritOptions_ValueInput',
+                                  payload: {
+                                    index: index,
+                                    value: value,
+                                  },
+                                });
+                              }}
+                              onBlur={() => {
+                                dispatch<OnBlur_Side_InheritOptions_ValueInput_Action>({
+                                  type: 'exhibitInfoPage/onBlur_Side_InheritOptions_ValueInput',
+                                  payload: {
+                                    index: index,
+                                  },
+                                });
+                              }}
+                            />)
+                            : (<div>
+                              <FComponentsLib.FInput.FSingleLine
+                                lengthLimit={-1}
+                                className={styles.FInput}
+                                value={io.valueInput}
+                                // errorText={io.valueInputError}
+                                placeholder={'输入自定义选项'}
+                                onChange={(e) => {
+                                  // onChangeCustomAttrs({ key: pc.key, value: e.target.value });
+                                  dispatch<OnChange_Side_InheritOptions_ValueInput_Action>({
+                                    type: 'exhibitInfoPage/onChange_Side_InheritOptions_ValueInput',
+                                    payload: {
+                                      index: index,
+                                      value: e.target.value,
+                                    },
+                                  });
+                                }}
+                                onBlur={() => {
+                                  dispatch<OnBlur_Side_InheritOptions_ValueInput_Action>({
+                                    type: 'exhibitInfoPage/onBlur_Side_InheritOptions_ValueInput',
+                                    payload: {
+                                      index: index,
+                                    },
+                                  });
+                                }}
+                              />
+                              {
+                                io.valueInputError !== '' && (
+                                  <div style={{ color: '#EE4040' }}>{io.valueInputError}</div>)
+                              }
 
+                            </div>)
+                        }
+                      </div>);
+                    })
+                  }
+                </Space>
               </div>
             </>)
           }
