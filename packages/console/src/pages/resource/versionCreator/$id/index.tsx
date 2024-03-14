@@ -100,10 +100,10 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
     },
   );
 
-  const isCartoon = resourceVersionCreatorPage.resourceInfo?.resourceType[0] === '阅读'
-    && resourceVersionCreatorPage.resourceInfo?.resourceType[1] === '漫画'
-    && (resourceVersionCreatorPage.resourceInfo?.resourceType[2] === '条漫'
-      || resourceVersionCreatorPage.resourceInfo?.resourceType[2] === '页漫');
+  // const isCartoon = resourceVersionCreatorPage.resourceInfo?.resourceType[0] === '阅读'
+  //   && resourceVersionCreatorPage.resourceInfo?.resourceType[1] === '漫画'
+  //   && (resourceVersionCreatorPage.resourceInfo?.resourceType[2] === '条漫'
+  //     || resourceVersionCreatorPage.resourceInfo?.resourceType[2] === '页漫');
 
   async function onClick_EditMarkdownBtn() {
 
@@ -804,232 +804,228 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
         }
 
 
-        {
-          $showMore && (<div>
-            {/*<div style={{ display: 'block' }}>*/}
-            <div style={{ height: 10 }} />
+        <div style={{ display: $showMore ? 'block' : 'none' }}>
+          {/*<div style={{ display: 'block' }}>*/}
+          <div style={{ height: 10 }} />
 
-            {
-              (resourceVersionCreatorPage.resourceInfo?.resourceType.includes('插件')
-                || resourceVersionCreatorPage.resourceInfo?.resourceType.includes('主题'))
-              && (<>
-                <div className={styles.block}>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <FComponentsLib.FContentText text={FI18n.i18nNext.t('resourceoptions_title')} type={'highlight'} />
-
-                    {
-                      resourceVersionCreatorPage.customConfigurations.length < 30 && (<Space size={10}>
-                        <FTooltip title={FI18n.i18nNext.t('info_versionoptions')}>
-                          <div>
-                            <FComponentsLib.FTextBtn
-                              style={{ fontSize: 12, display: 'flex', alignItems: 'center', gap: 5 }}
-                              type='primary'
-                              onClick={async () => {
-                                const dataSource: {
-                                  key: string;
-                                  name: string;
-                                  type: 'input' | 'select';
-                                  input: string;
-                                  select: string[];
-                                  description: string;
-                                } | null = await fResourceOptionEditor({
-                                  disabledKeys: [
-                                    ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
-                                    ...resourceVersionCreatorPage.additionalProperties.map<string>((rp) => rp.key),
-                                    ...resourceVersionCreatorPage.customProperties.map<string>((bp) => bp.key),
-                                    ...resourceVersionCreatorPage.customConfigurations.map<string>((pp) => pp.key),
-                                  ],
-                                  disabledNames: [
-                                    ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.name),
-                                    ...resourceVersionCreatorPage.additionalProperties.map<string>((rp) => rp.name),
-                                    ...resourceVersionCreatorPage.customProperties.map<string>((bp) => bp.name),
-                                    ...resourceVersionCreatorPage.customConfigurations.map<string>((pp) => pp.name),
-                                  ],
-                                });
-
-                                if (!dataSource) {
-                                  return;
-                                }
-
-                                await dispatch<OnChange_CustomConfigurations_Action>({
-                                  type: 'resourceVersionCreatorPage/onChange_CustomConfigurations',
-                                  payload: {
-                                    value: [
-                                      ...resourceVersionCreatorPage.customConfigurations,
-                                      dataSource,
-                                    ],
-                                  },
-                                });
-                              }}
-                            >
-                              <FComponentsLib.FIcons.FConfiguration style={{ fontSize: 14 }} />
-                              <span>{FI18n.i18nNext.t('resourceoptions_add_btn')}</span>
-                            </FComponentsLib.FTextBtn>
-                          </div>
-                        </FTooltip>
-
-                        {/*{*/}
-                        {/*  resourceVersionCreatorPage.preVersion_customConfigurations.length > 0 && (*/}
-                        {/*    <FComponentsLib.FTextBtn*/}
-                        {/*      type='primary'*/}
-                        {/*      style={{ fontSize: 12 }}*/}
-                        {/*      onClick={async () => {*/}
-                        {/*        const data: {*/}
-                        {/*          key: string;*/}
-                        {/*          name: string;*/}
-                        {/*          description: string;*/}
-                        {/*          type: 'input' | 'select';*/}
-                        {/*          input: string;*/}
-                        {/*          select: string[];*/}
-                        {/*        }[] | null = await fAddCustomOptions({*/}
-                        {/*          disabledKeys: [*/}
-                        {/*            ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),*/}
-                        {/*            ...resourceVersionCreatorPage.additionalProperties.map<string>((pp) => pp.key),*/}
-                        {/*            ...resourceVersionCreatorPage.customProperties.map<string>((pp) => pp.key),*/}
-                        {/*            ...resourceVersionCreatorPage.customConfigurations.map<string>((cod) => cod.key),*/}
-                        {/*          ],*/}
-                        {/*          disabledNames: [*/}
-                        {/*            ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.name),*/}
-                        {/*            ...resourceVersionCreatorPage.additionalProperties.map<string>((rp) => rp.name),*/}
-                        {/*            ...resourceVersionCreatorPage.customProperties.map<string>((pp) => pp.name),*/}
-                        {/*            ...resourceVersionCreatorPage.customConfigurations.map<string>((cod) => cod.name),*/}
-                        {/*          ],*/}
-                        {/*          defaultData: resourceVersionCreatorPage.preVersion_customConfigurations,*/}
-                        {/*        });*/}
-                        {/*        // console.log(data, 'data09weeisojfsdlkfjsldkjflk');*/}
-                        {/*        if (!data) {*/}
-                        {/*          return;*/}
-                        {/*        }*/}
-
-                        {/*        await dispatch<OnChange_CustomConfigurations_Action>({*/}
-                        {/*          type: 'resourceVersionCreatorPage/onChange_CustomConfigurations',*/}
-                        {/*          payload: {*/}
-                        {/*            value: [*/}
-                        {/*              ...resourceVersionCreatorPage.customConfigurations,*/}
-                        {/*              ...data,*/}
-                        {/*            ],*/}
-                        {/*          },*/}
-                        {/*        });*/}
-                        {/*      }}*/}
-                        {/*    >从上个版本导入</FComponentsLib.FTextBtn>)*/}
-                        {/*}*/}
-                      </Space>)
-                    }
-                  </div>
+          {
+            resourceVersionCreatorPage.resourceTypeConfig.isSupportOptionalConfig && (<>
+              <div className={styles.block}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <FComponentsLib.FContentText text={FI18n.i18nNext.t('resourceoptions_title')} type={'highlight'} />
 
                   {
-                    resourceVersionCreatorPage.customConfigurations.length === 0 && (<>
-                      <div style={{ height: 10 }} />
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        {/*<span>{FI18n.i18nNext.t('resourceoptions_list_empty')}</span>*/}
-                        <FComponentsLib.FContentText
-                          text={FI18n.i18nNext.t('resourceoptions_list_empty')}
-                          type={'additional2'}
-                        />
-                      </div>
-                      <div style={{ height: 20 }} />
-                    </>)
+                    resourceVersionCreatorPage.customConfigurations.length < 30 && (<Space size={10}>
+                      <FTooltip title={FI18n.i18nNext.t('info_versionoptions')}>
+                        <div>
+                          <FComponentsLib.FTextBtn
+                            style={{ fontSize: 12, display: 'flex', alignItems: 'center', gap: 5 }}
+                            type='primary'
+                            onClick={async () => {
+                              const dataSource: {
+                                key: string;
+                                name: string;
+                                type: 'input' | 'select';
+                                input: string;
+                                select: string[];
+                                description: string;
+                              } | null = await fResourceOptionEditor({
+                                disabledKeys: [
+                                  ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
+                                  ...resourceVersionCreatorPage.additionalProperties.map<string>((rp) => rp.key),
+                                  ...resourceVersionCreatorPage.customProperties.map<string>((bp) => bp.key),
+                                  ...resourceVersionCreatorPage.customConfigurations.map<string>((pp) => pp.key),
+                                ],
+                                disabledNames: [
+                                  ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.name),
+                                  ...resourceVersionCreatorPage.additionalProperties.map<string>((rp) => rp.name),
+                                  ...resourceVersionCreatorPage.customProperties.map<string>((bp) => bp.name),
+                                  ...resourceVersionCreatorPage.customConfigurations.map<string>((pp) => pp.name),
+                                ],
+                              });
+
+                              if (!dataSource) {
+                                return;
+                              }
+
+                              await dispatch<OnChange_CustomConfigurations_Action>({
+                                type: 'resourceVersionCreatorPage/onChange_CustomConfigurations',
+                                payload: {
+                                  value: [
+                                    ...resourceVersionCreatorPage.customConfigurations,
+                                    dataSource,
+                                  ],
+                                },
+                              });
+                            }}
+                          >
+                            <FComponentsLib.FIcons.FConfiguration style={{ fontSize: 14 }} />
+                            <span>{FI18n.i18nNext.t('resourceoptions_add_btn')}</span>
+                          </FComponentsLib.FTextBtn>
+                        </div>
+                      </FTooltip>
+
+                      {/*{*/}
+                      {/*  resourceVersionCreatorPage.preVersion_customConfigurations.length > 0 && (*/}
+                      {/*    <FComponentsLib.FTextBtn*/}
+                      {/*      type='primary'*/}
+                      {/*      style={{ fontSize: 12 }}*/}
+                      {/*      onClick={async () => {*/}
+                      {/*        const data: {*/}
+                      {/*          key: string;*/}
+                      {/*          name: string;*/}
+                      {/*          description: string;*/}
+                      {/*          type: 'input' | 'select';*/}
+                      {/*          input: string;*/}
+                      {/*          select: string[];*/}
+                      {/*        }[] | null = await fAddCustomOptions({*/}
+                      {/*          disabledKeys: [*/}
+                      {/*            ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),*/}
+                      {/*            ...resourceVersionCreatorPage.additionalProperties.map<string>((pp) => pp.key),*/}
+                      {/*            ...resourceVersionCreatorPage.customProperties.map<string>((pp) => pp.key),*/}
+                      {/*            ...resourceVersionCreatorPage.customConfigurations.map<string>((cod) => cod.key),*/}
+                      {/*          ],*/}
+                      {/*          disabledNames: [*/}
+                      {/*            ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.name),*/}
+                      {/*            ...resourceVersionCreatorPage.additionalProperties.map<string>((rp) => rp.name),*/}
+                      {/*            ...resourceVersionCreatorPage.customProperties.map<string>((pp) => pp.name),*/}
+                      {/*            ...resourceVersionCreatorPage.customConfigurations.map<string>((cod) => cod.name),*/}
+                      {/*          ],*/}
+                      {/*          defaultData: resourceVersionCreatorPage.preVersion_customConfigurations,*/}
+                      {/*        });*/}
+                      {/*        // console.log(data, 'data09weeisojfsdlkfjsldkjflk');*/}
+                      {/*        if (!data) {*/}
+                      {/*          return;*/}
+                      {/*        }*/}
+
+                      {/*        await dispatch<OnChange_CustomConfigurations_Action>({*/}
+                      {/*          type: 'resourceVersionCreatorPage/onChange_CustomConfigurations',*/}
+                      {/*          payload: {*/}
+                      {/*            value: [*/}
+                      {/*              ...resourceVersionCreatorPage.customConfigurations,*/}
+                      {/*              ...data,*/}
+                      {/*            ],*/}
+                      {/*          },*/}
+                      {/*        });*/}
+                      {/*      }}*/}
+                      {/*    >从上个版本导入</FComponentsLib.FTextBtn>)*/}
+                      {/*}*/}
+                    </Space>)
                   }
-
-                  {
-                    resourceVersionCreatorPage.customConfigurations.length > 0 && (<>
-                      <div style={{ height: 20 }} />
-                      <FResourceOptions
-                        theme={'dark'}
-                        // dataSource={resourceVersionCreatorPage.customOptionsData}
-                        dataSource={resourceVersionCreatorPage.customConfigurations}
-                        onEdit={async (value) => {
-                          const index: number = resourceVersionCreatorPage.customConfigurations.findIndex((p) => {
-                            return p === value;
-                          });
-
-                          const dataSource: {
-                            key: string;
-                            name: string;
-                            type: 'input' | 'select';
-                            input: string;
-                            select: string[];
-                            description: string;
-                          } | null = await fResourceOptionEditor({
-                            disabledKeys: [
-                              ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
-                              ...resourceVersionCreatorPage.additionalProperties.map<string>((rp) => rp.key),
-                              ...resourceVersionCreatorPage.customProperties.map<string>((bp) => bp.key),
-                              ...resourceVersionCreatorPage.customConfigurations.map<string>((pp) => pp.key),
-                            ],
-                            disabledNames: [
-                              ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.name),
-                              ...resourceVersionCreatorPage.additionalProperties.map<string>((rp) => rp.name),
-                              ...resourceVersionCreatorPage.customProperties.map<string>((bp) => bp.name),
-                              ...resourceVersionCreatorPage.customConfigurations.map<string>((pp) => pp.name),
-                            ],
-                            defaultData: value,
-                          });
-
-                          if (!dataSource) {
-                            return;
-                          }
-
-                          await dispatch<OnChange_CustomConfigurations_Action>({
-                            type: 'resourceVersionCreatorPage/onChange_CustomConfigurations',
-                            payload: {
-                              value: resourceVersionCreatorPage.customConfigurations.map((a, b) => {
-                                if (b !== index) {
-                                  return a;
-                                }
-                                return dataSource;
-                              }),
-                            },
-                          });
-                        }}
-                        onDelete={async (value) => {
-                          await dispatch<OnChange_CustomConfigurations_Action>({
-                            type: 'resourceVersionCreatorPage/onChange_CustomConfigurations',
-                            payload: {
-                              value: resourceVersionCreatorPage.customConfigurations.filter((a) => {
-                                return a.key !== value.key && a.name !== value.name;
-                              }),
-                            },
-                          });
-                        }}
-                      />
-                    </>)
-                  }
-
                 </div>
 
-                <div style={{ height: 5 }} />
-              </>)
-            }
+                {
+                  resourceVersionCreatorPage.customConfigurations.length === 0 && (<>
+                    <div style={{ height: 10 }} />
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      {/*<span>{FI18n.i18nNext.t('resourceoptions_list_empty')}</span>*/}
+                      <FComponentsLib.FContentText
+                        text={FI18n.i18nNext.t('resourceoptions_list_empty')}
+                        type={'additional2'}
+                      />
+                    </div>
+                    <div style={{ height: 20 }} />
+                  </>)
+                }
 
-            <div className={styles.block}>
-              {
-                // resourceVersionCreatorPage.resourceInfo && (<FMicroAPP_Authorization
-                resourceVersionCreatorPage.resourceInfo && (<FMicroAPP_Authorization
-                  // name={'Authorization'}
-                  reload={resourceVersionCreatorPage.authReload}
-                  licenseeId={resourceVersionCreatorPage.resourceInfo.resourceID}
-                  mainAppType={'resourceInVersionUpdate'}
-                  depList={resourceVersionCreatorPage.directDependencies}
-                  upcastList={resourceVersionCreatorPage.baseUpcastResources}
-                  update={(data: any) => {
-                    // console.log(data, 'resourceInVersionUpdate ____________________ data sdifjlskdfjlkjlk');
-                    dispatch<ChangeAction>({
-                      type: 'resourceVersionCreatorPage/change',
-                      payload: {
-                        directDependencies: data.depList,
-                        resolveResources: data.resolveResources,
-                        baseUpcastResources: data.upcastList,
-                        isCompleteAuthorization: data.isAllAuthComplete,
-                        dataIsDirty: true,
-                      },
-                    });
-                  }}
-                />)
-              }
-            </div>
-          </div>)
-        }
+                {
+                  resourceVersionCreatorPage.customConfigurations.length > 0 && (<>
+                    <div style={{ height: 20 }} />
+                    <FResourceOptions
+                      theme={'dark'}
+                      // dataSource={resourceVersionCreatorPage.customOptionsData}
+                      dataSource={resourceVersionCreatorPage.customConfigurations}
+                      onEdit={async (value) => {
+                        const index: number = resourceVersionCreatorPage.customConfigurations.findIndex((p) => {
+                          return p === value;
+                        });
+
+                        const dataSource: {
+                          key: string;
+                          name: string;
+                          type: 'input' | 'select';
+                          input: string;
+                          select: string[];
+                          description: string;
+                        } | null = await fResourceOptionEditor({
+                          disabledKeys: [
+                            ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.key),
+                            ...resourceVersionCreatorPage.additionalProperties.map<string>((rp) => rp.key),
+                            ...resourceVersionCreatorPage.customProperties.map<string>((bp) => bp.key),
+                            ...resourceVersionCreatorPage.customConfigurations.map<string>((pp) => pp.key),
+                          ],
+                          disabledNames: [
+                            ...resourceVersionCreatorPage.rawProperties.map<string>((rp) => rp.name),
+                            ...resourceVersionCreatorPage.additionalProperties.map<string>((rp) => rp.name),
+                            ...resourceVersionCreatorPage.customProperties.map<string>((bp) => bp.name),
+                            ...resourceVersionCreatorPage.customConfigurations.map<string>((pp) => pp.name),
+                          ],
+                          defaultData: value,
+                        });
+
+                        if (!dataSource) {
+                          return;
+                        }
+
+                        await dispatch<OnChange_CustomConfigurations_Action>({
+                          type: 'resourceVersionCreatorPage/onChange_CustomConfigurations',
+                          payload: {
+                            value: resourceVersionCreatorPage.customConfigurations.map((a, b) => {
+                              if (b !== index) {
+                                return a;
+                              }
+                              return dataSource;
+                            }),
+                          },
+                        });
+                      }}
+                      onDelete={async (value) => {
+                        await dispatch<OnChange_CustomConfigurations_Action>({
+                          type: 'resourceVersionCreatorPage/onChange_CustomConfigurations',
+                          payload: {
+                            value: resourceVersionCreatorPage.customConfigurations.filter((a) => {
+                              return a.key !== value.key && a.name !== value.name;
+                            }),
+                          },
+                        });
+                      }}
+                    />
+                  </>)
+                }
+
+              </div>
+
+              <div style={{ height: 5 }} />
+            </>)
+          }
+
+          <div className={styles.block}>
+            {
+              // resourceVersionCreatorPage.resourceInfo && (<FMicroAPP_Authorization
+              resourceVersionCreatorPage.resourceInfo && (<FMicroAPP_Authorization
+                // name={'Authorization'}
+                reload={resourceVersionCreatorPage.authReload}
+                licenseeId={resourceVersionCreatorPage.resourceInfo.resourceID}
+                mainAppType={'resourceInVersionUpdate'}
+                depList={resourceVersionCreatorPage.directDependencies}
+                upcastList={resourceVersionCreatorPage.baseUpcastResources}
+                update={(data: any) => {
+                  // console.log(data, 'resourceInVersionUpdate ____________________ data sdifjlskdfjlkjlk');
+                  dispatch<ChangeAction>({
+                    type: 'resourceVersionCreatorPage/change',
+                    payload: {
+                      directDependencies: data.depList,
+                      resolveResources: data.resolveResources,
+                      baseUpcastResources: data.upcastList,
+                      isCompleteAuthorization: data.isAllAuthComplete,
+                      dataIsDirty: true,
+                    },
+                  });
+                }}
+              />)
+            }
+          </div>
+        </div>
         {/*{console.log(resourceVersionCreatorPage.descriptionEditorState.toHTML(), 'resourceVersionCreatorPage.descriptionEditorState.toHTML()')}*/}
 
         <div style={{ height: 10 }} />

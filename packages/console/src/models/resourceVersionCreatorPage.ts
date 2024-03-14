@@ -436,6 +436,7 @@ const Model: ResourceVersionCreatorModelType = {
           },
         },
       });
+      // console.log(data_ResourceTypeInfo.resourceConfig.supportOptionalConfig === 2, 'data_ResourceTypeInfo.resourceConfig.supportOptionalConfig === 2');
 
       if (data_resourceInfo.latestVersion) {
         const params2: Parameters<typeof FServiceAPI.Resource.resourceVersionInfo1>[0] = {
