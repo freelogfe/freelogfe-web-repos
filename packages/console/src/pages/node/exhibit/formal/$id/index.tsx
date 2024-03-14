@@ -300,51 +300,52 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
           />
           <div style={{ height: 10 }} />
           {
-            exhibitInfoPage.exhibit_ResourceInfo && (<Popover
-              // open={true}
-              content={<FResourceCard
-                key={exhibitInfoPage.exhibit_ResourceInfo.id}
-                resource={exhibitInfoPage.exhibit_ResourceInfo}
-                // className={styles.FResourceCard}
-                onClick={() => {
-                  window.open(
-                    FUtil.LinkTo.resourceDetails({
-                      resourceID: exhibitInfoPage.exhibit_ResourceInfo?.id || '',
-                    }),
-                  );
-                }}
-              />}
-              title={null}
-              // placement={'bottomLeft'}
-              placement={'bottom'}
-              // style={{ padding: 0 }}
-              // overlayInnerStyle={{ padding: 0 }}
-              // overlayStyle={{ padding: 0 }}
-              // className={styles.resourceCardPopover}
-              overlayClassName={styles.resourceCardPopover}
-            >
-              <div style={{ width: 'fit-content' }}>
-                <FComponentsLib.FTextBtn
-                  type='default'
+            exhibitInfoPage.exhibit_ResourceInfo && (<Space size={5}>
+              <FComponentsLib.FContentText
+                type={'additional2'}
+                text={'来自于'}
+                style={{ color: 'inherit' }}
+              />
+              <Popover
+                // open={true}
+                content={<FResourceCard
+                  key={exhibitInfoPage.exhibit_ResourceInfo.id}
+                  resource={exhibitInfoPage.exhibit_ResourceInfo}
+                  // className={styles.FResourceCard}
                   onClick={() => {
-                    window.open(FUtil.LinkTo.resourceDetails({ resourceID: exhibitInfoPage.exhibit_ResourceInfo?.id || '' }));
+                    window.open(
+                      FUtil.LinkTo.resourceDetails({
+                        resourceID: exhibitInfoPage.exhibit_ResourceInfo?.id || '',
+                      }),
+                    );
                   }}
-                >
-                  <FComponentsLib.FContentText
-                    type={'additional2'}
-                    text={'来自于'}
-                    style={{ color: 'inherit' }}
-                  />
-                  <FComponentsLib.FContentText
-                    type={'additional2'}
-                    style={{ width: 220, color: 'inherit' }}
-                    singleRow
-                    text={exhibitInfoPage.exhibit_ResourceInfo?.name || ''}
-                  />
-
-                </FComponentsLib.FTextBtn>
-              </div>
-            </Popover>)
+                />}
+                title={null}
+                // placement={'bottomLeft'}
+                placement={'bottom'}
+                // style={{ padding: 0 }}
+                // overlayInnerStyle={{ padding: 0 }}
+                // overlayStyle={{ padding: 0 }}
+                // className={styles.resourceCardPopover}
+                overlayClassName={styles.resourceCardPopover}
+              >
+                <div style={{ width: 'fit-content' }}>
+                  <FComponentsLib.FTextBtn
+                    type='default'
+                    onClick={() => {
+                      window.open(FUtil.LinkTo.resourceDetails({ resourceID: exhibitInfoPage.exhibit_ResourceInfo?.id || '' }));
+                    }}
+                  >
+                    <FComponentsLib.FContentText
+                      type={'additional2'}
+                      style={{ color: 'inherit', textDecoration: 'underline' }}
+                      singleRow
+                      text={exhibitInfoPage.exhibit_ResourceInfo?.name || ''}
+                    />
+                  </FComponentsLib.FTextBtn>
+                </div>
+              </Popover>
+            </Space>)
           }
 
           <div style={{ height: 15 }} />
