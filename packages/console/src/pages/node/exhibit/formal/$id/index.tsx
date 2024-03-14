@@ -836,8 +836,8 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
       />
 
       <div style={{ height: 5 }} />
-
       <Policies />
+
       <div style={{ height: 5 }} />
       <div className={styles.block}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -1021,7 +1021,7 @@ function IntroductionInput({ value, onOK }: IntroductionInputProps) {
                 onOK(get$value());
                 set$isEdit(false);
               }}
-              // disabled={resourceInfoPage.introduction_EditorText_Error !== ''}
+              disabled={$value.length > 200}
             >{FI18n.i18nNext.t('save')}</FComponentsLib.FTextBtn>
           </>)
         }

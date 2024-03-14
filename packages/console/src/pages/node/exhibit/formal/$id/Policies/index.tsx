@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styles from './index.less';
-import { Space } from 'antd';
-import { AddAPolicyAction, ChangeAction, UpdateAPolicyAction } from '@/models/exhibitInfoPage';
+import { AddAPolicyAction, UpdateAPolicyAction } from '@/models/exhibitInfoPage';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import { ConnectState, ExhibitInfoPageModelState } from '@/models/connect';
