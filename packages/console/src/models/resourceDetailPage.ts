@@ -255,8 +255,6 @@ const Model: ResourceDetailPageModelType = {
       yield put<FetchInfoActionAction>({
         type: 'fetchInfo',
       });
-
-
     },
     * onUnmountPage({}: OnUnmountPageAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
