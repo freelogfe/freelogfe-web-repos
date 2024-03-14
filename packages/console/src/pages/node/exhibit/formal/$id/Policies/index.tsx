@@ -92,7 +92,11 @@ function Policies({ dispatch, exhibitInfoPage }: PoliciesProps) {
       exhibitInfoPage.policy_List.length === 0 && (<div className={styles.empty}>
         <div style={{ height: 10 }} />
         <FComponentsLib.FContentText
-          text={FI18n.i18nNext.t('exhibit_auth_plan_empty')}
+          text={'资源需添加授权策略才能上架到资源市场，开放签约。'}
+          type={'additional2'}
+        />
+        <FComponentsLib.FContentText
+          text={'授权策略，即资源对外授权范围和条件的申明，如支付10元获得一个月使用授权。'}
           type={'additional2'}
         />
         <div style={{ height: 20 }} />

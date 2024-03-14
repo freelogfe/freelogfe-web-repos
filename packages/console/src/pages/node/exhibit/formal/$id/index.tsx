@@ -1061,7 +1061,11 @@ function IntroductionInput({ value, onOK }: IntroductionInputProps) {
               <div style={{ height: 10 }} />
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
                 <FComponentsLib.FContentText
-                  text={FI18n.i18nNext.t('resourceoptions_list_empty')}
+                  text={FI18n.i18nNext.t('标题直接影响商品的搜索曝光机会，建议在标题中加入品牌/内容主旨，')}
+                  type={'additional2'}
+                />
+                <FComponentsLib.FContentText
+                  text={FI18n.i18nNext.t('例如，《大明风华：明朝人的城市生活》；标题长度不超过100个字符。')}
                   type={'additional2'}
                 />
                 <div style={{ height: 20 }} />
