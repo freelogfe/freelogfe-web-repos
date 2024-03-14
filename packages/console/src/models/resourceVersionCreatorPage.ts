@@ -444,6 +444,8 @@ const Model: ResourceVersionCreatorModelType = {
         };
         const { data: data_resourceVersionInfo }: {
           data: {
+            fileSha1: string;
+            filename: string;
             customPropertyDescriptors: {
               key: string;
               name: string;
@@ -465,12 +467,16 @@ const Model: ResourceVersionCreatorModelType = {
             }[];
           }
         } = yield call(FServiceAPI.Resource.resourceVersionInfo1, params2);
-
+        // console.log(data_resourceVersionInfo, 'data_resourceVersionInfo sdifjsd;oifjsldkjflkdsjflkjl');
         yield put<ChangeAction>({
           type: 'change',
           payload: {
             versionInput: (semver.inc(data_resourceInfo.latestVersion, 'patch') || '1.0.0'),
-            // preVersion_additionalProperties,
+            selectedFileInfo: {
+              name: data_resourceVersionInfo.filename,
+              sha1: data_resourceVersionInfo.fileSha1,
+              from: '上个版本',
+            },
             additionalProperties: data_resourceVersionInfo.systemPropertyDescriptors
               .filter((spd) => {
                 return spd.insertMode === 2;

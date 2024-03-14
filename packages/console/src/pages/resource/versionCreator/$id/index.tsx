@@ -40,8 +40,6 @@ import {
 } from '@/models/resourceVersionCreatorPage';
 import { ComicTool } from '@/components/fComicTool/FComicToolModal';
 import FReleaseTip from '@/components/FReleaseTip';
-import fAddFileBaseProps from '@/components/fAddFileBaseProps';
-import fAddCustomOptions from '@/components/fAddCustomOptions';
 import FVersionInput from '@/components/FVersionInput';
 import FPrompt from '@/components/FPrompt';
 import FSkeletonNode from '@/components/FSkeletonNode';
@@ -49,12 +47,9 @@ import { withRouter, history } from 'umi';
 import FMicroApp_MarkdownEditorDrawer from '@/components/FMicroApp_MarkdownEditorDrawer';
 import { getFilesSha1Info } from '@/utils/service';
 import fMessage from '@/components/fMessage';
-import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
 import FMicroAPP_Authorization from '@/components/FMicroAPP_Authorization';
-import { UpdateDataSourceAction } from '@/models/resourceVersionEditorPage';
 import FBraftEditor from '@/components/FBraftEditor';
 import BraftEditor, { EditorState } from 'braft-editor';
-import { editor } from 'monaco-editor';
 
 interface VersionCreatorProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -63,8 +58,6 @@ interface VersionCreatorProps extends RouteComponentProps<{ id: string }> {
 
 function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: VersionCreatorProps) {
 
-  // const ref = React.useRef(null);
-  // const size = AHooks.useSize(ref);
   const [$showMore, set$ShowMore, get$ShowMore] = useGetState<boolean>(false);
   const [$versionInputHasError, set$versionInputHasError] = React.useState<boolean>(false);
   const [isMarkdownEditorDirty, set_isMarkdownEditorDirty] = React.useState<boolean>(false);
@@ -85,7 +78,6 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
   });
 
   AHooks.useUnmount(() => {
-    // set_isMarkdownEditorDirty(false);
     dispatch<OnUnmountPageAction>({
       type: 'resourceVersionCreatorPage/onUnmountPage',
     });
@@ -93,7 +85,6 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
 
   AHooks.useDebounceEffect(
     () => {
-      // console.log(resourceVersionCreatorPage.dataIsDirty, 'resourceVersionCreatorPage.dataIsDirtydsjlkfjlkjlsfoisdj woeisjflsk');
       if (resourceVersionCreatorPage.dataIsDirty) {
         dispatch<OnTrigger_SaveDraft_Action>({
           type: 'resourceVersionCreatorPage/onTrigger_SaveDraft',
