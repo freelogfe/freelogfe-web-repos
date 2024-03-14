@@ -18,6 +18,7 @@ import fNoviceGuide, {
   setNoviceGuide_LocalStorage_Content,
   clear,
 } from '@/components/fNoviceGuide';
+import img_choiceLabel from '@/assets/choice-label@2x.png';
 
 interface DashboardProps {
   dispatch: Dispatch;
@@ -412,28 +413,69 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
                         </div>
                         <div style={{ height: 10 }} />
                         <FComponentsLib.FContentText
-                          style={{ width: 250 }}
-                          text={lr.resourceName}
-                          type='highlight'
-                          singleRow
+                          singleRow={true}
+                          text={lr.resourceTitle || lr.resourceName.split('/')[1]}
+                          type={'highlight'}
                         />
-                        <div style={{ height: 8 }} />
-                        <FComponentsLib.FContentText text={FUtil.Format.resourceTypeKeyArrToResourceType(lr.type)} />
-                        <div style={{ height: 12 }} />
-                        <FComponentsLib.F_Contract_And_Policy_Labels
-                          data={lr.policies.map((p) => {
-                            return {
-                              text: p,
-                              dot: '',
-                            };
-                          })}
-                          singleRow
-                        />
-                        <div style={{ height: 15 }} />
+                        <div style={{ height: 5 }} />
                         <FComponentsLib.FContentText
-                          text={lr.dataTime}
                           type='additional2'
+                          text={FUtil.Format.resourceTypeKeyArrToResourceType(lr.type)}
+                          style={{ maxWidth: 260 }}
                         />
+                        <div style={{ height: 5 }} />
+                        <FComponentsLib.FContentText
+                          singleRow
+                          style={{ maxWidth: 260 }}
+                          type='additional2'
+                          // text={resource.version ? (FI18n.i18nNext.t('latest_version') + ' ' + resource.version) : '暂无版本'}
+                          text={`最新更新时间 ${lr.updateDate}`}
+                        />
+                        <div style={{ height: 5 }} />
+                        <div className={styles.policy}>
+                          {
+                            lr.policies.length > 0
+                              // ? resource.policy.map((i: string) => <Policy key={i} text={i} />)
+                              ? (<FComponentsLib.F_Contract_And_Policy_Labels
+                                data={lr.policies.map((p) => {
+                                  return {
+                                    text: p,
+                                    dot: '',
+                                  };
+                                })}
+                                singleRow
+                              />)
+                              : (<FComponentsLib.FContentText text={'暂无策略…'} type='additional2' />)
+                          }
+                        </div>
+                        <div style={{ height: 12 }} />
+                        <div className={styles.user}>
+                          <img src={lr.useAvatar || img_choiceLabel} alt={''} />
+                          <span>{lr.username}</span>
+                        </div>
+                        {/*<FComponentsLib.FContentText*/}
+                        {/*  style={{ width: 250 }}*/}
+                        {/*  text={lr.resourceName}*/}
+                        {/*  type='highlight'*/}
+                        {/*  singleRow*/}
+                        {/*/>*/}
+                        {/*<div style={{ height: 8 }} />*/}
+                        {/*<FComponentsLib.FContentText text={FUtil.Format.resourceTypeKeyArrToResourceType(lr.type)} />*/}
+                        {/*<div style={{ height: 12 }} />*/}
+                        {/*<FComponentsLib.F_Contract_And_Policy_Labels*/}
+                        {/*  data={lr.policies.map((p) => {*/}
+                        {/*    return {*/}
+                        {/*      text: p,*/}
+                        {/*      dot: '',*/}
+                        {/*    };*/}
+                        {/*  })}*/}
+                        {/*  singleRow*/}
+                        {/*/>*/}
+                        {/*<div style={{ height: 15 }} />*/}
+                        {/*<FComponentsLib.FContentText*/}
+                        {/*  text={lr.dataTime}*/}
+                        {/*  type='additional2'*/}
+                        {/*/>*/}
                       </div>);
                     })
                   }

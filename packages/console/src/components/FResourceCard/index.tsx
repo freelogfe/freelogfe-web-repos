@@ -127,24 +127,21 @@ function FResourceCard({
         type={'highlight'}
       />
       <div style={{ height: 5 }} />
-      <div className={styles.MetaInfo}>
-        <FComponentsLib.FContentText
-          type='additional2'
-          text={FUtil.Format.resourceTypeKeyArrToResourceType(resource.type)}
-          style={{ maxWidth: 120 }}
-        />
-        <div style={{ height: 5 }} />
-        <FComponentsLib.FContentText
-          singleRow
-          // style={{ maxWidth: 120 }}
-          type='additional2'
-          // text={resource.version ? (FI18n.i18nNext.t('latest_version') + ' ' + resource.version) : '暂无版本'}
-          text={`最新更新时间 ${resource.updateDate}`}
-        />
-      </div>
-
+      <FComponentsLib.FContentText
+        type='additional2'
+        text={FUtil.Format.resourceTypeKeyArrToResourceType(resource.type)}
+        style={{ maxWidth: 280 }}
+      />
       <div style={{ height: 5 }} />
-      <div className={styles.MetaFooter}>
+      <FComponentsLib.FContentText
+        singleRow
+        style={{ maxWidth: 280 }}
+        type='additional2'
+        // text={resource.version ? (FI18n.i18nNext.t('latest_version') + ' ' + resource.version) : '暂无版本'}
+        text={`最新更新时间 ${resource.updateDate}`}
+      />
+      <div style={{ height: 5 }} />
+      <div className={styles.policy}>
         {
           resource.policy.length > 0
             // ? resource.policy.map((i: string) => <Policy key={i} text={i} />)

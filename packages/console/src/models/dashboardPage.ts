@@ -14,6 +14,7 @@ export interface DashboardPageModelState {
   latestResources: {
     resourceID: string;
     resourceName: string;
+    resourceTitle: string;
     cover: string;
     type: string[];
     policies: string[];
@@ -21,6 +22,10 @@ export interface DashboardPageModelState {
     detailUrl: string;
     editUrl: string;
     updateUrl: string;
+
+    updateDate: string;
+    username: string;
+    useAvatar: string;
   }[];
 
   nodeStatistic: {
@@ -147,6 +152,7 @@ const Model: DashboardPageModelType = {
           dataList: {
             resourceId: string;
             resourceName: string;
+            resourceTitle: string;
             latestVersion: string;
             coverImages: string[];
             resourceType: string[];
@@ -155,6 +161,11 @@ const Model: DashboardPageModelType = {
               status: 0 | 1;
             }[];
             createDate: string;
+
+            userId: number;
+            updateDate: string;
+            username: string;
+            operationType: 0 | 1;
           }[];
         }
       } = yield call(FServiceAPI.Resource.list, params5);
@@ -202,6 +213,7 @@ const Model: DashboardPageModelType = {
             return {
               resourceID: r.resourceId,
               resourceName: r.resourceName,
+              resourceTitle: r.resourceTitle,
               cover: r.coverImages[0] || '',
               type: r.resourceType,
               policies: r.policies
@@ -219,6 +231,10 @@ const Model: DashboardPageModelType = {
                 version: r.latestVersion || undefined,
               }),
               updateUrl: FUtil.LinkTo.resourceVersionCreator({ resourceID: r.resourceId }),
+
+              updateDate: moment(r.updateDate).format('YYYY-MM-DD'),
+              username: r.username,
+              useAvatar: `https://image.freelog.com/avatar/${r.userId}`,
             };
           }),
 
