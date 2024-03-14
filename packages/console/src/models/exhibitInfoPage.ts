@@ -207,20 +207,6 @@ export interface UpdateContractUsedAction {
   };
 }
 
-// export interface OnChange_Side_InputTitle_Action extends AnyAction {
-//   type: 'exhibitInfoPage/onChange_Side_InputTitle';
-//   payload: {
-//     value: string | null;
-//   };
-// }
-
-// export interface OnChange_Side_ExhibitInputIntroduction_Action extends AnyAction {
-//   type: 'exhibitInfoPage/onChange_Side_ExhibitInputIntroduction';
-//   payload: {
-//     value: string | null;
-//   };
-// }
-
 export interface OnSave_Side_ExhibitIntroduction_Action extends AnyAction {
   type: 'exhibitInfoPage/onSave_Side_ExhibitIntroduction';
   payload: {
@@ -1075,24 +1061,6 @@ const Model: ExhibitInfoPageModelType = {
         },
       });
     },
-
-    // * onChange_Side_InputTitle({ payload }: OnChange_Side_InputTitle_Action, { put }: EffectsCommandMap) {
-    //   yield put<ChangeAction>({
-    //     type: 'change',
-    //     payload: {
-    //       side_ExhibitInputTitle: payload.value,
-    //       side_ExhibitInputTitle_Error: (payload.value || '').length > 100 ? '不能超过100个字符' : '',
-    //     },
-    //   });
-    // },
-    // * onChange_Side_ExhibitInputIntroduction({ payload }: OnChange_Side_ExhibitInputIntroduction_Action, { put }: EffectsCommandMap) {
-    //   yield put<ChangeAction>({
-    //     type: 'change',
-    //     payload: {
-    //       side_ExhibitInputIntroduction: payload.value,
-    //     },
-    //   });
-    // },
     * onSave_Side_ExhibitIntroduction({ payload }: OnSave_Side_ExhibitIntroduction_Action, {
       select,
       call,
@@ -1101,24 +1069,30 @@ const Model: ExhibitInfoPageModelType = {
       const { exhibitInfoPage }: ConnectState = yield select(({ exhibitInfoPage }: ConnectState) => ({
         exhibitInfoPage,
       }));
+      const oldText: string = exhibitInfoPage.side_ExhibitIntroduction;
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          side_ExhibitIntroduction: payload.value,
+        },
+      });
 
       const params: Parameters<typeof FServiceAPI.Exhibit.updatePresentable>[0] = {
         presentableId: exhibitInfoPage.exhibit_ID,
-        // presentableIntro: exhibitInfoPage.side_ExhibitInputIntroduction,
         presentableIntro: payload.value,
       };
       const { ret, errCode, msg } = yield call(FServiceAPI.Exhibit.updatePresentable, params);
       if (ret !== 0 || errCode !== 0) {
         fMessage(msg, 'error');
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            side_ExhibitIntroduction: oldText,
+          },
+        });
         return;
       }
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          // side_ExhibitIntroduction: exhibitInfoPage.side_ExhibitInputIntroduction || '',
-          side_ExhibitIntroduction: payload.value,
-        },
-      });
+
     },
     * onClick_Side_InheritOptions_ResetBtn({ payload }: OnClick_Side_InheritOptions_ResetBtn_Action, {
       select,
