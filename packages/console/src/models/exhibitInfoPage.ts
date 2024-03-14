@@ -344,26 +344,16 @@ const initStates: ExhibitInfoPageModelState = {
   exhibit_BelongNode_ActiveThemeId: '',
   exhibit_Cover: '',
   exhibit_ResourceInfo: null,
-  // resourceTypeConfig: {
-  //   isSupportOptionalConfig: false,
-  // },
   policy_List: [],
-  // policy_BuildDrawer_Visible: false,
 
   contract_ExhibitAllContractIDs: [],
   contract_SelectedAssociatedID: '',
   contract_Associated: [],
 
-  // graph_FullScreen: false,
-  // graph_Viewport_Show: 'relationship',
   graphShow: true,
 
-  // side_ExhibitCover: '',
   side_ExhibitTitle: '',
-  // side_ExhibitInputTitle: null,
-  // side_ExhibitInputTitle_Error: '',
   side_ExhibitIntroduction: '',
-  // side_ExhibitInputIntroduction: null,
   side_ExhibitTags: [],
   side_AllVersions: [],
   side_Version: '',
@@ -373,14 +363,8 @@ const initStates: ExhibitInfoPageModelState = {
   side_InheritOptions: [],
   side_CustomOptions: [],
 
-  // side_ResourceID: '',
-  // side_ResourceName: '',
-  // side_ResourceType: [],
-  // side_ResourceCover: '',
-
   policyEditorVisible: false,
   policyOperaterVisible: false,
-
 };
 
 const Model: ExhibitInfoPageModelType = {
