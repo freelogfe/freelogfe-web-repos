@@ -995,7 +995,7 @@ function IntroductionInput({ value, onOK }: IntroductionInputProps) {
 
   return (<div className={styles.block}>
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-      <FComponentsLib.FContentText text={FI18n.i18nNext.t('resource_short_description')} type={'highlight'} />
+      <FComponentsLib.FContentText text={'展品简介'} type={'highlight'} />
 
       <Space size={10}>
         {
