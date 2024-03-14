@@ -124,12 +124,6 @@ export interface ExhibitInfoPageModelState {
     valueInput: string;
     valueInputError: string;
   }[];
-
-  // side_ResourceID: string;
-  // side_ResourceName: string;
-  // side_ResourceType: string[];
-  // side_ResourceCover: string;
-
   policyEditorVisible: boolean;
   policyOperaterVisible: boolean;
 }
