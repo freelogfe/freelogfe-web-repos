@@ -1209,7 +1209,7 @@ const Model: ExhibitInfoPageModelType = {
       if (ret !== 0 || errCode !== 0 || !data) {
         return fMessage(msg, 'error');
       }
-      fMessage('自定义选项已更新');
+      fMessage('可选配置已更新');
     },
     * onClick_Side_CustomOptions_DeleteBtn({ payload }: OnClick_Side_CustomOptions_DeleteBtn_Action, {
       select,
