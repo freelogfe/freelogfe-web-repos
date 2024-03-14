@@ -158,45 +158,46 @@ function ResourceDetails({ match, dispatch, resourceDetailPage }: ResourceDetail
         <div style={{ borderTop: '1px solid #E5E7EB' }} />
         <div style={{ height: 10 }} />
 
-        {resourceDetailPage.resourceVersion_SelectedVersion && (
-          <div className={styles.versionWrap}>
-            <div className={styles.versionTitle}>
-              <Space size={10}>
-                <FComponentsLib.FTitleText
-                  text={'当前版本 ' + resourceDetailPage.resourceVersion_SelectedVersion}
+        {
+          resourceDetailPage.resourceVersion_SelectedVersion && (
+            <div className={styles.versionWrap}>
+              <div className={styles.versionTitle}>
+                <Space size={10}>
+                  <FComponentsLib.FTitleText
+                    text={'当前版本 ' + resourceDetailPage.resourceVersion_SelectedVersion}
+                  />
+                  <FDropdownMenu
+                    options={[...resourceDetailPage.resourceVersion_AllVersions]
+                      .reverse()
+                      .map((v) => ({ value: v }))}
+                    onChange={(value) => {
+                      history.push(
+                        FUtil.LinkTo.resourceDetails({
+                          resourceID: resourceDetailPage.resource_ID,
+                          version: value,
+                        }),
+                      );
+                    }}
+                  >
+                    <FComponentsLib.FIcons.FSwap style={{ cursor: 'pointer' }} />
+                  </FDropdownMenu>
+                </Space>
+
+                <FComponentsLib.FContentText
+                  text={'发布时间 ' + resourceDetailPage.resourceVersion_Info.releaseTime}
+                  type='negative'
                 />
-                <FDropdownMenu
-                  options={[...resourceDetailPage.resourceVersion_AllVersions]
-                    .reverse()
-                    .map((v) => ({ value: v }))}
-                  onChange={(value) => {
-                    history.push(
-                      FUtil.LinkTo.resourceDetails({
-                        resourceID: resourceDetailPage.resource_ID,
-                        version: value,
-                      }),
-                    );
-                  }}
-                >
-                  <FComponentsLib.FIcons.FSwap style={{ cursor: 'pointer' }} />
-                </FDropdownMenu>
-              </Space>
+              </div>
 
-              <FComponentsLib.FContentText
-                text={'发布时间 ' + resourceDetailPage.resourceVersion_Info.releaseTime}
-                type='negative'
-              />
+              <Description />
+
+              <Property />
+
+              <Option />
+
+              <Viewport />
             </div>
-
-            <Description />
-
-            <Property />
-
-            <Option />
-
-            <Viewport />
-          </div>
-        )}
+          )}
         <div style={{ height: 80 }} />
       </div>
     </div>

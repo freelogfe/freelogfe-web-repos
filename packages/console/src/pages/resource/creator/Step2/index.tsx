@@ -553,9 +553,7 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
         <div style={{ height: 10 }} />
 
         {
-          (resourceCreatorPage.step1_createdResourceInfo?.resourceType.includes('插件')
-            || resourceCreatorPage.step1_createdResourceInfo?.resourceType.includes('主题'))
-          && (<>
+          resourceCreatorPage.step2_resourceTypeConfig.isSupportOptionalConfig && (<>
             <div className={styles.block}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <FComponentsLib.FContentText text={FI18n.i18nNext.t('resourceoptions_title')} type={'highlight'} />

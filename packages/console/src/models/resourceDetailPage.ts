@@ -22,6 +22,13 @@ export interface ResourceDetailPageModelState {
   };
   resource_Popularity: number;
   resource_IsCollected: boolean;
+  resourceTypeConfig: {
+    // uploadEntry: [],
+    // limitFileSize: 0,
+    // isSupportDownload: false,
+    // isSupportEdit: false,
+    isSupportOptionalConfig: boolean;
+  };
 
   // 所有可签约的节点 ID
   sign_SignedNodeIDs: number[];
@@ -198,6 +205,9 @@ const initStates: ResourceDetailPageModelState = {
   },
   resource_Popularity: 0,
   resource_IsCollected: false,
+  resourceTypeConfig: {
+    isSupportOptionalConfig: false,
+  },
 
   sign_SignedNodeIDs: [],
   sign_SelectedNodeID: -1,
@@ -245,6 +255,8 @@ const Model: ResourceDetailPageModelType = {
       yield put<FetchInfoActionAction>({
         type: 'fetchInfo',
       });
+
+
     },
     * onUnmountPage({}: OnUnmountPageAction, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
@@ -591,6 +603,8 @@ const Model: ResourceDetailPageModelType = {
       const [data_ResourceDetail]: HandleResourceBatchInfoReturn = yield call(handleResourceBatchInfo, params);
       // console.log(data, ' data2309');
 
+
+
       if ((data_ResourceDetail.status & 2) === 2) {
         history.replace(FUtil.LinkTo.resourceFreeze({ resourceID: resourceDetailPage.resource_ID }));
         return;
@@ -628,6 +642,25 @@ const Model: ResourceDetailPageModelType = {
         userIds: allUserID.join(','),
       };
 
+      const params4: Parameters<typeof FServiceAPI.Resource.getResourceTypeInfoByCode>[0] = {
+        code: data_ResourceDetail.resourceTypeCode,
+      };
+      const { data: data_ResourceTypeInfo }: {
+        ret: number;
+        errCode: number;
+        msg: string;
+        data: {
+          resourceConfig: {
+            fileCommitMode: number[];
+            fileMaxSize: number;
+            fileMaxSizeUnit: 1 | 2;
+            supportDownload: 1 | 2;
+            supportEdit: 1 | 2;
+            supportOptionalConfig: 1 | 2;
+          }
+        };
+      } = yield call(FServiceAPI.Resource.getResourceTypeInfoByCode, params4);
+
       const { data: data_batchUserList } = yield call(FServiceAPI.User.batchUserList, params3);
       // console.log(data_ResourceDetail, 'data_ResourceDetailisodjflksdjflkjsdlkfjlkl klsdjf;lk ');
       yield put<ChangeAction>({
@@ -641,6 +674,9 @@ const Model: ResourceDetailPageModelType = {
             type: data_ResourceDetail.resourceType,
             tags: data_ResourceDetail.tags,
             about: data_ResourceDetail.intro,
+          },
+          resourceTypeConfig: {
+            isSupportOptionalConfig: data_ResourceTypeInfo.resourceConfig.supportOptionalConfig === 2,
           },
           resourceVersion_AllVersions: data_ResourceDetail.resourceVersions.map((v: any) => v.version),
           resourceVersion_SelectedVersion: resourceDetailPage.resourceVersion_SelectedVersion || data_ResourceDetail.latestVersion,
@@ -791,25 +827,25 @@ const Model: ResourceDetailPageModelType = {
           resourceVersion_Info: {
             releaseTime: FUtil.Format.formatDateTime(data_versionInfo.createDate),
             description: data_versionInfo.description,
-            // rawProperties: Object.entries(data_versionInfo.systemProperty as object)
-            //   .map((s) => ({
-            //     key: s[0],
-            //     value: fileAttrUnits[s[0]] ? fileAttrUnits[s[0]](s[1]) : s[1],
-            //   })),
-            rawProperties: data_versionInfo.systemPropertyDescriptors.map((spd) => {
-              return {
-                key: spd.key,
-                name: spd.name,
-                value: spd.valueDisplay,
-                description: spd.remark,
-              };
-            }),
+            rawProperties: data_versionInfo.systemPropertyDescriptors
+              .filter((spd) => {
+                return spd.defaultValue !== '';
+              })
+              .map((spd) => {
+                // console.log(spd, 'spdsdifojsd;oifjsld;kjflksdjlkjl');
+                return {
+                  key: spd.key,
+                  name: spd.name,
+                  value: spd.valueDisplay,
+                  description: spd.remark,
+                };
+              }),
             baseProperties: data_versionInfo.customPropertyDescriptors
               .filter((p) => {
-                return p.type === 'readonlyText';
+                return p.type === 'readonlyText' && p.defaultValue !== '';
               })
               .map((p: any) => {
-                // console.log(p, 'PPPPP()*UOI');
+                console.log(p, 'PPPPP()*UOI');
                 return {
                   key: p.key,
                   name: p.name,
@@ -961,6 +997,7 @@ type HandleResourceBatchInfoReturn = {
   resourceName: string;
   resourceTitle: string;
   resourceType: string[];
+  resourceTypeCode: string;
   latestVersion: string;
   coverImages: string[];
   status: 0 | 1;

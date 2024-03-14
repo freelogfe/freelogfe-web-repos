@@ -15,7 +15,7 @@ interface OptionProps {
 
 function Option({ dispatch, resourceDetailPage }: OptionProps) {
 
-  if (resourceDetailPage.resourceVersion_Info.customOptions.length === 0) {
+  if (resourceDetailPage.resourceVersion_Info.customOptions.length === 0 || !resourceDetailPage.resourceTypeConfig.isSupportOptionalConfig) {
     return null;
   }
 
@@ -23,7 +23,7 @@ function Option({ dispatch, resourceDetailPage }: OptionProps) {
     <div style={{ height: 30 }} />
     <div>
       <FComponentsLib.FTitleText
-        text={'自定义选项'}
+        text={'可选配置'}
         type='h3'
       />
       <div style={{ height: 20 }} />
