@@ -22,13 +22,13 @@ export interface ResourceDetailPageModelState {
   };
   resource_Popularity: number;
   resource_IsCollected: boolean;
-  resourceTypeConfig: {
-    // uploadEntry: [],
-    // limitFileSize: 0,
-    // isSupportDownload: false,
-    // isSupportEdit: false,
-    isSupportOptionalConfig: boolean;
-  };
+  // resourceTypeConfig: {
+  //   // uploadEntry: [],
+  //   // limitFileSize: 0,
+  //   // isSupportDownload: false,
+  //   // isSupportEdit: false,
+  //   isSupportOptionalConfig: boolean;
+  // };
 
   // 所有可签约的节点 ID
   sign_SignedNodeIDs: number[];
@@ -205,9 +205,9 @@ const initStates: ResourceDetailPageModelState = {
   },
   resource_Popularity: 0,
   resource_IsCollected: false,
-  resourceTypeConfig: {
-    isSupportOptionalConfig: false,
-  },
+  // resourceTypeConfig: {
+  //   isSupportOptionalConfig: false,
+  // },
 
   sign_SignedNodeIDs: [],
   sign_SelectedNodeID: -1,
@@ -642,24 +642,24 @@ const Model: ResourceDetailPageModelType = {
         userIds: allUserID.join(','),
       };
 
-      const params4: Parameters<typeof FServiceAPI.Resource.getResourceTypeInfoByCode>[0] = {
-        code: data_ResourceDetail.resourceTypeCode,
-      };
-      const { data: data_ResourceTypeInfo }: {
-        ret: number;
-        errCode: number;
-        msg: string;
-        data: {
-          resourceConfig: {
-            fileCommitMode: number[];
-            fileMaxSize: number;
-            fileMaxSizeUnit: 1 | 2;
-            supportDownload: 1 | 2;
-            supportEdit: 1 | 2;
-            supportOptionalConfig: 1 | 2;
-          }
-        };
-      } = yield call(FServiceAPI.Resource.getResourceTypeInfoByCode, params4);
+      // const params4: Parameters<typeof FServiceAPI.Resource.getResourceTypeInfoByCode>[0] = {
+      //   code: data_ResourceDetail.resourceTypeCode,
+      // };
+      // const { data: data_ResourceTypeInfo }: {
+      //   ret: number;
+      //   errCode: number;
+      //   msg: string;
+      //   data: {
+      //     resourceConfig: {
+      //       fileCommitMode: number[];
+      //       fileMaxSize: number;
+      //       fileMaxSizeUnit: 1 | 2;
+      //       supportDownload: 1 | 2;
+      //       supportEdit: 1 | 2;
+      //       supportOptionalConfig: 1 | 2;
+      //     }
+      //   };
+      // } = yield call(FServiceAPI.Resource.getResourceTypeInfoByCode, params4);
 
       const { data: data_batchUserList } = yield call(FServiceAPI.User.batchUserList, params3);
       // console.log(data_ResourceDetail, 'data_ResourceDetailisodjflksdjflkjsdlkfjlkl klsdjf;lk ');
@@ -675,9 +675,9 @@ const Model: ResourceDetailPageModelType = {
             tags: data_ResourceDetail.tags,
             about: data_ResourceDetail.intro,
           },
-          resourceTypeConfig: {
-            isSupportOptionalConfig: data_ResourceTypeInfo.resourceConfig.supportOptionalConfig === 2,
-          },
+          // resourceTypeConfig: {
+          //   isSupportOptionalConfig: data_ResourceTypeInfo.resourceConfig.supportOptionalConfig === 2,
+          // },
           resourceVersion_AllVersions: data_ResourceDetail.resourceVersions.map((v: any) => v.version),
           resourceVersion_SelectedVersion: resourceDetailPage.resourceVersion_SelectedVersion || data_ResourceDetail.latestVersion,
 

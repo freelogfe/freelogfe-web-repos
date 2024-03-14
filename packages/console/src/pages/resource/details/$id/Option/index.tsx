@@ -15,7 +15,7 @@ interface OptionProps {
 
 function Option({ dispatch, resourceDetailPage }: OptionProps) {
 
-  if (resourceDetailPage.resourceVersion_Info.customOptions.length === 0 || !resourceDetailPage.resourceTypeConfig.isSupportOptionalConfig) {
+  if (resourceDetailPage.resourceVersion_Info.customOptions.length === 0) {
     return null;
   }
 
