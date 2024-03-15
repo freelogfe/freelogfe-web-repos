@@ -44,6 +44,7 @@ import FResourcePropertyAndOptionTipPopover from '@/components/FResourceProperty
 import FSelect from '@/components/FSelect';
 import FResourceCard from '@/components/FResourceCard';
 import FLoadingTip from '@/components/FLoadingTip';
+import fExhibitCustomInfoEditor from '@/components/fExhibitCustomInfoEditor';
 
 // import FPopover from '@/components/FPopover';
 
@@ -602,11 +603,9 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
                     const dataSource: {
                       key: string;
                       name: string;
-                      type: 'input' | 'select';
                       input: string;
-                      select: string[];
                       description: string;
-                    } | null = await fResourceOptionEditor({
+                    } | null = await fExhibitCustomInfoEditor({
                       disabledKeys: [
                         ...exhibitInfoPage.side_RawProperties.map((ba) => ba.key),
                         ...exhibitInfoPage.side_BaseProperties.map((ba) => ba.key),
@@ -614,12 +613,11 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
                         ...exhibitInfoPage.side_CustomOptions.map((co) => co.key),
                       ],
                       disabledNames: [
-                        // ...exhibitInfoPage.side_RawProperties.map((ba) => ba.name),
+                        ...exhibitInfoPage.side_RawProperties.map((ba) => ba.name),
                         ...exhibitInfoPage.side_BaseProperties.map((ba) => ba.name),
                         ...exhibitInfoPage.side_InheritOptions.map((io) => io.name),
                         ...exhibitInfoPage.side_CustomOptions.map((co) => co.name),
                       ],
-                      hideTypeSelect: true,
                     });
 
                     if (!dataSource) {
@@ -632,9 +630,7 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
                         value: {
                           key: dataSource.key,
                           name: dataSource.name,
-                          // type: 'input' | 'select';
                           input: dataSource.input,
-                          // select: string[];
                           description: dataSource.description,
                         },
                       },
@@ -680,7 +676,7 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
                           >
                             <div>
                               <FComponentsLib.FContentText
-                                text={co.name}
+                                text={co.name || co.key}
                                 singleRow
                                 // style={{ maxWidth: 160 }}
                               />
@@ -696,11 +692,9 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
                                     const dataSource: {
                                       key: string;
                                       name: string;
-                                      type: 'input' | 'select';
                                       input: string;
-                                      select: string[];
                                       description: string;
-                                    } | null = await fResourceOptionEditor({
+                                    } | null = await fExhibitCustomInfoEditor({
                                       disabledKeys: [
                                         ...exhibitInfoPage.side_RawProperties.map((ba) => ba.key),
                                         ...exhibitInfoPage.side_BaseProperties.map((ba) => ba.key),
@@ -708,21 +702,17 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
                                         ...exhibitInfoPage.side_CustomOptions.map((co) => co.key),
                                       ],
                                       disabledNames: [
-                                        // ...exhibitInfoPage.side_RawProperties.map((ba) => ba.name),
+                                        ...exhibitInfoPage.side_RawProperties.map((ba) => ba.name),
                                         ...exhibitInfoPage.side_BaseProperties.map((ba) => ba.name),
                                         ...exhibitInfoPage.side_InheritOptions.map((io) => io.name),
                                         ...exhibitInfoPage.side_CustomOptions.map((co) => co.name),
                                       ],
-                                      //co
                                       defaultData: {
                                         key: co.key,
                                         name: co.name,
-                                        type: 'input',
                                         input: co.value,
-                                        select: [],
                                         description: co.description,
                                       },
-                                      hideTypeSelect: true,
                                     });
 
                                     if (!dataSource) {
@@ -730,11 +720,11 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
                                     }
 
                                     const side_CustomOptions: ExhibitInfoPageModelState['side_CustomOptions'] = exhibitInfoPage.side_CustomOptions.map((co, co_index) => {
-                                      console.log(co_index, index, 'co_index');
+                                      // console.log(co_index, index, 'co_index');
                                       if (co_index !== index) {
                                         return co;
                                       }
-                                      console.log(dataSource, 'sdfsidjfoisdujfoi');
+                                      // console.log(dataSource, 'sdfsidjfoisdujfoi');
                                       return {
                                         key: dataSource.key,
                                         name: dataSource.name,
