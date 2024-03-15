@@ -487,7 +487,7 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
                               <FComponentsLib.FContentText
                                 text={io.name}
                                 singleRow
-                                style={{ maxWidth: 160 }}
+                                // style={{ maxWidth: 160 }}
                               />
                             </div>
                           </FResourcePropertyAndOptionTipPopover>
@@ -677,7 +677,7 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
                               <FComponentsLib.FContentText
                                 text={co.name}
                                 singleRow
-                                style={{ maxWidth: 160 }}
+                                // style={{ maxWidth: 160 }}
                               />
                             </div>
                           </FResourcePropertyAndOptionTipPopover>
