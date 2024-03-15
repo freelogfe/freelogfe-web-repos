@@ -43,7 +43,9 @@ import FUploadCover from '@/components/FUploadCover';
 import FResourcePropertyAndOptionTipPopover from '@/components/FResourcePropertyAndOptionTipPopover';
 import FSelect from '@/components/FSelect';
 import FResourceCard from '@/components/FResourceCard';
-import FPopover from '@/components/FPopover';
+import FLoadingTip from '@/components/FLoadingTip';
+
+// import FPopover from '@/components/FPopover';
 
 interface PresentableProps extends RouteComponentProps<{ id: string }> {
   dispatch: Dispatch;
@@ -95,6 +97,10 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
   //     },
   //   });
   // }
+
+  if (exhibitInfoPage.pageLoading) {
+    return (<FLoadingTip height={'calc(100vh - 70px)'} />);
+  }
 
   return <div className={styles.Presentable}>
     <div className={styles.content}>
@@ -647,9 +653,8 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
               exhibitInfoPage.side_CustomOptions.length === 0 && (<>
                 <div style={{ height: 10 }} />
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  {/*<span>{FI18n.i18nNext.t('resourceoptions_list_empty')}</span>*/}
                   <FComponentsLib.FContentText
-                    text={FI18n.i18nNext.t('resourceoptions_list_empty')}
+                    text={'自定义信息是资源在消费端展示时所需的配置信息，您可以根据需要添加。'}
                     type={'additional2'}
                   />
                 </div>

@@ -306,21 +306,15 @@ export interface ExhibitInfoPageModelType {
     changeVersion: (action: ChangeVersionAction, effects: EffectsCommandMap) => void;
     updateContractUsed: (action: UpdateContractUsedAction, effects: EffectsCommandMap) => void;
 
-    // onChange_Side_InputTitle: (action: OnChange_Side_InputTitle_Action, effects: EffectsCommandMap) => void;
-    // onChange_Side_ExhibitInputIntroduction: (action: OnChange_Side_ExhibitInputIntroduction_Action, effects: EffectsCommandMap) => void;
     onSave_Side_ExhibitIntroduction: (action: OnSave_Side_ExhibitIntroduction_Action, effects: EffectsCommandMap) => void;
     onClick_Side_InheritOptions_ResetBtn: (action: OnClick_Side_InheritOptions_ResetBtn_Action, effects: EffectsCommandMap) => void;
     onChange_Side_InheritOptions_ValueInput: (action: OnChange_Side_InheritOptions_ValueInput_Action, effects: EffectsCommandMap) => void;
     onBlur_Side_InheritOptions_ValueInput: (action: OnBlur_Side_InheritOptions_ValueInput_Action, effects: EffectsCommandMap) => void;
-    // onClick_Side_CustomOptions_EditBtn: (action: OnClick_Side_CustomOptions_EditBtn_Action, effects: EffectsCommandMap) => void;
     onClick_Side_CustomOptions_DeleteBtn: (action: OnClick_Side_CustomOptions_DeleteBtn_Action, effects: EffectsCommandMap) => void;
     onChange_Side_CustomOptions_ValueInput: (action: OnChange_Side_CustomOptions_ValueInput_Action, effects: EffectsCommandMap) => void;
     onBlur_Side_CustomOptions_ValueInput: (action: OnBlur_Side_CustomOptions_ValueInput_Action, effects: EffectsCommandMap) => void;
-    // onClick_Side_AddCustomOptionsBtn: (action: OnClick_Side_AddCustomOptionsBtn_Action, effects: EffectsCommandMap) => void;
     onConfirm_AddCustomOptionsDrawer: (action: OnConfirm_AddCustomOptionsDrawer_Action, effects: EffectsCommandMap) => void;
-    // onCancel_AddCustomOptionsDrawer: (action: OnCancel_AddCustomOptionsDrawer_Action, effects: EffectsCommandMap) => void;
     onConfirm_CustomOptionDrawer: (action: OnConfirm_CustomOptionDrawer_Action, effects: EffectsCommandMap) => void;
-    // onCancel_CustomOptionDrawer: (action: OnCancel_CustomOptionDrawer_Action, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<ExhibitInfoPageModelState, ChangeAction>;
