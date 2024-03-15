@@ -250,20 +250,21 @@ function FResourceOptionEditorDrawer({
             value={$state.keyInput}
             onChange={(e) => {
               const value: string = e.target.value;
-              console.log(value, 'value sdfoijdslkfjsdlkfjlksdjflkjsdlkjfl');
+              // console.log(value, 'value sdfoijdslkfjsdlkfjlksdjflkjsdlkjfl');
               const finalValue: string = get$keyPrefix() + value;
               let errorText: string = '';
               if (value === '') {
                 errorText = '请输入key';
-              } else if (value.length > 20) {
+              } else if (finalValue.length > 30) {
                 // errorText = FI18n.i18nNext.t('alert_key_convention_key');
-                errorText = '不超过20个字符';
+                errorText = '不超过30个字符';
               } else if (disabledKeys.includes(finalValue) && finalValue !== defaultData?.key) {
                 errorText = FI18n.i18nNext.t('alert_key_exist');
-              } else if (!FUtil.Regexp.CUSTOM_KEY.test(value)) {
+              // } else if (!FUtil.Regexp.CUSTOM_KEY.test(finalValue)) {
+              } else if (!new RegExp('^[a-zA-Z]([a-zA-Z0-9_]{1,29})?$').test(finalValue)) {
                 errorText = FI18n.i18nNext.t('alert_naming_convention_key');
               }
-              console.log(errorText, 'errorTextsdifjsdlkfjlsdkjflkjlk');
+              // console.log(errorText, 'errorTextsdifjsdlkfjlsdkjflkjlk');
               // set_keyInput(value);
               // set_keyInputError(errorText);
               $setState({
