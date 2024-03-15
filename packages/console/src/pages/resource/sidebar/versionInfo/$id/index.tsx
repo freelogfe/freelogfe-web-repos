@@ -216,16 +216,18 @@ function VersionInfo({ dispatch, resourceVersionEditorPage, match }: VersionInfo
               sha1={resourceVersionEditorPage.resourceVersionInfo?.sha1 || ''}
               isCartoon={resourceVersionEditorPage.resourceInfo?.resourceType[0] === '阅读' && resourceVersionEditorPage.resourceInfo?.resourceType[1] === '漫画'}
               hasDraft={!!resourceVersionEditorPage.draft}
-              onClickDownload={(extension) => {
-                if (!extension) {
-                  self.location.href = FUtil.Format.completeUrlByDomain('api')
-                    + `/v2/resources/${resourceVersionEditorPage.resourceID}/versions/${resourceVersionEditorPage.version}/download`;
-                  return;
-                }
+              onClickDownload={resourceVersionEditorPage.resourceTypeConfig.isSupportDownload
+                ? (extension) => {
+                  if (!extension) {
+                    self.location.href = FUtil.Format.completeUrlByDomain('api')
+                      + `/v2/resources/${resourceVersionEditorPage.resourceID}/versions/${resourceVersionEditorPage.version}/download`;
+                    return;
+                  }
 
-                self.location.href = FUtil.Format.completeUrlByDomain('api')
-                  + `/v2/resources/${resourceVersionEditorPage.resourceID}/versions/${resourceVersionEditorPage.version}/download?fileSuffix=${extension}`;
-              }}
+                  self.location.href = FUtil.Format.completeUrlByDomain('api')
+                    + `/v2/resources/${resourceVersionEditorPage.resourceID}/versions/${resourceVersionEditorPage.version}/download?fileSuffix=${extension}`;
+                }
+                : undefined}
               onChangeVersion={(version) => {
                 if (version !== resourceVersionEditorPage.version) {
                   dispatch<OnChange_Version_Action>({
@@ -646,13 +648,6 @@ function Header({
                 };
               })}
               onClick={(value) => {
-                // onChangeResourceStatus && onChangeResourceStatus(value === '#' ? value : Number(value) as 0)
-                // dispatch<OnChangeStatusAction>({
-                //   type: 'resourceListPage/onChangeStatus',
-                //   payload: {
-                //     value: value === '#' ? value : Number(value) as 0,
-                //   },
-                // });
                 onChangeVersion && onChangeVersion(value);
               }}
             />
@@ -687,44 +682,49 @@ function Header({
         <div style={{ width: 20 }} />
 
         {
-          isCartoon ? (<FDropdownMenu
-              options={[{
-                text: 'ZIP格式文件',
-                value: 'zip',
-              }, {
-                text: 'CBZ格式文件',
-                value: 'cbz',
-              }]}
-              onChange={(value) => {
-                // $prop.onClick_DownloadBtn && $prop.onClick_DownloadBtn('.' + value);
+          onClickDownload && (<>
+            {
+              isCartoon ? (<FDropdownMenu
+                  options={[{
+                    text: 'ZIP格式文件',
+                    value: 'zip',
+                  }, {
+                    text: 'CBZ格式文件',
+                    value: 'cbz',
+                  }]}
+                  onChange={(value) => {
+                    // $prop.onClick_DownloadBtn && $prop.onClick_DownloadBtn('.' + value);
 
-                onClickDownload && onClickDownload('.' + value);
-              }}
-            >
-              <div>
-                <FComponentsLib.FTextBtn
-                  type='primary'
-                  // onClick={() => onClickDownload && onClickDownload()}
+                    onClickDownload && onClickDownload('.' + value);
+                  }}
                 >
-                  <FComponentsLib.FIcons.FDownload
-                    style={{ fontSize: 12, fontWeight: 600 }}
-                  />
-                </FComponentsLib.FTextBtn>
-              </div>
-            </FDropdownMenu>)
-            : (<FTooltip title={'下载'}>
-              <div>
-                <FComponentsLib.FTextBtn
-                  type='primary'
-                  onClick={() => onClickDownload && onClickDownload()}
-                >
-                  <FComponentsLib.FIcons.FDownload
-                    style={{ fontSize: 12, fontWeight: 600 }}
-                  />
-                </FComponentsLib.FTextBtn>
-              </div>
-            </FTooltip>)
+                  <div>
+                    <FComponentsLib.FTextBtn
+                      type='primary'
+                      // onClick={() => onClickDownload && onClickDownload()}
+                    >
+                      <FComponentsLib.FIcons.FDownload
+                        style={{ fontSize: 12, fontWeight: 600 }}
+                      />
+                    </FComponentsLib.FTextBtn>
+                  </div>
+                </FDropdownMenu>)
+                : (<FTooltip title={'下载'}>
+                  <div>
+                    <FComponentsLib.FTextBtn
+                      type='primary'
+                      onClick={() => onClickDownload && onClickDownload()}
+                    >
+                      <FComponentsLib.FIcons.FDownload
+                        style={{ fontSize: 12, fontWeight: 600 }}
+                      />
+                    </FComponentsLib.FTextBtn>
+                  </div>
+                </FTooltip>)
+            }
+          </>)
         }
+
       </Space>
     </div>
   );

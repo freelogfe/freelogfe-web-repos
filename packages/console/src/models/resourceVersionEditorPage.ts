@@ -22,6 +22,13 @@ export interface ResourceVersionEditorPageModelState {
     resourceName: string;
     resourceType: string[];
   } | null;
+  resourceTypeConfig: {
+    // uploadEntry: ('localUpload' | 'storageSpace' | 'markdownEditor' | 'cartoonEditor')[];
+    // limitFileSize: number;
+    isSupportDownload: boolean;
+    // isSupportEdit: boolean;
+    // isSupportOptionalConfig: boolean;
+  };
   draft: null | IResourceCreateVersionDraftType;
   resourceVersionInfo: {
     version: string;
@@ -137,6 +144,13 @@ const initStates: ResourceVersionEditorPageModelState = {
   versions: [],
   // signingDate: '',
   resourceInfo: null,
+  resourceTypeConfig: {
+    // uploadEntry: ('localUpload' | 'storageSpace' | 'markdownEditor' | 'cartoonEditor')[];
+    // limitFileSize: number;
+    isSupportDownload: false,
+    // isSupportEdit: boolean;
+    // isSupportOptionalConfig: boolean;
+  },
   draft: null,
   resourceVersionInfo: null,
 
@@ -174,6 +188,8 @@ const Model: ResourceVersionEditorModelType = {
       yield put<FetchDataSourceAction>({
         type: 'fetchDataSource',
       });
+
+
     },
     * onUnmount_Page({}: OnUnmount_Page_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
@@ -205,6 +221,7 @@ const Model: ResourceVersionEditorModelType = {
           latestVersion: string;
           coverImages: string[];
           resourceType: string[];
+          resourceTypeCode: string;
           policies: PolicyFullInfo_Type[];
           baseUpcastResources: {
             resourceId: string;
@@ -228,12 +245,38 @@ const Model: ResourceVersionEditorModelType = {
       const { data: data_draft } = yield call(FServiceAPI.Resource.lookDraft, params3);
 
       // console.log(resourceSelectedVersion, 'resourceVersionEditorPage.version sdfjsdlkfjlkjl');
+
+      const params4: Parameters<typeof FServiceAPI.Resource.getResourceTypeInfoByCode>[0] = {
+        code: data_resourceInfo.resourceTypeCode,
+      };
+      const { data: data_ResourceTypeInfo }: {
+        ret: number;
+        errCode: number;
+        msg: string;
+        data: {
+          resourceConfig: {
+            fileCommitMode: number[];
+            fileMaxSize: number;
+            fileMaxSizeUnit: 1 | 2;
+            supportDownload: 1 | 2;
+            supportEdit: 1 | 2;
+            supportOptionalConfig: 1 | 2;
+          }
+        };
+      } = yield call(FServiceAPI.Resource.getResourceTypeInfoByCode, params4);
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           // pageState: 'loaded',
           version: resourceSelectedVersion,
           draft: data_draft ? data_draft.draftData : null,
+          resourceTypeConfig: {
+            // uploadEntry: uploadEntry,
+            // limitFileSize: data_ResourceTypeInfo.resourceConfig.fileMaxSize * 1024 * 1024 ** data_ResourceTypeInfo.resourceConfig.fileMaxSizeUnit,
+            isSupportDownload: data_ResourceTypeInfo.resourceConfig.supportDownload === 2,
+            // isSupportEdit: data_ResourceTypeInfo.resourceConfig.supportEdit === 2,
+            // isSupportOptionalConfig: data_ResourceTypeInfo.resourceConfig.supportOptionalConfig === 2,
+          },
         },
       });
       if (resourceSelectedVersion === '') {
