@@ -125,12 +125,14 @@ function FResourceCard({
         singleRow={true}
         text={resource.title || resource.name.split('/')[1]}
         type={'highlight'}
+        style={{ maxWidth: 280 }}
       />
       <div style={{ height: 5 }} />
       <FComponentsLib.FContentText
         type='additional2'
         text={FUtil.Format.resourceTypeKeyArrToResourceType(resource.type)}
         style={{ maxWidth: 280 }}
+        singleRow
       />
       <div style={{ height: 5 }} />
       <FComponentsLib.FContentText
