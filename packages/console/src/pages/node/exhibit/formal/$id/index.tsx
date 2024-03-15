@@ -724,7 +724,33 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
                                       return;
                                     }
 
-                                    dispatch<OnConfirm_CustomOptionDrawer_Action>({
+                                    const side_CustomOptions: ExhibitInfoPageModelState['side_CustomOptions'] = exhibitInfoPage.side_CustomOptions.map((co, co_index) => {
+                                      console.log(co_index, index, 'co_index');
+                                      if (co_index !== index) {
+                                        return co;
+                                      }
+                                      console.log(dataSource, 'sdfsidjfoisdujfoi');
+                                      return {
+                                        key: dataSource.key,
+                                        name: dataSource.name,
+                                        value: dataSource.input,
+                                        description: dataSource.description,
+                                        valueInput: dataSource.input,
+                                        valueInputError: '',
+                                      };
+                                    });
+
+                                    await dispatch<ChangeAction>({
+                                      type: 'exhibitInfoPage/change',
+                                      payload: {
+                                        side_CustomOptions: side_CustomOptions,
+                                        // side_CustomOptionDrawer_Visible: false,
+                                        // side_CustomOptionDrawer_DataSource: null,
+                                      },
+                                    });
+
+                                    // console.log(dataSource, 'dataSource sdifojsdl;kfjlskdjflk;jl');
+                                    await dispatch<OnConfirm_CustomOptionDrawer_Action>({
                                       type: 'exhibitInfoPage/onConfirm_CustomOptionDrawer',
                                       payload: {
                                         value: {

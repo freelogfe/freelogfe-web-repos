@@ -1350,33 +1350,12 @@ const Model: ExhibitInfoPageModelType = {
       const { exhibitInfoPage }: ConnectState = yield select(({ exhibitInfoPage }: ConnectState) => ({
         exhibitInfoPage,
       }));
-      const side_CustomOptions: ExhibitInfoPageModelState['side_CustomOptions'] = exhibitInfoPage.side_CustomOptions.map((co) => {
-        if (co.key !== payload.value.key) {
-          return co;
-        }
-        return {
-          key: co.key,
-          name: co.name,
-          value: payload.value.value,
-          description: payload.value.description,
-          valueInput: payload.value.value,
-          valueInputError: '',
-        };
-      });
 
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          side_CustomOptions: side_CustomOptions,
-          // side_CustomOptionDrawer_Visible: false,
-          // side_CustomOptionDrawer_DataSource: null,
-        },
-      });
 
       const params: UpdateRewriteParams = {
         exhibit_ID: exhibitInfoPage.exhibit_ID,
         side_InheritOptions: exhibitInfoPage.side_InheritOptions,
-        side_CustomOptions: side_CustomOptions,
+        side_CustomOptions: exhibitInfoPage.side_CustomOptions,
       };
       const { data, errCode, ret, msg }: {
         data: boolean;
