@@ -277,16 +277,19 @@ function FSignResourceToNodeDrawer({ resourceIDs, onClose, onOk }: FSignResource
               <>
                 {menu}
                 {/*<Divider style={{ margin: '8px 0' }} />*/}
-                <a
-                  href={FUtil.LinkTo.nodeCreator()}
-                  className={styles.newButton}
-                  target={'_blank'}
-                >
-                  <Space size={10}>
-                    <FComponentsLib.FIcons.FPlus style={{ fontSize: 14 }} />
-                    <span>创建节点</span>
-                  </Space>
-                </a>
+                {
+                  $nodeOptions.length < 3 && (<a
+                    href={FUtil.LinkTo.nodeCreator()}
+                    className={styles.newButton}
+                    target={'_blank'}
+                  >
+                    <Space size={10}>
+                      <FComponentsLib.FIcons.FPlus style={{ fontSize: 14 }} />
+                      <span>创建节点</span>
+                    </Space>
+                  </a>)
+                }
+
               </>
             )}
           />)
