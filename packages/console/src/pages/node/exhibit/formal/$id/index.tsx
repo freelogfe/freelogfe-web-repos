@@ -459,7 +459,9 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
             <div style={{ height: 20 }} />
 
             <FResourceProperties
-              immutableData={exhibitInfoPage.side_RawProperties}
+              immutableData={[
+                ...exhibitInfoPage.side_RawProperties,
+                ...exhibitInfoPage.side_BaseProperties]}
               onlyEditValueData={[]}
               alterableData={[]}
             />
