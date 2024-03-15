@@ -78,17 +78,6 @@ function FResourceOptionEditorDrawer({
 
   const [$keyPrefix, set$keyPrefix, get$keyPrefix] = FUtil.Hook.useGetState<string>('options_');
   const [$state, $setState] = AHooks.useSetState<FResourceOptionEditorDrawerStates>(initStates);
-  // const [visible, set_visible] = React.useState<FResourceOptionEditorDrawerStates['visible']>(initStates['visible']);
-  // const [nameInput, set_nameInput] = React.useState<FResourceOptionEditorDrawerStates['nameInput']>(initStates['nameInput']);
-  // const [nameInputError, set_nameInputError] = React.useState<FResourceOptionEditorDrawerStates['nameInputError']>(initStates['nameInputError']);
-  // const [keyInput, set_keyInput] = React.useState<FResourceOptionEditorDrawerStates['keyInput']>(initStates['keyInput']);
-  // const [keyInputError, set_keyInputError] = React.useState<FResourceOptionEditorDrawerStates['keyInputError']>(initStates['keyInputError']);
-  // const [typeSelect, set_typeSelect] = React.useState<FResourceOptionEditorDrawerStates['typeSelect']>(initStates['typeSelect']);
-  // const [inputInput, set_inputInput] = React.useState<FResourceOptionEditorDrawerStates['inputInput']>(initStates['inputInput']);
-  // const [inputInputError, set_inputInputError] = React.useState<FResourceOptionEditorDrawerStates['inputInputError']>(initStates['inputInputError']);
-  // const [selectInputs, set_selectInputs] = React.useState<FResourceOptionEditorDrawerStates['selectInputs']>(initStates['selectInputs']);
-  // const [descriptionInput, set_descriptionInput] = React.useState<FResourceOptionEditorDrawerStates['descriptionInput']>(initStates['descriptionInput']);
-  // const [descriptionInputError, set_descriptionInputError] = React.useState<FResourceOptionEditorDrawerStates['descriptionInputError']>(initStates['descriptionInputError']);
 
   function initData() {
     if (!defaultData) {
@@ -118,22 +107,6 @@ function FResourceOptionEditorDrawer({
       }),
       descriptionInput: defaultData.description,
     });
-    // set_keyInput(defaultData?.key || '');
-    // set_nameInput(defaultData?.name || '');
-    // set_typeSelect(defaultData?.type || 'input');
-    // set_inputInput(defaultData?.input || '');
-    // set_selectInputs(defaultData?.select.map((s) => {
-    //   return {
-    //     value: s,
-    //     error: '',
-    //   };
-    // }) || [
-    //   {
-    //     value: '',
-    //     error: '',
-    //   },
-    // ]);
-    // set_descriptionInput(defaultData?.description || '');
   }
 
   return (<FDrawer
@@ -271,24 +244,26 @@ function FResourceOptionEditorDrawer({
               type={'normal'}
               text={$keyPrefix}
             />)}
-            className={[styles.keyInput].join(' ')}
+            className={[styles.keyInput, noneEditableFields.includes('key') ? styles.grayBg : ''].join(' ')}
             disabled={noneEditableFields.includes('key')}
             placeholder={FI18n.i18nNext.t('resourceoptions_add_input_key_hint')}
             value={$state.keyInput}
             onChange={(e) => {
               const value: string = e.target.value;
+              console.log(value, 'value sdfoijdslkfjsdlkfjlksdjflkjsdlkjfl');
               const finalValue: string = get$keyPrefix() + value;
               let errorText: string = '';
               if (value === '') {
                 errorText = '请输入key';
-              } else if (finalValue.length > 20) {
+              } else if (value.length > 20) {
                 // errorText = FI18n.i18nNext.t('alert_key_convention_key');
                 errorText = '不超过20个字符';
               } else if (disabledKeys.includes(finalValue) && finalValue !== defaultData?.key) {
                 errorText = FI18n.i18nNext.t('alert_key_exist');
-              } else if (!FUtil.Regexp.CUSTOM_KEY.test(finalValue)) {
+              } else if (!FUtil.Regexp.CUSTOM_KEY.test(value)) {
                 errorText = FI18n.i18nNext.t('alert_naming_convention_key');
               }
+              console.log(errorText, 'errorTextsdifjsdlkfjlsdkjflkjlk');
               // set_keyInput(value);
               // set_keyInputError(errorText);
               $setState({
