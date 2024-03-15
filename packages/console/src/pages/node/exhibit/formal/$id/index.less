@@ -56,36 +56,52 @@
     }
 
 
-    .cover {
-      width: 260px;
-      height: 195px;
-      position: relative;
+    .exhibitInfo {
       display: flex;
-      cursor: pointer;
-      overflow: hidden;
+      align-items: flex-start;
+      gap: 20px;
 
-      &:hover {
+      .cover {
+        width: 260px;
+        height: 195px;
+        position: relative;
+        display: flex;
+        cursor: pointer;
+        overflow: hidden;
+
+        &:hover {
+          & > .coverEdit {
+            visibility: visible;
+          }
+        }
+
         & > .coverEdit {
-          visibility: visible;
+          position: absolute;
+          top: 0;
+          right: 0;
+          bottom: 0;
+          left: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-direction: column;
+          color: white;
+          background: rgba(0, 0, 0, 0.4);
+          border-radius: 6px;
+          visibility: hidden;
         }
       }
 
-      & > .coverEdit {
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
+      .info {
+        width: 640px;
         display: flex;
-        align-items: center;
-        justify-content: center;
         flex-direction: column;
-        color: white;
-        background: rgba(0, 0, 0, 0.4);
-        border-radius: 6px;
-        visibility: hidden;
+        min-height: 195px;
+        align-items: flex-start;
+        justify-content: space-between;
       }
     }
+
 
     .InheritOptions {
       width: 100%;

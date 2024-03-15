@@ -255,7 +255,7 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
       </div>
 
       <div style={{ height: 40 }} />
-      <Space size={20} style={{ alignItems: 'flex-start' }}>
+      <div className={styles.exhibitInfo}>
         <FUploadCover
           style={{ height: 195 }}
           use={'exhibit'}
@@ -286,68 +286,69 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
           </div>
         </FUploadCover>
 
-        <div>
-          <TitleInput
-            value={exhibitInfoPage.side_ExhibitTitle}
-            onOK={(value) => {
-              dispatch<UpdateBaseInfoAction>({
-                type: 'exhibitInfoPage/updateBaseInfo',
-                payload: {
-                  side_ExhibitTitle: value,
-                },
-              });
-            }}
-          />
-          <div style={{ height: 10 }} />
-          {
-            exhibitInfoPage.exhibit_ResourceInfo && (<Space size={5}>
-              <FComponentsLib.FContentText
-                type={'additional2'}
-                text={'来自于'}
-                style={{ color: 'inherit' }}
-              />
-              <Popover
-                // open={true}
-                content={<FResourceCard
-                  key={exhibitInfoPage.exhibit_ResourceInfo.id}
-                  resource={exhibitInfoPage.exhibit_ResourceInfo}
-                  // className={styles.FResourceCard}
-                  onClick={() => {
-                    window.open(
-                      FUtil.LinkTo.resourceDetails({
-                        resourceID: exhibitInfoPage.exhibit_ResourceInfo?.id || '',
-                      }),
-                    );
-                  }}
-                />}
-                title={null}
-                // placement={'bottomLeft'}
-                placement={'bottom'}
-                // style={{ padding: 0 }}
-                // overlayInnerStyle={{ padding: 0 }}
-                // overlayStyle={{ padding: 0 }}
-                // className={styles.resourceCardPopover}
-                overlayClassName={styles.resourceCardPopover}
-              >
-                <div style={{ width: 'fit-content' }}>
-                  <FComponentsLib.FTextBtn
-                    type='default'
+        <div className={styles.info}>
+          <div>
+            <TitleInput
+              value={exhibitInfoPage.side_ExhibitTitle}
+              onOK={(value) => {
+                dispatch<UpdateBaseInfoAction>({
+                  type: 'exhibitInfoPage/updateBaseInfo',
+                  payload: {
+                    side_ExhibitTitle: value,
+                  },
+                });
+              }}
+            />
+            <div style={{ height: 5 }} />
+            {
+              exhibitInfoPage.exhibit_ResourceInfo && (<Space size={5}>
+                <FComponentsLib.FContentText
+                  type={'additional2'}
+                  text={'来自于'}
+                  style={{ color: 'inherit' }}
+                />
+                <Popover
+                  // open={true}
+                  content={<FResourceCard
+                    key={exhibitInfoPage.exhibit_ResourceInfo.id}
+                    resource={exhibitInfoPage.exhibit_ResourceInfo}
+                    // className={styles.FResourceCard}
                     onClick={() => {
-                      window.open(FUtil.LinkTo.resourceDetails({ resourceID: exhibitInfoPage.exhibit_ResourceInfo?.id || '' }));
+                      window.open(
+                        FUtil.LinkTo.resourceDetails({
+                          resourceID: exhibitInfoPage.exhibit_ResourceInfo?.id || '',
+                        }),
+                      );
                     }}
-                  >
-                    <FComponentsLib.FContentText
-                      type={'additional2'}
-                      style={{ color: 'inherit', textDecoration: 'underline' }}
-                      singleRow
-                      text={exhibitInfoPage.exhibit_ResourceInfo?.name || ''}
-                    />
-                  </FComponentsLib.FTextBtn>
-                </div>
-              </Popover>
-            </Space>)
-          }
-
+                  />}
+                  title={null}
+                  // placement={'bottomLeft'}
+                  placement={'bottom'}
+                  // style={{ padding: 0 }}
+                  // overlayInnerStyle={{ padding: 0 }}
+                  // overlayStyle={{ padding: 0 }}
+                  // className={styles.resourceCardPopover}
+                  overlayClassName={styles.resourceCardPopover}
+                >
+                  <div style={{ width: 'fit-content' }}>
+                    <FComponentsLib.FTextBtn
+                      type='default'
+                      onClick={() => {
+                        window.open(FUtil.LinkTo.resourceDetails({ resourceID: exhibitInfoPage.exhibit_ResourceInfo?.id || '' }));
+                      }}
+                    >
+                      <FComponentsLib.FContentText
+                        type={'additional2'}
+                        style={{ color: 'inherit', textDecoration: 'underline' }}
+                        singleRow
+                        text={exhibitInfoPage.exhibit_ResourceInfo?.name || ''}
+                      />
+                    </FComponentsLib.FTextBtn>
+                  </div>
+                </Popover>
+              </Space>)
+            }
+          </div>
           <div style={{ height: 15 }} />
           <div style={{ borderRadius: 4, border: '1px solid #D4D4D4', minHeight: 114, backgroundColor: 'white' }}>
             <FResourceLabelEditor2
@@ -365,8 +366,8 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
             />
           </div>
         </div>
-      </Space>
-      <div style={{ height: 15 }} />
+      </div>
+      <div style={{ height: 20 }} />
       <Space size={10}>
         <FComponentsLib.FTextBtn
           style={{ fontSize: 12 }}
