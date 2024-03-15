@@ -392,10 +392,11 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
           style={{ fontSize: 12 }}
         />
       </Space>
-      <div style={{ height: 10 }} />
+
 
       {
         exhibitInfoPage.side_SettingUnfold && (<>
+          <div style={{ height: 10 }} />
           <div className={styles.block} style={{ backgroundColor: 'rgba(0,0,0,0.02)' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <FComponentsLib.FContentText
@@ -801,10 +802,11 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
               </>)
             }
           </div>
-          <div style={{ height: 5 }} />
+
         </>)
       }
 
+      <div style={{ height: 40 }} />
       <IntroductionInput
         value={exhibitInfoPage.side_ExhibitIntroduction}
         onOK={(value) => {
