@@ -416,12 +416,14 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
                           singleRow={true}
                           text={lr.resourceTitle || lr.resourceName.split('/')[1]}
                           type={'highlight'}
+                          style={{ maxWidth: 260 }}
                         />
                         <div style={{ height: 5 }} />
                         <FComponentsLib.FContentText
                           type='additional2'
                           text={FUtil.Format.resourceTypeKeyArrToResourceType(lr.type)}
                           style={{ maxWidth: 260 }}
+                          singleRow={true}
                         />
                         <div style={{ height: 5 }} />
                         <FComponentsLib.FContentText
@@ -453,29 +455,6 @@ function Dashboard({ dispatch, dashboardPage }: DashboardProps) {
                           <img src={lr.useAvatar || img_choiceLabel} alt={''} />
                           <span>{lr.username}</span>
                         </div>
-                        {/*<FComponentsLib.FContentText*/}
-                        {/*  style={{ width: 250 }}*/}
-                        {/*  text={lr.resourceName}*/}
-                        {/*  type='highlight'*/}
-                        {/*  singleRow*/}
-                        {/*/>*/}
-                        {/*<div style={{ height: 8 }} />*/}
-                        {/*<FComponentsLib.FContentText text={FUtil.Format.resourceTypeKeyArrToResourceType(lr.type)} />*/}
-                        {/*<div style={{ height: 12 }} />*/}
-                        {/*<FComponentsLib.F_Contract_And_Policy_Labels*/}
-                        {/*  data={lr.policies.map((p) => {*/}
-                        {/*    return {*/}
-                        {/*      text: p,*/}
-                        {/*      dot: '',*/}
-                        {/*    };*/}
-                        {/*  })}*/}
-                        {/*  singleRow*/}
-                        {/*/>*/}
-                        {/*<div style={{ height: 15 }} />*/}
-                        {/*<FComponentsLib.FContentText*/}
-                        {/*  text={lr.dataTime}*/}
-                        {/*  type='additional2'*/}
-                        {/*/>*/}
                       </div>);
                     })
                   }
