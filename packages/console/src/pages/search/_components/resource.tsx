@@ -74,6 +74,13 @@ export default function ResourceList({
               isChoice: i.operationType === 1,
             }}
             key={i.resourceId}
+            onClick={() => {
+              window.open(
+                FUtil.LinkTo.resourceDetails({
+                  resourceID: i.resourceId,
+                }),
+              );
+            }}
           />);
           // return !item._fake
           //   ? (
