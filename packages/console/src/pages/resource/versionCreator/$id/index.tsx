@@ -145,10 +145,6 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
     });
   }
 
-  // if (!resourceVersionCreatorPage.selectedFileInfo) {
-  //   return ();
-  // }
-
   const hasError: boolean =
     resourceVersionCreatorPage.versionInput === '' ||
     $versionInputHasError ||
@@ -468,23 +464,6 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
                 <span>下载</span>
               </FComponentsLib.FTextBtn>)
             }
-
-            {/*{*/}
-            {/*  resourceVersionCreatorPage.resourceInfo?.resourceType[1] === '漫画'*/}
-            {/*  && (resourceVersionCreatorPage.resourceInfo?.resourceType[2] === '条漫'*/}
-            {/*    || resourceVersionCreatorPage.resourceInfo?.resourceType[2] === '页漫') && (<FComponentsLib.FTextBtn*/}
-            {/*    disabled={resourceVersionCreatorPage.rawPropertiesState === 'parsing'}*/}
-            {/*    type='primary'*/}
-            {/*    style={{ fontSize: 12, display: 'flex', alignItems: 'center', gap: 5 }}*/}
-            {/*    onClick={() => {*/}
-            {/*      */}
-            {/*    }}*/}
-            {/*  >*/}
-            {/*    <FComponentsLib.FIcons.FEdit style={{ fontSize: 12 }} />*/}
-            {/*    <span>编辑</span>*/}
-            {/*  </FComponentsLib.FTextBtn>)*/}
-            {/*}*/}
-
 
             <FComponentsLib.FTextBtn
               type='danger'

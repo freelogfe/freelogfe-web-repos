@@ -57,12 +57,7 @@ function VersionInfo({ dispatch, resourceVersionEditorPage, match }: VersionInfo
         resourceID: match.params.id,
       },
     });
-    // dispatch<OnMount_PolicyPage_Action>({
-    //   type: 'resourceAuthPage/onMount_PolicyPage',
-    //   payload: {
-    //     resourceID: match.params.id,
-    //   },
-    // });
+
     dispatch<OnChange_Page_Action>({
       type: 'resourceSider/onChange_Page',
       payload: {
@@ -84,32 +79,10 @@ function VersionInfo({ dispatch, resourceVersionEditorPage, match }: VersionInfo
     });
   });
 
-  // AHooks.useDebounceEffect(() => {
-  //   // console.log($urlState, '$urlState wsedf9iojsdlkfjsldkjlkjl');
-  //   init();
-  // }, [$urlState.version, match.params.id], {
-  //   wait: 100,
-  // });
-
   React.useEffect(() => {
     setEditor(BraftEditor.createEditorState(resourceVersionEditorPage.description));
   }, [resourceVersionEditorPage.description]);
 
-  // async function init() {
-  //   await onChange({
-  //     resourceID: match.params.id,
-  //     version: $urlState.version,
-  //   });
-  //   if ($urlState.version === '') {
-  //     onChange({
-  //       pageState: 'loaded',
-  //     });
-  //   } else {
-  //     await dispatch<FetchDataSourceAction>({
-  //       type: 'resourceVersionEditorPage/fetchDataSource',
-  //     });
-  //   }
-  // }
 
   async function onChange(payload: Partial<ResourceVersionEditorPageModelState>) {
     await dispatch<ChangeAction>({
@@ -230,9 +203,6 @@ function VersionInfo({ dispatch, resourceVersionEditorPage, match }: VersionInfo
       </div>)
     }
 
-    {/*{*/}
-    {/*  resourceVersionEditorPage.version === '' && */}
-    {/*}*/}
     {
       resourceVersionEditorPage.version !== '' && (
         <div style={{ display: resourceVersionEditorPage.pageState === 'loaded' ? 'block' : 'none' }}>
@@ -257,8 +227,6 @@ function VersionInfo({ dispatch, resourceVersionEditorPage, match }: VersionInfo
                   + `/v2/resources/${resourceVersionEditorPage.resourceID}/versions/${resourceVersionEditorPage.version}/download?fileSuffix=${extension}`;
               }}
               onChangeVersion={(version) => {
-                // console.log(version, 'version 9ewiofjksdfjlsdkjflkdsjflkjl');
-                // set$urlState({ version: version });
                 if (version !== resourceVersionEditorPage.version) {
                   dispatch<OnChange_Version_Action>({
                     type: 'resourceVersionEditorPage/onChange_Version',

@@ -335,7 +335,7 @@ const Model: ResourceVersionEditorModelType = {
             .filter((spd) => {
               return spd.insertMode === 2;
             })
-            .map<ResourceVersionEditorPageModelState['rawProperties'][number]>((spd) => {
+            .map<ResourceVersionEditorPageModelState['additionalProperties'][number]>((spd) => {
               return {
                 key: spd.key,
                 name: spd.name,

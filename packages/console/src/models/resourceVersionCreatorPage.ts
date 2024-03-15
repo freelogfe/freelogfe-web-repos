@@ -537,6 +537,13 @@ const Model: ResourceVersionCreatorModelType = {
             descriptionText: data_resourceVersionInfo.description,
           },
         });
+
+        yield put<_FetchRawPropsAction>({
+          type: '_FetchRawProps',
+          payload: {
+            ifMarkdownFetchDependencies: true,
+          },
+        });
       }
 
       yield put<_FetchDraft_Action>({
@@ -664,13 +671,6 @@ const Model: ResourceVersionCreatorModelType = {
           dataIsDirty: false,
         },
       });
-
-      // yield put<OnChange_DraftData_Action>({
-      //   type: 'resourceInfo/onChange_DraftData',
-      //   payload: {
-      //     draftData: null,
-      //   },
-      // });
 
       history.replace(FUtil.LinkTo.resourceVersionCreateRelease({
         resourceID: data.resourceId,
