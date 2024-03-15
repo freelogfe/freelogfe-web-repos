@@ -3,6 +3,7 @@ import styles from './index.less';
 import {Input} from 'antd';
 import {ChangeEventHandler, FocusEventHandler, KeyboardEventHandler} from 'react';
 import {TextAreaRef} from 'antd/lib/input/TextArea';
+import {AutoSizeType} from "rc-textarea/lib/ResizableTextArea";
 
 export interface FMultiLineInputProps {
     value: string;
@@ -13,8 +14,9 @@ export interface FMultiLineInputProps {
     // FI18n.i18nNext.t('form_input_multiplelinetxt_error_length')
     lengthLimit?: number;
     onChange?: ChangeEventHandler<HTMLTextAreaElement>;
-    onBlur?:  FocusEventHandler<HTMLTextAreaElement>;
+    onBlur?: FocusEventHandler<HTMLTextAreaElement>;
     onPressEnter?: KeyboardEventHandler<HTMLTextAreaElement>;
+    autoSize?: AutoSizeType;
 }
 
 function FMultiLineInput({
@@ -27,6 +29,7 @@ function FMultiLineInput({
                              onChange,
                              onBlur,
                              onPressEnter,
+                             autoSize = {}
                          }: FMultiLineInputProps, ref: React.Ref<TextAreaRef> | undefined) {
     return (<div className={styles.introduction}>
         <Input.TextArea
@@ -38,7 +41,11 @@ function FMultiLineInput({
             onChange={onChange}
             onBlur={onBlur}
             onPressEnter={onPressEnter}
-            autoSize={{minRows: 4, maxRows: 20}}
+            autoSize={{
+                minRows: 4,
+                maxRows: 20,
+                ...autoSize
+            }}
         />
         {
             lengthLimit > 0 && (<span

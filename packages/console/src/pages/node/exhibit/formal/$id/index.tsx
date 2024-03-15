@@ -766,7 +766,8 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
                           </Space>
                         </div>
                         <div style={{ height: 5 }} />
-                        <FComponentsLib.FInput.FSingleLine
+                        <FComponentsLib.FInput.FMultiLine
+                          autoSize={{ minRows: 1 }}
                           lengthLimit={-1}
                           placeholder={FI18n.i18nNext.t('hint_value_null')}
                           className={styles.FInput}
