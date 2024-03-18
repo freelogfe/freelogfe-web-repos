@@ -6,7 +6,7 @@ import { history } from 'umi';
 import fMessage from '@/components/fMessage';
 import * as semver from 'semver';
 import { FUtil, FServiceAPI } from '@freelog/tools-lib';
-import { getFilesSha1Info } from '@/utils/service';
+import { getFilesSha1Info, handleData_By_Sha1_And_ResourceTypeCode_And_InheritData } from '@/utils/service';
 import { IResourceCreateVersionDraftType } from '@/type/resourceTypes';
 import moment from 'moment';
 import { OnChange_Draft_Action } from '@/models/resourceSider';
@@ -244,13 +244,13 @@ export interface _SaveDraft_Action extends AnyAction {
   };
 }
 
-export interface _FetchRawPropsAction extends AnyAction {
-  type: '_FetchRawProps';
-  payload: {
-    ifMarkdownFetchDependencies: boolean;
-    delay?: boolean;
-  };
-}
+// export interface _FetchRawPropsAction extends AnyAction {
+//   type: '_FetchRawProps';
+//   payload: {
+//     // ifMarkdownFetchDependencies: boolean;
+//     delay?: boolean;
+//   };
+// }
 
 export interface ResourceVersionCreatorModelType {
   namespace: 'resourceVersionCreatorPage';
@@ -282,7 +282,7 @@ export interface ResourceVersionCreatorModelType {
 
     _FetchDraft: (action: _FetchDraft_Action, effects: EffectsCommandMap) => void;
     _SaveDraft: (action: _SaveDraft_Action, effects: EffectsCommandMap) => void;
-    _FetchRawProps: (action: _FetchRawPropsAction, effects: EffectsCommandMap) => void;
+    // _FetchRawProps: (action: _FetchRawPropsAction, effects: EffectsCommandMap) => void;
   };
   reducers: {
     change: DvaReducer<ResourceVersionCreatorPageModelState, ChangeAction>;
@@ -468,15 +468,10 @@ const Model: ResourceVersionCreatorModelType = {
           }
         } = yield call(FServiceAPI.Resource.resourceVersionInfo1, params2);
         // console.log(data_resourceVersionInfo, 'data_resourceVersionInfo sdifjsd;oifjsldkjflkdsjflkjl');
-        yield put<ChangeAction>({
-          type: 'change',
-          payload: {
-            versionInput: (semver.inc(data_resourceInfo.latestVersion, 'patch') || '1.0.0'),
-            selectedFileInfo: {
-              name: data_resourceVersionInfo.filename,
-              sha1: data_resourceVersionInfo.fileSha1,
-              from: '上个版本',
-            },
+        const params4: Parameters<typeof handleData_By_Sha1_And_ResourceTypeCode_And_InheritData>[0] = {
+          sha1: data_resourceVersionInfo.fileSha1,
+          resourceTypeCode: data_resourceInfo.resourceTypeCode,
+          inheritData: {
             additionalProperties: data_resourceVersionInfo.systemPropertyDescriptors
               .filter((spd) => {
                 return spd.insertMode === 2;
@@ -512,6 +507,28 @@ const Model: ResourceVersionCreatorModelType = {
                   select: cpd.candidateItems,
                 };
               }),
+          },
+        };
+        const result: Awaited<ReturnType<typeof handleData_By_Sha1_And_ResourceTypeCode_And_InheritData>> = yield call(handleData_By_Sha1_And_ResourceTypeCode_And_InheritData, params4);
+        // console.log(result, 'w9eifjsdlkfjlsdjflsdjfljl');
+        if (result.state !== 'success') {
+          fMessage(result.failedMsg, 'error');
+          return;
+        }
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            versionInput: (semver.inc(data_resourceInfo.latestVersion, 'patch') || '1.0.0'),
+            selectedFileInfo: {
+              name: data_resourceVersionInfo.filename,
+              sha1: data_resourceVersionInfo.fileSha1,
+              from: '上个版本',
+            },
+            rawProperties: result.rawProperties,
+            additionalProperties: result.additionalProperties,
+            customProperties: result.customProperties,
+            customConfigurations: result.customConfigurations,
+
             directDependencies: data_resourceVersionInfo.dependencies
               .map<ResourceVersionCreatorPageModelState['directDependencies'][number]>((d) => {
                 return {
@@ -532,15 +549,8 @@ const Model: ResourceVersionCreatorModelType = {
             descriptionText: data_resourceVersionInfo.description,
           },
         });
-
-        yield put<_FetchRawPropsAction>({
-          type: '_FetchRawProps',
-          payload: {
-            ifMarkdownFetchDependencies: true,
-          },
-        });
       }
-
+      console.log('********************************************');
       yield put<_FetchDraft_Action>({
         type: '_FetchDraft',
         payload: {
@@ -703,12 +713,12 @@ const Model: ResourceVersionCreatorModelType = {
         },
       });
 
-      yield put<_FetchRawPropsAction>({
-        type: '_FetchRawProps',
-        payload: {
-          ifMarkdownFetchDependencies: true,
-        },
-      });
+      // yield put<_FetchRawPropsAction>({
+      //   type: '_FetchRawProps',
+      //   payload: {
+      //     // ifMarkdownFetchDependencies: true,
+      //   },
+      // });
     },
     * onSucceed_ImportObject({ payload }: OnSucceed_ImportObject_Action, { call, put }: EffectsCommandMap) {
       yield put<ChangeAction>({
@@ -866,12 +876,12 @@ const Model: ResourceVersionCreatorModelType = {
         },
       });
 
-      yield put<_FetchRawPropsAction>({
-        type: '_FetchRawProps',
-        payload: {
-          ifMarkdownFetchDependencies: true,
-        },
-      });
+      // yield put<_FetchRawPropsAction>({
+      //   type: '_FetchRawProps',
+      //   payload: {
+      //     // ifMarkdownFetchDependencies: true,
+      //   },
+      // });
     },
     * onClick_OpenMarkdownBtn({}: OnClick_OpenMarkdownBtn_Action, {}: EffectsCommandMap) {
 
@@ -1056,8 +1066,6 @@ const Model: ResourceVersionCreatorModelType = {
           draftData: IResourceCreateVersionDraftType;
         };
       } = yield call(FServiceAPI.Resource.lookDraft, params);
-      // console.log(data_draft, 'data_draftiosdjlfkjsdlkfjklsdjflk');
-
       if (!!data_draft) {
 
         const { draftData } = data_draft;
@@ -1068,6 +1076,30 @@ const Model: ResourceVersionCreatorModelType = {
           };
 
           const { data: data_ResourcesBySha1 }: { data: any[] } = yield call(FServiceAPI.Resource.getResourceBySha1, params3);
+
+          const params4: Parameters<typeof handleData_By_Sha1_And_ResourceTypeCode_And_InheritData>[0] = {
+            sha1: draftData.selectedFileInfo.sha1,
+            resourceTypeCode: resourceVersionCreatorPage.resourceInfo?.resourceTypeCode || '',
+            inheritData: {
+              additionalProperties: draftData.additionalProperties.map((p) => {
+                return {
+                  key: p.key,
+                  name: '',
+                  value: p.value,
+                  description: '',
+                };
+              }),
+              customProperties: draftData.customProperties,
+              customConfigurations: draftData.customConfigurations,
+            },
+          };
+          const result: Awaited<ReturnType<typeof handleData_By_Sha1_And_ResourceTypeCode_And_InheritData>> = yield call(handleData_By_Sha1_And_ResourceTypeCode_And_InheritData, params4);
+          // console.log(result, '&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&');
+          if (result.state !== 'success') {
+            fMessage(result.failedMsg, 'error');
+            return;
+          }
+
           yield put<ChangeAction>({
             type: 'change',
             payload: {
@@ -1089,6 +1121,30 @@ const Model: ResourceVersionCreatorModelType = {
                     };
                   });
                 }).flat(),
+
+              pageState: 'loaded',
+              rawProperties: result.rawProperties,
+              additionalProperties: result.additionalProperties,
+              customProperties: result.customProperties,
+              customConfigurations: result.customConfigurations,
+            },
+          });
+        } else {
+          yield put<ChangeAction>({
+            type: 'change',
+            payload: {
+              pageState: 'loaded',
+              rawProperties: [],
+              additionalProperties: draftData.additionalProperties.map((p) => {
+                return {
+                  key: p.key,
+                  name: '',
+                  value: p.value,
+                  description: '',
+                };
+              }),
+              customProperties: draftData.customProperties,
+              customConfigurations: draftData.customConfigurations,
             },
           });
         }
@@ -1098,46 +1154,25 @@ const Model: ResourceVersionCreatorModelType = {
           payload: {
             versionInput: draftData.versionInput,
             selectedFileInfo: draftData.selectedFileInfo,
-            additionalProperties: draftData.additionalProperties.map((p) => {
-              return {
-                key: p.key,
-                name: '',
-                value: p.value,
-                description: '',
-              };
-            }),
-            customProperties: draftData.customProperties,
-            customConfigurations: draftData.customConfigurations,
 
             directDependencies: draftData.directDependencies,
             baseUpcastResources: draftData.baseUpcastResources,
             authReload: resourceVersionCreatorPage.authReload + 1,
 
-            // descriptionEditorState: BraftEditor.createEditorState(draftData.descriptionEditorInput),
             descriptionText: draftData.descriptionEditorInput,
             draftSaveTime: moment(data_draft.updateDate).format('YYYY-MM-DD HH:mm:ss'),
-            // draftSaveTime: FUtil.Format.formatDateTime(data_draft.updateDate, true),
           },
         });
-        yield call(FUtil.Tool.promiseSleep);
 
-        if (draftData.selectedFileInfo) {
-          yield put<_FetchRawPropsAction>({
-            type: '_FetchRawProps',
-            payload: {
-              ifMarkdownFetchDependencies: false,
-              delay: payload.delay,
-            },
-          });
-        }
       }
-      // console.log('DDDDEEEEEEE *(&(*&(*&');
-      yield call(FUtil.Tool.promiseSleep, 1000);
+      if (payload.delay) {
+        yield call(FUtil.Tool.promiseSleep, 1000);
+      }
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           pageState: 'loaded',
-          // draftSaveTime: moment(data_draft.)
         },
       });
     },
@@ -1146,25 +1181,9 @@ const Model: ResourceVersionCreatorModelType = {
         resourceVersionCreatorPage,
       }));
 
-      // console.log(resourceVersionCreatorPage.resourceInfo, 'resourceVersionCreatorPage.resourceInfo sdifjlsdkfjlksdjflkjsdlkfj');
-
       if (!resourceVersionCreatorPage.resourceInfo) {
         return;
       }
-
-      // let directDependencies: any[] = [];
-      // let baseUpcastResources: {
-      //   resourceID: string;
-      //   resourceName: string;
-      // }[] = [];
-
-      // if (resourceVersionCreatorPage.selectedFileInfo) {
-      // const p: { getAllTargets(): void; getBaseUpcastResources(): { resourceID: string; resourceName: string; }[] } = yield call(getProcessor, 'resourceVersionCreator');
-      // directDependencies = yield call(p.getAllTargets);
-      // baseUpcastResources = yield call(p.getBaseUpcastResources);
-      // }
-      // console.log(directDependencies, 'directDependenciesewfdsfsdfsd ');
-      // console.log(baseUpcastResources, 'baseUpcastResourcesoisjdlkfjlsdkjflsdjfljsl');
 
       const draftData: IResourceCreateVersionDraftType = {
         versionInput: resourceVersionCreatorPage.versionInput,
@@ -1218,115 +1237,108 @@ const Model: ResourceVersionCreatorModelType = {
           value: draftData,
         },
       });
-
-      // yield put<OnChange_DraftData_Action>({
-      //   type: 'resourceInfo/onChange_DraftData',
-      //   payload: {
-      //     draftData: draftData,
-      //   },
-      // });
     },
-    * _FetchRawProps({ payload }: _FetchRawPropsAction, { select, put, call }: EffectsCommandMap) {
-      // console.log('_FetchRawProps, sdiofjldksfjlksdjflkdsjlkjl');
-      const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
-        resourceVersionCreatorPage,
-      }));
-
-      if (!resourceVersionCreatorPage.selectedFileInfo) {
-        return;
-      }
-
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          rawPropertiesState: 'parsing',
-        },
-      });
-      // console.log('_FetchRawProps, sdiofjldksfjlksdjflkdsjlkjl');
-
-
-      const params0: Parameters<typeof getFilesSha1Info>[0] = {
-        sha1: [resourceVersionCreatorPage.selectedFileInfo.sha1],
-        resourceTypeCode: resourceVersionCreatorPage.resourceInfo?.resourceTypeCode || '',
-      };
-      const {
-        result,
-        error,
-      }: Awaited<ReturnType<typeof getFilesSha1Info>> = yield call(getFilesSha1Info, params0);
-
-      // console.log(result, 'resulte53452sdf', error, 'error asdfsdfsdfsdf');
-
-      if (error !== '') {
-        yield put<ChangeAction>({
-          type: 'change',
-          payload: {
-            rawProperties: [],
-          },
-        });
-        return fMessage(error, 'error');
-      }
-
-      if (result[0].state === 'fail') {
-        yield put<ChangeAction>({
-          type: 'change',
-          payload: {
-            rawProperties: [],
-          },
-        });
-        return fMessage('文件解析失败', 'error');
-      }
-
-      if (payload.delay) {
-        yield call(FUtil.Tool.promiseSleep, 1000);
-      }
-
-      if (result[0].state === 'success') {
-
-        const params: Parameters<typeof FServiceAPI.Resource.lookDraft>[0] = {
-          resourceId: resourceVersionCreatorPage.resourceInfo?.resourceID || '',
-        };
-        const { data: data_draft }: {
-          data: null | {
-            draftData: IResourceCreateVersionDraftType;
-          };
-        } = yield call(FServiceAPI.Resource.lookDraft, params);
-
-        yield put<ChangeAction>({
-          type: 'change',
-          payload: {
-            rawProperties: result[0].info
-              .filter((i) => {
-                return i.insertMode === 1;
-              })
-              .map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((i) => {
-                return {
-                  key: i.key,
-                  name: i.name,
-                  value: i.valueDisplay,
-                  description: i.remark,
-                };
-              }),
-            rawPropertiesState: 'success',
-            additionalProperties: result[0].info
-              .filter((i) => {
-                return i.insertMode === 2;
-              })
-              .map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((i) => {
-                const item = data_draft?.draftData.additionalProperties?.find((ap) => {
-                  return ap.key === i.key;
-                }) || {};
-                return {
-                  key: i.key,
-                  name: i.name,
-                  value: i.valueDisplay,
-                  description: i.remark,
-                  ...item,
-                };
-              }),
-          },
-        });
-      }
-    },
+    // * _FetchRawProps({ payload }: _FetchRawPropsAction, { select, put, call }: EffectsCommandMap) {
+    //   // console.log('_FetchRawProps, sdiofjldksfjlksdjflkdsjlkjl');
+    //   const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
+    //     resourceVersionCreatorPage,
+    //   }));
+    //
+    //   if (!resourceVersionCreatorPage.selectedFileInfo) {
+    //     return;
+    //   }
+    //
+    //   yield put<ChangeAction>({
+    //     type: 'change',
+    //     payload: {
+    //       rawPropertiesState: 'parsing',
+    //     },
+    //   });
+    //   // console.log('_FetchRawProps, sdiofjldksfjlksdjflkdsjlkjl');
+    //
+    //
+    //   const params0: Parameters<typeof getFilesSha1Info>[0] = {
+    //     sha1: [resourceVersionCreatorPage.selectedFileInfo.sha1],
+    //     resourceTypeCode: resourceVersionCreatorPage.resourceInfo?.resourceTypeCode || '',
+    //   };
+    //   const {
+    //     result,
+    //     error,
+    //   }: Awaited<ReturnType<typeof getFilesSha1Info>> = yield call(getFilesSha1Info, params0);
+    //
+    //   // console.log(result, 'resulte53452sdf', error, 'error asdfsdfsdfsdf');
+    //
+    //   if (error !== '') {
+    //     yield put<ChangeAction>({
+    //       type: 'change',
+    //       payload: {
+    //         rawProperties: [],
+    //       },
+    //     });
+    //     return fMessage(error, 'error');
+    //   }
+    //
+    //   if (result[0].state === 'fail') {
+    //     yield put<ChangeAction>({
+    //       type: 'change',
+    //       payload: {
+    //         rawProperties: [],
+    //       },
+    //     });
+    //     return fMessage('文件解析失败', 'error');
+    //   }
+    //
+    //   if (payload.delay) {
+    //     yield call(FUtil.Tool.promiseSleep, 1000);
+    //   }
+    //
+    //   if (result[0].state === 'success') {
+    //
+    //     const params: Parameters<typeof FServiceAPI.Resource.lookDraft>[0] = {
+    //       resourceId: resourceVersionCreatorPage.resourceInfo?.resourceID || '',
+    //     };
+    //     const { data: data_draft }: {
+    //       data: null | {
+    //         draftData: IResourceCreateVersionDraftType;
+    //       };
+    //     } = yield call(FServiceAPI.Resource.lookDraft, params);
+    //
+    //     yield put<ChangeAction>({
+    //       type: 'change',
+    //       payload: {
+    //         rawProperties: result[0].info
+    //           .filter((i) => {
+    //             return i.insertMode === 1;
+    //           })
+    //           .map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((i) => {
+    //             return {
+    //               key: i.key,
+    //               name: i.name,
+    //               value: i.valueDisplay,
+    //               description: i.remark,
+    //             };
+    //           }),
+    //         rawPropertiesState: 'success',
+    //         additionalProperties: result[0].info
+    //           .filter((i) => {
+    //             return i.insertMode === 2;
+    //           })
+    //           .map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((i) => {
+    //             const item = data_draft?.draftData.additionalProperties?.find((ap) => {
+    //               return ap.key === i.key;
+    //             }) || {};
+    //             return {
+    //               key: i.key,
+    //               name: i.name,
+    //               value: i.valueDisplay,
+    //               description: i.remark,
+    //               ...item,
+    //             };
+    //           }),
+    //       },
+    //     });
+    //   }
+    // },
 
   },
 

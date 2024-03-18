@@ -112,7 +112,6 @@ export async function getFilesSha1Info({
 
 interface HandleData_By_Sha1_And_ResourceTypeCode_And_InheritData_Params {
   sha1: string;
-  // resourceID: string;
   resourceTypeCode: string;
   inheritData: {
     additionalProperties: {
