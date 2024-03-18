@@ -545,7 +545,7 @@ const Model: ResourceVersionCreatorModelType = {
           },
         });
       }
-      console.log('********************************************');
+      // console.log('********************************************');
       yield put<_FetchDraft_Action>({
         type: '_FetchDraft',
         payload: {
@@ -695,7 +695,34 @@ const Model: ResourceVersionCreatorModelType = {
       });
     },
 
-    * onSucceed_UploadFile({ payload }: OnSucceed_UploadFile_Action, { put, call }: EffectsCommandMap) {
+    * onSucceed_UploadFile({ payload }: OnSucceed_UploadFile_Action, { select, put, call }: EffectsCommandMap) {
+
+      const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
+        resourceVersionCreatorPage,
+      }));
+
+      const params4: Parameters<typeof handleData_By_Sha1_And_ResourceTypeCode_And_InheritData>[0] = {
+        sha1: payload.sha1,
+        resourceTypeCode: resourceVersionCreatorPage.resourceInfo?.resourceTypeCode || '',
+        inheritData: {
+          additionalProperties: resourceVersionCreatorPage.additionalProperties.map((p) => {
+            return {
+              key: p.key,
+              name: '',
+              value: p.value,
+              description: '',
+            };
+          }),
+          customProperties: resourceVersionCreatorPage.customProperties,
+          customConfigurations: resourceVersionCreatorPage.customConfigurations,
+        },
+      };
+      const result: Awaited<ReturnType<typeof handleData_By_Sha1_And_ResourceTypeCode_And_InheritData>> = yield call(handleData_By_Sha1_And_ResourceTypeCode_And_InheritData, params4);
+      if (result.state !== 'success') {
+        fMessage(result.failedMsg, 'error');
+        return;
+      }
+      console.log('asdfasdfwefasedfsd fasdfasdf **************************');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -704,6 +731,10 @@ const Model: ResourceVersionCreatorModelType = {
             name: payload.name,
             from: '本地上传',
           },
+          rawProperties: result.rawProperties,
+          additionalProperties: result.additionalProperties,
+          customProperties: result.customProperties,
+          customConfigurations: result.customConfigurations,
           dataIsDirty: true,
         },
       });
@@ -885,36 +916,19 @@ const Model: ResourceVersionCreatorModelType = {
       const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
         resourceVersionCreatorPage,
       }));
-
-      // yield put<OnTrigger_SaveDraft_Action>({
-      //   type: 'resourceVersionCreatorPage/onTrigger_SaveDraft',
-      //   payload: {
-      //     showSuccessTip: false,
-      //   },
-      // });
-
-      // yield put<_SaveDraft_Action>({
-      //   type: '_SaveDraft',
-      //   payload: {
-      //     showSuccessTip: false,
-      //   },
-      // });
       if (resourceVersionCreatorPage.draftSaveTime === '') {
         const params: Parameters<typeof saveInitDraft>[0] = {
           resourceID: resourceVersionCreatorPage.resourceInfo?.resourceID || '',
           versionInput: resourceVersionCreatorPage.versionInput,
         };
 
-        // console.time('打开编辑器');
         const success: Awaited<typeof saveInitDraft> = yield call(saveInitDraft, params);
-        // console.timeEnd('打开编辑器');
 
         if (!success) {
           fMessage('保存草稿失败，无法打开编辑器');
           return;
         }
       }
-
 
       yield put<ChangeAction>({
         type: 'change',
