@@ -212,10 +212,6 @@ export interface OnChange_CustomConfigurations_Action extends AnyAction {
   };
 }
 
-// export interface OnClick_ImportLastVersionDependents_Btn_Action extends AnyAction {
-//   type: 'resourceVersionCreatorPage/onClick_ImportLastVersionDependents_Btn';
-// }
-
 export interface OnChange_DescriptionText_Action extends AnyAction {
   type: 'resourceVersionCreatorPage/onChange_DescriptionText';
   payload: {
@@ -271,7 +267,6 @@ export interface ResourceVersionCreatorModelType {
     onChange_AdditionalProperties: (action: OnChange_AdditionalProperties_Action, effects: EffectsCommandMap) => void;
     onChange_CustomProperties: (action: OnChange_CustomProperties_Action, effects: EffectsCommandMap) => void;
     onChange_CustomConfigurations: (action: OnChange_CustomConfigurations_Action, effects: EffectsCommandMap) => void;
-    // onClick_ImportLastVersionDependents_Btn: (action: OnClick_ImportLastVersionDependents_Btn_Action, effects: EffectsCommandMap) => void;
     onChange_DescriptionText: (action: OnChange_DescriptionText_Action, effects: EffectsCommandMap) => void;
     onChange_IsOpenCartoon: (action: OnChange_IsOpenCartoon_Action, effects: EffectsCommandMap) => void;
 
@@ -1005,27 +1000,6 @@ const Model: ResourceVersionCreatorModelType = {
         },
       });
     },
-    // * onClick_ImportLastVersionDependents_Btn({ payload }: OnClick_ImportLastVersionDependents_Btn_Action, {
-    //   call,
-    //   select,
-    //   put,
-    // }: EffectsCommandMap) {
-    //   const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
-    //     resourceVersionCreatorPage,
-    //   }));
-    //   const p: {
-    //     addTargets(value: any): void;
-    //     clear(): void;
-    //   } = yield call(getProcessor, 'resourceVersionCreator');
-    //   yield call(p.clear);
-    //   yield call(p.addTargets, resourceVersionCreatorPage.preVersionDirectDependencies);
-    //   yield put<ChangeAction>({
-    //     type: 'change',
-    //     payload: {
-    //       dataIsDirty: true,
-    //     },
-    //   });
-    // },
     * onChange_DescriptionText({ payload }: OnChange_DescriptionText_Action, { put }: EffectsCommandMap) {
       yield put<ChangeAction>({
         type: 'change',
