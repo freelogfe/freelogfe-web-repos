@@ -1,5 +1,6 @@
 import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 import { ResourceVersionCreatorPageModelState } from '@/models/resourceVersionCreatorPage';
+import moment, { Moment } from 'moment';
 
 interface FileInfo {
   sha1: string;
@@ -210,7 +211,7 @@ export async function handleData_By_Sha1_And_ResourceTypeCode_And_InheritData({
       ...inheritData.additionalProperties,
       ...inheritData.customProperties,
     ];
-
+    console.log(result[0].info, 'result[0].info sdfijsdlfkjsdlkfjlksdjflkjl');
     const rawProperties: HandleData_By_Sha1_And_ResourceTypeCode_And_InheritData_Return['rawProperties'] = result[0].info
       .filter((i) => {
         return i.insertMode === 1;
@@ -317,5 +318,155 @@ export async function handleData_By_Sha1_And_ResourceTypeCode_And_InheritData({
     additionalProperties: [],
     customProperties: [],
     customConfigurations: [],
+  };
+}
+
+interface Correct_Resource_AdditionalProperties_Params {
+  key: string;
+  value: string;
+}
+
+async function correct_Resource_AdditionalProperties({
+                                                       key,
+                                                       value,
+                                                     }: Correct_Resource_AdditionalProperties_Params): Promise<{
+  key: string;
+  value: string;
+}> {
+  const params: Parameters<typeof FServiceAPI.Resource.getAttrsInfoByKey>[0] = {
+    key: key,
+  };
+
+  const { ret, errCode, msg, data }: {
+    ret: number;
+    errCode: number;
+    msg: string;
+    data: null | {
+      format: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9; //	值格式 1：文本 2：数值 3：时间 4：日期 5：日期和时间 6: 单行文本 7: 多行文本 8: 整数 9: 小数
+      contentRule?:
+        { startDate?: string; limitDate?: string; } // 4：日期
+        | { startDateTime?: string; limitDateTime?: string; } // 5：日期和时间
+        | { minLength?: number; maxLength?: number; } // 6：文本  7: 多行文本
+        | { min?: number; max?: number; } // 8: 整数
+        | { minDecimal?: number; maxDecimal?: number; precision?: number; }; // 9: 小数
+    }
+  } = await FServiceAPI.Resource.getAttrsInfoByKey(params);
+
+
+  if (data) {
+    const contentRule: any = data.contentRule;
+
+    // 1：文本
+    if (data.format === 1) {
+      if (value.length < (contentRule?.minLength || 0) || value.length > (contentRule?.maxLength || Number.MAX_SAFE_INTEGER)) {
+        return {
+          key,
+          value: '',
+        };
+      }
+    }
+
+    // 2：数值
+    if (data.format === 2) {
+      if (!Number.isFinite(value) || Number(value) < (contentRule?.min || Number.MAX_SAFE_INTEGER) || Number(value) > (contentRule?.max || Number.MAX_SAFE_INTEGER)) {
+        return {
+          key,
+          value: '',
+        };
+      }
+    }
+
+    // 3：时间
+    if (data.format === 3) {
+      const momentValue: Moment = moment(value, 'HH:mm:ss');
+      if (!momentValue.isValid()
+        || momentValue.format('HH:mm:ss') !== value
+        || contentRule?.startDateTime && momentValue.isBefore(contentRule?.startDateTime)
+        || contentRule?.limitDateTime && momentValue.isAfter(contentRule?.limitDateTime)) {
+        return {
+          key,
+          value: '',
+        };
+      }
+    }
+
+    // 4：日期
+    if (data.format === 4) {
+      const momentValue: Moment = moment(value, 'YYYY-MM-DD');
+      if (!momentValue.isValid()
+        || momentValue.format('YYYY-MM-DD') !== value
+        || contentRule?.startDateTime && momentValue.isBefore(contentRule?.startDateTime)
+        || contentRule?.limitDateTime && momentValue.isAfter(contentRule?.limitDateTime)) {
+        return {
+          key,
+          value: '',
+        };
+      }
+    }
+
+    // 5：日期和时间
+    if (data.format === 5) {
+      const momentValue: Moment = moment(value, 'YYYY-MM-DD HH:mm:ss');
+      if (!momentValue.isValid()
+        || momentValue.format('YYYY-MM-DD HH:mm:ss') !== value
+        || contentRule?.startDateTime && momentValue.isBefore(contentRule?.startDateTime)
+        || contentRule?.limitDateTime && momentValue.isAfter(contentRule?.limitDateTime)) {
+        return {
+          key,
+          value: '',
+        };
+      }
+    }
+
+    // 6: 单行文本
+    if (data.format === 6) {
+      if (value.length < (contentRule?.minLength || 0) || value.length > (contentRule?.maxLength || Number.MAX_SAFE_INTEGER)) {
+        return {
+          key,
+          value: '',
+        };
+      }
+    }
+
+    // 7: 多行文本
+    if (data.format === 7) {
+      if (value.length < (contentRule?.minLength || 0) || value.length > (contentRule?.maxLength || Number.MAX_SAFE_INTEGER)) {
+        return {
+          key,
+          value: '',
+        };
+      }
+    }
+
+    // 8: 整数
+    if (data.format === 8) {
+      if (!Number.isFinite(value)
+        || Number(value) % 1 !== 0
+        || Number(value) < (contentRule?.min || Number.MIN_SAFE_INTEGER)
+        || Number(value) > (contentRule?.max || Number.MAX_SAFE_INTEGER)) {
+        return {
+          key,
+          value: '',
+        };
+      }
+    }
+
+    // 9: 小数
+    if (data.format === 9) {
+      if (!Number.isFinite(value)
+        || value.split('.')[1] && (value.split('.')[1].length > (contentRule?.minDecimal || Number.MAX_SAFE_INTEGER))
+        || Number(value) < (contentRule?.min || Number.MIN_SAFE_INTEGER)
+        || Number(value) > (contentRule?.max || Number.MAX_SAFE_INTEGER)) {
+        return {
+          key,
+          value: '',
+        };
+      }
+    }
+  }
+
+  return {
+    key,
+    value,
   };
 }
