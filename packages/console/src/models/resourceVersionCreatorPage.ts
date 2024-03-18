@@ -436,7 +436,6 @@ const Model: ResourceVersionCreatorModelType = {
           },
         },
       });
-      // console.log(data_ResourceTypeInfo.resourceConfig.supportOptionalConfig === 2, 'data_ResourceTypeInfo.resourceConfig.supportOptionalConfig === 2');
 
       if (data_resourceInfo.latestVersion) {
         const params2: Parameters<typeof FServiceAPI.Resource.resourceVersionInfo1>[0] = {
@@ -483,10 +482,6 @@ const Model: ResourceVersionCreatorModelType = {
                 return spd.insertMode === 2;
               })
               .map<ResourceVersionCreatorPageModelState['additionalProperties'][number]>((spd) => {
-                // return {
-                //   key: spd.key,
-                //   value: spd.valueDisplay,
-                // };
                 return {
                   key: spd.key,
                   name: '',
@@ -1388,3 +1383,7 @@ async function saveInitDraft({ resourceID, versionInput }: SaveInitDraftParamsTy
   // console.timeEnd('保存草稿')
   return ret === 0 && errCode === 0;
 }
+
+
+
+
