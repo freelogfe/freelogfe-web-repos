@@ -705,14 +705,7 @@ const Model: ResourceVersionCreatorModelType = {
         sha1: payload.sha1,
         resourceTypeCode: resourceVersionCreatorPage.resourceInfo?.resourceTypeCode || '',
         inheritData: {
-          additionalProperties: resourceVersionCreatorPage.additionalProperties.map((p) => {
-            return {
-              key: p.key,
-              name: '',
-              value: p.value,
-              description: '',
-            };
-          }),
+          additionalProperties: resourceVersionCreatorPage.additionalProperties,
           customProperties: resourceVersionCreatorPage.customProperties,
           customConfigurations: resourceVersionCreatorPage.customConfigurations,
         },
@@ -722,7 +715,7 @@ const Model: ResourceVersionCreatorModelType = {
         fMessage(result.failedMsg, 'error');
         return;
       }
-      console.log('asdfasdfwefasedfsd fasdfasdf **************************');
+      // console.log('asdfasdfwefasedfsd fasdfasdf **************************');
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -746,7 +739,12 @@ const Model: ResourceVersionCreatorModelType = {
       //   },
       // });
     },
-    * onSucceed_ImportObject({ payload }: OnSucceed_ImportObject_Action, { call, put }: EffectsCommandMap) {
+    * onSucceed_ImportObject({ payload }: OnSucceed_ImportObject_Action, { select, call, put }: EffectsCommandMap) {
+
+      const { resourceVersionCreatorPage }: ConnectState = yield select(({ resourceVersionCreatorPage }: ConnectState) => ({
+        resourceVersionCreatorPage,
+      }));
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
@@ -769,6 +767,11 @@ const Model: ResourceVersionCreatorModelType = {
             type: 'resource' | 'object';
             versionRange?: string;
           }[];
+          systemPropertyDescriptors: {
+            key: string;
+            valueDisplay: string;
+            insertMode: 1 | 2;
+          }[];
           customPropertyDescriptors: {
             key: string;
             name: string;
@@ -782,15 +785,29 @@ const Model: ResourceVersionCreatorModelType = {
 
       // console.log(data_objectDetails, 'data_objectDetailssfiojdlkfjdslkfjdslkflskdjflk');
 
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
+      const params4: Parameters<typeof handleData_By_Sha1_And_ResourceTypeCode_And_InheritData>[0] = {
+        sha1: payload.sha1,
+        resourceTypeCode: resourceVersionCreatorPage.resourceInfo?.resourceTypeCode || '',
+        inheritData: {
+          additionalProperties: data_objectDetails.systemPropertyDescriptors
+            .filter((spd) => {
+              return spd.insertMode === 2;
+            })
+            .map<ResourceVersionCreatorPageModelState['additionalProperties'][number]>((spd) => {
+              return {
+                key: spd.key,
+                name: '',
+                value: spd.valueDisplay,
+                description: '',
+              };
+            }),
           customProperties: data_objectDetails.customPropertyDescriptors
-            .filter((cpd) => cpd.type === 'readonlyText')
-            .map<ResourceVersionCreatorPageModelState['customProperties'][number]>((cpd: any) => {
+            .filter((cpd: any) => cpd.type === 'readonlyText')
+            .map<ResourceVersionCreatorPageModelState['customProperties'][number]>((cpd) => {
+              // console.log(cpd, 'cpdoidsjflksdjflkjkl');
               return {
                 key: cpd.key,
-                name: cpd.key,
+                name: cpd.name,
                 value: cpd.defaultValue,
                 description: cpd.remark,
               };
@@ -801,18 +818,47 @@ const Model: ResourceVersionCreatorModelType = {
               return {
                 key: cpd.key,
                 name: cpd.name,
-                // keyError: '',
                 description: cpd.remark,
-                // descriptionError: '',
                 type: cpd.type === 'editableText' ? 'input' : 'select',
                 input: cpd.defaultValue,
-                // defaultValueError: '',
                 select: cpd.candidateItems,
-                // customOptionError: '',
               };
             }),
         },
-      });
+      };
+      const result: Awaited<ReturnType<typeof handleData_By_Sha1_And_ResourceTypeCode_And_InheritData>> = yield call(handleData_By_Sha1_And_ResourceTypeCode_And_InheritData, params4);
+      if (result.state !== 'success') {
+        fMessage(result.failedMsg, 'error');
+        return;
+      }
+
+      // yield put<ChangeAction>({
+      //   type: 'change',
+      //   payload: {
+      //     customProperties: data_objectDetails.customPropertyDescriptors
+      //       .filter((cpd) => cpd.type === 'readonlyText')
+      //       .map<ResourceVersionCreatorPageModelState['customProperties'][number]>((cpd: any) => {
+      //         return {
+      //           key: cpd.key,
+      //           name: cpd.key,
+      //           value: cpd.defaultValue,
+      //           description: cpd.remark,
+      //         };
+      //       }),
+      //     customConfigurations: data_objectDetails.customPropertyDescriptors
+      //       .filter((cpd: any) => cpd.type !== 'readonlyText')
+      //       .map<ResourceVersionCreatorPageModelState['customConfigurations'][number]>((cpd) => {
+      //         return {
+      //           key: cpd.key,
+      //           name: cpd.name,
+      //           description: cpd.remark,
+      //           type: cpd.type === 'editableText' ? 'input' : 'select',
+      //           input: cpd.defaultValue,
+      //           select: cpd.candidateItems,
+      //         };
+      //       }),
+      //   },
+      // });
 
       // console.log(data_objectDetails, 'datasdoipejflskdfjlsdjflskj');
       const resourceNames: string[] = data_objectDetails.dependencies
@@ -895,6 +941,11 @@ const Model: ResourceVersionCreatorModelType = {
       yield put<ChangeAction>({
         type: 'change',
         payload: {
+          rawProperties: result.rawProperties,
+          additionalProperties: result.additionalProperties,
+          customProperties: result.customProperties,
+          customConfigurations: result.customConfigurations,
+          dataIsDirty: true,
           directDependencies: [
             ...addR,
             ...addO,
@@ -1112,7 +1163,14 @@ const Model: ResourceVersionCreatorModelType = {
 
               pageState: 'loaded',
               rawProperties: result.rawProperties,
-              additionalProperties: result.additionalProperties,
+              additionalProperties: result.additionalProperties.map((p) => {
+                return {
+                  key: p.key,
+                  name: '',
+                  value: p.value,
+                  description: '',
+                };
+              }),
               customProperties: result.customProperties,
               customConfigurations: result.customConfigurations,
             },
