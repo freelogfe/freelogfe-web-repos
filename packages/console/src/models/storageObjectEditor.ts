@@ -426,12 +426,36 @@ const Model: StorageObjectEditorModelType = {
       history.replace(FUtil.LinkTo.storageSpace({ bucketName: storageObjectEditor.bucketName }));
     },
     * onChangeType({ payload }: OnChangeTypeAction, { put, select, call }: EffectsCommandMap) {
+      const { storageObjectEditor }: ConnectState = yield select(({ storageObjectEditor }: ConnectState) => ({
+        storageObjectEditor,
+      }));
+
+      const params4: Parameters<typeof handleData_By_Sha1_And_ResourceTypeCode_And_InheritData>[0] = {
+        sha1: storageObjectEditor.sha1,
+        resourceTypeCode: payload.value?.value || '',
+        inheritData: {
+          additionalProperties: storageObjectEditor.additionalProperties,
+          customProperties: storageObjectEditor.customProperties,
+          customConfigurations: storageObjectEditor.customConfigurations,
+        },
+      };
+      const result: Awaited<ReturnType<typeof handleData_By_Sha1_And_ResourceTypeCode_And_InheritData>> = yield call(handleData_By_Sha1_And_ResourceTypeCode_And_InheritData, params4);
+      if (result.state !== 'success') {
+        fMessage(result.failedMsg, 'error');
+        return;
+      }
+
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           // resourceTypeCodes: payload.value,
           // resourceTypeNames: payload.names,
           resourceTypeValue: payload.value,
+          rawProperties: result.rawProperties,
+          additionalProperties: result.additionalProperties,
+          customProperties: result.customProperties,
+          customConfigurations: result.customConfigurations,
         },
       });
     },
