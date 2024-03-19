@@ -231,7 +231,7 @@ export async function handleData_By_Sha1_And_ResourceTypeCode_And_InheritData({
       return i.name;
     });
 
-    let additionalProperties: HandleData_By_Sha1_And_ResourceTypeCode_And_InheritData_Return['additionalProperties'] = result[0].info
+    const additionalProperties: HandleData_By_Sha1_And_ResourceTypeCode_And_InheritData_Return['additionalProperties'] = result[0].info
       .filter((i) => {
         return i.insertMode === 2;
       })
@@ -274,6 +274,13 @@ export async function handleData_By_Sha1_And_ResourceTypeCode_And_InheritData({
           description: i.description,
         };
       });
+
+    for (const i of additionalProperties) {
+      i.value = (await correct_Resource_AdditionalProperties({
+        key: i.key,
+        value: i.value,
+      })).value;
+    }
     const additionalProperties_allKeys: string[] = additionalProperties.map((i) => {
       return i.key;
     });
