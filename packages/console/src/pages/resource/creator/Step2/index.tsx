@@ -37,6 +37,7 @@ import FMicroApp_MarkdownEditorDrawer from '@/components/FMicroApp_MarkdownEdito
 import fMessage from '@/components/fMessage';
 import { getFilesSha1Info } from '@/utils/service';
 import FMicroAPP_Authorization from '@/components/FMicroAPP_Authorization';
+import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
 
 // import { ChangeAction } from '@/models/resourceVersionCreatorPage';
 
@@ -308,11 +309,16 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
             // disabled={$prop.disabledOperations?.includes('remove')}
             onClick={async () => {
               // $prop.onClick_DeleteBtn && $prop.onClick_DeleteBtn();
-              dispatch<OnRemove_step2_file_Action>({
-                type: 'resourceCreatorPage/onRemove_step2_file',
+              const confirm: boolean = await fPromiseModalConfirm({
+                title: '提示',
+                description: '确认删除吗',
               });
+              if (confirm) {
+                dispatch<OnRemove_step2_file_Action>({
+                  type: 'resourceCreatorPage/onRemove_step2_file',
+                });
+              }
             }}
-            // className={styles.delete}
           >
             <FComponentsLib.FIcons.FDelete style={{ fontSize: 12 }} />
             <span>{FI18n.i18nNext.t('remove')}</span>
@@ -675,14 +681,12 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
         <div className={styles.block}>
           {
             resourceCreatorPage.step1_createdResourceInfo && (<FMicroAPP_Authorization
-              // name={'Authorization'}
               reload={resourceCreatorPage.step2_authReload}
               licenseeId={resourceCreatorPage.step1_createdResourceInfo.resourceID}
               mainAppType={'resourceInVersionUpdate'}
               depList={resourceCreatorPage.step2_directDependencies}
               upcastList={resourceCreatorPage.step2_baseUpcastResources}
               update={(data: any) => {
-                // console.log(data, 'resourceInVersionUpdate _____________ datasidjflksdjflkjsdlkjlkj');
                 dispatch<ChangeAction>({
                   type: 'resourceCreatorPage/change',
                   payload: {
@@ -738,7 +742,6 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
           // });
         }}
         onClose={() => {
-          // console.log('777777777777777777777777&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&');
           dispatch<OnClose_step2_editMarkdown>({
             type: 'resourceCreatorPage/onClose_step2_editMarkdown',
           });

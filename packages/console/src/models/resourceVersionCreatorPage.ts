@@ -10,6 +10,7 @@ import { getFilesSha1Info, handleData_By_Sha1_And_ResourceTypeCode_And_InheritDa
 import { IResourceCreateVersionDraftType } from '@/type/resourceTypes';
 import moment from 'moment';
 import { OnChange_Draft_Action } from '@/models/resourceSider';
+import fPromiseModalConfirm from '@/components/fPromiseModalConfirm';
 
 export interface ResourceVersionCreatorPageModelState {
   pageState: 'loading' | 'loaded';
@@ -1004,19 +1005,23 @@ const Model: ResourceVersionCreatorModelType = {
         },
       });
     },
-    * onDelete_ObjectFile({}: OnDelete_ObjectFile_Action, { put }: EffectsCommandMap) {
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          selectedFileInfo: null,
-          rawProperties: [],
-          // additionalProperties: [],
-          // customProperties: [],
-          // customConfigurations: [],
-          dataIsDirty: true,
-          // selectedFile_UsedResources: [],
-        },
+    * onDelete_ObjectFile({}: OnDelete_ObjectFile_Action, { call, put }: EffectsCommandMap) {
+
+      const confirm: boolean = yield call(fPromiseModalConfirm, {
+        title: '提示',
+        description: '确认删除吗',
       });
+
+      if (confirm) {
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            selectedFileInfo: null,
+            rawProperties: [],
+            dataIsDirty: true,
+          },
+        });
+      }
     },
     * onClose_MarkdownEditor({}: OnClose_MarkdownEditor_Action, { select, call, put }: EffectsCommandMap) {
 
