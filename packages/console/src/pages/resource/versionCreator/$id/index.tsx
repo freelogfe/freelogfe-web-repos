@@ -107,17 +107,17 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
 
   async function onClick_EditMarkdownBtn() {
 
-    if (resourceVersionCreatorPage.selectedFileInfo) {
-      const { result } = await getFilesSha1Info({
-        sha1: [resourceVersionCreatorPage.selectedFileInfo?.sha1 || ''],
-        resourceTypeCode: '',
-      });
+    // if (resourceVersionCreatorPage.selectedFileInfo) {
+      // const { result } = await getFilesSha1Info({
+      //   sha1: [resourceVersionCreatorPage.selectedFileInfo?.sha1 || ''],
+      //   resourceTypeCode: '',
+      // });
 
-      if (result[0].fileSize > 2 * 1024 * 1024) {
-        fMessage(FI18n.i18nNext.t('mdeditor_import_error_lengthlimitation'), 'error');
-        return;
-      }
-    }
+      // if (result[0].fileSize > 2 * 1024 * 1024) {
+      //   fMessage(FI18n.i18nNext.t('mdeditor_import_error_lengthlimitation'), 'error');
+      //   return;
+      // }
+    // }
     await dispatch<OnTrigger_SaveDraft_Action>({
       type: 'resourceVersionCreatorPage/onTrigger_SaveDraft',
       payload: {
