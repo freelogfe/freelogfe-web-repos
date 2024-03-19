@@ -24,6 +24,10 @@ import FResourceProperties from '@/components/FResourceProperties';
 import fResourcePropertyEditor from '@/components/fResourcePropertyEditor';
 import FResourceOptions from '@/components/FResourceOptions';
 import fResourceOptionEditor from '@/components/fResourceOptionEditor';
+import {
+  OnChange_AdditionalProperties_Action,
+  OnChange_CustomProperties_Action,
+} from '@/models/resourceVersionCreatorPage';
 
 interface DetailsProps {
   dispatch: Dispatch;
@@ -52,13 +56,15 @@ function Details({ storageObjectEditor, dispatch }: DetailsProps) {
     } | null = await fResourceOptionEditor({
       disabledKeys: [
         ...storageObjectEditor.rawProperties.map<string>((rp) => rp.key),
-        ...storageObjectEditor.baseProperties.map<string>((bp) => bp.key),
-        ...storageObjectEditor.customOptionsData.map<string>((pp) => pp.key),
+        ...storageObjectEditor.additionalProperties.map<string>((bp) => bp.key),
+        ...storageObjectEditor.customProperties.map<string>((pp) => pp.key),
+        ...storageObjectEditor.customConfigurations.map<string>((pp) => pp.key),
       ],
       disabledNames: [
-        // ...storageObjectEditor.rawProperties.map<string>((rp) => rp.name),
-        ...storageObjectEditor.baseProperties.map<string>((bp) => bp.name),
-        ...storageObjectEditor.customOptionsData.map<string>((pp) => pp.name),
+        ...storageObjectEditor.rawProperties.map<string>((rp) => rp.name),
+        ...storageObjectEditor.additionalProperties.map<string>((bp) => bp.name),
+        ...storageObjectEditor.customProperties.map<string>((pp) => pp.name),
+        ...storageObjectEditor.customConfigurations.map<string>((pp) => pp.name),
       ],
     });
 
@@ -67,8 +73,8 @@ function Details({ storageObjectEditor, dispatch }: DetailsProps) {
     }
 
     await onChange({
-      customOptionsData: [
-        ...storageObjectEditor.customOptionsData,
+      customConfigurations: [
+        ...storageObjectEditor.customConfigurations,
         dataSource,
       ],
     });
@@ -149,7 +155,11 @@ function Details({ storageObjectEditor, dispatch }: DetailsProps) {
             <div style={{ height: 20 }} />
             <div className={styles.attributesHeader}>
               {/*<span>基础属性</span>*/}
-              <FComponentsLib.FContentText text={'基础属性'} type={'highlight'} style={{ fontSize: 12 }} />
+              <FComponentsLib.FContentText
+                text={'基础属性'}
+                type={'highlight'}
+                style={{ fontSize: 12 }}
+              />
               <div>
                 <Space size={20}>
                   <FComponentsLib.FTextBtn
@@ -164,12 +174,15 @@ function Details({ storageObjectEditor, dispatch }: DetailsProps) {
                       } | null = await fResourcePropertyEditor({
                         disabledKeys: [
                           ...storageObjectEditor.rawProperties.map<string>((rp) => rp.key),
-                          ...storageObjectEditor.baseProperties.map<string>((bp) => bp.key),
-                          ...storageObjectEditor.customOptionsData.map<string>((pp) => pp.key),
+                          ...storageObjectEditor.additionalProperties.map<string>((bp) => bp.key),
+                          ...storageObjectEditor.customProperties.map<string>((pp) => pp.key),
+                          ...storageObjectEditor.customConfigurations.map<string>((pp) => pp.key),
                         ],
                         disabledNames: [
-                          ...storageObjectEditor.baseProperties.map<string>((bp) => bp.name),
-                          ...storageObjectEditor.customOptionsData.map<string>((pp) => pp.name),
+                          ...storageObjectEditor.rawProperties.map<string>((rp) => rp.name),
+                          ...storageObjectEditor.additionalProperties.map<string>((bp) => bp.name),
+                          ...storageObjectEditor.customProperties.map<string>((pp) => pp.name),
+                          ...storageObjectEditor.customConfigurations.map<string>((pp) => pp.name),
                         ],
                       });
                       // console.log(dataSource, 'dataSource9iojskldjflksdjflk');
@@ -178,8 +191,8 @@ function Details({ storageObjectEditor, dispatch }: DetailsProps) {
                       }
 
                       onChange({
-                        baseProperties: [
-                          ...storageObjectEditor.baseProperties,
+                        customProperties: [
+                          ...storageObjectEditor.customProperties,
                           dataSource,
                         ],
                       });
@@ -193,8 +206,123 @@ function Details({ storageObjectEditor, dispatch }: DetailsProps) {
 
             <FResourceProperties
               immutableData={storageObjectEditor.rawProperties}
-              onlyEditValueData={[]}
-              alterableData={storageObjectEditor.baseProperties}
+              onlyEditValueData={storageObjectEditor.additionalProperties}
+              alterableData={storageObjectEditor.customProperties}
+              onEdit_onlyEditValueData={async (value) => {
+                const index: number = storageObjectEditor.additionalProperties.findIndex((p) => {
+                  return p === value;
+                });
+                const dataSource: {
+                  key: string;
+                  name: string;
+                  value: string;
+                  description: string;
+                } | null = await fResourcePropertyEditor({
+                  disabledKeys: [
+                    ...storageObjectEditor.rawProperties.map<string>((rp) => rp.key),
+                    ...storageObjectEditor.additionalProperties.map<string>((rp) => rp.key),
+                    ...storageObjectEditor.customProperties.map<string>((bp) => bp.key),
+                    ...storageObjectEditor.customConfigurations.map<string>((pp) => pp.key),
+                  ],
+                  disabledNames: [
+                    ...storageObjectEditor.rawProperties.map<string>((bp) => bp.name),
+                    ...storageObjectEditor.additionalProperties.map<string>((bp) => bp.name),
+                    ...storageObjectEditor.customProperties.map<string>((bp) => bp.name),
+                    ...storageObjectEditor.customConfigurations.map<string>((pp) => pp.name),
+                  ],
+                  defaultData: value,
+                  noneEditableFields: ['key', 'description', 'name'],
+                  valueAcceptNull: true,
+                });
+                if (!dataSource) {
+                  return;
+                }
+
+                // await dispatch<OnChange_AdditionalProperties_Action>({
+                //   type: 'resourceVersionCreatorPage/onChange_AdditionalProperties',
+                //   payload: {
+                //     value: storageObjectEditor.additionalProperties.map((v, i) => {
+                //       if (i !== index) {
+                //         return v;
+                //       }
+                //       return dataSource;
+                //     }),
+                //   },
+                // });
+
+                await onChange({
+                  additionalProperties: storageObjectEditor.additionalProperties.map((v, i) => {
+                    if (i !== index) {
+                      return v;
+                    }
+                    return dataSource;
+                  }),
+                });
+              }}
+              onEdit_alterableData={async (value) => {
+                const index: number = storageObjectEditor.customProperties.findIndex((p) => {
+                  return p === value;
+                });
+                const dataSource: {
+                  key: string;
+                  name: string;
+                  value: string;
+                  description: string;
+                } | null = await fResourcePropertyEditor({
+                  disabledKeys: [
+                    ...storageObjectEditor.rawProperties.map<string>((rp) => rp.key),
+                    ...storageObjectEditor.additionalProperties.map<string>((rp) => rp.key),
+                    ...storageObjectEditor.customProperties.map<string>((bp) => bp.key),
+                    ...storageObjectEditor.customConfigurations.map<string>((pp) => pp.key),
+                  ],
+                  disabledNames: [
+                    ...storageObjectEditor.rawProperties.map<string>((bp) => bp.name),
+                    ...storageObjectEditor.additionalProperties.map<string>((bp) => bp.name),
+                    ...storageObjectEditor.customProperties.map<string>((bp) => bp.name),
+                    ...storageObjectEditor.customConfigurations.map<string>((pp) => pp.name),
+                  ],
+                  defaultData: value,
+                });
+                if (!dataSource) {
+                  return;
+                }
+
+                // await dispatch<OnChange_CustomProperties_Action>({
+                //   type: 'resourceVersionCreatorPage/onChange_CustomProperties',
+                //   payload: {
+                //     value: storageObjectEditor.customProperties.map((v, i) => {
+                //       if (i !== index) {
+                //         return v;
+                //       }
+                //       return dataSource;
+                //     }),
+                //   },
+                // });
+                await onChange({
+                  customProperties: storageObjectEditor.customProperties.map((v, i) => {
+                    if (i !== index) {
+                      return v;
+                    }
+                    return dataSource;
+                  }),
+                });
+              }}
+              onDelete_alterableData={async (value) => {
+                // console.log(value, 'AAAAAAsdofijsdflksdjfldsjlkj');
+                // await dispatch<OnChange_CustomProperties_Action>({
+                //   type: 'resourceVersionCreatorPage/onChange_CustomProperties',
+                //   payload: {
+                //     value: resourceVersionCreatorPage.customProperties.filter((v, i) => {
+                //       return v.key !== value.key && v.name !== value.name;
+                //     }),
+                //   },
+                // });
+                await onChange({
+                  customProperties: storageObjectEditor.customProperties.filter((v) => {
+                    return v.key !== value.key && v.name !== value.name;
+                  }),
+                });
+              }}
             />
             <div style={{ height: 15 }} />
           </div>
@@ -202,7 +330,7 @@ function Details({ storageObjectEditor, dispatch }: DetailsProps) {
           <div style={{ height: 5 }} />
 
           {
-            storageObjectEditor.customOptionsData.length === 0
+            storageObjectEditor.customConfigurations.length === 0
               ? (<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 20 }}>
                 <FComponentsLib.FTextBtn
                   type={'default'}
@@ -230,9 +358,9 @@ function Details({ storageObjectEditor, dispatch }: DetailsProps) {
 
                 <FResourceOptions
                   // dataSource={resourceVersionCreatorPage.customOptionsData}
-                  dataSource={storageObjectEditor.customOptionsData}
+                  dataSource={storageObjectEditor.customConfigurations}
                   onEdit={async (value) => {
-                    const index: number = storageObjectEditor.customOptionsData.findIndex((p) => {
+                    const index: number = storageObjectEditor.customConfigurations.findIndex((p) => {
                       return p === value;
                     });
 
@@ -246,13 +374,15 @@ function Details({ storageObjectEditor, dispatch }: DetailsProps) {
                     } | null = await fResourceOptionEditor({
                       disabledKeys: [
                         ...storageObjectEditor.rawProperties.map<string>((rp) => rp.key),
-                        ...storageObjectEditor.baseProperties.map<string>((bp) => bp.key),
-                        ...storageObjectEditor.customOptionsData.map<string>((pp) => pp.key),
+                        ...storageObjectEditor.additionalProperties.map<string>((bp) => bp.key),
+                        ...storageObjectEditor.customProperties.map<string>((pp) => pp.key),
+                        ...storageObjectEditor.customConfigurations.map<string>((pp) => pp.key),
                       ],
                       disabledNames: [
-                        // ...storageObjectEditor.rawProperties.map<string>((rp) => rp.name),
-                        ...storageObjectEditor.baseProperties.map<string>((bp) => bp.name),
-                        ...storageObjectEditor.customOptionsData.map<string>((pp) => pp.name),
+                        ...storageObjectEditor.rawProperties.map<string>((rp) => rp.name),
+                        ...storageObjectEditor.additionalProperties.map<string>((bp) => bp.name),
+                        ...storageObjectEditor.customProperties.map<string>((pp) => pp.name),
+                        ...storageObjectEditor.customConfigurations.map<string>((pp) => pp.name),
                       ],
                       defaultData: value,
                     });
@@ -262,7 +392,7 @@ function Details({ storageObjectEditor, dispatch }: DetailsProps) {
                     }
 
                     await onChange({
-                      customOptionsData: storageObjectEditor.customOptionsData.map((a, b) => {
+                      customConfigurations: storageObjectEditor.customConfigurations.map((a, b) => {
                         if (b !== index) {
                           return a;
                         }
@@ -272,13 +402,12 @@ function Details({ storageObjectEditor, dispatch }: DetailsProps) {
                   }}
                   onDelete={async (value) => {
                     await onChange({
-                      customOptionsData: storageObjectEditor.customOptionsData.filter((a) => {
+                      customConfigurations: storageObjectEditor.customConfigurations.filter((a) => {
                         return a.key !== value.key && a.name !== value.name;
                       }),
                     });
                   }}
                 />
-
               </div>)
           }
 

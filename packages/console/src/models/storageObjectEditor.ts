@@ -1,12 +1,13 @@
 import { DvaReducer } from '@/models/shared';
 import { AnyAction } from 'redux';
 import { EffectsCommandMap, Subscription } from 'dva';
-import { ConnectState } from '@/models/connect';
+import { ConnectState, ResourceVersionCreatorPageModelState } from '@/models/connect';
 import fMessage from '@/components/fMessage';
 import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 import { history } from 'umi';
 import { UpdateAObjectAction } from '@/models/storageHomePage';
 import { fileAttrUnits } from '@/utils/format';
+import { handleData_By_Sha1_And_ResourceTypeCode_And_InheritData } from '@/utils/service';
 
 interface DepR {
   id: string;
@@ -48,14 +49,19 @@ export interface StorageObjectEditorModelState {
     value: string;
     description: string;
   }[];
-
-  baseProperties: {
+  additionalProperties: {
     key: string;
     name: string;
     value: string;
     description: string;
   }[];
-  customOptionsData: {
+  customProperties: {
+    key: string;
+    name: string;
+    value: string;
+    description: string;
+  }[];
+  customConfigurations: {
     key: string;
     name: string;
     description: string;
@@ -63,6 +69,28 @@ export interface StorageObjectEditorModelState {
     input: string;
     select: string[];
   }[];
+
+  // rawProperties: {
+  //   key: string;
+  //   name: string;
+  //   value: string;
+  //   description: string;
+  // }[];
+  //
+  // baseProperties: {
+  //   key: string;
+  //   name: string;
+  //   value: string;
+  //   description: string;
+  // }[];
+  // customOptionsData: {
+  //   key: string;
+  //   name: string;
+  //   description: string;
+  //   type: 'input' | 'select';
+  //   input: string;
+  //   select: string[];
+  // }[];
   depRs: DepR[];
   depOs: DepO[];
 }
@@ -144,9 +172,10 @@ export const storageObjectEditorInitData: StorageObjectEditorModelState = {
   resourceTypeValue: null,
 
   rawProperties: [],
+  additionalProperties: [],
+  customProperties: [],
+  customConfigurations: [],
 
-  baseProperties: [],
-  customOptionsData: [],
   depRs: [],
   depOs: [],
 };
@@ -191,6 +220,11 @@ const Model: StorageObjectEditorModelType = {
             candidateItems: string[];
             remark: string;
           }[];
+          systemPropertyDescriptors: {
+            key: string;
+            valueDisplay: string;
+            insertMode: 1 | 2;
+          }[];
           // fileSize: string;
           systemProperty: {
             [key: string]: string;
@@ -199,12 +233,14 @@ const Model: StorageObjectEditorModelType = {
           };
         }
       } = yield call(FServiceAPI.Storage.objectDetails, params);
-      // console.log(data_objectDetails, 'data@#Rwe90ifjsdlkfa');
-      // if (!data || data.userId !== user.cookiesUserID) {
+
+      // console.log(data_objectDetails, 'data_objectDetails sdifjsdlkfjl;ksdjflksdjlkfjsdlfkjsldkj');
+
       if (!data_objectDetails || data_objectDetails.userId !== FUtil.Tool.getUserIDByCookies()) {
         history.replace(FUtil.LinkTo.exception403());
         return;
       }
+
       const resources: any[] = data_objectDetails.dependencies
         .filter((ro: any) => ro.type === 'resource');
       const objects: any[] = data_objectDetails.dependencies
@@ -241,7 +277,6 @@ const Model: StorageObjectEditorModelType = {
           fullObjectNames: objects.map((r: any) => r.name).join(','),
         };
         const { data } = yield call(FServiceAPI.Storage.batchObjectList, params);
-        // console.log(data, 'data sdifjlsdkjlk jlfkds');
         depOs = (data as any[]).map<StorageObjectEditorModelState['depOs'][number]>((o: any) => ({
           id: o.objectId,
           name: o.bucketName + '/' + o.objectName,
@@ -253,6 +288,56 @@ const Model: StorageObjectEditorModelType = {
           }),
         }));
       }
+
+
+      const params4: Parameters<typeof handleData_By_Sha1_And_ResourceTypeCode_And_InheritData>[0] = {
+        sha1: data_objectDetails.sha1,
+        resourceTypeCode: data_objectDetails.resourceTypeCode,
+        inheritData: {
+          additionalProperties: data_objectDetails.systemPropertyDescriptors
+            .filter((spd) => {
+              return spd.insertMode === 2;
+            })
+            .map<ResourceVersionCreatorPageModelState['additionalProperties'][number]>((spd) => {
+              return {
+                key: spd.key,
+                name: '',
+                value: spd.valueDisplay,
+                description: '',
+              };
+            }),
+          customProperties: data_objectDetails.customPropertyDescriptors
+            .filter((cpd) => {
+              return cpd.type === 'readonlyText';
+            })
+            .map<StorageObjectEditorModelState['customProperties'][number]>((cpd: any) => {
+              return {
+                key: cpd.key,
+                name: cpd.name,
+                value: cpd.defaultValue,
+                description: cpd.remark,
+              };
+            }),
+          customConfigurations: data_objectDetails.customPropertyDescriptors
+            .filter((cpd: any) => cpd.type !== 'readonlyText')
+            .map<StorageObjectEditorModelState['customConfigurations'][number]>((cpd) => {
+              return {
+                key: cpd.key,
+                name: cpd.name,
+                description: cpd.remark,
+                type: cpd.type === 'editableText' ? 'input' : 'select',
+                input: cpd.defaultValue,
+                select: cpd.candidateItems,
+              };
+            }),
+        },
+      };
+      const result: Awaited<ReturnType<typeof handleData_By_Sha1_And_ResourceTypeCode_And_InheritData>> = yield call(handleData_By_Sha1_And_ResourceTypeCode_And_InheritData, params4);
+      if (result.state !== 'success') {
+        fMessage(result.failedMsg, 'error');
+        return;
+      }
+
       yield put<ChangeAction>({
         type: 'change',
 
@@ -263,40 +348,13 @@ const Model: StorageObjectEditorModelType = {
           sha1: data_objectDetails.sha1,
           resourceTypeValue: {
             value: data_objectDetails.resourceTypeCode,
-            // values: [data_objectDetails.resourceTypeCode],
-            // label: data_objectDetails.resourceType[data_objectDetails.resourceType.length - 1],
             labels: data_objectDetails.resourceType,
           },
           size: data_objectDetails.systemProperty.fileSize,
-          rawProperties: Object.entries(data_objectDetails.systemProperty).map((s) => ({
-            key: s[0],
-            name: s[0],
-            // value: s[0] === 'fileSize' ? FUtil.Format.humanizeSize(s[1]) : s[1],
-            value: fileAttrUnits[s[0]] ? fileAttrUnits[s[0]](s[1]) : s[1],
-            description: '',
-          })),
-          baseProperties: (data_objectDetails.customPropertyDescriptors as any[])
-            .filter((cpd: any) => cpd.type === 'readonlyText')
-            .map<StorageObjectEditorModelState['baseProperties'][number]>((cpd: any) => {
-              return {
-                key: cpd.key,
-                name: cpd.name,
-                value: cpd.defaultValue,
-                description: cpd.remark,
-              };
-            }),
-          customOptionsData: data_objectDetails.customPropertyDescriptors
-            .filter((cpd: any) => cpd.type !== 'readonlyText')
-            .map<StorageObjectEditorModelState['customOptionsData'][number]>((cpd) => {
-              return {
-                key: cpd.key,
-                name: cpd.name,
-                description: cpd.remark,
-                type: cpd.type === 'editableText' ? 'input' : 'select',
-                input: cpd.defaultValue,
-                select: cpd.candidateItems,
-              };
-            }),
+          rawProperties: result.rawProperties,
+          additionalProperties: result.additionalProperties,
+          customProperties: result.customProperties,
+          customConfigurations: result.customConfigurations,
           depRs: depRs,
           depOs: depOs,
         },
@@ -306,20 +364,11 @@ const Model: StorageObjectEditorModelType = {
       const { storageObjectEditor }: ConnectState = yield select(({ storageObjectEditor }: ConnectState) => ({
         storageObjectEditor,
       }));
-      // console.log(storageObjectEditor.resource_Type, 'storageObjectEditor.resource_Type09owpjsdlkfj');
-      // if (storageObjectEditor.resourceTypeValue === null) {
-      //   return;
-      // }
 
       const params: Parameters<typeof FServiceAPI.Storage.updateObject>[0] = {
         objectIdOrName: encodeURIComponent(`${storageObjectEditor.bucketName}/${storageObjectEditor.objectName}`),
         resourceTypeCode: storageObjectEditor.resourceTypeValue?.value || undefined,
         resourceTypeName: storageObjectEditor.resourceTypeValue?.customInput || undefined,
-        // resourceType: storageObjectEditor.resourceTypeValue?.customInput
-        //   ? [...storageObjectEditor.resourceTypeValue.labels, storageObjectEditor.resourceTypeValue.customInput]
-        //   : (storageObjectEditor.resourceTypeValue?.labels || []).length > 0
-        //     ? storageObjectEditor.resourceTypeValue?.labels
-        //     : undefined,
         dependencies: [
           ...storageObjectEditor.depRs.map((r) => ({
             name: r.name,
@@ -332,7 +381,7 @@ const Model: StorageObjectEditorModelType = {
           })),
         ],
         customPropertyDescriptors: [
-          ...storageObjectEditor.baseProperties.map<NonNullable<Parameters<typeof FServiceAPI.Storage.updateObject>[0]['customPropertyDescriptors']>[number]>((i) => {
+          ...storageObjectEditor.customProperties.map<NonNullable<Parameters<typeof FServiceAPI.Storage.updateObject>[0]['customPropertyDescriptors']>[number]>((i) => {
             return {
               type: 'readonlyText',
               key: i.key,
@@ -341,7 +390,7 @@ const Model: StorageObjectEditorModelType = {
               defaultValue: i.value,
             };
           }),
-          ...storageObjectEditor.customOptionsData.map<NonNullable<Parameters<typeof FServiceAPI.Storage.updateObject>[0]['customPropertyDescriptors']>[number]>((i) => {
+          ...storageObjectEditor.customConfigurations.map<NonNullable<Parameters<typeof FServiceAPI.Storage.updateObject>[0]['customPropertyDescriptors']>[number]>((i) => {
             const isInput: boolean = i.type === 'input';
             const options: string[] = i.select;
             return {

@@ -309,8 +309,6 @@ const initStates: ResourceVersionCreatorPageModelState = {
   rawPropertiesState: 'success',
   additionalProperties: [],
   customProperties: [],
-
-  // customOptionsDataVisible: false,
   customConfigurations: [],
 
   directDependencies: [],
@@ -505,7 +503,6 @@ const Model: ResourceVersionCreatorModelType = {
           },
         };
         const result: Awaited<ReturnType<typeof handleData_By_Sha1_And_ResourceTypeCode_And_InheritData>> = yield call(handleData_By_Sha1_And_ResourceTypeCode_And_InheritData, params4);
-        // console.log(result, 'w9eifjsdlkfjlsdjflsdjfljl');
         if (result.state !== 'success') {
           fMessage(result.failedMsg, 'error');
           return;
