@@ -420,7 +420,7 @@ const Model: ResourceVersionCreatorModelType = {
             }),
             cover: data_resourceInfo.coverImages[0] || '',
           },
-
+          versionInput: (semver.inc(data_resourceInfo.latestVersion, 'patch') || '1.0.0'),
           resourceTypeConfig: {
             uploadEntry: uploadEntry,
             limitFileSize: data_ResourceTypeInfo.resourceConfig.fileMaxSize * 1024 * 1024 ** data_ResourceTypeInfo.resourceConfig.fileMaxSizeUnit,
@@ -476,7 +476,6 @@ const Model: ResourceVersionCreatorModelType = {
         yield put<ChangeAction>({
           type: 'change',
           payload: {
-            versionInput: (semver.inc(data_resourceInfo.latestVersion, 'patch') || '1.0.0'),
             selectedFileInfo: {
               name: data_resourceVersionInfo.filename,
               sha1: data_resourceVersionInfo.fileSha1,

@@ -822,12 +822,12 @@ const Model: ResourceCreatorPageModelType = {
       const { resourceCreatorPage }: ConnectState = yield select(({ resourceCreatorPage }: ConnectState) => ({
         resourceCreatorPage,
       }));
-      // console.log('**************************************************');
+
       yield put<ChangeAction>({
         type: 'change',
         payload: {
           step2_isOpenMarkdown: false,
-          step2_rawPropertiesState: 'parsing',
+          // step2_rawPropertiesState: 'parsing',
           step2_dataIsDirty_count: resourceCreatorPage.step2_dataIsDirty_count + 1,
         },
       });
@@ -855,26 +855,9 @@ const Model: ResourceCreatorPageModelType = {
           step2_directDependencies: draftData.directDependencies,
           step2_baseUpcastResources: draftData.baseUpcastResources,
           step2_authReload: resourceCreatorPage.step2_authReload + 1,
+          step2_rawPropertiesState: 'parsing',
         },
       });
-
-      // console.log(draftData, 'draftData sdifjsdlkfjlsdjflkjlsdkj');
-
-      // const params3: Parameters<typeof FServiceAPI.Resource.getResourceBySha1>[0] = {
-      //   fileSha1: data_draft2.draftData.selectedFileInfo.sha1,
-      // };
-      //
-      // const { data: data_ResourcesBySha1 }: { data: any[] } = yield call(FServiceAPI.Resource.getResourceBySha1, params3);
-
-      // const params4: Parameters<typeof getFilesSha1Info>[0] = {
-      //   sha1: [data_draft2.draftData.selectedFileInfo.sha1],
-      //   resourceTypeCode: resourceCreatorPage.step1_createdResourceInfo?.resourceTypeCode || '',
-      // };
-      // const {
-      //   result,
-      //   error,
-      // }: Awaited<ReturnType<typeof getFilesSha1Info>> = yield call(getFilesSha1Info, params4);
-      // console.log('@@@@@@@@@@@@@@@@@@@@@@@#33333333333333333333333333333333333');
 
       const params4: Parameters<typeof handleData_By_Sha1_And_ResourceTypeCode_And_InheritData>[0] = {
         sha1: draftData.selectedFileInfo.sha1,
@@ -963,16 +946,8 @@ const Model: ResourceCreatorPageModelType = {
         },
       });
 
-      yield put<ChangeAction>({
-        type: 'change',
-        payload: {
-          step2_rawPropertiesState: 'parsing',
-          step2_dataIsDirty_count: resourceCreatorPage.step2_dataIsDirty_count + 1,
-        },
-      });
-
       const params2: Parameters<typeof FServiceAPI.Resource.lookDraft>[0] = {
-        resourceId: resourceCreatorPage.step1_createdResourceInfo.resourceID,
+        resourceId: resourceCreatorPage.step1_createdResourceInfo?.resourceID || '',
       };
       const { data: data_draft2 }: {
         data: null | {
@@ -982,61 +957,52 @@ const Model: ResourceCreatorPageModelType = {
         };
       } = yield call(FServiceAPI.Resource.lookDraft, params2);
 
-      if (!data_draft2?.draftData.selectedFileInfo) {
+      const draftData = data_draft2?.draftData;
+      if (!draftData?.selectedFileInfo) {
         return;
       }
-
-      const params3: Parameters<typeof FServiceAPI.Resource.getResourceBySha1>[0] = {
-        fileSha1: data_draft2.draftData.selectedFileInfo.sha1,
-      };
-
-      const { data: data_ResourcesBySha1 }: { data: any[] } = yield call(FServiceAPI.Resource.getResourceBySha1, params3);
-
-      const params4: Parameters<typeof getFilesSha1Info>[0] = {
-        sha1: [data_draft2.draftData.selectedFileInfo.sha1],
-        resourceTypeCode: resourceCreatorPage.step1_createdResourceInfo.resourceTypeCode,
-      };
-      const {
-        result,
-        error,
-      }: Awaited<ReturnType<typeof getFilesSha1Info>> = yield call(getFilesSha1Info, params4);
 
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          step2_fileInfo: data_draft2.draftData.selectedFileInfo,
-          // step2_fileInfo_errorTip: '不能超过200M',
-          step2_rawProperties: result[0].info
-            .filter((i) => {
-              return i.insertMode === 1;
-            })
-            .map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((i) => {
-              return {
-                key: i.key,
-                name: i.name,
-                value: i.valueDisplay,
-                description: i.remark,
-              };
-            }),
+          step2_fileInfo: draftData.selectedFileInfo,
+          step2_directDependencies: draftData.directDependencies,
+          step2_baseUpcastResources: draftData.baseUpcastResources,
+          step2_authReload: resourceCreatorPage.step2_authReload + 1,
+          step2_rawPropertiesState: 'parsing',
+        },
+      });
+
+      const params4: Parameters<typeof handleData_By_Sha1_And_ResourceTypeCode_And_InheritData>[0] = {
+        sha1: draftData.selectedFileInfo.sha1,
+        resourceTypeCode: resourceCreatorPage.step1_resourceType?.value || '',
+        inheritData: {
+          additionalProperties: draftData.additionalProperties.map((ap) => {
+            return {
+              key: ap.key,
+              name: '',
+              value: ap.value,
+              description: '',
+            };
+          }),
+          customProperties: draftData.customProperties,
+          customConfigurations: draftData.customConfigurations,
+        },
+      };
+      const result: Awaited<ReturnType<typeof handleData_By_Sha1_And_ResourceTypeCode_And_InheritData>> = yield call(handleData_By_Sha1_And_ResourceTypeCode_And_InheritData, params4);
+      if (result.state !== 'success') {
+        fMessage(result.failedMsg, 'error');
+        return;
+      }
+
+      yield put<ChangeAction>({
+        type: 'change',
+        payload: {
+          step2_rawProperties: result.rawProperties,
           step2_rawPropertiesState: 'success',
-          step2_additionalProperties: result[0].info
-            .filter((i) => {
-              return i.insertMode === 2;
-            })
-            .map<ResourceVersionCreatorPageModelState['rawProperties'][number]>((i) => {
-              const item = data_draft2.draftData.additionalProperties?.find((ap) => {
-                return ap.key === i.key;
-              }) || {};
-              return {
-                key: i.key,
-                name: i.name,
-                value: i.valueDisplay,
-                description: i.remark,
-                ...item,
-              };
-            }),
-          step2_customProperties: data_draft2.draftData.customProperties,
-          step2_customConfigurations: data_draft2.draftData.customConfigurations,
+          step2_additionalProperties: result.additionalProperties,
+          step2_customProperties: result.customProperties,
+          step2_customConfigurations: result.customConfigurations,
         },
       });
     },
