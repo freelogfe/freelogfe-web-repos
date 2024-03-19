@@ -146,6 +146,7 @@ function Exhibits({ dispatch, nodeManagerPage }: ExhibitsProps) {
       title: <FComponentsLib.FTitleText text={`${FI18n.i18nNext.t('tableheader_exhibit')}`} type='table' />,
       dataIndex: 'name',
       key: 'name',
+      // width: 900,
       render(_, record) {
         return (
           <div className={styles.info}>
