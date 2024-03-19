@@ -311,7 +311,9 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
               // $prop.onClick_DeleteBtn && $prop.onClick_DeleteBtn();
               const confirm: boolean = await fPromiseModalConfirm({
                 title: '提示',
-                description: '确认删除吗',
+                description: FI18n.i18nNext.t('createversion_remove_file_confirmation'),
+                okText: FI18n.i18nNext.t('createversion_remove_file_btn_remove'),
+                cancelText: FI18n.i18nNext.t('btn_cancel'),
               });
               if (confirm) {
                 dispatch<OnRemove_step2_file_Action>({

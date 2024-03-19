@@ -5,7 +5,7 @@ import { ConnectState, ResourceCreatorPageModelState } from '@/models/connect';
 import { history } from 'umi';
 import fMessage from '@/components/fMessage';
 import * as semver from 'semver';
-import { FUtil, FServiceAPI } from '@freelog/tools-lib';
+import { FUtil, FServiceAPI, FI18n } from '@freelog/tools-lib';
 import { getFilesSha1Info, handleData_By_Sha1_And_ResourceTypeCode_And_InheritData } from '@/utils/service';
 import { IResourceCreateVersionDraftType } from '@/type/resourceTypes';
 import moment from 'moment';
@@ -1009,7 +1009,9 @@ const Model: ResourceVersionCreatorModelType = {
 
       const confirm: boolean = yield call(fPromiseModalConfirm, {
         title: '提示',
-        description: '确认删除吗',
+        description: FI18n.i18nNext.t('createversion_remove_file_confirmation'),
+        okText: FI18n.i18nNext.t('createversion_remove_file_btn_remove'),
+        cancelText: FI18n.i18nNext.t('btn_cancel'),
       });
 
       if (confirm) {
