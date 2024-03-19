@@ -24,10 +24,6 @@ import FResourceProperties from '@/components/FResourceProperties';
 import fResourcePropertyEditor from '@/components/fResourcePropertyEditor';
 import FResourceOptions from '@/components/FResourceOptions';
 import fResourceOptionEditor from '@/components/fResourceOptionEditor';
-import {
-  OnChange_AdditionalProperties_Action,
-  OnChange_CustomProperties_Action,
-} from '@/models/resourceVersionCreatorPage';
 
 interface DetailsProps {
   dispatch: Dispatch;
@@ -326,89 +322,91 @@ function Details({ storageObjectEditor, dispatch }: DetailsProps) {
             />
             <div style={{ height: 15 }} />
           </div>
-
-          <div style={{ height: 5 }} />
-
           {
-            storageObjectEditor.customConfigurations.length === 0
-              ? (<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 20 }}>
-                <FComponentsLib.FTextBtn
-                  type={'default'}
-                  style={{ fontSize: 12 }}
-                  onClick={() => {
-                    onClick_addOptionBtn();
-                  }}
-                >添加可选配置</FComponentsLib.FTextBtn>
+            storageObjectEditor.resourceTypeConfig.isSupportOptionalConfig && (<>
+              <div style={{ height: 5 }} />
 
-              </div>)
-              : (<div className={styles.options}>
-                <div style={{ height: 20 }} />
-                <div className={styles.optionsHeader}>
-                  <FComponentsLib.FContentText text={'可选配置'} type={'highlight'} style={{ fontSize: 12 }} />
+              {
+                storageObjectEditor.customConfigurations.length === 0
+                  ? (<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 20 }}>
+                    <FComponentsLib.FTextBtn
+                      type={'default'}
+                      style={{ fontSize: 12 }}
+                      onClick={() => {
+                        onClick_addOptionBtn();
+                      }}
+                    >添加可选配置</FComponentsLib.FTextBtn>
+                  </div>)
+                  : (<div className={styles.options}>
+                    <div style={{ height: 20 }} />
+                    <div className={styles.optionsHeader}>
+                      <FComponentsLib.FContentText text={'可选配置'} type={'highlight'} style={{ fontSize: 12 }} />
 
-                  <FComponentsLib.FTextBtn
-                    style={{ fontSize: 12, fontWeight: 600 }}
-                    type='primary'
-                    onClick={async () => {
-                      onClick_addOptionBtn();
-                    }}
-                  >添加配置</FComponentsLib.FTextBtn>
-                </div>
-                <div style={{ height: 20 }} />
+                      <FComponentsLib.FTextBtn
+                        style={{ fontSize: 12, fontWeight: 600 }}
+                        type='primary'
+                        onClick={async () => {
+                          onClick_addOptionBtn();
+                        }}
+                      >添加配置</FComponentsLib.FTextBtn>
+                    </div>
+                    <div style={{ height: 20 }} />
 
-                <FResourceOptions
-                  // dataSource={resourceVersionCreatorPage.customOptionsData}
-                  dataSource={storageObjectEditor.customConfigurations}
-                  onEdit={async (value) => {
-                    const index: number = storageObjectEditor.customConfigurations.findIndex((p) => {
-                      return p === value;
-                    });
+                    <FResourceOptions
+                      // dataSource={resourceVersionCreatorPage.customOptionsData}
+                      dataSource={storageObjectEditor.customConfigurations}
+                      onEdit={async (value) => {
+                        const index: number = storageObjectEditor.customConfigurations.findIndex((p) => {
+                          return p === value;
+                        });
 
-                    const dataSource: {
-                      key: string;
-                      name: string;
-                      type: 'input' | 'select';
-                      input: string;
-                      select: string[];
-                      description: string;
-                    } | null = await fResourceOptionEditor({
-                      disabledKeys: [
-                        ...storageObjectEditor.rawProperties.map<string>((rp) => rp.key),
-                        ...storageObjectEditor.additionalProperties.map<string>((bp) => bp.key),
-                        ...storageObjectEditor.customProperties.map<string>((pp) => pp.key),
-                        ...storageObjectEditor.customConfigurations.map<string>((pp) => pp.key),
-                      ],
-                      disabledNames: [
-                        ...storageObjectEditor.rawProperties.map<string>((rp) => rp.name),
-                        ...storageObjectEditor.additionalProperties.map<string>((bp) => bp.name),
-                        ...storageObjectEditor.customProperties.map<string>((pp) => pp.name),
-                        ...storageObjectEditor.customConfigurations.map<string>((pp) => pp.name),
-                      ],
-                      defaultData: value,
-                    });
+                        const dataSource: {
+                          key: string;
+                          name: string;
+                          type: 'input' | 'select';
+                          input: string;
+                          select: string[];
+                          description: string;
+                        } | null = await fResourceOptionEditor({
+                          disabledKeys: [
+                            ...storageObjectEditor.rawProperties.map<string>((rp) => rp.key),
+                            ...storageObjectEditor.additionalProperties.map<string>((bp) => bp.key),
+                            ...storageObjectEditor.customProperties.map<string>((pp) => pp.key),
+                            ...storageObjectEditor.customConfigurations.map<string>((pp) => pp.key),
+                          ],
+                          disabledNames: [
+                            ...storageObjectEditor.rawProperties.map<string>((rp) => rp.name),
+                            ...storageObjectEditor.additionalProperties.map<string>((bp) => bp.name),
+                            ...storageObjectEditor.customProperties.map<string>((pp) => pp.name),
+                            ...storageObjectEditor.customConfigurations.map<string>((pp) => pp.name),
+                          ],
+                          defaultData: value,
+                        });
 
-                    if (!dataSource) {
-                      return;
-                    }
-
-                    await onChange({
-                      customConfigurations: storageObjectEditor.customConfigurations.map((a, b) => {
-                        if (b !== index) {
-                          return a;
+                        if (!dataSource) {
+                          return;
                         }
-                        return dataSource;
-                      }),
-                    });
-                  }}
-                  onDelete={async (value) => {
-                    await onChange({
-                      customConfigurations: storageObjectEditor.customConfigurations.filter((a) => {
-                        return a.key !== value.key && a.name !== value.name;
-                      }),
-                    });
-                  }}
-                />
-              </div>)
+
+                        await onChange({
+                          customConfigurations: storageObjectEditor.customConfigurations.map((a, b) => {
+                            if (b !== index) {
+                              return a;
+                            }
+                            return dataSource;
+                          }),
+                        });
+                      }}
+                      onDelete={async (value) => {
+                        await onChange({
+                          customConfigurations: storageObjectEditor.customConfigurations.filter((a) => {
+                            return a.key !== value.key && a.name !== value.name;
+                          }),
+                        });
+                      }}
+                    />
+                  </div>)
+              }
+            </>)
           }
 
         </FFormLayout.FBlock>

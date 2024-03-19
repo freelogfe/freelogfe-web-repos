@@ -37,11 +37,17 @@ export interface StorageObjectEditorModelState {
   size: number;
   resourceTypeValue: {
     value: string;
-    // label: string;
-    // values: Array<string | number>;
     labels: string[];
     customInput?: string;
   } | null;
+
+  resourceTypeConfig: {
+    // uploadEntry: ('localUpload' | 'storageSpace' | 'markdownEditor' | 'cartoonEditor')[];
+    // limitFileSize: number;
+    isSupportDownload: boolean;
+    // isSupportEdit: boolean;
+    isSupportOptionalConfig: boolean;
+  };
 
   rawProperties: {
     key: string;
@@ -102,17 +108,11 @@ export interface ChangeAction extends AnyAction {
 
 export interface FetchInfoAction extends AnyAction {
   type: 'storageObjectEditor/fetchInfo';
-  // payload: string;
 }
 
 export interface OnClick_SaveBtn_Action extends AnyAction {
   type: 'storageObjectEditor/onClick_SaveBtn';
-  // payload: string;
 }
-
-// export interface UpdateObjectInfoAction extends AnyAction {
-//   type: 'storageObjectEditor/updateObjectInfo';
-// }
 
 export interface AddObjectDepRAction extends AnyAction {
   type: 'storageObjectEditor/addObjectDepR';
@@ -138,7 +138,6 @@ export interface OnChangeTypeAction extends AnyAction {
   type: 'storageObjectEditor/onChangeType';
   payload: {
     value: StorageObjectEditorModelState['resourceTypeValue'];
-    // names: StorageObjectEditorModelState['resourceTypeNames'];
   };
 }
 
@@ -171,6 +170,14 @@ export const storageObjectEditorInitData: StorageObjectEditorModelState = {
 
   resourceTypeValue: null,
 
+  resourceTypeConfig: {
+    // uploadEntry: [],
+    // limitFileSize: 0,
+    isSupportDownload: false,
+    // isSupportEdit: false,
+    isSupportOptionalConfig: false,
+  },
+
   rawProperties: [],
   additionalProperties: [],
   customProperties: [],
@@ -185,23 +192,18 @@ const Model: StorageObjectEditorModelType = {
   state: storageObjectEditorInitData,
   effects: {
     * fetchInfo({}: FetchInfoAction, { call, put, select }: EffectsCommandMap) {
-      // console.log(payload, 'duixiangID09w3ujlkasdfasdfasdf');
-      const { storageObjectEditor, user }: ConnectState = yield select(({
-                                                                          storageObjectEditor,
-                                                                          user,
-                                                                        }: ConnectState) => ({
+      const { storageObjectEditor }: ConnectState = yield select(({ storageObjectEditor }: ConnectState) => ({
         storageObjectEditor,
-        user,
       }));
-
-      // console.log(storageObjectEditor, 'storageObjectEditor0q923u4oj4l234');
 
       if (!storageObjectEditor.objectId) {
         return;
       }
+
       const params: Parameters<typeof FServiceAPI.Storage.objectDetails>[0] = {
         objectIdOrName: storageObjectEditor.objectId,
       };
+
       const { data: data_objectDetails }: {
         data: {
           objectId: string;
@@ -225,10 +227,7 @@ const Model: StorageObjectEditorModelType = {
             valueDisplay: string;
             insertMode: 1 | 2;
           }[];
-          // fileSize: string;
           systemProperty: {
-            [key: string]: string;
-          } & {
             fileSize: number;
           };
         }
@@ -289,10 +288,41 @@ const Model: StorageObjectEditorModelType = {
         }));
       }
 
+      let resourceTypeConfig: StorageObjectEditorModelState['resourceTypeConfig'] = {
+        isSupportDownload: true,
+        isSupportOptionalConfig: true,
+      };
+
+      if (!!data_objectDetails.resourceTypeCode) {
+        const params1: Parameters<typeof FServiceAPI.Resource.getResourceTypeInfoByCode>[0] = {
+          code: data_objectDetails.resourceTypeCode,
+        };
+        const { data: data_ResourceTypeInfo }: {
+          ret: number;
+          errCode: number;
+          msg: string;
+          data: {
+            resourceConfig: {
+              fileCommitMode: number[];
+              fileMaxSize: number;
+              fileMaxSizeUnit: 1 | 2;
+              supportDownload: 1 | 2;
+              supportEdit: 1 | 2;
+              supportOptionalConfig: 1 | 2;
+            }
+          };
+        } = yield call(FServiceAPI.Resource.getResourceTypeInfoByCode, params1);
+
+        resourceTypeConfig = {
+          isSupportDownload: data_ResourceTypeInfo.resourceConfig.supportDownload === 2,
+          isSupportOptionalConfig: data_ResourceTypeInfo.resourceConfig.supportOptionalConfig === 2,
+        };
+      }
 
       const params4: Parameters<typeof handleData_By_Sha1_And_ResourceTypeCode_And_InheritData>[0] = {
         sha1: data_objectDetails.sha1,
         resourceTypeCode: data_objectDetails.resourceTypeCode,
+
         inheritData: {
           additionalProperties: data_objectDetails.systemPropertyDescriptors
             .filter((spd) => {
@@ -318,18 +348,20 @@ const Model: StorageObjectEditorModelType = {
                 description: cpd.remark,
               };
             }),
-          customConfigurations: data_objectDetails.customPropertyDescriptors
-            .filter((cpd: any) => cpd.type !== 'readonlyText')
-            .map<StorageObjectEditorModelState['customConfigurations'][number]>((cpd) => {
-              return {
-                key: cpd.key,
-                name: cpd.name,
-                description: cpd.remark,
-                type: cpd.type === 'editableText' ? 'input' : 'select',
-                input: cpd.defaultValue,
-                select: cpd.candidateItems,
-              };
-            }),
+          customConfigurations: resourceTypeConfig
+            ? data_objectDetails.customPropertyDescriptors
+              .filter((cpd: any) => cpd.type !== 'readonlyText')
+              .map<StorageObjectEditorModelState['customConfigurations'][number]>((cpd) => {
+                return {
+                  key: cpd.key,
+                  name: cpd.name,
+                  description: cpd.remark,
+                  type: cpd.type === 'editableText' ? 'input' : 'select',
+                  input: cpd.defaultValue,
+                  select: cpd.candidateItems,
+                };
+              })
+            : [],
         },
       };
       const result: Awaited<ReturnType<typeof handleData_By_Sha1_And_ResourceTypeCode_And_InheritData>> = yield call(handleData_By_Sha1_And_ResourceTypeCode_And_InheritData, params4);
@@ -350,6 +382,7 @@ const Model: StorageObjectEditorModelType = {
             value: data_objectDetails.resourceTypeCode,
             labels: data_objectDetails.resourceType,
           },
+          resourceTypeConfig,
           size: data_objectDetails.systemProperty.fileSize,
           rawProperties: result.rawProperties,
           additionalProperties: result.additionalProperties,
@@ -430,13 +463,46 @@ const Model: StorageObjectEditorModelType = {
         storageObjectEditor,
       }));
 
+      let resourceTypeConfig: StorageObjectEditorModelState['resourceTypeConfig'] = {
+        isSupportDownload: true,
+        isSupportOptionalConfig: true,
+      };
+
+      if (!!payload.value) {
+        const params1: Parameters<typeof FServiceAPI.Resource.getResourceTypeInfoByCode>[0] = {
+          code: payload.value.value,
+        };
+        const { data: data_ResourceTypeInfo }: {
+          ret: number;
+          errCode: number;
+          msg: string;
+          data: {
+            resourceConfig: {
+              fileCommitMode: number[];
+              fileMaxSize: number;
+              fileMaxSizeUnit: 1 | 2;
+              supportDownload: 1 | 2;
+              supportEdit: 1 | 2;
+              supportOptionalConfig: 1 | 2;
+            }
+          };
+        } = yield call(FServiceAPI.Resource.getResourceTypeInfoByCode, params1);
+
+        resourceTypeConfig = {
+          isSupportDownload: data_ResourceTypeInfo.resourceConfig.supportDownload === 2,
+          isSupportOptionalConfig: data_ResourceTypeInfo.resourceConfig.supportOptionalConfig === 2,
+        };
+      }
+
       const params4: Parameters<typeof handleData_By_Sha1_And_ResourceTypeCode_And_InheritData>[0] = {
         sha1: storageObjectEditor.sha1,
         resourceTypeCode: payload.value?.value || '',
         inheritData: {
           additionalProperties: storageObjectEditor.additionalProperties,
           customProperties: storageObjectEditor.customProperties,
-          customConfigurations: storageObjectEditor.customConfigurations,
+          customConfigurations: resourceTypeConfig.isSupportOptionalConfig
+            ? storageObjectEditor.customConfigurations
+            : [],
         },
       };
       const result: Awaited<ReturnType<typeof handleData_By_Sha1_And_ResourceTypeCode_And_InheritData>> = yield call(handleData_By_Sha1_And_ResourceTypeCode_And_InheritData, params4);
@@ -445,13 +511,11 @@ const Model: StorageObjectEditorModelType = {
         return;
       }
 
-
       yield put<ChangeAction>({
         type: 'change',
         payload: {
-          // resourceTypeCodes: payload.value,
-          // resourceTypeNames: payload.names,
           resourceTypeValue: payload.value,
+          resourceTypeConfig,
           rawProperties: result.rawProperties,
           additionalProperties: result.additionalProperties,
           customProperties: result.customProperties,
