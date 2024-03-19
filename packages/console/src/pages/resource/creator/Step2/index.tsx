@@ -257,28 +257,21 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
               disabled={resourceCreatorPage.step2_rawPropertiesState === 'parsing'}
               type='primary'
               onClick={async () => {
-
-                if (resourceCreatorPage.step1_createdResourceInfo?.resourceType[1] === '漫画') {
-                  dispatch<OnClick_step2_editCartoonBtn_Action>({
-                    type: 'resourceCreatorPage/onClick_step2_editCartoonBtn',
-                  });
-                }
-
-                if (resourceCreatorPage.step1_createdResourceInfo?.resourceType[0] === '阅读' && resourceCreatorPage.step1_createdResourceInfo?.resourceType[1] === '文章') {
-                  const { result } = await getFilesSha1Info({
-                    sha1: [resourceCreatorPage.step2_fileInfo?.sha1 || ''],
-                    resourceTypeCode: '',
-                  });
-
-                  // if (result[0].fileSize > 2 * 1024 * 1024) {
-                  if (result[0].fileSize > resourceCreatorPage.step2_resourceTypeConfig.limitFileSize) {
-                    fMessage(FI18n.i18nNext.t('mdeditor_import_error_lengthlimitation'), 'error');
-                    return;
-                  }
-
-                  // $prop.onClick_EditBtn && $prop.onClick_EditBtn();
+                if (resourceCreatorPage.step2_resourceTypeConfig.uploadEntry.includes('markdownEditor')) {
+                  // const { result } = await getFilesSha1Info({
+                  //   sha1: [resourceCreatorPage.step2_fileInfo?.sha1 || ''],
+                  //   resourceTypeCode: '',
+                  // });
+                  // if (result[0].fileSize > resourceCreatorPage.step2_resourceTypeConfig.limitFileSize) {
+                  //   fMessage(FI18n.i18nNext.t('mdeditor_import_error_lengthlimitation'), 'error');
+                  //   return;
+                  // }
                   dispatch<OnClick_step2_editMarkdownBtn_Action>({
                     type: 'resourceCreatorPage/onClick_step2_editMarkdownBtn',
+                  });
+                } else if (resourceCreatorPage.step2_resourceTypeConfig.uploadEntry.includes('cartoonEditor')) {
+                  dispatch<OnClick_step2_editCartoonBtn_Action>({
+                    type: 'resourceCreatorPage/onClick_step2_editCartoonBtn',
                   });
                 }
               }}
@@ -308,25 +301,6 @@ function Step2({ dispatch, resourceCreatorPage }: Step2Props) {
               <span>下载</span>
             </FComponentsLib.FTextBtn>)
           }
-
-          {/*{*/}
-          {/*  resourceCreatorPage.step1_createdResourceInfo?.resourceType[1] === '漫画'*/}
-          {/*  && (resourceCreatorPage.step1_createdResourceInfo?.resourceType[2] === '条漫'*/}
-          {/*    || resourceCreatorPage.step1_createdResourceInfo?.resourceType[2] === '页漫') && (<FComponentsLib.FTextBtn*/}
-          {/*    disabled={resourceCreatorPage.step2_rawPropertiesState === 'parsing'}*/}
-          {/*    type='primary'*/}
-          {/*    style={{ fontSize: 12, display: 'flex', alignItems: 'center', gap: 5 }}*/}
-          {/*    onClick={() => {*/}
-          {/*      // $prop.onClick_EditBtn && $prop.onClick_EditBtn();*/}
-          {/*      dispatch<OnClick_step2_editCartoonBtn_Action>({*/}
-          {/*        type: 'resourceCreatorPage/onClick_step2_editCartoonBtn',*/}
-          {/*      });*/}
-          {/*    }}*/}
-          {/*  >*/}
-          {/*    <FComponentsLib.FIcons.FEdit style={{ fontSize: 12 }} />*/}
-          {/*    <span>编辑</span>*/}
-          {/*  </FComponentsLib.FTextBtn>)*/}
-          {/*}*/}
 
           <FComponentsLib.FTextBtn
             type='danger'

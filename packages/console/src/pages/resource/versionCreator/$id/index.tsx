@@ -427,14 +427,9 @@ function VersionCreator({ match, dispatch, resourceVersionCreatorPage }: Version
                   type='primary'
                   style={{ fontSize: 12, display: 'flex', alignItems: 'center', gap: 5 }}
                   onClick={async () => {
-                    if (resourceVersionCreatorPage.resourceInfo?.resourceType[0] === '阅读'
-                      && resourceVersionCreatorPage.resourceInfo?.resourceType[1] === '文章') {
+                    if (resourceVersionCreatorPage.resourceTypeConfig.uploadEntry.includes('markdownEditor')) {
                       onClick_EditMarkdownBtn();
-                    }
-
-                    if (resourceVersionCreatorPage.resourceInfo?.resourceType[1] === '漫画') {
-                      // && (resourceVersionCreatorPage.resourceInfo?.resourceType[2] === '条漫'
-                      //   || resourceVersionCreatorPage.resourceInfo?.resourceType[2] === '页漫')
+                    } else if (resourceVersionCreatorPage.resourceTypeConfig.uploadEntry.includes('cartoonEditor')) {
                       dispatch<OnClick_OpenCartoonBtn_Action>({
                         type: 'resourceVersionCreatorPage/onClick_OpenCartoonBtn',
                       });
