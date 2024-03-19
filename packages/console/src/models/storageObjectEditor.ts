@@ -398,6 +398,7 @@ const Model: StorageObjectEditorModelType = {
         storageObjectEditor,
       }));
 
+
       const params: Parameters<typeof FServiceAPI.Storage.updateObject>[0] = {
         objectIdOrName: encodeURIComponent(`${storageObjectEditor.bucketName}/${storageObjectEditor.objectName}`),
         resourceTypeCode: storageObjectEditor.resourceTypeValue?.value || undefined,
@@ -413,6 +414,14 @@ const Model: StorageObjectEditorModelType = {
             type: 'object',
           })),
         ],
+        // @ts-ignore
+        inputAttrs: storageObjectEditor.additionalProperties
+          .map((ap) => {
+            return {
+              key: ap.key,
+              value: ap.value,
+            };
+          }),
         customPropertyDescriptors: [
           ...storageObjectEditor.customProperties.map<NonNullable<Parameters<typeof FServiceAPI.Storage.updateObject>[0]['customPropertyDescriptors']>[number]>((i) => {
             return {
@@ -437,10 +446,7 @@ const Model: StorageObjectEditorModelType = {
           }),
         ],
       };
-      // console.log(params, 'params098io3wkqlsaejfdlkjfl');
       const { ret, errCode, data, msg } = yield call(FServiceAPI.Storage.updateObject, params);
-
-      // console.log(data, 'dataiosdjlfkjsdlkfjlk sdfij;sldkjflk iosdj');
 
       if (ret !== 0 || errCode !== 0) {
         fMessage(msg, 'error');
