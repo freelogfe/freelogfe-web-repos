@@ -430,7 +430,18 @@ const Model: ResourceVersionCreatorModelType = {
         },
       });
 
-      if (data_resourceInfo.latestVersion) {
+      const params: Parameters<typeof FServiceAPI.Resource.lookDraft>[0] = {
+        resourceId: data_resourceInfo.resourceId,
+      };
+      const { data: data_draft }: {
+        data: null | {
+          resourceId: string;
+          updateDate: string;
+          draftData: IResourceCreateVersionDraftType;
+        };
+      } = yield call(FServiceAPI.Resource.lookDraft, params);
+
+      if (!!data_resourceInfo.latestVersion && !data_draft) {
         const params2: Parameters<typeof FServiceAPI.Resource.resourceVersionInfo1>[0] = {
           resourceId: data_resourceInfo.resourceId,
           version: data_resourceInfo.latestVersion,
@@ -460,6 +471,38 @@ const Model: ResourceVersionCreatorModelType = {
             }[];
           }
         } = yield call(FServiceAPI.Resource.resourceVersionInfo1, params2);
+
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            versionInput: (semver.inc(data_resourceInfo.latestVersion, 'patch') || '1.0.0'),
+            selectedFileInfo: {
+              name: data_resourceVersionInfo.filename,
+              sha1: data_resourceVersionInfo.fileSha1,
+              from: '上个版本',
+            },
+
+            directDependencies: data_resourceVersionInfo.dependencies
+              .map<ResourceVersionCreatorPageModelState['directDependencies'][number]>((d) => {
+                return {
+                  id: d.resourceId,
+                  name: d.resourceName,
+                  type: 'resource',
+                  versionRange: d.versionRange,
+                };
+              }),
+            baseUpcastResources: data_resourceInfo.baseUpcastResources
+              .map<ResourceVersionCreatorPageModelState['baseUpcastResources'][number]>((b) => {
+                return {
+                  resourceID: b.resourceId,
+                  resourceName: b.resourceName,
+                };
+              }),
+            descriptionText: data_resourceVersionInfo.description,
+            rawPropertiesState: 'parsing',
+          },
+        });
+
         // console.log(data_resourceVersionInfo, 'data_resourceVersionInfo sdifjsd;oifjsldkjflkdsjflkjl');
         const params4: Parameters<typeof handleData_By_Sha1_And_ResourceTypeCode_And_InheritData>[0] = {
           sha1: data_resourceVersionInfo.fileSha1,
@@ -510,45 +553,24 @@ const Model: ResourceVersionCreatorModelType = {
         yield put<ChangeAction>({
           type: 'change',
           payload: {
-            versionInput: (semver.inc(data_resourceInfo.latestVersion, 'patch') || '1.0.0'),
-            selectedFileInfo: {
-              name: data_resourceVersionInfo.filename,
-              sha1: data_resourceVersionInfo.fileSha1,
-              from: '上个版本',
-            },
             rawProperties: result.rawProperties,
             additionalProperties: result.additionalProperties,
             customProperties: result.customProperties,
             customConfigurations: result.customConfigurations,
-
-            directDependencies: data_resourceVersionInfo.dependencies
-              .map<ResourceVersionCreatorPageModelState['directDependencies'][number]>((d) => {
-                return {
-                  id: d.resourceId,
-                  name: d.resourceName,
-                  type: 'resource',
-                  versionRange: d.versionRange,
-                };
-              }),
-            baseUpcastResources: data_resourceInfo.baseUpcastResources
-              .map<ResourceVersionCreatorPageModelState['baseUpcastResources'][number]>((b) => {
-                return {
-                  resourceID: b.resourceId,
-                  resourceName: b.resourceName,
-                };
-              }),
-            // descriptionEditorState,
-            descriptionText: data_resourceVersionInfo.description,
+            rawPropertiesState: 'success',
           },
         });
       }
       // console.log('********************************************');
-      yield put<_FetchDraft_Action>({
-        type: '_FetchDraft',
-        payload: {
-          delay: false,
-        },
-      });
+
+      if (!!data_draft) {
+        yield put<_FetchDraft_Action>({
+          type: '_FetchDraft',
+          payload: {
+            delay: false,
+          },
+        });
+      }
     },
     * onUnmountPage({}: OnUnmountPageAction, { put }: EffectsCommandMap) {
       window.onbeforeunload = null;
@@ -1099,9 +1121,25 @@ const Model: ResourceVersionCreatorModelType = {
           draftData: IResourceCreateVersionDraftType;
         };
       } = yield call(FServiceAPI.Resource.lookDraft, params);
+
       if (!!data_draft) {
 
         const { draftData } = data_draft;
+
+        yield put<ChangeAction>({
+          type: 'change',
+          payload: {
+            versionInput: draftData.versionInput,
+            selectedFileInfo: draftData.selectedFileInfo,
+
+            directDependencies: draftData.directDependencies,
+            baseUpcastResources: draftData.baseUpcastResources,
+            authReload: resourceVersionCreatorPage.authReload + 1,
+
+            descriptionText: draftData.descriptionEditorInput,
+            draftSaveTime: moment(data_draft.updateDate).format('YYYY-MM-DD HH:mm:ss'),
+          },
+        });
 
         if (!!draftData.selectedFileInfo) {
           const params3: Parameters<typeof FServiceAPI.Resource.getResourceBySha1>[0] = {
@@ -1109,6 +1147,32 @@ const Model: ResourceVersionCreatorModelType = {
           };
 
           const { data: data_ResourcesBySha1 }: { data: any[] } = yield call(FServiceAPI.Resource.getResourceBySha1, params3);
+
+          yield put<ChangeAction>({
+            type: 'change',
+            payload: {
+              selectedFile_UsedResources: data_ResourcesBySha1
+                .filter((d) => {
+                  return d.userId !== FUtil.Tool.getUserIDByCookies();
+                })
+                .map((d) => {
+                  return d.resourceVersions.map((v: any) => {
+                    return {
+                      resourceId: d.resourceId,
+                      resourceName: d.resourceName,
+                      resourceType: d.resourceType,
+                      resourceVersion: v.version,
+                      url: FUtil.LinkTo.resourceDetails({
+                        resourceID: d.resourceId,
+                        version: v.version,
+                      }),
+                    };
+                  });
+                }).flat(),
+              pageState: 'loaded',
+              rawPropertiesState: 'parsing',
+            },
+          });
 
           const params4: Parameters<typeof handleData_By_Sha1_And_ResourceTypeCode_And_InheritData>[0] = {
             sha1: draftData.selectedFileInfo.sha1,
@@ -1136,44 +1200,17 @@ const Model: ResourceVersionCreatorModelType = {
           yield put<ChangeAction>({
             type: 'change',
             payload: {
-              selectedFile_UsedResources: data_ResourcesBySha1
-                .filter((d) => {
-                  return d.userId !== FUtil.Tool.getUserIDByCookies();
-                })
-                .map((d) => {
-                  return d.resourceVersions.map((v: any) => {
-                    return {
-                      resourceId: d.resourceId,
-                      resourceName: d.resourceName,
-                      resourceType: d.resourceType,
-                      resourceVersion: v.version,
-                      url: FUtil.LinkTo.resourceDetails({
-                        resourceID: d.resourceId,
-                        version: v.version,
-                      }),
-                    };
-                  });
-                }).flat(),
-
-              pageState: 'loaded',
               rawProperties: result.rawProperties,
-              additionalProperties: result.additionalProperties.map((p) => {
-                return {
-                  key: p.key,
-                  name: '',
-                  value: p.value,
-                  description: '',
-                };
-              }),
+              additionalProperties: result.additionalProperties,
               customProperties: result.customProperties,
               customConfigurations: result.customConfigurations,
+              rawPropertiesState: 'success',
             },
           });
         } else {
           yield put<ChangeAction>({
             type: 'change',
             payload: {
-              pageState: 'loaded',
               rawProperties: [],
               additionalProperties: draftData.additionalProperties.map((p) => {
                 return {
@@ -1188,22 +1225,6 @@ const Model: ResourceVersionCreatorModelType = {
             },
           });
         }
-
-        yield put<ChangeAction>({
-          type: 'change',
-          payload: {
-            versionInput: draftData.versionInput,
-            selectedFileInfo: draftData.selectedFileInfo,
-
-            directDependencies: draftData.directDependencies,
-            baseUpcastResources: draftData.baseUpcastResources,
-            authReload: resourceVersionCreatorPage.authReload + 1,
-
-            descriptionText: draftData.descriptionEditorInput,
-            draftSaveTime: moment(data_draft.updateDate).format('YYYY-MM-DD HH:mm:ss'),
-          },
-        });
-
       }
       if (payload.delay) {
         yield call(FUtil.Tool.promiseSleep, 1000);
