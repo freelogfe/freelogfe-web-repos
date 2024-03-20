@@ -375,7 +375,9 @@ async function correct_Resource_AdditionalProperties({
 
     // 2：数值
     if (data.format === 2) {
-      if (!Number.isFinite(value) || Number(value) < (contentRule?.min || Number.MAX_SAFE_INTEGER) || Number(value) > (contentRule?.max || Number.MAX_SAFE_INTEGER)) {
+      if (!new RegExp(`^-?\\d+(\\.\\d{0,${Number.MAX_SAFE_INTEGER}})?$`).test(value)
+        || Number(value) < (contentRule?.min || Number.MAX_SAFE_INTEGER)
+        || Number(value) > (contentRule?.max || Number.MAX_SAFE_INTEGER)) {
         return {
           key,
           value: '',
@@ -447,8 +449,7 @@ async function correct_Resource_AdditionalProperties({
 
     // 8: 整数
     if (data.format === 8) {
-      if (!Number.isFinite(value)
-        || Number(value) % 1 !== 0
+      if (!new RegExp(/^-?\d+$/).test(value)
         || Number(value) < (contentRule?.min || Number.MIN_SAFE_INTEGER)
         || Number(value) > (contentRule?.max || Number.MAX_SAFE_INTEGER)) {
         return {
@@ -460,8 +461,8 @@ async function correct_Resource_AdditionalProperties({
 
     // 9: 小数
     if (data.format === 9) {
-      if (!Number.isFinite(value)
-        || value.split('.')[1] && (value.split('.')[1].length > (contentRule?.minDecimal || Number.MAX_SAFE_INTEGER))
+      // if (!new RegExp('^-?\\d+(\\.\\d{0,' + (contentRule?.minDecimal || Number.MAX_SAFE_INTEGER) + '})?$').test(value)
+      if (!new RegExp(`^-?\\d+(\\.\\d{0,${contentRule?.minDecimal || Number.MAX_SAFE_INTEGER}})?$`).test(value)
         || Number(value) < (contentRule?.min || Number.MIN_SAFE_INTEGER)
         || Number(value) > (contentRule?.max || Number.MAX_SAFE_INTEGER)) {
         return {
