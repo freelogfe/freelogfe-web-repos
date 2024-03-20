@@ -357,21 +357,26 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
             }
           </div>
           <div style={{ height: 15 }} />
-          <div style={{ borderRadius: 4, border: '1px solid #D4D4D4', minHeight: 114, backgroundColor: 'white' }}>
-            <FResourceLabelEditor2
-              // style={{ minHeight: 114, width: 640, backgroundColor: '#fff', alignItems: 'flex-start' }}
-              style={{ border: 'none' }}
-              value={exhibitInfoPage.side_ExhibitTags}
-              onChange={(value) => {
-                dispatch<UpdateBaseInfoAction>({
-                  type: 'exhibitInfoPage/updateBaseInfo',
-                  payload: {
-                    side_ExhibitTags: value,
-                  },
-                });
-              }}
-            />
-          </div>
+          {/*<div style={{ borderRadius: 4, border: '1px solid #D4D4D4', minHeight: 114, backgroundColor: 'white' }}>*/}
+          <FResourceLabelEditor2
+            showRemaining={true}
+            style={{
+              minHeight: 114,
+              width: 640,
+              backgroundColor: '#fff',
+            }}
+            // style={{ border: 'none' }}
+            value={exhibitInfoPage.side_ExhibitTags}
+            onChange={(value) => {
+              dispatch<UpdateBaseInfoAction>({
+                type: 'exhibitInfoPage/updateBaseInfo',
+                payload: {
+                  side_ExhibitTags: value,
+                },
+              });
+            }}
+          />
+          {/*</div>*/}
         </div>
       </div>
       <div style={{ height: 20 }} />

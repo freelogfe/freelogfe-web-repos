@@ -1,20 +1,27 @@
 import * as React from 'react';
 import styles from './index.less';
 import FComponentsLib from '@freelog/components-lib';
-import { Input, InputRef } from 'antd';
+import { Input, InputRef, Space } from 'antd';
 import * as AHooks from 'ahooks';
 import { FI18n, FUtil } from '@freelog/tools-lib';
 
 interface FResourceLabelEditor2Props {
   value: string[];
   style?: React.CSSProperties;
+  showRemaining?: boolean;
 
   onChange?(value: string[]): void;
 
   onClickApply?(): void;
 }
 
-function FResourceLabelEditor2({ value, onChange, onClickApply, style }: FResourceLabelEditor2Props) {
+function FResourceLabelEditor2({
+                                 value,
+                                 onChange,
+                                 onClickApply,
+                                 style,
+                                 showRemaining = false,
+                               }: FResourceLabelEditor2Props) {
   const refDiv = React.useRef<HTMLDivElement>(null);
   const inputRef = React.useRef<InputRef>(null);
   const [$showInput, set$showInput, get$showInput] = FUtil.Hook.useGetState<boolean>(false);
@@ -104,6 +111,17 @@ function FResourceLabelEditor2({ value, onChange, onClickApply, style }: FResour
         />)
       }
 
+      {
+        showRemaining && (<>
+          <div style={{ width: 100, height: 24 }} />
+          <FComponentsLib.FContentText
+            style={{ position: 'absolute', right: 10, bottom: 6, lineHeight: '24px' }}
+            text={`还可添加${20 - value.length}个标签`}
+            type={'additional2'}
+          />
+        </>)
+      }
+
     </div>
     {
       ($inputError !== '' || !!onClickApply) && (<>
@@ -124,7 +142,6 @@ function FResourceLabelEditor2({ value, onChange, onClickApply, style }: FResour
               }}
             >{FI18n.i18nNext.t('brr_resourcelisting_item_btn_bulkaddtag')}</FComponentsLib.FTextBtn>)
           }
-
         </div>
       </>)
     }
