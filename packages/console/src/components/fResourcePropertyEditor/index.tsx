@@ -52,8 +52,8 @@ function fResourcePropertyEditor({
         resolve(null);
         setTimeout(() => {
           root.unmount();
-          rootDiv.remove();
-        }, 300);
+          div.remove();
+        }, .1);
       }}
     />);
   });
