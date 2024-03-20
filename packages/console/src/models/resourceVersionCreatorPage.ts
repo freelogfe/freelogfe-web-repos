@@ -500,6 +500,7 @@ const Model: ResourceVersionCreatorModelType = {
               }),
             descriptionText: data_resourceVersionInfo.description,
             rawPropertiesState: 'parsing',
+            dataIsDirty: true,
           },
         });
 
@@ -558,6 +559,7 @@ const Model: ResourceVersionCreatorModelType = {
             customProperties: result.customProperties,
             customConfigurations: result.customConfigurations,
             rawPropertiesState: 'success',
+            dataIsDirty: true,
           },
         });
       }
