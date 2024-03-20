@@ -1,5 +1,4 @@
 import * as React from 'react';
-
 import styles from './index.less';
 import FMenu, { FMenuProps } from '../FMenu';
 import FComponentsLib from '@freelog/components-lib';
@@ -14,26 +13,29 @@ interface FDropdownMenuProps extends FMenuProps {
 function FDropdownMenu({ options, children, text, onChange }: FDropdownMenuProps) {
   const [$open, set$open, get$open] = FUtil.Hook.useGetState<boolean>(false);
   return (<FComponentsLib.FDropdown
+    // open={true}
     // @ts-ignore
     onOpenChange={(o: boolean) => {
-      // console.log(o, 'siodfjlksdjflksdjfljdslfjlkj');
       set$open(o);
     }}
-    overlay={<FMenu
-      onClick={onChange}
-      options={options} />}>
+    overlay={(<div className={styles.menu}>
+      <FMenu
+        onClick={onChange}
+        options={options}
+      />
+    </div>)}>
     {
-      text ?
-        (<div className={styles.text}>
-          {text}
-          {
-            $open
-              ? (<FComponentsLib.FIcons.FUp style={{ fontSize: 12 }} />)
-              : (<FComponentsLib.FIcons.FDown style={{ fontSize: 12 }} />)
-          }
-
-        </div>)
-        : children
+      text && (<div className={styles.text}>
+        {text}
+        {
+          $open
+            ? (<FComponentsLib.FIcons.FUp style={{ fontSize: 12 }} />)
+            : (<FComponentsLib.FIcons.FDown style={{ fontSize: 12 }} />)
+        }
+      </div>)
+    }
+    {
+      !text && children
     }
   </FComponentsLib.FDropdown>);
 }

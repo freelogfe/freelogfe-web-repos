@@ -14,17 +14,7 @@ export interface FMenuProps {
 }
 
 function FMenu({ options, value, onClick }: FMenuProps) {
-
-  // const items = [
-  //   { label: '菜单项一', key: 'item-1' }, // 菜单项务必填写 key
-  //   { label: '菜单项二', key: 'item-2' },
-  //   {
-  //     label: '子菜单',
-  //     key: 'submenu',
-  //     children: [{ label: '子菜单项', key: 'submenu-item-1' }],
-  //   },
-  // ];
-
+  
   const items = options.map((o) => {
     return {
       key: o.value,
