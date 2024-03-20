@@ -4,7 +4,7 @@ import { Space } from 'antd';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import { ConnectState, ExhibitInfoPageModelState } from '@/models/connect';
-import { ChangeAction } from '@/models/exhibitInfoPage';
+// import { ChangeAction } from '@/models/exhibitInfoPage';
 import Resources from './Resources';
 import Contract from './Contract';
 import Policy from './Policy';

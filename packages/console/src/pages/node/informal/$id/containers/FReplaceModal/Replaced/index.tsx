@@ -3,7 +3,7 @@ import styles from './index.less';
 import FDropdownMenu from "@/components/FDropdownMenu";
 import {Tree} from 'antd';
 import FAutoComplete from "@/components/FAutoComplete";
-import {connect, Dispatch} from 'dva';
+import {connect} from 'dva';
 import {ConnectState, InformalNodeManagerPageModelState} from "@/models/connect";
 import {
   ChangeAction, OnReplacedEntityVersionChangeAction,
@@ -12,6 +12,7 @@ import {
 } from "@/models/informalNodeManagerPage";
 import * as AHooks from 'ahooks';
 import FComponentsLib from '@freelog/components-lib';
+import { Dispatch } from 'redux';
 
 interface ReplacedProps {
   dispatch: Dispatch;
