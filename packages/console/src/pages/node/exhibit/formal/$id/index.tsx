@@ -123,7 +123,11 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
             singleRow
           />
         </FComponentsLib.FTextBtn>
-        <FComponentsLib.FContentText type={'negative'} text={'>'} style={{ fontWeight: 600 }} />
+        <FComponentsLib.FContentText
+          type={'negative'}
+          text={'>'}
+          style={{ fontWeight: 600 }}
+        />
         <FComponentsLib.FContentText
           type={'highlight'}
           text={exhibitInfoPage.exhibit_Name}
