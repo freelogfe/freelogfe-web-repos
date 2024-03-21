@@ -250,7 +250,11 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
             {
               !exhibitInfoPage.exhibit_ResourceInfo?.type.includes('主题') && (<>
                 <FComponentsLib.FContentText
-                  text={exhibitInfoPage.exhibit_Online ? '展品已上架' : '展品未上架'}
+                  text={exhibitInfoPage.exhibit_Online
+                    // ? '展品已上架'
+                    ? FI18n.i18nNext.t('edit_exhibit_status_availableforauth')
+                    // : '展品未上架'}
+                    : FI18n.i18nNext.t('edit_exhibit_status_pendingauth')}
                   type={'additional2'}
                   style={{ color: '#222' }}
                 />
@@ -311,7 +315,8 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
               exhibitInfoPage.exhibit_ResourceInfo && (<Space size={5}>
                 <FComponentsLib.FContentText
                   type={'additional2'}
-                  text={'来自于'}
+                  // text={'来自于'}
+                  text={FI18n.i18nNext.t('edit_exhibit_relative_article')}
                   style={{ color: 'inherit' }}
                 />
                 <Popover
@@ -396,10 +401,11 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
         >{
           exhibitInfoPage.side_SettingUnfold
             ? FI18n.i18nNext.t('brr_resourcelisting_item_btn_showlesssetting')
-            : FI18n.i18nNext.t('brr_resourcelisting_item_btn_moresetting')
+            : FI18n.i18nNext.t('edit_exhibit_moresetting_btn')
         }</FComponentsLib.FTextBtn>
         <FComponentsLib.FContentText
-          text={'可以为资源文件添加可选配置，或进行依赖资源的声明'}
+          // text={'可以为资源文件添加可选配置，或进行依赖资源的声明'}
+          text={FI18n.i18nNext.t('edit_exhibit_moresetting_info')}
           type={'negative'}
           style={{ fontSize: 12 }}
         />
@@ -412,7 +418,8 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
           <div className={styles.block} style={{ backgroundColor: 'rgba(0,0,0,0.02)' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <FComponentsLib.FContentText
-                text={'展示版本'}
+                // text={'展示版本'}
+                text={FI18n.i18nNext.t('edit_exhibit_version')}
                 type={'highlight'}
               />
             </div>
@@ -436,7 +443,11 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
                 <Space style={{ cursor: 'pointer' }} size={2}>
                   <FComponentsLib.FTextBtn><FComponentsLib.FIcons.FSwap
                     style={{ fontSize: 12 }} /></FComponentsLib.FTextBtn>
-                  <FComponentsLib.FTextBtn style={{ fontSize: 12 }}>切换展示版本</FComponentsLib.FTextBtn>
+                  <FComponentsLib.FTextBtn
+                    style={{ fontSize: 12 }}>
+                    {/*切换展示版本*/}
+                    {FI18n.i18nNext.t('edit_exhibit_version_btn_changeversion')}
+                  </FComponentsLib.FTextBtn>
                 </Space>
               </FDropdownMenu>
 
@@ -444,6 +455,7 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
               {/*<FComponentsLib.FContentText*/}
               {/*  type={'highlight'}*/}
               {/*  text={'自动更新到最新版本'}*/}
+              {/*  text={FI18n.i18nNext.t('edit_exhibit_version_toggles_automaticupdate')}*/}
               {/*  style={{ fontSize: 12 }}*/}
               {/*/>*/}
               {/*<div style={{ width: 20 }} />*/}
@@ -459,7 +471,11 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
           <div style={{ height: 5 }} />
           <div className={styles.block} style={{ backgroundColor: 'rgba(0,0,0,0.02)' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <FComponentsLib.FContentText text={'基础属性'} type={'highlight'} />
+              <FComponentsLib.FContentText
+                // text={'基础属性'}
+                text={FI18n.i18nNext.t('edit_exhibit_resourceinfo')}
+                type={'highlight'}
+              />
             </div>
             <div style={{ height: 20 }} />
 
@@ -478,7 +494,8 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
               <div className={styles.block} style={{ backgroundColor: 'rgba(0,0,0,0.02)' }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                   <FComponentsLib.FContentText
-                    text={'可选配置'}
+                    // text={'可选配置'}
+                    text={FI18n.i18nNext.t('edit_exhibit_resourceoptions')}
                     type={'highlight'}
                   />
                 </div>
@@ -599,7 +616,8 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
           <div className={styles.block} style={{ backgroundColor: 'rgba(0,0,0,0.02)' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <FComponentsLib.FContentText
-                text={'自定义信息'}
+                // text={'自定义信息'}
+                text={FI18n.i18nNext.t('edit_exhibit_customdata')}
                 type={'highlight'}
               />
               {
@@ -645,7 +663,8 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
                   }}
                 >
                   <FComponentsLib.FIcons.FConfiguration style={{ fontSize: 14 }} />
-                  <span>添加自定义信息</span>
+                  {/*<span>添加自定义信息</span>*/}
+                  <span>{FI18n.i18nNext.t('edit_exhibit_btn_addcustomdata')}</span>
                 </FComponentsLib.FTextBtn>)
               }
 
@@ -657,7 +676,8 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
                 <div style={{ height: 10 }} />
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <FComponentsLib.FContentText
-                    text={'自定义信息是资源在消费端展示时所需的配置信息，您可以根据需要添加。'}
+                    // text={'自定义信息是资源在消费端展示时所需的配置信息，您可以根据需要添加。'}
+                    text={FI18n.i18nNext.t('edit_exhibit_customdata_info')}
                     type={'additional2'}
                   />
                 </div>
@@ -854,7 +874,11 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
       <div style={{ height: 5 }} />
       <div className={styles.block}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <FComponentsLib.FContentText text={'相关合约'} type={'highlight'} />
+          <FComponentsLib.FContentText
+            // text={'相关合约'}
+            text={FI18n.i18nNext.t('edit_exhibit_articlenauth')}
+            type={'highlight'}
+          />
         </div>
         <div style={{ height: 20 }} />
         <Contracts />
@@ -865,7 +889,11 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
           <div style={{ height: 5 }} />
           <div className={styles.block}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <FComponentsLib.FContentText text={'相关视图'} type={'highlight'} />
+              <FComponentsLib.FContentText
+                // text={'相关视图'}
+                text={FI18n.i18nNext.t('edit_exhibit_maps')}
+                type={'highlight'}
+              />
             </div>
             <div style={{ height: 10 }} />
             <Viewports />
@@ -970,7 +998,7 @@ function TitleInput({ value, onOK }: TitleInputProps) {
           onOK(get$value());
           set$isEdit(false);
         }}
-      >{FI18n.i18nNext.t('btn_save')}</FComponentsLib.FRectBtn>
+      >{FI18n.i18nNext.t('edit_exhibit_btn_save_title')}</FComponentsLib.FRectBtn>
       <FComponentsLib.FRectBtn
         type='default'
         // size="small"
@@ -978,7 +1006,7 @@ function TitleInput({ value, onOK }: TitleInputProps) {
         onClick={() => {
           set$isEdit(false);
         }}
-      >{FI18n.i18nNext.t('btn_cancel')}</FComponentsLib.FRectBtn>
+      >{FI18n.i18nNext.t('edit_exhibit_btn_cancel')}</FComponentsLib.FRectBtn>
     </Space>
 
     {
@@ -1008,7 +1036,11 @@ function IntroductionInput({ value, onOK }: IntroductionInputProps) {
 
   return (<div className={styles.block}>
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-      <FComponentsLib.FContentText text={'展品简介'} type={'highlight'} />
+      <FComponentsLib.FContentText
+        // text={'展品简介'}
+        text={FI18n.i18nNext.t('edit_exhibit_description')}
+        type={'highlight'}
+      />
 
       <Space size={10}>
         {
@@ -1073,14 +1105,22 @@ function IntroductionInput({ value, onOK }: IntroductionInputProps) {
 
               <div style={{ height: 10 }} />
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
-                <FComponentsLib.FContentText
-                  text={FI18n.i18nNext.t('标题直接影响商品的搜索曝光机会，建议在标题中加入品牌/内容主旨，')}
-                  type={'additional2'}
-                />
-                <FComponentsLib.FContentText
-                  text={FI18n.i18nNext.t('例如，《大明风华：明朝人的城市生活》；标题长度不超过100个字符。')}
-                  type={'additional2'}
-                />
+                {
+                  FI18n.i18nNext.t('edit_exhibit_description_info')
+                    .split('<br />')
+                    .map((text) => {
+                      return (<FComponentsLib.FContentText
+                        // text={FI18n.i18nNext.t('标题直接影响商品的搜索曝光机会，建议在标题中加入品牌/内容主旨，')}
+                        text={text}
+                        type={'additional2'}
+                      />);
+                    })
+                }
+
+                {/*<FComponentsLib.FContentText*/}
+                {/*  text={FI18n.i18nNext.t('例如，《大明风华：明朝人的城市生活》；标题长度不超过100个字符。')}*/}
+                {/*  type={'additional2'}*/}
+                {/*/>*/}
                 <div style={{ height: 20 }} />
                 <FComponentsLib.FRectBtn
                   type='primary'
@@ -1088,7 +1128,8 @@ function IntroductionInput({ value, onOK }: IntroductionInputProps) {
                     onEdit();
                   }}
                 >
-                  添加展品简介
+                  {/*添加展品简介*/}
+                  {FI18n.i18nNext.t('edit_exhibit_description_btn_add')}
                 </FComponentsLib.FRectBtn>
               </div>
               <div style={{ height: 20 }} />

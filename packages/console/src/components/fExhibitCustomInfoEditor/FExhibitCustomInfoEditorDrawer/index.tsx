@@ -81,7 +81,10 @@ function FExhibitCustomInfoEditorDrawer({
   }
 
   return (<FDrawer
-    title={defaultData ? '编辑自定义信息' : '添加自定义信息'}
+    title={defaultData
+      // ? '编辑自定义信息'
+      ? FI18n.i18nNext.t('add_customdata_title')
+      : '添加自定义信息'}
     onClose={() => {
       $setState({
         visible: false,
@@ -105,7 +108,7 @@ function FExhibitCustomInfoEditorDrawer({
             visible: false,
           });
         }}
-      >{FI18n.i18nNext.t('btn_cancel')}</FComponentsLib.FTextBtn>
+      >{FI18n.i18nNext.t('add_customdata_btn_cancel')}</FComponentsLib.FTextBtn>
 
       <FComponentsLib.FRectBtn
         type='primary'
@@ -124,7 +127,7 @@ function FExhibitCustomInfoEditorDrawer({
             visible: false,
           });
         }}
-      >{FI18n.i18nNext.t('btn_save')}</FComponentsLib.FRectBtn>
+      >{FI18n.i18nNext.t('add_customdata_btn_submit')}</FComponentsLib.FRectBtn>
     </Space>}
   >
 
@@ -145,13 +148,13 @@ function FExhibitCustomInfoEditorDrawer({
             <FComponentsLib.FContentText
               style={{ fontSize: 12 }}
               type={'highlight'}
-              text={FI18n.i18nNext.t('resourceoptions_add_input_name')}
+              text={FI18n.i18nNext.t('add_customdata_input_name_hint')}
             />
           </div>
           <div style={{ height: 5 }} />
           <FComponentsLib.FInput.FSingleLine
             lengthLimit={-1}
-            placeholder={FI18n.i18nNext.t('resourceoptions_add_input_name_hint')}
+            placeholder={FI18n.i18nNext.t('add_customdata_input_name_hint')}
             value={$state.nameInput}
             className={styles.input}
             onChange={(e) => {
@@ -185,7 +188,7 @@ function FExhibitCustomInfoEditorDrawer({
               style={{ fontSize: 12 }}
               type={'highlight'}
               // text={'key'}
-              text={FI18n.i18nNext.t('resourceoptions_add_input_key')}
+              text={FI18n.i18nNext.t('add_customdata_input_key')}
             />
 
             <FComponentsLib.FContentText
@@ -201,7 +204,7 @@ function FExhibitCustomInfoEditorDrawer({
             //   text={$keyPrefix}
             // />)}
             className={[styles.keyInput].join(' ')}
-            placeholder={FI18n.i18nNext.t('resourceoptions_add_input_key_hint')}
+            placeholder={FI18n.i18nNext.t('add_customdata_input_key_hint')}
             value={$state.keyInput}
             onChange={(e) => {
               const value: string = e.target.value;
@@ -236,7 +239,7 @@ function FExhibitCustomInfoEditorDrawer({
             <FComponentsLib.FContentText
               style={{ fontSize: 12 }}
               type={'highlight'}
-              text={FI18n.i18nNext.t('resourceoptions_add_input_desc')}
+              text={FI18n.i18nNext.t('add_customdata_input_desc')}
             />
             {/*<FComponentsLib.FContentText*/}
             {/*  style={{ fontSize: 12 }}*/}
@@ -260,7 +263,7 @@ function FExhibitCustomInfoEditorDrawer({
                 descriptionInputError: errorText,
               });
             }}
-            placeholder={FI18n.i18nNext.t('resourceoptions_add_input_desc_hint')}
+            placeholder={FI18n.i18nNext.t('add_customdata_input_desc_hint')}
           />
           {
             $state.descriptionInputError !== '' && (<>
@@ -275,7 +278,7 @@ function FExhibitCustomInfoEditorDrawer({
             <FComponentsLib.FContentText
               style={{ fontSize: 12 }}
               type={'highlight'}
-              text={FI18n.i18nNext.t('resourceoptions_add_input_default')}
+              text={FI18n.i18nNext.t('add_customdata_input_value')}
             />
             {/*<FComponentsLib.FContentText*/}
             {/*  style={{ fontSize: 12 }}*/}
@@ -299,7 +302,7 @@ function FExhibitCustomInfoEditorDrawer({
                 inputInputError: errorText,
               });
             }}
-            placeholder={FI18n.i18nNext.t('resourceoptions_add_input_default_hint')}
+            placeholder={FI18n.i18nNext.t('add_customdata_input_value_hint')}
           />
           {
             $state.inputInputError !== '' && (<>
