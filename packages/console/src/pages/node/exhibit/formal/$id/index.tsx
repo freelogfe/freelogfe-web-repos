@@ -620,10 +620,10 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
                         ...exhibitInfoPage.side_CustomOptions.map((co) => co.key),
                       ],
                       disabledNames: [
-                        ...exhibitInfoPage.side_RawProperties.map((ba) => ba.name),
-                        ...exhibitInfoPage.side_BaseProperties.map((ba) => ba.name),
-                        ...exhibitInfoPage.side_InheritOptions.map((io) => io.name),
-                        ...exhibitInfoPage.side_CustomOptions.map((co) => co.name),
+                        // ...exhibitInfoPage.side_RawProperties.map((ba) => ba.name),
+                        // ...exhibitInfoPage.side_BaseProperties.map((ba) => ba.name),
+                        // ...exhibitInfoPage.side_InheritOptions.map((io) => io.name),
+                        // ...exhibitInfoPage.side_CustomOptions.map((co) => co.name),
                       ],
                     });
 
@@ -709,10 +709,10 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
                                         ...exhibitInfoPage.side_CustomOptions.map((co) => co.key),
                                       ],
                                       disabledNames: [
-                                        ...exhibitInfoPage.side_RawProperties.map((ba) => ba.name),
-                                        ...exhibitInfoPage.side_BaseProperties.map((ba) => ba.name),
-                                        ...exhibitInfoPage.side_InheritOptions.map((io) => io.name),
-                                        ...exhibitInfoPage.side_CustomOptions.map((co) => co.name),
+                                        // ...exhibitInfoPage.side_RawProperties.map((ba) => ba.name),
+                                        // ...exhibitInfoPage.side_BaseProperties.map((ba) => ba.name),
+                                        // ...exhibitInfoPage.side_InheritOptions.map((io) => io.name),
+                                        // ...exhibitInfoPage.side_CustomOptions.map((co) => co.name),
                                       ],
                                       defaultData: {
                                         key: co.key,
