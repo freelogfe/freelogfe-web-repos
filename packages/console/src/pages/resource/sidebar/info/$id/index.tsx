@@ -347,7 +347,7 @@ function Info({ dispatch, resourceInfoPage, match }: InfoProps) {
 
           <FResourceLabelEditor
             value={resourceInfoPage.resourceInfo.tags}
-            resourceType={resourceInfoPage.resourceInfo.resourceType[resourceInfoPage.resourceInfo.resourceType.length - 1 || 0]}
+            resourceTypeCode={resourceInfoPage.resourceInfo.resourceTypeCode}
             onChange={(value) => {
               dispatch<OnChange_Labels_Action>({
                 type: 'resourceInfoPage/onChange_Labels',

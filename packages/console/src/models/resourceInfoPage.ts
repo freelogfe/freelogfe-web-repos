@@ -12,6 +12,7 @@ export interface ResourceInfoPageModelState {
     coverImages: string[];
     resourceName: string;
     resourceTitle: string;
+    resourceTypeCode: string;
     resourceType: string[];
     intro: string;
     tags: string[];
@@ -191,6 +192,7 @@ const Model: ResourceInfoPageModelType = {
           coverImages: string[];
           resourceName: string;
           resourceTitle: string;
+          resourceTypeCode: string;
           resourceType: string[];
           intro: string;
           tags: string[];
@@ -203,6 +205,7 @@ const Model: ResourceInfoPageModelType = {
           resourceInfo: {
             coverImages: data_resourceInfo.coverImages,
             resourceName: data_resourceInfo.resourceName,
+            resourceTypeCode: data_resourceInfo.resourceTypeCode,
             resourceType: data_resourceInfo.resourceType,
             resourceTitle: data_resourceInfo.resourceTitle,
             intro: data_resourceInfo.intro,

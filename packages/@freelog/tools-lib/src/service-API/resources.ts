@@ -658,7 +658,7 @@ export function resourcesRecommend({...params}: ResourcesRecommendParamsType) {
 
 // 根据资源类型查看推荐的标签
 interface AvailableTagsParamsType {
-  resourceType: string;
+  resourceTypeCode: string;
 }
 
 export function availableTags({...params}: AvailableTagsParamsType) {

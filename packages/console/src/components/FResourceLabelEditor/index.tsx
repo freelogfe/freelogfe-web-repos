@@ -8,7 +8,7 @@ import { InputRef, Space } from 'antd';
 
 interface FResourceLabelEditorProps {
   value: string[];
-  resourceType: string;
+  resourceTypeCode: string;
   onChange?: (value: string[]) => void;
 }
 
@@ -43,9 +43,10 @@ function FResourceLabelEditor($prop: FResourceLabelEditorProps) {
   const [$state, $setState] = AHooks.useSetState<FResourceLabelEditorStates>(initState);
 
   AHooks.useMount(async () => {
-    if ($prop.resourceType === '') {
+    if ($prop.resourceTypeCode === '') {
       return;
     }
+
     const { data: data_availableTags }: {
       data: {
         tagId: string;
@@ -54,7 +55,9 @@ function FResourceLabelEditor($prop: FResourceLabelEditorProps) {
         tagNote: string;
       }[];
     } = await FServiceAPI.Resource.availableTags({
-      resourceType: $prop.resourceType,
+      // resourceType: $prop.resourceType,
+      // @ts-ignore
+      resourceTypeCode: $prop.resourceTypeCode,
     });
     // console.log(data, '*****LJLKJLKJ');
     $setState({

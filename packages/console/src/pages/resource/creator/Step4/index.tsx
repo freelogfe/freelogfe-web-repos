@@ -103,7 +103,7 @@ function Step4({ dispatch, resourceCreatorPage }: Step4Props) {
       <FResourceLabelEditor
         value={resourceCreatorPage.step4_resourceLabels}
         // resourceType={resourceInfoPage.resourceInfo.resourceType[resourceInfoPage.resourceInfo.resourceType.length - 1 || 0]}
-        resourceType={resourceCreatorPage.step1_createdResourceInfo?.resourceType[resourceCreatorPage.step1_createdResourceInfo.resourceType.length - 1 || 0] || ''}
+        resourceTypeCode={resourceCreatorPage.step1_createdResourceInfo?.resourceTypeCode || ''}
         onChange={(value) => {
           dispatch<OnChange_step4_resourceLabels_Action>({
             type: 'resourceCreatorPage/onChange_step4_resourceLabels',
