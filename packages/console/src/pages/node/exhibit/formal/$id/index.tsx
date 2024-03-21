@@ -577,7 +577,7 @@ function Presentable({ dispatch, exhibitInfoPage, match }: PresentableProps) {
                                 className={styles.FInput}
                                 value={io.valueInput}
                                 // errorText={io.valueInputError}
-                                placeholder={'输入自定义选项'}
+                                placeholder={'输入可选配置'}
                                 onChange={(e) => {
                                   // onChangeCustomAttrs({ key: pc.key, value: e.target.value });
                                   dispatch<OnChange_Side_InheritOptions_ValueInput_Action>({
