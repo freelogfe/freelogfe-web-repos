@@ -211,7 +211,7 @@ export async function handleData_By_Sha1_And_ResourceTypeCode_And_InheritData({
       ...inheritData.additionalProperties,
       ...inheritData.customProperties,
     ];
-    console.log(result[0].info, 'result[0].info sdfijsdlfkjsdlkfjlksdjflkjl');
+    // console.log(result[0].info, 'result[0].info sdfijsdlfkjsdlkfjlksdjflkjl');
     const rawProperties: HandleData_By_Sha1_And_ResourceTypeCode_And_InheritData_Return['rawProperties'] = result[0].info
       .filter((i) => {
         return i.insertMode === 1;
@@ -250,27 +250,30 @@ export async function handleData_By_Sha1_And_ResourceTypeCode_And_InheritData({
         const item = additionalProperties_availableData.find((ap) => {
           return ap.key === i.key;
         });
-        additionalProperties_availableData = additionalProperties_availableData.filter((ad) => {
-          return ad.key !== i.key;
-        });
+
+        let value: string = i.value;
+        if (item) {
+          additionalProperties_availableData = additionalProperties_availableData.filter((ad) => {
+            return ad.key !== i.key;
+          });
+          value = item.value;
+        } else {
+          const item2 = additionalProperties_availableData.find((ap) => {
+            return ap.name === i.name;
+          });
+
+          if (item2) {
+            additionalProperties_availableData = additionalProperties_availableData.filter((ad) => {
+              return ad.name !== i.name;
+            });
+            value = item2.value;
+          }
+        }
+
         return {
           key: i.key,
           name: i.name,
-          value: item?.value || i.value,
-          description: i.description,
-        };
-      })
-      .map((i) => {
-        const item = additionalProperties_availableData.find((ap) => {
-          return ap.name === i.name;
-        });
-        additionalProperties_availableData = additionalProperties_availableData.filter((ad) => {
-          return ad.name !== i.name;
-        });
-        return {
-          key: i.key,
-          name: i.name,
-          value: item?.value || i.value,
+          value: value,
           description: i.description,
         };
       });
