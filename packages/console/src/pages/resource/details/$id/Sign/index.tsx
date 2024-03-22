@@ -13,6 +13,7 @@ import FCoverImage from '@/components/FCoverImage';
 import FComponentsLib from '@freelog/components-lib';
 import { FI18n, FUtil } from '@freelog/tools-lib';
 import * as AHooks from 'ahooks';
+
 // import FPopover from '@/components/FPopover';
 
 interface SignProps {
@@ -34,7 +35,10 @@ function Sign({ dispatch, resourceDetailPage }: SignProps) {
         <FCoverImage
           src={resourceDetailPage.resource_Info?.cover || ''}
           width={260}
-          style={{ borderRadius: 10, display: 'block' }}
+          style={{
+            borderRadius: 10,
+            // display: 'block'
+          }}
         />
         <div style={{ height: 15 }} />
 
