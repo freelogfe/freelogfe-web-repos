@@ -168,7 +168,7 @@ function VersionInfo({ dispatch, resourceVersionEditorPage, match }: VersionInfo
               color: '#666',
               lineHeight: '42px',
             }}>
-              您有一个未完成的发行
+              {FI18n.i18nNext.t('versionmngt_empty_msg2')}
             </div>
             <div style={{ height: 40 }} />
             <Space size={40}>
@@ -177,7 +177,7 @@ function VersionInfo({ dispatch, resourceVersionEditorPage, match }: VersionInfo
                 onClick={() => {
                   self.open(FUtil.LinkTo.resourceVersionCreator({ resourceID: match.params.id }));
                 }}
-              >继续编辑</FComponentsLib.FTextBtn>
+              >{FI18n.i18nNext.t('versionmngt_empty_btn_continueediting')}</FComponentsLib.FTextBtn>
               <FComponentsLib.FTextBtn
                 type={'default'}
                 onClick={async () => {
@@ -195,7 +195,7 @@ function VersionInfo({ dispatch, resourceVersionEditorPage, match }: VersionInfo
                     },
                   });
                 }}
-              >丢弃</FComponentsLib.FTextBtn>
+              >{FI18n.i18nNext.t('versionmngt_empty_btn_discard')}</FComponentsLib.FTextBtn>
             </Space>
           </div>)
         }
