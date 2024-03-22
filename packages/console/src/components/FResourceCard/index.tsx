@@ -13,6 +13,7 @@ type EventFunc = () => void
 export interface FResourceCardProps {
   className?: string;
   type?: 'resource' | 'favorite' | 'market';
+  showUserInfo?: boolean;
   resource: {
     id: string;
     cover: string;
@@ -45,6 +46,7 @@ function FResourceCard({
                          onClickEditing,
                          onClickRevision,
                          onClick,
+                         showUserInfo = true,
                        }: FResourceCardProps) {
   return (
     <div
@@ -159,11 +161,16 @@ function FResourceCard({
             : (<FComponentsLib.FContentText text={'暂无策略…'} type='additional2' />)
         }
       </div>
-      <div style={{ height: 12 }} />
-      <div className={styles.user}>
-        <img src={resource.useAvatar || img_choiceLabel} alt={''} />
-        <span>{resource.username}</span>
-      </div>
+      {
+        showUserInfo && (<>
+          <div style={{ height: 12 }} />
+          <div className={styles.user}>
+            <img src={resource.useAvatar || img_choiceLabel} alt={''} />
+            <span>{resource.username}</span>
+          </div>
+        </>)
+      }
+
     </div>
   );
 }

@@ -9,6 +9,7 @@ import img_choiceLabel from '@/assets/choice-label@2x.png';
 interface FResourceCard_AbleCheck_Props {
   checked: boolean;
   disabled?: boolean;
+  showUserInfo?: boolean;
   resource: {
     title: string;
     cover: string;
@@ -30,6 +31,7 @@ function FResourceCard_AbleCheck({
                                    disabled = false,
                                    resource,
                                    onChange,
+                                   showUserInfo = true,
                                  }: FResourceCard_AbleCheck_Props) {
   return (<div style={{ position: 'relative' }}>
     <div
@@ -101,11 +103,15 @@ function FResourceCard_AbleCheck({
             : (<FComponentsLib.FContentText text={'暂无策略…'} type='additional2' />)
         }
       </div>
-      <div style={{ height: 12 }} />
-      <div className={styles.user}>
-        <img src={resource.useAvatar || img_choiceLabel} alt={''} />
-        <span>{resource.username}</span>
-      </div>
+      {
+        showUserInfo && (<>
+          <div style={{ height: 12 }} />
+          <div className={styles.user}>
+            <img src={resource.useAvatar || img_choiceLabel} alt={''} />
+            <span>{resource.username}</span>
+          </div>
+        </>)
+      }
     </div>
 
     <div style={{ position: 'absolute', top: 52, left: 20 }}>

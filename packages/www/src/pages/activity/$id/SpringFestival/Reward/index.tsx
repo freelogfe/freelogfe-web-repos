@@ -76,7 +76,7 @@ function Reward({ activityDetailsPage }: RewardProps) {
           <img src={img_rewardTitle1} className={styles.imgTitle} alt={''} />
           <div style={{ height: 20 }} />
           <div className={styles.h2}>经过大家的齐心协力，新春瓜分奖励池成功解锁至 <span
-            className={styles.strong}>xxxx元</span> ！
+            className={styles.strong}>666元</span> ！
             {/*现在人均可获得丰厚的 <span*/}
             {/*className={styles.strong}>xx元</span> 奖励，*/}
             感谢大家的辛勤付出与参与！

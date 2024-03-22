@@ -395,6 +395,7 @@ function Resources({ dispatch, resourceListPage }: ResourceProps) {
             resourceListPage.resource_List.map((i, j) => {
               if (resourceListPage.isBatchManagement) {
                 return (<FResourceCard_AbleCheck
+                  showUserInfo={false}
                   checked={resourceListPage.checkedResourceIDs.includes(i.id)}
                   disabled={i.status === 2}
                   key={i.id}
@@ -445,6 +446,7 @@ function Resources({ dispatch, resourceListPage }: ResourceProps) {
               }
 
               return (<FResourceCard
+                  showUserInfo={false}
                   key={i.id}
                   resource={i}
                   type={'resource'}
