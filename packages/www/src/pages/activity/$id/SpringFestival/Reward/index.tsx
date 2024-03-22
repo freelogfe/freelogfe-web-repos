@@ -84,63 +84,238 @@ function Reward({ activityDetailsPage }: RewardProps) {
           <div style={{ height: 40 }} />
           <img src={img_rewardTitle2} className={styles.imgTitle} alt={''} />
           <div style={{ height: 25 }} />
-          <strong className={styles.strong}>共30人完成累计打卡21天挑战，瓜分奖励¥2888</strong>
+          <strong className={styles.strong}>共13人完成累计打卡21天挑战，瓜分奖励¥2888</strong>
           <div style={{ height: 15 }} />
           <RewardList
-            names={['世袭锦鲤001', 'tomato_1234', '李家小孩']}
+            names={[
+              'Bex110204',
+              'aaa',
+              'cyy',
+              'jeno',
+              'wxy15737841802',
+              'SSSR',
+              'xxt',
+              'myy',
+              'qwe3523199631',
+              'yueyueyue',
+              'Eeyore',
+              '111',
+              'wjh19837861207',
+            ]}
             pentagramColor={'#FF6A1F'}
           />
           <div style={{ height: 25 }} />
           <strong className={styles.strong}>共20人完成累计打卡14天挑战，瓜分奖励¥1888</strong>
           <div style={{ height: 15 }} />
           <RewardList
-            names={['世袭锦鲤001', 'tomato_1234', '李家小孩']}
+            names={[
+              'Bex110204',
+              'jeno',
+              'wjh19837861207',
+              'wxy15737841802',
+              'aaa',
+              'cyy',
+              'qwe3523199631',
+              '111',
+              'SSSR',
+              'myy',
+              'xxt',
+              'Tsuki7789',
+              'yueyueyue',
+              'Eeyore',
+              'looopy',
+              'Tsuki',
+              'fdk',
+              'WASD',
+              'hlb',
+              'ADiii',
+            ]}
             pentagramColor={'#E9A923'}
           />
           <div style={{ height: 25 }} />
-          <strong className={styles.strong}>共12人完成累计打卡7天挑战，瓜分奖励¥888</strong>
+          <strong className={styles.strong}>共25人完成累计打卡7天挑战，瓜分奖励¥888</strong>
           <div style={{ height: 15 }} />
           <RewardList
-            names={['世袭锦鲤001', 'tomato_1234', '李家小孩']}
+            names={[
+              'Bex110204',
+              'jeno',
+              'wjh19837861207',
+              'wxy15737841802',
+              'aaa',
+              'cyy',
+              'qwe3523199631',
+              '111',
+              'SSSR',
+              'myy',
+              'xxt',
+              'Tsuki7789',
+              'yueyueyue',
+              'Eeyore',
+              'looopy',
+              'Tsuki',
+              'fdk',
+              'WASD',
+              'hlb',
+              'ADiii',
+              'wmy13781185013',
+              'btsjk0901',
+              'YC-1123',
+              'hqw1345',
+              'zaxizecuo3611',
+            ]}
             pentagramColor={'#E9A923'}
           />
           <div style={{ height: 40 }} />
           <img src={img_rewardTitle3} className={styles.imgTitle} alt={''} />
           <div style={{ height: 25 }} />
-          <strong className={styles.strong}>共10人完成邀请5位好友任务，瓜分奖励¥600</strong>
+          <strong className={styles.strong}>共3人完成邀请5位好友任务，瓜分奖励¥600</strong>
           <div style={{ height: 15 }} />
           <RewardList
-            names={['世袭锦鲤001', 'tomato_1234', '李家小孩']}
+            names={[
+              'qwe3523199631',
+              'SSSR',
+              'aaa',
+            ]}
             pentagramColor={'#E9A923'}
           />
           <div style={{ height: 25 }} />
-          <strong className={styles.strong}>共10人完成邀请3位好友任务，瓜分奖励¥600</strong>
+          <strong className={styles.strong}>共5人完成邀请3位好友任务，瓜分奖励¥600</strong>
           <div style={{ height: 15 }} />
           <RewardList
-            names={['世袭锦鲤001', 'tomato_1234', '李家小孩']}
+            names={[
+              'qwe3523199631',
+              'SSSR',
+              'aaa',
+              'WASD',
+              'thinkoutofthebox',
+            ]}
             pentagramColor={'#E9A923'}
           />
           <div style={{ height: 25 }} />
-          <strong className={styles.strong}>共10人完成邀请1位好友任务，瓜分奖励¥800</strong>
+          <strong className={styles.strong}>共9人完成邀请1位好友任务，瓜分奖励¥800</strong>
           <div style={{ height: 15 }} />
           <RewardList
-            names={['世袭锦鲤001', 'tomato_1234', '李家小孩']}
+            names={[
+              'qwe3523199631',
+              'aaa',
+              'wjh19837861207',
+              'Bex110204',
+              'SSSR',
+              'btsjk0901',
+              'WASD',
+              'thinkoutofthebox',
+              'wmy13781185013',
+            ]}
             pentagramColor={'#E9A923'}
           />
           <div style={{ height: 40 }} />
           <img src={img_rewardTitle4} className={styles.imgTitle} alt={''} />
           <div style={{ height: 25 }} />
-          <strong className={styles.strong}>10位新人首次参与了freelog活动并完成一次活动任务，瓜分奖励￥666</strong>
+          <strong className={styles.strong}>46位新人首次参与了freelog活动并完成一次活动任务，瓜分奖励￥666</strong>
           <div style={{ height: 15 }} />
           <RewardList
-            names={['世袭锦鲤001', 'tomato_1234', '李家小孩']}
+            names={[
+              'spring',
+              'abcdefg',
+              'fafafa111',
+              'z398544891',
+              'ansailong',
+              'yy',
+              'hcy',
+              'hlb',
+              'PL',
+              'YC-1123',
+              'cathy',
+              'ADiii',
+              'WASD',
+              'kesideyu',
+              'zzz',
+              'syd',
+              'Tsuki',
+              'hqw1345',
+              'fdk',
+              'looopy',
+              'luzhiyao',
+              'kylin',
+              'myy',
+              'X',
+              '87',
+              'yuu',
+              'lan',
+              'a11',
+              'SSSR',
+              'xxt',
+              'Tsuki7789',
+              'zhaoheng123',
+              'qwe123456',
+              'zaxizecuo3611',
+              'wxy15737841802',
+              'Bex110204',
+              'wjh19837861207',
+              'wmy13781185013',
+              'cyy',
+              'hhk258069',
+              'two',
+              'jeno',
+              'aaaa1',
+              'hid-q605f6xsrxtc-4t',
+              '1117837800554',
+              'qwe3523199631',
+            ]}
             pentagramColor={'#E9A923'}
           />
           <div style={{ height: 25 }} />
           <strong className={styles.strong}>前100位完成的用户分别额外获得¥3奖励</strong>
           <div style={{ height: 15 }} />
           <RewardList
-            names={['世袭锦鲤001', 'tomato_1234', '李家小孩']}
+            names={[
+              'spring',
+              'abcdefg',
+              'fafafa111',
+              'z398544891',
+              'ansailong',
+              'yy',
+              'hcy',
+              'hlb',
+              'PL',
+              'YC-1123',
+              'cathy',
+              'ADiii',
+              'WASD',
+              'kesideyu',
+              'zzz',
+              'syd',
+              'Tsuki',
+              'hqw1345',
+              'fdk',
+              'looopy',
+              'luzhiyao',
+              'kylin',
+              'myy',
+              'X',
+              '87',
+              'yuu',
+              'lan',
+              'a11',
+              'SSSR',
+              'xxt',
+              'Tsuki7789',
+              'zhaoheng123',
+              'qwe123456',
+              'zaxizecuo3611',
+              'wxy15737841802',
+              'Bex110204',
+              'wjh19837861207',
+              'wmy13781185013',
+              'cyy',
+              'hhk258069',
+              'two',
+              'jeno',
+              'aaaa1',
+              'hid-q605f6xsrxtc-4t',
+              '1117837800554',
+              'qwe3523199631',
+            ]}
             pentagramColor={'#E9A923'}
           />
           <div style={{ height: 40 }} />
@@ -149,14 +324,32 @@ function Reward({ activityDetailsPage }: RewardProps) {
           <strong className={styles.strong}>转发点赞最高奖¥166</strong>
           <div style={{ height: 15 }} />
           <RewardList
-            names={['世袭锦鲤001']}
+            names={[
+              'qwe3523199631 (小红书)',
+              'Bex110204 (微博)',
+            ]}
             pentagramColor={'#E9A923'}
           />
           <div style={{ height: 25 }} />
-          <strong className={styles.strong}>20位锦鲤，每人奖励¥66</strong>
+          <strong className={styles.strong}>14位锦鲤，每人奖励¥66</strong>
           <div style={{ height: 15 }} />
           <RewardList
-            names={['世袭锦鲤001']}
+            names={[
+              'jeno',
+              'SSSR',
+              'hid-q605f6xsrxtc-4t',
+              'Eeyore',
+              'aaa',
+              'kylin',
+              'Tsuki',
+              'kesideyu',
+              'YC-1123',
+              '111',
+              'cyy',
+              'xxt',
+              'wmy13781185013',
+              'yueyueyue',
+            ]}
             pentagramColor={'#E9A923'}
           />
           <div style={{ height: 40 }} />
