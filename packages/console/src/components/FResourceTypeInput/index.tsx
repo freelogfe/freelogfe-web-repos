@@ -478,20 +478,82 @@ function FResourceTypeInput($prop: FResourceTypeInputProps) {
                             o1.children.map((o2, o2Index) => {
                               // console.log(o2Index + 1, o1.children.length, 'o2Index + 1 === o1.children.length 839isdfihsdkf');
                               return (<React.Fragment key={o2.value}>
-                                <div
-                                  className={styles.item}
-                                  onClick={() => {
-                                    if (o2.children.length === 0) {
-                                      onDropdownChange({
-                                        value: o2.value,
-                                        labels: o2.labels,
-                                      });
-                                    }
+                                <Popover
+                                  zIndex={10001}
+                                  // showArrow={false}
+                                  getPopupContainer={() => {
+                                    return ref.current;
                                   }}
-                                >
-                                  <span>{o2.label}</span>
-                                </div>
+                                  open={o2.children.length === 0 ? false : undefined}
+                                  overlayClassName={styles.PopoverOverlayClassName}
+                                  title={null}
+                                  placement={'rightTop'}
+                                  content={<div className={styles.itemChildren}>
+                                    {
+                                      o2.children.map((o3, o3Index) => {
+                                        return (<React.Fragment key={o3.value}>
+                                          <div
+                                            className={styles.item}
+                                            onClick={() => {
+                                              if (o3.children.length === 0) {
+                                                onDropdownChange({
+                                                  value: o3.value,
+                                                  labels: o3.labels,
+                                                });
+                                              }
+                                            }}
+                                          >
+                                            <span>{o3.label}</span>
+                                            {
+                                              o3.children.length > 0 && (
+                                                <FComponentsLib.FIcons.FRight
+                                                  className={styles.itemRightIcon}
+                                                />)
+                                            }
+                                          </div>
 
+                                          {
+                                            o3Index + 1 === o2.children.length && (<div
+                                              className={styles.item + ' ' + styles.itemLatest}
+                                              onClick={() => {
+                                                onDropdownClickCustom({
+                                                  value: o2.value,
+                                                  values: o2.values,
+                                                  label: o2.label,
+                                                  labels: o2.labels,
+                                                });
+                                              }}
+                                            >
+                                              {/*<span>添加新类型</span>*/}
+                                              <span>{FI18n.i18nNext.t('createresource_selectresourcetype_btn_addnewtype')}</span>
+                                            </div>)
+                                          }
+                                        </React.Fragment>);
+                                      })
+                                    }
+                                  </div>}
+                                >
+                                  <div
+                                    className={styles.item}
+                                    onClick={() => {
+                                      if (o2.children.length === 0) {
+                                        onDropdownChange({
+                                          value: o2.value,
+                                          labels: o2.labels,
+                                        });
+                                      }
+                                    }}
+                                  >
+                                    <span>{o2.label}</span>
+
+                                    {
+                                      o2.children.length > 0 && (
+                                        <FComponentsLib.FIcons.FRight
+                                          className={styles.itemRightIcon}
+                                        />)
+                                    }
+                                  </div>
+                                </Popover>
                                 {
                                   o2Index + 1 === o1.children.length && (<div
                                     className={styles.item + ' ' + styles.itemLatest}
