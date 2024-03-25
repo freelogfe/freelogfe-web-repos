@@ -205,10 +205,6 @@ function FResourceTypeFilter({ value, omitTheme = false, onChange }: FResourceTy
                     return (<React.Fragment key={o1.value}>
                       <Popover
                         zIndex={10001}
-                        // showArrow={false}
-                        // getPopupContainer={() => {
-                        //   return ref.current;
-                        // }}
                         open={o1.children.length === 0 ? false : undefined}
                         overlayClassName={styles.PopoverOverlayClassName}
                         title={null}
@@ -217,17 +213,52 @@ function FResourceTypeFilter({ value, omitTheme = false, onChange }: FResourceTy
                           {
                             o1.children.map((o2) => {
                               return (<React.Fragment key={o2.value}>
-                                <div
-                                  className={styles.item}
-                                  onClick={() => {
-                                    if (o2.children.length === 0) {
-                                      onDropdownChange(o2);
-                                    }
-                                  }}
-                                >
-                                  <span>{o2.label}</span>
-                                </div>
+                                <Popover
+                                  zIndex={10001}
+                                  open={o2.children.length === 0 ? false : undefined}
+                                  overlayClassName={styles.PopoverOverlayClassName}
+                                  title={null}
+                                  placement={'rightTop'}
+                                  content={<div className={styles.itemChildren}>
+                                    {
+                                      o2.children.map((o3) => {
+                                        return (<React.Fragment key={o3.value}>
+                                          <div
+                                            className={styles.item}
+                                            onClick={() => {
+                                              if (o3.children.length === 0) {
+                                                onDropdownChange(o3);
+                                              }
+                                            }}
+                                          >
+                                            <span>{o3.label}</span>
 
+                                            {
+                                              o3.children.length > 0 && (
+                                                <FComponentsLib.FIcons.FRight className={styles.itemRightIcon} />)
+                                            }
+                                          </div>
+                                        </React.Fragment>);
+                                      })
+                                    }
+                                  </div>}
+                                >
+                                  <div
+                                    className={styles.item}
+                                    onClick={() => {
+                                      if (o2.children.length === 0) {
+                                        onDropdownChange(o2);
+                                      }
+                                    }}
+                                  >
+                                    <span>{o2.label}</span>
+
+                                    {
+                                      o2.children.length > 0 && (
+                                        <FComponentsLib.FIcons.FRight className={styles.itemRightIcon} />)
+                                    }
+                                  </div>
+                                </Popover>
                               </React.Fragment>);
                             })
                           }
