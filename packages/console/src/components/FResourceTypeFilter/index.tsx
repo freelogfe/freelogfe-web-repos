@@ -146,6 +146,7 @@ function FResourceTypeFilter({ value, omitTheme = false, onChange }: FResourceTy
     }}
     trigger={['hover']}
     overlayClassName={styles.overlayClassName}
+    destroyPopupOnHide={true}
     overlay={(<div className={styles.overlay}>
       <div className={styles.recommend}>
         <FComponentsLib.FContentText
@@ -214,7 +215,7 @@ function FResourceTypeFilter({ value, omitTheme = false, onChange }: FResourceTy
                             o1.children.map((o2) => {
                               return (<React.Fragment key={o2.value}>
                                 <Popover
-                                  zIndex={10001}
+                                  zIndex={10002}
                                   open={o2.children.length === 0 ? false : undefined}
                                   overlayClassName={styles.PopoverOverlayClassName}
                                   title={null}
