@@ -268,7 +268,19 @@ export function handleImage(params: HandleImageParamsType) {
     method: 'POST',
     url: `/v2/storages/files/imageHandle`,
     data: params,
-    // ...config,
+  });
+}
+
+// 生成封面
+interface GenerateCoverImageParamsType {
+  sha1: string;
+}
+
+export function generateCoverImage(params: GenerateCoverImageParamsType) {
+  return FUtil.Request({
+    method: 'POST',
+    url: `/v2/storages/files/generateCoverImage`,
+    data: params,
   });
 }
 
