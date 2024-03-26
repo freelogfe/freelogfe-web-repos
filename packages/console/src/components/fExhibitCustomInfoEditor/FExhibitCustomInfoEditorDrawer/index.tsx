@@ -82,9 +82,10 @@ function FExhibitCustomInfoEditorDrawer({
 
   return (<FDrawer
     title={defaultData
-      // ? '编辑自定义信息'
-      ? FI18n.i18nNext.t('add_customdata_title')
-      : '添加自定义信息'}
+      ? '编辑自定义信息'
+      : FI18n.i18nNext.t('add_customdata_title')
+      // : '添加自定义信息' +
+    }
     onClose={() => {
       $setState({
         visible: false,
