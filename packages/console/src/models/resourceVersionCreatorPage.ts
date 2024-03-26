@@ -1233,7 +1233,9 @@ const Model: ResourceVersionCreatorModelType = {
                 };
               }),
               customProperties: draftData.customProperties,
-              customConfigurations: draftData.customConfigurations,
+              customConfigurations: resourceVersionCreatorPage.resourceTypeConfig.isSupportOptionalConfig
+                ? draftData.customConfigurations
+                : [],
             },
           });
         }
