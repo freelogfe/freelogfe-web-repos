@@ -532,18 +532,20 @@ const Model: ResourceVersionCreatorModelType = {
                   description: cpd.remark,
                 };
               }),
-            customConfigurations: data_resourceVersionInfo.customPropertyDescriptors
-              .filter((cpd: any) => cpd.type !== 'readonlyText')
-              .map<ResourceVersionCreatorPageModelState['customConfigurations'][number]>((cpd) => {
-                return {
-                  key: cpd.key,
-                  name: cpd.name,
-                  description: cpd.remark,
-                  type: cpd.type === 'editableText' ? 'input' : 'select',
-                  input: cpd.defaultValue,
-                  select: cpd.candidateItems,
-                };
-              }),
+            customConfigurations: data_ResourceTypeInfo.resourceConfig.supportOptionalConfig === 2
+              ? data_resourceVersionInfo.customPropertyDescriptors
+                .filter((cpd: any) => cpd.type !== 'readonlyText')
+                .map<ResourceVersionCreatorPageModelState['customConfigurations'][number]>((cpd) => {
+                  return {
+                    key: cpd.key,
+                    name: cpd.name,
+                    description: cpd.remark,
+                    type: cpd.type === 'editableText' ? 'input' : 'select',
+                    input: cpd.defaultValue,
+                    select: cpd.candidateItems,
+                  };
+                })
+              : [],
           },
         };
         const result: Awaited<ReturnType<typeof handleData_By_Sha1_And_ResourceTypeCode_And_InheritData>> = yield call(handleData_By_Sha1_And_ResourceTypeCode_And_InheritData, params4);
@@ -1195,7 +1197,9 @@ const Model: ResourceVersionCreatorModelType = {
                 };
               }),
               customProperties: draftData.customProperties,
-              customConfigurations: draftData.customConfigurations,
+              customConfigurations: resourceVersionCreatorPage.resourceTypeConfig.isSupportOptionalConfig
+                ? draftData.customConfigurations
+                : [],
             },
           };
           const result: Awaited<ReturnType<typeof handleData_By_Sha1_And_ResourceTypeCode_And_InheritData>> = yield call(handleData_By_Sha1_And_ResourceTypeCode_And_InheritData, params4);
