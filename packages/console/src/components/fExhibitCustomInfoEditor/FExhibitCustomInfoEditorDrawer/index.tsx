@@ -149,7 +149,7 @@ function FExhibitCustomInfoEditorDrawer({
             <FComponentsLib.FContentText
               style={{ fontSize: 12 }}
               type={'highlight'}
-              text={FI18n.i18nNext.t('add_customdata_input_name_hint')}
+              text={FI18n.i18nNext.t('add_customdata_input_name')}
             />
           </div>
           <div style={{ height: 5 }} />
